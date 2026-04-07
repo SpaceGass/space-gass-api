@@ -35,6 +35,12 @@ jobs:
         working-directory: docs
         run: npx zudoku build
 
+      - name: Add .nojekyll
+        run: touch docs/dist/.nojekyll
+
+      - name: Debug — list build output
+        run: find docs/dist -maxdepth 3 -type f | head -50
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
