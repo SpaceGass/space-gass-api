@@ -1,0 +1,183 @@
+---
+title: Quick Start
+description: Get started with the SpaceGass API in 5 minutes
+---
+
+This guide walks you through connecting to the API, opening a project
+file, and reading nodes — using the SDK clients or plain HTTP.
+
+### Prerequisites
+
+- [SPACE GASS](https://www.spacegass.com/) installed on your machine
+- A valid API key
+- An existing `.sg` project file on disk
+
+<Stepper>
+1. **Start the Service**
+
+   The API runs as a local server. The easiest way to start it is to
+   double-click the **SpaceGass API** shortcut placed on your Desktop
+   during SPACE GASS installation.
+
+   Alternatively, open a terminal and run:
+
+   ```bash
+   "C:\Program Files\SPACE GASS 14.25\SpaceGassApi.exe"
+   ```
+
+   By default the service starts on `https://localhost:5001`. To use a
+   different port, pass the `--urls` flag:
+
+   ```bash
+   "C:\Program Files\SPACE GASS 14.25\SpaceGassApi.exe" --urls="https://localhost:8443"
+   ```
+
+   Leave the terminal or shortcut window open — the service runs until
+   you close it.
+
+1. **Install the SDK**
+
+   The API includes generated SDK clients for C# and Python. These
+   handle authentication, serialisation, and give you typed methods
+   for every endpoint. If you prefer raw HTTP requests, you can skip
+   this step and use curl or any HTTP client.
+
+   <CodeTabs>
+   ```csharp title="C#"
+   // From your project directory, add the NuGet package:
+   dotnet add package SpaceGassApi.Client
+
+   // This also installs the required Kiota dependencies:
+   //   Microsoft.Kiota.Abstractions
+   //   Microsoft.Kiota.Http.HttpClientLibrary
+   //   Microsoft.Kiota.Serialization.Json
+   ```
+
+   ```python title="Python"
+   # Install from PyPI:
+   pip install spacegass-api-client
+
+   # This also installs the required Kiota dependencies:
+   #   microsoft-kiota-abstractions
+   #   microsoft-kiota-http
+   #   microsoft-kiota-serialization-json
+   ```
+
+   ```bash title="curl"
+   # No installation needed — curl is included with Windows 10+.
+   # You can also use any HTTP client (Postman, Insomnia, etc.)
+   ```
+   </CodeTabs>
+
+1. **Create the Client**
+
+   <CodeTabs>
+   ```csharp title="C#"
+   using Microsoft.Kiota.Abstractions.Authentication;
+   using Microsoft.Kiota.Http.HttpClientLibrary;
+   using SpaceGassApi.Client;
+
+   var authProvider = new ApiKeyAuthenticationProvider(
+       "YOUR_API_KEY",
+       "X-API-KEY",
+       ApiKeyAuthenticationProvider.KeyLocation.Header);
+
+   var adapter = new HttpClientRequestAdapter(authProvider);
+   adapter.BaseUrl = "https://localhost:5001";
+
+   var client = new SpaceGassApiClient(adapter);
+   ```
+
+   ```python title="Python"
+   from microsoft_kiota_http.httpx_request_adapter import HttpxRequestAdapter
+   from spacegass_client.space_gass_api_client import SpaceGassApiClient
+
+   adapter = HttpxRequestAdapter(auth_provider)
+   adapter.base_url = "https://localhost:5001"
+
+   client = SpaceGassApiClient(adapter)
+   ```
+
+   ```bash title="curl"
+   # Include the API key header with every request:
+   curl -H "X-API-KEY: YOUR_API_KEY" https://localhost:5001/api/v1/...
+   ```
+   </CodeTabs>
+
+1. **Open a Project File**
+
+   <CodeTabs>
+   ```csharp title="C#"
+   using SpaceGassApi.Client.Models;
+
+   await client.Job.File.Open.PostAsync(
+       new LocalFileRequest { FilePath = @"C:\Projects\MyStructure.sg" });
+   ```
+
+   ```python title="Python"
+   from spacegass_client.models.local_file_request import LocalFileRequest
+
+   await client.job.file.open.post(
+       LocalFileRequest(file_path="C:\\Projects\\MyStructure.sg"))
+   ```
+
+   ```bash title="curl"
+   curl -X POST https://localhost:5001/api/v1/job/file/open \
+     -H "X-API-KEY: YOUR_API_KEY" \
+     -H "Content-Type: application/json" \
+     -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
+   ```
+   </CodeTabs>
+
+1. **Get All Nodes**
+
+   <CodeTabs>
+   ```csharp title="C#"
+   var nodes = await client.Job.Structure.Nodes.GetAsync();
+
+   foreach (var node in nodes)
+   {
+       Console.WriteLine($"Node {node.Key}: ({node.X}, {node.Y}, {node.Z})");
+   }
+   ```
+
+   ```python title="Python"
+   nodes = await client.job.structure.nodes.get()
+
+   for node in nodes:
+       print(f"Node {node.key}: ({node.x}, {node.y}, {node.z})")
+   ```
+
+   ```bash title="curl"
+   curl https://localhost:5001/api/v1/job/structure/nodes \
+     -H "X-API-KEY: YOUR_API_KEY"
+   ```
+   </CodeTabs>
+
+1. **Close the Project**
+
+   <CodeTabs>
+   ```csharp title="C#"
+   await client.Job.Close.PostAsync();
+   ```
+
+   ```python title="Python"
+   await client.job.close.post()
+   ```
+
+   ```bash title="curl"
+   curl -X POST https://localhost:5001/api/v1/job/close \
+     -H "X-API-KEY: YOUR_API_KEY"
+   ```
+   </CodeTabs>
+</Stepper>
+
+## Next Steps
+
+- [Authentication](/getting-started/authentication) — API key details
+  and setup
+- [SDK Examples](/guides/sdk-examples) — Full walkthrough with error
+  handling
+- [File Handling](/guides/file-handling) — Open, save, force-open, and
+  file status checks
+- [API Reference](/api) — Browse all endpoints interactively

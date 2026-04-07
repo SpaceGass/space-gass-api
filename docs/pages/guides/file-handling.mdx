@@ -1,0 +1,123 @@
+---
+title: File Handling
+description: Working with SPACE GASS job files through the API
+---
+
+The API provides endpoints for managing SPACE GASS `.sg` project files
+— opening, saving, closing, and checking file status before operations.
+
+## Opening a File
+
+<CodeTabs>
+```csharp title="C#"
+using SpaceGassApi.Client.Models;
+
+await client.Job.File.Open.PostAsync(
+    new LocalFileRequest
+    {
+        FilePath = @"C:\Projects\MyStructure.sg"
+    });
+```
+
+```python title="Python"
+from spacegass_client.models.local_file_request import LocalFileRequest
+
+await client.job.file.open.post(
+    LocalFileRequest(file_path="C:\\Projects\\MyStructure.sg"))
+```
+
+```bash title="curl"
+curl -X POST https://localhost:5001/api/v1/job/file/open \
+  -H "X-API-KEY: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
+```
+</CodeTabs>
+
+## Checking File Status
+
+Before opening a file, you can check its status to determine if it
+is locked by another process or has unsaved changes:
+
+<CodeTabs>
+```csharp title="C#"
+var status = await client.Job.File.Status.PostAsync(
+    new LocalFileRequest
+    {
+        FilePath = @"C:\Projects\MyStructure.sg"
+    });
+
+// status contains CanOpenSafely, Description, RecommendedAction
+```
+
+```bash title="curl"
+curl -X POST https://localhost:5001/api/v1/job/file/status \
+  -H "X-API-KEY: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
+```
+</CodeTabs>
+
+## Saving
+
+<CodeTabs>
+```csharp title="C#"
+// Save an already-opened file
+await client.Job.File.Save.PostAsync();
+
+// Save as a new file path
+await client.Job.File.SaveAs.PostAsync(
+    new LocalFileRequest
+    {
+        FilePath = @"C:\Projects\MyStructure_Copy.sg"
+    });
+```
+
+```bash title="curl"
+# Save current file
+curl -X POST https://localhost:5001/api/v1/job/file/save \
+  -H "X-API-KEY: YOUR_API_KEY"
+
+# Save as new file
+curl -X POST https://localhost:5001/api/v1/job/file/save-as \
+  -H "X-API-KEY: YOUR_API_KEY" \
+  -H "Content-Type: application/json" \
+  -d '{"filePath": "C:\\Projects\\MyStructure_Copy.sg"}'
+```
+</CodeTabs>
+
+## Creating a New Job
+
+<CodeTabs>
+```csharp title="C#"
+await client.Job.File.New.PostAsync();
+```
+
+```bash title="curl"
+curl -X POST https://localhost:5001/api/v1/job/file/new \
+  -H "X-API-KEY: YOUR_API_KEY"
+```
+</CodeTabs>
+
+## Closing
+
+<CodeTabs>
+```csharp title="C#"
+await client.Job.Close.PostAsync();
+```
+
+```python title="Python"
+await client.job.close.post()
+```
+
+```bash title="curl"
+curl -X POST https://localhost:5001/api/v1/job/close \
+  -H "X-API-KEY: YOUR_API_KEY"
+```
+</CodeTabs>
+
+{/* TODO: Adapt additional content from docs/SPACE_GASS_FILE_HANDLING.md */}
+{/* Topics to cover: */}
+{/* - Force open scenarios (locked files, unsaved changes) */}
+{/* - File status enum values and their meanings */}
+{/* - Recommended workflow: status check -> open -> modify -> save -> close */}

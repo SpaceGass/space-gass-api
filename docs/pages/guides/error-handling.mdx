@@ -1,0 +1,84 @@
+---
+title: Error Handling
+description: How the SpaceGass API reports and handles errors
+---
+
+The API returns structured error responses using the
+[RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) Problem Details
+format. All error responses include a JSON body with diagnostic
+information.
+
+## Error Response Format
+
+```json
+{
+  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
+  "title": "Bad Request",
+  "status": 400,
+  "detail": "Node with key 1 already exists",
+  "traceId": "00-abc123..."
+}
+```
+
+## HTTP Status Codes
+
+| Status | Meaning |
+|--------|---------|
+| `400`  | Bad request — validation failure or invalid input |
+| `401`  | Unauthorized — missing or invalid API key |
+| `404`  | Not found — resource does not exist |
+| `409`  | Conflict — operation conflicts with current state (e.g., file locked) |
+| `500`  | Server error — unexpected internal failure |
+
+## Handling Errors in SDK Clients
+
+<CodeTabs>
+```csharp title="C#"
+using Microsoft.Kiota.Abstractions;
+
+try
+{
+    var node = await client.Job.Structure.Nodes[999].GetAsync();
+}
+catch (ApiException ex) when (ex.ResponseStatusCode == 404)
+{
+    Console.WriteLine($"Node not found: {ex.Message}");
+}
+catch (ApiException ex) when (ex.ResponseStatusCode == 401)
+{
+    Console.WriteLine("Invalid API key. Check your X-API-KEY header.");
+}
+catch (ApiException ex)
+{
+    Console.WriteLine($"API error {ex.ResponseStatusCode}: {ex.Message}");
+}
+```
+
+```python title="Python"
+from kiota_abstractions.api_error import APIError
+
+try:
+    node = await client.job.structure.nodes.by_key(999).get()
+except APIError as e:
+    if e.response_status_code == 404:
+        print(f"Node not found: {e.message}")
+    elif e.response_status_code == 401:
+        print("Invalid API key.")
+    else:
+        print(f"API error {e.response_status_code}: {e.message}")
+```
+
+```bash title="curl"
+# curl shows HTTP status in verbose mode
+curl -v https://localhost:5001/api/v1/job/structure/nodes/999 \
+  -H "X-API-KEY: YOUR_API_KEY"
+
+# Response (404):
+# {"type":"...","title":"Not Found","status":404,"detail":"Node 999 not found"}
+```
+</CodeTabs>
+
+{/* TODO: Adapt additional content from docs/ERROR_HANDLING.md */}
+{/* Topics to cover: */}
+{/* - Validation error details (field-level errors) */}
+{/* - Common error scenarios and resolutions */}

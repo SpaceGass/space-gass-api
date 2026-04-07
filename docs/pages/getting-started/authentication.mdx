@@ -1,0 +1,69 @@
+---
+title: Authentication
+description: API key authentication for the SpaceGass API
+---
+
+The SpaceGass API uses API key authentication. Every request must
+include a valid key in the `X-API-KEY` HTTP header.
+
+## Setting Up Authentication
+
+<CodeTabs>
+```csharp title="C#"
+using Microsoft.Kiota.Abstractions.Authentication;
+using Microsoft.Kiota.Http.HttpClientLibrary;
+using SpaceGassApi.Client;
+
+// Kiota has a built-in provider for API key auth
+var authProvider = new ApiKeyAuthenticationProvider(
+    "YOUR_API_KEY",
+    "X-API-KEY",
+    ApiKeyAuthenticationProvider.KeyLocation.Header);
+
+var adapter = new HttpClientRequestAdapter(authProvider);
+adapter.BaseUrl = "https://localhost:5001";
+
+var client = new SpaceGassApiClient(adapter);
+```
+
+```python title="Python"
+# Configure the request adapter with your API key
+# The key is sent as the X-API-KEY header on every request
+adapter.base_url = "https://localhost:5001"
+```
+
+```bash title="curl"
+# Pass the API key as a header
+curl -H "X-API-KEY: YOUR_API_KEY" \
+  https://localhost:5001/api/v1/info
+```
+</CodeTabs>
+
+## Validating Your Key
+
+You can check whether a key is valid before making other API calls:
+
+<CodeTabs>
+```csharp title="C#"
+var result = await client.Apikey.Validate.PostAsync();
+// Returns ApiKeyValidationResponse with IsValid, Tier, ExpiresAt
+```
+
+```bash title="curl"
+curl -X POST https://localhost:5001/api/v1/apikey/validate \
+  -H "X-API-KEY: YOUR_API_KEY"
+```
+</CodeTabs>
+
+## Error Responses
+
+| Status | Meaning |
+|--------|---------|
+| `401`  | API key is missing, invalid, or expired |
+| `403`  | API key does not have permission for this operation |
+
+{/* TODO: Adapt additional detail from docs/API_KEY_SYSTEM.md */}
+{/* Topics to cover: */}
+{/* - API key format and structure */}
+{/* - Tier-based rate limits */}
+{/* - Key generation and deactivation endpoints */}

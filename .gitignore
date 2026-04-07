@@ -416,3 +416,27 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+# ============================================
+# Python
+# ============================================
+*.py[cod]
+*$py.class
+*.so
+*.egg-info/
+*.egg
+dist/
+build/
+.eggs/
+.venv/
+venv/
+.python-version
+
+# ============================================
+# Node.js / Zudoku docs site
+# ============================================
+docs/node_modules/
+docs/dist/
+docs/.zudoku/
+.env.local
+.env.*.local
