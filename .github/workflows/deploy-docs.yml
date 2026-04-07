@@ -35,10 +35,15 @@ jobs:
         working-directory: docs
         run: npx zudoku build
 
+      - name: Prepare deployment
+        run: |
+          cp docs/dist/404.html docs/dist/space-gass-api/404.html 2>/dev/null || true
+          touch docs/dist/space-gass-api/.nojekyll
+
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: docs/dist
+          path: docs/dist/space-gass-api
           include-hidden-files: true
 
   deploy:

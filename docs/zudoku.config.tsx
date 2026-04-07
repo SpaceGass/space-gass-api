@@ -118,6 +118,7 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
 // --- Zudoku config ---
 
 const config: ZudokuConfig = {
+  basePath: "/space-gass-api",
   site: {
     title: "SpaceGass API",
     logo: {
