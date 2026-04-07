@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.QueryRestrainedNode
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.CreateSimpleBeam", "Example.CreateSimpleBeam\Example.CreateSimpleBeam.csproj", "{C7804F4F-E114-465E-9B1E-0F15221BAB6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceGassApi", "..\client\SpaceGassApi\SpaceGassApi.csproj", "{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceGassApi", "..\client\SpaceGassApi.csproj", "{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.RunAnalysis", "Example.RunAnalysis\Example.RunAnalysis.csproj", "{1E37C4AF-EAD8-4471-8388-DA72FE5256D9}"
 EndProject

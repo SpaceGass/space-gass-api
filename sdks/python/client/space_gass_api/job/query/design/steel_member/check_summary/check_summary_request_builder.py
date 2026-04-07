@@ -1,0 +1,112 @@
+from __future__ import annotations
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from kiota_abstractions.base_request_builder import BaseRequestBuilder
+from kiota_abstractions.base_request_configuration import RequestConfiguration
+from kiota_abstractions.default_query_parameters import QueryParameters
+from kiota_abstractions.get_path_parameters import get_path_parameters
+from kiota_abstractions.method import Method
+from kiota_abstractions.request_adapter import RequestAdapter
+from kiota_abstractions.request_information import RequestInformation
+from kiota_abstractions.request_option import RequestOption
+from kiota_abstractions.serialization import Parsable, ParsableFactory
+from typing import Any, Optional, TYPE_CHECKING, Union
+from warnings import warn
+
+if TYPE_CHECKING:
+    from ......models.problem_details import ProblemDetails
+    from ......models.steel_check_summary_query_result import SteelCheckSummaryQueryResult
+
+class CheckSummaryRequestBuilder(BaseRequestBuilder):
+    """
+    Builds and executes requests for operations under /job/query/design/steel-member/check-summary
+    """
+    def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
+        """
+        Instantiates a new CheckSummaryRequestBuilder and sets the default values.
+        param path_parameters: The raw url or the url-template parameters for the request.
+        param request_adapter: The request adapter to use to execute the requests.
+        Returns: None
+        """
+        super().__init__(request_adapter, "{+baseurl}/job/query/design/steel-member/check-summary{?Limit*,Offset*,member*}", path_parameters)
+    
+    async def get(self,request_configuration: Optional[RequestConfiguration[CheckSummaryRequestBuilderGetQueryParameters]] = None) -> Optional[SteelCheckSummaryQueryResult]:
+        """
+        Gets steel member design check summary results, optionally filtered by member keys.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: Optional[SteelCheckSummaryQueryResult]
+        """
+        request_info = self.to_get_request_information(
+            request_configuration
+        )
+        from ......models.problem_details import ProblemDetails
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "401": ProblemDetails,
+        }
+        if not self.request_adapter:
+            raise Exception("Http core is null") 
+        from ......models.steel_check_summary_query_result import SteelCheckSummaryQueryResult
+
+        return await self.request_adapter.send_async(request_info, SteelCheckSummaryQueryResult, error_mapping)
+    
+    def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[CheckSummaryRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
+        """
+        Gets steel member design check summary results, optionally filtered by member keys.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: RequestInformation
+        """
+        request_info = RequestInformation(Method.GET, self.url_template, self.path_parameters)
+        request_info.configure(request_configuration)
+        request_info.headers.try_add("Accept", "application/json")
+        return request_info
+    
+    def with_url(self,raw_url: str) -> CheckSummaryRequestBuilder:
+        """
+        Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
+        param raw_url: The raw URL to use for the request builder.
+        Returns: CheckSummaryRequestBuilder
+        """
+        if raw_url is None:
+            raise TypeError("raw_url cannot be null.")
+        return CheckSummaryRequestBuilder(self.request_adapter, raw_url)
+    
+    @dataclass
+    class CheckSummaryRequestBuilderGetQueryParameters():
+        """
+        Gets steel member design check summary results, optionally filtered by member keys.
+        """
+        def get_query_parameter(self,original_name: str) -> str:
+            """
+            Maps the query parameters names to their encoded names for the URI template parsing.
+            param original_name: The original query parameter name in the class.
+            Returns: str
+            """
+            if original_name is None:
+                raise TypeError("original_name cannot be null.")
+            if original_name == "limit":
+                return "Limit"
+            if original_name == "offset":
+                return "Offset"
+            if original_name == "member":
+                return "member"
+            return original_name
+        
+        # Maximum number of items to return. Default is null (return all).
+        limit: Optional[int] = None
+
+        # Filter by member keys.
+        member: Optional[list[int]] = None
+
+        # Number of items to skip from the start of the result set. Default is 0.
+        offset: Optional[int] = None
+
+    
+    @dataclass
+    class CheckSummaryRequestBuilderGetRequestConfiguration(RequestConfiguration[CheckSummaryRequestBuilderGetQueryParameters]):
+        """
+        Configuration for the request such as headers, query parameters, and middleware options.
+        """
+        warn("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.", DeprecationWarning)
+    
+
