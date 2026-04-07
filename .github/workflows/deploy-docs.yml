@@ -13,6 +13,9 @@ concurrency:
   group: "pages"
   cancel-in-progress: true
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,16 +38,13 @@ jobs:
         working-directory: docs
         run: npx zudoku build
 
-      - name: Prepare deployment
-        run: |
-          cp docs/dist/404.html docs/dist/space-gass-api/404.html 2>/dev/null || true
-          touch docs/dist/space-gass-api/.nojekyll
+      - name: Copy error pages into deploy directory
+        run: cp docs/dist/404.html docs/dist/space-gass-api/404.html 2>/dev/null || true
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
           path: docs/dist/space-gass-api
-          include-hidden-files: true
 
   deploy:
     needs: build
