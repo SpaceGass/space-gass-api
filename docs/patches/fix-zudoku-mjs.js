@@ -49,22 +49,34 @@ if (fs.existsSync(loaderPath)) {
 // Patch 2: prerender.js - accept entry.server.mjs in addition to .js
 if (fs.existsSync(prerenderPath)) {
   let content = fs.readFileSync(prerenderPath, "utf-8");
+
+  // 2a: Add existsSync import if not already present
+  const fsImportLine = 'import { readFile, rm } from "node:fs/promises";';
+  const fsImportWithSync =
+    'import { readFile, rm } from "node:fs/promises";\nimport { existsSync } from "node:fs";';
+  if (content.includes(fsImportLine) && !content.includes('from "node:fs";')) {
+    content = content.replace(fsImportLine, fsImportWithSync);
+    console.log("[patch] Added existsSync import to prerender.js");
+  }
+
+  // 2b: Replace hardcoded .js path with .js/.mjs fallback
   const oldLine =
     'const entryServerPath = pathToFileURL(path.join(distDir, "server/entry.server.js")).href;';
   const newLines = [
     'const entryServerJsPath = path.join(distDir, "server/entry.server.js");',
     'const entryServerMjsPath = path.join(distDir, "server/entry.server.mjs");',
-    'const entryServerFile = require("fs").existsSync(entryServerJsPath) ? entryServerJsPath : entryServerMjsPath;',
+    "const entryServerFile = existsSync(entryServerJsPath) ? entryServerJsPath : entryServerMjsPath;",
     "const entryServerPath = pathToFileURL(entryServerFile).href;",
   ].join("\n    ");
 
   if (content.includes(oldLine)) {
     content = content.replace(oldLine, newLines);
-    fs.writeFileSync(prerenderPath, content, "utf-8");
     console.log("[patch] Fixed prerender.js: accept entry.server.mjs");
   } else {
     console.log(
       "[patch] prerender.js: already patched or pattern changed",
     );
   }
+
+  fs.writeFileSync(prerenderPath, content, "utf-8");
 }
