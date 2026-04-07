@@ -1,6 +1,7 @@
+using SpaceGassApi;
 using SpaceGassApi.Job.New;
 using SpaceGassApi.Models;
-using SpaceGassApi.Examples.Common;
+
 
 // ---------------------------------------------------------------
 // Example: Manage Sections and Materials
@@ -19,7 +20,7 @@ using SpaceGassApi.Examples.Common;
 //   - A valid API key
 // ---------------------------------------------------------------
 
-var client = ApiClientFactory.Create();
+var client = SpaceGassApiClient.CreateClient();
 
 try
 {

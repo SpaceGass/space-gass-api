@@ -18,7 +18,7 @@ Prerequisites:
 import asyncio
 import sys
 
-from client_factory import create_client
+from extensions.client_extensions import create_client
 from space_gass_api.models.material_create import MaterialCreate
 from space_gass_api.models.member_create import MemberCreate
 from space_gass_api.models.node_create import NodeCreate

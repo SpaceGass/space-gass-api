@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SpaceGassApi.Examples.Common\SpaceGassApi.Examples.Common.csproj" />
+    <ProjectReference Include="..\..\client\SpaceGassApi.csproj" />
   </ItemGroup>
 
 </Project>

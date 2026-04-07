@@ -1,5 +1,6 @@
+using SpaceGassApi;
 using SpaceGassApi.Models;
-using SpaceGassApi.Examples.Common;
+
 
 // ---------------------------------------------------------------
 // Example: Run a Linear Static Analysis
@@ -27,7 +28,7 @@ var projectFilePath = Path.Combine(
 
 var pollIntervalMs = 500; // How often to poll for progress (milliseconds)
 
-var client = ApiClientFactory.Create();
+var client = SpaceGassApiClient.CreateClient();
 
 try
 {

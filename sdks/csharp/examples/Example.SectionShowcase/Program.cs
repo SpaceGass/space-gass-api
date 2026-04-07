@@ -1,5 +1,6 @@
+using SpaceGassApi;
 using SpaceGassApi.Models;
-using SpaceGassApi.Examples.Common;
+
 
 // ---------------------------------------------------------------
 // Example: Section Showcase
@@ -34,7 +35,7 @@ if (string.IsNullOrWhiteSpace(sourceFile))
 const double memberLength = 0.5;  // metres
 const double gridSpacing = 1.0;   // metres between grid positions (room for vertical + horizontal)
 
-var client = ApiClientFactory.Create();
+var client = SpaceGassApiClient.CreateClient();
 
 try
 {

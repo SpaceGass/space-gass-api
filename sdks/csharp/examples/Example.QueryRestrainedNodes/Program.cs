@@ -1,5 +1,6 @@
+using SpaceGassApi;
 using SpaceGassApi.Models;
-using SpaceGassApi.Examples.Common;
+
 
 // ---------------------------------------------------------------
 // Example: Query Restrained Nodes and Their Reactions
@@ -20,7 +21,7 @@ using SpaceGassApi.Examples.Common;
 // Update these values to match your local environment.
 const string projectFilePath = @"C:\Path\To\Your\Project.sg";
 
-var client = ApiClientFactory.Create();
+var client = SpaceGassApiClient.CreateClient();
 
 try
 {

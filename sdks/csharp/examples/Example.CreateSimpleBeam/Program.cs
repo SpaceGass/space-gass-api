@@ -1,6 +1,7 @@
+using SpaceGassApi;
 using SpaceGassApi.Job.New;
 using SpaceGassApi.Models;
-using SpaceGassApi.Examples.Common;
+
 
 // ---------------------------------------------------------------
 // Example: Create a Simple Beam Model from Scratch
@@ -22,7 +23,7 @@ var saveFilePath = Path.Combine(
     "SpaceGass Examples",
     "SimpleBeam.sg");
 
-var client = ApiClientFactory.Create();
+var client = SpaceGassApiClient.CreateClient();
 
 try
 {

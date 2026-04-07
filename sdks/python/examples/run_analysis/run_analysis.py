@@ -18,7 +18,7 @@ import asyncio
 import os
 import sys
 
-from client_factory import create_client
+from extensions.client_extensions import create_client
 from space_gass_api.models.open_job_request import OpenJobRequest
 from space_gass_api.models.static_settings_update import StaticSettingsUpdate
 from space_gass_api.models.analysis_run_status import AnalysisRunStatus

@@ -18,7 +18,7 @@ import sys
 
 from kiota_abstractions.base_request_configuration import RequestConfiguration
 
-from client_factory import create_client
+from extensions.client_extensions import create_client
 from space_gass_api.models.open_job_request import OpenJobRequest
 from space_gass_api.models.node_type_filter import NodeTypeFilter
 from space_gass_api.job.structure.nodes.nodes_request_builder import NodesRequestBuilder

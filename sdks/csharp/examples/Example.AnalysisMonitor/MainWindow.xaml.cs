@@ -9,7 +9,7 @@ using Microsoft.Kiota.Abstractions;
 using Microsoft.Win32;
 using SpaceGassApi;
 using SpaceGassApi.Models;
-using SpaceGassApi.Examples.Common;
+
 
 namespace Example.AnalysisMonitor;
 
@@ -54,7 +54,7 @@ public partial class MainWindow : Window
 
         try
         {
-            _client = ApiClientFactory.Create(baseUrl);
+            _client = SpaceGassApiClient.CreateClient(baseUrl);
             var info = await _client.Service.Info.GetAsync();
 
             _isConnected = true;
