@@ -1,0 +1,58 @@
+---
+title: Introduction
+description: Welcome to the SpaceGass API documentation
+---
+
+The SpaceGass API provides programmatic access to SPACE GASS structural
+analysis data. Use it to open job files, read and write structural
+entities, manage libraries, and query analysis results.
+
+The API is a **headless service** — it runs as a local server on your
+machine without any program UI. There is no interaction with the
+SPACE GASS desktop interface. All operations are performed through
+HTTP requests to the local server.
+
+## What You Can Do
+
+- **Open and manage job files** — Create, open, save, and close
+  SPACE GASS `.sg` project files
+- **Read and write structural data** — Nodes, members, load cases,
+  load categories, and load case groups
+- **Access libraries** — Query section, material, and bolt libraries
+- **Query analysis results** — Retrieve node displacements, reactions,
+  and member forces
+- **Batch operations** — Create or update many entities in a single
+  request
+
+## Base URL
+
+All API endpoints are served under a versioned path:
+
+```
+/api/v1
+```
+
+## Authentication
+
+Every request must include an API key in the `X-API-KEY` header.
+See [Authentication](/getting-started/authentication) for details.
+
+## SDK Clients
+
+Generated SDK clients are available for:
+
+- **C#** — `SpaceGassApi.Client` (NuGet package / project reference)
+- **Python** — `spacegass-api-client` (pip installable)
+
+Both are generated from the OpenAPI specification using
+[Microsoft Kiota](https://learn.microsoft.com/en-us/openapi/kiota/overview).
+
+## Next Steps
+
+- [Quick Start](/getting-started/quick-start) — Get up and running
+  in 5 minutes
+- [Authentication](/getting-started/authentication) — Set up your
+  API key
+- [SDK Examples](/guides/sdk-examples) — Full walkthrough using the
+  C# and Python clients
+- [API Reference](/api) — Browse all endpoints interactively

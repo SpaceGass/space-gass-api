@@ -1,0 +1,15 @@
+{
+  "name": "spacegass-api-docs",
+  "version": "1.0.0",
+  "private": true,
+  "description": "SpaceGass API Documentation Site",
+  "scripts": {
+    "dev": "zudoku dev",
+    "build": "zudoku build",
+    "preview": "zudoku preview",
+    "postinstall": "node patches/fix-zudoku-mjs.js"
+  },
+  "dependencies": {
+    "zudoku": "^0.69.3"
+  }
+}
