@@ -1,0 +1,304 @@
+<Window x:Class="Example.AnalysisMonitor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="SPACE GASS — Analysis Monitor"
+        Width="900" Height="700"
+        MinWidth="700" MinHeight="500"
+        Background="#FF024f6e"
+        Foreground="#FFf8fafc"
+        FontFamily="Segoe UI"
+        FontSize="13">
+
+    <Window.Resources>
+        <!-- Design System: Technical Bauhaus dark theme -->
+        <SolidColorBrush x:Key="PanelBg" Color="#FF035679"/>
+        <SolidColorBrush x:Key="SurfaceBg" Color="#FF024f6e"/>
+        <SolidColorBrush x:Key="Border" Color="#FF334155"/>
+        <SolidColorBrush x:Key="TextMuted" Color="#FF94a3b8"/>
+        <SolidColorBrush x:Key="TextDim" Color="#FF64748b"/>
+        <SolidColorBrush x:Key="Accent" Color="#FFf97316"/>
+        <SolidColorBrush x:Key="Green" Color="#FF22c55e"/>
+        <SolidColorBrush x:Key="Red" Color="#FFef4444"/>
+        <SolidColorBrush x:Key="Orange" Color="#FFf97316"/>
+
+        <!-- Shared panel style -->
+        <Style x:Key="Panel" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource PanelBg}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="6"/>
+            <Setter Property="Padding" Value="12"/>
+        </Style>
+
+        <!-- Section header -->
+        <Style x:Key="SectionHeader" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="11"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="Margin" Value="0,0,0,8"/>
+        </Style>
+
+        <!-- Analysis row border -->
+        <Style x:Key="AnalysisRow" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource SurfaceBg}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource Border}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+            <Setter Property="Padding" Value="10,7"/>
+        </Style>
+
+        <!-- Label in detail grid -->
+        <Style x:Key="DetailLabel" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="{StaticResource TextMuted}"/>
+            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>  <!-- Logo -->
+            <RowDefinition Height="Auto"/>  <!-- Service -->
+            <RowDefinition Height="Auto"/>  <!-- Project -->
+            <RowDefinition Height="Auto"/>  <!-- Analysis Types -->
+            <RowDefinition Height="*"/>     <!-- Queue Grid -->
+            <RowDefinition Height="Auto"/>  <!-- Detail Panel -->
+        </Grid.RowDefinitions>
+
+        <!-- ============================================================ -->
+        <!-- LOGO -->
+        <!-- ============================================================ -->
+        <DockPanel Grid.Row="0" Margin="0,0,0,12">
+            <Image Source="logo.png" Height="32" HorizontalAlignment="Left" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <TextBlock Text="Analysis Monitor" Foreground="{StaticResource TextMuted}"
+                       FontSize="12" VerticalAlignment="Center" Margin="12,0,0,0"/>
+        </DockPanel>
+
+        <!-- ============================================================ -->
+        <!-- SERVICE PANEL -->
+        <!-- ============================================================ -->
+        <Border Grid.Row="1" Style="{StaticResource Panel}" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Style="{StaticResource SectionHeader}" Text="SERVICE"/>
+                <DockPanel>
+                    <Button x:Name="BtnConnect" Content="Connect" DockPanel.Dock="Right"
+                            Padding="12,4" Margin="8,0,0,0" Click="BtnConnect_Click"/>
+                    <Ellipse x:Name="ConnDot" Width="10" Height="10" Fill="{StaticResource Red}" Margin="0,0,8,0"/>
+                    <TextBlock x:Name="ConnText" Text="Disconnected" Foreground="{StaticResource TextMuted}"
+                               VerticalAlignment="Center" Width="90"/>
+                    <TextBox x:Name="TxtServiceUrl" Text="https://localhost:53483"
+                             Background="{StaticResource SurfaceBg}" Foreground="#FFf8fafc"
+                             BorderBrush="{StaticResource Border}" Padding="6,4"
+                             FontFamily="Cascadia Code,Consolas" FontSize="12"/>
+                </DockPanel>
+                <StackPanel Orientation="Horizontal" Margin="18,6,0,0">
+                    <TextBlock Text="API Status:" Foreground="{StaticResource TextMuted}" FontSize="12"/>
+                    <TextBlock x:Name="TxtApiStatus" Text="—" Foreground="{StaticResource TextDim}"
+                               FontSize="12" FontFamily="Cascadia Code,Consolas" Margin="8,0,0,0"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- ============================================================ -->
+        <!-- PROJECT PANEL -->
+        <!-- ============================================================ -->
+        <Border Grid.Row="2" Style="{StaticResource Panel}" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Style="{StaticResource SectionHeader}" Text="PROJECT"/>
+                <DockPanel>
+                    <Button x:Name="BtnOpenClose" Content="Open" DockPanel.Dock="Right"
+                            Padding="12,4" Margin="8,0,0,0" Click="BtnOpenClose_Click" IsEnabled="False"/>
+                    <Button Content="Browse..." DockPanel.Dock="Right"
+                            Padding="12,4" Margin="8,0,0,0" Click="BtnBrowse_Click" IsEnabled="True"/>
+                    <TextBox x:Name="TxtProjectPath"
+                             Text="MyProject.sg"
+                             Background="{StaticResource SurfaceBg}" Foreground="#FFf8fafc"
+                             BorderBrush="{StaticResource Border}" Padding="6,4" IsReadOnly="True"/>
+                </DockPanel>
+            </StackPanel>
+        </Border>
+
+        <!-- ============================================================ -->
+        <!-- ANALYSIS TYPES -->
+        <!-- ============================================================ -->
+        <Border Grid.Row="3" Style="{StaticResource Panel}" Margin="0,0,0,8">
+            <StackPanel>
+                <TextBlock Style="{StaticResource SectionHeader}" Text="ANALYSIS TYPES"/>
+
+                <!-- Static row -->
+                <Border Style="{StaticResource AnalysisRow}" Margin="0,0,0,6">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Button Content="⚙" FontSize="16" Background="Transparent" BorderThickness="0"
+                                    Foreground="{StaticResource TextMuted}" Padding="4,0" Margin="0,0,4,0"
+                                    ToolTip="Settings" Click="BtnSettingsStatic_Click"/>
+                            <Button x:Name="BtnRunStatic" Content="▶ Run" Padding="10,4"
+                                    Click="BtnRunStatic_Click" IsEnabled="False"/>
+                        </StackPanel>
+                        <TextBlock Text="Static" FontWeight="Medium" VerticalAlignment="Center" Width="120"/>
+                        <RadioButton x:Name="RadioLinear" Content="Linear" IsChecked="True"
+                                     Foreground="{StaticResource TextMuted}" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                        <RadioButton x:Name="RadioNonLinear" Content="Non-Linear"
+                                     Foreground="{StaticResource TextMuted}" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </Border>
+
+                <!-- Buckling row -->
+                <Border Style="{StaticResource AnalysisRow}" Margin="0,0,0,6">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Button Content="⚙" FontSize="16" Background="Transparent" BorderThickness="0"
+                                    Foreground="{StaticResource TextMuted}" Padding="4,0" Margin="0,0,4,0"
+                                    ToolTip="Settings" Click="BtnSettingsBuckling_Click"/>
+                            <Button x:Name="BtnRunBuckling" Content="▶ Run" Padding="10,4"
+                                    Click="BtnRunBuckling_Click" IsEnabled="False"/>
+                        </StackPanel>
+                        <TextBlock Text="Buckling" FontWeight="Medium" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </Border>
+
+                <!-- Dynamic Frequency row -->
+                <Border Style="{StaticResource AnalysisRow}">
+                    <DockPanel>
+                        <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                            <Button Content="⚙" FontSize="16" Background="Transparent" BorderThickness="0"
+                                    Foreground="{StaticResource TextMuted}" Padding="4,0" Margin="0,0,4,0"
+                                    ToolTip="Settings" Click="BtnSettingsDynamic_Click"/>
+                            <Button x:Name="BtnRunDynamic" Content="▶ Run" Padding="10,4"
+                                    Click="BtnRunDynamic_Click" IsEnabled="False"/>
+                        </StackPanel>
+                        <TextBlock Text="Dynamic Frequency" FontWeight="Medium" VerticalAlignment="Center"/>
+                    </DockPanel>
+                </Border>
+            </StackPanel>
+        </Border>
+
+        <!-- ============================================================ -->
+        <!-- QUEUE GRID -->
+        <!-- ============================================================ -->
+        <Border Grid.Row="4" Style="{StaticResource Panel}" Margin="0,0,0,8">
+            <DockPanel>
+                <TextBlock Style="{StaticResource SectionHeader}" DockPanel.Dock="Top" Text="ANALYSIS QUEUE"/>
+                <DataGrid x:Name="QueueGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                          Background="Transparent" BorderThickness="0"
+                          RowBackground="Transparent" AlternatingRowBackground="Transparent"
+                          GridLinesVisibility="None" HeadersVisibility="Column"
+                          CanUserReorderColumns="False" CanUserResizeRows="False"
+                          SelectionChanged="QueueGrid_SelectionChanged">
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="Padding" Value="4,2"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource SurfaceBg}"/>
+                                    <Setter Property="Foreground" Value="#FFf8fafc"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.CellStyle>
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="{StaticResource SurfaceBg}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Analysis Type" Binding="{Binding TypeName}" Width="*"
+                                            Foreground="#FFf8fafc"/>
+                        <DataGridTextColumn Header="Status" Binding="{Binding StatusText}" Width="100"
+                                            Foreground="#FFf8fafc"/>
+                        <DataGridTextColumn Header="Elapsed" Binding="{Binding ElapsedText}" Width="90"
+                                            Foreground="{StaticResource TextMuted}"/>
+                        <DataGridTemplateColumn Header="" Width="70">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Cancel" Padding="8,2" FontSize="11"
+                                            Visibility="{Binding CancelVisible, Mode=OneWay}"
+                                            Click="BtnCancelRun_Click"
+                                            Tag="{Binding}"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
+        </Border>
+
+        <!-- ============================================================ -->
+        <!-- DETAIL PANEL -->
+        <!-- ============================================================ -->
+        <Border Grid.Row="5" Style="{StaticResource Panel}">
+            <StackPanel>
+                <TextBlock Style="{StaticResource SectionHeader}" Text="CURRENT ANALYSIS"/>
+                <Grid x:Name="DetailGrid" Visibility="Collapsed">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource DetailLabel}" Text="Analysis"/>
+                    <TextBlock Grid.Row="0" Grid.Column="1" x:Name="DetailType" Margin="0,2"/>
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Style="{StaticResource DetailLabel}" Text="Step"/>
+                    <TextBlock Grid.Row="1" Grid.Column="1" x:Name="DetailStep" Margin="0,2"/>
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Style="{StaticResource DetailLabel}" Text="Load Cases"/>
+                    <TextBlock Grid.Row="2" Grid.Column="1" x:Name="DetailLoadCases" Margin="0,2"/>
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource DetailLabel}" Text="Status"/>
+                    <TextBlock Grid.Row="3" Grid.Column="1" x:Name="DetailStatus" Margin="0,2"/>
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Style="{StaticResource DetailLabel}" Text="Elapsed"/>
+                    <TextBlock Grid.Row="4" Grid.Column="1" x:Name="DetailElapsed" Margin="0,2"/>
+
+                    <StackPanel Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,8,0,0">
+                        <ProgressBar x:Name="DetailProgressBar" Height="10" Minimum="0" Maximum="100"
+                                     Background="{StaticResource SurfaceBg}" Foreground="{StaticResource Accent}"
+                                     BorderThickness="0"/>
+                        <TextBlock x:Name="DetailProgressText" FontSize="11" Foreground="{StaticResource TextMuted}" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <!-- Error / warnings display -->
+                    <Border Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" x:Name="DetailErrorBorder"
+                            Background="#33ef4444" CornerRadius="4" Padding="8,6" Margin="0,8,0,0"
+                            Visibility="Collapsed">
+                        <StackPanel>
+                            <TextBlock x:Name="DetailErrorHeader" FontWeight="SemiBold" FontSize="12"
+                                       Foreground="{StaticResource Red}" Margin="0,0,0,4"/>
+                            <TextBlock x:Name="DetailErrorText" TextWrapping="Wrap" FontSize="12"
+                                       Foreground="#FFf8fafc" MaxHeight="120"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" x:Name="DetailWarningBorder"
+                            Background="#33f97316" CornerRadius="4" Padding="8,6" Margin="0,4,0,0"
+                            Visibility="Collapsed">
+                        <StackPanel>
+                            <TextBlock Text="Warnings" FontWeight="SemiBold" FontSize="12"
+                                       Foreground="{StaticResource Orange}" Margin="0,0,0,4"/>
+                            <TextBlock x:Name="DetailWarningText" TextWrapping="Wrap" FontSize="12"
+                                       Foreground="#FFf8fafc" MaxHeight="120"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                <TextBlock x:Name="DetailEmpty" Text="No analysis running"
+                           Foreground="{StaticResource TextDim}" FontStyle="Italic"
+                           HorizontalAlignment="Center" Margin="0,8"/>
+            </StackPanel>
+        </Border>
+    </Grid>
+</Window>

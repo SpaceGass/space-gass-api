@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SPACE GASS — Analysis Monitor</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1e1e2e; color: #cdd6f4; font-size: 13px; }
+
+  .app { max-width: 900px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 12px; height: 100vh; }
+
+  /* -- Panels -- */
+  .panel { background: #313244; border: 1px solid #45475a; border-radius: 6px; padding: 12px; }
+  .panel-header { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #a6adc8; margin-bottom: 8px; }
+
+  /* -- Project Bar -- */
+  .project-bar { display: flex; gap: 8px; align-items: center; }
+  .project-bar input { flex: 1; background: #1e1e2e; border: 1px solid #45475a; border-radius: 4px; padding: 6px 10px; color: #cdd6f4; font-size: 13px; }
+  .project-bar input:focus { outline: none; border-color: #89b4fa; }
+
+  /* -- Buttons -- */
+  button { background: #45475a; border: 1px solid #585b70; border-radius: 4px; padding: 5px 12px; color: #cdd6f4; font-size: 12px; cursor: pointer; transition: background 0.15s; }
+  button:hover { background: #585b70; }
+  button:active { background: #6c7086; }
+  button.primary { background: #89b4fa; color: #1e1e2e; border-color: #89b4fa; font-weight: 600; }
+  button.primary:hover { background: #74c7ec; border-color: #74c7ec; }
+  button.danger { background: #f38ba8; color: #1e1e2e; border-color: #f38ba8; font-weight: 600; }
+  button.danger:hover { background: #eba0ac; border-color: #eba0ac; }
+  button:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* -- Analysis Selection -- */
+  .analysis-list { display: flex; flex-direction: column; gap: 6px; }
+  .analysis-row { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 4px; background: #1e1e2e; border: 1px solid #45475a; }
+  .analysis-row:hover { border-color: #585b70; }
+  .analysis-row .type-name { flex: 1; font-size: 13px; font-weight: 500; }
+  .analysis-row .radio-group { display: flex; gap: 10px; margin-right: 4px; }
+  .analysis-row .radio-group label { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #a6adc8; cursor: pointer; }
+  .analysis-row .radio-group input[type="radio"] { accent-color: #89b4fa; width: 14px; height: 14px; }
+  .analysis-row .settings-btn { background: transparent; border: none; color: #a6adc8; font-size: 16px; padding: 2px 6px; cursor: pointer; }
+  .analysis-row .settings-btn:hover { color: #89b4fa; }
+  .analysis-row .row-actions { display: flex; gap: 6px; }
+
+  /* -- Queue Grid -- */
+  .queue-table { width: 100%; border-collapse: collapse; }
+  .queue-table th { text-align: left; font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; color: #a6adc8; padding: 6px 8px; border-bottom: 1px solid #45475a; }
+  .queue-table td { padding: 8px; border-bottom: 1px solid #313244; vertical-align: middle; }
+  .queue-table tr:hover td { background: #45475a33; }
+  .queue-table .empty-row td { text-align: center; color: #6c7086; padding: 24px; font-style: italic; }
+
+  /* Status badges */
+  .status-badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 600; }
+  .status-queued { background: #45475a; color: #a6adc8; }
+  .status-running { background: #89b4fa33; color: #89b4fa; }
+  .status-completed { background: #a6e3a133; color: #a6e3a1; }
+  .status-failed { background: #f38ba833; color: #f38ba8; }
+  .status-cancelled { background: #45475a; color: #6c7086; }
+  .status-cancelling { background: #fab38733; color: #fab387; }
+
+  /* Progress bar */
+  .progress-cell { width: 180px; }
+  .progress-bar-track { background: #1e1e2e; border-radius: 3px; height: 6px; overflow: hidden; }
+  .progress-bar-fill { height: 100%; border-radius: 3px; background: #89b4fa; transition: width 0.3s ease; }
+  .progress-bar-fill.completed { background: #a6e3a1; }
+  .progress-bar-fill.failed { background: #f38ba8; }
+  .progress-bar-fill.cancelled { background: #6c7086; }
+  .progress-text { font-size: 11px; color: #a6adc8; margin-top: 2px; }
+
+  /* -- Detail Panel -- */
+  .detail-panel { flex: 0 0 auto; }
+  .detail-grid { display: grid; grid-template-columns: 120px 1fr; gap: 4px 12px; font-size: 13px; }
+  .detail-label { color: #a6adc8; font-weight: 500; }
+  .detail-value { color: #cdd6f4; }
+  .detail-progress { margin-top: 8px; }
+  .detail-progress .progress-bar-track { height: 10px; border-radius: 4px; }
+  .detail-progress .progress-bar-fill { transition: width 0.3s ease; }
+  .detail-empty { color: #6c7086; font-style: italic; text-align: center; padding: 12px; }
+
+  /* -- Settings Modal -- */
+  .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); display: none; align-items: center; justify-content: center; z-index: 100; }
+  .modal-overlay.active { display: flex; }
+  .modal { background: #313244; border: 1px solid #45475a; border-radius: 8px; padding: 16px; width: 500px; max-height: 80vh; display: flex; flex-direction: column; }
+  .modal-title { font-size: 14px; font-weight: 600; margin-bottom: 12px; }
+  .modal textarea { flex: 1; min-height: 280px; background: #1e1e2e; border: 1px solid #45475a; border-radius: 4px; padding: 10px; color: #a6e3a1; font-family: 'Cascadia Code', 'Consolas', monospace; font-size: 12px; resize: vertical; }
+  .modal textarea:focus { outline: none; border-color: #89b4fa; }
+  .modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 12px; }
+
+  /* Elapsed time column */
+  .elapsed { font-variant-numeric: tabular-nums; color: #a6adc8; font-size: 12px; }
+
+  /* -- Connection Status -- */
+  .connection-bar { display: flex; align-items: center; gap: 10px; }
+  .connection-bar .url-input { flex: 1; background: #1e1e2e; border: 1px solid #45475a; border-radius: 4px; padding: 6px 10px; color: #cdd6f4; font-size: 13px; font-family: 'Cascadia Code', 'Consolas', monospace; }
+  .connection-bar .url-input:focus { outline: none; border-color: #89b4fa; }
+  .connection-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+  .connection-dot.connected { background: #a6e3a1; box-shadow: 0 0 6px #a6e3a166; }
+  .connection-dot.disconnected { background: #f38ba8; box-shadow: 0 0 6px #f38ba866; }
+  .connection-dot.connecting { background: #fab387; box-shadow: 0 0 6px #fab38766; animation: pulse 1s ease-in-out infinite; }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  .connection-status-text { font-size: 12px; color: #a6adc8; min-width: 80px; }
+  .api-status-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; padding-left: 18px; font-size: 12px; color: #6c7086; }
+  .api-status-row .api-label { color: #a6adc8; }
+  .api-status-row .api-value { font-family: 'Cascadia Code', 'Consolas', monospace; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- Connection Bar -->
+  <div class="panel">
+    <div class="panel-header">Service</div>
+    <div class="connection-bar">
+      <div class="connection-dot disconnected" id="connDot"></div>
+      <span class="connection-status-text" id="connText">Disconnected</span>
+      <input type="text" class="url-input" id="serviceUrl" value="https://localhost:53483">
+      <button class="primary" id="btnConnect" onclick="toggleConnection()">Connect</button>
+    </div>
+    <div class="api-status-row" id="apiStatusRow">
+      <span class="api-label">API Status:</span>
+      <span class="api-value" id="apiStatusText">—</span>
+    </div>
+  </div>
+
+  <!-- Project Bar -->
+  <div class="panel">
+    <div class="panel-header">Project</div>
+    <div class="project-bar">
+      <input type="text" id="projectPath" value="C:\Users\Desktop\SpaceGass Examples\MyProject.sg" readonly>
+      <button onclick="document.getElementById('projectPath').value = 'C:\\Users\\Desktop\\SpaceGass Examples\\MyProject.sg'">Browse...</button>
+    </div>
+  </div>
+
+  <!-- Analysis Selection -->
+  <div class="panel">
+    <div class="panel-header">Analysis Types</div>
+    <div class="analysis-list">
+      <div class="analysis-row">
+        <span class="type-name">Static</span>
+        <div class="radio-group">
+          <label><input type="radio" name="staticType" value="linear" checked> Linear</label>
+          <label><input type="radio" name="staticType" value="nonlinear"> Non-Linear</label>
+        </div>
+        <button class="settings-btn" title="Settings" onclick="openStaticSettings()">&#9881;</button>
+        <div class="row-actions">
+          <button class="primary" onclick="runSingle('static')">&#9654; Run</button>
+          <button class="danger" onclick="cancelSingle('static')" id="btnCancelStatic" disabled>Cancel</button>
+        </div>
+      </div>
+      <div class="analysis-row">
+        <span class="type-name">Buckling</span>
+        <button class="settings-btn" title="Settings" onclick="openSettings('Buckling', bucklingSettingsJson)">&#9881;</button>
+        <div class="row-actions">
+          <button class="primary" onclick="runSingle('buckling')">&#9654; Run</button>
+          <button class="danger" onclick="cancelSingle('buckling')" id="btnCancelBuckling" disabled>Cancel</button>
+        </div>
+      </div>
+      <div class="analysis-row">
+        <span class="type-name">Dynamic Frequency</span>
+        <button class="settings-btn" title="Settings" onclick="openSettings('Dynamic Frequency', dynamicSettingsJson)">&#9881;</button>
+        <div class="row-actions">
+          <button class="primary" onclick="runSingle('dynamic')">&#9654; Run</button>
+          <button class="danger" onclick="cancelSingle('dynamic')" id="btnCancelDynamic" disabled>Cancel</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Queue Grid -->
+  <div class="panel" style="flex: 1; overflow: auto;">
+    <div class="panel-header">Analysis Queue</div>
+    <table class="queue-table">
+      <thead>
+        <tr>
+          <th>Analysis Type</th>
+          <th>Status</th>
+          <th class="progress-cell">Progress</th>
+          <th>Elapsed</th>
+        </tr>
+      </thead>
+      <tbody id="queueBody">
+        <tr class="empty-row"><td colspan="4">No analyses queued — select types above and click Run</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Detail Panel -->
+  <div class="panel detail-panel">
+    <div class="panel-header">Current Analysis</div>
+    <div id="detailContent">
+      <div class="detail-empty">No analysis running</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="settingsModal">
+  <div class="modal">
+    <div class="modal-title" id="settingsTitle">Settings</div>
+    <textarea id="settingsJson" spellcheck="false"></textarea>
+    <div class="modal-actions">
+      <button onclick="closeSettings()">Cancel</button>
+      <button class="primary" onclick="saveSettings()">Save</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// -- Sample settings JSON --
+const linearSettingsJson = JSON.stringify({
+  loadCases: "all",
+  retainCases: false,
+  tensionCompressionOnly: "Deactivated",
+  frameBucklingCheck: true,
+  stabilizeUnrestrainedNodes: true
+}, null, 2);
+
+const nonLinearSettingsJson = JSON.stringify({
+  loadCases: "all",
+  theory: "P-Delta",
+  convergenceAccuracy: 0.001,
+  loadSteps: 10,
+  loadStepIterations: 50,
+  dampingFactor: 0.0,
+  tensionCompressionOnly: "Activated",
+  rotateLocalLoads: false,
+  frameBucklingCheck: true
+}, null, 2);
+
+const bucklingSettingsJson = JSON.stringify({
+  loadCases: "1-5",
+  bucklingModes: 3,
+  theory: "Linearized",
+  solverType: "Subspace",
+  stabilizeUnrestrainedNodes: true
+}, null, 2);
+
+const dynamicSettingsJson = JSON.stringify({
+  loadCases: "all",
+  frequencyModes: 10,
+  optimizationMethod: "SturmSequence",
+  solverType: "Subspace",
+  massType: "Consistent"
+}, null, 2);
+
+// -- State --
+let runs = [];
+let simulationTimer = null;
+let currentSettingsType = '';
+
+const stepLabels = [
+  "Assembling geometric data",
+  "Forming element stiffness matrices",
+  "Assembling global stiffness matrix",
+  "Solving equations",
+  "Calculating member forces",
+  "Saving results"
+];
+
+// Map keys to cancel button IDs
+const cancelBtnIds = { static: 'btnCancelStatic', buckling: 'btnCancelBuckling', dynamic: 'btnCancelDynamic' };
+
+// -- Settings Modal --
+function openSettings(type, json) {
+  currentSettingsType = type;
+  document.getElementById('settingsTitle').textContent = type + ' Settings';
+  document.getElementById('settingsJson').value = json;
+  document.getElementById('settingsModal').classList.add('active');
+}
+function openStaticSettings() {
+  const isLinear = document.querySelector('input[name="staticType"]:checked').value === 'linear';
+  openSettings(isLinear ? 'Linear Static' : 'Non-Linear Static', isLinear ? linearSettingsJson : nonLinearSettingsJson);
+}
+function closeSettings() {
+  document.getElementById('settingsModal').classList.remove('active');
+}
+function saveSettings() {
+  closeSettings();
+}
+
+// -- Resolve analysis type name from key --
+function resolveType(key) {
+  if (key === 'static') {
+    const isLinear = document.querySelector('input[name="staticType"]:checked').value === 'linear';
+    return isLinear ? 'Linear Static' : 'Non-Linear Static';
+  }
+  if (key === 'buckling') return 'Buckling';
+  if (key === 'dynamic') return 'Dynamic Frequency';
+  return key;
+}
+
+// -- Run a single analysis --
+function runSingle(key) {
+  const type = resolveType(key);
+
+  const run = {
+    key: key,
+    type: type,
+    status: 'Running',
+    progress: 0,
+    elapsed: 0,
+    currentStep: 0,
+    stepProgress: 0,
+    loadCase: 0,
+    totalLoadCases: 20,
+    statusText: 'Starting...'
+  };
+  runs.push(run);
+
+  // Enable cancel for this row
+  const cancelBtn = document.getElementById(cancelBtnIds[key]);
+  if (cancelBtn) cancelBtn.disabled = false;
+
+  renderQueue();
+  renderDetail();
+
+  if (!simulationTimer) {
+    simulationTimer = setInterval(tick, 400);
+  }
+}
+
+function cancelSingle(key) {
+  const run = runs.find(r => r.key === key && r.status === 'Running');
+  if (!run) return;
+
+  run.status = 'Cancelling';
+  run.statusText = 'Cancelling...';
+  renderQueue();
+  renderDetail();
+
+  setTimeout(() => {
+    run.status = 'Cancelled';
+    run.statusText = '';
+    const cancelBtn = document.getElementById(cancelBtnIds[key]);
+    if (cancelBtn) cancelBtn.disabled = true;
+    renderQueue();
+    renderDetail();
+  }, 1200);
+}
+
+function tick() {
+  let anyRunning = false;
+
+  for (const run of runs) {
+    if (run.status !== 'Running') continue;
+    anyRunning = true;
+
+    run.elapsed += 0.4;
+    run.stepProgress += 3 + Math.random() * 8;
+
+    if (run.stepProgress >= 100) {
+      run.stepProgress = 0;
+      run.currentStep++;
+
+      if (run.currentStep >= stepLabels.length) {
+        run.status = 'Completed';
+        run.progress = 100;
+        run.statusText = '';
+        const cancelBtn = document.getElementById(cancelBtnIds[run.key]);
+        if (cancelBtn) cancelBtn.disabled = true;
+        continue;
+      }
+    }
+
+    const stepWeight = 100 / stepLabels.length;
+    run.progress = Math.min(99, Math.floor(run.currentStep * stepWeight + (run.stepProgress / 100) * stepWeight));
+
+    if (run.currentStep === 3) {
+      run.loadCase = Math.min(run.totalLoadCases, Math.floor(run.stepProgress / 100 * run.totalLoadCases));
+      run.statusText = 'Analysing...';
+    } else if (run.currentStep === 5) {
+      run.statusText = 'Saving results...';
+      run.loadCase = run.totalLoadCases;
+    } else {
+      run.statusText = stepLabels[run.currentStep];
+      run.loadCase = 0;
+    }
+  }
+
+  renderQueue();
+  renderDetail();
+
+  if (!anyRunning) {
+    clearInterval(simulationTimer);
+    simulationTimer = null;
+  }
+}
+
+// -- Rendering --
+function renderQueue() {
+  const tbody = document.getElementById('queueBody');
+  if (runs.length === 0) {
+    tbody.innerHTML = '<tr class="empty-row"><td colspan="4">No analyses queued — select types above and click Run</td></tr>';
+    return;
+  }
+  tbody.innerHTML = runs.map((r, i) => {
+    const statusClass = 'status-' + r.status.toLowerCase();
+    const fillClass = r.status === 'Completed' ? 'completed' : r.status === 'Failed' ? 'failed' : r.status === 'Cancelled' ? 'cancelled' : '';
+    const pct = r.status === 'Completed' ? 100 : r.status === 'Cancelled' || r.status === 'Queued' ? r.progress : r.progress;
+    const elapsed = r.elapsed > 0 ? formatTime(r.elapsed) : '—';
+    return `<tr>
+      <td>${r.type}</td>
+      <td><span class="status-badge ${statusClass}">${r.status}</span></td>
+      <td class="progress-cell">
+        <div class="progress-bar-track"><div class="progress-bar-fill ${fillClass}" style="width:${pct}%"></div></div>
+        <div class="progress-text">${pct}%</div>
+      </td>
+      <td class="elapsed">${elapsed}</td>
+    </tr>`;
+  }).join('');
+}
+
+function renderDetail() {
+  const el = document.getElementById('detailContent');
+  // Show first running analysis, or fall back to last finished
+  const run = runs.find(r => r.status === 'Running' || r.status === 'Cancelling');
+
+  if (!run) {
+    const last = [...runs].reverse().find(r => r.status === 'Completed' || r.status === 'Failed' || r.status === 'Cancelled');
+    if (last) {
+      el.innerHTML = `
+        <div class="detail-grid">
+          <div class="detail-label">Analysis</div><div class="detail-value">${last.type}</div>
+          <div class="detail-label">Status</div><div class="detail-value"><span class="status-badge status-${last.status.toLowerCase()}">${last.status}</span></div>
+          <div class="detail-label">Elapsed</div><div class="detail-value">${formatTime(last.elapsed)}</div>
+        </div>`;
+    } else {
+      el.innerHTML = '<div class="detail-empty">No analysis running</div>';
+    }
+    return;
+  }
+
+  const stepLabel = run.currentStep < stepLabels.length ? stepLabels[run.currentStep] : '';
+  const loadCaseInfo = run.loadCase > 0 ? `${run.loadCase} / ${run.totalLoadCases}` : '—';
+
+  el.innerHTML = `
+    <div class="detail-grid">
+      <div class="detail-label">Analysis</div><div class="detail-value">${run.type}</div>
+      <div class="detail-label">Step</div><div class="detail-value">${run.currentStep + 1} / ${stepLabels.length} — ${stepLabel}</div>
+      <div class="detail-label">Load Cases</div><div class="detail-value">${loadCaseInfo}</div>
+      <div class="detail-label">Status</div><div class="detail-value">${run.statusText}</div>
+      <div class="detail-label">Elapsed</div><div class="detail-value">${formatTime(run.elapsed)}</div>
+    </div>
+    <div class="detail-progress">
+      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${Math.floor(run.stepProgress)}%"></div></div>
+      <div class="progress-text">Step progress: ${Math.floor(run.stepProgress)}%</div>
+    </div>`;
+}
+
+function formatTime(seconds) {
+  const m = Math.floor(seconds / 60);
+  const s = Math.floor(seconds % 60);
+  const ms = Math.floor((seconds % 1) * 10);
+  return `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}.${ms}`;
+}
+
+// -- Connection --
+let isConnected = false;
+
+function toggleConnection() {
+  const dot = document.getElementById('connDot');
+  const text = document.getElementById('connText');
+  const btn = document.getElementById('btnConnect');
+  const apiStatus = document.getElementById('apiStatusText');
+
+  if (isConnected) {
+    isConnected = false;
+    dot.className = 'connection-dot disconnected';
+    text.textContent = 'Disconnected';
+    btn.textContent = 'Connect';
+    btn.classList.add('primary');
+    btn.classList.remove('danger');
+    apiStatus.textContent = '—';
+    apiStatus.style.color = '';
+    return;
+  }
+
+  // Simulate connecting
+  dot.className = 'connection-dot connecting';
+  text.textContent = 'Connecting...';
+  btn.disabled = true;
+  apiStatus.textContent = 'Checking...';
+  apiStatus.style.color = '#fab387';
+
+  setTimeout(() => {
+    isConnected = true;
+    dot.className = 'connection-dot connected';
+    text.textContent = 'Connected';
+    btn.textContent = 'Disconnect';
+    btn.classList.remove('primary');
+    btn.classList.add('danger');
+    btn.disabled = false;
+    apiStatus.textContent = 'v1.0.0 — Ready (no job open)';
+    apiStatus.style.color = '#a6e3a1';
+  }, 1000);
+}
+
+// Initial render
+renderQueue();
+</script>
+</body>
+</html>
