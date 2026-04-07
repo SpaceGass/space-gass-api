@@ -19,10 +19,10 @@ import sys
 from kiota_abstractions.base_request_configuration import RequestConfiguration
 
 from client_factory import create_client
-from space_gass_api.models.local_file_request import LocalFileRequest
+from space_gass_api.models.open_job_request import OpenJobRequest
 from space_gass_api.models.node_type_filter import NodeTypeFilter
 from space_gass_api.job.structure.nodes.nodes_request_builder import NodesRequestBuilder
-from space_gass_api.job.query.analysis.node.reactions.reactions_request_builder import ReactionsRequestBuilder
+from space_gass_api.job.query.analysis.static.node.reactions.reactions_request_builder import ReactionsRequestBuilder
 
 # -- Configuration ------------------------------------------------
 # Update this path to match your local environment.
@@ -35,7 +35,7 @@ async def main() -> int:
     try:
         # -- Open the project ------------------------------------------
         print(f"Opening project: {PROJECT_FILE_PATH}")
-        await client.job.file.open.post(LocalFileRequest(file_path=PROJECT_FILE_PATH))
+        await client.job.open.post(OpenJobRequest(file_path=PROJECT_FILE_PATH))
         print("Project opened successfully.")
         print()
 
@@ -69,7 +69,7 @@ async def main() -> int:
                 keys=node_keys,
             )
             reaction_config = RequestConfiguration(query_parameters=reaction_params)
-            reaction_result = await client.job.query.analysis.node.reactions.get(
+            reaction_result = await client.job.query.analysis.static.node.reactions.get(
                 request_configuration=reaction_config,
             )
 

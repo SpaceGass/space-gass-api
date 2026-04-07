@@ -33,7 +33,7 @@ try
 {
     // -- Open the project ------------------------------------------
     Console.WriteLine($"Opening project: {projectFilePath}");
-    await client.Job.File.Open.PostAsync(new LocalFileRequest { FilePath = projectFilePath });
+    await client.Job.Open.PostAsync(new OpenJobRequest { FilePath = projectFilePath });
     Console.WriteLine("Project opened.");
     Console.WriteLine();
 
@@ -162,7 +162,7 @@ try
     Console.WriteLine();
     Console.WriteLine("Querying node reactions...");
 
-    var queryResult = await client.Job.Query.Analysis.Node.Reactions.GetAsync();
+    var queryResult = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync();
     var reactions = queryResult?.Results;
     if (reactions != null && reactions.Count > 0)
     {
@@ -170,7 +170,7 @@ try
         // Print first few reactions as a sample
         foreach (var r in reactions.Take(3))
         {
-            Console.WriteLine($"    Node {r.Key}, LC {r.Case}: " +
+            Console.WriteLine($"    Node {r.Node}, LC {r.Case}: " +
                 $"FX={r.Fx:F2}, FY={r.Fy:F2}, FZ={r.Fz:F2}");
         }
         if (reactions.Count > 3)

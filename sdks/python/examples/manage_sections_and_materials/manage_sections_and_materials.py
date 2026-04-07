@@ -32,7 +32,7 @@ async def main() -> int:
     try:
         # -- Create a new blank project --------------------------------
         print("Creating new blank project...")
-        await client.job.file.new.post()
+        await client.job.new.post()
         print("New project created.")
         print()
 

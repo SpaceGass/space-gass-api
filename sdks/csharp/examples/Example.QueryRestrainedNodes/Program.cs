@@ -26,7 +26,7 @@ try
 {
     // -- Open the project ------------------------------------------
     Console.WriteLine($"Opening project: {projectFilePath}");
-    await client.Job.File.Open.PostAsync(new LocalFileRequest { FilePath = projectFilePath });
+    await client.Job.Open.PostAsync(new OpenJobRequest { FilePath = projectFilePath });
     Console.WriteLine("Project opened successfully.");
     Console.WriteLine();
 
@@ -34,7 +34,7 @@ try
     Console.WriteLine("Querying restrained nodes...");
 
     var restrainedNodes = await client.Job.Structure.Nodes.GetAsync(config =>
-        config.QueryParameters.NodeType = NodeTypeFilter.Restrained);
+        config.QueryParameters.NodeTypeAsNodeTypeFilter = NodeTypeFilter.Restrained);
 
     if (restrainedNodes is null || restrainedNodes.Count == 0)
     {
@@ -58,8 +58,8 @@ try
 
         var nodeKeys = restrainedNodes.Select(n => (int?)n.Key).ToArray();
 
-        var reactionResult = await client.Job.Query.Analysis.Node.Reactions.GetAsync(config =>
-            config.QueryParameters.Keys = nodeKeys);
+        var reactionResult = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync(config =>
+            config.QueryParameters.Node = nodeKeys);
 
         var reactions = reactionResult?.Results;
 
@@ -76,7 +76,7 @@ try
 
             foreach (var r in reactions)
             {
-                Console.WriteLine($"  {r.Key,-8} {r.Case,-8} {r.Fx,12:F3} {r.Fy,12:F3} {r.Fz,12:F3} {r.Mx,12:F3} {r.My,12:F3} {r.Mz,12:F3}");
+                Console.WriteLine($"  {r.Node,-8} {r.Case,-8} {r.Fx,12:F3} {r.Fy,12:F3} {r.Fz,12:F3} {r.Mx,12:F3} {r.My,12:F3} {r.Mz,12:F3}");
             }
         }
     }

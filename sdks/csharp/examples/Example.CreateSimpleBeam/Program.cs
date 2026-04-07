@@ -1,3 +1,4 @@
+using SpaceGassApi.Job.New;
 using SpaceGassApi.Models;
 using SpaceGassApi.Examples.Common;
 
@@ -27,7 +28,7 @@ try
 {
     // -- Create a new blank project --------------------------------
     Console.WriteLine("Creating new blank project...");
-    await client.Job.File.New.PostAsync();
+    await client.Job.New.PostAsync(new NewPostRequestBody());
     Console.WriteLine("New project created.");
     Console.WriteLine();
 
@@ -81,7 +82,7 @@ try
     // New jobs must use SaveAs to establish a file path.
     Console.WriteLine();
     Console.WriteLine($"Saving project to: {saveFilePath}");
-    await client.Job.File.SaveAs.PostAsync(new LocalFileRequest { FilePath = saveFilePath });
+    await client.Job.Save.PostAsync(new SaveJobRequest { FilePath = saveFilePath });
     Console.WriteLine("Project saved.");
 
     // -- Close the project -----------------------------------------

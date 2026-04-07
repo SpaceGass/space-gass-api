@@ -19,7 +19,7 @@ import os
 import sys
 
 from client_factory import create_client
-from space_gass_api.models.local_file_request import LocalFileRequest
+from space_gass_api.models.open_job_request import OpenJobRequest
 from space_gass_api.models.static_settings_update import StaticSettingsUpdate
 from space_gass_api.models.analysis_run_status import AnalysisRunStatus
 
@@ -41,8 +41,8 @@ async def main() -> int:
     try:
         # -- Open the project ------------------------------------------
         print(f"Opening project: {project_file_path}")
-        await client.job.file.open.post(
-            LocalFileRequest(file_path=project_file_path),
+        await client.job.open.post(
+            OpenJobRequest(file_path=project_file_path),
         )
         print("Project opened.")
         print()
@@ -150,7 +150,7 @@ async def main() -> int:
         print()
         print("Querying node reactions...")
 
-        query_result = await client.job.query.analysis.node.reactions.get()
+        query_result = await client.job.query.analysis.static.node.reactions.get()
         reactions = query_result.results if query_result else None
         if reactions:
             print(f"  Found {len(reactions)} reaction result(s).")

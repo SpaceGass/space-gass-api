@@ -18,7 +18,7 @@ import os
 import sys
 
 from client_factory import create_client
-from space_gass_api.models.local_file_request import LocalFileRequest
+from space_gass_api.models.save_job_request import SaveJobRequest
 from space_gass_api.models.member_create import MemberCreate
 from space_gass_api.models.node_create import NodeCreate
 from space_gass_api.models.node_restraint_create import NodeRestraintCreate
@@ -37,7 +37,7 @@ async def main() -> int:
     try:
         # -- Create a new blank project --------------------------------
         print("Creating new blank project...")
-        await client.job.file.new.post()
+        await client.job.new.post()
         print("New project created.")
         print()
 
@@ -92,8 +92,8 @@ async def main() -> int:
         # New jobs must use save_as to establish a file path.
         print()
         print(f"Saving project to: {save_file_path}")
-        await client.job.file.save_as.post(
-            LocalFileRequest(file_path=save_file_path),
+        await client.job.save.post(
+            SaveJobRequest(file_path=save_file_path),
         )
         print("Project saved.")
 

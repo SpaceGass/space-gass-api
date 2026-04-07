@@ -55,7 +55,7 @@ public partial class MainWindow : Window
         try
         {
             _client = ApiClientFactory.Create(baseUrl);
-            var info = await _client.Info.GetAsync();
+            var info = await _client.Service.Info.GetAsync();
 
             _isConnected = true;
             ConnDot.Fill = (SolidColorBrush)FindResource("Green");
@@ -147,7 +147,7 @@ public partial class MainWindow : Window
             BtnOpenClose.IsEnabled = false;
             try
             {
-                await _client.Job.File.Open.PostAsync(new LocalFileRequest { FilePath = path });
+                await _client.Job.Open.PostAsync(new OpenJobRequest { FilePath = path });
                 _isProjectOpen = true;
                 BtnOpenClose.Content = "Close";
 

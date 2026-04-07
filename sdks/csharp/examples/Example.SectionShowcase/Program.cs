@@ -40,7 +40,7 @@ try
 {
     // -- Open the existing project --------------------------------
     Console.WriteLine($"Opening: {sourceFile}");
-    await client.Job.File.Open.PostAsync(new LocalFileRequest { FilePath = sourceFile });
+    await client.Job.Open.PostAsync(new OpenJobRequest { FilePath = sourceFile });
     Console.WriteLine("Project opened.");
     Console.WriteLine();
 
@@ -174,7 +174,7 @@ try
     var saveFile = Path.Combine(dir, $"{name}_SectionShowcase{ext}");
 
     Console.WriteLine($"Saving as: {saveFile}");
-    await client.Job.File.SaveAs.PostAsync(new LocalFileRequest { FilePath = saveFile });
+    await client.Job.Save.PostAsync(new SaveJobRequest { FilePath = saveFile });
     Console.WriteLine("Saved.");
 
     // -- Close ----------------------------------------------------
