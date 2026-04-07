@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\client\SpaceGassApi.csproj" />
+    <ProjectReference Include="..\..\client\SpaceGassApi\SpaceGassApi.csproj" />
   </ItemGroup>
 
 </Project>

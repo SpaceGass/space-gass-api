@@ -15,7 +15,7 @@
 
   <!-- Include generated source files and hand-maintained extensions -->
   <ItemGroup>
-    <Compile Include="SpaceGassApi\**\*.cs" />
+    <Compile Include="Generated\**\*.cs" />
     <Compile Include="Extensions\**\*.cs" />
   </ItemGroup>
 

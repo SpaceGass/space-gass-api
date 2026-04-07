@@ -3,7 +3,7 @@
   "clients": {
     "SpaceGassApi-csharp": {
       "descriptionLocation": "descriptions/preview/openapi.json",
-      "outputPath": "sdks/csharp/client/SpaceGassApi",
+      "outputPath": "sdks/csharp/client/SpaceGassApi/Generated",
       "language": "csharp",
       "namespace": "SpaceGassApi",
       "excludeBackwardCompatible": false,
