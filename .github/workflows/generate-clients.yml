@@ -1,10 +1,7 @@
 name: Generate SDK Clients
 
 on:
-  push:
-    branches: [develop]
-    paths:
-      - "descriptions/current/**"
+  workflow_dispatch:
 
 jobs:
   generate:
