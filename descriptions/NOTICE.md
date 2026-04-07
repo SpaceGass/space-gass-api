@@ -1,7 +1,7 @@
 # Notice — OpenAPI Specifications
 
 The OpenAPI specification files in this directory and its subdirectories are
-**copyright Spacegass Pty Ltd** and are licensed under the
+**copyright Space Gass Pty Ltd** and are licensed under the
 [Creative Commons Attribution-NoDerivatives 4.0 International License (CC BY-ND 4.0)](https://creativecommons.org/licenses/by-nd/4.0/).
 
 ## What this means
