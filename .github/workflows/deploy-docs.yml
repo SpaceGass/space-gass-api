@@ -25,7 +25,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: "22"
 
       - name: Install dependencies
         working-directory: docs
@@ -35,8 +35,14 @@ jobs:
         working-directory: docs
         run: npx zudoku build
 
+      - name: Add .nojekyll
+        run: touch docs/dist/.nojekyll
+
+      - name: Debug — list build output
+        run: find docs/dist -maxdepth 3 -type f | head -50
+
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v4
         with:
           path: docs/dist
 
@@ -49,4 +55,4 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
