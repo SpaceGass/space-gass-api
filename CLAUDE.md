@@ -40,17 +40,43 @@ This is the public developer-facing repo for the SPACE GASS API. It contains the
 
 ### SDK Generation (Kiota)
 
-- Clients in `sdks/*/client/` are **auto-generated** — never hand-edit
 - `kiota.config.json` at the root defines both C# and Python targets
 - Both point to `descriptions/preview/openapi.json` (stable path)
-- The `generate-clients` workflow is **manual trigger** (`workflow_dispatch`)
+- The `generate-clients` workflow is **manual trigger** (`workflow_dispatch`) with `--clean-output`
+- C# output: `sdks/csharp/client/SpaceGassApi/Generated/` — never hand-edit
+- Python output: `sdks/python/client/space_gass_api/` — never hand-edit
+
+### C# Client Structure
+
+```
+sdks/csharp/client/
+├── SpaceGassApi.sln                     ← client solution (+ future tests)
+└── SpaceGassApi/
+    ├── SpaceGassApi.csproj              ← hand-maintained (safe from Kiota regen)
+    ├── Extensions/                      ← hand-maintained (CreateClient factory, etc.)
+    │   └── SpaceGassApiClientExtensions.cs
+    └── Generated/                       ← Kiota output (wiped on --clean-output)
+        ├── SpaceGassApiClient.cs
+        ├── Models/
+        └── ...
+```
+
+- `.csproj` uses `EnableDefaultCompileItems=false` and explicit `<Compile Include>` for `Generated\**\*.cs` and `Extensions\**\*.cs`
+- `SpaceGassApiClient` is a `partial class` — the Extensions file adds `CreateClient()` via another partial definition
+
+### Authentication
+
+- **No authentication required** — the API runs locally on the user's machine
+- SDK ships with `SpaceGassApiClient.CreateClient()` which uses `AnonymousAuthenticationProvider`
+- Default base URL: `http://localhost:53483/api/v1` (plain HTTP, no SSL bypass needed)
+- When API key auth is added later, `CreateClient(apiKey: "...")` will be a non-breaking addition
 
 ### Examples
 
 - **C# examples** use `ProjectReference` to `../../client/SpaceGassApi/SpaceGassApi.csproj` (will switch to NuGet package reference once published)
 - **Python examples** are organized in individual **snake_case folders** (`create_simple_beam/`, `run_analysis/`, etc.)
-- Shared helper `client_factory.py` stays at the Python examples root
-- C# examples follow `Example.PascalCase` folder naming with a shared `SpaceGassApi.Examples.Common` library
+- C# examples follow `Example.PascalCase` folder naming
+- All examples use the one-liner `CreateClient()` factory — no shared helper project needed
 
 ### Documentation Site (Zudoku)
 
