@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <RootNamespace>SpaceGassApi</RootNamespace>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+
+    <!-- NuGet package metadata -->
+    <PackageId>SpaceGassApi</PackageId>
+    <Description>Official .NET SDK for the SPACE GASS structural analysis API. Auto-generated from the OpenAPI specification with Microsoft Kiota.</Description>
+    <Authors>Space Gass Pty Ltd</Authors>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageProjectUrl>https://spacegass.github.io/space-gass-api/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/Spacegass/space-gass-api</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageTags>spacegass;structural-analysis;api;sdk;kiota</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Kiota.Bundle" Version="1.21.2" />
+  </ItemGroup>
+
+  <!-- Include generated source files and hand-maintained extensions -->
+  <ItemGroup>
+    <Compile Include="Generated\**\*.cs" />
+    <Compile Include="Extensions\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+
+</Project>

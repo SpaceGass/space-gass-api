@@ -3,6 +3,10 @@ name: Generate SDK Clients
 on:
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+  SPEC_PATH: descriptions/preview/openapi.json
+
 jobs:
   generate:
     runs-on: ubuntu-latest
@@ -13,36 +17,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Detect spec version
-        id: version
-        run: |
-          NEW_SPEC=$(ls descriptions/current/openapi-v*.yaml 2>/dev/null | head -1)
-          if [ -z "$NEW_SPEC" ]; then
-            echo "No spec found in descriptions/current/"
-            exit 1
-          fi
-          VERSION=$(echo "$NEW_SPEC" | grep -oP 'v\d+\.\d+\.\d+')
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-          echo "spec_file=$NEW_SPEC" >> "$GITHUB_OUTPUT"
-          echo "Detected version: $VERSION"
-
-      - name: Archive previous spec
-        run: |
-          # Find previous spec version in git history (before this push)
-          PREV_SPEC=$(git show HEAD~1:descriptions/current/ 2>/dev/null | grep 'openapi-v' || true)
-          if [ -n "$PREV_SPEC" ]; then
-            PREV_VERSION=$(echo "$PREV_SPEC" | grep -oP 'v\d+\.\d+\.\d+')
-            if [ -n "$PREV_VERSION" ]; then
-              mkdir -p "descriptions/archive/$PREV_VERSION"
-              git show "HEAD~1:descriptions/current/$PREV_SPEC" > "descriptions/archive/$PREV_VERSION/$PREV_SPEC"
-              echo "Archived previous spec: $PREV_VERSION"
-            fi
-          else
-            echo "No previous spec to archive"
-          fi
 
       - name: Install Kiota
         run: dotnet tool install --global Microsoft.OpenApi.Kiota
@@ -50,37 +24,36 @@ jobs:
       - name: Generate C# client
         run: |
           kiota generate \
-            --openapi "${{ steps.version.outputs.spec_file }}" \
+            --openapi "$SPEC_PATH" \
             --language csharp \
-            --output sdks/csharp/client/SpaceGassApi \
+            --output sdks/csharp/client/SpaceGassApi/Generated \
             --namespace-name SpaceGassApi \
-            --class-name SpaceGassApiClient
+            --class-name SpaceGassApiClient \
+            --clean-output
 
       - name: Generate Python client
         run: |
           kiota generate \
-            --openapi "${{ steps.version.outputs.spec_file }}" \
+            --openapi "$SPEC_PATH" \
             --language python \
             --output sdks/python/client/space_gass_api \
             --namespace-name space_gass_api \
-            --class-name SpaceGassApiClient
+            --class-name SpaceGassApiClient \
+            --clean-output
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          branch: sdk/update-${{ steps.version.outputs.version }}
-          title: "Update SDK clients for ${{ steps.version.outputs.version }}"
+          branch: sdk/regenerate-clients
+          title: "chore: regenerate SDK clients"
           body: |
-            Auto-generated SDK client update for spec version **${{ steps.version.outputs.version }}**.
-
-            This PR was created automatically by the `generate-clients` workflow.
+            Auto-generated SDK client update from `${{ env.SPEC_PATH }}`.
 
             ## Changes
-            - Regenerated C# client in `sdks/csharp/client/`
-            - Regenerated Python client in `sdks/python/client/`
-            - Archived previous spec version (if applicable)
+            - Regenerated C# client in `sdks/csharp/client/SpaceGassApi/Generated/`
+            - Regenerated Python client in `sdks/python/client/space_gass_api/`
 
             Please review the generated code for any breaking changes before merging.
-          commit-message: "chore: regenerate SDK clients for ${{ steps.version.outputs.version }}"
+          commit-message: "chore: regenerate SDK clients"
           delete-branch: true
