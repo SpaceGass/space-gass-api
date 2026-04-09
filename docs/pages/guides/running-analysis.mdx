@@ -1,0 +1,312 @@
+---
+title: Running Analysis
+description: How to run analyses, poll for progress, and handle async workflows
+---
+
+Analysis in the SPACE GASS API is **asynchronous** — when you start
+an analysis, the API returns immediately with a run ID. You then poll
+for progress until the run completes. This guide covers the common
+patterns from simple scripting to advanced multi-run monitoring.
+
+## How It Works
+
+1. **Start** an analysis — returns an `AnalysisRun` with a `runId` and initial status
+2. **Poll** the run status using the `runId` at regular intervals
+3. **Check** for a terminal status: `Completed`, `Failed`, or `Cancelled`
+4. **Query** results once completed
+
+## Simple Script — Wait for Completion
+
+Most scripts just need to run an analysis and wait. Here is a simple
+helper that polls until the analysis finishes, then returns the
+final status:
+
+<CodeTabs>
+```csharp title="C#"
+using SpaceGassApi;
+using SpaceGassApi.Models;
+
+var client = SpaceGassApiClient.CreateClient();
+
+// Open a project and run linear static analysis
+await client.Job.Open.PostAsync(
+    new OpenJobRequest { FilePath = @"C:\Projects\MyStructure.sg" });
+
+var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
+    new StaticSettingsUpdate());
+
+// Poll until complete
+var result = await WaitForCompletion(client, run.RunId.Value);
+
+Console.WriteLine($"Analysis {result.Status} in {result.ElapsedTime}");
+
+if (result.Status == AnalysisRunStatus.Completed)
+{
+    // Query results...
+    var reactions = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync();
+    Console.WriteLine($"Got {reactions.Results.Count} reactions");
+}
+
+await client.Job.Close.PostAsync();
+
+// --- Helper: poll until terminal state ---
+static async Task<AnalysisRun> WaitForCompletion(
+    SpaceGassApiClient client, Guid runId, int pollMs = 500)
+{
+    while (true)
+    {
+        await Task.Delay(pollMs);
+
+        var status = await client.Job.Analysis.Runs[runId].GetAsync();
+
+        if (status.Status is AnalysisRunStatus.Completed
+                          or AnalysisRunStatus.Failed
+                          or AnalysisRunStatus.Cancelled)
+        {
+            return status;
+        }
+    }
+}
+```
+
+```python title="Python"
+import asyncio
+from extensions.client_extensions import create_client
+from space_gass_api.models.open_job_request import OpenJobRequest
+from space_gass_api.models.static_settings_update import StaticSettingsUpdate
+from space_gass_api.models.analysis_run_status import AnalysisRunStatus
+
+client = create_client()
+
+# Open a project and run linear static analysis
+await client.job.open.post(
+    OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
+
+run = await client.job.analysis.static.run_linear.post(
+    StaticSettingsUpdate())
+
+# Poll until complete
+async def wait_for_completion(client, run_id, poll_interval=0.5):
+    while True:
+        await asyncio.sleep(poll_interval)
+        status = await client.job.analysis.runs.by_run_id(str(run_id)).get()
+        if status.status in (
+            AnalysisRunStatus.Completed,
+            AnalysisRunStatus.Failed,
+            AnalysisRunStatus.Cancelled,
+        ):
+            return status
+
+result = await wait_for_completion(client, run.run_id)
+
+print(f"Analysis {result.status} in {result.elapsed_time}")
+
+if result.status == AnalysisRunStatus.Completed:
+    # Query results...
+    reactions = await client.job.query.analysis.static.node.reactions.get()
+    print(f"Got {len(reactions.results)} reactions")
+
+await client.job.close.post()
+```
+</CodeTabs>
+
+The `WaitForCompletion` helper turns the async polling into a simple
+blocking call — your script just waits until the analysis is done
+before moving on. This is the pattern you will use most often in
+scripts.
+
+## Running Multiple Analyses in Sequence
+
+The API processes analysis runs in a queue. You can start multiple
+analyses and they will execute in order. Poll the last run ID to
+know when all analyses are complete:
+
+<CodeTabs>
+```csharp title="C#"
+// Queue three analysis types
+var staticRun = await client.Job.Analysis.Static.RunLinear.PostAsync(
+    new StaticSettingsUpdate());
+Console.WriteLine($"Queued linear static: {staticRun.RunId}");
+
+var bucklingRun = await client.Job.Analysis.Buckling.Run.PostAsync(
+    new BucklingSettingsUpdate());
+Console.WriteLine($"Queued buckling: {bucklingRun.RunId}");
+
+var dynamicRun = await client.Job.Analysis.DynamicFrequency.Run.PostAsync(
+    new DynamicFrequencySettingsUpdate());
+Console.WriteLine($"Queued dynamic frequency: {dynamicRun.RunId}");
+
+// Wait for each in order
+var staticResult = await WaitForCompletion(client, staticRun.RunId.Value);
+Console.WriteLine($"Static: {staticResult.Status} ({staticResult.ElapsedTime})");
+
+var bucklingResult = await WaitForCompletion(client, bucklingRun.RunId.Value);
+Console.WriteLine($"Buckling: {bucklingResult.Status} ({bucklingResult.ElapsedTime})");
+
+var dynamicResult = await WaitForCompletion(client, dynamicRun.RunId.Value);
+Console.WriteLine($"Dynamic: {dynamicResult.Status} ({dynamicResult.ElapsedTime})");
+```
+
+```python title="Python"
+# Queue three analysis types
+static_run = await client.job.analysis.static.run_linear.post(
+    StaticSettingsUpdate())
+print(f"Queued linear static: {static_run.run_id}")
+
+buckling_run = await client.job.analysis.buckling.run.post(
+    BucklingSettingsUpdate())
+print(f"Queued buckling: {buckling_run.run_id}")
+
+dynamic_run = await client.job.analysis.dynamic_frequency.run.post(
+    DynamicFrequencySettingsUpdate())
+print(f"Queued dynamic frequency: {dynamic_run.run_id}")
+
+# Wait for each in order
+static_result = await wait_for_completion(client, static_run.run_id)
+print(f"Static: {static_result.status} ({static_result.elapsed_time})")
+
+buckling_result = await wait_for_completion(client, buckling_run.run_id)
+print(f"Buckling: {buckling_result.status} ({buckling_result.elapsed_time})")
+
+dynamic_result = await wait_for_completion(client, dynamic_run.run_id)
+print(f"Dynamic: {dynamic_result.status} ({dynamic_result.elapsed_time})")
+```
+</CodeTabs>
+
+## Monitoring Progress
+
+For longer analyses you may want to display progress as it runs.
+The `AnalysisRun.Progress` object provides step labels, iteration
+percentages, and load case status:
+
+<CodeTabs>
+```csharp title="C#"
+var lastStep = -1;
+
+while (true)
+{
+    await Task.Delay(500);
+
+    var status = await client.Job.Analysis.Runs[runId].GetAsync();
+
+    if (status.Progress != null)
+    {
+        var p = status.Progress;
+        var stepInfo = $"Step {p.CurrentStep}/{p.TotalSteps}";
+
+        // Print step label when it changes
+        if (p.CurrentStep != lastStep && p.StepLabels != null)
+        {
+            var idx = p.CurrentStep ?? 0;
+            if (idx < p.StepLabels.Count && !string.IsNullOrEmpty(p.StepLabels[idx]))
+                Console.WriteLine($"  [{stepInfo}] {p.StepLabels[idx]}");
+            lastStep = p.CurrentStep ?? -1;
+        }
+
+        // Overwrite current line with live progress
+        Console.Write($"\r  {stepInfo} | {p.IterationPercentage}%");
+        if (p.LoadCaseStatus != null)
+            Console.Write($" | {p.LoadCaseStatus}");
+
+        Console.Write("".PadRight(20));
+    }
+
+    if (status.Status is AnalysisRunStatus.Completed
+                      or AnalysisRunStatus.Failed
+                      or AnalysisRunStatus.Cancelled)
+    {
+        Console.WriteLine();
+        Console.WriteLine($"Analysis {status.Status} in {status.ElapsedTime}");
+
+        if (status.Warnings?.Count > 0)
+            Console.WriteLine($"  Warnings: {status.Warnings.Count}");
+        if (status.ErrorMessage != null)
+            Console.WriteLine($"  Error: {status.ErrorMessage}");
+
+        break;
+    }
+}
+```
+
+```python title="Python"
+last_step = -1
+
+while True:
+    await asyncio.sleep(0.5)
+
+    status = await client.job.analysis.runs.by_run_id(str(run_id)).get()
+
+    if status.progress is not None:
+        p = status.progress
+        step_info = f"Step {p.current_step}/{p.total_steps}"
+
+        # Print step label when it changes
+        if p.current_step != last_step and p.step_labels:
+            idx = p.current_step or 0
+            if idx < len(p.step_labels) and p.step_labels[idx]:
+                print(f"  [{step_info}] {p.step_labels[idx]}")
+            last_step = p.current_step if p.current_step is not None else -1
+
+        # Overwrite current line with live progress
+        line = f"\r  {step_info} | {p.iteration_percentage}%"
+        if p.load_case_status:
+            line += f" | {p.load_case_status}"
+        print(f"{line:<60}", end="", flush=True)
+
+    if status.status in (
+        AnalysisRunStatus.Completed,
+        AnalysisRunStatus.Failed,
+        AnalysisRunStatus.Cancelled,
+    ):
+        print()
+        print(f"Analysis {status.status} in {status.elapsed_time}")
+
+        if status.warnings:
+            print(f"  Warnings: {len(status.warnings)}")
+        if status.error_message:
+            print(f"  Error: {status.error_message}")
+
+        break
+```
+</CodeTabs>
+
+## Cancelling a Run
+
+You can cancel a running or queued analysis by calling `DELETE` on
+the run:
+
+<CodeTabs>
+```csharp title="C#"
+await client.Job.Analysis.Runs[runId].DeleteAsync();
+```
+
+```python title="Python"
+await client.job.analysis.runs.by_run_id(str(run_id)).delete()
+```
+
+```bash title="curl"
+curl -X DELETE http://localhost:5000/api/v1/job/analysis/runs/{runId}
+```
+</CodeTabs>
+
+The run transitions to `Cancelling` and then `Cancelled` once the
+solver has stopped.
+
+## Analysis Run Lifecycle
+
+| Status | Description |
+|---|---|
+| `Queued` | Run is waiting in the queue |
+| `Running` | Analysis is actively executing |
+| `Cancelling` | Cancellation requested, waiting for solver to stop |
+| `Completed` | Analysis finished successfully — results are available |
+| `Failed` | Analysis encountered an error — check `errorMessage` |
+| `Cancelled` | Analysis was cancelled before completion |
+
+## Advanced: Real-Time Monitoring Application
+
+For a full example of an interactive monitoring application that
+tracks multiple concurrent runs with live progress bars, elapsed
+timers, and error/warning display, see the
+[AnalysisMonitor WPF example](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.AnalysisMonitor)
+in the repository.

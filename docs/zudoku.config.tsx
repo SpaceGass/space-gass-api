@@ -121,6 +121,7 @@ const config: ZudokuConfig = {
   basePath: "/space-gass-api",
   site: {
     title: "SpaceGass API",
+    favicon: "/blue-sg-256-clear-bg.ico",
     logo: {
       src: {
         light: "/logo-light.png",
@@ -223,6 +224,7 @@ const config: ZudokuConfig = {
       items: [
         "guides/authentication",
         "guides/file-handling",
+        "guides/running-analysis",
         "guides/filtering-and-querying",
         "guides/error-handling",
         "guides/versioning",
@@ -273,7 +275,12 @@ const config: ZudokuConfig = {
   },
   docs: {
     files: "/pages/**/*.{md,mdx}",
-    editUrl: "https://github.com/Spacegass/space-gass-api/edit/develop/docs",
+    publishMarkdown: true,
+    defaultOptions: {
+      suggestEdit: {
+        url: "https://github.com/Spacegass/space-gass-api/edit/develop/docs/pages",
+      },
+    },
   },
   redirects: [{ from: "/", to: "/getting-started/introduction" }],
 };
