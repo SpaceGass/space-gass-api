@@ -271,6 +271,7 @@ const config: ZudokuConfig = {
         expandAllTags: false,
         expandApiInformation: true,
         showInfoPage: true,
+        showVersionSelect: "always",
         disablePlayground: true,
         schemaDownload: { enabled: true },
         supportedLanguages: [
