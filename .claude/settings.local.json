@@ -1,8 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(find docs/pages -name \"*.mdx\" -exec sed -i 's/localhost:53483/localhost:5000/g' {} +)",
-      "Bash(dotnet build:*)"
-    ]
-  }
-}
