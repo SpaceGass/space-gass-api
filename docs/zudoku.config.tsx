@@ -121,6 +121,7 @@ const config: ZudokuConfig = {
   basePath: "/space-gass-api",
   site: {
     title: "SpaceGass API",
+    favicon: "/blue-sg-256-clear-bg.ico",
     logo: {
       src: {
         light: "/logo-light.png",
