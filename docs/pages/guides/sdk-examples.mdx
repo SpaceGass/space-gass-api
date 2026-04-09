@@ -11,27 +11,17 @@ and close the project — with proper error handling.
 
 <CodeTabs>
 ```csharp title="C#"
-using Microsoft.Kiota.Abstractions.Authentication;
-using Microsoft.Kiota.Http.HttpClientLibrary;
-using SpaceGassApi.Client;
-using SpaceGassApi.Client.Models;
+using SpaceGassApi;
+using SpaceGassApi.Models;
 
-// 1. Set up authentication
-var authProvider = new ApiKeyAuthenticationProvider(
-    "YOUR_API_KEY",
-    "X-API-KEY",
-    ApiKeyAuthenticationProvider.KeyLocation.Header);
-
-var adapter = new HttpClientRequestAdapter(authProvider);
-adapter.BaseUrl = "https://localhost:5001";
-
-var client = new SpaceGassApiClient(adapter);
+// 1. Create the client
+var client = SpaceGassApiClient.CreateClient();
 
 try
 {
     // 2. Open a project file
-    await client.Job.File.Open.PostAsync(
-        new LocalFileRequest
+    await client.Job.Open.PostAsync(
+        new OpenJobRequest
         {
             FilePath = @"C:\Projects\MyStructure.sg"
         });
@@ -61,16 +51,16 @@ catch (Exception ex)
 ```
 
 ```python title="Python"
-from spacegass_client.space_gass_api_client import SpaceGassApiClient
-from spacegass_client.models.local_file_request import LocalFileRequest
+from extensions.client_extensions import create_client
+from space_gass_api.models.open_job_request import OpenJobRequest
 
-# 1. Set up authentication (adapter configured with API key)
-client = SpaceGassApiClient(adapter)
+# 1. Create the client
+client = create_client()
 
 try:
     # 2. Open a project file
-    await client.job.file.open.post(
-        LocalFileRequest(file_path="C:\\Projects\\MyStructure.sg"))
+    await client.job.open.post(
+        OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
 
     # 3. Get job information
     job = await client.job.get()
@@ -107,8 +97,7 @@ print(f"Node {node.key}: ({node.x}, {node.y}, {node.z})")
 ```
 
 ```bash title="curl"
-curl https://localhost:5001/api/v1/job/structure/nodes/1 \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl http://localhost:53483/api/v1/job/structure/nodes/1
 ```
 </CodeTabs>
 
@@ -136,8 +125,7 @@ filtered = await client.job.structure.nodes.get(
 ```
 
 ```bash title="curl"
-curl "https://localhost:5001/api/v1/job/structure/nodes?MinX=0&MaxX=100&Limit=50" \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl "http://localhost:53483/api/v1/job/structure/nodes?MinX=0&MaxX=100&Limit=50"
 ```
 </CodeTabs>
 
@@ -156,7 +144,7 @@ Console.WriteLine($"Created node {newNode.Key}");
 ```
 
 ```python title="Python"
-from spacegass_client.models.node_create import NodeCreate
+from space_gass_api.models.node_create import NodeCreate
 
 new_node = await client.job.structure.nodes.post(
     NodeCreate(x=10.0, y=20.0, z=0.0))
@@ -164,8 +152,7 @@ print(f"Created node {new_node.key}")
 ```
 
 ```bash title="curl"
-curl -X POST https://localhost:5001/api/v1/job/structure/nodes \
-  -H "X-API-KEY: YOUR_API_KEY" \
+curl -X POST http://localhost:53483/api/v1/job/structure/nodes \
   -H "Content-Type: application/json" \
   -d '{"x": 10.0, "y": 20.0, "z": 0.0}'
 ```
@@ -201,8 +188,7 @@ for r in result.results:
 ```
 
 ```bash title="curl"
-curl https://localhost:5001/api/v1/job/query/analysis/static/node/reactions \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl http://localhost:53483/api/v1/job/query/analysis/static/node/reactions
 ```
 </CodeTabs>
 
@@ -230,8 +216,7 @@ result = await client.job.query.analysis.static.node.displacements.get(
 ```
 
 ```bash title="curl"
-curl "https://localhost:5001/api/v1/job/query/analysis/static/node/displacements?case=1&case=3&node=10&node=11&node=12" \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl "http://localhost:53483/api/v1/job/query/analysis/static/node/displacements?case=1&case=3&node=10&node=11&node=12"
 ```
 </CodeTabs>
 
@@ -273,8 +258,7 @@ for m in result.results:
 ```
 
 ```bash title="curl"
-curl "https://localhost:5001/api/v1/job/query/analysis/static/member/intermediate-forces?member=1" \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl "http://localhost:53483/api/v1/job/query/analysis/static/member/intermediate-forces?member=1"
 ```
 </CodeTabs>
 
@@ -300,8 +284,7 @@ for b in result.results:
 ```
 
 ```bash title="curl"
-curl https://localhost:5001/api/v1/job/query/analysis/buckling/load-factors \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl http://localhost:53483/api/v1/job/query/analysis/buckling/load-factors
 ```
 </CodeTabs>
 
@@ -328,8 +311,7 @@ for f in result.results:
 ```
 
 ```bash title="curl"
-curl https://localhost:5001/api/v1/job/query/analysis/dynamic/natural-frequencies \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl http://localhost:53483/api/v1/job/query/analysis/dynamic/natural-frequencies
 ```
 </CodeTabs>
 
@@ -355,8 +337,7 @@ for s in result.results:
 ```
 
 ```bash title="curl"
-curl https://localhost:5001/api/v1/job/query/design/steel-member/check-summary \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl http://localhost:53483/api/v1/job/query/design/steel-member/check-summary
 ```
 </CodeTabs>
 
@@ -399,30 +380,9 @@ page2 = await client.job.query.analysis.static.node.displacements.get(
 
 ```bash title="curl"
 # Page 1
-curl "https://localhost:5001/api/v1/job/query/analysis/static/node/displacements?offset=0&limit=100" \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl "http://localhost:53483/api/v1/job/query/analysis/static/node/displacements?offset=0&limit=100"
 
 # Page 2
-curl "https://localhost:5001/api/v1/job/query/analysis/static/node/displacements?offset=100&limit=100" \
-  -H "X-API-KEY: YOUR_API_KEY"
+curl "http://localhost:53483/api/v1/job/query/analysis/static/node/displacements?offset=100&limit=100"
 ```
 </CodeTabs>
-
-## Self-Signed Certificates (Development)
-
-When running the API locally with a self-signed SSL certificate,
-you may need to bypass certificate validation:
-
-```csharp title="C#"
-var handler = new HttpClientHandler
-{
-    ServerCertificateCustomValidationCallback =
-        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
-};
-var httpClient = new HttpClient(handler);
-var adapter = new HttpClientRequestAdapter(authProvider,
-    httpClient: httpClient);
-```
-
-> **Warning:** Only use this in development. Never disable certificate
-> validation in production.

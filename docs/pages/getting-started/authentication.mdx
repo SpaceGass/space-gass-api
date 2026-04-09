@@ -1,69 +1,54 @@
 ---
 title: Authentication
-description: API key authentication for the SpaceGass API
+description: Authentication for the SpaceGass API
 ---
 
-The SpaceGass API uses API key authentication. Every request must
-include a valid key in the `X-API-KEY` HTTP header.
+The SPACE GASS API currently requires **no authentication**. The API
+runs as a local service on your machine and is accessed over plain
+HTTP — no API keys, tokens, or credentials are needed.
 
-## Setting Up Authentication
+## Default Connection
 
-<CodeTabs>
+The SDK clients connect to the local API with no setup:
+
 ```csharp title="C#"
-using Microsoft.Kiota.Abstractions.Authentication;
-using Microsoft.Kiota.Http.HttpClientLibrary;
-using SpaceGassApi.Client;
+using SpaceGassApi;
 
-// Kiota has a built-in provider for API key auth
-var authProvider = new ApiKeyAuthenticationProvider(
-    "YOUR_API_KEY",
-    "X-API-KEY",
-    ApiKeyAuthenticationProvider.KeyLocation.Header);
-
-var adapter = new HttpClientRequestAdapter(authProvider);
-adapter.BaseUrl = "https://localhost:5001";
-
-var client = new SpaceGassApiClient(adapter);
+var client = SpaceGassApiClient.CreateClient();
+// Connects to http://localhost:53483/api/v1
 ```
 
 ```python title="Python"
-# Configure the request adapter with your API key
-# The key is sent as the X-API-KEY header on every request
-adapter.base_url = "https://localhost:5001"
+from extensions.client_extensions import create_client
+
+client = create_client()
+# Connects to http://localhost:53483/api/v1
 ```
 
 ```bash title="curl"
-# Pass the API key as a header
-curl -H "X-API-KEY: YOUR_API_KEY" \
-  https://localhost:5001/api/v1/info
+curl http://localhost:53483/api/v1/service/info
 ```
-</CodeTabs>
 
-## Validating Your Key
+## Custom Base URL
 
-You can check whether a key is valid before making other API calls:
+If the API is running on a different port, pass the URL explicitly:
 
-<CodeTabs>
 ```csharp title="C#"
-var result = await client.Apikey.Validate.PostAsync();
-// Returns ApiKeyValidationResponse with IsValid, Tier, ExpiresAt
+var client = SpaceGassApiClient.CreateClient("http://localhost:8080/api/v1");
 ```
 
-```bash title="curl"
-curl -X POST https://localhost:5001/api/v1/apikey/validate \
-  -H "X-API-KEY: YOUR_API_KEY"
+```python title="Python"
+client = create_client("http://localhost:8080/api/v1")
 ```
-</CodeTabs>
 
-## Error Responses
+## Future Authentication
 
-| Status | Meaning |
-|--------|---------|
-| `401`  | API key is missing, invalid, or expired |
-| `403`  | API key does not have permission for this operation |
+API key authentication may be introduced in a future release. When
+this happens, the SDK will support it as an optional parameter:
 
-{/* TODO: Adapt additional detail from docs/API_KEY_SYSTEM.md */}
-{/* Topics to cover: */}
-{/* - API key format and structure */}
-{/* - Tier-based rate limits */}
-{/* - Key generation and deactivation endpoints */}
+```csharp title="C# (future)"
+var client = SpaceGassApiClient.CreateClient(apiKey: "your-key-here");
+```
+
+Existing code using the parameterless `CreateClient()` will continue
+to work — adding authentication will be a non-breaking change.
