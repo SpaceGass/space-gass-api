@@ -9,7 +9,6 @@ file, and reading nodes — using the SDK clients or plain HTTP.
 ### Prerequisites
 
 - [SPACE GASS](https://www.spacegass.com/) installed on your machine
-- A valid API key
 - An existing `.sg` project file on disk
 
 <Stepper>
@@ -25,11 +24,11 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    "C:\Program Files\SPACE GASS 14.25\SpaceGassApi.exe"
    ```
 
-   By default the service starts on `https://localhost:5001`. To use a
+   By default the service starts on `http://localhost:53483`. To use a
    different port, pass the `--urls` flag:
 
    ```bash
-   "C:\Program Files\SPACE GASS 14.25\SpaceGassApi.exe" --urls="https://localhost:8443"
+   "C:\Program Files\SPACE GASS 14.25\SpaceGassApi.exe" --urls="http://localhost:8080"
    ```
 
    Leave the terminal or shortcut window open — the service runs until
@@ -38,29 +37,19 @@ file, and reading nodes — using the SDK clients or plain HTTP.
 1. **Install the SDK**
 
    The API includes generated SDK clients for C# and Python. These
-   handle authentication, serialisation, and give you typed methods
-   for every endpoint. If you prefer raw HTTP requests, you can skip
-   this step and use curl or any HTTP client.
+   handle serialisation and give you typed methods for every endpoint.
+   If you prefer raw HTTP requests, you can skip this step and use
+   curl or any HTTP client.
 
    <CodeTabs>
    ```csharp title="C#"
    // From your project directory, add the NuGet package:
-   dotnet add package SpaceGassApi.Client
-
-   // This also installs the required Kiota dependencies:
-   //   Microsoft.Kiota.Abstractions
-   //   Microsoft.Kiota.Http.HttpClientLibrary
-   //   Microsoft.Kiota.Serialization.Json
+   dotnet add package SpaceGassApi
    ```
 
    ```python title="Python"
    # Install from PyPI:
-   pip install spacegass-api-client
-
-   # This also installs the required Kiota dependencies:
-   #   microsoft-kiota-abstractions
-   #   microsoft-kiota-http
-   #   microsoft-kiota-serialization-json
+   pip install space-gass-api
    ```
 
    ```bash title="curl"
@@ -73,34 +62,20 @@ file, and reading nodes — using the SDK clients or plain HTTP.
 
    <CodeTabs>
    ```csharp title="C#"
-   using Microsoft.Kiota.Abstractions.Authentication;
-   using Microsoft.Kiota.Http.HttpClientLibrary;
-   using SpaceGassApi.Client;
+   using SpaceGassApi;
 
-   var authProvider = new ApiKeyAuthenticationProvider(
-       "YOUR_API_KEY",
-       "X-API-KEY",
-       ApiKeyAuthenticationProvider.KeyLocation.Header);
-
-   var adapter = new HttpClientRequestAdapter(authProvider);
-   adapter.BaseUrl = "https://localhost:5001";
-
-   var client = new SpaceGassApiClient(adapter);
+   var client = SpaceGassApiClient.CreateClient();
    ```
 
    ```python title="Python"
-   from microsoft_kiota_http.httpx_request_adapter import HttpxRequestAdapter
-   from spacegass_client.space_gass_api_client import SpaceGassApiClient
+   from extensions.client_extensions import create_client
 
-   adapter = HttpxRequestAdapter(auth_provider)
-   adapter.base_url = "https://localhost:5001"
-
-   client = SpaceGassApiClient(adapter)
+   client = create_client()
    ```
 
    ```bash title="curl"
-   # Include the API key header with every request:
-   curl -H "X-API-KEY: YOUR_API_KEY" https://localhost:5001/api/v1/...
+   # No client setup needed — just make HTTP requests directly.
+   curl http://localhost:53483/api/v1/service/info
    ```
    </CodeTabs>
 
@@ -108,22 +83,21 @@ file, and reading nodes — using the SDK clients or plain HTTP.
 
    <CodeTabs>
    ```csharp title="C#"
-   using SpaceGassApi.Client.Models;
+   using SpaceGassApi.Models;
 
-   await client.Job.File.Open.PostAsync(
-       new LocalFileRequest { FilePath = @"C:\Projects\MyStructure.sg" });
+   await client.Job.Open.PostAsync(
+       new OpenJobRequest { FilePath = @"C:\Projects\MyStructure.sg" });
    ```
 
    ```python title="Python"
-   from spacegass_client.models.local_file_request import LocalFileRequest
+   from space_gass_api.models.open_job_request import OpenJobRequest
 
-   await client.job.file.open.post(
-       LocalFileRequest(file_path="C:\\Projects\\MyStructure.sg"))
+   await client.job.open.post(
+       OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
    ```
 
    ```bash title="curl"
-   curl -X POST https://localhost:5001/api/v1/job/file/open \
-     -H "X-API-KEY: YOUR_API_KEY" \
+   curl -X POST http://localhost:53483/api/v1/job/open \
      -H "Content-Type: application/json" \
      -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
    ```
@@ -149,8 +123,7 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    ```
 
    ```bash title="curl"
-   curl https://localhost:5001/api/v1/job/structure/nodes \
-     -H "X-API-KEY: YOUR_API_KEY"
+   curl http://localhost:53483/api/v1/job/structure/nodes
    ```
    </CodeTabs>
 
@@ -166,16 +139,13 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    ```
 
    ```bash title="curl"
-   curl -X POST https://localhost:5001/api/v1/job/close \
-     -H "X-API-KEY: YOUR_API_KEY"
+   curl -X POST http://localhost:53483/api/v1/job/close
    ```
    </CodeTabs>
 </Stepper>
 
 ## Next Steps
 
-- [Authentication](/getting-started/authentication) — API key details
-  and setup
 - [SDK Examples](/guides/sdk-examples) — Full walkthrough with error
   handling
 - [File Handling](/guides/file-handling) — Open, save, force-open, and

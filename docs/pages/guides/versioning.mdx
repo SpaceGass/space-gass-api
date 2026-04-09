@@ -9,32 +9,15 @@ is part of the URL path.
 ## URL Format
 
 ```
-https://your-host/api/v{version}/{resource}
+http://your-host/api/v{version}/{resource}
 ```
 
 All current endpoints use **v1**:
 
 ```
-https://localhost:5001/api/v1/job
-https://localhost:5001/api/v1/job/structure/nodes
-https://localhost:5001/api/v1/libraries/sections
-```
-
-## Version Header
-
-As an alternative to URL versioning, you can specify the version
-via the `X-API-VERSION` header. If both are present, the URL segment
-takes priority.
-
-```bash title="curl"
-# Version in URL (preferred)
-curl https://localhost:5001/api/v1/job \
-  -H "X-API-KEY: YOUR_API_KEY"
-
-# Version in header (alternative)
-curl https://localhost:5001/api/job \
-  -H "X-API-KEY: YOUR_API_KEY" \
-  -H "X-API-VERSION: 1"
+http://localhost:53483/api/v1/job
+http://localhost:53483/api/v1/job/structure/nodes
+http://localhost:53483/api/v1/job/structure/members
 ```
 
 ## SDK Clients
@@ -54,7 +37,12 @@ nodes = await client.job.structure.nodes.get()
 ```
 </CodeTabs>
 
-{/* TODO: Adapt additional content from docs/VERSIONING.md */}
-{/* Topics to cover: */}
-{/* - Breaking vs non-breaking change policy */}
-{/* - Deprecation timeline */}
+## Package Versioning
+
+SDK and package versions mirror the SPACE GASS Desktop version to
+eliminate ambiguity:
+
+| SPACE GASS Desktop | NuGet Package | PyPI Package |
+|---|---|---|
+| v15.0.2 | `SpaceGassApi 15.0.2` | `space-gass-api==15.0.2` |
+| v15.1.0 | `SpaceGassApi 15.1.0` | `space-gass-api==15.1.0` |

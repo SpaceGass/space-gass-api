@@ -34,15 +34,16 @@ All API endpoints are served under a versioned path:
 
 ## Authentication
 
-Every request must include an API key in the `X-API-KEY` header.
-See [Authentication](/getting-started/authentication) for details.
+No authentication is required. The API runs locally on your machine
+and is accessed over plain HTTP. See
+[Authentication](/getting-started/authentication) for details.
 
 ## SDK Clients
 
 Generated SDK clients are available for:
 
-- **C#** — `SpaceGassApi.Client` (NuGet package / project reference)
-- **Python** — `spacegass-api-client` (pip installable)
+- **C#** — `SpaceGassApi` (NuGet package)
+- **Python** — `space-gass-api` (pip installable)
 
 Both are generated from the OpenAPI specification using
 [Microsoft Kiota](https://learn.microsoft.com/en-us/openapi/kiota/overview).
@@ -51,8 +52,6 @@ Both are generated from the OpenAPI specification using
 
 - [Quick Start](/getting-started/quick-start) — Get up and running
   in 5 minutes
-- [Authentication](/getting-started/authentication) — Set up your
-  API key
 - [SDK Examples](/guides/sdk-examples) — Full walkthrough using the
   C# and Python clients
 - [API Reference](/api) — Browse all endpoints interactively
