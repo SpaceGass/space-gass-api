@@ -13,14 +13,14 @@ public partial class SpaceGassApiClient
     /// <summary>
     /// Default base URL for the SPACE GASS API running locally.
     /// </summary>
-    public const string DefaultBaseUrl = "http://localhost:53483/api/v1";
+    public const string DefaultBaseUrl = "http://localhost:5000/api/v1";
 
     /// <summary>
     /// Create a <see cref="SpaceGassApiClient"/> with default settings.
     /// </summary>
     /// <param name="baseUrl">
     /// Base URL of the SPACE GASS API.
-    /// Defaults to <c>http://localhost:53483/api/v1</c>.
+    /// Defaults to <c>http://localhost:5000/api/v1</c>.
     /// </param>
     /// <returns>A configured client ready to make API calls.</returns>
     public static SpaceGassApiClient CreateClient(string baseUrl = DefaultBaseUrl)

@@ -9,7 +9,7 @@ Demonstrates how to:
   5. Save the project to disk
 
 Prerequisites:
-  - SPACE GASS API running locally (default: https://localhost:53483)
+  - SPACE GASS API running locally (default: http://localhost:5000)
   - A valid API key
 """
 

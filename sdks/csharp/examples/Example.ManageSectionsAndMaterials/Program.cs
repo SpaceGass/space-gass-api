@@ -16,7 +16,7 @@ using SpaceGassApi.Models;
 //   7. Delete a section
 //
 // Prerequisites:
-//   - SPACE GASS API running locally (default: https://localhost:53483)
+//   - SPACE GASS API running locally (default: http://localhost:5000)
 //   - A valid API key
 // ---------------------------------------------------------------
 
