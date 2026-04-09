@@ -1,54 +1,35 @@
 ---
 title: Licensing
-description: How licensing works for the SPACE GASS API and SDK
+description: SPACE GASS license requirements for API access
 ---
 
-This repository uses a **dual-license** strategy to be
-developer-friendly while protecting the SPACE GASS API definition.
+The SPACE GASS API is licensed as an **add-on** to your existing
+SPACE GASS license. API access is bundled into **Pro and above**
+subscriptions, or available as a **yearly add-on** for perpetual
+license holders.
 
-## At a Glance
+## How License Seats Are Consumed
 
-| Content | License | What it means |
-|---|---|---|
-| SDK clients and examples (`sdks/`) | **MIT** | Use, modify, and distribute freely with no restrictions |
-| OpenAPI specifications (`descriptions/`) | **CC BY-ND 4.0** | Free to use and reference, but you may not distribute modified versions |
+### API License
 
-## MIT License — SDKs and Examples
+When the API service is started, an **API license seat** is consumed
+and held for the duration of that service process. The seat is
+released when the service is stopped.
 
-The generated SDK clients, hand-crafted examples, and sandbox scripts
-are all licensed under the [MIT License](https://github.com/Spacegass/space-gass-api/blob/develop/LICENSE).
-This gives you full freedom to:
+### SPACE GASS License
 
-- Use the SDK in commercial and open-source projects
-- Modify the code to suit your needs
-- Redistribute it with your own applications
+When you open a job through the API, a **standard SPACE GASS license
+seat** is consumed — the same as opening a job in the desktop
+application. The seat is released when you close the job.
 
-No attribution is required, though it is appreciated.
+### Module Licenses
 
-## CC BY-ND 4.0 — OpenAPI Specifications
+While working with an open job, additional module licenses (e.g.
+plate analysis, master-slave constraints) are consumed as needed,
+just as they would be when using SPACE GASS through the desktop
+interface.
 
-The OpenAPI specification files that define the API are licensed under
-[Creative Commons Attribution-NoDerivatives 4.0](https://github.com/Spacegass/space-gass-api/blob/develop/LICENSE-SPEC).
-This means you may:
+## More Information
 
-- **Use** the specifications to generate your own client code,
-  build integrations, and reference the API structure
-- **Share** the specifications with others
-
-But you **may not** create modified or derivative versions of the
-specification files and distribute them.
-
-## Why Dual Licensing?
-
-The OpenAPI spec is the authoritative definition of the SPACE GASS API.
-Licensing it under CC BY-ND ensures a single, consistent API
-definition exists, while the permissive MIT license on the SDKs means
-engineering firms and developers have zero friction when integrating
-the API into their own tools and workflows.
-
-## Summary
-
-If you are using the SDK to build integrations with SPACE GASS, the
-MIT license covers everything you need. The CC BY-ND license only
-applies to the specification files themselves — not to any code you
-write against the API.
+For full details on SPACE GASS licensing and pricing, visit
+[spacegass.com](https://www.spacegass.com/).
