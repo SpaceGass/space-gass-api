@@ -267,6 +267,7 @@ const config: ZudokuConfig = {
       options: {
         expandAllTags: false,
         expandApiInformation: true,
+        disablePlayground: true,
         supportedLanguages: [
           { value: "python", label: "Python" },
           { value: "csharp", label: "C#" },
