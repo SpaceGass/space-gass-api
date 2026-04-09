@@ -273,7 +273,12 @@ const config: ZudokuConfig = {
   },
   docs: {
     files: "/pages/**/*.{md,mdx}",
-    editUrl: "https://github.com/Spacegass/space-gass-api/edit/develop/docs",
+    publishMarkdown: true,
+    defaultOptions: {
+      suggestEdit: {
+        url: "https://github.com/Spacegass/space-gass-api/edit/develop/docs/pages",
+      },
+    },
   },
   redirects: [{ from: "/", to: "/getting-started/introduction" }],
 };

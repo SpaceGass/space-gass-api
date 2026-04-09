@@ -11,6 +11,7 @@ HTTP — no API keys, tokens, or credentials are needed.
 
 The SDK clients connect to the local API with no setup:
 
+<CodeTabs>
 ```csharp title="C#"
 using SpaceGassApi;
 
@@ -28,11 +29,13 @@ client = create_client()
 ```bash title="curl"
 curl http://localhost:5000/api/v1/service/info
 ```
+</CodeTabs>
 
 ## Custom Base URL
 
 If the API is running on a different port, pass the URL explicitly:
 
+<CodeTabs>
 ```csharp title="C#"
 var client = SpaceGassApiClient.CreateClient("http://localhost:8080/api/v1");
 ```
@@ -40,6 +43,7 @@ var client = SpaceGassApiClient.CreateClient("http://localhost:8080/api/v1");
 ```python title="Python"
 client = create_client("http://localhost:8080/api/v1")
 ```
+</CodeTabs>
 
 ## Future Authentication
 
