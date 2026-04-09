@@ -223,7 +223,7 @@ const config: ZudokuConfig = {
       items: [
         "guides/authentication",
         "guides/file-handling",
-        "guides/sdk-examples",
+        "guides/filtering-and-querying",
         "guides/error-handling",
         "guides/versioning",
         "guides/licensing",

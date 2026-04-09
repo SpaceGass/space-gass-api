@@ -1,107 +1,16 @@
 ---
-title: SDK Examples
-description: Full walkthrough using the C# and Python SDK clients
+title: Filtering & Querying
+description: How to filter, query, and paginate API results
 ---
 
-This guide demonstrates a complete workflow using the generated SDK
-clients: connect to the API, open a project, read structural data,
-and close the project — with proper error handling.
+Most API endpoints support query parameters for filtering, and all
+query result endpoints support pagination. This guide covers the
+common patterns.
 
-## Full Workflow
+## Filtering Entities
 
-<CodeTabs>
-```csharp title="C#"
-using SpaceGassApi;
-using SpaceGassApi.Models;
-
-// 1. Create the client
-var client = SpaceGassApiClient.CreateClient();
-
-try
-{
-    // 2. Open a project file
-    await client.Job.Open.PostAsync(
-        new OpenJobRequest
-        {
-            FilePath = @"C:\Projects\MyStructure.sg"
-        });
-
-    // 3. Get job information
-    var job = await client.Job.GetAsync();
-    Console.WriteLine($"Project: {job?.ProjectHeading}");
-    Console.WriteLine($"Job:     {job?.Heading}");
-
-    // 4. Get all nodes
-    var nodes = await client.Job.Structure.Nodes.GetAsync();
-    Console.WriteLine($"Found {nodes?.Count} nodes");
-
-    foreach (var node in nodes)
-    {
-        Console.WriteLine(
-            $"  Node {node.Key}: ({node.X}, {node.Y}, {node.Z})");
-    }
-
-    // 5. Close the project
-    await client.Job.Close.PostAsync();
-}
-catch (Exception ex)
-{
-    Console.Error.WriteLine($"Error: {ex.Message}");
-}
-```
-
-```python title="Python"
-from extensions.client_extensions import create_client
-from space_gass_api.models.open_job_request import OpenJobRequest
-
-# 1. Create the client
-client = create_client()
-
-try:
-    # 2. Open a project file
-    await client.job.open.post(
-        OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
-
-    # 3. Get job information
-    job = await client.job.get()
-    print(f"Project: {job.project_heading}")
-    print(f"Job:     {job.heading}")
-
-    # 4. Get all nodes
-    nodes = await client.job.structure.nodes.get()
-    print(f"Found {len(nodes)} nodes")
-
-    for node in nodes:
-        print(f"  Node {node.key}: ({node.x}, {node.y}, {node.z})")
-
-    # 5. Close the project
-    await client.job.close.post()
-
-except Exception as e:
-    print(f"Error: {e}")
-```
-</CodeTabs>
-
-## Getting a Single Node
-
-<CodeTabs>
-```csharp title="C#"
-// Get node by key (e.g., node 1)
-var node = await client.Job.Structure.Nodes[1].GetAsync();
-Console.WriteLine($"Node {node.Key}: ({node.X}, {node.Y}, {node.Z})");
-```
-
-```python title="Python"
-node = await client.job.structure.nodes.by_key(1).get()
-print(f"Node {node.key}: ({node.x}, {node.y}, {node.z})")
-```
-
-```bash title="curl"
-curl http://localhost:5000/api/v1/job/structure/nodes/1
-```
-</CodeTabs>
-
-## Filtering Nodes
+Structure endpoints like nodes, members, and sections support query
+parameters to narrow down results.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -116,7 +25,6 @@ var filtered = await client.Job.Structure.Nodes.GetAsync(
 ```
 
 ```python title="Python"
-# Get nodes within a coordinate range
 filtered = await client.job.structure.nodes.get(
     request_configuration=lambda c: setattr(
         c.query_parameters, 'min_x', 0) or
@@ -129,46 +37,37 @@ curl "http://localhost:5000/api/v1/job/structure/nodes?MinX=0&MaxX=100&Limit=50"
 ```
 </CodeTabs>
 
-## Creating a Node
+## Getting a Single Entity
+
+Access any entity by its key using the indexer (C#) or `by_key`
+(Python):
 
 <CodeTabs>
 ```csharp title="C#"
-var newNode = await client.Job.Structure.Nodes.PostAsync(
-    new NodeCreate
-    {
-        X = 10.0,
-        Y = 20.0,
-        Z = 0.0
-    });
-Console.WriteLine($"Created node {newNode.Key}");
+var node = await client.Job.Structure.Nodes[1].GetAsync();
+Console.WriteLine($"Node {node.Key}: ({node.X}, {node.Y}, {node.Z})");
 ```
 
 ```python title="Python"
-from space_gass_api.models.node_create import NodeCreate
-
-new_node = await client.job.structure.nodes.post(
-    NodeCreate(x=10.0, y=20.0, z=0.0))
-print(f"Created node {new_node.key}")
+node = await client.job.structure.nodes.by_key(1).get()
+print(f"Node {node.key}: ({node.x}, {node.y}, {node.z})")
 ```
 
 ```bash title="curl"
-curl -X POST http://localhost:5000/api/v1/job/structure/nodes \
-  -H "Content-Type: application/json" \
-  -d '{"x": 10.0, "y": 20.0, "z": 0.0}'
+curl http://localhost:5000/api/v1/job/structure/nodes/1
 ```
 </CodeTabs>
 
 ## Querying Analysis Results
 
-After running an analysis, you can query the results. Results use a columnar
-format for efficient data transfer — grouped results return parallel arrays
-rather than nested objects.
+After running an analysis, query endpoints return results in a flat,
+efficient format. All query endpoints support optional filters for
+load case and entity key.
 
 ### Node Reactions
 
 <CodeTabs>
 ```csharp title="C#"
-// Get all node reactions
 var result = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync();
 
 foreach (var r in result.Results)
@@ -179,7 +78,6 @@ foreach (var r in result.Results)
 ```
 
 ```python title="Python"
-# Get all node reactions
 result = await client.job.query.analysis.static.node.reactions.get()
 
 for r in result.results:
@@ -194,11 +92,8 @@ curl http://localhost:5000/api/v1/job/query/analysis/static/node/reactions
 
 ### Filtering by Load Case and Node
 
-All query endpoints support optional filters via query parameters.
-
 <CodeTabs>
 ```csharp title="C#"
-// Get displacements for cases 1 and 3, nodes 10-12
 var result = await client.Job.Query.Analysis.Static.Node.Displacements
     .GetAsync(config =>
     {
@@ -220,11 +115,11 @@ curl "http://localhost:5000/api/v1/job/query/analysis/static/node/displacements?
 ```
 </CodeTabs>
 
-### Member Intermediate Forces (Columnar Format)
+### Member Intermediate Forces
 
-Grouped results like member forces use a columnar layout — the parent object
-contains the case and member keys, with force values as parallel arrays
-indexed by station.
+Grouped results like member forces use a columnar layout — the parent
+object contains the case and member keys, with force values as parallel
+arrays indexed by station.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -341,9 +236,10 @@ curl http://localhost:5000/api/v1/job/query/design/steel-member/check-summary
 ```
 </CodeTabs>
 
-### Pagination
+## Pagination
 
-All query endpoints support `offset` and `limit` for pagination.
+All query endpoints support `offset` and `limit` for pagination. By
+default all results are returned. Use pagination for large result sets.
 
 <CodeTabs>
 ```csharp title="C#"
