@@ -15,7 +15,8 @@
   },
   "servers": [
     {
-      "url": "/api/v1"
+      "url": "http://localhost:5000/api/v1",
+      "description": "Local development server (default)"
     }
   ],
   "paths": {
@@ -1074,8 +1075,8 @@
               }
             }
           },
-          "404": {
-            "description": "File not found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1084,8 +1085,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "File not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1239,8 +1240,8 @@
               }
             }
           },
-          "404": {
-            "description": "No job found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1249,8 +1250,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "No job found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1280,8 +1281,8 @@
               }
             }
           },
-          "404": {
-            "description": "No job found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1290,8 +1291,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "No job found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1532,8 +1533,8 @@
               }
             }
           },
-          "409": {
-            "description": "Existing job has unsaved changes (use forceCreate=true to discard)",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1542,8 +1543,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Existing job has unsaved changes (use forceCreate=true to discard)",
             "content": {
               "application/json": {
                 "schema": {
@@ -1674,8 +1675,8 @@
               }
             }
           },
-          "409": {
-            "description": "Job is new and no filePath was provided",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1684,8 +1685,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Job is new and no filePath was provided",
             "content": {
               "application/json": {
                 "schema": {
@@ -1860,8 +1861,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1870,8 +1871,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -1912,8 +1913,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -1922,8 +1923,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1992,8 +1993,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -2002,8 +2003,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -2035,8 +2036,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -2045,8 +2046,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -2091,8 +2092,8 @@
               }
             }
           },
-          "404": {
-            "description": "Group not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -2101,8 +2102,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Group not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -2536,8 +2537,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -2546,8 +2547,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -2588,8 +2589,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -2598,8 +2599,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -2668,8 +2669,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -2678,8 +2679,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -2712,8 +2713,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -2722,8 +2723,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -2841,8 +2842,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "400": {
+            "description": "Bad Request",
             "content": {
               "application/json": {
                 "schema": {
@@ -2851,8 +2852,8 @@
               }
             }
           },
-          "400": {
-            "description": "Bad Request",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -3312,8 +3313,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -3322,8 +3323,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -3364,8 +3365,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -3374,8 +3375,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -3444,8 +3445,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -3454,8 +3455,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -3487,8 +3488,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -3497,8 +3498,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -3941,6 +3942,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -3953,16 +3964,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -4014,8 +4015,8 @@
               }
             }
           },
-          "404": {
-            "description": "Lumped mass load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -4024,8 +4025,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Lumped mass load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -4105,8 +4106,8 @@
               }
             }
           },
-          "404": {
-            "description": "Lumped mass load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -4115,8 +4116,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Lumped mass load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -4159,8 +4160,8 @@
           "204": {
             "description": "Lumped mass load deleted successfully"
           },
-          "404": {
-            "description": "Lumped mass load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -4169,8 +4170,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Lumped mass load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -4563,8 +4564,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -4573,8 +4574,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -4615,8 +4616,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -4625,8 +4626,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -4695,8 +4696,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -4705,8 +4706,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -4738,8 +4739,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -4748,8 +4749,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -5192,6 +5193,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -5204,16 +5215,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -5275,8 +5276,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member concentrated load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -5285,8 +5286,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member concentrated load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -5376,8 +5377,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member concentrated load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -5386,8 +5387,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member concentrated load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -5440,8 +5441,8 @@
           "204": {
             "description": "Member concentrated load deleted successfully"
           },
-          "404": {
-            "description": "Member concentrated load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -5450,8 +5451,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member concentrated load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -5869,6 +5870,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -5881,16 +5892,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -5952,8 +5953,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member distributed load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -5962,8 +5963,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member distributed load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -6053,8 +6054,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member distributed load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -6063,8 +6064,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member distributed load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -6117,8 +6118,8 @@
           "204": {
             "description": "Member distributed load deleted successfully"
           },
-          "404": {
-            "description": "Member distributed load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -6127,8 +6128,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member distributed load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -6546,6 +6547,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -6558,16 +6569,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -6629,8 +6630,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member distributed moment not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -6639,8 +6640,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member distributed moment not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -6730,8 +6731,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member distributed moment not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -6740,8 +6741,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member distributed moment not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -6794,8 +6795,8 @@
           "204": {
             "description": "Member distributed moment deleted successfully"
           },
-          "404": {
-            "description": "Member distributed moment not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -6804,8 +6805,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member distributed moment not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -7223,6 +7224,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -7235,16 +7246,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -7296,8 +7297,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member prestress load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -7306,8 +7307,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member prestress load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -7387,8 +7388,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member prestress load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -7397,8 +7398,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member prestress load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -7441,8 +7442,8 @@
           "204": {
             "description": "Member prestress load deleted successfully"
           },
-          "404": {
-            "description": "Member prestress load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -7451,8 +7452,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member prestress load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -7871,8 +7872,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -7881,8 +7882,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -7923,8 +7924,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -7933,8 +7934,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -8003,8 +8004,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -8013,8 +8014,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -8046,8 +8047,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -8056,8 +8057,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -8099,8 +8100,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member, direction vector, or Node A not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -8109,8 +8110,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member, direction vector, or Node A not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -8152,8 +8153,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -8162,8 +8163,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -8223,16 +8224,6 @@
               }
             }
           },
-          "404": {
-            "description": "Member not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "400": {
             "description": "Invalid offset data",
             "content": {
@@ -8245,6 +8236,16 @@
           },
           "401": {
             "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Member not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -8304,16 +8305,6 @@
               }
             }
           },
-          "404": {
-            "description": "Offsets not found for this member",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "400": {
             "description": "Invalid update data",
             "content": {
@@ -8326,6 +8317,16 @@
           },
           "401": {
             "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Offsets not found for this member",
             "content": {
               "application/json": {
                 "schema": {
@@ -8357,8 +8358,8 @@
           "204": {
             "description": "Offsets deleted successfully"
           },
-          "404": {
-            "description": "Offsets not found for this member",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -8367,8 +8368,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Offsets not found for this member",
             "content": {
               "application/json": {
                 "schema": {
@@ -8410,8 +8411,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -8420,8 +8421,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -8481,16 +8482,6 @@
               }
             }
           },
-          "404": {
-            "description": "Member not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "400": {
             "description": "Invalid update data",
             "content": {
@@ -8503,6 +8494,16 @@
           },
           "401": {
             "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Member not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -8535,8 +8536,8 @@
           "204": {
             "description": "Releases reset successfully"
           },
-          "404": {
-            "description": "Member not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -8545,8 +8546,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -8989,6 +8990,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -9001,16 +9012,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -9062,8 +9063,8 @@
               }
             }
           },
-          "404": {
-            "description": "Prescribed displacement not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -9072,8 +9073,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Prescribed displacement not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -9153,8 +9154,8 @@
               }
             }
           },
-          "404": {
-            "description": "Prescribed displacement not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -9163,8 +9164,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Prescribed displacement not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -9207,8 +9208,8 @@
           "204": {
             "description": "Prescribed displacement deleted successfully"
           },
-          "404": {
-            "description": "Prescribed displacement not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -9217,8 +9218,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Prescribed displacement not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -9636,6 +9637,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -9648,16 +9659,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -9709,8 +9710,8 @@
               }
             }
           },
-          "404": {
-            "description": "Node load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -9719,8 +9720,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Node load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -9800,8 +9801,8 @@
               }
             }
           },
-          "404": {
-            "description": "Node load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -9810,8 +9811,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Node load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -9854,8 +9855,8 @@
           "204": {
             "description": "Node load deleted successfully"
           },
-          "404": {
-            "description": "Node load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -9864,8 +9865,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Node load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -10320,8 +10321,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -10330,8 +10331,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -10372,8 +10373,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -10382,8 +10383,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -10452,8 +10453,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -10462,8 +10463,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -10495,8 +10496,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -10505,8 +10506,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -10548,8 +10549,8 @@
               }
             }
           },
-          "404": {
-            "description": "No constraint defined for this node",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -10558,8 +10559,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "No constraint defined for this node",
             "content": {
               "application/json": {
                 "schema": {
@@ -10619,16 +10620,6 @@
               }
             }
           },
-          "404": {
-            "description": "Slave node not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "400": {
             "description": "Invalid constraint data",
             "content": {
@@ -10641,6 +10632,16 @@
           },
           "401": {
             "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Slave node not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -10700,16 +10701,6 @@
               }
             }
           },
-          "404": {
-            "description": "No constraint defined for this node",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "400": {
             "description": "Invalid update data",
             "content": {
@@ -10722,6 +10713,16 @@
           },
           "401": {
             "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No constraint defined for this node",
             "content": {
               "application/json": {
                 "schema": {
@@ -10754,8 +10755,8 @@
           "204": {
             "description": "Constraint deleted successfully"
           },
-          "404": {
-            "description": "No constraint defined for this node",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -10764,8 +10765,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "No constraint defined for this node",
             "content": {
               "application/json": {
                 "schema": {
@@ -10868,16 +10869,6 @@
               }
             }
           },
-          "404": {
-            "description": "Node not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "400": {
             "description": "Invalid restraint data",
             "content": {
@@ -10890,6 +10881,16 @@
           },
           "401": {
             "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Node not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -10949,16 +10950,6 @@
               }
             }
           },
-          "404": {
-            "description": "Restraint not found for this node",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "400": {
             "description": "Invalid update data",
             "content": {
@@ -10971,6 +10962,16 @@
           },
           "401": {
             "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Restraint not found for this node",
             "content": {
               "application/json": {
                 "schema": {
@@ -11091,16 +11092,6 @@
               }
             }
           },
-          "404": {
-            "description": "No node exists within the specified tolerance",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "400": {
             "description": "If tolerance is negative",
             "content": {
@@ -11113,6 +11104,16 @@
           },
           "401": {
             "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No node exists within the specified tolerance",
             "content": {
               "application/json": {
                 "schema": {
@@ -12058,8 +12059,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -12068,8 +12069,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -12110,8 +12111,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -12120,8 +12121,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -12190,8 +12191,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -12200,8 +12201,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -12233,8 +12234,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -12243,8 +12244,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -12687,6 +12688,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -12699,16 +12710,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -12760,8 +12761,8 @@
               }
             }
           },
-          "404": {
-            "description": "Plate pressure load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -12770,8 +12771,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Plate pressure load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -12851,8 +12852,8 @@
               }
             }
           },
-          "404": {
-            "description": "Plate pressure load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -12861,8 +12862,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Plate pressure load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -12905,8 +12906,8 @@
           "204": {
             "description": "Plate pressure load deleted successfully"
           },
-          "404": {
-            "description": "Plate pressure load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -12915,8 +12916,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Plate pressure load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -13309,8 +13310,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -13319,8 +13320,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -13361,8 +13362,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -13371,8 +13372,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -13441,8 +13442,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -13451,8 +13452,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -13484,8 +13485,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -13494,8 +13495,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -13930,8 +13931,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -13940,8 +13941,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -13982,8 +13983,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -13992,8 +13993,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -14062,8 +14063,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -14072,8 +14073,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -14105,8 +14106,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -14115,8 +14116,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -14534,8 +14535,8 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -14544,8 +14545,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "409": {
+            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -14586,8 +14587,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -14596,8 +14597,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -14666,8 +14667,8 @@
               }
             }
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -14676,8 +14677,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -14709,8 +14710,8 @@
           "204": {
             "description": "No Content"
           },
-          "404": {
-            "description": "Not Found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -14719,8 +14720,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "Not Found",
             "content": {
               "application/json": {
                 "schema": {
@@ -15136,8 +15137,8 @@
               }
             }
           },
-          "404": {
-            "description": "Self-weight load not found for this case",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -15146,8 +15147,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Self-weight load not found for this case",
             "content": {
               "application/json": {
                 "schema": {
@@ -15217,8 +15218,8 @@
               }
             }
           },
-          "404": {
-            "description": "Self-weight load not found for this case",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -15227,8 +15228,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Self-weight load not found for this case",
             "content": {
               "application/json": {
                 "schema": {
@@ -15298,8 +15299,8 @@
               }
             }
           },
-          "404": {
-            "description": "Load case not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -15308,8 +15309,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Load case not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -15342,8 +15343,8 @@
           "204": {
             "description": "Self-weight load deleted successfully"
           },
-          "404": {
-            "description": "Self-weight load not found for this case",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -15352,8 +15353,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Self-weight load not found for this case",
             "content": {
               "application/json": {
                 "schema": {
@@ -16380,6 +16381,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Not Found",
             "content": {
@@ -16392,16 +16403,6 @@
           },
           "409": {
             "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -16453,8 +16454,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member thermal load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -16463,8 +16464,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member thermal load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -16544,8 +16545,8 @@
               }
             }
           },
-          "404": {
-            "description": "Member thermal load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -16554,8 +16555,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member thermal load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -16598,8 +16599,8 @@
           "204": {
             "description": "Member thermal load deleted successfully"
           },
-          "404": {
-            "description": "Member thermal load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -16608,8 +16609,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Member thermal load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -16692,8 +16693,8 @@
               }
             }
           },
-          "404": {
-            "description": "Plate thermal load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -16702,8 +16703,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Plate thermal load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -16783,8 +16784,8 @@
               }
             }
           },
-          "404": {
-            "description": "Plate thermal load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -16793,8 +16794,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Plate thermal load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -16837,8 +16838,8 @@
           "204": {
             "description": "Plate thermal load deleted successfully"
           },
-          "404": {
-            "description": "Plate thermal load not found",
+          "401": {
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -16847,8 +16848,8 @@
               }
             }
           },
-          "401": {
-            "description": "If the API key is invalid",
+          "404": {
+            "description": "Plate thermal load not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -17117,8 +17118,8 @@
               }
             }
           },
-          "404": {
-            "description": "No job found",
+          "401": {
+            "description": "Unauthorized",
             "content": {
               "application/json": {
                 "schema": {
@@ -17127,8 +17128,8 @@
               }
             }
           },
-          "401": {
-            "description": "Unauthorized",
+          "404": {
+            "description": "No job found",
             "content": {
               "application/json": {
                 "schema": {
@@ -18229,7 +18230,7 @@
           },
           "extensions": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
             "description": "Additional context-specific data",
             "nullable": true
           },
@@ -19499,7 +19500,7 @@
             "description": "Material name."
           },
           "youngsModulus": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Young's modulus. Must be greater than zero.",
             "format": "double"
@@ -19510,7 +19511,7 @@
             "format": "double"
           },
           "massDensity": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Mass density. Must be greater than zero.",
             "format": "double"
@@ -19568,7 +19569,7 @@
             "nullable": true
           },
           "youngsModulus": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Young's modulus. Must be greater than zero if provided.",
             "format": "double",
@@ -19581,7 +19582,7 @@
             "nullable": true
           },
           "massDensity": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Mass density. Must be greater than zero if provided.",
             "format": "double",
@@ -23336,7 +23337,7 @@
         "properties": {
           "succeeded": {
             "type": "array",
-            "items": { },
+            "items": {},
             "description": "Successfully processed items.",
             "nullable": true
           },
@@ -25218,7 +25219,7 @@
             "nullable": true
           }
         },
-        "additionalProperties": { }
+        "additionalProperties": {}
       },
       "PropertySource": {
         "enum": [
@@ -25434,37 +25435,37 @@
             "nullable": true
           },
           "a": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Cross-sectional area. Must be greater than zero.",
             "format": "double"
           },
           "j": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Torsion constant. Must be greater than zero.",
             "format": "double"
           },
           "iy": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Second moment of area about Y axis. Must be greater than zero.",
             "format": "double"
           },
           "iz": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Second moment of area about Z axis. Must be greater than zero.",
             "format": "double"
           },
           "ay": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Shear area in Y direction. Must be greater than zero.",
             "format": "double"
           },
           "az": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Shear area in Z direction. Must be greater than zero.",
             "format": "double"
@@ -25476,28 +25477,28 @@
             "nullable": true
           },
           "areaFactor": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Area modification factor. Defaults to 1.0. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "torsionFactor": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Torsion modification factor. Defaults to 1.0. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "iyFactor": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Iy modification factor. Defaults to 1.0. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "izFactor": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Iz modification factor. Defaults to 1.0. Must be greater than zero if provided.",
             "format": "double",
@@ -25545,42 +25546,42 @@
             "nullable": true
           },
           "a": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Cross-sectional area. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "j": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Torsion constant. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "iy": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Second moment of area about Y axis. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "iz": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Second moment of area about Z axis. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "ay": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Shear area in Y direction. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "az": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Shear area in Z direction. Must be greater than zero if provided.",
             "format": "double",
@@ -25593,28 +25594,28 @@
             "nullable": true
           },
           "areaFactor": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Area modification factor. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "torsionFactor": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Torsion modification factor. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "iyFactor": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Iy modification factor. Must be greater than zero if provided.",
             "format": "double",
             "nullable": true
           },
           "izFactor": {
-            "minimum": 0.0000000000000000000000000000,
+            "minimum": 0,
             "type": "number",
             "description": "Iz modification factor. Must be greater than zero if provided.",
             "format": "double",

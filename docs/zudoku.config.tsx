@@ -121,7 +121,6 @@ const config: ZudokuConfig = {
   basePath: "/space-gass-api",
   site: {
     title: "SpaceGass API",
-    favicon: "/blue-sg-256-clear-bg.ico",
     logo: {
       src: {
         light: "/logo-light.png",
@@ -144,6 +143,7 @@ const config: ZudokuConfig = {
     title: "SpaceGass API Documentation",
     description:
       "Programmatic access to SPACE GASS structural analysis data",
+    favicon: "/space-gass-api/blue-sg-256-clear-bg.ico",
   },
   theme: {
     fonts: {
@@ -237,11 +237,25 @@ const config: ZudokuConfig = {
       to: "/api",
       icon: "code",
     },
+    {
+      type: "link",
+      label: "GitHub",
+      to: "https://github.com/Spacegass/space-gass-api",
+      target: "_blank",
+      icon: "github",
+    },
+    {
+      type: "link",
+      label: "spacegass.com",
+      to: "https://www.spacegass.com",
+      target: "_blank",
+      icon: "globe",
+    },
   ],
   defaults: {
     apis: {
       expandAllTags: false,
-      expandApiInformation: false,
+      expandApiInformation: true,
     },
   },
   apis: [
@@ -252,7 +266,8 @@ const config: ZudokuConfig = {
       label: "14.5.0 (Preview)",
       options: {
         expandAllTags: false,
-        expandApiInformation: false,
+        expandApiInformation: true,
+        disablePlayground: true,
         supportedLanguages: [
           { value: "python", label: "Python" },
           { value: "csharp", label: "C#" },
