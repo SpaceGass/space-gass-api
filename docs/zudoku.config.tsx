@@ -121,7 +121,6 @@ const config: ZudokuConfig = {
   basePath: "/space-gass-api",
   site: {
     title: "SpaceGass API",
-    favicon: "/blue-sg-256-clear-bg.ico",
     logo: {
       src: {
         light: "/logo-light.png",
@@ -144,6 +143,7 @@ const config: ZudokuConfig = {
     title: "SpaceGass API Documentation",
     description:
       "Programmatic access to SPACE GASS structural analysis data",
+    favicon: "/space-gass-api/blue-sg-256-clear-bg.ico",
   },
   theme: {
     fonts: {
