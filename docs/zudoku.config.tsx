@@ -242,26 +242,38 @@ const config: ZudokuConfig = {
       expandApiInformation: false,
     },
   },
-  apis: {
-    type: "file",
-    input: "../descriptions/preview/openapi.json",
-    path: "/api",
-    options: {
-      expandAllTags: false,
-      expandApiInformation: false,
-      supportedLanguages: [
-        { value: "python", label: "Python" },
-        { value: "csharp", label: "C#" },
-        { value: "shell", label: "cURL" },
-      ],
-      generateCodeSnippet,
+  apis: [
+    {
+      type: "file",
+      input: "../descriptions/preview/openapi.json",
+      path: "/api",
+      label: "14.5.0 (Preview)",
+      options: {
+        expandAllTags: false,
+        expandApiInformation: false,
+        supportedLanguages: [
+          { value: "python", label: "Python" },
+          { value: "csharp", label: "C#" },
+          { value: "shell", label: "cURL" },
+        ],
+        generateCodeSnippet,
+      },
     },
-  },
+    // Future versions:
+    // {
+    //   type: "file",
+    //   input: "../descriptions/archive/v14.6.0/openapi.json",
+    //   path: "/api",
+    //   label: "14.6.0",
+    //   options: { ... },
+    // },
+  ],
   search: {
     type: "pagefind",
   },
   docs: {
     files: "/pages/**/*.{md,mdx}",
+    editUrl: "https://github.com/Spacegass/space-gass-api/edit/develop/docs",
   },
   redirects: [{ from: "/", to: "/getting-started/introduction" }],
 };
