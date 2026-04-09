@@ -270,7 +270,9 @@ const config: ZudokuConfig = {
       options: {
         expandAllTags: false,
         expandApiInformation: true,
+        showInfoPage: true,
         disablePlayground: true,
+        schemaDownload: { enabled: true },
         supportedLanguages: [
           { value: "python", label: "Python" },
           { value: "csharp", label: "C#" },
