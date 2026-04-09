@@ -1,0 +1,196 @@
+---
+title: "Example: Simple Beam"
+description: Build a simple beam model, run analysis, and query results
+---
+
+This walkthrough demonstrates a complete SPACE GASS API workflow from
+start to finish: create a project, build a simple beam with supports
+and loads, run a linear static analysis, and retrieve the results.
+
+## What We Will Build
+
+A simply-supported beam with a point load at midspan:
+
+- **Node 1** at (0, 0, 0) — fixed support
+- **Node 2** at (6, 0, 0) — pinned support
+- **Member 1** connecting the two nodes
+- **A vertical node load** applied to Node 2
+
+## Step 1 — Create the Client and a New Project
+
+<CodeTabs>
+```csharp title="C#"
+using SpaceGassApi;
+using SpaceGassApi.Job.New;
+using SpaceGassApi.Models;
+
+var client = SpaceGassApiClient.CreateClient();
+
+// Create a new blank project
+await client.Job.New.PostAsync(new NewPostRequestBody());
+```
+
+```python title="Python"
+from extensions.client_extensions import create_client
+from space_gass_api.models.node_create import NodeCreate
+from space_gass_api.models.node_restraint_create import NodeRestraintCreate
+from space_gass_api.models.member_create import MemberCreate
+from space_gass_api.models.save_job_request import SaveJobRequest
+
+client = create_client()
+
+# Create a new blank project
+await client.job.new.post()
+```
+</CodeTabs>
+
+## Step 2 — Create Nodes
+
+<CodeTabs>
+```csharp title="C#"
+var node1 = await client.Job.Structure.Nodes.PostAsync(
+    new NodeCreate { X = 0.0, Y = 0.0, Z = 0.0 });
+
+var node2 = await client.Job.Structure.Nodes.PostAsync(
+    new NodeCreate { X = 6.0, Y = 0.0, Z = 0.0 });
+
+Console.WriteLine($"Node {node1.Key}: ({node1.X}, {node1.Y}, {node1.Z})");
+Console.WriteLine($"Node {node2.Key}: ({node2.X}, {node2.Y}, {node2.Z})");
+```
+
+```python title="Python"
+node1 = await client.job.structure.nodes.post(
+    NodeCreate(x=0.0, y=0.0, z=0.0))
+
+node2 = await client.job.structure.nodes.post(
+    NodeCreate(x=6.0, y=0.0, z=0.0))
+
+print(f"Node {node1.key}: ({node1.x}, {node1.y}, {node1.z})")
+print(f"Node {node2.key}: ({node2.x}, {node2.y}, {node2.z})")
+```
+</CodeTabs>
+
+## Step 3 — Apply Restraints
+
+Restraint codes use 6 characters representing the translational (TX,
+TY, TZ) and rotational (RX, RY, RZ) degrees of freedom. `R` means
+restrained, `F` means free.
+
+<CodeTabs>
+```csharp title="C#"
+// Node 1: Fixed support (all DOFs restrained)
+await client.Job.Structure.Nodes[node1.Key.Value].Restraint.PostAsync(
+    new NodeRestraintCreate { RestraintCode = "RRRRRR" });
+
+// Node 2: Pinned support (translations restrained, rotations free)
+await client.Job.Structure.Nodes[node2.Key.Value].Restraint.PostAsync(
+    new NodeRestraintCreate { RestraintCode = "RRRFFF" });
+```
+
+```python title="Python"
+# Node 1: Fixed support (all DOFs restrained)
+await client.job.structure.nodes.by_key(node1.key).restraint.post(
+    NodeRestraintCreate(restraint_code="RRRRRR"))
+
+# Node 2: Pinned support (translations restrained, rotations free)
+await client.job.structure.nodes.by_key(node2.key).restraint.post(
+    NodeRestraintCreate(restraint_code="RRRFFF"))
+```
+</CodeTabs>
+
+## Step 4 — Create a Member
+
+<CodeTabs>
+```csharp title="C#"
+var member = await client.Job.Structure.Members.PostAsync(
+    new MemberCreate
+    {
+        NodeA = node1.Key.Value,
+        NodeB = node2.Key.Value
+    });
+
+Console.WriteLine($"Member {member.Key}: Node {member.NodeA} -> Node {member.NodeB}");
+```
+
+```python title="Python"
+member = await client.job.structure.members.post(
+    MemberCreate(node_a=node1.key, node_b=node2.key))
+
+print(f"Member {member.key}: Node {member.node_a} -> Node {member.node_b}")
+```
+</CodeTabs>
+
+## Step 5 — Run a Linear Static Analysis
+
+<CodeTabs>
+```csharp title="C#"
+var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
+    new StaticSettingsUpdate());
+
+Console.WriteLine($"Run ID: {run.RunId}");
+Console.WriteLine($"Status: {run.Status}");
+```
+
+```python title="Python"
+from space_gass_api.models.static_settings_update import StaticSettingsUpdate
+
+run = await client.job.analysis.static.run_linear.post(
+    StaticSettingsUpdate())
+
+print(f"Run ID: {run.run_id}")
+print(f"Status: {run.status}")
+```
+</CodeTabs>
+
+## Step 6 — Query Reactions
+
+Once the analysis completes, retrieve the support reactions:
+
+<CodeTabs>
+```csharp title="C#"
+var result = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync();
+
+foreach (var r in result.Results)
+{
+    Console.WriteLine(
+        $"Node {r.Node}, LC {r.Case}: " +
+        $"Fx={r.Fx:F2}, Fy={r.Fy:F2}, Fz={r.Fz:F2}");
+}
+```
+
+```python title="Python"
+result = await client.job.query.analysis.static.node.reactions.get()
+
+for r in result.results:
+    print(f"Node {r.node}, LC {r.case_}: "
+          f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
+```
+</CodeTabs>
+
+## Step 7 — Save and Close
+
+<CodeTabs>
+```csharp title="C#"
+await client.Job.Save.PostAsync(
+    new SaveJobRequest { FilePath = @"C:\Projects\SimpleBeam.sg" });
+
+await client.Job.Close.PostAsync();
+```
+
+```python title="Python"
+from space_gass_api.models.save_job_request import SaveJobRequest
+
+await client.job.save.post(
+    SaveJobRequest(file_path="C:\\Projects\\SimpleBeam.sg"))
+
+await client.job.close.post()
+```
+</CodeTabs>
+
+## Full Source Code
+
+The complete examples with error handling are available in the
+repository:
+
+- [C# — Example.CreateSimpleBeam](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.CreateSimpleBeam)
+- [Python — create_simple_beam](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/create_simple_beam)

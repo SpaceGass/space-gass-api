@@ -7,7 +7,7 @@ from kiota_http.httpx_request_adapter import HttpxRequestAdapter
 
 from space_gass_api.space_gass_api_client import SpaceGassApiClient
 
-DEFAULT_BASE_URL = "http://localhost:53483/api/v1"
+DEFAULT_BASE_URL = "http://localhost:5000/api/v1"
 
 
 def create_client(base_url: str = DEFAULT_BASE_URL) -> SpaceGassApiClient:
@@ -16,7 +16,7 @@ def create_client(base_url: str = DEFAULT_BASE_URL) -> SpaceGassApiClient:
 
     Args:
         base_url: Base URL of the SPACE GASS API.
-                  Defaults to http://localhost:53483/api/v1.
+                  Defaults to http://localhost:5000/api/v1.
 
     Returns:
         A configured client ready to make API calls.

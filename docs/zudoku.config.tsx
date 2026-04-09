@@ -206,7 +206,14 @@ const config: ZudokuConfig = {
       items: [
         "getting-started/introduction",
         "getting-started/quick-start",
-        "getting-started/authentication",
+      ],
+    },
+    {
+      type: "category",
+      label: "Examples",
+      icon: "play",
+      items: [
+        "guides/examples/simple-beam",
       ],
     },
     {
@@ -214,10 +221,12 @@ const config: ZudokuConfig = {
       label: "Guides",
       icon: "compass",
       items: [
-        "guides/sdk-examples",
+        "guides/authentication",
         "guides/file-handling",
+        "guides/sdk-examples",
         "guides/error-handling",
         "guides/versioning",
+        "guides/licensing",
       ],
     },
     {

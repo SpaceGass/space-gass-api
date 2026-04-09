@@ -18,7 +18,7 @@ using SpaceGassApi.Models;
 //   5. Saving a copy with SaveAs
 //
 // Prerequisites:
-//   - SPACE GASS API running locally (default: https://localhost:53483)
+//   - SPACE GASS API running locally (default: http://localhost:5000)
 //   - A valid API key
 //   - A SPACE GASS project file (.SG) containing sections
 // ---------------------------------------------------------------

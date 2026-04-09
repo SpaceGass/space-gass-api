@@ -8,7 +8,7 @@ Demonstrates how to:
   4. Display the results in a formatted table
 
 Prerequisites:
-  - SPACE GASS API running locally (default: https://localhost:53483)
+  - SPACE GASS API running locally (default: http://localhost:5000)
   - A valid API key
   - An existing .sg project file that has been analysed
 """

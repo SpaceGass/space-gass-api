@@ -15,8 +15,8 @@ file, and reading nodes — using the SDK clients or plain HTTP.
 1. **Start the Service**
 
    The API runs as a local server. The easiest way to start it is to
-   double-click the **SpaceGass API** shortcut placed on your Desktop
-   during SPACE GASS installation.
+   double-click the **SPACE GASS API** shortcut under the SPACE GASS
+   windows application folder.
 
    Alternatively, open a terminal and run:
 
@@ -24,7 +24,7 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    "C:\Program Files\SPACE GASS 14.25\SpaceGassApi.exe"
    ```
 
-   By default the service starts on `http://localhost:53483`. To use a
+   By default the service starts on `http://localhost:5000`. To use a
    different port, pass the `--urls` flag:
 
    ```bash
@@ -60,6 +60,12 @@ file, and reading nodes — using the SDK clients or plain HTTP.
 
 1. **Create the Client**
 
+   The SDK provides a `CreateClient()` factory that configures
+   everything for you — it connects to the local API with no
+   additional setup required. See
+   [Authentication](/guides/authentication) for details on
+   custom URLs and future API key support.
+
    <CodeTabs>
    ```csharp title="C#"
    using SpaceGassApi;
@@ -75,7 +81,7 @@ file, and reading nodes — using the SDK clients or plain HTTP.
 
    ```bash title="curl"
    # No client setup needed — just make HTTP requests directly.
-   curl http://localhost:53483/api/v1/service/info
+   curl http://localhost:5000/api/v1/service/info
    ```
    </CodeTabs>
 
@@ -97,7 +103,7 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    ```
 
    ```bash title="curl"
-   curl -X POST http://localhost:53483/api/v1/job/open \
+   curl -X POST http://localhost:5000/api/v1/job/open \
      -H "Content-Type: application/json" \
      -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
    ```
@@ -123,7 +129,7 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    ```
 
    ```bash title="curl"
-   curl http://localhost:53483/api/v1/job/structure/nodes
+   curl http://localhost:5000/api/v1/job/structure/nodes
    ```
    </CodeTabs>
 
@@ -139,15 +145,15 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    ```
 
    ```bash title="curl"
-   curl -X POST http://localhost:53483/api/v1/job/close
+   curl -X POST http://localhost:5000/api/v1/job/close
    ```
    </CodeTabs>
 </Stepper>
 
 ## Next Steps
 
-- [SDK Examples](/guides/sdk-examples) — Full walkthrough with error
-  handling
+- [Simple Beam Example](/guides/examples/simple-beam) — Full walkthrough
+  building a model, running analysis, and querying results
 - [File Handling](/guides/file-handling) — Open, save, force-open, and
   file status checks
 - [API Reference](/api) — Browse all endpoints interactively

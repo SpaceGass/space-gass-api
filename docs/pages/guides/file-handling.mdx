@@ -27,7 +27,7 @@ await client.job.open.post(
 ```
 
 ```bash title="curl"
-curl -X POST http://localhost:53483/api/v1/job/open \
+curl -X POST http://localhost:5000/api/v1/job/open \
   -H "Content-Type: application/json" \
   -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
 ```
@@ -50,7 +50,7 @@ var status = await client.File.Status.PostAsync(
 ```
 
 ```bash title="curl"
-curl -X POST http://localhost:53483/api/v1/file/status \
+curl -X POST http://localhost:5000/api/v1/file/status \
   -H "Content-Type: application/json" \
   -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
 ```
@@ -88,11 +88,11 @@ await client.job.save.post(
 
 ```bash title="curl"
 # Save to current file
-curl -X POST http://localhost:53483/api/v1/job/save \
+curl -X POST http://localhost:5000/api/v1/job/save \
   -H "Content-Type: application/json"
 
 # Save to a new file path
-curl -X POST http://localhost:53483/api/v1/job/save \
+curl -X POST http://localhost:5000/api/v1/job/save \
   -H "Content-Type: application/json" \
   -d '{"filePath": "C:\\Projects\\MyStructure_Copy.sg"}'
 ```
@@ -110,7 +110,7 @@ await client.job.new.post()
 ```
 
 ```bash title="curl"
-curl -X POST http://localhost:53483/api/v1/job/new
+curl -X POST http://localhost:5000/api/v1/job/new
 ```
 </CodeTabs>
 
@@ -126,6 +126,6 @@ await client.job.close.post()
 ```
 
 ```bash title="curl"
-curl -X POST http://localhost:53483/api/v1/job/close
+curl -X POST http://localhost:5000/api/v1/job/close
 ```
 </CodeTabs>

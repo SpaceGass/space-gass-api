@@ -97,7 +97,7 @@ print(f"Node {node.key}: ({node.x}, {node.y}, {node.z})")
 ```
 
 ```bash title="curl"
-curl http://localhost:53483/api/v1/job/structure/nodes/1
+curl http://localhost:5000/api/v1/job/structure/nodes/1
 ```
 </CodeTabs>
 
@@ -125,7 +125,7 @@ filtered = await client.job.structure.nodes.get(
 ```
 
 ```bash title="curl"
-curl "http://localhost:53483/api/v1/job/structure/nodes?MinX=0&MaxX=100&Limit=50"
+curl "http://localhost:5000/api/v1/job/structure/nodes?MinX=0&MaxX=100&Limit=50"
 ```
 </CodeTabs>
 
@@ -152,7 +152,7 @@ print(f"Created node {new_node.key}")
 ```
 
 ```bash title="curl"
-curl -X POST http://localhost:53483/api/v1/job/structure/nodes \
+curl -X POST http://localhost:5000/api/v1/job/structure/nodes \
   -H "Content-Type: application/json" \
   -d '{"x": 10.0, "y": 20.0, "z": 0.0}'
 ```
@@ -188,7 +188,7 @@ for r in result.results:
 ```
 
 ```bash title="curl"
-curl http://localhost:53483/api/v1/job/query/analysis/static/node/reactions
+curl http://localhost:5000/api/v1/job/query/analysis/static/node/reactions
 ```
 </CodeTabs>
 
@@ -216,7 +216,7 @@ result = await client.job.query.analysis.static.node.displacements.get(
 ```
 
 ```bash title="curl"
-curl "http://localhost:53483/api/v1/job/query/analysis/static/node/displacements?case=1&case=3&node=10&node=11&node=12"
+curl "http://localhost:5000/api/v1/job/query/analysis/static/node/displacements?case=1&case=3&node=10&node=11&node=12"
 ```
 </CodeTabs>
 
@@ -258,7 +258,7 @@ for m in result.results:
 ```
 
 ```bash title="curl"
-curl "http://localhost:53483/api/v1/job/query/analysis/static/member/intermediate-forces?member=1"
+curl "http://localhost:5000/api/v1/job/query/analysis/static/member/intermediate-forces?member=1"
 ```
 </CodeTabs>
 
@@ -284,7 +284,7 @@ for b in result.results:
 ```
 
 ```bash title="curl"
-curl http://localhost:53483/api/v1/job/query/analysis/buckling/load-factors
+curl http://localhost:5000/api/v1/job/query/analysis/buckling/load-factors
 ```
 </CodeTabs>
 
@@ -311,7 +311,7 @@ for f in result.results:
 ```
 
 ```bash title="curl"
-curl http://localhost:53483/api/v1/job/query/analysis/dynamic/natural-frequencies
+curl http://localhost:5000/api/v1/job/query/analysis/dynamic/natural-frequencies
 ```
 </CodeTabs>
 
@@ -337,7 +337,7 @@ for s in result.results:
 ```
 
 ```bash title="curl"
-curl http://localhost:53483/api/v1/job/query/design/steel-member/check-summary
+curl http://localhost:5000/api/v1/job/query/design/steel-member/check-summary
 ```
 </CodeTabs>
 
@@ -380,9 +380,9 @@ page2 = await client.job.query.analysis.static.node.displacements.get(
 
 ```bash title="curl"
 # Page 1
-curl "http://localhost:53483/api/v1/job/query/analysis/static/node/displacements?offset=0&limit=100"
+curl "http://localhost:5000/api/v1/job/query/analysis/static/node/displacements?offset=0&limit=100"
 
 # Page 2
-curl "http://localhost:53483/api/v1/job/query/analysis/static/node/displacements?offset=100&limit=100"
+curl "http://localhost:5000/api/v1/job/query/analysis/static/node/displacements?offset=100&limit=100"
 ```
 </CodeTabs>
