@@ -9,6 +9,8 @@ file, and reading nodes — using the SDK clients or plain HTTP.
 ### Prerequisites
 
 - [SPACE GASS](https://www.spacegass.com/) installed on your machine
+- SPACE GASS has been opened at least once to initialize the required
+  data files
 - An existing `.sg` project file on disk
 
 <Stepper>
@@ -21,14 +23,14 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    Alternatively, open a terminal and run:
 
    ```bash
-   "C:\Program Files\SPACE GASS 14.25\SpaceGassApi.exe"
+   "C:\Program Files\SPACE GASS 14.5\SpaceGassApi.exe"
    ```
 
    By default the service starts on `http://localhost:5000`. To use a
-   different port, pass the `--urls` flag:
+   different port, pass the `--port` flag:
 
    ```bash
-   "C:\Program Files\SPACE GASS 14.25\SpaceGassApi.exe" --urls="http://localhost:8080"
+   "C:\Program Files\SPACE GASS 14.5\SpaceGassApi.exe" --port=5025
    ```
 
    Leave the terminal or shortcut window open — the service runs until
@@ -46,6 +48,10 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    request and response schemas, and make live API calls directly
    from your browser — no SDK or code required. This is the quickest
    way to get familiar with the API.
+
+   To try it out, use the **Open** endpoint to open a `.sg` project
+   file, then use any of the **GET** endpoints to read structural
+   data — nodes, members, sections, and more.
 
    When you are ready to integrate the API into your own code,
    continue with the steps below.
