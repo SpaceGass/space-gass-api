@@ -4,11 +4,69 @@
  * Vite 7 outputs .mjs files for SSR builds, but Zudoku expects .js files.
  * This patch makes Zudoku accept both .js and .mjs extensions.
  *
- * See: https://github.com/zuplo/zudoku/issues (report upstream when possible)
+ * Supports both the old multi-file layout (<=0.69.x) and the new
+ * single-bundle layout (>=0.70.x).
  */
 const fs = require("fs");
 const path = require("path");
 
+// --- New layout (>=0.70.x): bundled into cli.js ---
+const cliPath = path.join(
+  __dirname,
+  "..",
+  "node_modules",
+  "zudoku",
+  "dist",
+  "cli",
+  "cli.js",
+);
+
+if (fs.existsSync(cliPath)) {
+  let content = fs.readFileSync(cliPath, "utf-8");
+  let patched = false;
+
+  // Patch 1: Accept zudoku.config.mjs in server config lookup
+  const oldConfigCheck = 'o.fileName === "zudoku.config.js"';
+  const newConfigCheck = '/^zudoku\\.config\\.(js|mjs)$/.test(o.fileName)';
+  if (content.includes(oldConfigCheck)) {
+    content = content.replace(oldConfigCheck, newConfigCheck);
+    console.log("[patch] cli.js: accept zudoku.config.mjs");
+    patched = true;
+  }
+
+  // Patch 2: Accept entry.server.mjs in prerender
+  const oldEntry =
+    'path21.join(distDir, "server", serverConfigFilename)';
+  if (content.includes(oldEntry) && !content.includes("entry.server.mjs")) {
+    // Find and patch the entry.server.js reference near the prerender function
+    const oldEntryServer = '"server/entry.server.js"';
+    const newEntryServer =
+      '(existsSync(path21.join(distDir, "server/entry.server.js")) ? "server/entry.server.js" : "server/entry.server.mjs")';
+    if (content.includes(oldEntryServer)) {
+      content = content.replace(oldEntryServer, newEntryServer);
+      console.log("[patch] cli.js: accept entry.server.mjs");
+      patched = true;
+    }
+  }
+
+  // Patch 3: Fix external entry references in build config
+  const oldExternal = '"./entry.server.js", "./zudoku.config.js"';
+  const newExternal =
+    '"./entry.server.js", "./entry.server.mjs", "./zudoku.config.js", "./zudoku.config.mjs"';
+  if (content.includes(oldExternal)) {
+    content = content.replace(oldExternal, newExternal);
+    console.log("[patch] cli.js: add .mjs to external list");
+    patched = true;
+  }
+
+  if (patched) {
+    fs.writeFileSync(cliPath, content, "utf-8");
+  } else {
+    console.log("[patch] cli.js: already patched or pattern changed");
+  }
+}
+
+// --- Old layout (<=0.69.x): separate files ---
 const loaderPath = path.join(
   __dirname,
   "..",
@@ -30,36 +88,32 @@ const prerenderPath = path.join(
   "prerender.js",
 );
 
-// Patch 1: loader.js - accept zudoku.config.mjs in addition to .js
+// Patch: loader.js - accept zudoku.config.mjs
 if (fs.existsSync(loaderPath)) {
   let content = fs.readFileSync(loaderPath, "utf-8");
   const oldPattern = 'o.fileName === "zudoku.config.js"';
-  const newPattern =
-    '/^zudoku\\.config\\.(js|mjs)$/.test(o.fileName)';
+  const newPattern = '/^zudoku\\.config\\.(js|mjs)$/.test(o.fileName)';
 
   if (content.includes(oldPattern)) {
     content = content.replace(oldPattern, newPattern);
     fs.writeFileSync(loaderPath, content, "utf-8");
-    console.log("[patch] Fixed loader.js: accept zudoku.config.mjs");
-  } else {
-    console.log("[patch] loader.js: already patched or pattern changed");
+    console.log("[patch] loader.js: accept zudoku.config.mjs");
   }
 }
 
-// Patch 2: prerender.js - accept entry.server.mjs in addition to .js
+// Patch: prerender.js - accept entry.server.mjs
 if (fs.existsSync(prerenderPath)) {
   let content = fs.readFileSync(prerenderPath, "utf-8");
 
-  // 2a: Add existsSync import if not already present
+  // Add existsSync import if needed
   const fsImportLine = 'import { readFile, rm } from "node:fs/promises";';
   const fsImportWithSync =
     'import { readFile, rm } from "node:fs/promises";\nimport { existsSync } from "node:fs";';
   if (content.includes(fsImportLine) && !content.includes('from "node:fs";')) {
     content = content.replace(fsImportLine, fsImportWithSync);
-    console.log("[patch] Added existsSync import to prerender.js");
   }
 
-  // 2b: Replace hardcoded .js path with .js/.mjs fallback
+  // Replace hardcoded .js path with fallback
   const oldLine =
     'const entryServerPath = pathToFileURL(path.join(distDir, "server/entry.server.js")).href;';
   const newLines = [
@@ -71,12 +125,7 @@ if (fs.existsSync(prerenderPath)) {
 
   if (content.includes(oldLine)) {
     content = content.replace(oldLine, newLines);
-    console.log("[patch] Fixed prerender.js: accept entry.server.mjs");
-  } else {
-    console.log(
-      "[patch] prerender.js: already patched or pattern changed",
-    );
+    fs.writeFileSync(prerenderPath, content, "utf-8");
+    console.log("[patch] prerender.js: accept entry.server.mjs");
   }
-
-  fs.writeFileSync(prerenderPath, content, "utf-8");
 }

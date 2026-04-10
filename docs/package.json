@@ -10,6 +10,6 @@
     "postinstall": "node patches/fix-zudoku-mjs.js"
   },
   "dependencies": {
-    "zudoku": "^0.69.3"
+    "zudoku": "^0.71.10"
   }
 }
