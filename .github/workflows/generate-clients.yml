@@ -41,19 +41,33 @@ jobs:
             --class-name SpaceGassApiClient \
             --clean-output
 
+      - name: Sync SDK source versions to spec
+        id: sync_version
+        run: |
+          VERSION=$(jq -r '.info["x-space-gass-build"]' "$SPEC_PATH")
+          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
+            echo "::error::info.x-space-gass-build is missing from $SPEC_PATH"
+            exit 1
+          fi
+          sed -i "s/^version = .*/version = \"$VERSION\"/" sdks/python/client/pyproject.toml
+          sed -i "s|<Version>.*</Version>|<Version>$VERSION</Version>|" sdks/csharp/client/SpaceGassApi/SpaceGassApi.csproj
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Synced SDK source versions to $VERSION"
+
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v6
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: sdk/regenerate-clients
-          title: "chore: regenerate SDK clients"
+          title: "chore: regenerate SDK clients (${{ steps.sync_version.outputs.version }})"
           body: |
             Auto-generated SDK client update from `${{ env.SPEC_PATH }}`.
 
             ## Changes
             - Regenerated C# client in `sdks/csharp/client/SpaceGassApi/Generated/`
             - Regenerated Python client in `sdks/python/client/space_gass_api/`
+            - Synced package version to **${{ steps.sync_version.outputs.version }}** (from `info.x-space-gass-build`) in `pyproject.toml` and `SpaceGassApi.csproj`
 
             Please review the generated code for any breaking changes before merging.
-          commit-message: "chore: regenerate SDK clients"
+          commit-message: "chore: regenerate SDK clients (${{ steps.sync_version.outputs.version }})"
           delete-branch: true
