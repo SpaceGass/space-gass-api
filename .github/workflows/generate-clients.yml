@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       contents: write
-      pull-requests: write
 
     steps:
       - name: Checkout repository
@@ -54,20 +53,27 @@ jobs:
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Synced SDK source versions to $VERSION"
 
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v6
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: sdk/regenerate-clients
-          title: "chore: regenerate SDK clients (${{ steps.sync_version.outputs.version }})"
-          body: |
-            Auto-generated SDK client update from `${{ env.SPEC_PATH }}`.
-
-            ## Changes
-            - Regenerated C# client in `sdks/csharp/client/SpaceGassApi/Generated/`
-            - Regenerated Python client in `sdks/python/client/space_gass_api/`
-            - Synced package version to **${{ steps.sync_version.outputs.version }}** (from `info.x-space-gass-build`) in `pyproject.toml` and `SpaceGassApi.csproj`
-
-            Please review the generated code for any breaking changes before merging.
-          commit-message: "chore: regenerate SDK clients (${{ steps.sync_version.outputs.version }})"
-          delete-branch: true
+      - name: Push regenerated clients to branch
+        env:
+          VERSION: ${{ steps.sync_version.outputs.version }}
+          BRANCH: sdk/regenerate-clients
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "No changes detected — skipping push."
+            echo "compare_url=" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git checkout -B "$BRANCH"
+          git commit -m "chore: regenerate SDK clients ($VERSION)"
+          git push --force origin "$BRANCH"
+          echo "Pushed branch $BRANCH. Open a PR at: https://github.com/${GITHUB_REPOSITORY}/compare/${BRANCH}?expand=1"
+          {
+            echo "## SDK clients regenerated"
+            echo ""
+            echo "Pushed to branch \`$BRANCH\` at version **$VERSION** (from \`info.x-space-gass-build\`)."
+            echo ""
+            echo "[Open a pull request](https://github.com/${GITHUB_REPOSITORY}/compare/${BRANCH}?expand=1)"
+          } >> "$GITHUB_STEP_SUMMARY"
