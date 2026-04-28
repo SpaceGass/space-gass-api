@@ -19,14 +19,16 @@ if TYPE_CHECKING:
     from .analysis.analysis_request_builder import AnalysisRequestBuilder
     from .close.close_request_builder import CloseRequestBuilder
     from .data.data_request_builder import DataRequestBuilder
-    from .details.details_request_builder import DetailsRequestBuilder
     from .errors.errors_request_builder import ErrorsRequestBuilder
+    from .headings.headings_request_builder import HeadingsRequestBuilder
     from .import_.import_request_builder import ImportRequestBuilder
     from .loads.loads_request_builder import LoadsRequestBuilder
     from .new.new_request_builder import NewRequestBuilder
     from .open.open_request_builder import OpenRequestBuilder
+    from .open_sample.open_sample_request_builder import OpenSampleRequestBuilder
     from .query.query_request_builder import QueryRequestBuilder
     from .save.save_request_builder import SaveRequestBuilder
+    from .settings.settings_request_builder import SettingsRequestBuilder
     from .status.status_request_builder import StatusRequestBuilder
     from .structure.structure_request_builder import StructureRequestBuilder
     from .units.units_request_builder import UnitsRequestBuilder
@@ -46,7 +48,7 @@ class JobRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Job]:
         """
-        Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Details: GET/PATCH /job/details- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
+        Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Job]
         """
@@ -67,7 +69,7 @@ class JobRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Details: GET/PATCH /job/details- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
+        Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -114,15 +116,6 @@ class JobRequestBuilder(BaseRequestBuilder):
         return DataRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
-    def details(self) -> DetailsRequestBuilder:
-        """
-        The details property
-        """
-        from .details.details_request_builder import DetailsRequestBuilder
-
-        return DetailsRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
     def errors(self) -> ErrorsRequestBuilder:
         """
         The errors property
@@ -130,6 +123,15 @@ class JobRequestBuilder(BaseRequestBuilder):
         from .errors.errors_request_builder import ErrorsRequestBuilder
 
         return ErrorsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def headings(self) -> HeadingsRequestBuilder:
+        """
+        The headings property
+        """
+        from .headings.headings_request_builder import HeadingsRequestBuilder
+
+        return HeadingsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def import_(self) -> ImportRequestBuilder:
@@ -168,6 +170,15 @@ class JobRequestBuilder(BaseRequestBuilder):
         return OpenRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
+    def open_sample(self) -> OpenSampleRequestBuilder:
+        """
+        The openSample property
+        """
+        from .open_sample.open_sample_request_builder import OpenSampleRequestBuilder
+
+        return OpenSampleRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
     def query(self) -> QueryRequestBuilder:
         """
         The query property
@@ -184,6 +195,15 @@ class JobRequestBuilder(BaseRequestBuilder):
         from .save.save_request_builder import SaveRequestBuilder
 
         return SaveRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def settings(self) -> SettingsRequestBuilder:
+        """
+        The settings property
+        """
+        from .settings.settings_request_builder import SettingsRequestBuilder
+
+        return SettingsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def status(self) -> StatusRequestBuilder:

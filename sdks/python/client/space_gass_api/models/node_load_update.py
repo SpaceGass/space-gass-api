@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class NodeLoadUpdate(Parsable):
     """
-    DTO for updating an existing node load.All fields are nullable to support partial PATCH semantics.
+    DTO for updating an existing node load.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # The load case number.
     case: Optional[int] = None

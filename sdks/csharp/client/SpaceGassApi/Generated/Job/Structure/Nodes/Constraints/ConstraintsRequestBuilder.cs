@@ -100,7 +100,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Constraints
             /// <summary>Filter by master node number. Omit to return all.</summary>
             [QueryParameter("masterNode")]
             public int? MasterNode { get; set; }
-            /// <summary>Comma-separated list of slave node numbers to filter by (e.g., &quot;1,5,10&quot;). Omit to return all.</summary>
+            /// <summary>Slave node Ids in SG list format (e.g. `&quot;1,5-10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
             [QueryParameter("slaves")]

@@ -36,7 +36,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,body: list[NodeLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[NodeLoadKeyBatchResult]:
         """
-        Deletes multiple node loads. Both case and node are required for each entry —providing only a case does not delete all loads for that case.The succeeded array echoes back the keys of each successfully deleted load.
+        Deletes multiple node loads. Both case and node are required for each entry —providing only a case does not delete all loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[NodeLoadKeyBatchResult]
@@ -82,12 +82,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, NodeLoadBatchResult, error_mapping)
     
-    async def post(self,body: list[NodeLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[NodeLoadBatchResult]:
+    async def post(self,body: list[NodeLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[NodeLoadBatchResult]
+        Returns: bytes
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -102,13 +102,11 @@ class BulkRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.node_load_batch_result import NodeLoadBatchResult
-
-        return await self.request_adapter.send_async(request_info, NodeLoadBatchResult, error_mapping)
+        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
     
     def to_delete_request_information(self,body: list[NodeLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
-        Deletes multiple node loads. Both case and node are required for each entry —providing only a case does not delete all loads for that case.The succeeded array echoes back the keys of each successfully deleted load.
+        Deletes multiple node loads. Both case and node are required for each entry —providing only a case does not delete all loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -164,7 +162,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderDeleteQueryParameters():
         """
-        Deletes multiple node loads. Both case and node are required for each entry —providing only a case does not delete all loads for that case.The succeeded array echoes back the keys of each successfully deleted load.
+        Deletes multiple node loads. Both case and node are required for each entry —providing only a case does not delete all loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

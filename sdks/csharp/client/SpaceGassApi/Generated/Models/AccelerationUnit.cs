@@ -3,37 +3,37 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Acceleration unit types (Field Index 8)</summary>
+    /// <summary>Acceleration unit. Members mirror SPACE GASS `SgAcceleration`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum AccelerationUnit
     {
-        [EnumMember(Value = "Gravity")]
+        [EnumMember(Value = "gs")]
         #pragma warning disable CS1591
-        Gravity,
+        Gs,
         #pragma warning restore CS1591
-        [EnumMember(Value = "FeetPerSecondSquared")]
+        [EnumMember(Value = "ftpersec2")]
         #pragma warning disable CS1591
-        FeetPerSecondSquared,
+        Ftpersec2,
         #pragma warning restore CS1591
-        [EnumMember(Value = "InchesPerSecondSquared")]
+        [EnumMember(Value = "inpersec2")]
         #pragma warning disable CS1591
-        InchesPerSecondSquared,
+        Inpersec2,
         #pragma warning restore CS1591
-        [EnumMember(Value = "MetersPerSecondSquared")]
+        [EnumMember(Value = "mpersec2")]
         #pragma warning disable CS1591
-        MetersPerSecondSquared,
+        Mpersec2,
         #pragma warning restore CS1591
-        [EnumMember(Value = "CentimetersPerSecondSquared")]
+        [EnumMember(Value = "cmpersec2")]
         #pragma warning disable CS1591
-        CentimetersPerSecondSquared,
+        Cmpersec2,
         #pragma warning restore CS1591
-        [EnumMember(Value = "MillimetersPerSecondSquared")]
+        [EnumMember(Value = "mmpersec2")]
         #pragma warning disable CS1591
-        MillimetersPerSecondSquared,
+        Mmpersec2,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KiloNewtonsPerKilogram")]
+        [EnumMember(Value = "kNperkg")]
         #pragma warning disable CS1591
-        KiloNewtonsPerKilogram,
+        KNperkg,
         #pragma warning restore CS1591
     }
 }

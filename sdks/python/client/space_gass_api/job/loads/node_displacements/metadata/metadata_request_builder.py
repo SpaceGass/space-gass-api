@@ -14,8 +14,8 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from .....models.entity_metadata import EntityMetadata
     from .....models.problem_details import ProblemDetails
+    from .....models.resource_metadata import ResourceMetadata
 
 class MetadataRequestBuilder(BaseRequestBuilder):
     """
@@ -30,11 +30,11 @@ class MetadataRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/node-displacements/metadata", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[EntityMetadata]:
+    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[ResourceMetadata]:
         """
-        Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and min/max constraints sourced from the SPACE GASS DataSpec.
+        Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and allowed value ranges.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[EntityMetadata]
+        Returns: Optional[ResourceMetadata]
         """
         request_info = self.to_get_request_information(
             request_configuration
@@ -46,13 +46,13 @@ class MetadataRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.entity_metadata import EntityMetadata
+        from .....models.resource_metadata import ResourceMetadata
 
-        return await self.request_adapter.send_async(request_info, EntityMetadata, error_mapping)
+        return await self.request_adapter.send_async(request_info, ResourceMetadata, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and min/max constraints sourced from the SPACE GASS DataSpec.
+        Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and allowed value ranges.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

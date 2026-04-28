@@ -28,11 +28,11 @@ class CloseRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/close{?save*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/close", path_parameters)
     
-    async def post(self,request_configuration: Optional[RequestConfiguration[CloseRequestBuilderPostQueryParameters]] = None) -> Optional[JobState]:
+    async def post(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[JobState]:
         """
-        Closes the current job session and unloads from memory.            - save=true (default): saves data to the .sg file before closing- save=false: discards unsaved changes and closes without saving            The .sg file on disk is never deleted.Returns the file resource state after close (isOpen will be false).
+        Closes the current job session and unloads from memory.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[JobState]
         """
@@ -42,8 +42,8 @@ class CloseRequestBuilder(BaseRequestBuilder):
         from ...models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
             "401": ProblemDetails,
+            "404": ProblemDetails,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -51,9 +51,9 @@ class CloseRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, JobState, error_mapping)
     
-    def to_post_request_information(self,request_configuration: Optional[RequestConfiguration[CloseRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
+    def to_post_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Closes the current job session and unloads from memory.            - save=true (default): saves data to the .sg file before closing- save=false: discards unsaved changes and closes without saving            The .sg file on disk is never deleted.Returns the file resource state after close (isOpen will be false).
+        Closes the current job session and unloads from memory.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -73,16 +73,7 @@ class CloseRequestBuilder(BaseRequestBuilder):
         return CloseRequestBuilder(self.request_adapter, raw_url)
     
     @dataclass
-    class CloseRequestBuilderPostQueryParameters():
-        """
-        Closes the current job session and unloads from memory.            - save=true (default): saves data to the .sg file before closing- save=false: discards unsaved changes and closes without saving            The .sg file on disk is never deleted.Returns the file resource state after close (isOpen will be false).
-        """
-        # If true (default), saves before closing. If false, discards unsaved changes.
-        save: Optional[bool] = None
-
-    
-    @dataclass
-    class CloseRequestBuilderPostRequestConfiguration(RequestConfiguration[CloseRequestBuilderPostQueryParameters]):
+    class CloseRequestBuilderPostRequestConfiguration(RequestConfiguration[QueryParameters]):
         """
         Configuration for the request such as headers, query parameters, and middleware options.
         """

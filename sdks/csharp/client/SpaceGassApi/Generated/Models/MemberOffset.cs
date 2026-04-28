@@ -15,7 +15,7 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table &quot;L/G Axes&quot;.</summary>
         public global::SpaceGassApi.Models.AxesType? Axes { get; set; }
-        /// <summary>The member key this offset applies to.</summary>
+        /// <summary>The member Id this offset applies to.</summary>
         public int? Member { get; set; }
         /// <summary>X offset at end A. Unit: Length (see GET /job/units).</summary>
         public double? XOffsetAtA { get; set; }

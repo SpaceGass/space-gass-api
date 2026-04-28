@@ -21,8 +21,8 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
-        public int? Key { get; set; }
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
+        public int? Id { get; set; }
         /// <summary>Comma-separated list of load case numbers and ranges (e.g., &quot;1,3,5-10&quot;).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -58,7 +58,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "loadCaseList", n => { LoadCaseList = n.GetStringValue(); } },
                 { "title", n => { Title = n.GetStringValue(); } },
             };
@@ -71,7 +71,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteIntValue("id", Id);
             writer.WriteStringValue("loadCaseList", LoadCaseList);
             writer.WriteStringValue("title", Title);
         }

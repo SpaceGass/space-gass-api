@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Units.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +18,11 @@ namespace SpaceGassApi.Job.Units
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class UnitsRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The metadata property</summary>
+        public global::SpaceGassApi.Job.Units.Metadata.MetadataRequestBuilder Metadata
+        {
+            get => new global::SpaceGassApi.Job.Units.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Units.UnitsRequestBuilder"/> and sets the default values.
         /// </summary>
@@ -59,33 +65,6 @@ namespace SpaceGassApi.Job.Units
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Units>(requestInfo, global::SpaceGassApi.Models.Units.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Partially updates the unit settings for the job. Only provided fields are changed.            If system is set to Metric or Imperial, all units are overridden with system defaults.If system is Custom (or omitted), only the individual unit fields provided are updated.
-        /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.Units"/></returns>
-        /// <param name="body">DTO for partially updating unit settings.Only provided (non-null) fields are applied; omitted fields remain unchanged.If system is provided as Metric or Imperial, system defaults override individual fields.</param>
-        /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
-        /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public async Task<global::SpaceGassApi.Models.Units?> PatchAsync(global::SpaceGassApi.Models.UnitsUpdate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
-        {
-#nullable restore
-#else
-        public async Task<global::SpaceGassApi.Models.Units> PatchAsync(global::SpaceGassApi.Models.UnitsUpdate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
-        {
-#endif
-            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
-            var requestInfo = ToPatchRequestInformation(body, requestConfiguration);
-            var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
-            {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-            };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Units>(requestInfo, global::SpaceGassApi.Models.Units.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
-        }
-        /// <summary>
         /// Gets the current unit settings for the job.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
@@ -105,28 +84,6 @@ namespace SpaceGassApi.Job.Units
             return requestInfo;
         }
         /// <summary>
-        /// Partially updates the unit settings for the job. Only provided fields are changed.            If system is set to Metric or Imperial, all units are overridden with system defaults.If system is Custom (or omitted), only the individual unit fields provided are updated.
-        /// </summary>
-        /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for partially updating unit settings.Only provided (non-null) fields are applied; omitted fields remain unchanged.If system is provided as Metric or Imperial, system defaults override individual fields.</param>
-        /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public RequestInformation ToPatchRequestInformation(global::SpaceGassApi.Models.UnitsUpdate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
-        {
-#nullable restore
-#else
-        public RequestInformation ToPatchRequestInformation(global::SpaceGassApi.Models.UnitsUpdate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
-        {
-#endif
-            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
-            var requestInfo = new RequestInformation(Method.PATCH, UrlTemplate, PathParameters);
-            requestInfo.Configure(requestConfiguration);
-            requestInfo.Headers.TryAdd("Accept", "application/json");
-            requestInfo.SetContentFromParsable(RequestAdapter, "application/json", body);
-            return requestInfo;
-        }
-        /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Job.Units.UnitsRequestBuilder"/></returns>
@@ -141,14 +98,6 @@ namespace SpaceGassApi.Job.Units
         [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class UnitsRequestBuilderGetRequestConfiguration : RequestConfiguration<DefaultQueryParameters>
-        {
-        }
-        /// <summary>
-        /// Configuration for the request such as headers, query parameters, and middleware options.
-        /// </summary>
-        [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
-        [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-        public partial class UnitsRequestBuilderPatchRequestConfiguration : RequestConfiguration<DefaultQueryParameters>
         {
         }
     }

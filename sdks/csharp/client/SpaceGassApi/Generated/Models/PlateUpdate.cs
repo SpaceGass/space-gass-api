@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for updating an existing plate.All fields are nullable to support partial updates.
+    /// DTO for updating an existing plate.Only fields included in the request are updated; omit a field to keep its current value.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class PlateUpdate : IParsable
@@ -31,8 +31,8 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key identifying the entity to update.Optional for single updates (key comes from route), required for batch updates.</summary>
-        public int? Key { get; set; }
+        /// <summary>Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.</summary>
+        public int? Id { get; set; }
         /// <summary>Material number assigned to this plate.</summary>
         public int? Material { get; set; }
         /// <summary>Membrane thickness of the plate. Unit: Section Properties (see GET /job/units).</summary>
@@ -75,7 +75,7 @@ namespace SpaceGassApi.Models
                 { "dirAxis", n => { DirAxis = n.GetEnumValue<global::SpaceGassApi.Models.DirectionAxis>(); } },
                 { "dirNode", n => { DirNode = n.GetIntValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "material", n => { Material = n.GetIntValue(); } },
                 { "membraneThickness", n => { MembraneThickness = n.GetDoubleValue(); } },
                 { "nodeA", n => { NodeA = n.GetIntValue(); } },
@@ -100,7 +100,7 @@ namespace SpaceGassApi.Models
             writer.WriteEnumValue<global::SpaceGassApi.Models.DirectionAxis>("dirAxis", DirAxis);
             writer.WriteIntValue("dirNode", DirNode);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteIntValue("id", Id);
             writer.WriteIntValue("material", Material);
             writer.WriteDoubleValue("membraneThickness", MembraneThickness);
             writer.WriteIntValue("nodeA", NodeA);

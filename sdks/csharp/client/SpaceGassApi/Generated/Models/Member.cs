@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a member entity.Contains core member properties without release data (fixity/stiffness).
+    /// DTO for reading a member entity.Releases (fixity/stiffness at each end) are intrinsic member data and are always populated.Offsets (rigid end zones) are a linked sub-resource and are hydrated only when `?expand=all`.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class Member : IParsable
@@ -37,14 +37,32 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
-        public int? Key { get; set; }
+        /// <summary>True when this member has an explicit offsets row defined (rigid end zones at A/B).False means the member has no offsets (end rigid zones zero).Use `?expand=all` to include the full `offsets` object.</summary>
+        public bool? HasOffsets { get; set; }
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
+        public int? Id { get; set; }
         /// <summary>Material number assigned to this member.</summary>
         public int? Material { get; set; }
         /// <summary>Node at end A of the member.</summary>
         public int? NodeA { get; set; }
         /// <summary>Node at end B of the member.</summary>
         public int? NodeB { get; set; }
+        /// <summary>DTO for reading member offset data.Offsets define rigid end zones at each end of a member.This is a sub-resource of Member, not a standalone entity.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.MemberOffset? Offsets { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.MemberOffset Offsets { get; set; }
+#endif
+        /// <summary>DTO for reading member release data.Releases define fixity codes and spring stiffness at each end of a member.Always present on every member, so the owning member Idis not duplicated here — the parent MemberDto&apos;s `id` is authoritative whenreturned inline, and the route parameter is authoritative on the standalone endpoint.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.MemberRelease? Releases { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.MemberRelease Releases { get; set; }
+#endif
         /// <summary>Section number assigned to this member.</summary>
         public int? Section { get; set; }
         /// <summary>Member element type. Determines the structural behavior of the member.Maps to SPACE GASS lookup table &quot;Member Type&quot;.</summary>
@@ -76,10 +94,13 @@ namespace SpaceGassApi.Models
                 { "gapCompressionLimit", n => { GapCompressionLimit = n.GetDoubleValue(); } },
                 { "gapTensionLimit", n => { GapTensionLimit = n.GetDoubleValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "hasOffsets", n => { HasOffsets = n.GetBoolValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "material", n => { Material = n.GetIntValue(); } },
                 { "nodeA", n => { NodeA = n.GetIntValue(); } },
                 { "nodeB", n => { NodeB = n.GetIntValue(); } },
+                { "offsets", n => { Offsets = n.GetObjectValue<global::SpaceGassApi.Models.MemberOffset>(global::SpaceGassApi.Models.MemberOffset.CreateFromDiscriminatorValue); } },
+                { "releases", n => { Releases = n.GetObjectValue<global::SpaceGassApi.Models.MemberRelease>(global::SpaceGassApi.Models.MemberRelease.CreateFromDiscriminatorValue); } },
                 { "section", n => { Section = n.GetIntValue(); } },
                 { "type", n => { Type = n.GetEnumValue<global::SpaceGassApi.Models.MemberType>(); } },
             };
@@ -100,10 +121,13 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("gapCompressionLimit", GapCompressionLimit);
             writer.WriteDoubleValue("gapTensionLimit", GapTensionLimit);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteBoolValue("hasOffsets", HasOffsets);
+            writer.WriteIntValue("id", Id);
             writer.WriteIntValue("material", Material);
             writer.WriteIntValue("nodeA", NodeA);
             writer.WriteIntValue("nodeB", NodeB);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.MemberOffset>("offsets", Offsets);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.MemberRelease>("releases", Releases);
             writer.WriteIntValue("section", Section);
             writer.WriteEnumValue<global::SpaceGassApi.Models.MemberType>("type", Type);
         }

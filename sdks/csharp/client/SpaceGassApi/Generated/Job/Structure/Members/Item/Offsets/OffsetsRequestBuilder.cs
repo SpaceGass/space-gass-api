@@ -12,7 +12,7 @@ using System;
 namespace SpaceGassApi.Job.Structure.Members.Item.Offsets
 {
     /// <summary>
-    /// Builds and executes requests for operations under \job\structure\members\{key}\offsets
+    /// Builds and executes requests for operations under \job\structure\members\{id}\offsets
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class OffsetsRequestBuilder : BaseRequestBuilder
@@ -22,7 +22,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Offsets
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public OffsetsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members/{key}/offsets", pathParameters)
+        public OffsetsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members/{id}/offsets", pathParameters)
         {
         }
         /// <summary>
@@ -30,7 +30,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Offsets
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public OffsetsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members/{key}/offsets", rawUrl)
+        public OffsetsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members/{id}/offsets", rawUrl)
         {
         }
         /// <summary>
@@ -86,7 +86,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Offsets
         /// Partially updates the offsets for a specific member.Only provided fields are updated; omitted fields remain unchanged.The offsets must already exist (use POST to create).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MemberOffset"/></returns>
-        /// <param name="body">DTO for partial updates to a member offset.All fields are nullable — only provided fields are updated.</param>
+        /// <param name="body">DTO for partial updates to a member offset.Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
@@ -115,7 +115,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Offsets
         /// Creates or replaces the offsets for a specific member.The member must exist. If offsets already exist, they are replaced.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MemberOffset"/></returns>
-        /// <param name="body">DTO for creating (or replacing) a member offset.The member key comes from the route parameter, not the body.</param>
+        /// <param name="body">DTO for creating (or replacing) a member offset.The member Id comes from the route parameter, not the body.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
@@ -182,7 +182,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Offsets
         /// Partially updates the offsets for a specific member.Only provided fields are updated; omitted fields remain unchanged.The offsets must already exist (use POST to create).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for partial updates to a member offset.All fields are nullable — only provided fields are updated.</param>
+        /// <param name="body">DTO for partial updates to a member offset.Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -204,7 +204,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Offsets
         /// Creates or replaces the offsets for a specific member.The member must exist. If offsets already exist, they are replaced.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for creating (or replacing) a member offset.The member key comes from the route parameter, not the body.</param>
+        /// <param name="body">DTO for creating (or replacing) a member offset.The member Id comes from the route parameter, not the body.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

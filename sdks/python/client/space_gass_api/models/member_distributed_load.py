@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @dataclass
 class MemberDistributedLoad(Parsable):
     """
-    DTO for reading a member distributed load entity.Represents distributed forces applied along a member.Composite key: (Case, Member, SubLoad).
+    DTO for reading a member distributed load entity.Represents distributed forces applied along a member.Composite Id: (Case, Member, SubLoad).
     """
     # Coordinate axes type for distributed loads and plate pressure loads.Maps to SPACE GASS lookup table "L/GI/GP Axes".
     axes: Optional[LoadAxes] = None

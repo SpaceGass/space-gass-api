@@ -43,7 +43,7 @@ namespace SpaceGassApi.Models
         public Guid? RunId { get; set; }
         /// <summary>Status of an analysis run through its lifecycle.</summary>
         public global::SpaceGassApi.Models.AnalysisRunStatus? Status { get; set; }
-        /// <summary>Warning messages from SPACEGASS during the analysis</summary>
+        /// <summary>Warning messages generated during the analysis</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<string>? Warnings { get; set; }

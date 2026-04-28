@@ -34,19 +34,19 @@ namespace SpaceGassApi.Job.Loads.MemberPrestressLoads.Metadata
         {
         }
         /// <summary>
-        /// Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and min/max constraints sourced from the SPACE GASS DataSpec.
+        /// Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and allowed value ranges.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.EntityMetadata"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.ResourceMetadata"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.EntityMetadata?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ResourceMetadata?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.EntityMetadata> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ResourceMetadata> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
@@ -54,10 +54,10 @@ namespace SpaceGassApi.Job.Loads.MemberPrestressLoads.Metadata
             {
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.EntityMetadata>(requestInfo, global::SpaceGassApi.Models.EntityMetadata.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ResourceMetadata>(requestInfo, global::SpaceGassApi.Models.ResourceMetadata.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and min/max constraints sourced from the SPACE GASS DataSpec.
+        /// Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and allowed value ranges.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

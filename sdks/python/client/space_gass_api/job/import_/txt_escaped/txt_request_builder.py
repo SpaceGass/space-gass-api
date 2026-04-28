@@ -33,7 +33,7 @@ class TxtRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: MultipartBody, request_configuration: Optional[RequestConfiguration[TxtRequestBuilderPostQueryParameters]] = None) -> Optional[JobStatus]:
         """
-        Imports a SpaceGass text file into the current job using the Fortran text import command.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt?merge=false" /      -F "file=@/path/to/model.txt"
+        Imports a SpaceGass text file into the current job.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt?merge=false" /      -F "file=@/path/to/model.txt"
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[JobStatus]
@@ -57,7 +57,7 @@ class TxtRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: MultipartBody, request_configuration: Optional[RequestConfiguration[TxtRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """
-        Imports a SpaceGass text file into the current job using the Fortran text import command.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt?merge=false" /      -F "file=@/path/to/model.txt"
+        Imports a SpaceGass text file into the current job.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt?merge=false" /      -F "file=@/path/to/model.txt"
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -83,7 +83,7 @@ class TxtRequestBuilder(BaseRequestBuilder):
     @dataclass
     class TxtRequestBuilderPostQueryParameters():
         """
-        Imports a SpaceGass text file into the current job using the Fortran text import command.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt?merge=false" /      -F "file=@/path/to/model.txt"
+        Imports a SpaceGass text file into the current job.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt?merge=false" /      -F "file=@/path/to/model.txt"
         """
         # If true, merges imported data with existing structure. If false (default), replaces existing data.
         merge: Optional[bool] = None

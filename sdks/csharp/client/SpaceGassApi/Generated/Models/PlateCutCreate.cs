@@ -29,8 +29,8 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
-        public int? Key { get; set; }
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
+        public int? Id { get; set; }
         /// <summary>Out-of-plane tolerance for the cut.</summary>
         public double? OutOfPlaneTolerance { get; set; }
         /// <summary>Start node number for the cut.</summary>
@@ -72,7 +72,7 @@ namespace SpaceGassApi.Models
                 { "endOffsetTransverse", n => { EndOffsetTransverse = n.GetDoubleValue(); } },
                 { "endPlate", n => { EndPlate = n.GetIntValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "outOfPlaneTolerance", n => { OutOfPlaneTolerance = n.GetDoubleValue(); } },
                 { "startNode", n => { StartNode = n.GetIntValue(); } },
                 { "startOffsetLongitudinal", n => { StartOffsetLongitudinal = n.GetDoubleValue(); } },
@@ -93,7 +93,7 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("endOffsetTransverse", EndOffsetTransverse);
             writer.WriteIntValue("endPlate", EndPlate);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("outOfPlaneTolerance", OutOfPlaneTolerance);
             writer.WriteIntValue("startNode", StartNode);
             writer.WriteDoubleValue("startOffsetLongitudinal", StartOffsetLongitudinal);

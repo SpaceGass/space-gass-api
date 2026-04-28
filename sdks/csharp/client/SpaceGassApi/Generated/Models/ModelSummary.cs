@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Summary counts of all model entities in the current job.Counts are read from file headers (lightweight, no datasheet loading).
+    /// Summary counts of all model entities in the current job.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ModelSummary : IParsable

@@ -3,49 +3,49 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Mass Density unit types (Field Index 3)</summary>
+    /// <summary>Mass density unit. Members mirror SPACE GASS `SgMassDensity`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MassDensityUnit
     {
-        [EnumMember(Value = "KipsPerCubicFoot")]
+        [EnumMember(Value = "Kperft3")]
         #pragma warning disable CS1591
-        KipsPerCubicFoot,
+        Kperft3,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KipsPerCubicInch")]
+        [EnumMember(Value = "Kperin3")]
         #pragma warning disable CS1591
-        KipsPerCubicInch,
+        Kperin3,
         #pragma warning restore CS1591
-        [EnumMember(Value = "PoundsPerCubicFoot")]
+        [EnumMember(Value = "lbperft3")]
         #pragma warning disable CS1591
-        PoundsPerCubicFoot,
+        Lbperft3,
         #pragma warning restore CS1591
-        [EnumMember(Value = "PoundsPerCubicInch")]
+        [EnumMember(Value = "lbperin3")]
         #pragma warning disable CS1591
-        PoundsPerCubicInch,
+        Lbperin3,
         #pragma warning restore CS1591
-        [EnumMember(Value = "TonnesPerCubicMetre")]
+        [EnumMember(Value = "Tperm3")]
         #pragma warning disable CS1591
-        TonnesPerCubicMetre,
+        Tperm3,
         #pragma warning restore CS1591
-        [EnumMember(Value = "TonnesPerCubicCentimetre")]
+        [EnumMember(Value = "Tpercm3")]
         #pragma warning disable CS1591
-        TonnesPerCubicCentimetre,
+        Tpercm3,
         #pragma warning restore CS1591
-        [EnumMember(Value = "TonnesPerCubicMillimetre")]
+        [EnumMember(Value = "Tpermm3")]
         #pragma warning disable CS1591
-        TonnesPerCubicMillimetre,
+        Tpermm3,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KilogramsPerCubicMetre")]
+        [EnumMember(Value = "kgperm3")]
         #pragma warning disable CS1591
-        KilogramsPerCubicMetre,
+        Kgperm3,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KilogramsPerCubicCentimetre")]
+        [EnumMember(Value = "kgpercm3")]
         #pragma warning disable CS1591
-        KilogramsPerCubicCentimetre,
+        Kgpercm3,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KilogramsPerCubicMillimetre")]
+        [EnumMember(Value = "kgpermm3")]
         #pragma warning disable CS1591
-        KilogramsPerCubicMillimetre,
+        Kgpermm3,
         #pragma warning restore CS1591
     }
 }

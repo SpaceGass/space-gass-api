@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a member distributed load entity.Represents distributed forces applied along a member.Composite key: (Case, Member, SubLoad).
+    /// DTO for reading a member distributed load entity.Represents distributed forces applied along a member.Composite Id: (Case, Member, SubLoad).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberDistributedLoad : IParsable

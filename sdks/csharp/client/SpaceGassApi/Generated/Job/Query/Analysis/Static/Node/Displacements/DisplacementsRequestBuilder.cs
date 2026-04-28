@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Query.Analysis.Static.Node.Displacements.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -17,12 +18,17 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.Node.Displacements
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class DisplacementsRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The metadata property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.Node.Displacements.Metadata.MetadataRequestBuilder Metadata
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.Node.Displacements.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Analysis.Static.Node.Displacements.DisplacementsRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public DisplacementsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node/displacements{?Limit*,Offset*,case*,node*}", pathParameters)
+        public DisplacementsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node/displacements{?Limit*,Offset*,cases*,nodes*}", pathParameters)
         {
         }
         /// <summary>
@@ -30,15 +36,16 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.Node.Displacements
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public DisplacementsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node/displacements{?Limit*,Offset*,case*,node*}", rawUrl)
+        public DisplacementsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node/displacements{?Limit*,Offset*,cases*,nodes*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets displacement results for nodes, optionally filtered by load cases and node keys.
+        /// Gets displacement results for nodes, optionally filtered by load cases and node Ids.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.NodeDisplacementQueryResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -52,12 +59,13 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.Node.Displacements
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.NodeDisplacementQueryResult>(requestInfo, global::SpaceGassApi.Models.NodeDisplacementQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets displacement results for nodes, optionally filtered by load cases and node keys.
+        /// Gets displacement results for nodes, optionally filtered by load cases and node Ids.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -85,32 +93,32 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.Node.Displacements
             return new global::SpaceGassApi.Job.Query.Analysis.Static.Node.Displacements.DisplacementsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets displacement results for nodes, optionally filtered by load cases and node keys.
+        /// Gets displacement results for nodes, optionally filtered by load cases and node Ids.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class DisplacementsRequestBuilderGetQueryParameters 
         {
-            /// <summary>Filter by load case IDs.</summary>
+            /// <summary>Load case Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("case")]
-            public int?[]? Case { get; set; }
+            [QueryParameter("cases")]
+            public string? Cases { get; set; }
 #nullable restore
 #else
-            [QueryParameter("case")]
-            public int?[] Case { get; set; }
+            [QueryParameter("cases")]
+            public string Cases { get; set; }
 #endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
-            /// <summary>Filter by node keys.</summary>
+            /// <summary>Node Ids in SG list format (e.g. `&quot;1,5-10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("node")]
-            public int?[]? Node { get; set; }
+            [QueryParameter("nodes")]
+            public string? Nodes { get; set; }
 #nullable restore
 #else
-            [QueryParameter("node")]
-            public int?[] Node { get; set; }
+            [QueryParameter("nodes")]
+            public string Nodes { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             public int? Offset { get; set; }

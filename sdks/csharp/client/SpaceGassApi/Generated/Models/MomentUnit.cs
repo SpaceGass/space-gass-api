@@ -3,61 +3,61 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Moment unit types (Field Index 6)</summary>
+    /// <summary>Moment unit. Members mirror SPACE GASS `SgMoment`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MomentUnit
     {
-        [EnumMember(Value = "KipFeet")]
+        [EnumMember(Value = "Kft")]
         #pragma warning disable CS1591
-        KipFeet,
+        Kft,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KipInches")]
+        [EnumMember(Value = "Kin")]
         #pragma warning disable CS1591
-        KipInches,
+        Kin,
         #pragma warning restore CS1591
-        [EnumMember(Value = "PoundFeet")]
+        [EnumMember(Value = "lbft")]
         #pragma warning disable CS1591
-        PoundFeet,
+        Lbft,
         #pragma warning restore CS1591
-        [EnumMember(Value = "PoundInches")]
+        [EnumMember(Value = "lbin")]
         #pragma warning disable CS1591
-        PoundInches,
+        Lbin,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KiloNewtonMetres")]
+        [EnumMember(Value = "kNm")]
         #pragma warning disable CS1591
-        KiloNewtonMetres,
+        KNm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KiloNewtonCentimetres")]
+        [EnumMember(Value = "kNcm")]
         #pragma warning disable CS1591
-        KiloNewtonCentimetres,
+        KNcm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KiloNewtonMillimetres")]
+        [EnumMember(Value = "kNmm")]
         #pragma warning disable CS1591
-        KiloNewtonMillimetres,
+        KNmm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "NewtonMetres")]
+        [EnumMember(Value = "Nm")]
         #pragma warning disable CS1591
-        NewtonMetres,
+        Nm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "NewtonCentimetres")]
+        [EnumMember(Value = "Ncm")]
         #pragma warning disable CS1591
-        NewtonCentimetres,
+        Ncm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "NewtonMillimetres")]
+        [EnumMember(Value = "Nmm")]
         #pragma warning disable CS1591
-        NewtonMillimetres,
+        Nmm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KilogramMetres")]
+        [EnumMember(Value = "kgm")]
         #pragma warning disable CS1591
-        KilogramMetres,
+        Kgm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KilogramCentimetres")]
+        [EnumMember(Value = "kgcm")]
         #pragma warning disable CS1591
-        KilogramCentimetres,
+        Kgcm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KilogramMillimetres")]
+        [EnumMember(Value = "kgmm")]
         #pragma warning disable CS1591
-        KilogramMillimetres,
+        Kgmm,
         #pragma warning restore CS1591
     }
 }

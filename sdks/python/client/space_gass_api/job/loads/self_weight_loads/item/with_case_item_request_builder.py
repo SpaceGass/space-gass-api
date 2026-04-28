@@ -1,0 +1,216 @@
+from __future__ import annotations
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from kiota_abstractions.base_request_builder import BaseRequestBuilder
+from kiota_abstractions.base_request_configuration import RequestConfiguration
+from kiota_abstractions.default_query_parameters import QueryParameters
+from kiota_abstractions.get_path_parameters import get_path_parameters
+from kiota_abstractions.method import Method
+from kiota_abstractions.request_adapter import RequestAdapter
+from kiota_abstractions.request_information import RequestInformation
+from kiota_abstractions.request_option import RequestOption
+from kiota_abstractions.serialization import Parsable, ParsableFactory
+from typing import Any, Optional, TYPE_CHECKING, Union
+from warnings import warn
+
+if TYPE_CHECKING:
+    from .....models.problem_details import ProblemDetails
+    from .....models.self_weight_load import SelfWeightLoad
+    from .....models.self_weight_load_create import SelfWeightLoadCreate
+    from .....models.self_weight_load_update import SelfWeightLoadUpdate
+
+class WithCaseItemRequestBuilder(BaseRequestBuilder):
+    """
+    Builds and executes requests for operations under /job/loads/self-weight-loads/{caseId}
+    """
+    def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
+        """
+        Instantiates a new WithCaseItemRequestBuilder and sets the default values.
+        param path_parameters: The raw url or the url-template parameters for the request.
+        param request_adapter: The request adapter to use to execute the requests.
+        Returns: None
+        """
+        super().__init__(request_adapter, "{+baseurl}/job/loads/self-weight-loads/{caseId}", path_parameters)
+    
+    async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> None:
+        """
+        Deletes the self-weight load for a specific load case.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: None
+        """
+        request_info = self.to_delete_request_information(
+            request_configuration
+        )
+        from .....models.problem_details import ProblemDetails
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "401": ProblemDetails,
+            "404": ProblemDetails,
+        }
+        if not self.request_adapter:
+            raise Exception("Http core is null") 
+        return await self.request_adapter.send_no_response_content_async(request_info, error_mapping)
+    
+    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SelfWeightLoad]:
+        """
+        Gets the self-weight load for a specific load case.Returns 404 if no self-weight load exists for that case.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: Optional[SelfWeightLoad]
+        """
+        request_info = self.to_get_request_information(
+            request_configuration
+        )
+        from .....models.problem_details import ProblemDetails
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "401": ProblemDetails,
+            "404": ProblemDetails,
+        }
+        if not self.request_adapter:
+            raise Exception("Http core is null") 
+        from .....models.self_weight_load import SelfWeightLoad
+
+        return await self.request_adapter.send_async(request_info, SelfWeightLoad, error_mapping)
+    
+    async def patch(self,body: SelfWeightLoadUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SelfWeightLoad]:
+        """
+        Updates an existing self-weight load. Only provided fields are updated.The load case must be a Primary load case.
+        param body: DTO for updating an existing self-weight load.Only fields included in the request are updated; omit a field to keep its current value.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: Optional[SelfWeightLoad]
+        """
+        if body is None:
+            raise TypeError("body cannot be null.")
+        request_info = self.to_patch_request_information(
+            body, request_configuration
+        )
+        from .....models.problem_details import ProblemDetails
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ProblemDetails,
+            "401": ProblemDetails,
+            "404": ProblemDetails,
+        }
+        if not self.request_adapter:
+            raise Exception("Http core is null") 
+        from .....models.self_weight_load import SelfWeightLoad
+
+        return await self.request_adapter.send_async(request_info, SelfWeightLoad, error_mapping)
+    
+    async def post(self,body: SelfWeightLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SelfWeightLoad]:
+        """
+        Creates a self-weight load for a load case.The load case must exist and be a Primary load case.Returns 409 if a self-weight load already exists for the case.The case is taken from the route — do not include it in the body.
+        param body: DTO for creating a new self-weight load.Only one self-weight load is permitted per load case.Use PUT /self-weight/{case} to create or replace.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: Optional[SelfWeightLoad]
+        """
+        if body is None:
+            raise TypeError("body cannot be null.")
+        request_info = self.to_post_request_information(
+            body, request_configuration
+        )
+        from .....models.problem_details import ProblemDetails
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ProblemDetails,
+            "401": ProblemDetails,
+            "404": ProblemDetails,
+            "409": ProblemDetails,
+        }
+        if not self.request_adapter:
+            raise Exception("Http core is null") 
+        from .....models.self_weight_load import SelfWeightLoad
+
+        return await self.request_adapter.send_async(request_info, SelfWeightLoad, error_mapping)
+    
+    def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+        """
+        Deletes the self-weight load for a specific load case.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: RequestInformation
+        """
+        request_info = RequestInformation(Method.DELETE, self.url_template, self.path_parameters)
+        request_info.configure(request_configuration)
+        request_info.headers.try_add("Accept", "application/json")
+        return request_info
+    
+    def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+        """
+        Gets the self-weight load for a specific load case.Returns 404 if no self-weight load exists for that case.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: RequestInformation
+        """
+        request_info = RequestInformation(Method.GET, self.url_template, self.path_parameters)
+        request_info.configure(request_configuration)
+        request_info.headers.try_add("Accept", "application/json")
+        return request_info
+    
+    def to_patch_request_information(self,body: SelfWeightLoadUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+        """
+        Updates an existing self-weight load. Only provided fields are updated.The load case must be a Primary load case.
+        param body: DTO for updating an existing self-weight load.Only fields included in the request are updated; omit a field to keep its current value.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: RequestInformation
+        """
+        if body is None:
+            raise TypeError("body cannot be null.")
+        request_info = RequestInformation(Method.PATCH, self.url_template, self.path_parameters)
+        request_info.configure(request_configuration)
+        request_info.headers.try_add("Accept", "application/json")
+        request_info.set_content_from_parsable(self.request_adapter, "application/json", body)
+        return request_info
+    
+    def to_post_request_information(self,body: SelfWeightLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+        """
+        Creates a self-weight load for a load case.The load case must exist and be a Primary load case.Returns 409 if a self-weight load already exists for the case.The case is taken from the route — do not include it in the body.
+        param body: DTO for creating a new self-weight load.Only one self-weight load is permitted per load case.Use PUT /self-weight/{case} to create or replace.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: RequestInformation
+        """
+        if body is None:
+            raise TypeError("body cannot be null.")
+        request_info = RequestInformation(Method.POST, self.url_template, self.path_parameters)
+        request_info.configure(request_configuration)
+        request_info.headers.try_add("Accept", "application/json")
+        request_info.set_content_from_parsable(self.request_adapter, "application/json", body)
+        return request_info
+    
+    def with_url(self,raw_url: str) -> WithCaseItemRequestBuilder:
+        """
+        Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
+        param raw_url: The raw URL to use for the request builder.
+        Returns: WithCaseItemRequestBuilder
+        """
+        if raw_url is None:
+            raise TypeError("raw_url cannot be null.")
+        return WithCaseItemRequestBuilder(self.request_adapter, raw_url)
+    
+    @dataclass
+    class WithCaseItemRequestBuilderDeleteRequestConfiguration(RequestConfiguration[QueryParameters]):
+        """
+        Configuration for the request such as headers, query parameters, and middleware options.
+        """
+        warn("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.", DeprecationWarning)
+    
+    @dataclass
+    class WithCaseItemRequestBuilderGetRequestConfiguration(RequestConfiguration[QueryParameters]):
+        """
+        Configuration for the request such as headers, query parameters, and middleware options.
+        """
+        warn("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.", DeprecationWarning)
+    
+    @dataclass
+    class WithCaseItemRequestBuilderPatchRequestConfiguration(RequestConfiguration[QueryParameters]):
+        """
+        Configuration for the request such as headers, query parameters, and middleware options.
+        """
+        warn("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.", DeprecationWarning)
+    
+    @dataclass
+    class WithCaseItemRequestBuilderPostRequestConfiguration(RequestConfiguration[QueryParameters]):
+        """
+        Configuration for the request such as headers, query parameters, and middleware options.
+        """
+        warn("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.", DeprecationWarning)
+    
+

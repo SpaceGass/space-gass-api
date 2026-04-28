@@ -21,18 +21,18 @@ namespace SpaceGassApi.Models
 #else
         public string Error { get; set; }
 #endif
-        /// <summary>Index of the item in the original request (0-based).</summary>
-        public int? Index { get; set; }
-        /// <summary>Entity key of the failed item (for single-key entities).</summary>
-        public int? Key { get; set; }
-        /// <summary>Key values of the failed item (for multi-key entities).</summary>
+        /// <summary>Entity Id of the failed item (for single-Id entities).</summary>
+        public int? Id { get; set; }
+        /// <summary>Id values of the failed item (for multi-Id entities).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<int?>? Keys { get; set; }
+        public List<int?>? Ids { get; set; }
 #nullable restore
 #else
-        public List<int?> Keys { get; set; }
+        public List<int?> Ids { get; set; }
 #endif
+        /// <summary>Index of the item in the original request (0-based).</summary>
+        public int? Index { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
@@ -52,9 +52,9 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "error", n => { Error = n.GetStringValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
+                { "ids", n => { Ids = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
                 { "index", n => { Index = n.GetIntValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
-                { "keys", n => { Keys = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
             };
         }
         /// <summary>
@@ -65,9 +65,9 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("error", Error);
+            writer.WriteIntValue("id", Id);
+            writer.WriteCollectionOfPrimitiveValues<int?>("ids", Ids);
             writer.WriteIntValue("index", Index);
-            writer.WriteIntValue("key", Key);
-            writer.WriteCollectionOfPrimitiveValues<int?>("keys", Keys);
         }
     }
 }

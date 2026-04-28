@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class ModelSummary(Parsable):
     """
-    Summary counts of all model entities in the current job.Counts are read from file headers (lightweight, no datasheet loading).
+    Summary counts of all model entities in the current job.
     """
     # Number of combination load cases.
     combination_load_cases: Optional[int] = None

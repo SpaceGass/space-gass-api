@@ -11,8 +11,8 @@ class LoadCategoryUpdate(Parsable):
     """
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
-    # Primary key identifying the entity to update.Optional for single updates (key comes from route), required for batch updates.
-    key: Optional[int] = None
+    # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.
+    id: Optional[int] = None
     # Notes (supports multi-line text).
     notes: Optional[str] = None
     # Category title.
@@ -36,7 +36,7 @@ class LoadCategoryUpdate(Parsable):
         """
         fields: dict[str, Callable[[Any], None]] = {
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "notes": lambda n : setattr(self, 'notes', n.get_str_value()),
             "title": lambda n : setattr(self, 'title', n.get_str_value()),
         }
@@ -51,7 +51,7 @@ class LoadCategoryUpdate(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_str_value("guid", self.guid)
-        writer.write_int_value("key", self.key)
+        writer.write_int_value("id", self.id)
         writer.write_str_value("notes", self.notes)
         writer.write_str_value("title", self.title)
     

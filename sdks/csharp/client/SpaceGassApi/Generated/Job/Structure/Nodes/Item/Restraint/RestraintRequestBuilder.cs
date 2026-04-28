@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Structure.Nodes.Item.Restraint.Table;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -12,17 +13,22 @@ using System;
 namespace SpaceGassApi.Job.Structure.Nodes.Item.Restraint
 {
     /// <summary>
-    /// Builds and executes requests for operations under \job\structure\nodes\{key}\restraint
+    /// Builds and executes requests for operations under \job\structure\nodes\{id}\restraint
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class RestraintRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The table property</summary>
+        public global::SpaceGassApi.Job.Structure.Nodes.Item.Restraint.Table.TableRequestBuilder Table
+        {
+            get => new global::SpaceGassApi.Job.Structure.Nodes.Item.Restraint.Table.TableRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Structure.Nodes.Item.Restraint.RestraintRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public RestraintRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes/{key}/restraint", pathParameters)
+        public RestraintRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes/{id}/restraint", pathParameters)
         {
         }
         /// <summary>
@@ -30,7 +36,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item.Restraint
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public RestraintRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes/{key}/restraint", rawUrl)
+        public RestraintRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes/{id}/restraint", rawUrl)
         {
         }
         /// <summary>
@@ -60,7 +66,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item.Restraint
         /// Partially updates the restraint for a specific node.Only provided fields are updated; omitted fields remain unchanged.The restraint must already exist (use POST to create).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.NodeRestraint"/></returns>
-        /// <param name="body">DTO for partial updates to a node restraint.All fields are nullable — only provided fields are updated.</param>
+        /// <param name="body">DTO for partial updates to a node restraint.Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
@@ -89,7 +95,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item.Restraint
         /// Creates or replaces the restraint for a specific node.The node must exist. If a restraint already exists, it is replaced.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.NodeRestraint"/></returns>
-        /// <param name="body">DTO for creating (or replacing) a node restraint.The node key comes from the route parameter, not the body.</param>
+        /// <param name="body">DTO for creating (or replacing) a node restraint.The node Id comes from the route parameter, not the body.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
@@ -137,7 +143,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item.Restraint
         /// Partially updates the restraint for a specific node.Only provided fields are updated; omitted fields remain unchanged.The restraint must already exist (use POST to create).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for partial updates to a node restraint.All fields are nullable — only provided fields are updated.</param>
+        /// <param name="body">DTO for partial updates to a node restraint.Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -159,7 +165,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item.Restraint
         /// Creates or replaces the restraint for a specific node.The node must exist. If a restraint already exists, it is replaced.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for creating (or replacing) a node restraint.The node key comes from the route parameter, not the body.</param>
+        /// <param name="body">DTO for creating (or replacing) a node restraint.The node Id comes from the route parameter, not the body.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

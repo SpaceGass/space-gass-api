@@ -8,18 +8,34 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Read DTO for job responses.Model counts are available via GET /job/status (JobStatusDto).Sub-resources (units, details) are managed via their own endpoints.
+    /// Read DTO for job responses.Model counts and file state are available via GET /job/status (JobStatusDto).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class Job : IParsable
     {
-        /// <summary>Read DTO for job details (text properties).</summary>
+        /// <summary>Read DTO for job headings (text properties).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::SpaceGassApi.Models.JobDetails? Details { get; set; }
+        public global::SpaceGassApi.Models.JobHeadings? Headings { get; set; }
 #nullable restore
 #else
-        public global::SpaceGassApi.Models.JobDetails Details { get; set; }
+        public global::SpaceGassApi.Models.JobHeadings Headings { get; set; }
+#endif
+        /// <summary>Read DTO for job-level settings.Groups configuration properties that apply to the job as a whole.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.JobSettings? Settings { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.JobSettings Settings { get; set; }
+#endif
+        /// <summary>Unit settings for the current job.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.Units? Units { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.Units Units { get; set; }
 #endif
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
@@ -39,7 +55,9 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "details", n => { Details = n.GetObjectValue<global::SpaceGassApi.Models.JobDetails>(global::SpaceGassApi.Models.JobDetails.CreateFromDiscriminatorValue); } },
+                { "headings", n => { Headings = n.GetObjectValue<global::SpaceGassApi.Models.JobHeadings>(global::SpaceGassApi.Models.JobHeadings.CreateFromDiscriminatorValue); } },
+                { "settings", n => { Settings = n.GetObjectValue<global::SpaceGassApi.Models.JobSettings>(global::SpaceGassApi.Models.JobSettings.CreateFromDiscriminatorValue); } },
+                { "units", n => { Units = n.GetObjectValue<global::SpaceGassApi.Models.Units>(global::SpaceGassApi.Models.Units.CreateFromDiscriminatorValue); } },
             };
         }
         /// <summary>
@@ -49,7 +67,9 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteObjectValue<global::SpaceGassApi.Models.JobDetails>("details", Details);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.JobHeadings>("headings", Headings);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.JobSettings>("settings", Settings);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.Units>("units", Units);
         }
     }
 }

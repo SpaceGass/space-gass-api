@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -17,6 +18,11 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class LoadFactorsRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The metadata property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors.Metadata.MetadataRequestBuilder Metadata
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors.LoadFactorsRequestBuilder"/> and sets the default values.
         /// </summary>

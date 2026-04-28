@@ -4,11 +4,13 @@ using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Structure.Nodes.Bulk;
+using SpaceGassApi.Job.Structure.Nodes.Constraint;
 using SpaceGassApi.Job.Structure.Nodes.Constraints;
 using SpaceGassApi.Job.Structure.Nodes.Exists;
 using SpaceGassApi.Job.Structure.Nodes.Item;
 using SpaceGassApi.Job.Structure.Nodes.Metadata;
 using SpaceGassApi.Job.Structure.Nodes.Next;
+using SpaceGassApi.Job.Structure.Nodes.Restraint;
 using SpaceGassApi.Job.Structure.Nodes.Restraints;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
@@ -28,6 +30,11 @@ namespace SpaceGassApi.Job.Structure.Nodes
         public global::SpaceGassApi.Job.Structure.Nodes.Bulk.BulkRequestBuilder Bulk
         {
             get => new global::SpaceGassApi.Job.Structure.Nodes.Bulk.BulkRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The constraint property</summary>
+        public global::SpaceGassApi.Job.Structure.Nodes.Constraint.ConstraintRequestBuilder Constraint
+        {
+            get => new global::SpaceGassApi.Job.Structure.Nodes.Constraint.ConstraintRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The constraints property</summary>
         public global::SpaceGassApi.Job.Structure.Nodes.Constraints.ConstraintsRequestBuilder Constraints
@@ -49,34 +56,39 @@ namespace SpaceGassApi.Job.Structure.Nodes
         {
             get => new global::SpaceGassApi.Job.Structure.Nodes.Next.NextRequestBuilder(PathParameters, RequestAdapter);
         }
+        /// <summary>The restraint property</summary>
+        public global::SpaceGassApi.Job.Structure.Nodes.Restraint.RestraintRequestBuilder Restraint
+        {
+            get => new global::SpaceGassApi.Job.Structure.Nodes.Restraint.RestraintRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The restraints property</summary>
         public global::SpaceGassApi.Job.Structure.Nodes.Restraints.RestraintsRequestBuilder Restraints
         {
             get => new global::SpaceGassApi.Job.Structure.Nodes.Restraints.RestraintsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the SpaceGassApi.job.structure.nodes.item collection</summary>
-        /// <param name="position">The entity key</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Nodes.Item.WithKeyItemRequestBuilder"/></returns>
-        public global::SpaceGassApi.Job.Structure.Nodes.Item.WithKeyItemRequestBuilder this[int position]
+        /// <param name="position">The entity Id</param>
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Nodes.Item.NodesItemRequestBuilder"/></returns>
+        public global::SpaceGassApi.Job.Structure.Nodes.Item.NodesItemRequestBuilder this[int position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                urlTplParams.Add("key", position);
-                return new global::SpaceGassApi.Job.Structure.Nodes.Item.WithKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                urlTplParams.Add("id", position);
+                return new global::SpaceGassApi.Job.Structure.Nodes.Item.NodesItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>Gets an item from the SpaceGassApi.job.structure.nodes.item collection</summary>
-        /// <param name="position">The entity key</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Nodes.Item.WithKeyItemRequestBuilder"/></returns>
+        /// <param name="position">The entity Id</param>
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Nodes.Item.NodesItemRequestBuilder"/></returns>
         [Obsolete("This indexer is deprecated and will be removed in the next major version. Use the one with the typed parameter instead.")]
-        public global::SpaceGassApi.Job.Structure.Nodes.Item.WithKeyItemRequestBuilder this[string position]
+        public global::SpaceGassApi.Job.Structure.Nodes.Item.NodesItemRequestBuilder this[string position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("key", position);
-                return new global::SpaceGassApi.Job.Structure.Nodes.Item.WithKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("id", position);
+                return new global::SpaceGassApi.Job.Structure.Nodes.Item.NodesItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>
@@ -84,7 +96,7 @@ namespace SpaceGassApi.Job.Structure.Nodes
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes{?Limit*,MaxX*,MaxY*,MaxZ*,MinX*,MinY*,MinZ*,NodeType*,Nodes*,Offset*}", pathParameters)
+        public NodesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes{?Expand*,Limit*,MaxX*,MaxY*,MaxZ*,MinX*,MinY*,MinZ*,NodeType*,Nodes*,Offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -92,11 +104,11 @@ namespace SpaceGassApi.Job.Structure.Nodes
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes{?Limit*,MaxX*,MaxY*,MaxZ*,MinX*,MinY*,MinZ*,NodeType*,Nodes*,Offset*}", rawUrl)
+        public NodesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes{?Expand*,Limit*,MaxX*,MaxY*,MaxZ*,MinX*,MinY*,MinZ*,NodeType*,Nodes*,Offset*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.Node&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -149,7 +161,7 @@ namespace SpaceGassApi.Job.Structure.Nodes
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Node>(requestInfo, global::SpaceGassApi.Models.Node.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -199,11 +211,23 @@ namespace SpaceGassApi.Job.Structure.Nodes
             return new global::SpaceGassApi.Job.Structure.Nodes.NodesRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class NodesRequestBuilderGetQueryParameters 
         {
+            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
+            [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            public string? Expand { get; set; }
+#nullable restore
+#else
+            public string Expand { get; set; }
+#endif
+            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
+            [QueryParameter("Expand")]
+            public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
             /// <summary>Maximum X coordinate filter. Unit: Length (see GET /job/units).</summary>
@@ -218,7 +242,7 @@ namespace SpaceGassApi.Job.Structure.Nodes
             public double? MinY { get; set; }
             /// <summary>Minimum Z coordinate filter. Unit: Length (see GET /job/units).</summary>
             public double? MinZ { get; set; }
-            /// <summary>Comma-separated list of specific node numbers (e.g., &quot;1,5,10,15&quot;).</summary>
+            /// <summary>Node Ids to filter by, in SG list format (e.g. `&quot;1,5-10,15&quot;`).Omit to return all nodes.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
             public string? Nodes { get; set; }

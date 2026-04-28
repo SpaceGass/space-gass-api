@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -17,12 +18,17 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NaturalFrequenciesRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The metadata property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies.Metadata.MetadataRequestBuilder Metadata
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies.NaturalFrequenciesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NaturalFrequenciesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?Limit*,Offset*,case*,mode*}", pathParameters)
+        public NaturalFrequenciesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?Limit*,Offset*,cases*,modes*}", pathParameters)
         {
         }
         /// <summary>
@@ -30,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NaturalFrequenciesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?Limit*,Offset*,case*,mode*}", rawUrl)
+        public NaturalFrequenciesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?Limit*,Offset*,cases*,modes*}", rawUrl)
         {
         }
         /// <summary>
@@ -39,6 +45,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
         /// <returns>A <see cref="global::SpaceGassApi.Models.NaturalFrequencyQueryResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -52,6 +59,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.NaturalFrequencyQueryResult>(requestInfo, global::SpaceGassApi.Models.NaturalFrequencyQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
@@ -90,27 +98,27 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class NaturalFrequenciesRequestBuilderGetQueryParameters 
         {
-            /// <summary>Filter by load case IDs.</summary>
+            /// <summary>Load case Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("case")]
-            public int?[]? Case { get; set; }
+            [QueryParameter("cases")]
+            public string? Cases { get; set; }
 #nullable restore
 #else
-            [QueryParameter("case")]
-            public int?[] Case { get; set; }
+            [QueryParameter("cases")]
+            public string Cases { get; set; }
 #endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
-            /// <summary>Filter by mode numbers.</summary>
+            /// <summary>Mode numbers in SG list format (e.g. `&quot;1-3&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("mode")]
-            public int?[]? Mode { get; set; }
+            [QueryParameter("modes")]
+            public string? Modes { get; set; }
 #nullable restore
 #else
-            [QueryParameter("mode")]
-            public int?[] Mode { get; set; }
+            [QueryParameter("modes")]
+            public string Modes { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             public int? Offset { get; set; }

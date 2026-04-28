@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.FileNamespace.Preview;
+using SpaceGassApi.FileNamespace.Samples;
 using SpaceGassApi.FileNamespace.Status;
 using System.Collections.Generic;
 using System.IO;
@@ -20,6 +21,11 @@ namespace SpaceGassApi.FileNamespace
         public global::SpaceGassApi.FileNamespace.Preview.PreviewRequestBuilder Preview
         {
             get => new global::SpaceGassApi.FileNamespace.Preview.PreviewRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The samples property</summary>
+        public global::SpaceGassApi.FileNamespace.Samples.SamplesRequestBuilder Samples
+        {
+            get => new global::SpaceGassApi.FileNamespace.Samples.SamplesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The status property</summary>
         public global::SpaceGassApi.FileNamespace.Status.StatusRequestBuilder Status

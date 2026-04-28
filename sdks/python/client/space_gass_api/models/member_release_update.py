@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class MemberReleaseUpdate(Parsable):
     """
-    DTO for partial updates to a member release.All fields are nullable — only provided fields are updated.
+    DTO for partial updates to a member release.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # Fixity code at end A of the member.
     fixity_code_at_a: Optional[str] = None

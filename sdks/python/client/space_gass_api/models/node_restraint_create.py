@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 @dataclass
 class NodeRestraintCreate(Parsable):
     """
-    DTO for creating (or replacing) a node restraint.The node key comes from the route parameter, not the body.
+    DTO for creating (or replacing) a node restraint.The node Id comes from the route parameter, not the body.
     """
     # 6-character active direction code for TX,TY,TZ,RX,RY,RZ.Each character: B=Both, P=Positive only, N=Negative only.
     active_direction: Optional[str] = None
     # Whether this is a general restraint.
     general_restraint: Optional[bool] = None
-    # The node key to create the restraint for.Optional in body — if omitted, set from the route parameter by the controller.
+    # The node Id to create the restraint for.Optional in body — if omitted, set from the route parameter by the controller.
     node: Optional[int] = None
     # 6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Free, R=Restrained, S=Spring, V=Variable spring, P=Plastic, N=Nonlinear friction.
     restraint_code: Optional[str] = None

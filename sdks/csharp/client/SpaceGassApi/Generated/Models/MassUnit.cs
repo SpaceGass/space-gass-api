@@ -3,25 +3,25 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Mass unit types (Field Index 7)</summary>
+    /// <summary>Mass unit. Members mirror SPACE GASS `SgMass`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MassUnit
     {
-        [EnumMember(Value = "Kips")]
+        [EnumMember(Value = "K")]
         #pragma warning disable CS1591
-        Kips,
+        K,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Pounds")]
+        [EnumMember(Value = "lb")]
         #pragma warning disable CS1591
-        Pounds,
+        Lb,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Tonnes")]
+        [EnumMember(Value = "T")]
         #pragma warning disable CS1591
-        Tonnes,
+        T,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Kilograms")]
+        [EnumMember(Value = "kg")]
         #pragma warning disable CS1591
-        Kilograms,
+        Kg,
         #pragma warning restore CS1591
     }
 }

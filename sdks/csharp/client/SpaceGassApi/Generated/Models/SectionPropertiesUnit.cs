@@ -3,29 +3,29 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Section Properties unit types (Field Index 1)</summary>
+    /// <summary>Unit for section properties (area, moment of inertia, etc.). Members mirrorSPACE GASS `SgSectionProperties` (`NetCommon/CommonEnums.vb`).</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum SectionPropertiesUnit
     {
-        [EnumMember(Value = "Feet")]
+        [EnumMember(Value = "ft")]
         #pragma warning disable CS1591
-        Feet,
+        Ft,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Inches")]
+        [EnumMember(Value = "in")]
         #pragma warning disable CS1591
-        Inches,
+        In,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Metres")]
+        [EnumMember(Value = "m")]
         #pragma warning disable CS1591
-        Metres,
+        M,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Centimetres")]
+        [EnumMember(Value = "cm")]
         #pragma warning disable CS1591
-        Centimetres,
+        Cm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Millimetres")]
+        [EnumMember(Value = "mm")]
         #pragma warning disable CS1591
-        Millimetres,
+        Mm,
         #pragma warning restore CS1591
     }
 }

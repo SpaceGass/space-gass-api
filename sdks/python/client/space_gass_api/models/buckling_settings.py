@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 @dataclass
 class BucklingSettings(Parsable):
     """
-    Settings DTO for Buckling Analysis.Properties map to the SPACEGASS NetSGBuckling struct.
+    Settings for Buckling Analysis.
     """
     # Axial force distribution method for buckling analysis.
     axial_force_distribution: Optional[AxialForceDistribution] = None
@@ -26,7 +26,7 @@ class BucklingSettings(Parsable):
     drilling_stiffness: Optional[float] = None
     # Whether to perform extra iterations for improved mode shape accuracy.
     extra_iterations: Optional[bool] = None
-    # Load cases to include in the analysis.Use "all" or "" to include all load cases (default).Use a comma-separated list of numbers and ranges (e.g., "1,3,5-10").Maximum 50 entries (individual numbers and ranges each count as entries).
+    # Load cases to include in the analysis, in SG list format (e.g. `"1,3,5-10"`).Omit or pass an empty string to include all load cases (default).Maximum 50 entries (individual numbers and ranges each count as entries).
     load_cases: Optional[str] = None
     # Lower limit for the load factor in buckling analysis.
     lower_limit: Optional[float] = None

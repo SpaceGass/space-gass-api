@@ -3,17 +3,17 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Temperature unit types (Field Index 4)</summary>
+    /// <summary>Temperature unit. Members mirror SPACE GASS `SgTemperature`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum TemperatureUnit
     {
-        [EnumMember(Value = "Fahrenheit")]
+        [EnumMember(Value = "degF")]
         #pragma warning disable CS1591
-        Fahrenheit,
+        DegF,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Celsius")]
+        [EnumMember(Value = "degC")]
         #pragma warning disable CS1591
-        Celsius,
+        DegC,
         #pragma warning restore CS1591
     }
 }

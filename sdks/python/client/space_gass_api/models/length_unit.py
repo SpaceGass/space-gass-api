@@ -1,9 +1,9 @@
 from enum import Enum
 
 class LengthUnit(str, Enum):
-    Feet = "Feet",
-    Inches = "Inches",
-    Metres = "Metres",
-    Centimetres = "Centimetres",
-    Millimetres = "Millimetres",
+    Ft = "ft",
+    In_ = "in",
+    M = "m",
+    Cm = "cm",
+    Mm = "mm",
 

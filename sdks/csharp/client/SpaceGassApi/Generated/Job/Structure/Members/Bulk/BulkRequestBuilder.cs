@@ -22,7 +22,7 @@ namespace SpaceGassApi.Job.Structure.Members.Bulk
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public BulkRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members/bulk{?continueOnError*,keys*}", pathParameters)
+        public BulkRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members/bulk{?continueOnError*}", pathParameters)
         {
         }
         /// <summary>
@@ -30,27 +30,29 @@ namespace SpaceGassApi.Job.Structure.Members.Bulk
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public BulkRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members/bulk{?continueOnError*,keys*}", rawUrl)
+        public BulkRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members/bulk{?continueOnError*}", rawUrl)
         {
         }
         /// <summary>
-        /// Delete Bulk
+        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.ObjectBatchResult"/></returns>
+        /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.ObjectBatchResult?> DeleteAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ObjectBatchResult?> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.ObjectBatchResult> DeleteAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ObjectBatchResult> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
-            var requestInfo = ToDeleteRequestInformation(requestConfiguration);
+            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
+            var requestInfo = ToDeleteRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
@@ -59,7 +61,7 @@ namespace SpaceGassApi.Job.Structure.Members.Bulk
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ObjectBatchResult>(requestInfo, global::SpaceGassApi.Models.ObjectBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Updates multiple items in a bulk operation.Each item must include its Key in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        /// Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MemberBatchResult"/></returns>
         /// <param name="body">The request body</param>
@@ -113,26 +115,29 @@ namespace SpaceGassApi.Job.Structure.Members.Bulk
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MemberBatchResult>(requestInfo, global::SpaceGassApi.Models.MemberBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Delete Bulk
+        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
+        /// <param name="body">The request body</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToDeleteRequestInformation(Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToDeleteRequestInformation(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToDeleteRequestInformation(Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToDeleteRequestInformation(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default)
         {
 #endif
+            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = new RequestInformation(Method.DELETE, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
             requestInfo.Headers.TryAdd("Accept", "application/json");
+            requestInfo.SetContentFromScalarCollection(RequestAdapter, "application/json", body);
             return requestInfo;
         }
         /// <summary>
-        /// Updates multiple items in a bulk operation.Each item must include its Key in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        /// Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -185,7 +190,7 @@ namespace SpaceGassApi.Job.Structure.Members.Bulk
             return new global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Delete Bulk
+        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderDeleteQueryParameters 
@@ -193,16 +198,6 @@ namespace SpaceGassApi.Job.Structure.Members.Bulk
             /// <summary>Whether to continue on error</summary>
             [QueryParameter("continueOnError")]
             public bool? ContinueOnError { get; set; }
-            /// <summary>Array of entity keys to delete (e.g., ?keys=1&amp;keys=2&amp;keys=3)</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-            [QueryParameter("keys")]
-            public int?[]? Keys { get; set; }
-#nullable restore
-#else
-            [QueryParameter("keys")]
-            public int?[] Keys { get; set; }
-#endif
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.
@@ -213,7 +208,7 @@ namespace SpaceGassApi.Job.Structure.Members.Bulk
         {
         }
         /// <summary>
-        /// Updates multiple items in a bulk operation.Each item must include its Key in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        /// Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderPatchQueryParameters 

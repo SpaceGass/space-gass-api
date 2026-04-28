@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for partial updates to a member release.All fields are nullable — only provided fields are updated.
+    /// DTO for partial updates to a member release.Only fields included in the request are updated; omit a field to keep its current value.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberReleaseUpdate : IParsable

@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @dataclass
 class MemberDistributedLoadUpdate(Parsable):
     """
-    DTO for updating an existing member distributed load.All fields are nullable to support partial PATCH semantics.
+    DTO for updating an existing member distributed load.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # Coordinate axes type for distributed loads and plate pressure loads.Maps to SPACE GASS lookup table "L/GI/GP Axes".
     axes: Optional[LoadAxes] = None

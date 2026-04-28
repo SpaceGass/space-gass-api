@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @dataclass
 class NodeRestraintUpdate(Parsable):
     """
-    DTO for partial updates to a node restraint.All fields are nullable — only provided fields are updated.
+    DTO for partial updates to a node restraint.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # 6-character active direction code for TX,TY,TZ,RX,RY,RZ.Each character: B=Both, P=Positive only, N=Negative only.
     active_direction: Optional[str] = None

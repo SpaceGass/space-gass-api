@@ -16,6 +16,7 @@ from warnings import warn
 if TYPE_CHECKING:
     from .......models.member_stress_query_result import MemberStressQueryResult
     from .......models.problem_details import ProblemDetails
+    from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class StressesRequestBuilder(BaseRequestBuilder):
     """
@@ -28,7 +29,7 @@ class StressesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/member/stresses{?Limit*,Offset*,case*,member*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/member/stresses{?Limit*,Offset*,cases*,members*}", path_parameters)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[StressesRequestBuilderGetQueryParameters]] = None) -> Optional[MemberStressQueryResult]:
         """
@@ -42,6 +43,7 @@ class StressesRequestBuilder(BaseRequestBuilder):
         from .......models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ProblemDetails,
             "401": ProblemDetails,
         }
         if not self.request_adapter:
@@ -71,6 +73,15 @@ class StressesRequestBuilder(BaseRequestBuilder):
             raise TypeError("raw_url cannot be null.")
         return StressesRequestBuilder(self.request_adapter, raw_url)
     
+    @property
+    def metadata(self) -> MetadataRequestBuilder:
+        """
+        The metadata property
+        """
+        from .metadata.metadata_request_builder import MetadataRequestBuilder
+
+        return MetadataRequestBuilder(self.request_adapter, self.path_parameters)
+    
     @dataclass
     class StressesRequestBuilderGetQueryParameters():
         """
@@ -88,20 +99,20 @@ class StressesRequestBuilder(BaseRequestBuilder):
                 return "Limit"
             if original_name == "offset":
                 return "Offset"
-            if original_name == "case":
-                return "case"
-            if original_name == "member":
-                return "member"
+            if original_name == "cases":
+                return "cases"
+            if original_name == "members":
+                return "members"
             return original_name
         
-        # Filter by load case IDs.
-        case: Optional[list[int]] = None
+        # Load case Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
+        cases: Optional[str] = None
 
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 
-        # Filter by member keys.
-        member: Optional[list[int]] = None
+        # Member Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
+        members: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None

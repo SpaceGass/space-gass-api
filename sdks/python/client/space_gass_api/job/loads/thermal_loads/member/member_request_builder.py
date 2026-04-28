@@ -6,7 +6,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .item.with_case_key_item_request_builder import WithCaseKeyItemRequestBuilder
+    from .item.with_case_item_request_builder import WithCaseItemRequestBuilder
 
 class MemberRequestBuilder(BaseRequestBuilder):
     """
@@ -21,18 +21,18 @@ class MemberRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/thermal-loads/member", path_parameters)
     
-    def by_case_key(self,case_key: int) -> WithCaseKeyItemRequestBuilder:
+    def by_case_id(self,case_id: int) -> WithCaseItemRequestBuilder:
         """
         Gets an item from the space_gass_api.job.loads.thermalLoads.member.item collection
-        param case_key: The load case number
-        Returns: WithCaseKeyItemRequestBuilder
+        param case_id: The load case number
+        Returns: WithCaseItemRequestBuilder
         """
-        if case_key is None:
-            raise TypeError("case_key cannot be null.")
-        from .item.with_case_key_item_request_builder import WithCaseKeyItemRequestBuilder
+        if case_id is None:
+            raise TypeError("case_id cannot be null.")
+        from .item.with_case_item_request_builder import WithCaseItemRequestBuilder
 
         url_tpl_params = get_path_parameters(self.path_parameters)
-        url_tpl_params["caseKey"] = case_key
-        return WithCaseKeyItemRequestBuilder(self.request_adapter, url_tpl_params)
+        url_tpl_params["caseId"] = case_id
+        return WithCaseItemRequestBuilder(self.request_adapter, url_tpl_params)
     
 

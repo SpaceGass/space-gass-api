@@ -14,7 +14,7 @@ class MemberOffset(Parsable):
     """
     # Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table "L/G Axes".
     axes: Optional[AxesType] = None
-    # The member key this offset applies to.
+    # The member Id this offset applies to.
     member: Optional[int] = None
     # X offset at end A. Unit: Length (see GET /job/units).
     x_offset_at_a: Optional[float] = None

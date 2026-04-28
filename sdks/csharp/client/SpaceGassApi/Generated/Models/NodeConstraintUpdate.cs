@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for partially updating an existing node constraint.All fields are nullable to support partial PATCH semantics.
+    /// DTO for partially updating an existing node constraint.Only fields included in the request are updated; omit a field to keep its current value.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeConstraintUpdate : IParsable

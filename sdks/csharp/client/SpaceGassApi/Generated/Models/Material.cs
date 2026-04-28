@@ -23,8 +23,8 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
-        public int? Key { get; set; }
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
+        public int? Id { get; set; }
         /// <summary>Library name. Empty for user-defined materials.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -71,7 +71,7 @@ namespace SpaceGassApi.Models
             {
                 { "concreteStrength", n => { ConcreteStrength = n.GetDoubleValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "library", n => { Library = n.GetStringValue(); } },
                 { "massDensity", n => { MassDensity = n.GetDoubleValue(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
@@ -90,7 +90,7 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteDoubleValue("concreteStrength", ConcreteStrength);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteIntValue("id", Id);
             writer.WriteStringValue("library", Library);
             writer.WriteDoubleValue("massDensity", MassDensity);
             writer.WriteStringValue("name", Name);

@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
 class OffsetsRequestBuilder(BaseRequestBuilder):
     """
-    Builds and executes requests for operations under /job/structure/members/{key}/offsets
+    Builds and executes requests for operations under /job/structure/members/{id}/offsets
     """
     def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
         """
@@ -30,7 +30,7 @@ class OffsetsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/members/{key}/offsets", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/members/{id}/offsets", path_parameters)
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> None:
         """
@@ -75,7 +75,7 @@ class OffsetsRequestBuilder(BaseRequestBuilder):
     async def patch(self,body: MemberOffsetUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[MemberOffset]:
         """
         Partially updates the offsets for a specific member.Only provided fields are updated; omitted fields remain unchanged.The offsets must already exist (use POST to create).
-        param body: DTO for partial updates to a member offset.All fields are nullable — only provided fields are updated.
+        param body: DTO for partial updates to a member offset.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[MemberOffset]
         """
@@ -100,7 +100,7 @@ class OffsetsRequestBuilder(BaseRequestBuilder):
     async def post(self,body: MemberOffsetCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[MemberOffset]:
         """
         Creates or replaces the offsets for a specific member.The member must exist. If offsets already exist, they are replaced.
-        param body: DTO for creating (or replacing) a member offset.The member key comes from the route parameter, not the body.
+        param body: DTO for creating (or replacing) a member offset.The member Id comes from the route parameter, not the body.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[MemberOffset]
         """
@@ -147,7 +147,7 @@ class OffsetsRequestBuilder(BaseRequestBuilder):
     def to_patch_request_information(self,body: MemberOffsetUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Partially updates the offsets for a specific member.Only provided fields are updated; omitted fields remain unchanged.The offsets must already exist (use POST to create).
-        param body: DTO for partial updates to a member offset.All fields are nullable — only provided fields are updated.
+        param body: DTO for partial updates to a member offset.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -162,7 +162,7 @@ class OffsetsRequestBuilder(BaseRequestBuilder):
     def to_post_request_information(self,body: MemberOffsetCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Creates or replaces the offsets for a specific member.The member must exist. If offsets already exist, they are replaced.
-        param body: DTO for creating (or replacing) a member offset.The member key comes from the route parameter, not the body.
+        param body: DTO for creating (or replacing) a member offset.The member Id comes from the route parameter, not the body.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

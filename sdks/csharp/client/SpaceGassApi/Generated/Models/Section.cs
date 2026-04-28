@@ -19,9 +19,9 @@ namespace SpaceGassApi.Models
         public global::SpaceGassApi.Models.AngleType? AngleType { get; set; }
         /// <summary>Area modification factor.</summary>
         public double? AreaFactor { get; set; }
-        /// <summary>Shear area in Y direction.</summary>
+        /// <summary>Shear area in the Y direction.</summary>
         public double? Ay { get; set; }
-        /// <summary>Shear area in Z direction.</summary>
+        /// <summary>Shear area in the Z direction.</summary>
         public double? Az { get; set; }
         /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -31,19 +31,19 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Second moment of area about Y axis.</summary>
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
+        public int? Id { get; set; }
+        /// <summary>Second moment of area about the principal Y axis.</summary>
         public double? Iy { get; set; }
         /// <summary>Iy modification factor.</summary>
         public double? IyFactor { get; set; }
-        /// <summary>Second moment of area about Z axis.</summary>
+        /// <summary>Second moment of area about the principal Z axis.</summary>
         public double? Iz { get; set; }
         /// <summary>Iz modification factor.</summary>
         public double? IzFactor { get; set; }
         /// <summary>Torsion constant.</summary>
         public double? J { get; set; }
-        /// <summary>Primary key - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
-        public int? Key { get; set; }
-        /// <summary>Library name. Empty for user-defined sections.</summary>
+        /// <summary>Library name.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Library { get; set; }
@@ -51,7 +51,7 @@ namespace SpaceGassApi.Models
 #else
         public string Library { get; set; }
 #endif
-        /// <summary>Section mark/designation.</summary>
+        /// <summary>Section mark / designation.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Mark { get; set; }
@@ -67,15 +67,15 @@ namespace SpaceGassApi.Models
 #else
         public string Name { get; set; }
 #endif
-        /// <summary>Principal axis rotation angle (degrees).</summary>
+        /// <summary>Principal axis rotation angle.</summary>
         public double? PrincipalAngle { get; set; }
-        /// <summary>Number of shapes in the section.</summary>
+        /// <summary>Number of shapes in the section (1 for a standard library section).</summary>
         public int? Shapes { get; set; }
         /// <summary>Indicates whether a section or material was user-defined or imported from a library.</summary>
         public global::SpaceGassApi.Models.PropertySource? Source { get; set; }
         /// <summary>Torsion modification factor.</summary>
         public double? TorsionFactor { get; set; }
-        /// <summary>Whether the section is transposed.</summary>
+        /// <summary>Whether the section&apos;s principal axes are swapped (transposed shape).</summary>
         public bool? Transposed { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
@@ -101,12 +101,12 @@ namespace SpaceGassApi.Models
                 { "ay", n => { Ay = n.GetDoubleValue(); } },
                 { "az", n => { Az = n.GetDoubleValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "iy", n => { Iy = n.GetDoubleValue(); } },
                 { "iyFactor", n => { IyFactor = n.GetDoubleValue(); } },
                 { "iz", n => { Iz = n.GetDoubleValue(); } },
                 { "izFactor", n => { IzFactor = n.GetDoubleValue(); } },
                 { "j", n => { J = n.GetDoubleValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
                 { "library", n => { Library = n.GetStringValue(); } },
                 { "mark", n => { Mark = n.GetStringValue(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
@@ -130,12 +130,12 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("ay", Ay);
             writer.WriteDoubleValue("az", Az);
             writer.WriteStringValue("guid", Guid);
+            writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("iy", Iy);
             writer.WriteDoubleValue("iyFactor", IyFactor);
             writer.WriteDoubleValue("iz", Iz);
             writer.WriteDoubleValue("izFactor", IzFactor);
             writer.WriteDoubleValue("j", J);
-            writer.WriteIntValue("key", Key);
             writer.WriteStringValue("library", Library);
             writer.WriteStringValue("mark", Mark);
             writer.WriteStringValue("name", Name);

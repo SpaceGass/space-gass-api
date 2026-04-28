@@ -11,11 +11,11 @@ if TYPE_CHECKING:
 @dataclass
 class MemberStressQueryResult(Parsable):
     """
-    Wrapper for analysis query results.Contains the result data plus optional warnings about requested keys or cases that were skipped.
+    Wrapper for analysis query results.Contains the result data plus optional warnings about requested cases or modesthat produced no results (i.e. were not analysed).
     """
     # The query result rows.
     results: Optional[list[MemberStress]] = None
-    # Warnings returned when query filter parameters reference keys or load casesthat do not exist in the result set.
+    # Warnings returned when some requested load cases or modes did not have analysisresults in the response. (Filter Ids that don't exist in the model are rejectedup-front with HTTP 400 by the controller — they never reach this DTO.)`casesNotAnalyzed` is an SG list-format string that can be pasted straightinto `POST /job/analysis/run`'s `loadCases` field to re-run only thosecases. `modesNotAnalyzed` is a per-case list — each analysed case can computea different number of modes, so the warning is keyed by case rather than flattened.
     warnings: Optional[QueryWarnings] = None
     
     @staticmethod

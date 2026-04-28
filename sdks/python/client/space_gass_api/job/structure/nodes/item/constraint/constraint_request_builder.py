@@ -21,7 +21,7 @@ if TYPE_CHECKING:
 
 class ConstraintRequestBuilder(BaseRequestBuilder):
     """
-    Builds and executes requests for operations under /job/structure/nodes/{key}/constraint
+    Builds and executes requests for operations under /job/structure/nodes/{id}/constraint
     """
     def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
         """
@@ -30,7 +30,7 @@ class ConstraintRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes/{key}/constraint", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes/{id}/constraint", path_parameters)
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> None:
         """
@@ -75,7 +75,7 @@ class ConstraintRequestBuilder(BaseRequestBuilder):
     async def patch(self,body: NodeConstraintUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[NodeConstraint]:
         """
         Partially updates the master-slave constraint for a specific slave node.Only provided fields are updated; omitted fields remain unchanged.The constraint must already exist (use POST to create).
-        param body: DTO for partially updating an existing node constraint.All fields are nullable to support partial PATCH semantics.
+        param body: DTO for partially updating an existing node constraint.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[NodeConstraint]
         """
@@ -147,7 +147,7 @@ class ConstraintRequestBuilder(BaseRequestBuilder):
     def to_patch_request_information(self,body: NodeConstraintUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Partially updates the master-slave constraint for a specific slave node.Only provided fields are updated; omitted fields remain unchanged.The constraint must already exist (use POST to create).
-        param body: DTO for partially updating an existing node constraint.All fields are nullable to support partial PATCH semantics.
+        param body: DTO for partially updating an existing node constraint.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

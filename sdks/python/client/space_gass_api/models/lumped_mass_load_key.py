@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class LumpedMassLoadKey(Parsable):
     """
-    Composite key object for bulk delete operations.
+    Composite Id object for bulk delete operations.
     """
     # The load case number.
     case: Optional[int] = None

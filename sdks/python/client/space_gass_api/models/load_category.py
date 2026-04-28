@@ -7,21 +7,21 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class LoadCategory(Parsable):
     """
-    DTO for a load category (from Loads - Load Categories table, FileID=38).Includes read-only fields (Source, Version, Username) set by SPACE GASS.
+    A load category used to group load cases (e.g. dead, live, wind).Includes read-only audit fields (Source, Version, Username) set automatically by the application.
     """
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
-    # Primary key - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
-    key: Optional[int] = None
+    # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
+    id: Optional[int] = None
     # Notes (supports multi-line text).
     notes: Optional[str] = None
-    # Source (read-only, set by SPACE GASS).
+    # Source (read-only, set automatically by the application).
     source: Optional[str] = None
     # Category title.
     title: Optional[str] = None
-    # Username (read-only, set by SPACE GASS).
+    # Username (read-only, set automatically by the application).
     username: Optional[str] = None
-    # Version (read-only, set by SPACE GASS).
+    # Version (read-only, set automatically by the application).
     version: Optional[str] = None
     
     @staticmethod
@@ -42,7 +42,7 @@ class LoadCategory(Parsable):
         """
         fields: dict[str, Callable[[Any], None]] = {
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "notes": lambda n : setattr(self, 'notes', n.get_str_value()),
             "source": lambda n : setattr(self, 'source', n.get_str_value()),
             "title": lambda n : setattr(self, 'title', n.get_str_value()),
@@ -60,7 +60,7 @@ class LoadCategory(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_str_value("guid", self.guid)
-        writer.write_int_value("key", self.key)
+        writer.write_int_value("id", self.id)
         writer.write_str_value("notes", self.notes)
         writer.write_str_value("source", self.source)
         writer.write_str_value("title", self.title)

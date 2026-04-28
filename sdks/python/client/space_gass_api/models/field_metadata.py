@@ -4,29 +4,36 @@ from dataclasses import dataclass, field
 from kiota_abstractions.serialization import Parsable, ParseNode, SerializationWriter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
+if TYPE_CHECKING:
+    from .allowed_value import AllowedValue
+
 @dataclass
 class FieldMetadata(Parsable):
     """
-    Metadata for a single field in an entity table.Provides schema information for clients to validate and display entity data.
+    Metadata for a single field in a resource. The shape mirrors what clients see onthe wire — SpaceGassApi.Models.Dtos.Common.FieldMetadataDto.JsonName is the exact property key a JSON consumer willread, so a client can correlate metadata to payload without any translation.
     """
-    # Whether the field can be empty/null
+    # Internal: whether the underlying SPACE GASS datasheet cell may be blank —reads NETSpec `<Empty>1</Empty>`. Set only when the field isDataSpec-backed (via `[NetspecField]`); null otherwise. Emitted inDebug builds for diagnostics; suppressed entirely in Release.
     allow_empty: Optional[bool] = None
-    # Data type (Integer, Double, String, etc.)
+    # For enum-backed fields, the permitted values with their wire tokens and display labels.Use `value` in request bodies; `label` is for display only. Null for non-enum fields.
+    allowed_values: Optional[list[AllowedValue]] = None
+    # Data type: "Integer" | "Double" | "String" | "Enum" | "Boolean" | "Guid".For enums, see SpaceGassApi.Models.Dtos.Common.FieldMetadataDto.AllowedValues for the permitted values.
     data_type: Optional[str] = None
-    # Default value (if applicable)
+    # Default value when the field is omitted on create.
     default: Optional[str] = None
-    # Field name
-    field_name: Optional[str] = None
-    # Field index in the underlying data structure
-    index: Optional[int] = None
-    # Maximum allowed value (if applicable)
+    # Optional hint text for this field, useful for UI labels and tooltips. Null when not available.
+    description: Optional[str] = None
+    # Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.
+    json_name: Optional[str] = None
+    # Maximum allowed value for this field (as a string; use `dataType` to determine how to parse it).Null if no maximum constraint applies.
     max: Optional[str] = None
-    # Minimum allowed value (if applicable)
+    # Maximum length for string fields (characters). Null for non-string fields.
+    max_length: Optional[int] = None
+    # Minimum allowed value for this field (as a string; use `dataType` to determine how to parse it).Null if no minimum constraint applies.
     min: Optional[str] = None
-    # Resolved unit label based on current job units (e.g., "mm", "kN/mm").This is what values in requests/responses are measured in.Null if the field has no units.
+    # Internal-only: raw NETSpec field name (e.g. "Node A", "Dir Angle") forcorrelation against SPACE GASS documentation. Not serialised in Release.
+    source_name: Optional[str] = None
+    # Resolved unit label based on the current job units — e.g. "mm", "kN","kN/mm^2". Null when the field has no units.
     units: Optional[str] = None
-    # Units mask token (e.g., "<Length>") - null if no units.This is the raw mask from the DataSpec.
-    units_mask: Optional[str] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> FieldMetadata:
@@ -44,16 +51,22 @@ class FieldMetadata(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
+        from .allowed_value import AllowedValue
+
+        from .allowed_value import AllowedValue
+
         fields: dict[str, Callable[[Any], None]] = {
             "allowEmpty": lambda n : setattr(self, 'allow_empty', n.get_bool_value()),
+            "allowedValues": lambda n : setattr(self, 'allowed_values', n.get_collection_of_object_values(AllowedValue)),
             "dataType": lambda n : setattr(self, 'data_type', n.get_str_value()),
             "default": lambda n : setattr(self, 'default', n.get_str_value()),
-            "fieldName": lambda n : setattr(self, 'field_name', n.get_str_value()),
-            "index": lambda n : setattr(self, 'index', n.get_int_value()),
+            "description": lambda n : setattr(self, 'description', n.get_str_value()),
+            "jsonName": lambda n : setattr(self, 'json_name', n.get_str_value()),
             "max": lambda n : setattr(self, 'max', n.get_str_value()),
+            "maxLength": lambda n : setattr(self, 'max_length', n.get_int_value()),
             "min": lambda n : setattr(self, 'min', n.get_str_value()),
+            "sourceName": lambda n : setattr(self, 'source_name', n.get_str_value()),
             "units": lambda n : setattr(self, 'units', n.get_str_value()),
-            "unitsMask": lambda n : setattr(self, 'units_mask', n.get_str_value()),
         }
         return fields
     
@@ -66,13 +79,15 @@ class FieldMetadata(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_bool_value("allowEmpty", self.allow_empty)
+        writer.write_collection_of_object_values("allowedValues", self.allowed_values)
         writer.write_str_value("dataType", self.data_type)
         writer.write_str_value("default", self.default)
-        writer.write_str_value("fieldName", self.field_name)
-        writer.write_int_value("index", self.index)
+        writer.write_str_value("description", self.description)
+        writer.write_str_value("jsonName", self.json_name)
         writer.write_str_value("max", self.max)
+        writer.write_int_value("maxLength", self.max_length)
         writer.write_str_value("min", self.min)
+        writer.write_str_value("sourceName", self.source_name)
         writer.write_str_value("units", self.units)
-        writer.write_str_value("unitsMask", self.units_mask)
     
 

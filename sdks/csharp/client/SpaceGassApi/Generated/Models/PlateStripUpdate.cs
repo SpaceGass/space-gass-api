@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for updating an existing plate strip.All fields are nullable to support partial updates.
+    /// DTO for updating an existing plate strip.Only fields included in the request are updated; omit a field to keep its current value.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class PlateStripUpdate : IParsable
@@ -33,8 +33,8 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key identifying the entity to update.Optional for single updates (key comes from route), required for batch updates.</summary>
-        public int? Key { get; set; }
+        /// <summary>Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.</summary>
+        public int? Id { get; set; }
         /// <summary>Out-of-plane tolerance for the strip.</summary>
         public double? OutOfPlaneTolerance { get; set; }
         /// <summary>Start node number for the strip.</summary>
@@ -88,7 +88,7 @@ namespace SpaceGassApi.Models
                 { "endWidthLeft", n => { EndWidthLeft = n.GetDoubleValue(); } },
                 { "endWidthRight", n => { EndWidthRight = n.GetDoubleValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "outOfPlaneTolerance", n => { OutOfPlaneTolerance = n.GetDoubleValue(); } },
                 { "startNode", n => { StartNode = n.GetIntValue(); } },
                 { "startOffsetLongitudinal", n => { StartOffsetLongitudinal = n.GetDoubleValue(); } },
@@ -116,7 +116,7 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("endWidthLeft", EndWidthLeft);
             writer.WriteDoubleValue("endWidthRight", EndWidthRight);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("outOfPlaneTolerance", OutOfPlaneTolerance);
             writer.WriteIntValue("startNode", StartNode);
             writer.WriteDoubleValue("startOffsetLongitudinal", StartOffsetLongitudinal);

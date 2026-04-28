@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for updating an existing node.All coordinate fields are optional to support partial updates.Key is inherited from EntityUpdateBaseDto - nullable because single updatesreceive the key from the route, while batch updates include it in the body.
+    /// DTO for updating an existing node.All coordinate fields are optional to support partial updates.Id is inherited from EntityUpdateBaseDto - nullable because single updatesreceive the Id from the route, while batch updates include it in the body.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeUpdate : IParsable
@@ -21,8 +21,8 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key identifying the entity to update.Optional for single updates (key comes from route), required for batch updates.</summary>
-        public int? Key { get; set; }
+        /// <summary>Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.</summary>
+        public int? Id { get; set; }
         /// <summary>X coordinate. Unit: Length (see GET /job/units).</summary>
         public double? X { get; set; }
         /// <summary>Y coordinate. Unit: Length (see GET /job/units).</summary>
@@ -48,7 +48,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "x", n => { X = n.GetDoubleValue(); } },
                 { "y", n => { Y = n.GetDoubleValue(); } },
                 { "z", n => { Z = n.GetDoubleValue(); } },
@@ -62,7 +62,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("x", X);
             writer.WriteDoubleValue("y", Y);
             writer.WriteDoubleValue("z", Z);

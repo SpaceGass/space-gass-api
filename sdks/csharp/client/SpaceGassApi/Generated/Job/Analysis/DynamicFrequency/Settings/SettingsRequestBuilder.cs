@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Analysis.DynamicFrequency.Settings
         {
         }
         /// <summary>
-        /// Returns the current Dynamic Frequency Analysis settings from the SPACEGASS job.
+        /// Returns the current Dynamic Frequency Analysis settings.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.DynamicFrequencySettings"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -52,10 +52,10 @@ namespace SpaceGassApi.Job.Analysis.DynamicFrequency.Settings
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.DynamicFrequencySettings>(requestInfo, global::SpaceGassApi.Models.DynamicFrequencySettings.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Partially updates the Dynamic Frequency Analysis settings in the SPACEGASS job.Uses PATCH semantics — only non-null fields in the request body are applied as overrides.
+        /// Partially updates the Dynamic Frequency Analysis settings.Only fields included in the request body are updated; omitted fields remain unchanged.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.DynamicFrequencySettings"/></returns>
-        /// <param name="body">Update DTO for Dynamic Frequency Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.</param>
+        /// <param name="body">Update request for Dynamic Frequency Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
@@ -77,7 +77,7 @@ namespace SpaceGassApi.Job.Analysis.DynamicFrequency.Settings
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.DynamicFrequencySettings>(requestInfo, global::SpaceGassApi.Models.DynamicFrequencySettings.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Returns the current Dynamic Frequency Analysis settings from the SPACEGASS job.
+        /// Returns the current Dynamic Frequency Analysis settings.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -96,10 +96,10 @@ namespace SpaceGassApi.Job.Analysis.DynamicFrequency.Settings
             return requestInfo;
         }
         /// <summary>
-        /// Partially updates the Dynamic Frequency Analysis settings in the SPACEGASS job.Uses PATCH semantics — only non-null fields in the request body are applied as overrides.
+        /// Partially updates the Dynamic Frequency Analysis settings.Only fields included in the request body are updated; omitted fields remain unchanged.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">Update DTO for Dynamic Frequency Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.</param>
+        /// <param name="body">Update request for Dynamic Frequency Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

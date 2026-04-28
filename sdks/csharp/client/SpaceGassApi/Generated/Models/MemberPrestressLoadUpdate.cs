@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for updating an existing member prestress load.All fields are nullable to support partial PATCH semantics.
+    /// DTO for updating an existing member prestress load.Only fields included in the request are updated; omit a field to keep its current value.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberPrestressLoadUpdate : IParsable

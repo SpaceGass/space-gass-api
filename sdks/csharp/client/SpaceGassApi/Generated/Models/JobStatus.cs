@@ -8,20 +8,20 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Full job status response including details, state, and model summary.Returned by lifecycle operations (new, open, save, status) and GET /job/status.
+    /// Full job status response including the current job, session state, and model summary.Returned by lifecycle operations (new, open, save, status) and GET /job/status.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class JobStatus : IParsable
     {
-        /// <summary>Read DTO for job details (text properties).</summary>
+        /// <summary>Read DTO for job responses.Model counts and file state are available via GET /job/status (JobStatusDto).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::SpaceGassApi.Models.JobDetails? Details { get; set; }
+        public global::SpaceGassApi.Models.Job? Job { get; set; }
 #nullable restore
 #else
-        public global::SpaceGassApi.Models.JobDetails Details { get; set; }
+        public global::SpaceGassApi.Models.Job Job { get; set; }
 #endif
-        /// <summary>Summary counts of all model entities in the current job.Counts are read from file headers (lightweight, no datasheet loading).</summary>
+        /// <summary>Summary counts of all model entities in the current job.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.ModelSummary? Model { get; set; }
@@ -55,7 +55,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "details", n => { Details = n.GetObjectValue<global::SpaceGassApi.Models.JobDetails>(global::SpaceGassApi.Models.JobDetails.CreateFromDiscriminatorValue); } },
+                { "job", n => { Job = n.GetObjectValue<global::SpaceGassApi.Models.Job>(global::SpaceGassApi.Models.Job.CreateFromDiscriminatorValue); } },
                 { "model", n => { Model = n.GetObjectValue<global::SpaceGassApi.Models.ModelSummary>(global::SpaceGassApi.Models.ModelSummary.CreateFromDiscriminatorValue); } },
                 { "state", n => { State = n.GetObjectValue<global::SpaceGassApi.Models.JobState>(global::SpaceGassApi.Models.JobState.CreateFromDiscriminatorValue); } },
             };
@@ -67,7 +67,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteObjectValue<global::SpaceGassApi.Models.JobDetails>("details", Details);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.Job>("job", Job);
             writer.WriteObjectValue<global::SpaceGassApi.Models.ModelSummary>("model", Model);
             writer.WriteObjectValue<global::SpaceGassApi.Models.JobState>("state", State);
         }

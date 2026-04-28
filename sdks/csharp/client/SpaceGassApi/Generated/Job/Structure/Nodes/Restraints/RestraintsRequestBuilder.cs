@@ -40,7 +40,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Restraints
         {
         }
         /// <summary>
-        /// Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{key}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
+        /// Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{id}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.NodeRestraint&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -64,7 +64,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Restraints
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{key}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
+        /// Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{id}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -92,12 +92,12 @@ namespace SpaceGassApi.Job.Structure.Nodes.Restraints
             return new global::SpaceGassApi.Job.Structure.Nodes.Restraints.RestraintsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{key}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
+        /// Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{id}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class RestraintsRequestBuilderGetQueryParameters 
         {
-            /// <summary>Comma-separated list of node numbers to filter by (e.g., &quot;1,5,10&quot;). Omit to return all.</summary>
+            /// <summary>Node Ids in SG list format (e.g. `&quot;1,5-10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
             [QueryParameter("nodes")]

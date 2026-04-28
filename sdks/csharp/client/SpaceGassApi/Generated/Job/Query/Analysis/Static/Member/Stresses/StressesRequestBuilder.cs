@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Query.Analysis.Static.Member.Stresses.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -17,12 +18,17 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.Member.Stresses
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class StressesRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The metadata property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.Member.Stresses.Metadata.MetadataRequestBuilder Metadata
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.Member.Stresses.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Analysis.Static.Member.Stresses.StressesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public StressesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member/stresses{?Limit*,Offset*,case*,member*}", pathParameters)
+        public StressesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member/stresses{?Limit*,Offset*,cases*,members*}", pathParameters)
         {
         }
         /// <summary>
@@ -30,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.Member.Stresses
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public StressesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member/stresses{?Limit*,Offset*,case*,member*}", rawUrl)
+        public StressesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member/stresses{?Limit*,Offset*,cases*,members*}", rawUrl)
         {
         }
         /// <summary>
@@ -39,6 +45,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.Member.Stresses
         /// <returns>A <see cref="global::SpaceGassApi.Models.MemberStressQueryResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -52,6 +59,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.Member.Stresses
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MemberStressQueryResult>(requestInfo, global::SpaceGassApi.Models.MemberStressQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
@@ -90,27 +98,27 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.Member.Stresses
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class StressesRequestBuilderGetQueryParameters 
         {
-            /// <summary>Filter by load case IDs.</summary>
+            /// <summary>Load case Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("case")]
-            public int?[]? Case { get; set; }
+            [QueryParameter("cases")]
+            public string? Cases { get; set; }
 #nullable restore
 #else
-            [QueryParameter("case")]
-            public int?[] Case { get; set; }
+            [QueryParameter("cases")]
+            public string Cases { get; set; }
 #endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
-            /// <summary>Filter by member keys.</summary>
+            /// <summary>Member Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("member")]
-            public int?[]? Member { get; set; }
+            [QueryParameter("members")]
+            public string? Members { get; set; }
 #nullable restore
 #else
-            [QueryParameter("member")]
-            public int?[] Member { get; set; }
+            [QueryParameter("members")]
+            public string Members { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             public int? Offset { get; set; }

@@ -34,11 +34,11 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/thermal-loads{?Cases*,ElementType*,Keys*,Limit*,LoadCategory*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/thermal-loads{?Cases*,ElementType*,Elements*,Limit*,LoadCategory*,Offset*}", path_parameters)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[ThermalLoadsRequestBuilderGetQueryParameters]] = None) -> Optional[list[ThermalLoad]]:
         """
-        Gets all loads with optional filtering and pagination.Use the 'cases' query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[ThermalLoad]]
         """
@@ -48,6 +48,7 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
         from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ProblemDetails,
             "401": ProblemDetails,
         }
         if not self.request_adapter:
@@ -56,12 +57,12 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_collection_async(request_info, ThermalLoad, error_mapping)
     
-    async def post(self,body: ThermalLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[ThermalLoad]:
+    async def post(self,body: ThermalLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[bytes]:
         """
         Creates a new load. The load case must exist and be a Primary load case.
         param body: DTO for creating a new thermal load.Specify the element type to target either a member or a plate element.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ThermalLoad]
+        Returns: bytes
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -78,13 +79,11 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from ....models.thermal_load import ThermalLoad
-
-        return await self.request_adapter.send_async(request_info, ThermalLoad, error_mapping)
+        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[ThermalLoadsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets all loads with optional filtering and pagination.Use the 'cases' query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -157,7 +156,7 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
     @dataclass
     class ThermalLoadsRequestBuilderGetQueryParameters():
         """
-        Gets all loads with optional filtering and pagination.Use the 'cases' query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -169,10 +168,10 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
                 raise TypeError("original_name cannot be null.")
             if original_name == "cases":
                 return "Cases"
+            if original_name == "elements":
+                return "Elements"
             if original_name == "element_type":
                 return "ElementType"
-            if original_name == "keys":
-                return "Keys"
             if original_name == "limit":
                 return "Limit"
             if original_name == "load_category":
@@ -181,14 +180,14 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
                 return "Offset"
             return original_name
         
-        # Load case numbers to filter by (e.g., ?cases=1&cases=5&cases=10).Returns only loads belonging to the specified cases.Omit to return loads for all cases.
-        cases: Optional[list[int]] = None
+        # Load cases to filter by, in SG list format (e.g. `"1,3-7,10"`).Returns only loads belonging to the specified cases.Omit to return loads for all cases.
+        cases: Optional[str] = None
 
         # Filter by element type (member or plate).Returns only thermal loads for the specified element type.Omit to return both member and plate thermal loads.
         element_type: Optional[ThermalElementType] = None
 
-        # Element keys to filter by (e.g., ?keys=1&keys=5).The meaning of each key depends on ElementType — member number for members, plate number for plates.Omit to return thermal loads for all elements.
-        keys: Optional[list[int]] = None
+        # Element Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).The meaning depends on ElementType — member Id for members, plate Id for plates.Omit to return thermal loads for all elements.
+        elements: Optional[str] = None
 
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None

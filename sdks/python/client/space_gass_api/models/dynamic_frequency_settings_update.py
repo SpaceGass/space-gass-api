@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 @dataclass
 class DynamicFrequencySettingsUpdate(Parsable):
     """
-    Update DTO for Dynamic Frequency Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.
+    Update request for Dynamic Frequency Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # The checkNonExistentCases property
     check_non_existent_cases: Optional[bool] = None

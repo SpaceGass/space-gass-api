@@ -16,6 +16,7 @@ from warnings import warn
 if TYPE_CHECKING:
     from ......models.problem_details import ProblemDetails
     from ......models.steel_check_summary_query_result import SteelCheckSummaryQueryResult
+    from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class CheckSummaryRequestBuilder(BaseRequestBuilder):
     """
@@ -28,11 +29,11 @@ class CheckSummaryRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/design/steel-member/check-summary{?Limit*,Offset*,member*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/design/steel-member/check-summary{?Limit*,Offset*,members*}", path_parameters)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[CheckSummaryRequestBuilderGetQueryParameters]] = None) -> Optional[SteelCheckSummaryQueryResult]:
         """
-        Gets steel member design check summary results, optionally filtered by member keys.
+        Gets steel member design check summary results, optionally filtered by member Ids.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[SteelCheckSummaryQueryResult]
         """
@@ -42,6 +43,7 @@ class CheckSummaryRequestBuilder(BaseRequestBuilder):
         from ......models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ProblemDetails,
             "401": ProblemDetails,
         }
         if not self.request_adapter:
@@ -52,7 +54,7 @@ class CheckSummaryRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[CheckSummaryRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets steel member design check summary results, optionally filtered by member keys.
+        Gets steel member design check summary results, optionally filtered by member Ids.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -71,10 +73,19 @@ class CheckSummaryRequestBuilder(BaseRequestBuilder):
             raise TypeError("raw_url cannot be null.")
         return CheckSummaryRequestBuilder(self.request_adapter, raw_url)
     
+    @property
+    def metadata(self) -> MetadataRequestBuilder:
+        """
+        The metadata property
+        """
+        from .metadata.metadata_request_builder import MetadataRequestBuilder
+
+        return MetadataRequestBuilder(self.request_adapter, self.path_parameters)
+    
     @dataclass
     class CheckSummaryRequestBuilderGetQueryParameters():
         """
-        Gets steel member design check summary results, optionally filtered by member keys.
+        Gets steel member design check summary results, optionally filtered by member Ids.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -88,15 +99,15 @@ class CheckSummaryRequestBuilder(BaseRequestBuilder):
                 return "Limit"
             if original_name == "offset":
                 return "Offset"
-            if original_name == "member":
-                return "member"
+            if original_name == "members":
+                return "members"
             return original_name
         
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 
-        # Filter by member keys.
-        member: Optional[list[int]] = None
+        # Member Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
+        members: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None

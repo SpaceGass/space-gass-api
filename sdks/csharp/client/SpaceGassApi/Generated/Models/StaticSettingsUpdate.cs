@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Update DTO for Static Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.Used by PATCH /static/settings and POST /static/run-linear and /static/run-non-linear.
+    /// Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class StaticSettingsUpdate : IParsable

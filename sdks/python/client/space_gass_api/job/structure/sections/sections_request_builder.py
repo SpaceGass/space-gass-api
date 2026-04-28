@@ -14,11 +14,13 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from ....models.expand_option import ExpandOption
     from ....models.problem_details import ProblemDetails
     from ....models.section import Section
-    from ....models.section_create import SectionCreate
+    from ....models.section_user_create import SectionUserCreate
     from .bulk.bulk_request_builder import BulkRequestBuilder
-    from .item.with_key_item_request_builder import WithKeyItemRequestBuilder
+    from .item.sections_item_request_builder import SectionsItemRequestBuilder
+    from .library.library_request_builder import LibraryRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
     from .next.next_request_builder import NextRequestBuilder
 
@@ -33,25 +35,25 @@ class SectionsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/sections{?Limit*,Offset*,Sections*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/sections{?Expand*,Limit*,Offset*,Sections*}", path_parameters)
     
-    def by_key(self,key: int) -> WithKeyItemRequestBuilder:
+    def by_id(self,id: int) -> SectionsItemRequestBuilder:
         """
         Gets an item from the space_gass_api.job.structure.sections.item collection
-        param key: The entity key
-        Returns: WithKeyItemRequestBuilder
+        param id: The entity Id
+        Returns: SectionsItemRequestBuilder
         """
-        if key is None:
-            raise TypeError("key cannot be null.")
-        from .item.with_key_item_request_builder import WithKeyItemRequestBuilder
+        if id is None:
+            raise TypeError("id cannot be null.")
+        from .item.sections_item_request_builder import SectionsItemRequestBuilder
 
         url_tpl_params = get_path_parameters(self.path_parameters)
-        url_tpl_params["key"] = key
-        return WithKeyItemRequestBuilder(self.request_adapter, url_tpl_params)
+        url_tpl_params["id"] = id
+        return SectionsItemRequestBuilder(self.request_adapter, url_tpl_params)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[SectionsRequestBuilderGetQueryParameters]] = None) -> Optional[list[Section]]:
         """
-        Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[Section]]
         """
@@ -69,10 +71,10 @@ class SectionsRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_collection_async(request_info, Section, error_mapping)
     
-    async def post(self,body: SectionCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Section]:
+    async def post(self,body: SectionUserCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Section]:
         """
         Creates a new item. If a validator is registered, the item is validated before creation.
-        param body: DTO for creating a new user-defined section.
+        param body: DTO for creating a user-defined section with explicit structural properties.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Section]
         """
@@ -96,7 +98,7 @@ class SectionsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[SectionsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -105,10 +107,10 @@ class SectionsRequestBuilder(BaseRequestBuilder):
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def to_post_request_information(self,body: SectionCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+    def to_post_request_information(self,body: SectionUserCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Creates a new item. If a validator is registered, the item is validated before creation.
-        param body: DTO for creating a new user-defined section.
+        param body: DTO for creating a user-defined section with explicit structural properties.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -140,6 +142,15 @@ class SectionsRequestBuilder(BaseRequestBuilder):
         return BulkRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
+    def library(self) -> LibraryRequestBuilder:
+        """
+        The library property
+        """
+        from .library.library_request_builder import LibraryRequestBuilder
+
+        return LibraryRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
     def metadata(self) -> MetadataRequestBuilder:
         """
         The metadata property
@@ -160,7 +171,7 @@ class SectionsRequestBuilder(BaseRequestBuilder):
     @dataclass
     class SectionsRequestBuilderGetQueryParameters():
         """
-        Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -170,6 +181,8 @@ class SectionsRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
+            if original_name == "expand":
+                return "Expand"
             if original_name == "limit":
                 return "Limit"
             if original_name == "offset":
@@ -178,13 +191,16 @@ class SectionsRequestBuilder(BaseRequestBuilder):
                 return "Sections"
             return original_name
         
+        # Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.
+        expand: Optional[ExpandOption] = None
+
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None
 
-        # Comma-separated list of specific section numbers (e.g., "1,5,10").
+        # Section Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all sections.
         sections: Optional[str] = None
 
     

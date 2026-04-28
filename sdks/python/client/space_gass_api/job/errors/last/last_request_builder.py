@@ -32,7 +32,7 @@ class LastRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[LastError]:
         """
-        Returns the most recent SPACE GASS error message, or null if no errors have been logged.Useful for quick checks after an operation without retrieving the full list.
+        Returns the most recent error message, or null if no errors have been logged.Useful for quick checks after an operation without retrieving the full list.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[LastError]
         """
@@ -52,7 +52,7 @@ class LastRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Returns the most recent SPACE GASS error message, or null if no errors have been logged.Useful for quick checks after an operation without retrieving the full list.
+        Returns the most recent error message, or null if no errors have been logged.Useful for quick checks after an operation without retrieving the full list.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

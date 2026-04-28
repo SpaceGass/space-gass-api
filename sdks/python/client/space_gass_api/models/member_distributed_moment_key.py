@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class MemberDistributedMomentKey(Parsable):
     """
-    Composite key object for bulk delete operations on member distributed moments.
+    Composite Id object for bulk delete operations on member distributed moments.
     """
     # The load case number.
     case: Optional[int] = None

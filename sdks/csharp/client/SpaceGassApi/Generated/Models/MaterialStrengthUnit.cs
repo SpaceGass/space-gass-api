@@ -3,49 +3,49 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Material Strength unit types (Field Index 2)</summary>
+    /// <summary>Material strength unit (yield stress, ultimate stress, etc.). Members mirrorSPACE GASS `SgMaterialStrength`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MaterialStrengthUnit
     {
-        [EnumMember(Value = "KiloPoundsPerSquareFoot")]
+        [EnumMember(Value = "Ksf")]
         #pragma warning disable CS1591
-        KiloPoundsPerSquareFoot,
+        Ksf,
         #pragma warning restore CS1591
-        [EnumMember(Value = "PoundsPerSquareFoot")]
+        [EnumMember(Value = "Psf")]
         #pragma warning disable CS1591
-        PoundsPerSquareFoot,
+        Psf,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KiloPoundsPerSquareInch")]
+        [EnumMember(Value = "Ksi")]
         #pragma warning disable CS1591
-        KiloPoundsPerSquareInch,
+        Ksi,
         #pragma warning restore CS1591
-        [EnumMember(Value = "PoundsPerSquareInch")]
+        [EnumMember(Value = "Psi")]
         #pragma warning disable CS1591
-        PoundsPerSquareInch,
+        Psi,
         #pragma warning restore CS1591
-        [EnumMember(Value = "MegaPascals")]
+        [EnumMember(Value = "MPa")]
         #pragma warning disable CS1591
-        MegaPascals,
+        MPa,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KiloPascals")]
+        [EnumMember(Value = "kPa")]
         #pragma warning disable CS1591
-        KiloPascals,
+        KPa,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Pascals")]
+        [EnumMember(Value = "Pa")]
         #pragma warning disable CS1591
-        Pascals,
+        Pa,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KilogramsPerSquareMetre")]
+        [EnumMember(Value = "kgperm2")]
         #pragma warning disable CS1591
-        KilogramsPerSquareMetre,
+        Kgperm2,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KilogramsPerSquareCentimetre")]
+        [EnumMember(Value = "kgpercm2")]
         #pragma warning disable CS1591
-        KilogramsPerSquareCentimetre,
+        Kgpercm2,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KilogramsPerSquareMillimetre")]
+        [EnumMember(Value = "kgpermm2")]
         #pragma warning disable CS1591
-        KilogramsPerSquareMillimetre,
+        Kgpermm2,
         #pragma warning restore CS1591
     }
 }

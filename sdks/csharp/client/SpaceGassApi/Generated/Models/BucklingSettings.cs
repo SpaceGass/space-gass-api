@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Settings DTO for Buckling Analysis.Properties map to the SPACEGASS NetSGBuckling struct.
+    /// Settings for Buckling Analysis.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BucklingSettings : IParsable
@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
         public float? DrillingStiffness { get; set; }
         /// <summary>Whether to perform extra iterations for improved mode shape accuracy.</summary>
         public bool? ExtraIterations { get; set; }
-        /// <summary>Load cases to include in the analysis.Use &quot;all&quot; or &quot;&quot; to include all load cases (default).Use a comma-separated list of numbers and ranges (e.g., &quot;1,3,5-10&quot;).Maximum 50 entries (individual numbers and ranges each count as entries).</summary>
+        /// <summary>Load cases to include in the analysis, in SG list format (e.g. `&quot;1,3,5-10&quot;`).Omit or pass an empty string to include all load cases (default).Maximum 50 entries (individual numbers and ranges each count as entries).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? LoadCases { get; set; }

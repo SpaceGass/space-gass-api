@@ -33,7 +33,7 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[BucklingSettings]:
         """
-        Returns the current Buckling Analysis settings from the SPACEGASS job.
+        Returns the current Buckling Analysis settings.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[BucklingSettings]
         """
@@ -48,8 +48,8 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     async def patch(self,body: BucklingSettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[BucklingSettings]:
         """
-        Partially updates the Buckling Analysis settings in the SPACEGASS job.Uses PATCH semantics — only non-null fields in the request body are applied as overrides.
-        param body: Update DTO for Buckling Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.
+        Partially updates the Buckling Analysis settings.Only fields included in the request body are updated; omitted fields remain unchanged.
+        param body: Update request for Buckling Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[BucklingSettings]
         """
@@ -71,7 +71,7 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Returns the current Buckling Analysis settings from the SPACEGASS job.
+        Returns the current Buckling Analysis settings.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -82,8 +82,8 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: BucklingSettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Partially updates the Buckling Analysis settings in the SPACEGASS job.Uses PATCH semantics — only non-null fields in the request body are applied as overrides.
-        param body: Update DTO for Buckling Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.
+        Partially updates the Buckling Analysis settings.Only fields included in the request body are updated; omitted fields remain unchanged.
+        param body: Update request for Buckling Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

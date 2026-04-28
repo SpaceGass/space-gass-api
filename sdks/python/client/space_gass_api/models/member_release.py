@@ -7,14 +7,12 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class MemberRelease(Parsable):
     """
-    DTO for reading member release data.Releases define fixity codes and spring stiffness at each end of a member.This is a sub-resource of Member, not a standalone entity.
+    DTO for reading member release data.Releases define fixity codes and spring stiffness at each end of a member.Always present on every member, so the owning member Idis not duplicated here — the parent MemberDto's `id` is authoritative whenreturned inline, and the route parameter is authoritative on the standalone endpoint.
     """
     # Fixity code at end A of the member.
     fixity_code_at_a: Optional[str] = None
     # Fixity code at end B of the member.
     fixity_code_at_b: Optional[str] = None
-    # The member key this release applies to.
-    member: Optional[int] = None
     # Rotational X spring stiffness at end A. Unit: Moment/Radian (see GET /job/units).
     rx_stiffness_at_a: Optional[float] = None
     # Rotational X spring stiffness at end B. Unit: Moment/Radian (see GET /job/units).
@@ -59,7 +57,6 @@ class MemberRelease(Parsable):
         fields: dict[str, Callable[[Any], None]] = {
             "fixityCodeAtA": lambda n : setattr(self, 'fixity_code_at_a', n.get_str_value()),
             "fixityCodeAtB": lambda n : setattr(self, 'fixity_code_at_b', n.get_str_value()),
-            "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "rxStiffnessAtA": lambda n : setattr(self, 'rx_stiffness_at_a', n.get_float_value()),
             "rxStiffnessAtB": lambda n : setattr(self, 'rx_stiffness_at_b', n.get_float_value()),
             "ryStiffnessAtA": lambda n : setattr(self, 'ry_stiffness_at_a', n.get_float_value()),
@@ -85,7 +82,6 @@ class MemberRelease(Parsable):
             raise TypeError("writer cannot be null.")
         writer.write_str_value("fixityCodeAtA", self.fixity_code_at_a)
         writer.write_str_value("fixityCodeAtB", self.fixity_code_at_b)
-        writer.write_int_value("member", self.member)
         writer.write_float_value("rxStiffnessAtA", self.rx_stiffness_at_a)
         writer.write_float_value("rxStiffnessAtB", self.rx_stiffness_at_b)
         writer.write_float_value("ryStiffnessAtA", self.ry_stiffness_at_a)

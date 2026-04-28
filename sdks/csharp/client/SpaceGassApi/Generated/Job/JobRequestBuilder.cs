@@ -6,14 +6,16 @@ using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Analysis;
 using SpaceGassApi.Job.Close;
 using SpaceGassApi.Job.Data;
-using SpaceGassApi.Job.Details;
 using SpaceGassApi.Job.Errors;
+using SpaceGassApi.Job.Headings;
 using SpaceGassApi.Job.Import;
 using SpaceGassApi.Job.Loads;
 using SpaceGassApi.Job.New;
 using SpaceGassApi.Job.Open;
+using SpaceGassApi.Job.OpenSample;
 using SpaceGassApi.Job.Query;
 using SpaceGassApi.Job.Save;
+using SpaceGassApi.Job.Settings;
 using SpaceGassApi.Job.Status;
 using SpaceGassApi.Job.Structure;
 using SpaceGassApi.Job.Units;
@@ -46,15 +48,15 @@ namespace SpaceGassApi.Job
         {
             get => new global::SpaceGassApi.Job.Data.DataRequestBuilder(PathParameters, RequestAdapter);
         }
-        /// <summary>The details property</summary>
-        public global::SpaceGassApi.Job.Details.DetailsRequestBuilder Details
-        {
-            get => new global::SpaceGassApi.Job.Details.DetailsRequestBuilder(PathParameters, RequestAdapter);
-        }
         /// <summary>The errors property</summary>
         public global::SpaceGassApi.Job.Errors.ErrorsRequestBuilder Errors
         {
             get => new global::SpaceGassApi.Job.Errors.ErrorsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The headings property</summary>
+        public global::SpaceGassApi.Job.Headings.HeadingsRequestBuilder Headings
+        {
+            get => new global::SpaceGassApi.Job.Headings.HeadingsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The import property</summary>
         public global::SpaceGassApi.Job.Import.ImportRequestBuilder Import
@@ -76,6 +78,11 @@ namespace SpaceGassApi.Job
         {
             get => new global::SpaceGassApi.Job.Open.OpenRequestBuilder(PathParameters, RequestAdapter);
         }
+        /// <summary>The openSample property</summary>
+        public global::SpaceGassApi.Job.OpenSample.OpenSampleRequestBuilder OpenSample
+        {
+            get => new global::SpaceGassApi.Job.OpenSample.OpenSampleRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The query property</summary>
         public global::SpaceGassApi.Job.Query.QueryRequestBuilder Query
         {
@@ -85,6 +92,11 @@ namespace SpaceGassApi.Job
         public global::SpaceGassApi.Job.Save.SaveRequestBuilder Save
         {
             get => new global::SpaceGassApi.Job.Save.SaveRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The settings property</summary>
+        public global::SpaceGassApi.Job.Settings.SettingsRequestBuilder Settings
+        {
+            get => new global::SpaceGassApi.Job.Settings.SettingsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The status property</summary>
         public global::SpaceGassApi.Job.Status.StatusRequestBuilder Status
@@ -118,7 +130,7 @@ namespace SpaceGassApi.Job
         {
         }
         /// <summary>
-        /// Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Details: GET/PATCH /job/details- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
+        /// Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Job"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -143,7 +155,7 @@ namespace SpaceGassApi.Job
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Job>(requestInfo, global::SpaceGassApi.Models.Job.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Details: GET/PATCH /job/details- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
+        /// Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

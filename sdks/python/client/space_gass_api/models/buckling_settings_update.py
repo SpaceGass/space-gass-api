@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 @dataclass
 class BucklingSettingsUpdate(Parsable):
     """
-    Update DTO for Buckling Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.
+    Update request for Buckling Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # Axial force distribution method for buckling analysis.
     axial_force_distribution: Optional[AxialForceDistribution] = None

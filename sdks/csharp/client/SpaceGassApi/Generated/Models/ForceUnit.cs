@@ -3,29 +3,29 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Force unit types (Field Index 5)</summary>
+    /// <summary>Force unit. Members mirror SPACE GASS `SgForce`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum ForceUnit
     {
-        [EnumMember(Value = "Kips")]
+        [EnumMember(Value = "K")]
         #pragma warning disable CS1591
-        Kips,
+        K,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Pounds")]
+        [EnumMember(Value = "lb")]
         #pragma warning disable CS1591
-        Pounds,
+        Lb,
         #pragma warning restore CS1591
-        [EnumMember(Value = "KiloNewtons")]
+        [EnumMember(Value = "kN")]
         #pragma warning disable CS1591
-        KiloNewtons,
+        KN,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Newtons")]
+        [EnumMember(Value = "N")]
         #pragma warning disable CS1591
-        Newtons,
+        N,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Kilograms")]
+        [EnumMember(Value = "kg")]
         #pragma warning disable CS1591
-        Kilograms,
+        Kg,
         #pragma warning restore CS1591
     }
 }
