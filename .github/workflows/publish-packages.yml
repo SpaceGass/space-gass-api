@@ -16,10 +16,14 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
-      - name: Extract version from tag
+      - name: Extract version from spec
         id: version
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/openapi.json)
+          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
+            echo "::error::info.x-space-gass-build is missing from descriptions/preview/openapi.json"
+            exit 1
+          fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Restore dependencies
@@ -49,10 +53,14 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Extract version from tag
+      - name: Extract version from spec
         id: version
         run: |
-          VERSION="${GITHUB_REF_NAME#v}"
+          VERSION=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/openapi.json)
+          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
+            echo "::error::info.x-space-gass-build is missing from descriptions/preview/openapi.json"
+            exit 1
+          fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Install build tools
@@ -82,10 +90,14 @@ jobs:
   #     - name: Checkout repository
   #       uses: actions/checkout@v4
   #
-  #     - name: Extract version from tag
+  #     - name: Extract version from spec
   #       id: version
   #       run: |
-  #         VERSION="${GITHUB_REF_NAME#v}"
+  #         VERSION=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/openapi.json)
+  #         if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
+  #           echo "::error::info.x-space-gass-build is missing from descriptions/preview/openapi.json"
+  #           exit 1
+  #         fi
   #         echo "version=$VERSION" >> "$GITHUB_OUTPUT"
   #
   #     - name: Setup .NET
