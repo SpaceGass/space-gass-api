@@ -286,6 +286,7 @@ const config: ZudokuConfig = {
       label: "Guides",
       icon: "compass",
       items: [
+        "guides/api-terminology",
         "guides/authentication",
         "guides/file-handling",
         "guides/running-analysis",

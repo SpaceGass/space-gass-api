@@ -1,0 +1,113 @@
+---
+title: API Terminology
+description: A plain-English reference for the REST verbs and async patterns used by the SPACE GASS API
+---
+
+If you are new to web APIs, the SDK calls and HTTP examples in this
+documentation can feel jargon-heavy. This page is a quick reference for
+the terms you will see repeatedly — what they actually mean, and how
+they map to engineering terms you already know.
+
+## The REST verbs
+
+The API uses standard HTTP verbs. Each one has a consistent meaning:
+
+| Verb     | What it means in plain English                                       | SDK call ends in… |
+| -------- | -------------------------------------------------------------------- | ----------------- |
+| `GET`    | **Read** something — fetch a value without changing anything         | `GetAsync()`      |
+| `POST`   | **Create** a new thing — add a node, member, load case, etc.         | `PostAsync(...)`  |
+| `PATCH`  | **Update** an existing thing in place — change one or two properties | `PatchAsync(...)` |
+| `PUT`    | **Replace** an existing thing wholesale — replace its entire state   | `PutAsync(...)`   |
+| `DELETE` | **Remove** an existing thing                                         | `DeleteAsync()`   |
+
+So `client.Job.Structure.Nodes.PostAsync(...)` reads as "post (create) a
+new node", and `client.Job.Structure.Nodes[5].DeleteAsync()` reads as
+"delete the node with Id 5".
+
+## The `Async` suffix and `await`
+
+Every SDK call ends in `Async` (in C#) or is awaited (in Python):
+
+```csharp
+var node = await client.Job.Structure.Nodes.PostAsync(new NodeCreate { ... });
+```
+
+```python
+node = await client.job.structure.nodes.post(NodeCreate(...))
+```
+
+The `Async` / `await` machinery is there because the API is reached over
+the network. Your code does not freeze the program while it waits for a
+response — it lets the rest of your application keep working until the
+result comes back. For day-to-day use you can read `await foo` as
+"do `foo` and give me the result"; the rest is plumbing.
+
+In C#, the `Async` suffix is a naming convention — every method that
+returns a `Task` is suffixed `Async` so it is obvious from the method
+name that you must `await` it.
+
+## Request and response bodies
+
+Most `POST`, `PATCH`, and `PUT` calls take a **body** — the data you
+are sending up. The SDK exposes this as a strongly-typed object:
+
+- `NodeCreate` — the shape of the body when creating a node
+- `MemberDistributedLoadCreate` — the body when creating a distributed load
+- `SectionUpdate` — the body when patching a section's properties
+
+A `*Create` model has all the fields you can set on creation; a
+`*Update` model is the same shape but every field is optional, so you
+only need to set the ones you want to change.
+
+## Path parameters and query parameters
+
+When you see `/job/structure/nodes/{id}`, the `{id}` is a **path
+parameter** — replaced with the actual value you want, e.g. `5`. The
+SDK exposes this as a typed indexer:
+
+```csharp
+client.Job.Structure.Nodes[5].GetAsync();
+```
+
+```python
+await client.job.structure.nodes.by_id(5).get()
+```
+
+Anything after a `?` in a URL is a **query parameter** — used for
+filtering, pagination, and similar options:
+
+```bash
+curl "http://localhost:34560/api/v1/job/query/analysis/static/node/reactions?cases=1,3-7&nodes=10-12"
+```
+
+In the SDK these become typed properties on a configuration object:
+
+```csharp
+client.Job.Query.Analysis.Static.Node.Reactions.GetAsync(config =>
+{
+    config.QueryParameters.Cases = "1,3-7";
+    config.QueryParameters.Nodes = "10-12";
+});
+```
+
+See the [Filtering & Querying guide](/guides/filtering-and-querying) for
+the full SG list-string filter syntax.
+
+## Status codes
+
+Every response carries an HTTP status code. The ones you will see in
+practice:
+
+| Code | Meaning                                                                       |
+| ---- | ----------------------------------------------------------------------------- |
+| 200  | OK — your read worked                                                         |
+| 201  | Created — your new entity was saved                                           |
+| 204  | No Content — your delete or update worked, no data to return                  |
+| 400  | Bad Request — the body you sent was invalid; check the `detail` field         |
+| 404  | Not Found — the entity (or file) does not exist                               |
+| 409  | Conflict — the operation clashes with current state (e.g. file already open)  |
+| 500  | Server Error — the API ran into trouble; please report it via [Support](/getting-started/support) |
+
+The SDK clients turn non-2xx responses into typed exceptions
+(`ApiException` in C#, `APIError` in Python). See
+[Error Handling](/guides/error-handling) for the patterns.
