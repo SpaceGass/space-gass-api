@@ -40,7 +40,7 @@ class AnalysisRun(Parsable):
     started_at: Optional[datetime.datetime] = None
     # Status of an analysis run through its lifecycle.
     status: Optional[AnalysisRunStatus] = None
-    # Warning messages from SPACEGASS during the analysis
+    # Warning messages generated during the analysis
     warnings: Optional[list[str]] = None
     
     @staticmethod

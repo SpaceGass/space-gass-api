@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Composite key object for bulk delete operations on member concentrated loads.
+    /// Composite Id object for bulk delete operations on member concentrated loads.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberConcentratedLoadKey : IParsable

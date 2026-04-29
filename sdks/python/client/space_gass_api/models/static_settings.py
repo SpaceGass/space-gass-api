@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 @dataclass
 class StaticSettings(Parsable):
     """
-    Settings DTO for Static Analysis (Linear and Non-Linear).Properties map to the SPACEGASS NetSGStatic struct.Used for GET (read current settings) and as the base for the update DTO.Fields marked as "Non-linear only" are only used during non-linear static analysis.
+    Settings for Static Analysis (Linear and Non-Linear).Used for GET (read current settings) and as the base for the update DTO.Fields marked as "Non-linear only" are only used during non-linear static analysis.
     """
     # Whether to check for non-existent load cases referenced in the analysis.When true, warnings are generated for missing load cases.
     check_non_existent_cases: Optional[bool] = None
@@ -34,7 +34,7 @@ class StaticSettings(Parsable):
     drilling_stiffness: Optional[float] = None
     # Whether to perform frame buckling check.
     frame_buckling_check: Optional[bool] = None
-    # Load cases to include in the analysis.Use "all" or "" to include all load cases (default).Use a comma-separated list of numbers and ranges (e.g., "1,3,5-10").Maximum 50 entries (individual numbers and ranges each count as entries).
+    # Load cases to include in the analysis, in SG list format (e.g. `"1,3,5-10"`).Omit or pass an empty string to include all load cases (default).Maximum 50 entries (individual numbers and ranges each count as entries).
     load_cases: Optional[str] = None
     # Number of iterations per load step.
     load_step_iterations: Optional[int] = None

@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @dataclass
 class PlateUpdate(Parsable):
     """
-    DTO for updating an existing plate.All fields are nullable to support partial updates.
+    DTO for updating an existing plate.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # Actual thickness of the plate. Unit: Section Properties (see GET /job/units).
     actual_thickness: Optional[float] = None
@@ -25,8 +25,8 @@ class PlateUpdate(Parsable):
     dir_node: Optional[int] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
-    # Primary key identifying the entity to update.Optional for single updates (key comes from route), required for batch updates.
-    key: Optional[int] = None
+    # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.
+    id: Optional[int] = None
     # Material number assigned to this plate.
     material: Optional[int] = None
     # Membrane thickness of the plate. Unit: Section Properties (see GET /job/units).
@@ -75,7 +75,7 @@ class PlateUpdate(Parsable):
             "dirAxis": lambda n : setattr(self, 'dir_axis', n.get_enum_value(DirectionAxis)),
             "dirNode": lambda n : setattr(self, 'dir_node', n.get_int_value()),
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "material": lambda n : setattr(self, 'material', n.get_int_value()),
             "membraneThickness": lambda n : setattr(self, 'membrane_thickness', n.get_float_value()),
             "nodeA": lambda n : setattr(self, 'node_a', n.get_int_value()),
@@ -102,7 +102,7 @@ class PlateUpdate(Parsable):
         writer.write_enum_value("dirAxis", self.dir_axis)
         writer.write_int_value("dirNode", self.dir_node)
         writer.write_str_value("guid", self.guid)
-        writer.write_int_value("key", self.key)
+        writer.write_int_value("id", self.id)
         writer.write_int_value("material", self.material)
         writer.write_float_value("membraneThickness", self.membrane_thickness)
         writer.write_int_value("nodeA", self.node_a)

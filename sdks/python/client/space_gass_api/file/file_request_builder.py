@@ -7,6 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from .preview.preview_request_builder import PreviewRequestBuilder
+    from .samples.samples_request_builder import SamplesRequestBuilder
     from .status.status_request_builder import StatusRequestBuilder
 
 class FileRequestBuilder(BaseRequestBuilder):
@@ -30,6 +31,15 @@ class FileRequestBuilder(BaseRequestBuilder):
         from .preview.preview_request_builder import PreviewRequestBuilder
 
         return PreviewRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def samples(self) -> SamplesRequestBuilder:
+        """
+        The samples property
+        """
+        from .samples.samples_request_builder import SamplesRequestBuilder
+
+        return SamplesRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def status(self) -> StatusRequestBuilder:

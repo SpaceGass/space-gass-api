@@ -7,6 +7,8 @@ using SpaceGassApi.Job.Structure.Members.Bulk;
 using SpaceGassApi.Job.Structure.Members.Item;
 using SpaceGassApi.Job.Structure.Members.Metadata;
 using SpaceGassApi.Job.Structure.Members.Next;
+using SpaceGassApi.Job.Structure.Members.Offsets;
+using SpaceGassApi.Job.Structure.Members.Releases;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -36,29 +38,39 @@ namespace SpaceGassApi.Job.Structure.Members
         {
             get => new global::SpaceGassApi.Job.Structure.Members.Next.NextRequestBuilder(PathParameters, RequestAdapter);
         }
+        /// <summary>The offsets property</summary>
+        public global::SpaceGassApi.Job.Structure.Members.Offsets.OffsetsRequestBuilder Offsets
+        {
+            get => new global::SpaceGassApi.Job.Structure.Members.Offsets.OffsetsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The releases property</summary>
+        public global::SpaceGassApi.Job.Structure.Members.Releases.ReleasesRequestBuilder Releases
+        {
+            get => new global::SpaceGassApi.Job.Structure.Members.Releases.ReleasesRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>Gets an item from the SpaceGassApi.job.structure.members.item collection</summary>
-        /// <param name="position">The entity key</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Members.Item.WithKeyItemRequestBuilder"/></returns>
-        public global::SpaceGassApi.Job.Structure.Members.Item.WithKeyItemRequestBuilder this[int position]
+        /// <param name="position">The entity Id</param>
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Members.Item.MembersItemRequestBuilder"/></returns>
+        public global::SpaceGassApi.Job.Structure.Members.Item.MembersItemRequestBuilder this[int position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                urlTplParams.Add("key", position);
-                return new global::SpaceGassApi.Job.Structure.Members.Item.WithKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                urlTplParams.Add("id", position);
+                return new global::SpaceGassApi.Job.Structure.Members.Item.MembersItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>Gets an item from the SpaceGassApi.job.structure.members.item collection</summary>
-        /// <param name="position">The entity key</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Members.Item.WithKeyItemRequestBuilder"/></returns>
+        /// <param name="position">The entity Id</param>
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Members.Item.MembersItemRequestBuilder"/></returns>
         [Obsolete("This indexer is deprecated and will be removed in the next major version. Use the one with the typed parameter instead.")]
-        public global::SpaceGassApi.Job.Structure.Members.Item.WithKeyItemRequestBuilder this[string position]
+        public global::SpaceGassApi.Job.Structure.Members.Item.MembersItemRequestBuilder this[string position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("key", position);
-                return new global::SpaceGassApi.Job.Structure.Members.Item.WithKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("id", position);
+                return new global::SpaceGassApi.Job.Structure.Members.Item.MembersItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>
@@ -66,7 +78,7 @@ namespace SpaceGassApi.Job.Structure.Members
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MembersRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members{?Limit*,Material*,Members*,Offset*,Section*,Type*}", pathParameters)
+        public MembersRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members{?Expand*,Limit*,Material*,Members*,Offset*,Section*,Type*}", pathParameters)
         {
         }
         /// <summary>
@@ -74,11 +86,11 @@ namespace SpaceGassApi.Job.Structure.Members
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MembersRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members{?Limit*,Material*,Members*,Offset*,Section*,Type*}", rawUrl)
+        public MembersRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members{?Expand*,Limit*,Material*,Members*,Offset*,Section*,Type*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.Member&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -131,7 +143,7 @@ namespace SpaceGassApi.Job.Structure.Members
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Member>(requestInfo, global::SpaceGassApi.Models.Member.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -181,16 +193,28 @@ namespace SpaceGassApi.Job.Structure.Members
             return new global::SpaceGassApi.Job.Structure.Members.MembersRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class MembersRequestBuilderGetQueryParameters 
         {
+            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
+            [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            public string? Expand { get; set; }
+#nullable restore
+#else
+            public string Expand { get; set; }
+#endif
+            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
+            [QueryParameter("Expand")]
+            public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
             /// <summary>Filter by material number.</summary>
             public int? Material { get; set; }
-            /// <summary>Comma-separated list of specific member numbers (e.g., &quot;1,5,10&quot;).</summary>
+            /// <summary>Member Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all members.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
             public string? Members { get; set; }

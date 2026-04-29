@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Steel member design check summary result (FileId 209).The &quot;member&quot; field maps to the Group column in the datasheet.
+    /// Steel member design check summary.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SteelCheckSummary : IParsable

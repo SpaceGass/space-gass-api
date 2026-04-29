@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class NodeConstraintUpdate(Parsable):
     """
-    DTO for partially updating an existing node constraint.All fields are nullable to support partial PATCH semantics.
+    DTO for partially updating an existing node constraint.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # Coordinate axis system used for master-slave constraint equations.Maps to SPACE GASS lookup table "Constraint Axes".
     axes: Optional[ConstraintAxes] = None

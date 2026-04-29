@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ServiceInfo : IParsable
     {
-        /// <summary>The API base URL (e.g. https://localhost:5000/api).</summary>
+        /// <summary>The API base URL (e.g. https://localhost:34560/api).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? ApiPath { get; set; }

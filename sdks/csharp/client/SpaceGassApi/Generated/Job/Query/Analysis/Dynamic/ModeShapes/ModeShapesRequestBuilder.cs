@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -17,12 +18,17 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ModeShapesRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The metadata property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes.Metadata.MetadataRequestBuilder Metadata
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes.ModeShapesRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ModeShapesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?Limit*,Offset*,case*,mode*,node*}", pathParameters)
+        public ModeShapesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?Limit*,Offset*,cases*,modes*,nodes*}", pathParameters)
         {
         }
         /// <summary>
@@ -30,15 +36,16 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ModeShapesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?Limit*,Offset*,case*,mode*,node*}", rawUrl)
+        public ModeShapesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?Limit*,Offset*,cases*,modes*,nodes*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets mode shape results grouped by load case and mode.Each result contains displacement values at each node.Optionally filtered by load cases, modes and node keys.
+        /// Gets mode shape results grouped by load case and mode.Each result contains displacement values at each node.Optionally filtered by load cases, modes and node Ids.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.ModeShapeQueryResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -52,12 +59,13 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ModeShapeQueryResult>(requestInfo, global::SpaceGassApi.Models.ModeShapeQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets mode shape results grouped by load case and mode.Each result contains displacement values at each node.Optionally filtered by load cases, modes and node keys.
+        /// Gets mode shape results grouped by load case and mode.Each result contains displacement values at each node.Optionally filtered by load cases, modes and node Ids.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -85,42 +93,42 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
             return new global::SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes.ModeShapesRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets mode shape results grouped by load case and mode.Each result contains displacement values at each node.Optionally filtered by load cases, modes and node keys.
+        /// Gets mode shape results grouped by load case and mode.Each result contains displacement values at each node.Optionally filtered by load cases, modes and node Ids.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class ModeShapesRequestBuilderGetQueryParameters 
         {
-            /// <summary>Filter by load case IDs.</summary>
+            /// <summary>Load case Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("case")]
-            public int?[]? Case { get; set; }
+            [QueryParameter("cases")]
+            public string? Cases { get; set; }
 #nullable restore
 #else
-            [QueryParameter("case")]
-            public int?[] Case { get; set; }
+            [QueryParameter("cases")]
+            public string Cases { get; set; }
 #endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
-            /// <summary>Filter by mode numbers.</summary>
+            /// <summary>Mode numbers in SG list format (e.g. `&quot;1-3&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("mode")]
-            public int?[]? Mode { get; set; }
+            [QueryParameter("modes")]
+            public string? Modes { get; set; }
 #nullable restore
 #else
-            [QueryParameter("mode")]
-            public int?[] Mode { get; set; }
+            [QueryParameter("modes")]
+            public string Modes { get; set; }
 #endif
-            /// <summary>Filter by node keys.</summary>
+            /// <summary>Node Ids in SG list format (e.g. `&quot;1,5-10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("node")]
-            public int?[]? Node { get; set; }
+            [QueryParameter("nodes")]
+            public string? Nodes { get; set; }
 #nullable restore
 #else
-            [QueryParameter("node")]
-            public int?[] Node { get; set; }
+            [QueryParameter("nodes")]
+            public string Nodes { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             public int? Offset { get; set; }

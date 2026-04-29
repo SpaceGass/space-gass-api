@@ -16,39 +16,34 @@ if TYPE_CHECKING:
     from .stress_unit import StressUnit
     from .temperature_unit import TemperatureUnit
     from .translation_unit import TranslationUnit
-    from .unit_system import UnitSystem
 
 @dataclass
 class Units(Parsable):
     """
-    Unit system DTO based on Space Gass Units XML structureUses enums that map to integer indexes as per Space Gass specification (Field Index 0-11)Units are set on model creation only and cannot be changed afterward
+    Unit settings for the current job.
     """
-    # Acceleration unit types (Field Index 8)
+    # Acceleration unit. Members mirror SPACE GASS `SgAcceleration`.
     acceleration: Optional[AccelerationUnit] = None
-    # Force unit types (Field Index 5)
+    # Force unit. Members mirror SPACE GASS `SgForce`.
     force: Optional[ForceUnit] = None
-    # Length unit types (Field Index 0)
+    # Length unit. Members mirror SPACE GASS `SGLength`(`NetCommon/CommonEnums.vb`); integer values and identifiers must stay inlock-step with it. The System.ComponentModel.DescriptionAttribute carries the displaylabel (mirrors `gcUNITS_LABEL_*`).
     length: Optional[LengthUnit] = None
-    # Mass unit types (Field Index 7)
+    # Mass unit. Members mirror SPACE GASS `SgMass`.
     mass: Optional[MassUnit] = None
-    # Mass Density unit types (Field Index 3)
+    # Mass density unit. Members mirror SPACE GASS `SgMassDensity`.
     mass_density: Optional[MassDensityUnit] = None
-    # Material Strength unit types (Field Index 2)
+    # Material strength unit (yield stress, ultimate stress, etc.). Members mirrorSPACE GASS `SgMaterialStrength`.
     material_strength: Optional[MaterialStrengthUnit] = None
-    # Moment unit types (Field Index 6)
+    # Moment unit. Members mirror SPACE GASS `SgMoment`.
     moment: Optional[MomentUnit] = None
-    # Section Properties unit types (Field Index 1)
+    # Unit for section properties (area, moment of inertia, etc.). Members mirrorSPACE GASS `SgSectionProperties` (`NetCommon/CommonEnums.vb`).
     section_properties: Optional[SectionPropertiesUnit] = None
-    # Stress unit types (Field Index 10)
+    # Stress unit. Members mirror SPACE GASS `SgStress`.
     stress: Optional[StressUnit] = None
-    # Unit system types - set on model creation only
-    system: Optional[UnitSystem] = None
-    # Temperature unit types (Field Index 4)
+    # Temperature unit. Members mirror SPACE GASS `SgTemperature`.
     temperature: Optional[TemperatureUnit] = None
-    # Translation unit types (Field Index 9)
+    # Translation (displacement) unit. Members mirror SPACE GASS `SgTranslation`.SG uses `inch` here (not `in`) to dodge the VB reserved word; we mirrorthat so the wire token stays `"inch"`.
     translation: Optional[TranslationUnit] = None
-    # Unused field (Field Index 11) - reserved for future use
-    unused: Optional[int] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> Units:
@@ -77,7 +72,6 @@ class Units(Parsable):
         from .stress_unit import StressUnit
         from .temperature_unit import TemperatureUnit
         from .translation_unit import TranslationUnit
-        from .unit_system import UnitSystem
 
         from .acceleration_unit import AccelerationUnit
         from .force_unit import ForceUnit
@@ -90,7 +84,6 @@ class Units(Parsable):
         from .stress_unit import StressUnit
         from .temperature_unit import TemperatureUnit
         from .translation_unit import TranslationUnit
-        from .unit_system import UnitSystem
 
         fields: dict[str, Callable[[Any], None]] = {
             "acceleration": lambda n : setattr(self, 'acceleration', n.get_enum_value(AccelerationUnit)),
@@ -102,10 +95,8 @@ class Units(Parsable):
             "moment": lambda n : setattr(self, 'moment', n.get_enum_value(MomentUnit)),
             "sectionProperties": lambda n : setattr(self, 'section_properties', n.get_enum_value(SectionPropertiesUnit)),
             "stress": lambda n : setattr(self, 'stress', n.get_enum_value(StressUnit)),
-            "system": lambda n : setattr(self, 'system', n.get_enum_value(UnitSystem)),
             "temperature": lambda n : setattr(self, 'temperature', n.get_enum_value(TemperatureUnit)),
             "translation": lambda n : setattr(self, 'translation', n.get_enum_value(TranslationUnit)),
-            "unused": lambda n : setattr(self, 'unused', n.get_int_value()),
         }
         return fields
     
@@ -126,9 +117,7 @@ class Units(Parsable):
         writer.write_enum_value("moment", self.moment)
         writer.write_enum_value("sectionProperties", self.section_properties)
         writer.write_enum_value("stress", self.stress)
-        writer.write_enum_value("system", self.system)
         writer.write_enum_value("temperature", self.temperature)
         writer.write_enum_value("translation", self.translation)
-        writer.write_int_value("unused", self.unused)
     
 

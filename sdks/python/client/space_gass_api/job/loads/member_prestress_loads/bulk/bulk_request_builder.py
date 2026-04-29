@@ -36,7 +36,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,body: list[MemberPrestressLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberPrestressLoadKeyBatchResult]:
         """
-        Deletes multiple member prestress loads. Both case and member are required for each entry —providing only a case does not delete all prestress loads for that case.The succeeded array echoes back the keys of each successfully deleted load.
+        Deletes multiple member prestress loads. Both case and member are required for each entry —providing only a case does not delete all prestress loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[MemberPrestressLoadKeyBatchResult]
@@ -82,12 +82,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MemberPrestressLoadBatchResult, error_mapping)
     
-    async def post(self,body: list[MemberPrestressLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberPrestressLoadBatchResult]:
+    async def post(self,body: list[MemberPrestressLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberPrestressLoadBatchResult]
+        Returns: bytes
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -102,13 +102,11 @@ class BulkRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.member_prestress_load_batch_result import MemberPrestressLoadBatchResult
-
-        return await self.request_adapter.send_async(request_info, MemberPrestressLoadBatchResult, error_mapping)
+        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
     
     def to_delete_request_information(self,body: list[MemberPrestressLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
-        Deletes multiple member prestress loads. Both case and member are required for each entry —providing only a case does not delete all prestress loads for that case.The succeeded array echoes back the keys of each successfully deleted load.
+        Deletes multiple member prestress loads. Both case and member are required for each entry —providing only a case does not delete all prestress loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -164,7 +162,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderDeleteQueryParameters():
         """
-        Deletes multiple member prestress loads. Both case and member are required for each entry —providing only a case does not delete all prestress loads for that case.The succeeded array echoes back the keys of each successfully deleted load.
+        Deletes multiple member prestress loads. Both case and member are required for each entry —providing only a case does not delete all prestress loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

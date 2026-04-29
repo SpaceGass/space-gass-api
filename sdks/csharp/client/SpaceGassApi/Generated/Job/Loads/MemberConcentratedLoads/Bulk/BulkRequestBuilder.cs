@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk
         {
         }
         /// <summary>
-        /// Deletes multiple member concentrated loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the keys of each successfully deleted load.
+        /// Deletes multiple member concentrated loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MemberConcentratedLoadKeyBatchResult"/></returns>
         /// <param name="body">The request body</param>
@@ -90,7 +90,7 @@ namespace SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk
         /// <summary>
         /// Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.MemberConcentratedLoadBatchResult"/></returns>
+        /// <returns>A <see cref="Stream"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -98,11 +98,11 @@ namespace SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.MemberConcentratedLoadBatchResult?> PostAsync(List<global::SpaceGassApi.Models.MemberConcentratedLoadCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<Stream?> PostAsync(List<global::SpaceGassApi.Models.MemberConcentratedLoadCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.MemberConcentratedLoadBatchResult> PostAsync(List<global::SpaceGassApi.Models.MemberConcentratedLoadCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<Stream> PostAsync(List<global::SpaceGassApi.Models.MemberConcentratedLoadCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -112,10 +112,10 @@ namespace SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MemberConcentratedLoadBatchResult>(requestInfo, global::SpaceGassApi.Models.MemberConcentratedLoadBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Deletes multiple member concentrated loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the keys of each successfully deleted load.
+        /// Deletes multiple member concentrated loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -190,7 +190,7 @@ namespace SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk
             return new global::SpaceGassApi.Job.Loads.MemberConcentratedLoads.Bulk.BulkRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Deletes multiple member concentrated loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the keys of each successfully deleted load.
+        /// Deletes multiple member concentrated loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderDeleteQueryParameters 

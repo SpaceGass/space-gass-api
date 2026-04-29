@@ -40,7 +40,7 @@ namespace SpaceGassApi.Job.Errors
         {
         }
         /// <summary>
-        /// Clears all logged SPACE GASS error messages from the current session.
+        /// Clears all logged error messages from the current session.
         /// </summary>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -62,7 +62,7 @@ namespace SpaceGassApi.Job.Errors
             await RequestAdapter.SendNoContentAsync(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Returns all SPACE GASS diagnostic error messages logged during the current session.These are engine-level messages generated during operations such as analysis, import, or file operations.
+        /// Returns all diagnostic error messages logged during the current session.These are engine-level messages generated during operations such as analysis, import, or file operations.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.ErrorList"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -85,7 +85,7 @@ namespace SpaceGassApi.Job.Errors
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ErrorList>(requestInfo, global::SpaceGassApi.Models.ErrorList.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Clears all logged SPACE GASS error messages from the current session.
+        /// Clears all logged error messages from the current session.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -104,7 +104,7 @@ namespace SpaceGassApi.Job.Errors
             return requestInfo;
         }
         /// <summary>
-        /// Returns all SPACE GASS diagnostic error messages logged during the current session.These are engine-level messages generated during operations such as analysis, import, or file operations.
+        /// Returns all diagnostic error messages logged during the current session.These are engine-level messages generated during operations such as analysis, import, or file operations.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

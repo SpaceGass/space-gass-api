@@ -1,11 +1,11 @@
 from enum import Enum
 
 class AccelerationUnit(str, Enum):
-    Gravity = "Gravity",
-    FeetPerSecondSquared = "FeetPerSecondSquared",
-    InchesPerSecondSquared = "InchesPerSecondSquared",
-    MetersPerSecondSquared = "MetersPerSecondSquared",
-    CentimetersPerSecondSquared = "CentimetersPerSecondSquared",
-    MillimetersPerSecondSquared = "MillimetersPerSecondSquared",
-    KiloNewtonsPerKilogram = "KiloNewtonsPerKilogram",
+    Gs = "gs",
+    Ftpersec2 = "ftpersec2",
+    Inpersec2 = "inpersec2",
+    Mpersec2 = "mpersec2",
+    Cmpersec2 = "cmpersec2",
+    Mmpersec2 = "mmpersec2",
+    KNperkg = "kNperkg",
 

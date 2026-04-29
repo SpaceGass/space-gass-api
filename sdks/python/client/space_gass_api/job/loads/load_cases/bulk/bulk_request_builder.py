@@ -31,16 +31,19 @@ class BulkRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/load-cases/bulk{?continueOnError*,keys*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/load-cases/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBatchResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBatchResult]:
         """
-        Delete Bulk
+        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
+        param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[ObjectBatchResult]
         """
+        if body is None:
+            raise TypeError("body cannot be null.")
         request_info = self.to_delete_request_information(
-            request_configuration
+            body, request_configuration
         )
         from .....models.problem_details import ProblemDetails
 
@@ -56,7 +59,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     async def patch(self,body: list[LoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBatchResult]:
         """
-        Updates multiple items in a bulk operation.Each item must include its Key in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[LoadCaseBatchResult]
@@ -102,20 +105,24 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, LoadCaseBatchResult, error_mapping)
     
-    def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
+    def to_delete_request_information(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
-        Delete Bulk
+        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
+        param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
+        if body is None:
+            raise TypeError("body cannot be null.")
         request_info = RequestInformation(Method.DELETE, self.url_template, self.path_parameters)
         request_info.configure(request_configuration)
         request_info.headers.try_add("Accept", "application/json")
+        request_info.set_content_from_scalar(self.request_adapter, "application/json", body)
         return request_info
     
     def to_patch_request_information(self,body: list[LoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> RequestInformation:
         """
-        Updates multiple items in a bulk operation.Each item must include its Key in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -156,7 +163,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderDeleteQueryParameters():
         """
-        Delete Bulk
+        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -168,15 +175,10 @@ class BulkRequestBuilder(BaseRequestBuilder):
                 raise TypeError("original_name cannot be null.")
             if original_name == "continue_on_error":
                 return "continueOnError"
-            if original_name == "keys":
-                return "keys"
             return original_name
         
         # Whether to continue on error
         continue_on_error: Optional[bool] = None
-
-        # Array of entity keys to delete (e.g., ?keys=1&keys=2&keys=3)
-        keys: Optional[list[int]] = None
 
     
     @dataclass
@@ -189,7 +191,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPatchQueryParameters():
         """
-        Updates multiple items in a bulk operation.Each item must include its Key in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

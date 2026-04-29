@@ -33,7 +33,7 @@ class RestraintsRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[RestraintsRequestBuilderGetQueryParameters]] = None) -> Optional[list[NodeRestraint]]:
         """
-        Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{key}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
+        Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{id}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[NodeRestraint]]
         """
@@ -53,7 +53,7 @@ class RestraintsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[RestraintsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{key}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
+        Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{id}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -84,9 +84,9 @@ class RestraintsRequestBuilder(BaseRequestBuilder):
     @dataclass
     class RestraintsRequestBuilderGetQueryParameters():
         """
-        Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{key}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
+        Returns all nodes that have explicit restraint rows defined.Nodes without a restraint row use default values (all DOFs free, no spring stiffness).Use GET /{id}/restraint to retrieve defaults for any node.Optionally filter by node numbers.
         """
-        # Comma-separated list of node numbers to filter by (e.g., "1,5,10"). Omit to return all.
+        # Node Ids in SG list format (e.g. `"1,5-10"`). Omit to return all.
         nodes: Optional[str] = None
 
     

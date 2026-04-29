@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class PlateCutUpdate(Parsable):
     """
-    DTO for updating an existing plate cut.All fields are nullable to support partial updates.
+    DTO for updating an existing plate cut.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # End node number for the cut.
     end_node: Optional[int] = None
@@ -19,8 +19,8 @@ class PlateCutUpdate(Parsable):
     end_plate: Optional[int] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
-    # Primary key identifying the entity to update.Optional for single updates (key comes from route), required for batch updates.
-    key: Optional[int] = None
+    # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.
+    id: Optional[int] = None
     # Out-of-plane tolerance for the cut.
     out_of_plane_tolerance: Optional[float] = None
     # Start node number for the cut.
@@ -56,7 +56,7 @@ class PlateCutUpdate(Parsable):
             "endOffsetTransverse": lambda n : setattr(self, 'end_offset_transverse', n.get_float_value()),
             "endPlate": lambda n : setattr(self, 'end_plate', n.get_int_value()),
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "outOfPlaneTolerance": lambda n : setattr(self, 'out_of_plane_tolerance', n.get_float_value()),
             "startNode": lambda n : setattr(self, 'start_node', n.get_int_value()),
             "startOffsetLongitudinal": lambda n : setattr(self, 'start_offset_longitudinal', n.get_float_value()),
@@ -79,7 +79,7 @@ class PlateCutUpdate(Parsable):
         writer.write_float_value("endOffsetTransverse", self.end_offset_transverse)
         writer.write_int_value("endPlate", self.end_plate)
         writer.write_str_value("guid", self.guid)
-        writer.write_int_value("key", self.key)
+        writer.write_int_value("id", self.id)
         writer.write_float_value("outOfPlaneTolerance", self.out_of_plane_tolerance)
         writer.write_int_value("startNode", self.start_node)
         writer.write_float_value("startOffsetLongitudinal", self.start_offset_longitudinal)

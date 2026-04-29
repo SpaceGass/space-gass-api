@@ -12,7 +12,7 @@ using System;
 namespace SpaceGassApi.Job.Structure.Nodes.Item.Constraint
 {
     /// <summary>
-    /// Builds and executes requests for operations under \job\structure\nodes\{key}\constraint
+    /// Builds and executes requests for operations under \job\structure\nodes\{id}\constraint
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ConstraintRequestBuilder : BaseRequestBuilder
@@ -22,7 +22,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item.Constraint
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ConstraintRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes/{key}/constraint", pathParameters)
+        public ConstraintRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes/{id}/constraint", pathParameters)
         {
         }
         /// <summary>
@@ -30,7 +30,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item.Constraint
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ConstraintRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes/{key}/constraint", rawUrl)
+        public ConstraintRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/nodes/{id}/constraint", rawUrl)
         {
         }
         /// <summary>
@@ -86,7 +86,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item.Constraint
         /// Partially updates the master-slave constraint for a specific slave node.Only provided fields are updated; omitted fields remain unchanged.The constraint must already exist (use POST to create).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.NodeConstraint"/></returns>
-        /// <param name="body">DTO for partially updating an existing node constraint.All fields are nullable to support partial PATCH semantics.</param>
+        /// <param name="body">DTO for partially updating an existing node constraint.Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
@@ -182,7 +182,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item.Constraint
         /// Partially updates the master-slave constraint for a specific slave node.Only provided fields are updated; omitted fields remain unchanged.The constraint must already exist (use POST to create).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for partially updating an existing node constraint.All fields are nullable to support partial PATCH semantics.</param>
+        /// <param name="body">DTO for partially updating an existing node constraint.Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

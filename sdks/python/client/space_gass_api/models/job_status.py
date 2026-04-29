@@ -5,18 +5,18 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .job_details import JobDetails
+    from .job import Job
     from .job_state import JobState
     from .model_summary import ModelSummary
 
 @dataclass
 class JobStatus(Parsable):
     """
-    Full job status response including details, state, and model summary.Returned by lifecycle operations (new, open, save, status) and GET /job/status.
+    Full job status response including the current job, session state, and model summary.Returned by lifecycle operations (new, open, save, status) and GET /job/status.
     """
-    # Read DTO for job details (text properties).
-    details: Optional[JobDetails] = None
-    # Summary counts of all model entities in the current job.Counts are read from file headers (lightweight, no datasheet loading).
+    # Read DTO for job responses.Model counts and file state are available via GET /job/status (JobStatusDto).
+    job: Optional[Job] = None
+    # Summary counts of all model entities in the current job.
     model: Optional[ModelSummary] = None
     # Current session/file state of the job.
     state: Optional[JobState] = None
@@ -37,16 +37,16 @@ class JobStatus(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .job_details import JobDetails
+        from .job import Job
         from .job_state import JobState
         from .model_summary import ModelSummary
 
-        from .job_details import JobDetails
+        from .job import Job
         from .job_state import JobState
         from .model_summary import ModelSummary
 
         fields: dict[str, Callable[[Any], None]] = {
-            "details": lambda n : setattr(self, 'details', n.get_object_value(JobDetails)),
+            "job": lambda n : setattr(self, 'job', n.get_object_value(Job)),
             "model": lambda n : setattr(self, 'model', n.get_object_value(ModelSummary)),
             "state": lambda n : setattr(self, 'state', n.get_object_value(JobState)),
         }
@@ -60,7 +60,7 @@ class JobStatus(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_object_value("details", self.details)
+        writer.write_object_value("job", self.job)
         writer.write_object_value("model", self.model)
         writer.write_object_value("state", self.state)
     

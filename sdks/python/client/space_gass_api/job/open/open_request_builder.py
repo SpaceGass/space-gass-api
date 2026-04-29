@@ -33,7 +33,7 @@ class OpenRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: OpenJobRequest, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[JobStatus]:
         """
-        Opens a job from a local .sg file.            For normal open, omit forceOption (or set to null).If the file has unsaved ATS files from a previous session, provide a forceOption:- OpenPreviousSaved: Discard unsaved changes, open last saved version- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown            Example request to recover unsaved work:                POST /api/v1/job/open    {      "filePath": "C://path//to//job.sg",      "forceOption": "OpenUnsavedMostRecent"    }
+        Opens a job from a local .sg file.            For normal open, omit forceOption (or set to null).If the file has unsaved temporary files from a previous session, provide a forceOption:- OpenPreviousSaved: Discard unsaved changes, open last saved version- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown            Example request to recover unsaved work:                POST /api/v1/job/open    {      "filePath": "C://path//to//job.sg",      "forceOption": "OpenUnsavedMostRecent"    }
         param body: Request DTO for opening a job file.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[JobStatus]
@@ -57,7 +57,7 @@ class OpenRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: OpenJobRequest, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Opens a job from a local .sg file.            For normal open, omit forceOption (or set to null).If the file has unsaved ATS files from a previous session, provide a forceOption:- OpenPreviousSaved: Discard unsaved changes, open last saved version- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown            Example request to recover unsaved work:                POST /api/v1/job/open    {      "filePath": "C://path//to//job.sg",      "forceOption": "OpenUnsavedMostRecent"    }
+        Opens a job from a local .sg file.            For normal open, omit forceOption (or set to null).If the file has unsaved temporary files from a previous session, provide a forceOption:- OpenPreviousSaved: Discard unsaved changes, open last saved version- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown            Example request to recover unsaved work:                POST /api/v1/job/open    {      "filePath": "C://path//to//job.sg",      "forceOption": "OpenUnsavedMostRecent"    }
         param body: Request DTO for opening a job file.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

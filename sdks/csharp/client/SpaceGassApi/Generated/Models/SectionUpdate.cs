@@ -8,18 +8,18 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for updating an existing section.All fields are optional to support partial updates.
+    /// DTO for partially updating an existing section. All fields are optional — only fieldspresent on the request are updated.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SectionUpdate : IParsable
     {
-        /// <summary>Cross-sectional area. Must be greater than zero if provided.</summary>
+        /// <summary>Cross-sectional area.</summary>
         public double? A { get; set; }
-        /// <summary>Area modification factor. Must be greater than zero if provided.</summary>
+        /// <summary>Area modification factor.</summary>
         public double? AreaFactor { get; set; }
-        /// <summary>Shear area in Y direction. Must be greater than zero if provided.</summary>
+        /// <summary>Shear area in the Y direction.</summary>
         public double? Ay { get; set; }
-        /// <summary>Shear area in Z direction. Must be greater than zero if provided.</summary>
+        /// <summary>Shear area in the Z direction.</summary>
         public double? Az { get; set; }
         /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -29,19 +29,19 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Second moment of area about Y axis. Must be greater than zero if provided.</summary>
+        /// <summary>Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.</summary>
+        public int? Id { get; set; }
+        /// <summary>Second moment of area about the principal Y axis.</summary>
         public double? Iy { get; set; }
-        /// <summary>Iy modification factor. Must be greater than zero if provided.</summary>
+        /// <summary>Iy modification factor.</summary>
         public double? IyFactor { get; set; }
-        /// <summary>Second moment of area about Z axis. Must be greater than zero if provided.</summary>
+        /// <summary>Second moment of area about the principal Z axis.</summary>
         public double? Iz { get; set; }
-        /// <summary>Iz modification factor. Must be greater than zero if provided.</summary>
+        /// <summary>Iz modification factor.</summary>
         public double? IzFactor { get; set; }
-        /// <summary>Torsion constant. Must be greater than zero if provided.</summary>
+        /// <summary>Torsion constant.</summary>
         public double? J { get; set; }
-        /// <summary>Primary key identifying the entity to update.Optional for single updates (key comes from route), required for batch updates.</summary>
-        public int? Key { get; set; }
-        /// <summary>Section mark/designation.</summary>
+        /// <summary>Section mark / designation.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Mark { get; set; }
@@ -57,9 +57,9 @@ namespace SpaceGassApi.Models
 #else
         public string Name { get; set; }
 #endif
-        /// <summary>Principal axis rotation angle (degrees).</summary>
+        /// <summary>Principal axis rotation angle.</summary>
         public double? PrincipalAngle { get; set; }
-        /// <summary>Torsion modification factor. Must be greater than zero if provided.</summary>
+        /// <summary>Torsion modification factor.</summary>
         public double? TorsionFactor { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
@@ -84,12 +84,12 @@ namespace SpaceGassApi.Models
                 { "ay", n => { Ay = n.GetDoubleValue(); } },
                 { "az", n => { Az = n.GetDoubleValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "iy", n => { Iy = n.GetDoubleValue(); } },
                 { "iyFactor", n => { IyFactor = n.GetDoubleValue(); } },
                 { "iz", n => { Iz = n.GetDoubleValue(); } },
                 { "izFactor", n => { IzFactor = n.GetDoubleValue(); } },
                 { "j", n => { J = n.GetDoubleValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
                 { "mark", n => { Mark = n.GetStringValue(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
                 { "principalAngle", n => { PrincipalAngle = n.GetDoubleValue(); } },
@@ -108,12 +108,12 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("ay", Ay);
             writer.WriteDoubleValue("az", Az);
             writer.WriteStringValue("guid", Guid);
+            writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("iy", Iy);
             writer.WriteDoubleValue("iyFactor", IyFactor);
             writer.WriteDoubleValue("iz", Iz);
             writer.WriteDoubleValue("izFactor", IzFactor);
             writer.WriteDoubleValue("j", J);
-            writer.WriteIntValue("key", Key);
             writer.WriteStringValue("mark", Mark);
             writer.WriteStringValue("name", Name);
             writer.WriteDoubleValue("principalAngle", PrincipalAngle);

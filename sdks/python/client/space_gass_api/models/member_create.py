@@ -31,8 +31,8 @@ class MemberCreate(Parsable):
     gap_tension_limit: Optional[float] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
-    # Primary key - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.
-    key: Optional[int] = None
+    # Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.
+    id: Optional[int] = None
     # Material number assigned to this member.
     material: Optional[int] = None
     # Node at end A of the member.
@@ -76,7 +76,7 @@ class MemberCreate(Parsable):
             "gapCompressionLimit": lambda n : setattr(self, 'gap_compression_limit', n.get_float_value()),
             "gapTensionLimit": lambda n : setattr(self, 'gap_tension_limit', n.get_float_value()),
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "material": lambda n : setattr(self, 'material', n.get_int_value()),
             "nodeA": lambda n : setattr(self, 'node_a', n.get_int_value()),
             "nodeB": lambda n : setattr(self, 'node_b', n.get_int_value()),
@@ -102,7 +102,7 @@ class MemberCreate(Parsable):
         writer.write_float_value("gapCompressionLimit", self.gap_compression_limit)
         writer.write_float_value("gapTensionLimit", self.gap_tension_limit)
         writer.write_str_value("guid", self.guid)
-        writer.write_int_value("key", self.key)
+        writer.write_int_value("id", self.id)
         writer.write_int_value("material", self.material)
         writer.write_int_value("nodeA", self.node_a)
         writer.write_int_value("nodeB", self.node_b)

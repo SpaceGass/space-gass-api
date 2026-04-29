@@ -8,11 +8,19 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for a load case (from Loads - Titles table, FileID=28).Returns all load cases including primary, combination, and step types.
+    /// DTO for a load case (from Loads - Titles table, FileID=28).Returns all load cases including primary, combination, and step types.When `Type` is `Combination`, the case owns a list of combination items(hydrated inline via `?expand=all`).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class LoadCase : IParsable
     {
+        /// <summary>The combination items (component case + multiplying factor rows) that make up this case.Populated only when `?expand=all` is passed AND `hasCombinationItems` is true;omitted from the wire otherwise.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<global::SpaceGassApi.Models.CombinationItem>? CombinationItems { get; set; }
+#nullable restore
+#else
+        public List<global::SpaceGassApi.Models.CombinationItem> CombinationItems { get; set; }
+#endif
         /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -21,8 +29,10 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
-        public int? Key { get; set; }
+        /// <summary>True when this case has at least one combination item defined.Only meaningful for cases where `Type` is `Combination`.Use `?expand=all` to include the full `combinationItems` array.</summary>
+        public bool? HasCombinationItems { get; set; }
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
+        public int? Id { get; set; }
         /// <summary>Load case notes (supports multi-line text).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -59,8 +69,10 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "combinationItems", n => { CombinationItems = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationItem>(global::SpaceGassApi.Models.CombinationItem.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "hasCombinationItems", n => { HasCombinationItems = n.GetBoolValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "notes", n => { Notes = n.GetStringValue(); } },
                 { "title", n => { Title = n.GetStringValue(); } },
                 { "type", n => { Type = n.GetEnumValue<global::SpaceGassApi.Models.LoadCaseType>(); } },
@@ -73,8 +85,10 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationItem>("combinationItems", CombinationItems);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteBoolValue("hasCombinationItems", HasCombinationItems);
+            writer.WriteIntValue("id", Id);
             writer.WriteStringValue("notes", Notes);
             writer.WriteStringValue("title", Title);
             writer.WriteEnumValue<global::SpaceGassApi.Models.LoadCaseType>("type", Type);

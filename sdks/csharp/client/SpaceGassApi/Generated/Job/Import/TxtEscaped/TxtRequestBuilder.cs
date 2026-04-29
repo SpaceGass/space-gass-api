@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Import.TxtEscaped
         {
         }
         /// <summary>
-        /// Imports a SpaceGass text file into the current job using the Fortran text import command.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name &quot;file&quot;.            Example usage with curl:                curl -X POST &quot;/api/v1/job/import/txt?merge=false&quot; \      -F &quot;file=@/path/to/model.txt&quot;
+        /// Imports a SpaceGass text file into the current job.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name &quot;file&quot;.            Example usage with curl:                curl -X POST &quot;/api/v1/job/import/txt?merge=false&quot; \      -F &quot;file=@/path/to/model.txt&quot;
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobStatus"/></returns>
         /// <param name="body">The request body</param>
@@ -61,7 +61,7 @@ namespace SpaceGassApi.Job.Import.TxtEscaped
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobStatus>(requestInfo, global::SpaceGassApi.Models.JobStatus.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Imports a SpaceGass text file into the current job using the Fortran text import command.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name &quot;file&quot;.            Example usage with curl:                curl -X POST &quot;/api/v1/job/import/txt?merge=false&quot; \      -F &quot;file=@/path/to/model.txt&quot;
+        /// Imports a SpaceGass text file into the current job.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name &quot;file&quot;.            Example usage with curl:                curl -X POST &quot;/api/v1/job/import/txt?merge=false&quot; \      -F &quot;file=@/path/to/model.txt&quot;
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -92,7 +92,7 @@ namespace SpaceGassApi.Job.Import.TxtEscaped
             return new global::SpaceGassApi.Job.Import.TxtEscaped.TxtRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Imports a SpaceGass text file into the current job using the Fortran text import command.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name &quot;file&quot;.            Example usage with curl:                curl -X POST &quot;/api/v1/job/import/txt?merge=false&quot; \      -F &quot;file=@/path/to/model.txt&quot;
+        /// Imports a SpaceGass text file into the current job.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name &quot;file&quot;.            Example usage with curl:                curl -X POST &quot;/api/v1/job/import/txt?merge=false&quot; \      -F &quot;file=@/path/to/model.txt&quot;
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class TxtRequestBuilderPostQueryParameters 

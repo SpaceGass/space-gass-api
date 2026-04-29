@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading member release data.Releases define fixity codes and spring stiffness at each end of a member.This is a sub-resource of Member, not a standalone entity.
+    /// DTO for reading member release data.Releases define fixity codes and spring stiffness at each end of a member.Always present on every member, so the owning member Idis not duplicated here — the parent MemberDto&apos;s `id` is authoritative whenreturned inline, and the route parameter is authoritative on the standalone endpoint.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberRelease : IParsable
@@ -29,8 +29,6 @@ namespace SpaceGassApi.Models
 #else
         public string FixityCodeAtB { get; set; }
 #endif
-        /// <summary>The member key this release applies to.</summary>
-        public int? Member { get; set; }
         /// <summary>Rotational X spring stiffness at end A. Unit: Moment/Radian (see GET /job/units).</summary>
         public double? RxStiffnessAtA { get; set; }
         /// <summary>Rotational X spring stiffness at end B. Unit: Moment/Radian (see GET /job/units).</summary>
@@ -75,7 +73,6 @@ namespace SpaceGassApi.Models
             {
                 { "fixityCodeAtA", n => { FixityCodeAtA = n.GetStringValue(); } },
                 { "fixityCodeAtB", n => { FixityCodeAtB = n.GetStringValue(); } },
-                { "member", n => { Member = n.GetIntValue(); } },
                 { "rxStiffnessAtA", n => { RxStiffnessAtA = n.GetDoubleValue(); } },
                 { "rxStiffnessAtB", n => { RxStiffnessAtB = n.GetDoubleValue(); } },
                 { "ryStiffnessAtA", n => { RyStiffnessAtA = n.GetDoubleValue(); } },
@@ -99,7 +96,6 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("fixityCodeAtA", FixityCodeAtA);
             writer.WriteStringValue("fixityCodeAtB", FixityCodeAtB);
-            writer.WriteIntValue("member", Member);
             writer.WriteDoubleValue("rxStiffnessAtA", RxStiffnessAtA);
             writer.WriteDoubleValue("rxStiffnessAtB", RxStiffnessAtB);
             writer.WriteDoubleValue("ryStiffnessAtA", RyStiffnessAtA);

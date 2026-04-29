@@ -10,10 +10,12 @@ if TYPE_CHECKING:
 @dataclass
 class MemberOffsetUpdate(Parsable):
     """
-    DTO for partial updates to a member offset.All fields are nullable — only provided fields are updated.
+    DTO for partial updates to a member offset.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table "L/G Axes".
     axes: Optional[AxesType] = None
+    # The member Id whose offset is being updated.Optional in body for the per-member PATCH endpoint (route parameter wins).Required for bulk-update payloads, where each item must identify its member.
+    member: Optional[int] = None
     # X offset at end A. Unit: Length (see GET /job/units).
     x_offset_at_a: Optional[float] = None
     # X offset at end B. Unit: Length (see GET /job/units).
@@ -49,6 +51,7 @@ class MemberOffsetUpdate(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "axes": lambda n : setattr(self, 'axes', n.get_enum_value(AxesType)),
+            "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "xOffsetAtA": lambda n : setattr(self, 'x_offset_at_a', n.get_float_value()),
             "xOffsetAtB": lambda n : setattr(self, 'x_offset_at_b', n.get_float_value()),
             "yOffsetAtA": lambda n : setattr(self, 'y_offset_at_a', n.get_float_value()),
@@ -67,6 +70,7 @@ class MemberOffsetUpdate(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_enum_value("axes", self.axes)
+        writer.write_int_value("member", self.member)
         writer.write_float_value("xOffsetAtA", self.x_offset_at_a)
         writer.write_float_value("xOffsetAtB", self.x_offset_at_b)
         writer.write_float_value("yOffsetAtA", self.y_offset_at_a)

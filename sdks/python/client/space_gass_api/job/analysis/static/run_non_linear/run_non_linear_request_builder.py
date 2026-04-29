@@ -33,8 +33,8 @@ class RunNonLinearRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: StaticSettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[AnalysisRun]:
         """
-        Starts a Non-Linear Static Analysis run. The analysis executes asynchronously in the background.Uses the same settings as Linear Static (shared via GET/PATCH /static/settings).            The request body is optional and uses PATCH semantics — only non-null fields are appliedas overrides to the current SPACEGASS job settings before the analysis starts.
-        param body: Update DTO for Static Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.Used by PATCH /static/settings and POST /static/run-linear and /static/run-non-linear.
+        Starts a Non-Linear Static Analysis run. The analysis executes asynchronously in the background.Uses the same settings as Linear Static (shared via GET/PATCH /static/settings).            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.
+        param body: Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[AnalysisRun]
         """
@@ -57,8 +57,8 @@ class RunNonLinearRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: StaticSettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Starts a Non-Linear Static Analysis run. The analysis executes asynchronously in the background.Uses the same settings as Linear Static (shared via GET/PATCH /static/settings).            The request body is optional and uses PATCH semantics — only non-null fields are appliedas overrides to the current SPACEGASS job settings before the analysis starts.
-        param body: Update DTO for Static Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.Used by PATCH /static/settings and POST /static/run-linear and /static/run-non-linear.
+        Starts a Non-Linear Static Analysis run. The analysis executes asynchronously in the background.Uses the same settings as Linear Static (shared via GET/PATCH /static/settings).            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.
+        param body: Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

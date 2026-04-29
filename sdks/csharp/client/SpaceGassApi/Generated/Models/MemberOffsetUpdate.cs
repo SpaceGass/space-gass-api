@@ -8,13 +8,15 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for partial updates to a member offset.All fields are nullable — only provided fields are updated.
+    /// DTO for partial updates to a member offset.Only fields included in the request are updated; omit a field to keep its current value.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberOffsetUpdate : IParsable
     {
         /// <summary>Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table &quot;L/G Axes&quot;.</summary>
         public global::SpaceGassApi.Models.AxesType? Axes { get; set; }
+        /// <summary>The member Id whose offset is being updated.Optional in body for the per-member PATCH endpoint (route parameter wins).Required for bulk-update payloads, where each item must identify its member.</summary>
+        public int? Member { get; set; }
         /// <summary>X offset at end A. Unit: Length (see GET /job/units).</summary>
         public double? XOffsetAtA { get; set; }
         /// <summary>X offset at end B. Unit: Length (see GET /job/units).</summary>
@@ -46,6 +48,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "axes", n => { Axes = n.GetEnumValue<global::SpaceGassApi.Models.AxesType>(); } },
+                { "member", n => { Member = n.GetIntValue(); } },
                 { "xOffsetAtA", n => { XOffsetAtA = n.GetDoubleValue(); } },
                 { "xOffsetAtB", n => { XOffsetAtB = n.GetDoubleValue(); } },
                 { "yOffsetAtA", n => { YOffsetAtA = n.GetDoubleValue(); } },
@@ -62,6 +65,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteEnumValue<global::SpaceGassApi.Models.AxesType>("axes", Axes);
+            writer.WriteIntValue("member", Member);
             writer.WriteDoubleValue("xOffsetAtA", XOffsetAtA);
             writer.WriteDoubleValue("xOffsetAtB", XOffsetAtB);
             writer.WriteDoubleValue("yOffsetAtA", YOffsetAtA);

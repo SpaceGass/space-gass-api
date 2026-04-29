@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class SteelCheckSummary(Parsable):
     """
-    Steel member design check summary result (FileId 209).The "member" field maps to the Group column in the datasheet.
+    Steel member design check summary.
     """
     # Load case ID of the critical case.
     critical_case: Optional[int] = None

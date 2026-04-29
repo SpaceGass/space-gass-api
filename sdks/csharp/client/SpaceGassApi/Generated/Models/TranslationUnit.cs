@@ -3,29 +3,29 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Translation unit types (Field Index 9)</summary>
+    /// <summary>Translation (displacement) unit. Members mirror SPACE GASS `SgTranslation`.SG uses `inch` here (not `in`) to dodge the VB reserved word; we mirrorthat so the wire token stays `&quot;inch&quot;`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum TranslationUnit
     {
-        [EnumMember(Value = "Feet")]
+        [EnumMember(Value = "ft")]
         #pragma warning disable CS1591
-        Feet,
+        Ft,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Inches")]
+        [EnumMember(Value = "inch")]
         #pragma warning disable CS1591
-        Inches,
+        Inch,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Metres")]
+        [EnumMember(Value = "m")]
         #pragma warning disable CS1591
-        Metres,
+        M,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Centimetres")]
+        [EnumMember(Value = "cm")]
         #pragma warning disable CS1591
-        Centimetres,
+        Cm,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Millimetres")]
+        [EnumMember(Value = "mm")]
         #pragma warning disable CS1591
-        Millimetres,
+        Mm,
         #pragma warning restore CS1591
     }
 }

@@ -14,11 +14,12 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from ....models.expand_option import ExpandOption
     from ....models.material import Material
     from ....models.material_create import MaterialCreate
     from ....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
-    from .item.with_key_item_request_builder import WithKeyItemRequestBuilder
+    from .item.materials_item_request_builder import MaterialsItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
     from .next.next_request_builder import NextRequestBuilder
 
@@ -33,25 +34,25 @@ class MaterialsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/materials{?Limit*,Materials*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/materials{?Expand*,Limit*,Materials*,Offset*}", path_parameters)
     
-    def by_key(self,key: int) -> WithKeyItemRequestBuilder:
+    def by_id(self,id: int) -> MaterialsItemRequestBuilder:
         """
         Gets an item from the space_gass_api.job.structure.materials.item collection
-        param key: The entity key
-        Returns: WithKeyItemRequestBuilder
+        param id: The entity Id
+        Returns: MaterialsItemRequestBuilder
         """
-        if key is None:
-            raise TypeError("key cannot be null.")
-        from .item.with_key_item_request_builder import WithKeyItemRequestBuilder
+        if id is None:
+            raise TypeError("id cannot be null.")
+        from .item.materials_item_request_builder import MaterialsItemRequestBuilder
 
         url_tpl_params = get_path_parameters(self.path_parameters)
-        url_tpl_params["key"] = key
-        return WithKeyItemRequestBuilder(self.request_adapter, url_tpl_params)
+        url_tpl_params["id"] = id
+        return MaterialsItemRequestBuilder(self.request_adapter, url_tpl_params)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[MaterialsRequestBuilderGetQueryParameters]] = None) -> Optional[list[Material]]:
         """
-        Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[Material]]
         """
@@ -96,7 +97,7 @@ class MaterialsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[MaterialsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -160,7 +161,7 @@ class MaterialsRequestBuilder(BaseRequestBuilder):
     @dataclass
     class MaterialsRequestBuilderGetQueryParameters():
         """
-        Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -170,6 +171,8 @@ class MaterialsRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
+            if original_name == "expand":
+                return "Expand"
             if original_name == "limit":
                 return "Limit"
             if original_name == "materials":
@@ -178,10 +181,13 @@ class MaterialsRequestBuilder(BaseRequestBuilder):
                 return "Offset"
             return original_name
         
+        # Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.
+        expand: Optional[ExpandOption] = None
+
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 
-        # Comma-separated list of specific material numbers (e.g., "1,5,10").
+        # Material Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all materials.
         materials: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.

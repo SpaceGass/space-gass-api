@@ -18,10 +18,11 @@ if TYPE_CHECKING:
     from ......models.node_restraint_create import NodeRestraintCreate
     from ......models.node_restraint_update import NodeRestraintUpdate
     from ......models.problem_details import ProblemDetails
+    from .table.table_request_builder import TableRequestBuilder
 
 class RestraintRequestBuilder(BaseRequestBuilder):
     """
-    Builds and executes requests for operations under /job/structure/nodes/{key}/restraint
+    Builds and executes requests for operations under /job/structure/nodes/{id}/restraint
     """
     def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
         """
@@ -30,7 +31,7 @@ class RestraintRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes/{key}/restraint", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes/{id}/restraint", path_parameters)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[NodeRestraint]:
         """
@@ -55,7 +56,7 @@ class RestraintRequestBuilder(BaseRequestBuilder):
     async def patch(self,body: NodeRestraintUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[NodeRestraint]:
         """
         Partially updates the restraint for a specific node.Only provided fields are updated; omitted fields remain unchanged.The restraint must already exist (use POST to create).
-        param body: DTO for partial updates to a node restraint.All fields are nullable — only provided fields are updated.
+        param body: DTO for partial updates to a node restraint.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[NodeRestraint]
         """
@@ -80,7 +81,7 @@ class RestraintRequestBuilder(BaseRequestBuilder):
     async def post(self,body: NodeRestraintCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[NodeRestraint]:
         """
         Creates or replaces the restraint for a specific node.The node must exist. If a restraint already exists, it is replaced.
-        param body: DTO for creating (or replacing) a node restraint.The node key comes from the route parameter, not the body.
+        param body: DTO for creating (or replacing) a node restraint.The node Id comes from the route parameter, not the body.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[NodeRestraint]
         """
@@ -116,7 +117,7 @@ class RestraintRequestBuilder(BaseRequestBuilder):
     def to_patch_request_information(self,body: NodeRestraintUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Partially updates the restraint for a specific node.Only provided fields are updated; omitted fields remain unchanged.The restraint must already exist (use POST to create).
-        param body: DTO for partial updates to a node restraint.All fields are nullable — only provided fields are updated.
+        param body: DTO for partial updates to a node restraint.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -131,7 +132,7 @@ class RestraintRequestBuilder(BaseRequestBuilder):
     def to_post_request_information(self,body: NodeRestraintCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Creates or replaces the restraint for a specific node.The node must exist. If a restraint already exists, it is replaced.
-        param body: DTO for creating (or replacing) a node restraint.The node key comes from the route parameter, not the body.
+        param body: DTO for creating (or replacing) a node restraint.The node Id comes from the route parameter, not the body.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -152,6 +153,15 @@ class RestraintRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return RestraintRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def table(self) -> TableRequestBuilder:
+        """
+        The table property
+        """
+        from .table.table_request_builder import TableRequestBuilder
+
+        return TableRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class RestraintRequestBuilderGetRequestConfiguration(RequestConfiguration[QueryParameters]):

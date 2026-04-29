@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Settings DTO for Static Analysis (Linear and Non-Linear).Properties map to the SPACEGASS NetSGStatic struct.Used for GET (read current settings) and as the base for the update DTO.Fields marked as &quot;Non-linear only&quot; are only used during non-linear static analysis.
+    /// Settings for Static Analysis (Linear and Non-Linear).Used for GET (read current settings) and as the base for the update DTO.Fields marked as &quot;Non-linear only&quot; are only used during non-linear static analysis.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class StaticSettings : IParsable
@@ -27,7 +27,7 @@ namespace SpaceGassApi.Models
         public float? DrillingStiffness { get; set; }
         /// <summary>Whether to perform frame buckling check.</summary>
         public bool? FrameBucklingCheck { get; set; }
-        /// <summary>Load cases to include in the analysis.Use &quot;all&quot; or &quot;&quot; to include all load cases (default).Use a comma-separated list of numbers and ranges (e.g., &quot;1,3,5-10&quot;).Maximum 50 entries (individual numbers and ranges each count as entries).</summary>
+        /// <summary>Load cases to include in the analysis, in SG list format (e.g. `&quot;1,3,5-10&quot;`).Omit or pass an empty string to include all load cases (default).Maximum 50 entries (individual numbers and ranges each count as entries).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? LoadCases { get; set; }

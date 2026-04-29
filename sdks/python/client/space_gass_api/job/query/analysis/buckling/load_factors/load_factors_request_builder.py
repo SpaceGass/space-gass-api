@@ -16,6 +16,7 @@ from warnings import warn
 if TYPE_CHECKING:
     from ......models.buckling_load_factor_query_result import BucklingLoadFactorQueryResult
     from ......models.problem_details import ProblemDetails
+    from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class LoadFactorsRequestBuilder(BaseRequestBuilder):
     """
@@ -70,6 +71,15 @@ class LoadFactorsRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return LoadFactorsRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def metadata(self) -> MetadataRequestBuilder:
+        """
+        The metadata property
+        """
+        from .metadata.metadata_request_builder import MetadataRequestBuilder
+
+        return MetadataRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class LoadFactorsRequestBuilderGetQueryParameters():

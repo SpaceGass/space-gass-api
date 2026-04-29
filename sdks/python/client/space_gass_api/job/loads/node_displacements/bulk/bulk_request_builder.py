@@ -36,7 +36,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,body: list[PrescribedDisplacementKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[PrescribedDisplacementKeyBatchResult]:
         """
-        Deletes multiple prescribed displacements. Both case and node are required for each entry —providing only a case does not delete all displacements for that case.The succeeded array echoes back the keys of each successfully deleted displacement.
+        Deletes multiple prescribed displacements. Both case and node are required for each entry —providing only a case does not delete all displacements for that case.The succeeded array echoes back the Ids of each successfully deleted displacement.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[PrescribedDisplacementKeyBatchResult]
@@ -82,12 +82,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, PrescribedDisplacementBatchResult, error_mapping)
     
-    async def post(self,body: list[PrescribedDisplacementCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[PrescribedDisplacementBatchResult]:
+    async def post(self,body: list[PrescribedDisplacementCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[PrescribedDisplacementBatchResult]
+        Returns: bytes
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -102,13 +102,11 @@ class BulkRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.prescribed_displacement_batch_result import PrescribedDisplacementBatchResult
-
-        return await self.request_adapter.send_async(request_info, PrescribedDisplacementBatchResult, error_mapping)
+        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
     
     def to_delete_request_information(self,body: list[PrescribedDisplacementKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
-        Deletes multiple prescribed displacements. Both case and node are required for each entry —providing only a case does not delete all displacements for that case.The succeeded array echoes back the keys of each successfully deleted displacement.
+        Deletes multiple prescribed displacements. Both case and node are required for each entry —providing only a case does not delete all displacements for that case.The succeeded array echoes back the Ids of each successfully deleted displacement.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -164,7 +162,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderDeleteQueryParameters():
         """
-        Deletes multiple prescribed displacements. Both case and node are required for each entry —providing only a case does not delete all displacements for that case.The succeeded array echoes back the keys of each successfully deleted displacement.
+        Deletes multiple prescribed displacements. Both case and node are required for each entry —providing only a case does not delete all displacements for that case.The succeeded array echoes back the Ids of each successfully deleted displacement.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

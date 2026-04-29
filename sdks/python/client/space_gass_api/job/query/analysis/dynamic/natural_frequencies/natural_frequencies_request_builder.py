@@ -16,6 +16,7 @@ from warnings import warn
 if TYPE_CHECKING:
     from ......models.natural_frequency_query_result import NaturalFrequencyQueryResult
     from ......models.problem_details import ProblemDetails
+    from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class NaturalFrequenciesRequestBuilder(BaseRequestBuilder):
     """
@@ -28,7 +29,7 @@ class NaturalFrequenciesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?Limit*,Offset*,case*,mode*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?Limit*,Offset*,cases*,modes*}", path_parameters)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[NaturalFrequenciesRequestBuilderGetQueryParameters]] = None) -> Optional[NaturalFrequencyQueryResult]:
         """
@@ -42,6 +43,7 @@ class NaturalFrequenciesRequestBuilder(BaseRequestBuilder):
         from ......models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ProblemDetails,
             "401": ProblemDetails,
         }
         if not self.request_adapter:
@@ -71,6 +73,15 @@ class NaturalFrequenciesRequestBuilder(BaseRequestBuilder):
             raise TypeError("raw_url cannot be null.")
         return NaturalFrequenciesRequestBuilder(self.request_adapter, raw_url)
     
+    @property
+    def metadata(self) -> MetadataRequestBuilder:
+        """
+        The metadata property
+        """
+        from .metadata.metadata_request_builder import MetadataRequestBuilder
+
+        return MetadataRequestBuilder(self.request_adapter, self.path_parameters)
+    
     @dataclass
     class NaturalFrequenciesRequestBuilderGetQueryParameters():
         """
@@ -88,20 +99,20 @@ class NaturalFrequenciesRequestBuilder(BaseRequestBuilder):
                 return "Limit"
             if original_name == "offset":
                 return "Offset"
-            if original_name == "case":
-                return "case"
-            if original_name == "mode":
-                return "mode"
+            if original_name == "cases":
+                return "cases"
+            if original_name == "modes":
+                return "modes"
             return original_name
         
-        # Filter by load case IDs.
-        case: Optional[list[int]] = None
+        # Load case Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
+        cases: Optional[str] = None
 
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 
-        # Filter by mode numbers.
-        mode: Optional[list[int]] = None
+        # Mode numbers in SG list format (e.g. `"1-3"`). Omit to return all.
+        modes: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None

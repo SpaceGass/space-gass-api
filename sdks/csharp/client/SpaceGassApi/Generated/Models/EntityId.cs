@@ -95,6 +95,18 @@ namespace SpaceGassApi.Models
         #pragma warning disable CS1591
         MemberOffsets,
         #pragma warning restore CS1591
+        [EnumMember(Value = "MemberReleases")]
+        #pragma warning disable CS1591
+        MemberReleases,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "Units")]
+        #pragma warning disable CS1591
+        Units,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "JobSettings")]
+        #pragma warning disable CS1591
+        JobSettings,
+        #pragma warning restore CS1591
         [EnumMember(Value = "LoadCases")]
         #pragma warning disable CS1591
         LoadCases,
@@ -119,17 +131,61 @@ namespace SpaceGassApi.Models
         #pragma warning disable CS1591
         AnalysisSettings,
         #pragma warning restore CS1591
-        [EnumMember(Value = "NodeResults")]
+        [EnumMember(Value = "NodeDisplacements")]
         #pragma warning disable CS1591
-        NodeResults,
+        NodeDisplacements,
         #pragma warning restore CS1591
-        [EnumMember(Value = "MemberResults")]
+        [EnumMember(Value = "NodeReactions")]
         #pragma warning disable CS1591
-        MemberResults,
+        NodeReactions,
         #pragma warning restore CS1591
-        [EnumMember(Value = "PlateResults")]
+        [EnumMember(Value = "MemberEndForces")]
         #pragma warning disable CS1591
-        PlateResults,
+        MemberEndForces,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "MemberIntermediateForces")]
+        #pragma warning disable CS1591
+        MemberIntermediateForces,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "MemberIntermediateDisplacements")]
+        #pragma warning disable CS1591
+        MemberIntermediateDisplacements,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "MemberStresses")]
+        #pragma warning disable CS1591
+        MemberStresses,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "PlateNodalForces")]
+        #pragma warning disable CS1591
+        PlateNodalForces,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "PlateElementForces")]
+        #pragma warning disable CS1591
+        PlateElementForces,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "PlateElementStresses")]
+        #pragma warning disable CS1591
+        PlateElementStresses,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "BucklingLoadFactors")]
+        #pragma warning disable CS1591
+        BucklingLoadFactors,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "BucklingEffectiveLengths")]
+        #pragma warning disable CS1591
+        BucklingEffectiveLengths,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "NaturalFrequencies")]
+        #pragma warning disable CS1591
+        NaturalFrequencies,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "ModeShapes")]
+        #pragma warning disable CS1591
+        ModeShapes,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "SteelCheckSummary")]
+        #pragma warning disable CS1591
+        SteelCheckSummary,
         #pragma warning restore CS1591
     }
 }

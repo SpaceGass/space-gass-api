@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @dataclass
 class MemberUpdate(Parsable):
     """
-    DTO for updating an existing member.All fields are nullable to support partial updates.
+    DTO for updating an existing member.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # Cable length (for Cable type members). Unit: Length (see GET /job/units).
     cable_length: Optional[float] = None
@@ -31,8 +31,8 @@ class MemberUpdate(Parsable):
     gap_tension_limit: Optional[float] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
-    # Primary key identifying the entity to update.Optional for single updates (key comes from route), required for batch updates.
-    key: Optional[int] = None
+    # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.
+    id: Optional[int] = None
     # Material number assigned to this member.
     material: Optional[int] = None
     # Node at end A of the member.
@@ -76,7 +76,7 @@ class MemberUpdate(Parsable):
             "gapCompressionLimit": lambda n : setattr(self, 'gap_compression_limit', n.get_float_value()),
             "gapTensionLimit": lambda n : setattr(self, 'gap_tension_limit', n.get_float_value()),
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "material": lambda n : setattr(self, 'material', n.get_int_value()),
             "nodeA": lambda n : setattr(self, 'node_a', n.get_int_value()),
             "nodeB": lambda n : setattr(self, 'node_b', n.get_int_value()),
@@ -102,7 +102,7 @@ class MemberUpdate(Parsable):
         writer.write_float_value("gapCompressionLimit", self.gap_compression_limit)
         writer.write_float_value("gapTensionLimit", self.gap_tension_limit)
         writer.write_str_value("guid", self.guid)
-        writer.write_int_value("key", self.key)
+        writer.write_int_value("id", self.id)
         writer.write_int_value("material", self.material)
         writer.write_int_value("nodeA", self.node_a)
         writer.write_int_value("nodeB", self.node_b)

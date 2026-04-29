@@ -12,7 +12,7 @@ using System;
 namespace SpaceGassApi.Job.Loads.LoadCaseGroups.Item.Cases
 {
     /// <summary>
-    /// Builds and executes requests for operations under \job\loads\load-case-groups\{key}\cases
+    /// Builds and executes requests for operations under \job\loads\load-case-groups\{id}\cases
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class CasesRequestBuilder : BaseRequestBuilder
@@ -22,7 +22,7 @@ namespace SpaceGassApi.Job.Loads.LoadCaseGroups.Item.Cases
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CasesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-case-groups/{key}/cases", pathParameters)
+        public CasesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-case-groups/{id}/cases", pathParameters)
         {
         }
         /// <summary>
@@ -30,11 +30,11 @@ namespace SpaceGassApi.Job.Loads.LoadCaseGroups.Item.Cases
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CasesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-case-groups/{key}/cases", rawUrl)
+        public CasesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-case-groups/{id}/cases", rawUrl)
         {
         }
         /// <summary>
-        /// Gets the expanded list of load cases that belong to a group.Resolves the group&apos;s load case list (e.g., &quot;1,3,5-10&quot;) against the actualload cases that exist in the current job. Returns full load case dataincluding key, title, type, notes, and guid.
+        /// Gets the expanded list of load cases that belong to a group.Resolves the group&apos;s load case list (e.g., &quot;1,3,5-10&quot;) against the actualload cases that exist in the current job. Returns full load case dataincluding Id, title, type, notes, and guid.
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.LoadCase&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -60,7 +60,7 @@ namespace SpaceGassApi.Job.Loads.LoadCaseGroups.Item.Cases
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Gets the expanded list of load cases that belong to a group.Resolves the group&apos;s load case list (e.g., &quot;1,3,5-10&quot;) against the actualload cases that exist in the current job. Returns full load case dataincluding key, title, type, notes, and guid.
+        /// Gets the expanded list of load cases that belong to a group.Resolves the group&apos;s load case list (e.g., &quot;1,3,5-10&quot;) against the actualload cases that exist in the current job. Returns full load case dataincluding Id, title, type, notes, and guid.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

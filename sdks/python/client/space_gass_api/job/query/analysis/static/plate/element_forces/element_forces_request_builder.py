@@ -16,6 +16,7 @@ from warnings import warn
 if TYPE_CHECKING:
     from .......models.plate_element_force_query_result import PlateElementForceQueryResult
     from .......models.problem_details import ProblemDetails
+    from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class ElementForcesRequestBuilder(BaseRequestBuilder):
     """
@@ -28,11 +29,11 @@ class ElementForcesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/plate/element-forces{?Limit*,Offset*,case*,plate*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/plate/element-forces{?Limit*,Offset*,cases*,plates*}", path_parameters)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[ElementForcesRequestBuilderGetQueryParameters]] = None) -> Optional[PlateElementForceQueryResult]:
         """
-        Gets element force results for plates, optionally filtered by load cases and plate keys.
+        Gets element force results for plates, optionally filtered by load cases and plate Ids.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[PlateElementForceQueryResult]
         """
@@ -42,6 +43,7 @@ class ElementForcesRequestBuilder(BaseRequestBuilder):
         from .......models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ProblemDetails,
             "401": ProblemDetails,
         }
         if not self.request_adapter:
@@ -52,7 +54,7 @@ class ElementForcesRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[ElementForcesRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets element force results for plates, optionally filtered by load cases and plate keys.
+        Gets element force results for plates, optionally filtered by load cases and plate Ids.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -71,10 +73,19 @@ class ElementForcesRequestBuilder(BaseRequestBuilder):
             raise TypeError("raw_url cannot be null.")
         return ElementForcesRequestBuilder(self.request_adapter, raw_url)
     
+    @property
+    def metadata(self) -> MetadataRequestBuilder:
+        """
+        The metadata property
+        """
+        from .metadata.metadata_request_builder import MetadataRequestBuilder
+
+        return MetadataRequestBuilder(self.request_adapter, self.path_parameters)
+    
     @dataclass
     class ElementForcesRequestBuilderGetQueryParameters():
         """
-        Gets element force results for plates, optionally filtered by load cases and plate keys.
+        Gets element force results for plates, optionally filtered by load cases and plate Ids.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -88,14 +99,14 @@ class ElementForcesRequestBuilder(BaseRequestBuilder):
                 return "Limit"
             if original_name == "offset":
                 return "Offset"
-            if original_name == "case":
-                return "case"
-            if original_name == "plate":
-                return "plate"
+            if original_name == "cases":
+                return "cases"
+            if original_name == "plates":
+                return "plates"
             return original_name
         
-        # Filter by load case IDs.
-        case: Optional[list[int]] = None
+        # Load case Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
+        cases: Optional[str] = None
 
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
@@ -103,8 +114,8 @@ class ElementForcesRequestBuilder(BaseRequestBuilder):
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None
 
-        # Filter by plate keys.
-        plate: Optional[list[int]] = None
+        # Plate Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
+        plates: Optional[str] = None
 
     
     @dataclass

@@ -33,8 +33,8 @@ class RunRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: DynamicFrequencySettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[AnalysisRun]:
         """
-        Starts a Dynamic Frequency Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional and uses PATCH semantics — only non-null fields are appliedas overrides to the current SPACEGASS job settings before the analysis starts.
-        param body: Update DTO for Dynamic Frequency Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.
+        Starts a Dynamic Frequency Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.
+        param body: Update request for Dynamic Frequency Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[AnalysisRun]
         """
@@ -57,8 +57,8 @@ class RunRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: DynamicFrequencySettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Starts a Dynamic Frequency Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional and uses PATCH semantics — only non-null fields are appliedas overrides to the current SPACEGASS job settings before the analysis starts.
-        param body: Update DTO for Dynamic Frequency Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.
+        Starts a Dynamic Frequency Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.
+        param body: Update request for Dynamic Frequency Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

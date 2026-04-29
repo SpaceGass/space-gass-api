@@ -32,27 +32,27 @@ namespace SpaceGassApi.Job.Loads.LumpedMassLoads
         }
         /// <summary>Gets an item from the SpaceGassApi.job.loads.lumpedMassLoads.item collection</summary>
         /// <param name="position">The load case number</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseKeyItemRequestBuilder"/></returns>
-        public global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseKeyItemRequestBuilder this[int position]
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseItemRequestBuilder"/></returns>
+        public global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseItemRequestBuilder this[int position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                urlTplParams.Add("caseKey", position);
-                return new global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                urlTplParams.Add("caseId", position);
+                return new global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>Gets an item from the SpaceGassApi.job.loads.lumpedMassLoads.item collection</summary>
         /// <param name="position">The load case number</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseKeyItemRequestBuilder"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseItemRequestBuilder"/></returns>
         [Obsolete("This indexer is deprecated and will be removed in the next major version. Use the one with the typed parameter instead.")]
-        public global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseKeyItemRequestBuilder this[string position]
+        public global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseItemRequestBuilder this[string position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("caseKey", position);
-                return new global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("caseId", position);
+                return new global::SpaceGassApi.Job.Loads.LumpedMassLoads.Item.WithCaseItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>
@@ -72,11 +72,12 @@ namespace SpaceGassApi.Job.Loads.LumpedMassLoads
         {
         }
         /// <summary>
-        /// Gets all loads with optional filtering and pagination.Use the &apos;cases&apos; query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.LumpedMassLoad&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -90,6 +91,7 @@ namespace SpaceGassApi.Job.Loads.LumpedMassLoads
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.LumpedMassLoad>(requestInfo, global::SpaceGassApi.Models.LumpedMassLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
@@ -98,7 +100,7 @@ namespace SpaceGassApi.Job.Loads.LumpedMassLoads
         /// <summary>
         /// Creates a new load. The load case must exist and be a Primary load case.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.LumpedMassLoad"/></returns>
+        /// <returns>A <see cref="Stream"/></returns>
         /// <param name="body">DTO for creating a new lumped mass load.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -108,11 +110,11 @@ namespace SpaceGassApi.Job.Loads.LumpedMassLoads
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.LumpedMassLoad?> PostAsync(global::SpaceGassApi.Models.LumpedMassLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<Stream?> PostAsync(global::SpaceGassApi.Models.LumpedMassLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.LumpedMassLoad> PostAsync(global::SpaceGassApi.Models.LumpedMassLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<Stream> PostAsync(global::SpaceGassApi.Models.LumpedMassLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -124,10 +126,10 @@ namespace SpaceGassApi.Job.Loads.LumpedMassLoads
                 { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LumpedMassLoad>(requestInfo, global::SpaceGassApi.Models.LumpedMassLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets all loads with optional filtering and pagination.Use the &apos;cases&apos; query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -177,30 +179,30 @@ namespace SpaceGassApi.Job.Loads.LumpedMassLoads
             return new global::SpaceGassApi.Job.Loads.LumpedMassLoads.LumpedMassLoadsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets all loads with optional filtering and pagination.Use the &apos;cases&apos; query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class LumpedMassLoadsRequestBuilderGetQueryParameters 
         {
-            /// <summary>Load case numbers to filter by (e.g., ?cases=1&amp;cases=5&amp;cases=10).Returns only loads belonging to the specified cases.Omit to return loads for all cases.</summary>
+            /// <summary>Load cases to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only loads belonging to the specified cases.Omit to return loads for all cases.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            public int?[]? Cases { get; set; }
+            public string? Cases { get; set; }
 #nullable restore
 #else
-            public int?[] Cases { get; set; }
+            public string Cases { get; set; }
 #endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
             /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
             public int? LoadCategory { get; set; }
-            /// <summary>Node numbers to filter by (e.g., ?nodes=1&amp;nodes=5&amp;nodes=10).Returns only lumped masses applied to the specified nodes.Omit to return lumped masses for all nodes.</summary>
+            /// <summary>Node Ids to filter by, in SG list format (e.g. `&quot;1,5-10,12&quot;`).Returns only lumped masses applied to the specified nodes.Omit to return lumped masses for all nodes.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            public int?[]? Nodes { get; set; }
+            public string? Nodes { get; set; }
 #nullable restore
 #else
-            public int?[] Nodes { get; set; }
+            public string Nodes { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             public int? Offset { get; set; }

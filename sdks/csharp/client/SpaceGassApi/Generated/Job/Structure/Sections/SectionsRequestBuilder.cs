@@ -5,6 +5,7 @@ using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Structure.Sections.Bulk;
 using SpaceGassApi.Job.Structure.Sections.Item;
+using SpaceGassApi.Job.Structure.Sections.Library;
 using SpaceGassApi.Job.Structure.Sections.Metadata;
 using SpaceGassApi.Job.Structure.Sections.Next;
 using SpaceGassApi.Models;
@@ -26,6 +27,11 @@ namespace SpaceGassApi.Job.Structure.Sections
         {
             get => new global::SpaceGassApi.Job.Structure.Sections.Bulk.BulkRequestBuilder(PathParameters, RequestAdapter);
         }
+        /// <summary>The library property</summary>
+        public global::SpaceGassApi.Job.Structure.Sections.Library.LibraryRequestBuilder Library
+        {
+            get => new global::SpaceGassApi.Job.Structure.Sections.Library.LibraryRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The metadata property</summary>
         public global::SpaceGassApi.Job.Structure.Sections.Metadata.MetadataRequestBuilder Metadata
         {
@@ -37,28 +43,28 @@ namespace SpaceGassApi.Job.Structure.Sections
             get => new global::SpaceGassApi.Job.Structure.Sections.Next.NextRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the SpaceGassApi.job.structure.sections.item collection</summary>
-        /// <param name="position">The entity key</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Sections.Item.WithKeyItemRequestBuilder"/></returns>
-        public global::SpaceGassApi.Job.Structure.Sections.Item.WithKeyItemRequestBuilder this[int position]
+        /// <param name="position">The entity Id</param>
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Sections.Item.SectionsItemRequestBuilder"/></returns>
+        public global::SpaceGassApi.Job.Structure.Sections.Item.SectionsItemRequestBuilder this[int position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                urlTplParams.Add("key", position);
-                return new global::SpaceGassApi.Job.Structure.Sections.Item.WithKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                urlTplParams.Add("id", position);
+                return new global::SpaceGassApi.Job.Structure.Sections.Item.SectionsItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>Gets an item from the SpaceGassApi.job.structure.sections.item collection</summary>
-        /// <param name="position">The entity key</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Sections.Item.WithKeyItemRequestBuilder"/></returns>
+        /// <param name="position">The entity Id</param>
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Structure.Sections.Item.SectionsItemRequestBuilder"/></returns>
         [Obsolete("This indexer is deprecated and will be removed in the next major version. Use the one with the typed parameter instead.")]
-        public global::SpaceGassApi.Job.Structure.Sections.Item.WithKeyItemRequestBuilder this[string position]
+        public global::SpaceGassApi.Job.Structure.Sections.Item.SectionsItemRequestBuilder this[string position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("key", position);
-                return new global::SpaceGassApi.Job.Structure.Sections.Item.WithKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("id", position);
+                return new global::SpaceGassApi.Job.Structure.Sections.Item.SectionsItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>
@@ -66,7 +72,7 @@ namespace SpaceGassApi.Job.Structure.Sections
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SectionsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/sections{?Limit*,Offset*,Sections*}", pathParameters)
+        public SectionsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/sections{?Expand*,Limit*,Offset*,Sections*}", pathParameters)
         {
         }
         /// <summary>
@@ -74,11 +80,11 @@ namespace SpaceGassApi.Job.Structure.Sections
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SectionsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/sections{?Limit*,Offset*,Sections*}", rawUrl)
+        public SectionsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/sections{?Expand*,Limit*,Offset*,Sections*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.Section&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -105,7 +111,7 @@ namespace SpaceGassApi.Job.Structure.Sections
         /// Creates a new item. If a validator is registered, the item is validated before creation.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Section"/></returns>
-        /// <param name="body">DTO for creating a new user-defined section.</param>
+        /// <param name="body">DTO for creating a user-defined section with explicit structural properties.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
@@ -113,11 +119,11 @@ namespace SpaceGassApi.Job.Structure.Sections
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.Section?> PostAsync(global::SpaceGassApi.Models.SectionCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.Section?> PostAsync(global::SpaceGassApi.Models.SectionUserCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.Section> PostAsync(global::SpaceGassApi.Models.SectionCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.Section> PostAsync(global::SpaceGassApi.Models.SectionUserCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -131,7 +137,7 @@ namespace SpaceGassApi.Job.Structure.Sections
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Section>(requestInfo, global::SpaceGassApi.Models.Section.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -153,15 +159,15 @@ namespace SpaceGassApi.Job.Structure.Sections
         /// Creates a new item. If a validator is registered, the item is validated before creation.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for creating a new user-defined section.</param>
+        /// <param name="body">DTO for creating a user-defined section with explicit structural properties.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.SectionCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.SectionUserCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.SectionCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.SectionUserCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -181,16 +187,28 @@ namespace SpaceGassApi.Job.Structure.Sections
             return new global::SpaceGassApi.Job.Structure.Sections.SectionsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class SectionsRequestBuilderGetQueryParameters 
         {
+            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
+            [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            public string? Expand { get; set; }
+#nullable restore
+#else
+            public string Expand { get; set; }
+#endif
+            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
+            [QueryParameter("Expand")]
+            public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             public int? Offset { get; set; }
-            /// <summary>Comma-separated list of specific section numbers (e.g., &quot;1,5,10&quot;).</summary>
+            /// <summary>Section Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all sections.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
             public string? Sections { get; set; }

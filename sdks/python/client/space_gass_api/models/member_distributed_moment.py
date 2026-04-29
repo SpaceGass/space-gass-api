@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @dataclass
 class MemberDistributedMoment(Parsable):
     """
-    DTO for reading a member distributed moment entity.Represents distributed moments applied along a member.Composite key: (Case, Member, SubLoad).
+    DTO for reading a member distributed moment entity.Represents distributed moments applied along a member.Composite Id: (Case, Member, SubLoad).
     """
     # Coordinate axes type for distributed loads and plate pressure loads.Maps to SPACE GASS lookup table "L/GI/GP Axes".
     axes: Optional[LoadAxes] = None

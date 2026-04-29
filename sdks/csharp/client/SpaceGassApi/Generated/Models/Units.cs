@@ -8,37 +8,33 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Unit system DTO based on Space Gass Units XML structureUses enums that map to integer indexes as per Space Gass specification (Field Index 0-11)Units are set on model creation only and cannot be changed afterward
+    /// Unit settings for the current job.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class Units : IParsable
     {
-        /// <summary>Acceleration unit types (Field Index 8)</summary>
+        /// <summary>Acceleration unit. Members mirror SPACE GASS `SgAcceleration`.</summary>
         public global::SpaceGassApi.Models.AccelerationUnit? Acceleration { get; set; }
-        /// <summary>Force unit types (Field Index 5)</summary>
+        /// <summary>Force unit. Members mirror SPACE GASS `SgForce`.</summary>
         public global::SpaceGassApi.Models.ForceUnit? Force { get; set; }
-        /// <summary>Length unit types (Field Index 0)</summary>
+        /// <summary>Length unit. Members mirror SPACE GASS `SGLength`(`NetCommon/CommonEnums.vb`); integer values and identifiers must stay inlock-step with it. The System.ComponentModel.DescriptionAttribute carries the displaylabel (mirrors `gcUNITS_LABEL_*`).</summary>
         public global::SpaceGassApi.Models.LengthUnit? Length { get; set; }
-        /// <summary>Mass unit types (Field Index 7)</summary>
+        /// <summary>Mass unit. Members mirror SPACE GASS `SgMass`.</summary>
         public global::SpaceGassApi.Models.MassUnit? Mass { get; set; }
-        /// <summary>Mass Density unit types (Field Index 3)</summary>
+        /// <summary>Mass density unit. Members mirror SPACE GASS `SgMassDensity`.</summary>
         public global::SpaceGassApi.Models.MassDensityUnit? MassDensity { get; set; }
-        /// <summary>Material Strength unit types (Field Index 2)</summary>
+        /// <summary>Material strength unit (yield stress, ultimate stress, etc.). Members mirrorSPACE GASS `SgMaterialStrength`.</summary>
         public global::SpaceGassApi.Models.MaterialStrengthUnit? MaterialStrength { get; set; }
-        /// <summary>Moment unit types (Field Index 6)</summary>
+        /// <summary>Moment unit. Members mirror SPACE GASS `SgMoment`.</summary>
         public global::SpaceGassApi.Models.MomentUnit? Moment { get; set; }
-        /// <summary>Section Properties unit types (Field Index 1)</summary>
+        /// <summary>Unit for section properties (area, moment of inertia, etc.). Members mirrorSPACE GASS `SgSectionProperties` (`NetCommon/CommonEnums.vb`).</summary>
         public global::SpaceGassApi.Models.SectionPropertiesUnit? SectionProperties { get; set; }
-        /// <summary>Stress unit types (Field Index 10)</summary>
+        /// <summary>Stress unit. Members mirror SPACE GASS `SgStress`.</summary>
         public global::SpaceGassApi.Models.StressUnit? Stress { get; set; }
-        /// <summary>Unit system types - set on model creation only</summary>
-        public global::SpaceGassApi.Models.UnitSystem? System { get; set; }
-        /// <summary>Temperature unit types (Field Index 4)</summary>
+        /// <summary>Temperature unit. Members mirror SPACE GASS `SgTemperature`.</summary>
         public global::SpaceGassApi.Models.TemperatureUnit? Temperature { get; set; }
-        /// <summary>Translation unit types (Field Index 9)</summary>
+        /// <summary>Translation (displacement) unit. Members mirror SPACE GASS `SgTranslation`.SG uses `inch` here (not `in`) to dodge the VB reserved word; we mirrorthat so the wire token stays `&quot;inch&quot;`.</summary>
         public global::SpaceGassApi.Models.TranslationUnit? Translation { get; set; }
-        /// <summary>Unused field (Field Index 11) - reserved for future use</summary>
-        public int? Unused { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
@@ -66,10 +62,8 @@ namespace SpaceGassApi.Models
                 { "moment", n => { Moment = n.GetEnumValue<global::SpaceGassApi.Models.MomentUnit>(); } },
                 { "sectionProperties", n => { SectionProperties = n.GetEnumValue<global::SpaceGassApi.Models.SectionPropertiesUnit>(); } },
                 { "stress", n => { Stress = n.GetEnumValue<global::SpaceGassApi.Models.StressUnit>(); } },
-                { "system", n => { System = n.GetEnumValue<global::SpaceGassApi.Models.UnitSystem>(); } },
                 { "temperature", n => { Temperature = n.GetEnumValue<global::SpaceGassApi.Models.TemperatureUnit>(); } },
                 { "translation", n => { Translation = n.GetEnumValue<global::SpaceGassApi.Models.TranslationUnit>(); } },
-                { "unused", n => { Unused = n.GetIntValue(); } },
             };
         }
         /// <summary>
@@ -88,10 +82,8 @@ namespace SpaceGassApi.Models
             writer.WriteEnumValue<global::SpaceGassApi.Models.MomentUnit>("moment", Moment);
             writer.WriteEnumValue<global::SpaceGassApi.Models.SectionPropertiesUnit>("sectionProperties", SectionProperties);
             writer.WriteEnumValue<global::SpaceGassApi.Models.StressUnit>("stress", Stress);
-            writer.WriteEnumValue<global::SpaceGassApi.Models.UnitSystem>("system", System);
             writer.WriteEnumValue<global::SpaceGassApi.Models.TemperatureUnit>("temperature", Temperature);
             writer.WriteEnumValue<global::SpaceGassApi.Models.TranslationUnit>("translation", Translation);
-            writer.WriteIntValue("unused", Unused);
         }
     }
 }

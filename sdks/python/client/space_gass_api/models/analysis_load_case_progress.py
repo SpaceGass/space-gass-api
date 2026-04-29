@@ -11,10 +11,10 @@ class AnalysisLoadCaseProgress(Parsable):
     """
     # Total number of load cases
     count: Optional[int] = None
+    # Current load case identifier
+    id: Optional[int] = None
     # Current load case index (0-based)
     index: Optional[int] = None
-    # Current load case key/identifier
-    key: Optional[int] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> AnalysisLoadCaseProgress:
@@ -34,8 +34,8 @@ class AnalysisLoadCaseProgress(Parsable):
         """
         fields: dict[str, Callable[[Any], None]] = {
             "count": lambda n : setattr(self, 'count', n.get_int_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "index": lambda n : setattr(self, 'index', n.get_int_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
         }
         return fields
     
@@ -48,7 +48,7 @@ class AnalysisLoadCaseProgress(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_int_value("count", self.count)
+        writer.write_int_value("id", self.id)
         writer.write_int_value("index", self.index)
-        writer.write_int_value("key", self.key)
     
 

@@ -8,13 +8,15 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Represents a single component within a load combination.Each item references a load case number and a multiplying factor.
+    /// Represents a single component within a load combination.Carries the composite key (CombinationCase + Case) plus its multiplying factor.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class CombinationItem : IParsable
     {
         /// <summary>Component load case number.</summary>
         public int? Case { get; set; }
+        /// <summary>The combination (parent) load case number that owns this item.Optional on the per-case PUT body (route wins); required for flat/bulk payloads.</summary>
+        public int? CombinationCase { get; set; }
         /// <summary>Multiplying factor applied to the component load case (default: 1.0).</summary>
         public double? MultiplyingFactor { get; set; }
         /// <summary>
@@ -36,6 +38,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "case", n => { Case = n.GetIntValue(); } },
+                { "combinationCase", n => { CombinationCase = n.GetIntValue(); } },
                 { "multiplyingFactor", n => { MultiplyingFactor = n.GetDoubleValue(); } },
             };
         }
@@ -47,6 +50,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteIntValue("case", Case);
+            writer.WriteIntValue("combinationCase", CombinationCase);
             writer.WriteDoubleValue("multiplyingFactor", MultiplyingFactor);
         }
     }

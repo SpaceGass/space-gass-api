@@ -14,7 +14,7 @@ class OpenJobRequest(Parsable):
     """
     # Full path to the .sg job file to open.
     file_path: Optional[str] = None
-    # Options for forcing access to a SPACE GASS job file that is in a locked or unsaved state.Used when ATS (temporary) files exist from a previous session that wasn't properly closed.
+    # Options for forcing access to a job file that is in a locked or unsaved state.Used when temporary files exist from a previous session that was not properly closed.
     force_option: Optional[JobForceAccessOption] = None
     
     @staticmethod

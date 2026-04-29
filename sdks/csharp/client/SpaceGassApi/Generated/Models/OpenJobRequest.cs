@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
 #else
         public string FilePath { get; set; }
 #endif
-        /// <summary>Options for forcing access to a SPACE GASS job file that is in a locked or unsaved state.Used when ATS (temporary) files exist from a previous session that wasn&apos;t properly closed.</summary>
+        /// <summary>Options for forcing access to a job file that is in a locked or unsaved state.Used when temporary files exist from a previous session that was not properly closed.</summary>
         public global::SpaceGassApi.Models.JobForceAccessOption? ForceOption { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

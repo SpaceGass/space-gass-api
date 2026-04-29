@@ -1,16 +1,16 @@
 from enum import Enum
 
 class StressUnit(str, Enum):
-    KiloPoundsPerSquareFoot = "KiloPoundsPerSquareFoot",
-    PoundsPerSquareFoot = "PoundsPerSquareFoot",
-    KiloPoundsPerSquareInch = "KiloPoundsPerSquareInch",
-    PoundsPerSquareInch = "PoundsPerSquareInch",
-    MegaPascals = "MegaPascals",
-    KiloPascals = "KiloPascals",
-    Pascals = "Pascals",
-    KilogramsPerSquareMetre = "KilogramsPerSquareMetre",
-    KilogramsPerSquareCentimetre = "KilogramsPerSquareCentimetre",
-    KilogramsPerSquareMillimetre = "KilogramsPerSquareMillimetre",
-    KiloNewtonsPerSquareMetre = "KiloNewtonsPerSquareMetre",
-    NewtonsPerSquareMillimetre = "NewtonsPerSquareMillimetre",
+    Ksf = "Ksf",
+    Psf = "Psf",
+    Ksi = "Ksi",
+    Psi = "Psi",
+    MPa = "MPa",
+    KPa = "kPa",
+    Pa = "Pa",
+    Kgperm2 = "kgperm2",
+    Kgpercm2 = "kgpercm2",
+    Kgpermm2 = "kgpermm2",
+    KNperm2 = "kNperm2",
+    Npermm2 = "Npermm2",
 

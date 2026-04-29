@@ -33,7 +33,7 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[StaticSettings]:
         """
-        Returns the current Static Analysis settings from the SPACEGASS job.These settings are shared between Linear Static and Non-Linear Static analysis types.
+        Returns the current Static Analysis settings.These settings are shared between Linear Static and Non-Linear Static analysis types.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[StaticSettings]
         """
@@ -48,8 +48,8 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     async def patch(self,body: StaticSettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[StaticSettings]:
         """
-        Partially updates the Static Analysis settings in the SPACEGASS job.Uses PATCH semantics — only non-null fields in the request body are applied as overrides.These settings are shared between Linear Static and Non-Linear Static analysis types.
-        param body: Update DTO for Static Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.Used by PATCH /static/settings and POST /static/run-linear and /static/run-non-linear.
+        Partially updates the Static Analysis settings.Only fields included in the request body are updated; omitted fields remain unchanged.These settings are shared between Linear Static and Non-Linear Static analysis types.
+        param body: Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[StaticSettings]
         """
@@ -71,7 +71,7 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Returns the current Static Analysis settings from the SPACEGASS job.These settings are shared between Linear Static and Non-Linear Static analysis types.
+        Returns the current Static Analysis settings.These settings are shared between Linear Static and Non-Linear Static analysis types.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -82,8 +82,8 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: StaticSettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Partially updates the Static Analysis settings in the SPACEGASS job.Uses PATCH semantics — only non-null fields in the request body are applied as overrides.These settings are shared between Linear Static and Non-Linear Static analysis types.
-        param body: Update DTO for Static Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.Used by PATCH /static/settings and POST /static/run-linear and /static/run-non-linear.
+        Partially updates the Static Analysis settings.Only fields included in the request body are updated; omitted fields remain unchanged.These settings are shared between Linear Static and Non-Linear Static analysis types.
+        param body: Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

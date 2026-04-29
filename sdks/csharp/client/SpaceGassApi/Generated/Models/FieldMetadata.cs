@@ -8,14 +8,22 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Metadata for a single field in an entity table.Provides schema information for clients to validate and display entity data.
+    /// Metadata for a single field in a resource. The shape mirrors what clients see onthe wire — SpaceGassApi.Models.Dtos.Common.FieldMetadataDto.JsonName is the exact property key a JSON consumer willread, so a client can correlate metadata to payload without any translation.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FieldMetadata : IParsable
     {
-        /// <summary>Whether the field can be empty/null</summary>
+        /// <summary>For enum-backed fields, the permitted values with their wire tokens and display labels.Use `value` in request bodies; `label` is for display only. Null for non-enum fields.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<global::SpaceGassApi.Models.AllowedValue>? AllowedValues { get; set; }
+#nullable restore
+#else
+        public List<global::SpaceGassApi.Models.AllowedValue> AllowedValues { get; set; }
+#endif
+        /// <summary>Internal: whether the underlying SPACE GASS datasheet cell may be blank —reads NETSpec `&lt;Empty&gt;1&lt;/Empty&gt;`. Set only when the field isDataSpec-backed (via `[NetspecField]`); null otherwise. Emitted inDebug builds for diagnostics; suppressed entirely in Release.</summary>
         public bool? AllowEmpty { get; set; }
-        /// <summary>Data type (Integer, Double, String, etc.)</summary>
+        /// <summary>Data type: &quot;Integer&quot; | &quot;Double&quot; | &quot;String&quot; | &quot;Enum&quot; | &quot;Boolean&quot; | &quot;Guid&quot;.For enums, see SpaceGassApi.Models.Dtos.Common.FieldMetadataDto.AllowedValues for the permitted values.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? DataType { get; set; }
@@ -23,7 +31,7 @@ namespace SpaceGassApi.Models
 #else
         public string DataType { get; set; }
 #endif
-        /// <summary>Default value (if applicable)</summary>
+        /// <summary>Default value when the field is omitted on create.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Default { get; set; }
@@ -31,17 +39,23 @@ namespace SpaceGassApi.Models
 #else
         public string Default { get; set; }
 #endif
-        /// <summary>Field name</summary>
+        /// <summary>Optional hint text for this field, useful for UI labels and tooltips. Null when not available.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public string? FieldName { get; set; }
+        public string? Description { get; set; }
 #nullable restore
 #else
-        public string FieldName { get; set; }
+        public string Description { get; set; }
 #endif
-        /// <summary>Field index in the underlying data structure</summary>
-        public int? Index { get; set; }
-        /// <summary>Maximum allowed value (if applicable)</summary>
+        /// <summary>Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? JsonName { get; set; }
+#nullable restore
+#else
+        public string JsonName { get; set; }
+#endif
+        /// <summary>Maximum allowed value for this field (as a string; use `dataType` to determine how to parse it).Null if no maximum constraint applies.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Max { get; set; }
@@ -49,7 +63,9 @@ namespace SpaceGassApi.Models
 #else
         public string Max { get; set; }
 #endif
-        /// <summary>Minimum allowed value (if applicable)</summary>
+        /// <summary>Maximum length for string fields (characters). Null for non-string fields.</summary>
+        public int? MaxLength { get; set; }
+        /// <summary>Minimum allowed value for this field (as a string; use `dataType` to determine how to parse it).Null if no minimum constraint applies.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Min { get; set; }
@@ -57,21 +73,21 @@ namespace SpaceGassApi.Models
 #else
         public string Min { get; set; }
 #endif
-        /// <summary>Resolved unit label based on current job units (e.g., &quot;mm&quot;, &quot;kN/mm&quot;).This is what values in requests/responses are measured in.Null if the field has no units.</summary>
+        /// <summary>Internal-only: raw NETSpec field name (e.g. &quot;Node A&quot;, &quot;Dir Angle&quot;) forcorrelation against SPACE GASS documentation. Not serialised in Release.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? SourceName { get; set; }
+#nullable restore
+#else
+        public string SourceName { get; set; }
+#endif
+        /// <summary>Resolved unit label based on the current job units — e.g. &quot;mm&quot;, &quot;kN&quot;,&quot;kN/mm^2&quot;. Null when the field has no units.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Units { get; set; }
 #nullable restore
 #else
         public string Units { get; set; }
-#endif
-        /// <summary>Units mask token (e.g., &quot;&lt;Length&gt;&quot;) - null if no units.This is the raw mask from the DataSpec.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? UnitsMask { get; set; }
-#nullable restore
-#else
-        public string UnitsMask { get; set; }
 #endif
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
@@ -92,14 +108,16 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "allowEmpty", n => { AllowEmpty = n.GetBoolValue(); } },
+                { "allowedValues", n => { AllowedValues = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.AllowedValue>(global::SpaceGassApi.Models.AllowedValue.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "dataType", n => { DataType = n.GetStringValue(); } },
                 { "default", n => { Default = n.GetStringValue(); } },
-                { "fieldName", n => { FieldName = n.GetStringValue(); } },
-                { "index", n => { Index = n.GetIntValue(); } },
+                { "description", n => { Description = n.GetStringValue(); } },
+                { "jsonName", n => { JsonName = n.GetStringValue(); } },
                 { "max", n => { Max = n.GetStringValue(); } },
+                { "maxLength", n => { MaxLength = n.GetIntValue(); } },
                 { "min", n => { Min = n.GetStringValue(); } },
+                { "sourceName", n => { SourceName = n.GetStringValue(); } },
                 { "units", n => { Units = n.GetStringValue(); } },
-                { "unitsMask", n => { UnitsMask = n.GetStringValue(); } },
             };
         }
         /// <summary>
@@ -109,15 +127,17 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.AllowedValue>("allowedValues", AllowedValues);
             writer.WriteBoolValue("allowEmpty", AllowEmpty);
             writer.WriteStringValue("dataType", DataType);
             writer.WriteStringValue("default", Default);
-            writer.WriteStringValue("fieldName", FieldName);
-            writer.WriteIntValue("index", Index);
+            writer.WriteStringValue("description", Description);
+            writer.WriteStringValue("jsonName", JsonName);
             writer.WriteStringValue("max", Max);
+            writer.WriteIntValue("maxLength", MaxLength);
             writer.WriteStringValue("min", Min);
+            writer.WriteStringValue("sourceName", SourceName);
             writer.WriteStringValue("units", Units);
-            writer.WriteStringValue("unitsMask", UnitsMask);
         }
     }
 }

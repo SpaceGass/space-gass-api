@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a member concentrated load entity.Represents a concentrated force or moment applied at a point along a member.Composite key: (Case, Member, SubLoad).
+    /// DTO for reading a member concentrated load entity.Represents a concentrated force or moment applied at a point along a member.Composite Id: (Case, Member, SubLoad).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberConcentratedLoad : IParsable

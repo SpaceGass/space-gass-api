@@ -9,7 +9,7 @@ class ServiceInfo(Parsable):
     """
     Service information including API path and SPACE GASS version.
     """
-    # The API base URL (e.g. https://localhost:5000/api).
+    # The API base URL (e.g. https://localhost:34560/api).
     api_path: Optional[str] = None
     # SPACE GASS version number in format "X.XX.XXXX (ProgramType)"(e.g. "15.2.100 (Commercial)").
     space_gass_version: Optional[str] = None

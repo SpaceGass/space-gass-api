@@ -8,34 +8,26 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Warnings returned when query filter parameters reference keys or load casesthat do not exist in the result set.
+    /// Warnings returned when some requested load cases or modes did not have analysisresults in the response. (Filter Ids that don&apos;t exist in the model are rejectedup-front with HTTP 400 by the controller — they never reach this DTO.)`casesNotAnalyzed` is an SG list-format string that can be pasted straightinto `POST /job/analysis/run`&apos;s `loadCases` field to re-run only thosecases. `modesNotAnalyzed` is a per-case list — each analysed case can computea different number of modes, so the warning is keyed by case rather than flattened.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class QueryWarnings : IParsable
     {
-        /// <summary>Load case IDs that were requested but produced no results.</summary>
+        /// <summary>Load case Ids that exist in the model but produced no result rows for this query— typically because the analysis has not been run for those cases.SG list-format string (e.g. `&quot;2,5-7&quot;`) — already intersected against thecaller&apos;s original filter, ready to paste back into `POST /job/analysis/run`&apos;s`loadCases` field.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<int?>? InvalidCases { get; set; }
+        public string? CasesNotAnalyzed { get; set; }
 #nullable restore
 #else
-        public List<int?> InvalidCases { get; set; }
+        public string CasesNotAnalyzed { get; set; }
 #endif
-        /// <summary>Entity keys that were requested but produced no results.</summary>
+        /// <summary>Per-case list of modes the caller requested that did not produce result rowsfor that specific case. Each analysed case can compute a different number ofmodes, so a flattened across-cases warning would hide gaps. Each entry namesthe case and the SG list-format string of missing mode numbers for it.Informational — to resolve, raise the analysis `modes` count to at leastthe largest missing mode number and re-run.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<int?>? InvalidKeys { get; set; }
+        public List<global::SpaceGassApi.Models.CaseModesWarning>? ModesNotAnalyzed { get; set; }
 #nullable restore
 #else
-        public List<int?> InvalidKeys { get; set; }
-#endif
-        /// <summary>Mode numbers that were requested but produced no results.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public List<int?>? InvalidModes { get; set; }
-#nullable restore
-#else
-        public List<int?> InvalidModes { get; set; }
+        public List<global::SpaceGassApi.Models.CaseModesWarning> ModesNotAnalyzed { get; set; }
 #endif
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
@@ -55,9 +47,8 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "invalidCases", n => { InvalidCases = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
-                { "invalidKeys", n => { InvalidKeys = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
-                { "invalidModes", n => { InvalidModes = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
+                { "casesNotAnalyzed", n => { CasesNotAnalyzed = n.GetStringValue(); } },
+                { "modesNotAnalyzed", n => { ModesNotAnalyzed = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.CaseModesWarning>(global::SpaceGassApi.Models.CaseModesWarning.CreateFromDiscriminatorValue)?.AsList(); } },
             };
         }
         /// <summary>
@@ -67,9 +58,8 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfPrimitiveValues<int?>("invalidCases", InvalidCases);
-            writer.WriteCollectionOfPrimitiveValues<int?>("invalidKeys", InvalidKeys);
-            writer.WriteCollectionOfPrimitiveValues<int?>("invalidModes", InvalidModes);
+            writer.WriteStringValue("casesNotAnalyzed", CasesNotAnalyzed);
+            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.CaseModesWarning>("modesNotAnalyzed", ModesNotAnalyzed);
         }
     }
 }

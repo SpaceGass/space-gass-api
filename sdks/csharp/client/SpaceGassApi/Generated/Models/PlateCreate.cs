@@ -31,8 +31,8 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
-        public int? Key { get; set; }
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
+        public int? Id { get; set; }
         /// <summary>Material number assigned to this plate.</summary>
         public int? Material { get; set; }
         /// <summary>Membrane thickness of the plate. Unit: Section Properties (see GET /job/units).</summary>
@@ -75,7 +75,7 @@ namespace SpaceGassApi.Models
                 { "dirAxis", n => { DirAxis = n.GetEnumValue<global::SpaceGassApi.Models.DirectionAxis>(); } },
                 { "dirNode", n => { DirNode = n.GetIntValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "material", n => { Material = n.GetIntValue(); } },
                 { "membraneThickness", n => { MembraneThickness = n.GetDoubleValue(); } },
                 { "nodeA", n => { NodeA = n.GetIntValue(); } },
@@ -100,7 +100,7 @@ namespace SpaceGassApi.Models
             writer.WriteEnumValue<global::SpaceGassApi.Models.DirectionAxis>("dirAxis", DirAxis);
             writer.WriteIntValue("dirNode", DirNode);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteIntValue("id", Id);
             writer.WriteIntValue("material", Material);
             writer.WriteDoubleValue("membraneThickness", MembraneThickness);
             writer.WriteIntValue("nodeA", NodeA);

@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 class CasesRequestBuilder(BaseRequestBuilder):
     """
-    Builds and executes requests for operations under /job/loads/load-case-groups/{key}/cases
+    Builds and executes requests for operations under /job/loads/load-case-groups/{id}/cases
     """
     def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
         """
@@ -28,11 +28,11 @@ class CasesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/load-case-groups/{key}/cases", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/load-case-groups/{id}/cases", path_parameters)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[list[LoadCase]]:
         """
-        Gets the expanded list of load cases that belong to a group.Resolves the group's load case list (e.g., "1,3,5-10") against the actualload cases that exist in the current job. Returns full load case dataincluding key, title, type, notes, and guid.
+        Gets the expanded list of load cases that belong to a group.Resolves the group's load case list (e.g., "1,3,5-10") against the actualload cases that exist in the current job. Returns full load case dataincluding Id, title, type, notes, and guid.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[LoadCase]]
         """
@@ -53,7 +53,7 @@ class CasesRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Gets the expanded list of load cases that belong to a group.Resolves the group's load case list (e.g., "1,3,5-10") against the actualload cases that exist in the current job. Returns full load case dataincluding key, title, type, notes, and guid.
+        Gets the expanded list of load cases that belong to a group.Resolves the group's load case list (e.g., "1,3,5-10") against the actualload cases that exist in the current job. Returns full load case dataincluding Id, title, type, notes, and guid.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

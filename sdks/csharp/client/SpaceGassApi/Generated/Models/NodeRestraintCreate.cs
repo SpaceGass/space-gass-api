@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for creating (or replacing) a node restraint.The node key comes from the route parameter, not the body.
+    /// DTO for creating (or replacing) a node restraint.The node Id comes from the route parameter, not the body.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeRestraintCreate : IParsable
@@ -23,7 +23,7 @@ namespace SpaceGassApi.Models
 #endif
         /// <summary>Whether this is a general restraint.</summary>
         public bool? GeneralRestraint { get; set; }
-        /// <summary>The node key to create the restraint for.Optional in body — if omitted, set from the route parameter by the controller.</summary>
+        /// <summary>The node Id to create the restraint for.Optional in body — if omitted, set from the route parameter by the controller.</summary>
         public int? Node { get; set; }
         /// <summary>6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Free, R=Restrained, S=Spring, V=Variable spring, P=Plastic, N=Nonlinear friction.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER

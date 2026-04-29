@@ -14,16 +14,19 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from ....models.expand_option import ExpandOption
     from ....models.node import Node
     from ....models.node_create import NodeCreate
     from ....models.node_type_filter import NodeTypeFilter
     from ....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
+    from .constraint.constraint_request_builder import ConstraintRequestBuilder
     from .constraints.constraints_request_builder import ConstraintsRequestBuilder
     from .exists.exists_request_builder import ExistsRequestBuilder
-    from .item.with_key_item_request_builder import WithKeyItemRequestBuilder
+    from .item.nodes_item_request_builder import NodesItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
     from .next.next_request_builder import NextRequestBuilder
+    from .restraint.restraint_request_builder import RestraintRequestBuilder
     from .restraints.restraints_request_builder import RestraintsRequestBuilder
 
 class NodesRequestBuilder(BaseRequestBuilder):
@@ -37,25 +40,25 @@ class NodesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes{?Limit*,MaxX*,MaxY*,MaxZ*,MinX*,MinY*,MinZ*,NodeType*,Nodes*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes{?Expand*,Limit*,MaxX*,MaxY*,MaxZ*,MinX*,MinY*,MinZ*,NodeType*,Nodes*,Offset*}", path_parameters)
     
-    def by_key(self,key: int) -> WithKeyItemRequestBuilder:
+    def by_id(self,id: int) -> NodesItemRequestBuilder:
         """
         Gets an item from the space_gass_api.job.structure.nodes.item collection
-        param key: The entity key
-        Returns: WithKeyItemRequestBuilder
+        param id: The entity Id
+        Returns: NodesItemRequestBuilder
         """
-        if key is None:
-            raise TypeError("key cannot be null.")
-        from .item.with_key_item_request_builder import WithKeyItemRequestBuilder
+        if id is None:
+            raise TypeError("id cannot be null.")
+        from .item.nodes_item_request_builder import NodesItemRequestBuilder
 
         url_tpl_params = get_path_parameters(self.path_parameters)
-        url_tpl_params["key"] = key
-        return WithKeyItemRequestBuilder(self.request_adapter, url_tpl_params)
+        url_tpl_params["id"] = id
+        return NodesItemRequestBuilder(self.request_adapter, url_tpl_params)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[NodesRequestBuilderGetQueryParameters]] = None) -> Optional[list[Node]]:
         """
-        Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[Node]]
         """
@@ -100,7 +103,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[NodesRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -144,6 +147,15 @@ class NodesRequestBuilder(BaseRequestBuilder):
         return BulkRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
+    def constraint(self) -> ConstraintRequestBuilder:
+        """
+        The constraint property
+        """
+        from .constraint.constraint_request_builder import ConstraintRequestBuilder
+
+        return ConstraintRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
     def constraints(self) -> ConstraintsRequestBuilder:
         """
         The constraints property
@@ -180,6 +192,15 @@ class NodesRequestBuilder(BaseRequestBuilder):
         return NextRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
+    def restraint(self) -> RestraintRequestBuilder:
+        """
+        The restraint property
+        """
+        from .restraint.restraint_request_builder import RestraintRequestBuilder
+
+        return RestraintRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
     def restraints(self) -> RestraintsRequestBuilder:
         """
         The restraints property
@@ -191,7 +212,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
     @dataclass
     class NodesRequestBuilderGetQueryParameters():
         """
-        Gets all items with optional filtering and pagination.Results are always sorted by Key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -201,6 +222,8 @@ class NodesRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
+            if original_name == "expand":
+                return "Expand"
             if original_name == "limit":
                 return "Limit"
             if original_name == "max_x":
@@ -223,6 +246,9 @@ class NodesRequestBuilder(BaseRequestBuilder):
                 return "Offset"
             return original_name
         
+        # Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.
+        expand: Optional[ExpandOption] = None
+
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 
@@ -247,7 +273,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
         # Filter by node type (e.g., Restrained). Default is All_Types.
         node_type: Optional[NodeTypeFilter] = None
 
-        # Comma-separated list of specific node numbers (e.g., "1,5,10,15").
+        # Node Ids to filter by, in SG list format (e.g. `"1,5-10,15"`).Omit to return all nodes.
         nodes: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.

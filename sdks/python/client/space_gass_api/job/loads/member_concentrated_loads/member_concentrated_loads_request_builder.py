@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from ....models.member_concentrated_load_create import MemberConcentratedLoadCreate
     from ....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
-    from .item.with_case_key_item_request_builder import WithCaseKeyItemRequestBuilder
+    from .item.with_case_item_request_builder import WithCaseItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class MemberConcentratedLoadsRequestBuilder(BaseRequestBuilder):
@@ -34,23 +34,23 @@ class MemberConcentratedLoadsRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/member-concentrated-loads{?Cases*,Limit*,LoadCategory*,Members*,Offset*}", path_parameters)
     
-    def by_case_key(self,case_key: int) -> WithCaseKeyItemRequestBuilder:
+    def by_case_id(self,case_id: int) -> WithCaseItemRequestBuilder:
         """
         Gets an item from the space_gass_api.job.loads.memberConcentratedLoads.item collection
-        param case_key: The load case number
-        Returns: WithCaseKeyItemRequestBuilder
+        param case_id: The load case number
+        Returns: WithCaseItemRequestBuilder
         """
-        if case_key is None:
-            raise TypeError("case_key cannot be null.")
-        from .item.with_case_key_item_request_builder import WithCaseKeyItemRequestBuilder
+        if case_id is None:
+            raise TypeError("case_id cannot be null.")
+        from .item.with_case_item_request_builder import WithCaseItemRequestBuilder
 
         url_tpl_params = get_path_parameters(self.path_parameters)
-        url_tpl_params["caseKey"] = case_key
-        return WithCaseKeyItemRequestBuilder(self.request_adapter, url_tpl_params)
+        url_tpl_params["caseId"] = case_id
+        return WithCaseItemRequestBuilder(self.request_adapter, url_tpl_params)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[MemberConcentratedLoadsRequestBuilderGetQueryParameters]] = None) -> Optional[list[MemberConcentratedLoad]]:
         """
-        Gets all loads with optional filtering and pagination.Use the 'cases' query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[MemberConcentratedLoad]]
         """
@@ -60,6 +60,7 @@ class MemberConcentratedLoadsRequestBuilder(BaseRequestBuilder):
         from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ProblemDetails,
             "401": ProblemDetails,
         }
         if not self.request_adapter:
@@ -68,12 +69,12 @@ class MemberConcentratedLoadsRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_collection_async(request_info, MemberConcentratedLoad, error_mapping)
     
-    async def post(self,body: MemberConcentratedLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[MemberConcentratedLoad]:
+    async def post(self,body: MemberConcentratedLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[bytes]:
         """
         Creates a new load. The load case must exist and be a Primary load case.
         param body: DTO for creating a new member concentrated load.The sub-load number is auto-assigned — do not include it in the request.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberConcentratedLoad]
+        Returns: bytes
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -90,13 +91,11 @@ class MemberConcentratedLoadsRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from ....models.member_concentrated_load import MemberConcentratedLoad
-
-        return await self.request_adapter.send_async(request_info, MemberConcentratedLoad, error_mapping)
+        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[MemberConcentratedLoadsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets all loads with optional filtering and pagination.Use the 'cases' query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -151,7 +150,7 @@ class MemberConcentratedLoadsRequestBuilder(BaseRequestBuilder):
     @dataclass
     class MemberConcentratedLoadsRequestBuilderGetQueryParameters():
         """
-        Gets all loads with optional filtering and pagination.Use the 'cases' query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity key ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -173,8 +172,8 @@ class MemberConcentratedLoadsRequestBuilder(BaseRequestBuilder):
                 return "Offset"
             return original_name
         
-        # Load case numbers to filter by (e.g., ?cases=1&cases=5&cases=10).Returns only loads belonging to the specified cases.Omit to return loads for all cases.
-        cases: Optional[list[int]] = None
+        # Load cases to filter by, in SG list format (e.g. `"1,3-7,10"`).Returns only loads belonging to the specified cases.Omit to return loads for all cases.
+        cases: Optional[str] = None
 
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
@@ -182,8 +181,8 @@ class MemberConcentratedLoadsRequestBuilder(BaseRequestBuilder):
         # Filter by load category number.Returns only loads assigned to the specified category.
         load_category: Optional[int] = None
 
-        # Member numbers to filter by (e.g., ?members=1&members=5&members=10).Returns only loads applied to the specified members.Omit to return loads for all members.
-        members: Optional[list[int]] = None
+        # Member Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Returns only loads applied to the specified members.Omit to return loads for all members.
+        members: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None

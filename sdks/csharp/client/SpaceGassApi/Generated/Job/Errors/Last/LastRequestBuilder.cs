@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Errors.Last
         {
         }
         /// <summary>
-        /// Returns the most recent SPACE GASS error message, or null if no errors have been logged.Useful for quick checks after an operation without retrieving the full list.
+        /// Returns the most recent error message, or null if no errors have been logged.Useful for quick checks after an operation without retrieving the full list.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.LastError"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -57,7 +57,7 @@ namespace SpaceGassApi.Job.Errors.Last
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LastError>(requestInfo, global::SpaceGassApi.Models.LastError.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Returns the most recent SPACE GASS error message, or null if no errors have been logged.Useful for quick checks after an operation without retrieving the full list.
+        /// Returns the most recent error message, or null if no errors have been logged.Useful for quick checks after an operation without retrieving the full list.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

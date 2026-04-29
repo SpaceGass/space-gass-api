@@ -33,7 +33,7 @@ class ErrorsRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> None:
         """
-        Clears all logged SPACE GASS error messages from the current session.
+        Clears all logged error messages from the current session.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: None
         """
@@ -51,7 +51,7 @@ class ErrorsRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[ErrorList]:
         """
-        Returns all SPACE GASS diagnostic error messages logged during the current session.These are engine-level messages generated during operations such as analysis, import, or file operations.
+        Returns all diagnostic error messages logged during the current session.These are engine-level messages generated during operations such as analysis, import, or file operations.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[ErrorList]
         """
@@ -71,7 +71,7 @@ class ErrorsRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Clears all logged SPACE GASS error messages from the current session.
+        Clears all logged error messages from the current session.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -82,7 +82,7 @@ class ErrorsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Returns all SPACE GASS diagnostic error messages logged during the current session.These are engine-level messages generated during operations such as analysis, import, or file operations.
+        Returns all diagnostic error messages logged during the current session.These are engine-level messages generated during operations such as analysis, import, or file operations.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

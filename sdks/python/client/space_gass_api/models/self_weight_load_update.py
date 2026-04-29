@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class SelfWeightLoadUpdate(Parsable):
     """
-    DTO for updating an existing self-weight load.All fields are nullable to support partial PATCH semantics.
+    DTO for updating an existing self-weight load.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # Gravitational acceleration in the global X direction.
     acceleration_x: Optional[float] = None

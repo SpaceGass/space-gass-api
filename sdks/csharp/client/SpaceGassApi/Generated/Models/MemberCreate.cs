@@ -37,8 +37,8 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
-        public int? Key { get; set; }
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
+        public int? Id { get; set; }
         /// <summary>Material number assigned to this member.</summary>
         public int? Material { get; set; }
         /// <summary>Node at end A of the member.</summary>
@@ -76,7 +76,7 @@ namespace SpaceGassApi.Models
                 { "gapCompressionLimit", n => { GapCompressionLimit = n.GetDoubleValue(); } },
                 { "gapTensionLimit", n => { GapTensionLimit = n.GetDoubleValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "material", n => { Material = n.GetIntValue(); } },
                 { "nodeA", n => { NodeA = n.GetIntValue(); } },
                 { "nodeB", n => { NodeB = n.GetIntValue(); } },
@@ -100,7 +100,7 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("gapCompressionLimit", GapCompressionLimit);
             writer.WriteDoubleValue("gapTensionLimit", GapTensionLimit);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteIntValue("id", Id);
             writer.WriteIntValue("material", Material);
             writer.WriteIntValue("nodeA", NodeA);
             writer.WriteIntValue("nodeB", NodeB);

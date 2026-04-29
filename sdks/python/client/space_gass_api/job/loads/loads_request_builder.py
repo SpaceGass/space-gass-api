@@ -6,6 +6,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
+    from .combination_cases.combination_cases_request_builder import CombinationCasesRequestBuilder
     from .load_cases.load_cases_request_builder import LoadCasesRequestBuilder
     from .load_case_groups.load_case_groups_request_builder import LoadCaseGroupsRequestBuilder
     from .load_categories.load_categories_request_builder import LoadCategoriesRequestBuilder
@@ -17,7 +18,7 @@ if TYPE_CHECKING:
     from .node_displacements.node_displacements_request_builder import NodeDisplacementsRequestBuilder
     from .node_loads.node_loads_request_builder import NodeLoadsRequestBuilder
     from .plate_pressure_loads.plate_pressure_loads_request_builder import PlatePressureLoadsRequestBuilder
-    from .self_weight.self_weight_request_builder import SelfWeightRequestBuilder
+    from .self_weight_loads.self_weight_loads_request_builder import SelfWeightLoadsRequestBuilder
     from .thermal_loads.thermal_loads_request_builder import ThermalLoadsRequestBuilder
 
 class LoadsRequestBuilder(BaseRequestBuilder):
@@ -32,6 +33,15 @@ class LoadsRequestBuilder(BaseRequestBuilder):
         Returns: None
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads", path_parameters)
+    
+    @property
+    def combination_cases(self) -> CombinationCasesRequestBuilder:
+        """
+        The combinationCases property
+        """
+        from .combination_cases.combination_cases_request_builder import CombinationCasesRequestBuilder
+
+        return CombinationCasesRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def load_case_groups(self) -> LoadCaseGroupsRequestBuilder:
@@ -133,13 +143,13 @@ class LoadsRequestBuilder(BaseRequestBuilder):
         return PlatePressureLoadsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
-    def self_weight(self) -> SelfWeightRequestBuilder:
+    def self_weight_loads(self) -> SelfWeightLoadsRequestBuilder:
         """
-        The selfWeight property
+        The selfWeightLoads property
         """
-        from .self_weight.self_weight_request_builder import SelfWeightRequestBuilder
+        from .self_weight_loads.self_weight_loads_request_builder import SelfWeightLoadsRequestBuilder
 
-        return SelfWeightRequestBuilder(self.request_adapter, self.path_parameters)
+        return SelfWeightLoadsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def thermal_loads(self) -> ThermalLoadsRequestBuilder:

@@ -103,7 +103,7 @@ class ConstraintsRequestBuilder(BaseRequestBuilder):
         # Filter by master node number. Omit to return all.
         master_node: Optional[int] = None
 
-        # Comma-separated list of slave node numbers to filter by (e.g., "1,5,10"). Omit to return all.
+        # Slave node Ids in SG list format (e.g. `"1,5-10"`). Omit to return all.
         slaves: Optional[str] = None
 
     

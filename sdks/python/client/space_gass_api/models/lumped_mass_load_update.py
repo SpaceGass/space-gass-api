@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class LumpedMassLoadUpdate(Parsable):
     """
-    DTO for updating an existing lumped mass load.All fields are nullable to support partial PATCH semantics.
+    DTO for updating an existing lumped mass load.Only fields included in the request are updated; omit a field to keep its current value.
     """
     # The load case number.
     case: Optional[int] = None

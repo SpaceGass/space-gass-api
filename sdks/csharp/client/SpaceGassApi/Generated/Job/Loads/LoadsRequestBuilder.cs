@@ -2,6 +2,7 @@
 #pragma warning disable CS0618
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Loads.CombinationCases;
 using SpaceGassApi.Job.Loads.LoadCaseGroups;
 using SpaceGassApi.Job.Loads.LoadCases;
 using SpaceGassApi.Job.Loads.LoadCategories;
@@ -13,7 +14,7 @@ using SpaceGassApi.Job.Loads.MemberPrestressLoads;
 using SpaceGassApi.Job.Loads.NodeDisplacements;
 using SpaceGassApi.Job.Loads.NodeLoads;
 using SpaceGassApi.Job.Loads.PlatePressureLoads;
-using SpaceGassApi.Job.Loads.SelfWeight;
+using SpaceGassApi.Job.Loads.SelfWeightLoads;
 using SpaceGassApi.Job.Loads.ThermalLoads;
 using System.Collections.Generic;
 using System.IO;
@@ -27,6 +28,11 @@ namespace SpaceGassApi.Job.Loads
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class LoadsRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The combinationCases property</summary>
+        public global::SpaceGassApi.Job.Loads.CombinationCases.CombinationCasesRequestBuilder CombinationCases
+        {
+            get => new global::SpaceGassApi.Job.Loads.CombinationCases.CombinationCasesRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The loadCaseGroups property</summary>
         public global::SpaceGassApi.Job.Loads.LoadCaseGroups.LoadCaseGroupsRequestBuilder LoadCaseGroups
         {
@@ -82,10 +88,10 @@ namespace SpaceGassApi.Job.Loads
         {
             get => new global::SpaceGassApi.Job.Loads.PlatePressureLoads.PlatePressureLoadsRequestBuilder(PathParameters, RequestAdapter);
         }
-        /// <summary>The selfWeight property</summary>
-        public global::SpaceGassApi.Job.Loads.SelfWeight.SelfWeightRequestBuilder SelfWeight
+        /// <summary>The selfWeightLoads property</summary>
+        public global::SpaceGassApi.Job.Loads.SelfWeightLoads.SelfWeightLoadsRequestBuilder SelfWeightLoads
         {
-            get => new global::SpaceGassApi.Job.Loads.SelfWeight.SelfWeightRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::SpaceGassApi.Job.Loads.SelfWeightLoads.SelfWeightLoadsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The thermalLoads property</summary>
         public global::SpaceGassApi.Job.Loads.ThermalLoads.ThermalLoadsRequestBuilder ThermalLoads

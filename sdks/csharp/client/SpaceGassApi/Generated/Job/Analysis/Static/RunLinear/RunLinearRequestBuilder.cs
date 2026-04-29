@@ -34,10 +34,10 @@ namespace SpaceGassApi.Job.Analysis.Static.RunLinear
         {
         }
         /// <summary>
-        /// Starts a Linear Static Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional and uses PATCH semantics — only non-null fields are appliedas overrides to the current SPACEGASS job settings before the analysis starts.If omitted (or null), the analysis runs with the current job settings as-is.            Once complete, results are available via the query endpoints(e.g., GET /api/v1/job/query/analysis/static/node/reactions).
+        /// Starts a Linear Static Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.If omitted, the analysis runs with the current job settings as-is.            Once complete, results are available via the query endpoints(e.g., GET /api/v1/job/query/analysis/static/node/reactions).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.AnalysisRun"/></returns>
-        /// <param name="body">Update DTO for Static Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.Used by PATCH /static/settings and POST /static/run-linear and /static/run-non-linear.</param>
+        /// <param name="body">Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
@@ -61,10 +61,10 @@ namespace SpaceGassApi.Job.Analysis.Static.RunLinear
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.AnalysisRun>(requestInfo, global::SpaceGassApi.Models.AnalysisRun.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Starts a Linear Static Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional and uses PATCH semantics — only non-null fields are appliedas overrides to the current SPACEGASS job settings before the analysis starts.If omitted (or null), the analysis runs with the current job settings as-is.            Once complete, results are available via the query endpoints(e.g., GET /api/v1/job/query/analysis/static/node/reactions).
+        /// Starts a Linear Static Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.If omitted, the analysis runs with the current job settings as-is.            Once complete, results are available via the query endpoints(e.g., GET /api/v1/job/query/analysis/static/node/reactions).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">Update DTO for Static Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.Used by PATCH /static/settings and POST /static/run-linear and /static/run-non-linear.</param>
+        /// <param name="body">Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

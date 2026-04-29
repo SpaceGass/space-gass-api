@@ -16,6 +16,7 @@ from warnings import warn
 if TYPE_CHECKING:
     from .......models.node_displacement_query_result import NodeDisplacementQueryResult
     from .......models.problem_details import ProblemDetails
+    from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class DisplacementsRequestBuilder(BaseRequestBuilder):
     """
@@ -28,11 +29,11 @@ class DisplacementsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/node/displacements{?Limit*,Offset*,case*,node*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/node/displacements{?Limit*,Offset*,cases*,nodes*}", path_parameters)
     
     async def get(self,request_configuration: Optional[RequestConfiguration[DisplacementsRequestBuilderGetQueryParameters]] = None) -> Optional[NodeDisplacementQueryResult]:
         """
-        Gets displacement results for nodes, optionally filtered by load cases and node keys.
+        Gets displacement results for nodes, optionally filtered by load cases and node Ids.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[NodeDisplacementQueryResult]
         """
@@ -42,6 +43,7 @@ class DisplacementsRequestBuilder(BaseRequestBuilder):
         from .......models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "400": ProblemDetails,
             "401": ProblemDetails,
         }
         if not self.request_adapter:
@@ -52,7 +54,7 @@ class DisplacementsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[DisplacementsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets displacement results for nodes, optionally filtered by load cases and node keys.
+        Gets displacement results for nodes, optionally filtered by load cases and node Ids.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -71,10 +73,19 @@ class DisplacementsRequestBuilder(BaseRequestBuilder):
             raise TypeError("raw_url cannot be null.")
         return DisplacementsRequestBuilder(self.request_adapter, raw_url)
     
+    @property
+    def metadata(self) -> MetadataRequestBuilder:
+        """
+        The metadata property
+        """
+        from .metadata.metadata_request_builder import MetadataRequestBuilder
+
+        return MetadataRequestBuilder(self.request_adapter, self.path_parameters)
+    
     @dataclass
     class DisplacementsRequestBuilderGetQueryParameters():
         """
-        Gets displacement results for nodes, optionally filtered by load cases and node keys.
+        Gets displacement results for nodes, optionally filtered by load cases and node Ids.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -88,20 +99,20 @@ class DisplacementsRequestBuilder(BaseRequestBuilder):
                 return "Limit"
             if original_name == "offset":
                 return "Offset"
-            if original_name == "case":
-                return "case"
-            if original_name == "node":
-                return "node"
+            if original_name == "cases":
+                return "cases"
+            if original_name == "nodes":
+                return "nodes"
             return original_name
         
-        # Filter by load case IDs.
-        case: Optional[list[int]] = None
+        # Load case Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
+        cases: Optional[str] = None
 
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 
-        # Filter by node keys.
-        node: Optional[list[int]] = None
+        # Node Ids in SG list format (e.g. `"1,5-10"`). Omit to return all.
+        nodes: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None

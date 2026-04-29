@@ -15,10 +15,10 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Total number of load cases</summary>
         public int? Count { get; set; }
+        /// <summary>Current load case identifier</summary>
+        public int? Id { get; set; }
         /// <summary>Current load case index (0-based)</summary>
         public int? Index { get; set; }
-        /// <summary>Current load case key/identifier</summary>
-        public int? Key { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
@@ -38,8 +38,8 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "count", n => { Count = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "index", n => { Index = n.GetIntValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
             };
         }
         /// <summary>
@@ -50,8 +50,8 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteIntValue("count", Count);
+            writer.WriteIntValue("id", Id);
             writer.WriteIntValue("index", Index);
-            writer.WriteIntValue("key", Key);
         }
     }
 }

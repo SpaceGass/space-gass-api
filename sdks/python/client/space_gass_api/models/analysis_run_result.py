@@ -27,7 +27,7 @@ class AnalysisRunResult(Parsable):
     run_id: Optional[UUID] = None
     # Status of an analysis run through its lifecycle.
     status: Optional[AnalysisRunStatus] = None
-    # Warning messages from SPACEGASS during the analysis
+    # Warning messages generated during the analysis
     warnings: Optional[list[str]] = None
     
     @staticmethod

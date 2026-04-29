@@ -17,27 +17,27 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads.Member
     {
         /// <summary>Gets an item from the SpaceGassApi.job.loads.thermalLoads.member.item collection</summary>
         /// <param name="position">The load case number</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseKeyItemRequestBuilder"/></returns>
-        public global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseKeyItemRequestBuilder this[int position]
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseItemRequestBuilder"/></returns>
+        public global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseItemRequestBuilder this[int position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                urlTplParams.Add("caseKey", position);
-                return new global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                urlTplParams.Add("caseId", position);
+                return new global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>Gets an item from the SpaceGassApi.job.loads.thermalLoads.member.item collection</summary>
         /// <param name="position">The load case number</param>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseKeyItemRequestBuilder"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseItemRequestBuilder"/></returns>
         [Obsolete("This indexer is deprecated and will be removed in the next major version. Use the one with the typed parameter instead.")]
-        public global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseKeyItemRequestBuilder this[string position]
+        public global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseItemRequestBuilder this[string position]
         {
             get
             {
                 var urlTplParams = new Dictionary<string, object>(PathParameters);
-                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("caseKey", position);
-                return new global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseKeyItemRequestBuilder(urlTplParams, RequestAdapter);
+                if (!string.IsNullOrWhiteSpace(position)) urlTplParams.Add("caseId", position);
+                return new global::SpaceGassApi.Job.Loads.ThermalLoads.Member.Item.WithCaseItemRequestBuilder(urlTplParams, RequestAdapter);
             }
         }
         /// <summary>

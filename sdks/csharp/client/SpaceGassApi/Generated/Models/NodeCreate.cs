@@ -21,8 +21,8 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
-        public int? Key { get; set; }
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
+        public int? Id { get; set; }
         /// <summary>X coordinate. Unit: Length (see GET /job/units).</summary>
         public double? X { get; set; }
         /// <summary>Y coordinate. Unit: Length (see GET /job/units).</summary>
@@ -48,7 +48,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "x", n => { X = n.GetDoubleValue(); } },
                 { "y", n => { Y = n.GetDoubleValue(); } },
                 { "z", n => { Z = n.GetDoubleValue(); } },
@@ -62,7 +62,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("x", X);
             writer.WriteDoubleValue("y", Y);
             writer.WriteDoubleValue("z", Z);

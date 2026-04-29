@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -17,12 +18,17 @@ namespace SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class CheckSummaryRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The metadata property</summary>
+        public global::SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary.Metadata.MetadataRequestBuilder Metadata
+        {
+            get => new global::SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary.CheckSummaryRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CheckSummaryRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/design/steel-member/check-summary{?Limit*,Offset*,member*}", pathParameters)
+        public CheckSummaryRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/design/steel-member/check-summary{?Limit*,Offset*,members*}", pathParameters)
         {
         }
         /// <summary>
@@ -30,15 +36,16 @@ namespace SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CheckSummaryRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/design/steel-member/check-summary{?Limit*,Offset*,member*}", rawUrl)
+        public CheckSummaryRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/design/steel-member/check-summary{?Limit*,Offset*,members*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets steel member design check summary results, optionally filtered by member keys.
+        /// Gets steel member design check summary results, optionally filtered by member Ids.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelCheckSummaryQueryResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -52,12 +59,13 @@ namespace SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.SteelCheckSummaryQueryResult>(requestInfo, global::SpaceGassApi.Models.SteelCheckSummaryQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets steel member design check summary results, optionally filtered by member keys.
+        /// Gets steel member design check summary results, optionally filtered by member Ids.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -85,22 +93,22 @@ namespace SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary
             return new global::SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary.CheckSummaryRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets steel member design check summary results, optionally filtered by member keys.
+        /// Gets steel member design check summary results, optionally filtered by member Ids.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class CheckSummaryRequestBuilderGetQueryParameters 
         {
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
-            /// <summary>Filter by member keys.</summary>
+            /// <summary>Member Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("member")]
-            public int?[]? Member { get; set; }
+            [QueryParameter("members")]
+            public string? Members { get; set; }
 #nullable restore
 #else
-            [QueryParameter("member")]
-            public int?[] Member { get; set; }
+            [QueryParameter("members")]
+            public string Members { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             public int? Offset { get; set; }

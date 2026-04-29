@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Update DTO for Buckling Analysis settings (PATCH semantics).All fields are nullable — only non-null fields are applied as overrides.
+    /// Update request for Buckling Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BucklingSettingsUpdate : IParsable

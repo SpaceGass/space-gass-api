@@ -22,7 +22,7 @@ namespace SpaceGassApi.Job.Close
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CloseRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/close{?save*}", pathParameters)
+        public CloseRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/close", pathParameters)
         {
         }
         /// <summary>
@@ -30,46 +30,46 @@ namespace SpaceGassApi.Job.Close
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CloseRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/close{?save*}", rawUrl)
+        public CloseRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/close", rawUrl)
         {
         }
         /// <summary>
-        /// Closes the current job session and unloads from memory.            - save=true (default): saves data to the .sg file before closing- save=false: discards unsaved changes and closes without saving            The .sg file on disk is never deleted.Returns the file resource state after close (isOpen will be false).
+        /// Closes the current job session and unloads from memory.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobState"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.JobState?> PostAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Close.CloseRequestBuilder.CloseRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.JobState?> PostAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.JobState> PostAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Close.CloseRequestBuilder.CloseRequestBuilderPostQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.JobState> PostAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToPostRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobState>(requestInfo, global::SpaceGassApi.Models.JobState.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Closes the current job session and unloads from memory.            - save=true (default): saves data to the .sg file before closing- save=false: discards unsaved changes and closes without saving            The .sg file on disk is never deleted.Returns the file resource state after close (isOpen will be false).
+        /// Closes the current job session and unloads from memory.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToPostRequestInformation(Action<RequestConfiguration<global::SpaceGassApi.Job.Close.CloseRequestBuilder.CloseRequestBuilderPostQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToPostRequestInformation(Action<RequestConfiguration<global::SpaceGassApi.Job.Close.CloseRequestBuilder.CloseRequestBuilderPostQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
         {
 #endif
             var requestInfo = new RequestInformation(Method.POST, UrlTemplate, PathParameters);
@@ -87,21 +87,11 @@ namespace SpaceGassApi.Job.Close
             return new global::SpaceGassApi.Job.Close.CloseRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Closes the current job session and unloads from memory.            - save=true (default): saves data to the .sg file before closing- save=false: discards unsaved changes and closes without saving            The .sg file on disk is never deleted.Returns the file resource state after close (isOpen will be false).
-        /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-        public partial class CloseRequestBuilderPostQueryParameters 
-        {
-            /// <summary>If true (default), saves before closing. If false, discards unsaved changes.</summary>
-            [QueryParameter("save")]
-            public bool? Save { get; set; }
-        }
-        /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.
         /// </summary>
         [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-        public partial class CloseRequestBuilderPostRequestConfiguration : RequestConfiguration<global::SpaceGassApi.Job.Close.CloseRequestBuilder.CloseRequestBuilderPostQueryParameters>
+        public partial class CloseRequestBuilderPostRequestConfiguration : RequestConfiguration<DefaultQueryParameters>
         {
         }
     }

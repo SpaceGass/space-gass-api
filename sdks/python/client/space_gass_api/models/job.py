@@ -5,15 +5,21 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .job_details import JobDetails
+    from .job_headings import JobHeadings
+    from .job_settings import JobSettings
+    from .units import Units
 
 @dataclass
 class Job(Parsable):
     """
-    Read DTO for job responses.Model counts are available via GET /job/status (JobStatusDto).Sub-resources (units, details) are managed via their own endpoints.
+    Read DTO for job responses.Model counts and file state are available via GET /job/status (JobStatusDto).
     """
-    # Read DTO for job details (text properties).
-    details: Optional[JobDetails] = None
+    # Read DTO for job headings (text properties).
+    headings: Optional[JobHeadings] = None
+    # Read DTO for job-level settings.Groups configuration properties that apply to the job as a whole.
+    settings: Optional[JobSettings] = None
+    # Unit settings for the current job.
+    units: Optional[Units] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> Job:
@@ -31,12 +37,18 @@ class Job(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .job_details import JobDetails
+        from .job_headings import JobHeadings
+        from .job_settings import JobSettings
+        from .units import Units
 
-        from .job_details import JobDetails
+        from .job_headings import JobHeadings
+        from .job_settings import JobSettings
+        from .units import Units
 
         fields: dict[str, Callable[[Any], None]] = {
-            "details": lambda n : setattr(self, 'details', n.get_object_value(JobDetails)),
+            "headings": lambda n : setattr(self, 'headings', n.get_object_value(JobHeadings)),
+            "settings": lambda n : setattr(self, 'settings', n.get_object_value(JobSettings)),
+            "units": lambda n : setattr(self, 'units', n.get_object_value(Units)),
         }
         return fields
     
@@ -48,6 +60,8 @@ class Job(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_object_value("details", self.details)
+        writer.write_object_value("headings", self.headings)
+        writer.write_object_value("settings", self.settings)
+        writer.write_object_value("units", self.units)
     
 

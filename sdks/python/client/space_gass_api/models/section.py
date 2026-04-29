@@ -19,39 +19,39 @@ class Section(Parsable):
     angle_type: Optional[AngleType] = None
     # Area modification factor.
     area_factor: Optional[float] = None
-    # Shear area in Y direction.
+    # Shear area in the Y direction.
     ay: Optional[float] = None
-    # Shear area in Z direction.
+    # Shear area in the Z direction.
     az: Optional[float] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
-    # Second moment of area about Y axis.
+    # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
+    id: Optional[int] = None
+    # Second moment of area about the principal Y axis.
     iy: Optional[float] = None
     # Iy modification factor.
     iy_factor: Optional[float] = None
-    # Second moment of area about Z axis.
+    # Second moment of area about the principal Z axis.
     iz: Optional[float] = None
     # Iz modification factor.
     iz_factor: Optional[float] = None
     # Torsion constant.
     j: Optional[float] = None
-    # Primary key - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
-    key: Optional[int] = None
-    # Library name. Empty for user-defined sections.
+    # Library name.
     library: Optional[str] = None
-    # Section mark/designation.
+    # Section mark / designation.
     mark: Optional[str] = None
     # Section name.
     name: Optional[str] = None
-    # Principal axis rotation angle (degrees).
+    # Principal axis rotation angle.
     principal_angle: Optional[float] = None
-    # Number of shapes in the section.
+    # Number of shapes in the section (1 for a standard library section).
     shapes: Optional[int] = None
     # Indicates whether a section or material was user-defined or imported from a library.
     source: Optional[PropertySource] = None
     # Torsion modification factor.
     torsion_factor: Optional[float] = None
-    # Whether the section is transposed.
+    # Whether the section's principal axes are swapped (transposed shape).
     transposed: Optional[bool] = None
     
     @staticmethod
@@ -83,12 +83,12 @@ class Section(Parsable):
             "ay": lambda n : setattr(self, 'ay', n.get_float_value()),
             "az": lambda n : setattr(self, 'az', n.get_float_value()),
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "iy": lambda n : setattr(self, 'iy', n.get_float_value()),
             "iyFactor": lambda n : setattr(self, 'iy_factor', n.get_float_value()),
             "iz": lambda n : setattr(self, 'iz', n.get_float_value()),
             "izFactor": lambda n : setattr(self, 'iz_factor', n.get_float_value()),
             "j": lambda n : setattr(self, 'j', n.get_float_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
             "library": lambda n : setattr(self, 'library', n.get_str_value()),
             "mark": lambda n : setattr(self, 'mark', n.get_str_value()),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
@@ -114,12 +114,12 @@ class Section(Parsable):
         writer.write_float_value("ay", self.ay)
         writer.write_float_value("az", self.az)
         writer.write_str_value("guid", self.guid)
+        writer.write_int_value("id", self.id)
         writer.write_float_value("iy", self.iy)
         writer.write_float_value("iyFactor", self.iy_factor)
         writer.write_float_value("iz", self.iz)
         writer.write_float_value("izFactor", self.iz_factor)
         writer.write_float_value("j", self.j)
-        writer.write_int_value("key", self.key)
         writer.write_str_value("library", self.library)
         writer.write_str_value("mark", self.mark)
         writer.write_str_value("name", self.name)

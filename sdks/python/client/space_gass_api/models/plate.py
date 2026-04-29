@@ -25,8 +25,8 @@ class Plate(Parsable):
     dir_node: Optional[int] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
-    # Primary key - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
-    key: Optional[int] = None
+    # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
+    id: Optional[int] = None
     # Material number assigned to this plate.
     material: Optional[int] = None
     # Membrane thickness of the plate. Unit: Section Properties (see GET /job/units).
@@ -75,7 +75,7 @@ class Plate(Parsable):
             "dirAxis": lambda n : setattr(self, 'dir_axis', n.get_enum_value(DirectionAxis)),
             "dirNode": lambda n : setattr(self, 'dir_node', n.get_int_value()),
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "material": lambda n : setattr(self, 'material', n.get_int_value()),
             "membraneThickness": lambda n : setattr(self, 'membrane_thickness', n.get_float_value()),
             "nodeA": lambda n : setattr(self, 'node_a', n.get_int_value()),
@@ -102,7 +102,7 @@ class Plate(Parsable):
         writer.write_enum_value("dirAxis", self.dir_axis)
         writer.write_int_value("dirNode", self.dir_node)
         writer.write_str_value("guid", self.guid)
-        writer.write_int_value("key", self.key)
+        writer.write_int_value("id", self.id)
         writer.write_int_value("material", self.material)
         writer.write_float_value("membraneThickness", self.membrane_thickness)
         writer.write_int_value("nodeA", self.node_a)

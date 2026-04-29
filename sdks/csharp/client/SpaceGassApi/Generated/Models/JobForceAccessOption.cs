@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Options for forcing access to a SPACE GASS job file that is in a locked or unsaved state.Used when ATS (temporary) files exist from a previous session that wasn&apos;t properly closed.</summary>
+    /// <summary>Options for forcing access to a job file that is in a locked or unsaved state.Used when temporary files exist from a previous session that was not properly closed.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum JobForceAccessOption
     {

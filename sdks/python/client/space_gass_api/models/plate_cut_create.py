@@ -19,8 +19,8 @@ class PlateCutCreate(Parsable):
     end_plate: Optional[int] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
-    # Primary key - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.
-    key: Optional[int] = None
+    # Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.
+    id: Optional[int] = None
     # Out-of-plane tolerance for the cut.
     out_of_plane_tolerance: Optional[float] = None
     # Start node number for the cut.
@@ -56,7 +56,7 @@ class PlateCutCreate(Parsable):
             "endOffsetTransverse": lambda n : setattr(self, 'end_offset_transverse', n.get_float_value()),
             "endPlate": lambda n : setattr(self, 'end_plate', n.get_int_value()),
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
-            "key": lambda n : setattr(self, 'key', n.get_int_value()),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "outOfPlaneTolerance": lambda n : setattr(self, 'out_of_plane_tolerance', n.get_float_value()),
             "startNode": lambda n : setattr(self, 'start_node', n.get_int_value()),
             "startOffsetLongitudinal": lambda n : setattr(self, 'start_offset_longitudinal', n.get_float_value()),
@@ -79,7 +79,7 @@ class PlateCutCreate(Parsable):
         writer.write_float_value("endOffsetTransverse", self.end_offset_transverse)
         writer.write_int_value("endPlate", self.end_plate)
         writer.write_str_value("guid", self.guid)
-        writer.write_int_value("key", self.key)
+        writer.write_int_value("id", self.id)
         writer.write_float_value("outOfPlaneTolerance", self.out_of_plane_tolerance)
         writer.write_int_value("startNode", self.start_node)
         writer.write_float_value("startOffsetLongitudinal", self.start_offset_longitudinal)

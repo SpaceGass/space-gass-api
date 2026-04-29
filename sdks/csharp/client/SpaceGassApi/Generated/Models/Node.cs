@@ -13,6 +13,14 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class Node : IParsable
     {
+        /// <summary>DTO for reading a node constraint (master-slave constraint).Defines a kinematic relationship between a slave node and a master node.The slave node&apos;s degrees of freedom are tied to the master node according to the constraint code.Key: SlaveNode — each node can be a slave in at most one constraint.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.NodeConstraint? Constraint { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.NodeConstraint Constraint { get; set; }
+#endif
         /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -21,8 +29,20 @@ namespace SpaceGassApi.Models
 #else
         public string Guid { get; set; }
 #endif
-        /// <summary>Primary key - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
-        public int? Key { get; set; }
+        /// <summary>True when this node is the slave side of a master-slave constraint.A node can be the slave of at most one constraint.Use `?expand=all` to include the full `constraint` object.</summary>
+        public bool? HasConstraint { get; set; }
+        /// <summary>True when this node has an explicit restraint row defined.False means the node uses default restraints (all DOFs free, no spring stiffness).</summary>
+        public bool? HasRestraint { get; set; }
+        /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
+        public int? Id { get; set; }
+        /// <summary>DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, free, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.NodeRestraint? Restraint { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.NodeRestraint Restraint { get; set; }
+#endif
         /// <summary>X coordinate. Unit: Length (see GET /job/units).</summary>
         public double? X { get; set; }
         /// <summary>Y coordinate. Unit: Length (see GET /job/units).</summary>
@@ -47,8 +67,12 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "constraint", n => { Constraint = n.GetObjectValue<global::SpaceGassApi.Models.NodeConstraint>(global::SpaceGassApi.Models.NodeConstraint.CreateFromDiscriminatorValue); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "key", n => { Key = n.GetIntValue(); } },
+                { "hasConstraint", n => { HasConstraint = n.GetBoolValue(); } },
+                { "hasRestraint", n => { HasRestraint = n.GetBoolValue(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
+                { "restraint", n => { Restraint = n.GetObjectValue<global::SpaceGassApi.Models.NodeRestraint>(global::SpaceGassApi.Models.NodeRestraint.CreateFromDiscriminatorValue); } },
                 { "x", n => { X = n.GetDoubleValue(); } },
                 { "y", n => { Y = n.GetDoubleValue(); } },
                 { "z", n => { Z = n.GetDoubleValue(); } },
@@ -61,8 +85,12 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteObjectValue<global::SpaceGassApi.Models.NodeConstraint>("constraint", Constraint);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("key", Key);
+            writer.WriteBoolValue("hasConstraint", HasConstraint);
+            writer.WriteBoolValue("hasRestraint", HasRestraint);
+            writer.WriteIntValue("id", Id);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.NodeRestraint>("restraint", Restraint);
             writer.WriteDoubleValue("x", X);
             writer.WriteDoubleValue("y", Y);
             writer.WriteDoubleValue("z", Z);

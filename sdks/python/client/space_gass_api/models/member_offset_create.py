@@ -10,11 +10,11 @@ if TYPE_CHECKING:
 @dataclass
 class MemberOffsetCreate(Parsable):
     """
-    DTO for creating (or replacing) a member offset.The member key comes from the route parameter, not the body.
+    DTO for creating (or replacing) a member offset.The member Id comes from the route parameter, not the body.
     """
     # Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table "L/G Axes".
     axes: Optional[AxesType] = None
-    # The member key to create the offset for.Optional in body — if omitted, set from the route parameter by the controller.
+    # The member Id to create the offset for.Optional in body — if omitted, set from the route parameter by the controller.
     member: Optional[int] = None
     # X offset at end A. Unit: Length (see GET /job/units).
     x_offset_at_a: Optional[float] = None
