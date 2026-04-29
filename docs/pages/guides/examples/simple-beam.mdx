@@ -4,19 +4,87 @@ description: Build a simple beam model, run analysis, and query results
 ---
 
 This walkthrough demonstrates a complete SPACE GASS API workflow from
-start to finish: create a project, build a simple beam with supports
-and loads, run a linear static analysis, and retrieve the results.
+start to finish: create a project, build a simply-supported beam with
+section, material, and loads, run a linear static analysis, and
+retrieve the design results.
 
 ## What We Will Build
 
-A simply-supported beam with a point load at midspan:
+A simply-supported steel beam with self-weight, a dead load and a live
+load, and ULS / SLS combinations to AS/NZS 1170:
 
 - **Node 1** at (0, 0, 0) — fixed support
 - **Node 2** at (6, 0, 0) — pinned support
-- **Member 1** connecting the two nodes
-- **A vertical node load** applied to Node 2
+- **Member 1** between the nodes, using a library section + library
+  material
+- **Three primary load cases** — self-weight, dead, live
+- **Two combination cases** — ULS strength, SLS deflection
+- A linear static analysis run, then queries for the maximum ULS
+  bending moment and the SLS midspan deflection
+
+## Project Setup
+
+Before you can run this example you need a code editor and the SPACE GASS
+SDK for your chosen language. If you already have a working .NET or
+Python environment, skip ahead to [Step 1](#step-1--create-the-client-and-a-new-project).
+
+We recommend [Visual Studio Code](https://code.visualstudio.com/) — it
+is free, runs on Windows, macOS, and Linux, and has first-class support
+for both C# and Python. If you already use Visual Studio, JetBrains
+Rider, or PyCharm, those work too — the steps below translate directly.
+
+### C#
+
+1. Install the [.NET 8 SDK](https://dotnet.microsoft.com/download) and
+   [Visual Studio Code](https://code.visualstudio.com/).
+2. In VS Code, install the
+   [C# Dev Kit](https://marketplace.visualstudio.com/items?itemName=ms-dotnettools.csdevkit)
+   extension.
+3. Pick a folder for your project (anywhere on disk), open it in VS Code
+   via **File → Open Folder...**, then open the integrated terminal with
+   **View → Terminal**. In the terminal, run:
+
+   ```bash
+   dotnet new console
+   dotnet add package SpaceGassApi
+   ```
+
+4. Open `Program.cs` (created by the first command) and paste the example
+   code from the steps below. Run it with `dotnet run`.
+
+### Python
+
+1. Install [Python 3.10 or newer](https://www.python.org/downloads/) and
+   [Visual Studio Code](https://code.visualstudio.com/).
+2. In VS Code, install the
+   [Python extension](https://marketplace.visualstudio.com/items?itemName=ms-python.python).
+3. Pick a folder for your project (anywhere on disk), open it in VS Code
+   via **File → Open Folder...**, then open the integrated terminal with
+   **View → Terminal**. In the terminal, run:
+
+   ```bash
+   python -m venv .venv
+   .venv\Scripts\activate
+   pip install space-gass-api
+   ```
+
+   On macOS or Linux replace the second line with `source .venv/bin/activate`.
+
+4. Create a new file called `main.py` (**File → New File**, save with
+   that name in the project folder) and paste the example code from the
+   steps below. Run it with `python main.py`.
 
 ## Step 1 — Create the Client and a New Project
+
+`SpaceGassApiClient` is your handle to the running API. Every endpoint
+follows the same pattern — `GetAsync` to read, `PostAsync` to create,
+`PatchAsync` to update, `DeleteAsync` to remove. See the
+[SDK Terminology guide](/guides/sdk-terminology) if these are new.
+
+The API only has one project open at a time. After `Job.New` (or
+`Job.Open` on an existing `.sg` file) the new project becomes the
+**active** job — every later call in this walkthrough acts on it until
+you `Job.Close` it in Step 16.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -35,6 +103,15 @@ from extensions.client_extensions import create_client
 from space_gass_api.models.node_create import NodeCreate
 from space_gass_api.models.node_restraint_create import NodeRestraintCreate
 from space_gass_api.models.member_create import MemberCreate
+from space_gass_api.models.section_library_create import SectionLibraryCreate
+from space_gass_api.models.material_create import MaterialCreate
+from space_gass_api.models.load_case_create import LoadCaseCreate
+from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
+from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
+from space_gass_api.models.load_position_units import LoadPositionUnits
+from space_gass_api.models.combination_item import CombinationItem
+from space_gass_api.models.static_settings_update import StaticSettingsUpdate
+from space_gass_api.models.analysis_run_status import AnalysisRunStatus
 from space_gass_api.models.save_job_request import SaveJobRequest
 
 client = create_client()
@@ -46,6 +123,11 @@ await client.job.new.post()
 
 ## Step 2 — Create Nodes
 
+Create the two endpoints of the beam — Node 1 at the origin and Node 2
+six metres along X. POSTing a `NodeCreate` to `Job.Structure.Nodes`
+returns the saved node including the `Id` SPACE GASS allocated; hold
+onto each Id, every later call that references this node uses it.
+
 <CodeTabs>
 ```csharp title="C#"
 var node1 = await client.Job.Structure.Nodes.PostAsync(
@@ -54,8 +136,8 @@ var node1 = await client.Job.Structure.Nodes.PostAsync(
 var node2 = await client.Job.Structure.Nodes.PostAsync(
     new NodeCreate { X = 6.0, Y = 0.0, Z = 0.0 });
 
-Console.WriteLine($"Node {node1.Key}: ({node1.X}, {node1.Y}, {node1.Z})");
-Console.WriteLine($"Node {node2.Key}: ({node2.X}, {node2.Y}, {node2.Z})");
+Console.WriteLine($"Node {node1.Id}: ({node1.X}, {node1.Y}, {node1.Z})");
+Console.WriteLine($"Node {node2.Id}: ({node2.X}, {node2.Y}, {node2.Z})");
 ```
 
 ```python title="Python"
@@ -65,92 +147,431 @@ node1 = await client.job.structure.nodes.post(
 node2 = await client.job.structure.nodes.post(
     NodeCreate(x=6.0, y=0.0, z=0.0))
 
-print(f"Node {node1.key}: ({node1.x}, {node1.y}, {node1.z})")
-print(f"Node {node2.key}: ({node2.x}, {node2.y}, {node2.z})")
+print(f"Node {node1.id}: ({node1.x}, {node1.y}, {node1.z})")
+print(f"Node {node2.id}: ({node2.x}, {node2.y}, {node2.z})")
 ```
 </CodeTabs>
 
 ## Step 3 — Apply Restraints
 
-Restraint codes use 6 characters representing the translational (TX,
-TY, TZ) and rotational (RX, RY, RZ) degrees of freedom. `R` means
-restrained, `F` means free.
+Restraints are attached to a node via `Nodes[id].Restraint`. The
+6-character `RestraintCode` maps to the TX, TY, TZ, RX, RY, RZ DOFs —
+`R` for restrained, `F` for free. Node 1 is fully fixed (`RRRRRR`),
+Node 2 is pinned (`RRRFFF`).
 
 <CodeTabs>
 ```csharp title="C#"
 // Node 1: Fixed support (all DOFs restrained)
-await client.Job.Structure.Nodes[node1.Key.Value].Restraint.PostAsync(
+await client.Job.Structure.Nodes[node1.Id.Value].Restraint.PostAsync(
     new NodeRestraintCreate { RestraintCode = "RRRRRR" });
 
 // Node 2: Pinned support (translations restrained, rotations free)
-await client.Job.Structure.Nodes[node2.Key.Value].Restraint.PostAsync(
+await client.Job.Structure.Nodes[node2.Id.Value].Restraint.PostAsync(
     new NodeRestraintCreate { RestraintCode = "RRRFFF" });
 ```
 
 ```python title="Python"
 # Node 1: Fixed support (all DOFs restrained)
-await client.job.structure.nodes.by_key(node1.key).restraint.post(
+await client.job.structure.nodes.by_id(node1.id).restraint.post(
     NodeRestraintCreate(restraint_code="RRRRRR"))
 
 # Node 2: Pinned support (translations restrained, rotations free)
-await client.job.structure.nodes.by_key(node2.key).restraint.post(
+await client.job.structure.nodes.by_id(node2.id).restraint.post(
     NodeRestraintCreate(restraint_code="RRRFFF"))
 ```
 </CodeTabs>
 
-## Step 4 — Create a Member
+## Step 4 — Add a Material
+
+Create the material before the member so its `Id` is available to
+assign. `MaterialCreate` defines a user-specified material. Library
+materials — referencing a pre-defined material from a SPACE GASS
+library file — are on the roadmap but not yet exposed by the API.
+
+<CodeTabs>
+```csharp title="C#"
+var steel = await client.Job.Structure.Materials.PostAsync(
+    new MaterialCreate
+    {
+        Name = "350 Grade Steel",
+        YoungsModulus = 200000.0,    // MPa
+        PoissonsRatio = 0.3,
+        MassDensity = 7850.0,        // kg/m^3
+        ThermalCoeff = 1.17e-5,      // per °C
+    });
+
+Console.WriteLine($"Material {steel.Id}: {steel.Name}");
+```
+
+```python title="Python"
+steel = await client.job.structure.materials.post(
+    MaterialCreate(
+        name="350 Grade Steel",
+        youngs_modulus=200000.0,    # MPa
+        poissons_ratio=0.3,
+        mass_density=7850.0,        # kg/m^3
+        thermal_coeff=1.17e-5,      # per °C
+    ))
+
+print(f"Material {steel.id}: {steel.name}")
+```
+</CodeTabs>
+
+## Step 5 — Add a Section
+
+Like the material, create the section before the member so its `Id`
+is available. POSTing a `SectionLibraryCreate` to
+`Job.Structure.Sections.Library` pulls a standard profile from a SPACE
+GASS library — `Library` is the library file name installed with SPACE
+GASS and `Name` is the section designation in that library.
+
+<CodeTabs>
+```csharp title="C#"
+var section = await client.Job.Structure.Sections.Library.PostAsync(
+    new SectionLibraryCreate
+    {
+        Library = "Aust300",
+        Name = "360 UB 44.7",
+        Mark = "B1",
+    });
+
+Console.WriteLine($"Section {section.Id}: {section.Name}");
+```
+
+```python title="Python"
+section = await client.job.structure.sections.library.post(
+    SectionLibraryCreate(
+        library="Aust300",
+        name="360 UB 44.7",
+        mark="B1",
+    ))
+
+print(f"Section {section.id}: {section.name}")
+```
+</CodeTabs>
+
+## Step 6 — Create the Member
+
+`MemberCreate` connects the two nodes with a single member and assigns
+the section and material we just made. `NodeA` / `NodeB` take the Ids
+from Step 2; `Section` and `Material` take the Ids returned by Steps 4
+and 5.
 
 <CodeTabs>
 ```csharp title="C#"
 var member = await client.Job.Structure.Members.PostAsync(
     new MemberCreate
     {
-        NodeA = node1.Key.Value,
-        NodeB = node2.Key.Value
+        NodeA = node1.Id,
+        NodeB = node2.Id,
+        Section = section.Id,
+        Material = steel.Id,
     });
 
-Console.WriteLine($"Member {member.Key}: Node {member.NodeA} -> Node {member.NodeB}");
+Console.WriteLine($"Member {member.Id}: Node {member.NodeA} → Node {member.NodeB}");
 ```
 
 ```python title="Python"
 member = await client.job.structure.members.post(
-    MemberCreate(node_a=node1.key, node_b=node2.key))
+    MemberCreate(
+        node_a=node1.id,
+        node_b=node2.id,
+        section=section.id,
+        material=steel.id,
+    ))
 
-print(f"Member {member.key}: Node {member.node_a} -> Node {member.node_b}")
+print(f"Member {member.id}: Node {member.node_a} → Node {member.node_b}")
 ```
 </CodeTabs>
 
-## Step 5 — Run a Linear Static Analysis
+## Step 7 — Create Primary Load Cases
+
+Create three primary cases up front — self-weight, dead, and live — so
+their Ids are available when we attach loads in Steps 8–10. POSTing a
+`LoadCaseCreate` to `Job.Loads.LoadCases` creates a primary case;
+combination cases come later in Step 11.
 
 <CodeTabs>
 ```csharp title="C#"
-var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
-    new StaticSettingsUpdate());
+var selfWeightCase = await client.Job.Loads.LoadCases.PostAsync(
+    new LoadCaseCreate { Id = 1, Title = "Self-weight" });
 
-Console.WriteLine($"Run ID: {run.RunId}");
-Console.WriteLine($"Status: {run.Status}");
+var deadCase = await client.Job.Loads.LoadCases.PostAsync(
+    new LoadCaseCreate { Id = 2, Title = "Dead Load" });
+
+var liveCase = await client.Job.Loads.LoadCases.PostAsync(
+    new LoadCaseCreate { Id = 3, Title = "Live Load" });
+
+Console.WriteLine($"Load cases: SW={selfWeightCase.Id}, G={deadCase.Id}, Q={liveCase.Id}");
 ```
 
 ```python title="Python"
-from space_gass_api.models.static_settings_update import StaticSettingsUpdate
+self_weight_case = await client.job.loads.load_cases.post(
+    LoadCaseCreate(id=1, title="Self-weight"))
 
-run = await client.job.analysis.static.run_linear.post(
-    StaticSettingsUpdate())
+dead_case = await client.job.loads.load_cases.post(
+    LoadCaseCreate(id=2, title="Dead Load"))
 
-print(f"Run ID: {run.run_id}")
-print(f"Status: {run.status}")
+live_case = await client.job.loads.load_cases.post(
+    LoadCaseCreate(id=3, title="Live Load"))
+
+print(f"Load cases: SW={self_weight_case.id}, G={dead_case.id}, Q={live_case.id}")
 ```
 </CodeTabs>
 
-## Step 6 — Query Reactions
+## Step 8 — Apply the Self-Weight Load
 
-Once the analysis completes, retrieve the support reactions:
+Attach a self-weight load to the self-weight case. POSTing a
+`SelfWeightLoadCreate` to `Job.Loads.SelfWeightLoads[caseId]` is keyed
+by load case Id (the case must already exist), and one self-weight
+load per case is allowed. Set `AccelerationY = -9.81` m/s² for gravity
+in the negative-Y direction.
 
 <CodeTabs>
 ```csharp title="C#"
-var result = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync();
+await client.Job.Loads.SelfWeightLoads[selfWeightCase.Id.Value].PostAsync(
+    new SelfWeightLoadCreate
+    {
+        AccelerationX = 0.0,
+        AccelerationY = -9.81,   // m/s² downward
+        AccelerationZ = 0.0,
+    });
+```
 
-foreach (var r in result.Results)
+```python title="Python"
+await client.job.loads.self_weight_loads.by_case_id(self_weight_case.id).post(
+    SelfWeightLoadCreate(
+        acceleration_x=0.0,
+        acceleration_y=-9.81,    # m/s² downward
+        acceleration_z=0.0,
+    ))
+```
+</CodeTabs>
+
+## Step 9 — Add a Member Distributed Load to the Dead Case
+
+Apply a uniform 2 kN/m downward across the full 6 m span on the dead
+case. `MemberDistributedLoadCreate` takes the target `Case` and
+`Member` Ids, start / finish positions along the member (in length
+units), and start / finish force intensity per unit length on each
+axis.
+
+<CodeTabs>
+```csharp title="C#"
+await client.Job.Loads.MemberDistributedLoads.PostAsync(
+    new MemberDistributedLoadCreate
+    {
+        Case = deadCase.Id,
+        Member = member.Id,
+        PositionUnits = LoadPositionUnits.Percent,
+        StartPosition = 0.0,
+        FinishPosition = 100.0,
+        FyStart = -2.0,    // kN/m downward
+        FyFinish = -2.0,
+    });
+```
+
+```python title="Python"
+await client.job.loads.member_distributed_loads.post(
+    MemberDistributedLoadCreate(
+        case=dead_case.id,
+        member=member.id,
+        position_units=LoadPositionUnits.Percent,
+        start_position=0.0,
+        finish_position=100.0,
+        fy_start=-2.0,    # kN/m downward
+        fy_finish=-2.0,
+    ))
+```
+</CodeTabs>
+
+## Step 10 — Add a Member Distributed Load to the Live Case
+
+Same shape as Step 9 — swap the `Case` to the live case and bump the
+intensity to 5 kN/m.
+
+<CodeTabs>
+```csharp title="C#"
+await client.Job.Loads.MemberDistributedLoads.PostAsync(
+    new MemberDistributedLoadCreate
+    {
+        Case = liveCase.Id,
+        Member = member.Id,
+        PositionUnits = LoadPositionUnits.Percent,
+        StartPosition = 0.0,
+        FinishPosition = 100.0,
+        FyStart = -5.0,    // kN/m downward
+        FyFinish = -5.0,
+    });
+```
+
+```python title="Python"
+await client.job.loads.member_distributed_loads.post(
+    MemberDistributedLoadCreate(
+        case=live_case.id,
+        member=member.id,
+        position_units=LoadPositionUnits.Percent,
+        start_position=0.0,
+        finish_position=100.0,
+        fy_start=-5.0,    # kN/m downward
+        fy_finish=-5.0,
+    ))
+```
+</CodeTabs>
+
+## Step 11 — Define the ULS and SLS Combinations
+
+A combination case is itself a load case (POSTed via
+`Job.Loads.LoadCases`). Its items — primary case + factor pairs — are
+then PUT to `Job.Loads.CombinationCases[caseId]` at the new case's Id.
+Below we define ULS (`1.2G + 1.5Q`) and SLS short-term (`1.0G + 0.7Q`)
+combinations to AS/NZS 1170.
+
+<CodeTabs>
+```csharp title="C#"
+// Create the load cases that will hold the combinations
+var ulsCase = await client.Job.Loads.LoadCases.PostAsync(
+    new LoadCaseCreate { Id = 10, Title = "ULS - Strength" });
+
+var slsCase = await client.Job.Loads.LoadCases.PostAsync(
+    new LoadCaseCreate { Id = 20, Title = "SLS - Short-term Deflection" });
+
+// ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
+await client.Job.Loads.CombinationCases[ulsCase.Id!.Value].PutAsync(
+    new List<CombinationItem>
+    {
+        new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
+        new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
+        new() { Case = liveCase.Id,       MultiplyingFactor = 1.5 },
+    });
+
+// SLS short-term: 1.0 G + 0.7 Q
+await client.Job.Loads.CombinationCases[slsCase.Id!.Value].PutAsync(
+    new List<CombinationItem>
+    {
+        new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
+        new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
+        new() { Case = liveCase.Id,       MultiplyingFactor = 0.7 },
+    });
+```
+
+```python title="Python"
+# Create the load cases that will hold the combinations
+uls_case = await client.job.loads.load_cases.post(
+    LoadCaseCreate(id=10, title="ULS - Strength"))
+
+sls_case = await client.job.loads.load_cases.post(
+    LoadCaseCreate(id=20, title="SLS - Short-term Deflection"))
+
+# ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
+await client.job.loads.combination_cases.by_combination_case(uls_case.id).put([
+    CombinationItem(case=self_weight_case.id, multiplying_factor=1.2),
+    CombinationItem(case=dead_case.id,        multiplying_factor=1.2),
+    CombinationItem(case=live_case.id,        multiplying_factor=1.5),
+])
+
+# SLS short-term: 1.0 G + 0.7 Q
+await client.job.loads.combination_cases.by_combination_case(sls_case.id).put([
+    CombinationItem(case=self_weight_case.id, multiplying_factor=1.0),
+    CombinationItem(case=dead_case.id,        multiplying_factor=1.0),
+    CombinationItem(case=live_case.id,        multiplying_factor=0.7),
+])
+```
+</CodeTabs>
+
+## Step 12 — Run a Linear Static Analysis
+
+Analyses are **asynchronous** in SPACE GASS — when you start one, the
+API returns immediately with a run Id and your code keeps going. Before
+you can query results you need to wait until the run reaches a terminal
+status (`Completed`, `Failed`, or `Cancelled`).
+
+The simplest way is a poll loop, shown below. For longer analyses
+where you want to display progress, see the
+[Running Analysis guide](/guides/running-analysis).
+
+<CodeTabs>
+```csharp title="C#"
+// Start a linear static analysis. Pass an empty StaticSettingsUpdate
+// to use the project's current settings as-is.
+var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
+    new StaticSettingsUpdate());
+
+Console.WriteLine($"Run {run.RunId} queued; waiting for completion...");
+
+// Poll until the run reaches a terminal state
+AnalysisRun finalRun;
+while (true)
+{
+    await Task.Delay(500);
+    finalRun = await client.Job.Analysis.Runs[run.RunId.Value].GetAsync();
+    if (finalRun.Status is AnalysisRunStatus.Completed
+                        or AnalysisRunStatus.Failed
+                        or AnalysisRunStatus.Cancelled)
+    {
+        break;
+    }
+}
+
+Console.WriteLine($"Analysis {finalRun.Status} in {finalRun.ElapsedTime}");
+
+if (finalRun.Status != AnalysisRunStatus.Completed)
+{
+    throw new Exception($"Analysis did not complete: {finalRun.ErrorMessage}");
+}
+```
+
+```python title="Python"
+import asyncio
+
+# Start a linear static analysis. Pass an empty StaticSettingsUpdate to
+# use the project's current settings as-is.
+run = await client.job.analysis.static.run_linear.post(
+    StaticSettingsUpdate())
+
+print(f"Run {run.run_id} queued; waiting for completion...")
+
+# Poll until the run reaches a terminal state
+while True:
+    await asyncio.sleep(0.5)
+    final_run = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
+    if final_run.status in (
+        AnalysisRunStatus.Completed,
+        AnalysisRunStatus.Failed,
+        AnalysisRunStatus.Cancelled,
+    ):
+        break
+
+print(f"Analysis {final_run.status} in {final_run.elapsed_time}")
+
+if final_run.status != AnalysisRunStatus.Completed:
+    raise RuntimeError(f"Analysis did not complete: {final_run.error_message}")
+```
+</CodeTabs>
+
+## Step 13 — Query Reactions
+
+Read the support reactions under the ULS combination. By default the
+query returns every result for every case; the `Cases` query parameter
+filters to the load case(s) you want.
+
+The result also carries a `Warnings` object. If a requested case (or
+any of its constituent primaries, for combinations) has not been
+analysed, its Id appears in `Warnings.CasesNotAnalyzed` — check this
+before reading `Results` so a missing run doesn't silently return zero
+rows.
+
+<CodeTabs>
+```csharp title="C#"
+var reactions = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync(
+    config => config.QueryParameters.Cases = $"{ulsCase.Id}");
+
+if (reactions.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
+{
+    throw new Exception($"Cases not analysed: {missing}. Run the analysis first.");
+}
+
+foreach (var r in reactions.Results)
 {
     Console.WriteLine(
         $"Node {r.Node}, LC {r.Case}: " +
@@ -159,15 +580,132 @@ foreach (var r in result.Results)
 ```
 
 ```python title="Python"
-result = await client.job.query.analysis.static.node.reactions.get()
+from kiota_abstractions.base_request_configuration import RequestConfiguration
+from space_gass_api.job.query.analysis.static.node.reactions.reactions_request_builder import ReactionsRequestBuilder
 
-for r in result.results:
-    print(f"Node {r.node}, LC {r.case_}: "
+reaction_params = ReactionsRequestBuilder.ReactionsRequestBuilderGetQueryParameters(
+    cases=str(uls_case.id))
+reactions = await client.job.query.analysis.static.node.reactions.get(
+    request_configuration=RequestConfiguration(query_parameters=reaction_params))
+
+if reactions.warnings and reactions.warnings.cases_not_analyzed:
+    raise RuntimeError(
+        f"Cases not analysed: {reactions.warnings.cases_not_analyzed}. "
+        "Run the analysis first.")
+
+for r in reactions.results:
+    print(f"Node {r.node}, LC {r.case}: "
           f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
 ```
 </CodeTabs>
 
-## Step 7 — Save and Close
+## Step 14 — Get the Maximum ULS Bending Moment
+
+Read the peak bending moment along the beam under the ULS combination.
+The result is one row per (case, member) combination; force values are
+returned as parallel arrays indexed by station, so element `[i]` of
+every array describes the same point along the member:
+
+```text
+MemberIntermediateForce {
+  Case:     int           // load case Id
+  Member:   int           // member Id
+  Station:  int[]         // station index per sample
+  Location: float[]       // distance along the member per sample
+  Fx, Fy, Fz: float[]     // force per sample
+  Mx, My, Mz: float[]     // moment per sample
+}
+```
+
+Filter by ULS case + the member Id and take the maximum of `|Mz|`.
+
+<CodeTabs>
+```csharp title="C#"
+var ulsForces = await client.Job.Query.Analysis.Static.Member.IntermediateForces
+    .GetAsync(config =>
+    {
+        config.QueryParameters.Cases   = $"{ulsCase.Id}";
+        config.QueryParameters.Members = $"{member.Id}";
+    });
+
+var beamForces = ulsForces.Results.First();
+var maxMz = beamForces.Mz.Max(v => Math.Abs(v ?? 0.0));
+
+Console.WriteLine($"Max ULS bending moment on Member {member.Id}: {maxMz:F2} kNm");
+```
+
+```python title="Python"
+from space_gass_api.job.query.analysis.static.member.intermediate_forces.intermediate_forces_request_builder import IntermediateForcesRequestBuilder
+
+force_params = IntermediateForcesRequestBuilder.IntermediateForcesRequestBuilderGetQueryParameters(
+    cases=str(uls_case.id),
+    members=str(member.id))
+uls_forces = await client.job.query.analysis.static.member.intermediate_forces.get(
+    request_configuration=RequestConfiguration(query_parameters=force_params))
+
+beam_forces = uls_forces.results[0]
+max_mz = max(abs(v) for v in beam_forces.mz if v is not None)
+
+print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
+```
+</CodeTabs>
+
+## Step 15 — Get the SLS Midspan Deflection
+
+Read the maximum vertical deflection along the beam under the SLS
+combination. `MemberIntermediateDisplacement` follows the same columnar
+shape as Step 14 — one row per (case, member), translations as
+parallel arrays indexed by station:
+
+```text
+MemberIntermediateDisplacement {
+  Case:     int                       // load case Id
+  Member:   int                       // member Id
+  Station:  int[]                     // station index per sample
+  Location: float[]                   // distance along the member per sample
+  TxLocal,  TyLocal,  TzLocal:  float[]  // translation in member-local axes
+  TxGlobal, TyGlobal, TzGlobal: float[]  // translation in global axes
+}
+```
+
+`TyGlobal` is the global-Y translation at each station; filter by SLS
+case + the member Id and take the maximum of `|TyGlobal|`.
+
+<CodeTabs>
+```csharp title="C#"
+var slsDisplacements = await client.Job.Query.Analysis.Static.Member.IntermediateDisplacements
+    .GetAsync(config =>
+    {
+        config.QueryParameters.Cases   = $"{slsCase.Id}";
+        config.QueryParameters.Members = $"{member.Id}";
+    });
+
+var beamDisplacements = slsDisplacements.Results.First();
+var maxDeflection = beamDisplacements.TyGlobal.Max(v => Math.Abs(v ?? 0.0));
+
+Console.WriteLine($"Max SLS midspan deflection on Member {member.Id}: {maxDeflection * 1000:F2} mm");
+```
+
+```python title="Python"
+from space_gass_api.job.query.analysis.static.member.intermediate_displacements.intermediate_displacements_request_builder import IntermediateDisplacementsRequestBuilder
+
+displ_params = IntermediateDisplacementsRequestBuilder.IntermediateDisplacementsRequestBuilderGetQueryParameters(
+    cases=str(sls_case.id),
+    members=str(member.id))
+sls_displacements = await client.job.query.analysis.static.member.intermediate_displacements.get(
+    request_configuration=RequestConfiguration(query_parameters=displ_params))
+
+beam_displacements = sls_displacements.results[0]
+max_deflection = max(abs(v) for v in beam_displacements.ty_global if v is not None)
+
+print(f"Max SLS midspan deflection on Member {member.id}: {max_deflection * 1000:.2f} mm")
+```
+</CodeTabs>
+
+## Step 16 — Save and Close
+
+Save persists the project to disk so you can re-open it later from
+SPACE GASS. Close ends the active job and releases the file.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -178,8 +716,6 @@ await client.Job.Close.PostAsync();
 ```
 
 ```python title="Python"
-from space_gass_api.models.save_job_request import SaveJobRequest
-
 await client.job.save.post(
     SaveJobRequest(file_path="C:\\Projects\\SimpleBeam.sg"))
 

@@ -18,7 +18,7 @@ using SpaceGassApi.Models;
 //   5. Saving a copy with SaveAs
 //
 // Prerequisites:
-//   - SPACE GASS API running locally (default: http://localhost:5000)
+//   - SPACE GASS API running locally (default: http://localhost:34560)
 //   - A valid API key
 //   - A SPACE GASS project file (.SG) containing sections
 // ---------------------------------------------------------------
@@ -57,7 +57,7 @@ try
     Console.WriteLine($"Found {sections.Count} sections:");
     foreach (var sec in sections)
     {
-        Console.WriteLine($"  [{sec.Key}] {sec.Name,-30} A={sec.A,10:F2}  Iy={sec.Iy,12:F2}  Source={sec.Source}");
+        Console.WriteLine($"  [{sec.Id}] {sec.Name,-30} A={sec.A,10:F2}  Iy={sec.Iy,12:F2}  Source={sec.Source}");
     }
     Console.WriteLine();
 
@@ -123,14 +123,14 @@ try
 
     for (var i = 0; i < count; i++)
     {
-        var sectionKey = sections[i].Key!.Value;
-        var baseKey = createdBase[i].Key!.Value;
+        var sectionKey = sections[i].Id!.Value;
+        var baseKey = createdBase[i].Id!.Value;
 
         // Vertical member (along Y)
         memberCreateList.Add(new MemberCreate
         {
             NodeA = baseKey,
-            NodeB = createdTop[i].Key!.Value,
+            NodeB = createdTop[i].Id!.Value,
             Section = sectionKey
         });
 
@@ -138,7 +138,7 @@ try
         memberCreateList.Add(new MemberCreate
         {
             NodeA = baseKey,
-            NodeB = createdEnd[i].Key!.Value,
+            NodeB = createdEnd[i].Id!.Value,
             Section = sectionKey
         });
     }
@@ -163,8 +163,8 @@ try
     {
         var vertical = createdMembers[i];
         var horizontal = createdMembers[i + 1];
-        var sec = sections.FirstOrDefault(s => s.Key == vertical.Section);
-        Console.WriteLine($"  Section [{vertical.Section}] {sec?.Name,-30}  Vertical=M{vertical.Key}  Horizontal=M{horizontal.Key}");
+        var sec = sections.FirstOrDefault(s => s.Id == vertical.Section);
+        Console.WriteLine($"  Section [{vertical.Section}] {sec?.Name,-30}  Vertical=M{vertical.Id}  Horizontal=M{horizontal.Id}");
     }
     Console.WriteLine();
 

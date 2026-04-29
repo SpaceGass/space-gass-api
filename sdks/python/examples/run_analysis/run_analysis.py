@@ -9,7 +9,7 @@ Demonstrates how to:
   5. Query node reactions from the completed analysis
 
 Prerequisites:
-  - SPACE GASS API running locally (default: http://localhost:5000)
+  - SPACE GASS API running locally (default: http://localhost:34560)
   - A valid API key
   - An existing .sg project file with structure and loads defined
 """
@@ -157,7 +157,7 @@ async def main() -> int:
             # Print first few reactions as a sample
             for r in reactions[:3]:
                 print(
-                    f"    Node {r.key}, LC {r.case}: "
+                    f"    Node {r.node}, LC {r.case}: "
                     f"FX={r.fx:.2f}, FY={r.fy:.2f}, FZ={r.fz:.2f}"
                 )
             if len(reactions) > 3:

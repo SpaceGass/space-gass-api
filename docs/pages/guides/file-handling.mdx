@@ -27,7 +27,7 @@ await client.job.open.post(
 ```
 
 ```bash title="curl"
-curl -X POST http://localhost:5000/api/v1/job/open \
+curl -X POST http://localhost:34560/api/v1/job/open \
   -H "Content-Type: application/json" \
   -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
 ```
@@ -40,19 +40,24 @@ is locked by another process or has unsaved changes:
 
 <CodeTabs>
 ```csharp title="C#"
-var status = await client.File.Status.PostAsync(
-    new FileStatusRequest
-    {
-        FilePath = @"C:\Projects\MyStructure.sg"
-    });
+var status = await client.File.Status.GetAsync(config =>
+    config.QueryParameters.FilePath = @"C:\Projects\MyStructure.sg");
 
 // status contains CanOpenSafely, Description, RecommendedAction
 ```
 
+```python title="Python"
+from kiota_abstractions.base_request_configuration import RequestConfiguration
+from space_gass_api.file.status.status_request_builder import StatusRequestBuilder
+
+query_params = StatusRequestBuilder.StatusRequestBuilderGetQueryParameters(
+    file_path=r"C:\Projects\MyStructure.sg")
+status = await client.file.status.get(
+    request_configuration=RequestConfiguration(query_parameters=query_params))
+```
+
 ```bash title="curl"
-curl -X POST http://localhost:5000/api/v1/file/status \
-  -H "Content-Type: application/json" \
-  -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
+curl "http://localhost:34560/api/v1/file/status?filePath=C:%5CProjects%5CMyStructure.sg"
 ```
 </CodeTabs>
 
@@ -88,11 +93,11 @@ await client.job.save.post(
 
 ```bash title="curl"
 # Save to current file
-curl -X POST http://localhost:5000/api/v1/job/save \
+curl -X POST http://localhost:34560/api/v1/job/save \
   -H "Content-Type: application/json"
 
 # Save to a new file path
-curl -X POST http://localhost:5000/api/v1/job/save \
+curl -X POST http://localhost:34560/api/v1/job/save \
   -H "Content-Type: application/json" \
   -d '{"filePath": "C:\\Projects\\MyStructure_Copy.sg"}'
 ```
@@ -110,7 +115,7 @@ await client.job.new.post()
 ```
 
 ```bash title="curl"
-curl -X POST http://localhost:5000/api/v1/job/new
+curl -X POST http://localhost:34560/api/v1/job/new
 ```
 </CodeTabs>
 
@@ -126,6 +131,6 @@ await client.job.close.post()
 ```
 
 ```bash title="curl"
-curl -X POST http://localhost:5000/api/v1/job/close
+curl -X POST http://localhost:34560/api/v1/job/close
 ```
 </CodeTabs>
