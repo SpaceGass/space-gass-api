@@ -261,6 +261,7 @@ const config: ZudokuConfig = {
       dark: "material-theme-ocean",
       light: "github-light",
     },
+    languages: ["csharp", "python", "bash", "json"],
   },
   navigation: [
     {
@@ -286,7 +287,7 @@ const config: ZudokuConfig = {
       label: "Guides",
       icon: "compass",
       items: [
-        "guides/api-terminology",
+        "guides/sdk-terminology",
         "guides/authentication",
         "guides/file-handling",
         "guides/running-analysis",

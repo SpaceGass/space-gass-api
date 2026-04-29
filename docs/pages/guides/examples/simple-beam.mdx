@@ -76,15 +76,15 @@ Rider, or PyCharm, those work too — the steps below translate directly.
 
 ## Step 1 — Create the Client and a New Project
 
-The `SpaceGassApiClient` is your handle to the running API service. The
-`PostAsync` suffix means "create something" — every endpoint call follows
-this pattern (`GetAsync` to read, `PostAsync` to create, `PatchAsync` to
-update, `DeleteAsync` to remove). See the
-[API Terminology guide](/guides/api-terminology) for a quick primer if
-the verb names are new to you.
+`SpaceGassApiClient` is your handle to the running API. Every endpoint
+follows the same pattern — `GetAsync` to read, `PostAsync` to create,
+`PatchAsync` to update, `DeleteAsync` to remove. See the
+[SDK Terminology guide](/guides/sdk-terminology) if these are new.
 
-This step opens a connection to the local API and starts a brand new
-empty SPACE GASS project to work in.
+The API only has one project open at a time. After `Job.New` (or
+`Job.Open` on an existing `.sg` file) the new project becomes the
+**active** job — every later call in this walkthrough acts on it until
+you `Job.Close` it in Step 16.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -122,11 +122,10 @@ await client.job.new.post()
 
 ## Step 2 — Create Nodes
 
-Nodes are the geometric points the beam connects between. Each node is
-created with X, Y, Z coordinates in your project's length units (metres
-by default). The API returns the saved node — including the `Id` that
-SPACE GASS allocated, which you will use whenever you need to refer
-back to the node.
+Create the two endpoints of the beam — Node 1 at the origin and Node 2
+six metres along X. POSTing a `NodeCreate` to `Job.Structure.Nodes`
+returns the saved node including the `Id` SPACE GASS allocated; hold
+onto each Id, every later call that references this node uses it.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -154,13 +153,10 @@ print(f"Node {node2.id}: ({node2.x}, {node2.y}, {node2.z})")
 
 ## Step 3 — Apply Restraints
 
-Restraints fix degrees of freedom at a node so the structure is stable.
-The 6-character code maps to the translational (TX, TY, TZ) and
-rotational (RX, RY, RZ) DOFs — `R` for restrained, `F` for free.
-
-For a simply-supported beam we make Node 1 a fixed support (every DOF
-restrained, `RRRRRR`) and Node 2 a pinned support (translations
-restrained, rotations free, `RRRFFF`).
+Restraints are attached to a node via `Nodes[id].Restraint`. The
+6-character `RestraintCode` maps to the TX, TY, TZ, RX, RY, RZ DOFs —
+`R` for restrained, `F` for free. Node 1 is fully fixed (`RRRRRR`),
+Node 2 is pinned (`RRRFFF`).
 
 <CodeTabs>
 ```csharp title="C#"
@@ -186,11 +182,10 @@ await client.job.structure.nodes.by_id(node2.id).restraint.post(
 
 ## Step 4 — Add a Material
 
-Every member needs a material so the analysis knows its stiffness and
-self-weight density. We'll use `MaterialCreate` to define a structural
-steel material directly. (Library materials — pulling a pre-defined
-material from a SPACE GASS library file by name — are on the roadmap
-but not yet exposed by the API.)
+Create the material before the member so its `Id` is available to
+assign. `MaterialCreate` defines a user-specified material. Library
+materials — referencing a pre-defined material from a SPACE GASS
+library file — are on the roadmap but not yet exposed by the API.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -223,11 +218,11 @@ print(f"Material {steel.id}: {steel.name}")
 
 ## Step 5 — Add a Section
 
-The section gives the member its cross-sectional properties. Rather
-than spell out the area, second moments, and torsion constant by hand,
-we'll pull a standard profile from the SPACE GASS section library. The
-`Library` field is the library file name installed with SPACE GASS and
-`Name` is the section designation in that library.
+Like the material, create the section before the member so its `Id`
+is available. POSTing a `SectionLibraryCreate` to
+`Job.Structure.Sections.Library` pulls a standard profile from a SPACE
+GASS library — `Library` is the library file name installed with SPACE
+GASS and `Name` is the section designation in that library.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -256,10 +251,10 @@ print(f"Section {section.id}: {section.name}")
 
 ## Step 6 — Create the Member
 
-Now we connect the two nodes with a single member, attaching the
-section and material we just made. The member's `NodeA` / `NodeB`
-properties take the node Ids from Step 2; `Section` and `Material` take
-the Ids from Steps 4 and 5.
+`MemberCreate` connects the two nodes with a single member and assigns
+the section and material we just made. `NodeA` / `NodeB` take the Ids
+from Step 2; `Section` and `Material` take the Ids returned by Steps 4
+and 5.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -290,13 +285,10 @@ print(f"Member {member.id}: Node {member.node_a} → Node {member.node_b}")
 
 ## Step 7 — Create Primary Load Cases
 
-Loads in SPACE GASS belong to load **cases**. A primary load case is one
-you apply loads to directly (as opposed to a combination case, which is
-a weighted sum of other cases — we'll get to those in Step 11).
-
-For our beam we need three primaries — self-weight, dead, and live —
-so the analysis can solve each one and we can later combine them at
-ULS and SLS factors.
+Create three primary cases up front — self-weight, dead, and live — so
+their Ids are available when we attach loads in Steps 8–10. POSTing a
+`LoadCaseCreate` to `Job.Loads.LoadCases` creates a primary case;
+combination cases come later in Step 11.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -328,13 +320,11 @@ print(f"Load cases: SW={self_weight_case.id}, G={dead_case.id}, Q={live_case.id}
 
 ## Step 8 — Apply the Self-Weight Load
 
-The self-weight load applies an acceleration vector to every member so
-the solver can compute the dead load contribution from the structure's
-own mass. For gravity in the negative-Y direction, set
-`AccelerationY = -9.81 m/s²`.
-
-The endpoint is keyed by the load case Id, so the case must already
-exist (which it does, from Step 7).
+Attach a self-weight load to the self-weight case. POSTing a
+`SelfWeightLoadCreate` to `Job.Loads.SelfWeightLoads[caseId]` is keyed
+by load case Id (the case must already exist), and one self-weight
+load per case is allowed. Set `AccelerationY = -9.81` m/s² for gravity
+in the negative-Y direction.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -359,9 +349,11 @@ await client.job.loads.self_weight_loads.by_case_id(self_weight_case.id).post(
 
 ## Step 9 — Add a Member Distributed Load to the Dead Case
 
-A member distributed load applies a force per unit length along part
-(or all) of a member. For our dead load we'll apply 2 kN/m downward
-across the full span (0 to 6 m), pointing in the negative-Y direction.
+Apply a uniform 2 kN/m downward across the full 6 m span on the dead
+case. `MemberDistributedLoadCreate` takes the target `Case` and
+`Member` Ids, start / finish positions along the member (in length
+units), and start / finish force intensity per unit length on each
+axis.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -392,8 +384,8 @@ await client.job.loads.member_distributed_loads.post(
 
 ## Step 10 — Add a Member Distributed Load to the Live Case
 
-The live load is the same shape as the dead load but on the live case
-and at a different intensity (5 kN/m downward across the span).
+Same shape as Step 9 — swap the `Case` to the live case and bump the
+intensity to 5 kN/m.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -424,15 +416,11 @@ await client.job.loads.member_distributed_loads.post(
 
 ## Step 11 — Define the ULS and SLS Combinations
 
-A combination case is a weighted sum of primary cases. We define two
-combinations that follow AS/NZS 1170:
-
-- **ULS strength** — `1.2G + 1.5Q`, including self-weight as part of `G`
-- **SLS short-term deflection** — `1.0G + 0.7Q`
-
-Each combination is itself a load case (created via the same `LoadCases`
-POST), and its items — primary case + factor pairs — are then PUT to
-the `CombinationCases` endpoint at the new case's Id.
+A combination case is itself a load case (POSTed via
+`Job.Loads.LoadCases`). Its items — primary case + factor pairs — are
+then PUT to `Job.Loads.CombinationCases[caseId]` at the new case's Id.
+Below we define ULS (`1.2G + 1.5Q`) and SLS short-term (`1.0G + 0.7Q`)
+combinations to AS/NZS 1170.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -559,9 +547,9 @@ if final_run.status != AnalysisRunStatus.Completed:
 
 ## Step 13 — Query Reactions
 
-With the analysis complete, the support reactions tell us how each
-restrained DOF is reacting under load. By default the query returns
-every result; we'll filter to just the ULS combination.
+Read the support reactions under the ULS combination. By default the
+query returns every result for every case; the `Cases` query parameter
+filters to the load case(s) you want.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -593,10 +581,10 @@ for r in reactions.results:
 
 ## Step 14 — Get the Maximum ULS Bending Moment
 
-To check the beam's strength we need the peak bending moment under the
-ULS combination. Member intermediate forces give us `Mz` sampled at
-several stations along the member; the maximum of `|Mz|` is our design
-moment.
+Read the peak bending moment along the beam under the ULS combination.
+`MemberIntermediateForce` returns `Mz` sampled at several stations
+along each member as a parallel array; filter by ULS case + the member
+Id and take the maximum of `|Mz|`.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -631,10 +619,10 @@ print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
 
 ## Step 15 — Get the SLS Midspan Deflection
 
-Service-state deflection is checked under the SLS combination. The
-member intermediate displacements endpoint returns the global Y
-translation (`TyGlobal`) at each station along the member; the largest
-absolute value is the midspan deflection (the beam is symmetric).
+Read the maximum vertical deflection along the beam under the SLS
+combination. `MemberIntermediateDisplacement.TyGlobal` is the global-Y
+translation at each station; filter by SLS case + the member Id and
+take the maximum of `|TyGlobal|`.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -669,8 +657,8 @@ print(f"Max SLS midspan deflection on Member {member.id}: {max_deflection * 1000
 
 ## Step 16 — Save and Close
 
-Persist the project to disk so you can re-open it from SPACE GASS,
-then close the file to release any locks.
+Save persists the project to disk so you can re-open it later from
+SPACE GASS. Close ends the active job and releases the file.
 
 <CodeTabs>
 ```csharp title="C#"
