@@ -270,6 +270,7 @@ const config: ZudokuConfig = {
       items: [
         "getting-started/introduction",
         "getting-started/quick-start",
+        "getting-started/support",
       ],
     },
     {
