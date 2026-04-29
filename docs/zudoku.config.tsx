@@ -24,6 +24,14 @@ function singularize(word: string): string {
   return word;
 }
 
+// Path-prefix → request body model name overrides for endpoints whose body
+// type doesn't follow the {Entity}Create / {Entity}Update naming convention.
+// Match by `${HTTP_METHOD} ${path}` exactly.
+const BODY_TYPE_OVERRIDES: Record<string, string> = {
+  "POST /job/structure/sections": "SectionUserCreate",
+  "POST /job/structure/sections/library": "SectionLibraryCreate",
+};
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   if (selectedLang === "shell") return false; // fall back to default cURL generator
@@ -35,15 +43,27 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   const cleanPath = path.replace(/^\//, "");
   const segments = cleanPath.split("/").filter(Boolean);
 
-  // Find the last non-parameter segment for deriving body type names
+  // Bulk endpoints (.../bulk) take a list of the parent entity, not a `BulkCreate`.
+  const isBulk = segments[segments.length - 1] === "bulk";
+
+  // Find the last non-parameter segment for deriving body type names. For
+  // bulk endpoints, skip the literal "bulk" segment so we land on the entity.
   const entitySegment = [...segments]
     .reverse()
-    .find((s: string) => !s.startsWith("{"));
+    .find((s: string) => !s.startsWith("{") && s !== "bulk");
   const entityName = entitySegment
     ? toPascalCase(singularize(entitySegment))
     : "Item";
 
   const hasBody = ["POST", "PATCH", "PUT"].includes(httpMethod);
+
+  // Resolve the request-body type, applying overrides for endpoints whose
+  // body schema doesn't follow the {Entity}Create/{Entity}Update convention.
+  const overrideKey = `${httpMethod} /${cleanPath}`;
+  const overriddenType = BODY_TYPE_OVERRIDES[overrideKey];
+  const defaultBodyType =
+    httpMethod === "POST" ? `${entityName}Create` : `${entityName}Update`;
+  const bodyType = overriddenType ?? defaultBodyType;
 
   // ── C# SDK ──
   if (selectedLang === "csharp") {
@@ -62,13 +82,19 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
 
     let code = "// C# SDK Client\n";
     if (hasBody) {
-      const bodyType =
-        httpMethod === "POST" ? `${entityName}Create` : `${entityName}Update`;
-      code += `var body = new ${bodyType}\n`;
-      code += `{\n`;
-      code += `    // Set properties\n`;
-      code += `};\n\n`;
-      code += `var result = await ${chain}.${asyncMethod}(body);`;
+      if (isBulk) {
+        code += `var bodies = new List<${bodyType}>\n`;
+        code += `{\n`;
+        code += `    new ${bodyType} { /* Set properties */ },\n`;
+        code += `};\n\n`;
+        code += `var result = await ${chain}.${asyncMethod}(bodies);`;
+      } else {
+        code += `var body = new ${bodyType}\n`;
+        code += `{\n`;
+        code += `    // Set properties\n`;
+        code += `};\n\n`;
+        code += `var result = await ${chain}.${asyncMethod}(body);`;
+      }
     } else if (httpMethod === "DELETE") {
       code += `await ${chain}.${asyncMethod}();`;
     } else {
@@ -95,14 +121,21 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
 
     let code = "# Python SDK Client\n";
     if (hasBody) {
-      const bodyType =
-        httpMethod === "POST" ? `${entityName}Create` : `${entityName}Update`;
       const bodyModule = pascalToSnake(bodyType);
-      code += `from spacegass_client.models.${bodyModule} import ${bodyType}\n\n`;
-      code += `body = ${bodyType}(\n`;
-      code += `    # Set properties\n`;
-      code += `)\n\n`;
-      code += `result = await ${chain}.${pyMethod}(body)`;
+      code += `from space_gass_api.models.${bodyModule} import ${bodyType}\n\n`;
+      if (isBulk) {
+        code += `bodies = [\n`;
+        code += `    ${bodyType}(\n`;
+        code += `        # Set properties\n`;
+        code += `    ),\n`;
+        code += `]\n\n`;
+        code += `result = await ${chain}.${pyMethod}(bodies)`;
+      } else {
+        code += `body = ${bodyType}(\n`;
+        code += `    # Set properties\n`;
+        code += `)\n\n`;
+        code += `result = await ${chain}.${pyMethod}(body)`;
+      }
     } else if (httpMethod === "DELETE") {
       code += `await ${chain}.${pyMethod}()`;
     } else {

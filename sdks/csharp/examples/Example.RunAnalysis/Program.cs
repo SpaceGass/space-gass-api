@@ -13,7 +13,7 @@ using SpaceGassApi.Models;
 //   5. Query node reactions from the completed analysis
 //
 // Prerequisites:
-//   - SPACE GASS API running locally (default: http://localhost:5000)
+//   - SPACE GASS API running locally (default: http://localhost:34560)
 //   - A valid API key
 //   - An existing .sg project file with structure and loads defined
 // ---------------------------------------------------------------

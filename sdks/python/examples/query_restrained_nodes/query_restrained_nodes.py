@@ -8,7 +8,7 @@ Demonstrates how to:
   4. Display the results in a formatted table
 
 Prerequisites:
-  - SPACE GASS API running locally (default: http://localhost:5000)
+  - SPACE GASS API running locally (default: http://localhost:34560)
   - A valid API key
   - An existing .sg project file that has been analysed
 """
@@ -57,16 +57,17 @@ async def main() -> int:
             print(f"  {'-' * 8} {'-' * 12} {'-' * 12} {'-' * 12}")
 
             for node in restrained_nodes:
-                print(f"  {node.key:<8} {node.x:>12.3f} {node.y:>12.3f} {node.z:>12.3f}")
+                print(f"  {node.id:<8} {node.x:>12.3f} {node.y:>12.3f} {node.z:>12.3f}")
 
             # -- Get reactions for restrained nodes --------------------
             print()
             print("Retrieving reactions for restrained nodes...")
 
-            node_keys = [node.key for node in restrained_nodes]
+            # Nodes filter uses SG list format (e.g. "1,5-10") — comma-separated Ids works for an arbitrary set.
+            node_filter = ",".join(str(n.id) for n in restrained_nodes if n.id is not None)
 
             reaction_params = ReactionsRequestBuilder.ReactionsRequestBuilderGetQueryParameters(
-                keys=node_keys,
+                nodes=node_filter,
             )
             reaction_config = RequestConfiguration(query_parameters=reaction_params)
             reaction_result = await client.job.query.analysis.static.node.reactions.get(
@@ -91,7 +92,7 @@ async def main() -> int:
 
                 for r in reactions:
                     print(
-                        f"  {r.key:<8} {r.case:<8} {r.fx:>12.3f} {r.fy:>12.3f} {r.fz:>12.3f}"
+                        f"  {r.node:<8} {r.case:<8} {r.fx:>12.3f} {r.fy:>12.3f} {r.fz:>12.3f}"
                         f" {r.mx:>12.3f} {r.my:>12.3f} {r.mz:>12.3f}"
                     )
 

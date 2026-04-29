@@ -13,7 +13,7 @@ using SpaceGassApi.Models;
 //   4. Create a beam member between the nodes
 //
 // Prerequisites:
-//   - SPACE GASS API running locally (default: http://localhost:5000)
+//   - SPACE GASS API running locally (default: http://localhost:34560)
 //   - A valid API key
 // ---------------------------------------------------------------
 
@@ -38,11 +38,11 @@ try
 
     var node1 = await client.Job.Structure.Nodes.PostAsync(
         new NodeCreate { X = 0.0, Y = 0.0, Z = 0.0 });
-    Console.WriteLine($"  Node {node1?.Key}: ({node1?.X}, {node1?.Y}, {node1?.Z})");
+    Console.WriteLine($"  Node {node1?.Id}: ({node1?.X}, {node1?.Y}, {node1?.Z})");
 
     var node2 = await client.Job.Structure.Nodes.PostAsync(
         new NodeCreate { X = 6.0, Y = 0.0, Z = 0.0 });
-    Console.WriteLine($"  Node {node2?.Key}: ({node2?.X}, {node2?.Y}, {node2?.Z})");
+    Console.WriteLine($"  Node {node2?.Id}: ({node2?.X}, {node2?.Y}, {node2?.Z})");
     Console.WriteLine();
 
     // -- Apply restraints ------------------------------------------
@@ -51,14 +51,14 @@ try
     Console.WriteLine("Applying restraints...");
 
     // Node 1: Fixed support (all DOFs restrained)
-    await client.Job.Structure.Nodes[node1!.Key!.Value].Restraint.PostAsync(
+    await client.Job.Structure.Nodes[node1!.Id!.Value].Restraint.PostAsync(
         new NodeRestraintCreate { RestraintCode = "RRRRRR" });
-    Console.WriteLine($"  Node {node1.Key}: Fixed (RRRRRR)");
+    Console.WriteLine($"  Node {node1.Id}: Fixed (RRRRRR)");
 
     // Node 2: Pinned support (translations restrained, rotations free)
-    await client.Job.Structure.Nodes[node2!.Key!.Value].Restraint.PostAsync(
+    await client.Job.Structure.Nodes[node2!.Id!.Value].Restraint.PostAsync(
         new NodeRestraintCreate { RestraintCode = "RRRFFF" });
-    Console.WriteLine($"  Node {node2.Key}: Pinned (RRRFFF)");
+    Console.WriteLine($"  Node {node2.Id}: Pinned (RRRFFF)");
     Console.WriteLine();
 
     // -- Create a beam member between the two nodes ----------------
@@ -67,16 +67,16 @@ try
     var member = await client.Job.Structure.Members.PostAsync(
         new MemberCreate
         {
-            NodeA = node1.Key.Value,
-            NodeB = node2.Key.Value
+            NodeA = node1.Id.Value,
+            NodeB = node2.Id.Value
         });
-    Console.WriteLine($"  Member {member?.Key}: Node {member?.NodeA} -> Node {member?.NodeB}");
+    Console.WriteLine($"  Member {member?.Id}: Node {member?.NodeA} -> Node {member?.NodeB}");
     Console.WriteLine();
 
     // -- Summary ---------------------------------------------------
     Console.WriteLine("Simple beam model created successfully!");
-    Console.WriteLine($"  Nodes:   {node1.Key}, {node2.Key}");
-    Console.WriteLine($"  Members: {member?.Key}");
+    Console.WriteLine($"  Nodes:   {node1.Id}, {node2.Id}");
+    Console.WriteLine($"  Members: {member?.Id}");
     Console.WriteLine($"  Span:    6.0 (length units)");
 
     // -- Save the project ------------------------------------------

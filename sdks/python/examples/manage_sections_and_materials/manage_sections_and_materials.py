@@ -11,7 +11,7 @@ Demonstrates how to:
   7. Delete a section
 
 Prerequisites:
-  - SPACE GASS API running locally (default: http://localhost:5000)
+  - SPACE GASS API running locally (default: http://localhost:34560)
   - A valid API key
 """
 
@@ -22,7 +22,7 @@ from extensions.client_extensions import create_client
 from space_gass_api.models.material_create import MaterialCreate
 from space_gass_api.models.member_create import MemberCreate
 from space_gass_api.models.node_create import NodeCreate
-from space_gass_api.models.section_create import SectionCreate
+from space_gass_api.models.section_user_create import SectionUserCreate
 from space_gass_api.models.section_update import SectionUpdate
 
 
@@ -50,7 +50,7 @@ async def main() -> int:
                 thermal_coeff=1.17e-5,      # per degree C
             ),
         )
-        print(f"  Material {steel.key}: {steel.name}")
+        print(f"  Material {steel.id}: {steel.name}")
         print(f"    Young's Modulus:  {steel.youngs_modulus} MPa")
         print(f"    Poisson's Ratio:  {steel.poissons_ratio}")
         print(f"    Mass Density:     {steel.mass_density} kg/m^3")
@@ -69,7 +69,7 @@ async def main() -> int:
                 concrete_strength=40.0,     # MPa
             ),
         )
-        print(f"  Material {concrete.key}: {concrete.name}")
+        print(f"  Material {concrete.id}: {concrete.name}")
         print(f"    Concrete Strength: {concrete.concrete_strength} MPa")
         print()
 
@@ -79,7 +79,7 @@ async def main() -> int:
         print("Creating sections...")
 
         rhs = await client.job.structure.sections.post(
-            SectionCreate(
+            SectionUserCreate(
                 name="200x100x6 RHS",
                 mark="RHS",
                 a=3360.0,       # mm^2  - cross-sectional area
@@ -90,7 +90,7 @@ async def main() -> int:
                 az=1200.0,      # mm^2  - shear area (Z)
             ),
         )
-        print(f"  Section {rhs.key}: {rhs.name}")
+        print(f"  Section {rhs.id}: {rhs.name}")
         print(f"    A  = {rhs.a} mm^2")
         print(f"    Iy = {rhs.iy} mm^4")
         print(f"    Iz = {rhs.iz} mm^4")
@@ -99,7 +99,7 @@ async def main() -> int:
 
         # -- Create a second section (circular hollow) -----------------
         chs = await client.job.structure.sections.post(
-            SectionCreate(
+            SectionUserCreate(
                 name="168.3x6 CHS",
                 mark="CHS",
                 a=3060.0,       # mm^2
@@ -110,7 +110,7 @@ async def main() -> int:
                 az=1530.0,      # mm^2
             ),
         )
-        print(f"  Section {chs.key}: {chs.name}")
+        print(f"  Section {chs.id}: {chs.name}")
         print()
 
         # == LIST ======================================================
@@ -119,27 +119,27 @@ async def main() -> int:
         print("Listing all materials...")
         materials = await client.job.structure.materials.get()
         for mat in materials:
-            print(f"  [{mat.key}] {mat.name} (E={mat.youngs_modulus}, Source={mat.source})")
+            print(f"  [{mat.id}] {mat.name} (E={mat.youngs_modulus}, Source={mat.source})")
         print()
 
         # -- List all sections -----------------------------------------
         print("Listing all sections...")
         sections = await client.job.structure.sections.get()
         for sec in sections:
-            print(f"  [{sec.key}] {sec.name} (A={sec.a}, Iy={sec.iy}, Source={sec.source})")
+            print(f"  [{sec.id}] {sec.name} (A={sec.a}, Iy={sec.iy}, Source={sec.source})")
         print()
 
         # == UPDATE ====================================================
 
         # -- Update the RHS section's area (partial update) ------------
-        print(f"Updating section {rhs.key} area...")
-        updated = await client.job.structure.sections.by_key(rhs.key).patch(
+        print(f"Updating section {rhs.id} area...")
+        updated = await client.job.structure.sections.by_id(rhs.id).patch(
             SectionUpdate(
                 a=3500.0,       # Increased area
                 name="200x100x6.3 RHS",
             ),
         )
-        print(f"  Section {updated.key}: {updated.name}")
+        print(f"  Section {updated.id}: {updated.name}")
         print(f"    A  = {updated.a} mm^2 (was {rhs.a})")
         print()
 
@@ -157,13 +157,13 @@ async def main() -> int:
 
         member = await client.job.structure.members.post(
             MemberCreate(
-                node_a=node_a.key,
-                node_b=node_b.key,
-                section=rhs.key,
-                material=steel.key,
+                node_a=node_a.id,
+                node_b=node_b.id,
+                section=rhs.id,
+                material=steel.id,
             ),
         )
-        print(f"  Member {member.key}: Node {member.node_a} -> Node {member.node_b}")
+        print(f"  Member {member.id}: Node {member.node_a} -> Node {member.node_b}")
         print(f"    Section:  {member.section}")
         print(f"    Material: {member.material}")
         print()
@@ -171,8 +171,8 @@ async def main() -> int:
         # == DELETE =====================================================
 
         # -- Delete the unused CHS section -----------------------------
-        print(f"Deleting unused section {chs.key} ({chs.name})...")
-        await client.job.structure.sections.by_key(chs.key).delete()
+        print(f"Deleting unused section {chs.id} ({chs.name})...")
+        await client.job.structure.sections.by_id(chs.id).delete()
         print("  Deleted.")
         print()
 
@@ -180,14 +180,14 @@ async def main() -> int:
         print("Remaining sections:")
         remaining = await client.job.structure.sections.get()
         for sec in remaining:
-            print(f"  [{sec.key}] {sec.name}")
+            print(f"  [{sec.id}] {sec.name}")
         print()
 
         # == SUMMARY ===================================================
         print("Example completed successfully!")
-        print(f"  Materials created: {steel.key} ({steel.name}), {concrete.key} ({concrete.name})")
-        print(f"  Sections created:  {rhs.key} ({updated.name})")
-        print(f"  Members created:   {member.key}")
+        print(f"  Materials created: {steel.id} ({steel.name}), {concrete.id} ({concrete.name})")
+        print(f"  Sections created:  {rhs.id} ({updated.name})")
+        print(f"  Members created:   {member.id}")
 
         # -- Close without saving (example only) -----------------------
         print()

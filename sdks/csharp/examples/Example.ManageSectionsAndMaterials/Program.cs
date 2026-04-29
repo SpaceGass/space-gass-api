@@ -16,7 +16,7 @@ using SpaceGassApi.Models;
 //   7. Delete a section
 //
 // Prerequisites:
-//   - SPACE GASS API running locally (default: http://localhost:5000)
+//   - SPACE GASS API running locally (default: http://localhost:34560)
 //   - A valid API key
 // ---------------------------------------------------------------
 
@@ -44,7 +44,7 @@ try
             MassDensity = 7850.0,        // kg/m^3
             ThermalCoeff = 1.17e-5       // per degree C
         });
-    Console.WriteLine($"  Material {steel?.Key}: {steel?.Name}");
+    Console.WriteLine($"  Material {steel?.Id}: {steel?.Name}");
     Console.WriteLine($"    Young's Modulus:  {steel?.YoungsModulus} MPa");
     Console.WriteLine($"    Poisson's Ratio:  {steel?.PoissonsRatio}");
     Console.WriteLine($"    Mass Density:     {steel?.MassDensity} kg/m^3");
@@ -63,7 +63,7 @@ try
             ThermalCoeff = 1.0e-5,
             ConcreteStrength = 40.0      // MPa
         });
-    Console.WriteLine($"  Material {concrete?.Key}: {concrete?.Name}");
+    Console.WriteLine($"  Material {concrete?.Id}: {concrete?.Name}");
     Console.WriteLine($"    Concrete Strength: {concrete?.ConcreteStrength} MPa");
     Console.WriteLine();
 
@@ -73,7 +73,7 @@ try
     Console.WriteLine("Creating sections...");
 
     var rhs = await client.Job.Structure.Sections.PostAsync(
-        new SectionCreate
+        new SectionUserCreate
         {
             Name = "200x100x6 RHS",
             Mark = "RHS",
@@ -84,7 +84,7 @@ try
             Ay = 2400.0,      // mm^2  - shear area (Y)
             Az = 1200.0       // mm^2  - shear area (Z)
         });
-    Console.WriteLine($"  Section {rhs?.Key}: {rhs?.Name}");
+    Console.WriteLine($"  Section {rhs?.Id}: {rhs?.Name}");
     Console.WriteLine($"    A  = {rhs?.A} mm^2");
     Console.WriteLine($"    Iy = {rhs?.Iy} mm^4");
     Console.WriteLine($"    Iz = {rhs?.Iz} mm^4");
@@ -93,7 +93,7 @@ try
 
     // -- Create a second section (circular hollow) -----------------
     var chs = await client.Job.Structure.Sections.PostAsync(
-        new SectionCreate
+        new SectionUserCreate
         {
             Name = "168.3x6 CHS",
             Mark = "CHS",
@@ -104,7 +104,7 @@ try
             Ay = 1530.0,      // mm^2
             Az = 1530.0       // mm^2
         });
-    Console.WriteLine($"  Section {chs?.Key}: {chs?.Name}");
+    Console.WriteLine($"  Section {chs?.Id}: {chs?.Name}");
     Console.WriteLine();
 
     // == LIST ======================================================
@@ -114,7 +114,7 @@ try
     var materials = await client.Job.Structure.Materials.GetAsync();
     foreach (var mat in materials!)
     {
-        Console.WriteLine($"  [{mat.Key}] {mat.Name} (E={mat.YoungsModulus}, Source={mat.Source})");
+        Console.WriteLine($"  [{mat.Id}] {mat.Name} (E={mat.YoungsModulus}, Source={mat.Source})");
     }
     Console.WriteLine();
 
@@ -123,21 +123,21 @@ try
     var sections = await client.Job.Structure.Sections.GetAsync();
     foreach (var sec in sections!)
     {
-        Console.WriteLine($"  [{sec.Key}] {sec.Name} (A={sec.A}, Iy={sec.Iy}, Source={sec.Source})");
+        Console.WriteLine($"  [{sec.Id}] {sec.Name} (A={sec.A}, Iy={sec.Iy}, Source={sec.Source})");
     }
     Console.WriteLine();
 
     // == UPDATE ====================================================
 
     // -- Update the RHS section's area (partial update) ------------
-    Console.WriteLine($"Updating section {rhs?.Key} area...");
-    var updated = await client.Job.Structure.Sections[rhs!.Key!.Value].PatchAsync(
+    Console.WriteLine($"Updating section {rhs?.Id} area...");
+    var updated = await client.Job.Structure.Sections[rhs!.Id!.Value].PatchAsync(
         new SectionUpdate
         {
             A = 3500.0,       // Increased area
             Name = "200x100x6.3 RHS"
         });
-    Console.WriteLine($"  Section {updated?.Key}: {updated?.Name}");
+    Console.WriteLine($"  Section {updated?.Id}: {updated?.Name}");
     Console.WriteLine($"    A  = {updated?.A} mm^2 (was {rhs.A})");
     Console.WriteLine();
 
@@ -154,12 +154,12 @@ try
     var member = await client.Job.Structure.Members.PostAsync(
         new MemberCreate
         {
-            NodeA = nodeA!.Key!.Value,
-            NodeB = nodeB!.Key!.Value,
-            Section = rhs.Key.Value,
-            Material = steel!.Key!.Value
+            NodeA = nodeA!.Id!.Value,
+            NodeB = nodeB!.Id!.Value,
+            Section = rhs.Id.Value,
+            Material = steel!.Id!.Value
         });
-    Console.WriteLine($"  Member {member?.Key}: Node {member?.NodeA} -> Node {member?.NodeB}");
+    Console.WriteLine($"  Member {member?.Id}: Node {member?.NodeA} -> Node {member?.NodeB}");
     Console.WriteLine($"    Section:  {member?.Section}");
     Console.WriteLine($"    Material: {member?.Material}");
     Console.WriteLine();
@@ -167,8 +167,8 @@ try
     // == DELETE =====================================================
 
     // -- Delete the unused CHS section -----------------------------
-    Console.WriteLine($"Deleting unused section {chs?.Key} ({chs?.Name})...");
-    await client.Job.Structure.Sections[chs!.Key!.Value].DeleteAsync();
+    Console.WriteLine($"Deleting unused section {chs?.Id} ({chs?.Name})...");
+    await client.Job.Structure.Sections[chs!.Id!.Value].DeleteAsync();
     Console.WriteLine("  Deleted.");
     Console.WriteLine();
 
@@ -177,15 +177,15 @@ try
     var remaining = await client.Job.Structure.Sections.GetAsync();
     foreach (var sec in remaining!)
     {
-        Console.WriteLine($"  [{sec.Key}] {sec.Name}");
+        Console.WriteLine($"  [{sec.Id}] {sec.Name}");
     }
     Console.WriteLine();
 
     // == SUMMARY ===================================================
     Console.WriteLine("Example completed successfully!");
-    Console.WriteLine($"  Materials created: {steel.Key} ({steel.Name}), {concrete?.Key} ({concrete?.Name})");
-    Console.WriteLine($"  Sections created:  {rhs.Key} ({updated?.Name})");
-    Console.WriteLine($"  Members created:   {member?.Key}");
+    Console.WriteLine($"  Materials created: {steel.Id} ({steel.Name}), {concrete?.Id} ({concrete?.Name})");
+    Console.WriteLine($"  Sections created:  {rhs.Id} ({updated?.Name})");
+    Console.WriteLine($"  Members created:   {member?.Id}");
 
     // -- Close without saving (example only) -----------------------
     Console.WriteLine();

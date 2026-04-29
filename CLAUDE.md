@@ -68,7 +68,7 @@ sdks/csharp/client/
 
 - **No authentication required** — the API runs locally on the user's machine
 - SDK ships with `SpaceGassApiClient.CreateClient()` which uses `AnonymousAuthenticationProvider`
-- Default base URL: `http://localhost:5000/api/v1` (plain HTTP, no SSL bypass needed)
+- Default base URL: `http://localhost:34560/api/v1` (plain HTTP, no SSL bypass needed)
 - When API key auth is added later, `CreateClient(apiKey: "...")` will be a non-breaking addition
 
 ### Examples

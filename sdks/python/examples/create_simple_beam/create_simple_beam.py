@@ -9,7 +9,7 @@ Demonstrates how to:
   5. Save the project to disk
 
 Prerequisites:
-  - SPACE GASS API running locally (default: http://localhost:5000)
+  - SPACE GASS API running locally (default: http://localhost:34560)
   - A valid API key
 """
 
@@ -47,12 +47,12 @@ async def main() -> int:
         node1 = await client.job.structure.nodes.post(
             NodeCreate(x=0.0, y=0.0, z=0.0),
         )
-        print(f"  Node {node1.key}: ({node1.x}, {node1.y}, {node1.z})")
+        print(f"  Node {node1.id}: ({node1.x}, {node1.y}, {node1.z})")
 
         node2 = await client.job.structure.nodes.post(
             NodeCreate(x=6.0, y=0.0, z=0.0),
         )
-        print(f"  Node {node2.key}: ({node2.x}, {node2.y}, {node2.z})")
+        print(f"  Node {node2.id}: ({node2.x}, {node2.y}, {node2.z})")
         print()
 
         # -- Apply restraints ------------------------------------------
@@ -61,31 +61,31 @@ async def main() -> int:
         print("Applying restraints...")
 
         # Node 1: Fixed support (all DOFs restrained)
-        await client.job.structure.nodes.by_key(node1.key).restraint.post(
+        await client.job.structure.nodes.by_id(node1.id).restraint.post(
             NodeRestraintCreate(restraint_code="RRRRRR"),
         )
-        print(f"  Node {node1.key}: Fixed (RRRRRR)")
+        print(f"  Node {node1.id}: Fixed (RRRRRR)")
 
         # Node 2: Pinned support (translations restrained, rotations free)
-        await client.job.structure.nodes.by_key(node2.key).restraint.post(
+        await client.job.structure.nodes.by_id(node2.id).restraint.post(
             NodeRestraintCreate(restraint_code="RRRFFF"),
         )
-        print(f"  Node {node2.key}: Pinned (RRRFFF)")
+        print(f"  Node {node2.id}: Pinned (RRRFFF)")
         print()
 
         # -- Create a beam member between the two nodes ----------------
         print("Creating beam member...")
 
         member = await client.job.structure.members.post(
-            MemberCreate(node_a=node1.key, node_b=node2.key),
+            MemberCreate(node_a=node1.id, node_b=node2.id),
         )
-        print(f"  Member {member.key}: Node {member.node_a} -> Node {member.node_b}")
+        print(f"  Member {member.id}: Node {member.node_a} -> Node {member.node_b}")
         print()
 
         # -- Summary ---------------------------------------------------
         print("Simple beam model created successfully!")
-        print(f"  Nodes:   {node1.key}, {node2.key}")
-        print(f"  Members: {member.key}")
+        print(f"  Nodes:   {node1.id}, {node2.id}")
+        print(f"  Members: {member.id}")
         print(f"  Span:    6.0 (length units)")
 
         # -- Save the project ------------------------------------------

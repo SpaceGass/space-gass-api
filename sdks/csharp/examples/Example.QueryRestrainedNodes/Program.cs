@@ -12,7 +12,7 @@ using SpaceGassApi.Models;
 //   4. Display the results in a formatted table
 //
 // Prerequisites:
-//   - SPACE GASS API running locally (default: http://localhost:5000)
+//   - SPACE GASS API running locally (default: http://localhost:34560)
 //   - A valid API key
 //   - An existing .sg project file that has been analysed
 // ---------------------------------------------------------------
@@ -50,17 +50,18 @@ try
 
         foreach (var node in restrainedNodes)
         {
-            Console.WriteLine($"  {node.Key,-8} {node.X,12:F3} {node.Y,12:F3} {node.Z,12:F3}");
+            Console.WriteLine($"  {node.Id,-8} {node.X,12:F3} {node.Y,12:F3} {node.Z,12:F3}");
         }
 
         // -- Get reactions for restrained nodes --------------------
         Console.WriteLine();
         Console.WriteLine("Retrieving reactions for restrained nodes...");
 
-        var nodeKeys = restrainedNodes.Select(n => (int?)n.Key).ToArray();
+        // Nodes filter uses SG list format (e.g. "1,5-10") — comma-separated Ids works for an arbitrary set.
+        var nodeFilter = string.Join(",", restrainedNodes.Where(n => n.Id != null).Select(n => n.Id!.Value));
 
         var reactionResult = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync(config =>
-            config.QueryParameters.Node = nodeKeys);
+            config.QueryParameters.Nodes = nodeFilter);
 
         var reactions = reactionResult?.Results;
 
