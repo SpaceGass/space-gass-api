@@ -108,6 +108,7 @@ from space_gass_api.models.material_create import MaterialCreate
 from space_gass_api.models.load_case_create import LoadCaseCreate
 from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
 from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
+from space_gass_api.models.load_position_units import LoadPositionUnits
 from space_gass_api.models.combination_item import CombinationItem
 from space_gass_api.models.static_settings_update import StaticSettingsUpdate
 from space_gass_api.models.analysis_run_status import AnalysisRunStatus
@@ -229,9 +230,9 @@ GASS and `Name` is the section designation in that library.
 var section = await client.Job.Structure.Sections.Library.PostAsync(
     new SectionLibraryCreate
     {
-        Library = "AS/NZS Steel Sections",
-        Name = "310UB46.2",
-        Mark = "Beam",
+        Library = "Aust300",
+        Name = "360 UB 44.7",
+        Mark = "B1",
     });
 
 Console.WriteLine($"Section {section.Id}: {section.Name}");
@@ -240,9 +241,9 @@ Console.WriteLine($"Section {section.Id}: {section.Name}");
 ```python title="Python"
 section = await client.job.structure.sections.library.post(
     SectionLibraryCreate(
-        library="AS/NZS Steel Sections",
-        name="310UB46.2",
-        mark="Beam",
+        library="Aust300",
+        name="360 UB 44.7",
+        mark="B1",
     ))
 
 print(f"Section {section.id}: {section.name}")
@@ -261,10 +262,10 @@ and 5.
 var member = await client.Job.Structure.Members.PostAsync(
     new MemberCreate
     {
-        NodeA = node1.Id.Value,
-        NodeB = node2.Id.Value,
-        Section = section.Id.Value,
-        Material = steel.Id.Value,
+        NodeA = node1.Id,
+        NodeB = node2.Id,
+        Section = section.Id,
+        Material = steel.Id,
     });
 
 Console.WriteLine($"Member {member.Id}: Node {member.NodeA} → Node {member.NodeB}");
@@ -293,26 +294,26 @@ combination cases come later in Step 11.
 <CodeTabs>
 ```csharp title="C#"
 var selfWeightCase = await client.Job.Loads.LoadCases.PostAsync(
-    new LoadCaseCreate { Title = "Self-weight" });
+    new LoadCaseCreate { Id = 1, Title = "Self-weight" });
 
 var deadCase = await client.Job.Loads.LoadCases.PostAsync(
-    new LoadCaseCreate { Title = "Dead Load" });
+    new LoadCaseCreate { Id = 2, Title = "Dead Load" });
 
 var liveCase = await client.Job.Loads.LoadCases.PostAsync(
-    new LoadCaseCreate { Title = "Live Load" });
+    new LoadCaseCreate { Id = 3, Title = "Live Load" });
 
 Console.WriteLine($"Load cases: SW={selfWeightCase.Id}, G={deadCase.Id}, Q={liveCase.Id}");
 ```
 
 ```python title="Python"
 self_weight_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(title="Self-weight"))
+    LoadCaseCreate(id=1, title="Self-weight"))
 
 dead_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(title="Dead Load"))
+    LoadCaseCreate(id=2, title="Dead Load"))
 
 live_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(title="Live Load"))
+    LoadCaseCreate(id=3, title="Live Load"))
 
 print(f"Load cases: SW={self_weight_case.id}, G={dead_case.id}, Q={live_case.id}")
 ```
@@ -360,10 +361,11 @@ axis.
 await client.Job.Loads.MemberDistributedLoads.PostAsync(
     new MemberDistributedLoadCreate
     {
-        Case = deadCase.Id.Value,
-        Member = member.Id.Value,
+        Case = deadCase.Id,
+        Member = member.Id,
+        PositionUnits = LoadPositionUnits.Percent,
         StartPosition = 0.0,
-        FinishPosition = 6.0,
+        FinishPosition = 100.0,
         FyStart = -2.0,    // kN/m downward
         FyFinish = -2.0,
     });
@@ -374,8 +376,9 @@ await client.job.loads.member_distributed_loads.post(
     MemberDistributedLoadCreate(
         case=dead_case.id,
         member=member.id,
+        position_units=LoadPositionUnits.Percent,
         start_position=0.0,
-        finish_position=6.0,
+        finish_position=100.0,
         fy_start=-2.0,    # kN/m downward
         fy_finish=-2.0,
     ))
@@ -392,10 +395,11 @@ intensity to 5 kN/m.
 await client.Job.Loads.MemberDistributedLoads.PostAsync(
     new MemberDistributedLoadCreate
     {
-        Case = liveCase.Id.Value,
-        Member = member.Id.Value,
+        Case = liveCase.Id,
+        Member = member.Id,
+        PositionUnits = LoadPositionUnits.Percent,
         StartPosition = 0.0,
-        FinishPosition = 6.0,
+        FinishPosition = 100.0,
         FyStart = -5.0,    // kN/m downward
         FyFinish = -5.0,
     });
@@ -406,8 +410,9 @@ await client.job.loads.member_distributed_loads.post(
     MemberDistributedLoadCreate(
         case=live_case.id,
         member=member.id,
+        position_units=LoadPositionUnits.Percent,
         start_position=0.0,
-        finish_position=6.0,
+        finish_position=100.0,
         fy_start=-5.0,    # kN/m downward
         fy_finish=-5.0,
     ))
@@ -426,37 +431,37 @@ combinations to AS/NZS 1170.
 ```csharp title="C#"
 // Create the load cases that will hold the combinations
 var ulsCase = await client.Job.Loads.LoadCases.PostAsync(
-    new LoadCaseCreate { Title = "ULS - Strength" });
+    new LoadCaseCreate { Id = 10, Title = "ULS - Strength" });
 
 var slsCase = await client.Job.Loads.LoadCases.PostAsync(
-    new LoadCaseCreate { Title = "SLS - Short-term Deflection" });
+    new LoadCaseCreate { Id = 20, Title = "SLS - Short-term Deflection" });
 
 // ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
-await client.Job.Loads.CombinationCases[ulsCase.Id.Value].PutAsync(
+await client.Job.Loads.CombinationCases[ulsCase.Id!.Value].PutAsync(
     new List<CombinationItem>
     {
-        new() { Case = selfWeightCase.Id.Value, MultiplyingFactor = 1.2 },
-        new() { Case = deadCase.Id.Value,       MultiplyingFactor = 1.2 },
-        new() { Case = liveCase.Id.Value,       MultiplyingFactor = 1.5 },
+        new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
+        new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
+        new() { Case = liveCase.Id,       MultiplyingFactor = 1.5 },
     });
 
 // SLS short-term: 1.0 G + 0.7 Q
-await client.Job.Loads.CombinationCases[slsCase.Id.Value].PutAsync(
+await client.Job.Loads.CombinationCases[slsCase.Id!.Value].PutAsync(
     new List<CombinationItem>
     {
-        new() { Case = selfWeightCase.Id.Value, MultiplyingFactor = 1.0 },
-        new() { Case = deadCase.Id.Value,       MultiplyingFactor = 1.0 },
-        new() { Case = liveCase.Id.Value,       MultiplyingFactor = 0.7 },
+        new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
+        new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
+        new() { Case = liveCase.Id,       MultiplyingFactor = 0.7 },
     });
 ```
 
 ```python title="Python"
 # Create the load cases that will hold the combinations
 uls_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(title="ULS - Strength"))
+    LoadCaseCreate(id=10, title="ULS - Strength"))
 
 sls_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(title="SLS - Short-term Deflection"))
+    LoadCaseCreate(id=20, title="SLS - Short-term Deflection"))
 
 # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
 await client.job.loads.combination_cases.by_combination_case(uls_case.id).put([
@@ -483,8 +488,7 @@ status (`Completed`, `Failed`, or `Cancelled`).
 
 The simplest way is a poll loop, shown below. For longer analyses
 where you want to display progress, see the
-[Running Analysis guide](/guides/running-analysis) for the full progress
-+ cancellation patterns.
+[Running Analysis guide](/guides/running-analysis).
 
 <CodeTabs>
 ```csharp title="C#"
@@ -551,10 +555,21 @@ Read the support reactions under the ULS combination. By default the
 query returns every result for every case; the `Cases` query parameter
 filters to the load case(s) you want.
 
+The result also carries a `Warnings` object. If a requested case (or
+any of its constituent primaries, for combinations) has not been
+analysed, its Id appears in `Warnings.CasesNotAnalyzed` — check this
+before reading `Results` so a missing run doesn't silently return zero
+rows.
+
 <CodeTabs>
 ```csharp title="C#"
 var reactions = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync(
-    config => config.QueryParameters.Cases = ulsCase.Id.Value.ToString());
+    config => config.QueryParameters.Cases = $"{ulsCase.Id}");
+
+if (reactions.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
+{
+    throw new Exception($"Cases not analysed: {missing}. Run the analysis first.");
+}
 
 foreach (var r in reactions.Results)
 {
@@ -573,6 +588,11 @@ reaction_params = ReactionsRequestBuilder.ReactionsRequestBuilderGetQueryParamet
 reactions = await client.job.query.analysis.static.node.reactions.get(
     request_configuration=RequestConfiguration(query_parameters=reaction_params))
 
+if reactions.warnings and reactions.warnings.cases_not_analyzed:
+    raise RuntimeError(
+        f"Cases not analysed: {reactions.warnings.cases_not_analyzed}. "
+        "Run the analysis first.")
+
 for r in reactions.results:
     print(f"Node {r.node}, LC {r.case}: "
           f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
@@ -582,17 +602,30 @@ for r in reactions.results:
 ## Step 14 — Get the Maximum ULS Bending Moment
 
 Read the peak bending moment along the beam under the ULS combination.
-`MemberIntermediateForce` returns `Mz` sampled at several stations
-along each member as a parallel array; filter by ULS case + the member
-Id and take the maximum of `|Mz|`.
+The result is one row per (case, member) combination; force values are
+returned as parallel arrays indexed by station, so element `[i]` of
+every array describes the same point along the member:
+
+```text
+MemberIntermediateForce {
+  Case:     int           // load case Id
+  Member:   int           // member Id
+  Station:  int[]         // station index per sample
+  Location: float[]       // distance along the member per sample
+  Fx, Fy, Fz: float[]     // force per sample
+  Mx, My, Mz: float[]     // moment per sample
+}
+```
+
+Filter by ULS case + the member Id and take the maximum of `|Mz|`.
 
 <CodeTabs>
 ```csharp title="C#"
 var ulsForces = await client.Job.Query.Analysis.Static.Member.IntermediateForces
     .GetAsync(config =>
     {
-        config.QueryParameters.Cases   = ulsCase.Id.Value.ToString();
-        config.QueryParameters.Members = member.Id.Value.ToString();
+        config.QueryParameters.Cases   = $"{ulsCase.Id}";
+        config.QueryParameters.Members = $"{member.Id}";
     });
 
 var beamForces = ulsForces.Results.First();
@@ -620,17 +653,31 @@ print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
 ## Step 15 — Get the SLS Midspan Deflection
 
 Read the maximum vertical deflection along the beam under the SLS
-combination. `MemberIntermediateDisplacement.TyGlobal` is the global-Y
-translation at each station; filter by SLS case + the member Id and
-take the maximum of `|TyGlobal|`.
+combination. `MemberIntermediateDisplacement` follows the same columnar
+shape as Step 14 — one row per (case, member), translations as
+parallel arrays indexed by station:
+
+```text
+MemberIntermediateDisplacement {
+  Case:     int                       // load case Id
+  Member:   int                       // member Id
+  Station:  int[]                     // station index per sample
+  Location: float[]                   // distance along the member per sample
+  TxLocal,  TyLocal,  TzLocal:  float[]  // translation in member-local axes
+  TxGlobal, TyGlobal, TzGlobal: float[]  // translation in global axes
+}
+```
+
+`TyGlobal` is the global-Y translation at each station; filter by SLS
+case + the member Id and take the maximum of `|TyGlobal|`.
 
 <CodeTabs>
 ```csharp title="C#"
 var slsDisplacements = await client.Job.Query.Analysis.Static.Member.IntermediateDisplacements
     .GetAsync(config =>
     {
-        config.QueryParameters.Cases   = slsCase.Id.Value.ToString();
-        config.QueryParameters.Members = member.Id.Value.ToString();
+        config.QueryParameters.Cases   = $"{slsCase.Id}";
+        config.QueryParameters.Members = $"{member.Id}";
     });
 
 var beamDisplacements = slsDisplacements.Results.First();
