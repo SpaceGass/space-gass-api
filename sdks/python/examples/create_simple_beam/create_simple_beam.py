@@ -32,10 +32,11 @@ from kiota_abstractions.base_request_configuration import RequestConfiguration
 
 from extensions.client_extensions import create_client
 from space_gass_api.models.analysis_run_status import AnalysisRunStatus
+from space_gass_api.models.combination_case_create import CombinationCaseCreate
 from space_gass_api.models.combination_item import CombinationItem
 from space_gass_api.models.load_case_create import LoadCaseCreate
 from space_gass_api.models.load_position_units import LoadPositionUnits
-from space_gass_api.models.material_create import MaterialCreate
+from space_gass_api.models.material_library_create import MaterialLibraryCreate
 from space_gass_api.models.member_create import MemberCreate
 from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
 from space_gass_api.models.node_create import NodeCreate
@@ -97,15 +98,12 @@ async def main() -> int:
         print(f"  Node {node2.id}: Pinned (RRRFFF)")
         print()
 
-        # == Step 4 — Add a material ===================================
-        print("Creating material...")
-        steel = await client.job.structure.materials.post(
-            MaterialCreate(
-                name="350 Grade Steel",
-                youngs_modulus=200000.0,    # MPa
-                poissons_ratio=0.3,
-                mass_density=7850.0,        # kg/m^3
-                thermal_coeff=1.17e-5,      # per °C
+        # == Step 4 — Add a library material ===========================
+        print("Adding library material...")
+        steel = await client.job.structure.materials.library.post(
+            MaterialLibraryCreate(
+                library="Aust",
+                name="STEEL",
             ),
         )
         print(f"  Material {steel.id}: {steel.name}")
@@ -152,7 +150,7 @@ async def main() -> int:
         await client.job.loads.self_weight_loads.by_case_id(self_weight_case.id).post(
             SelfWeightLoadCreate(
                 acceleration_x=0.0,
-                acceleration_y=-9.81,    # m/s² downward
+                acceleration_y=-1.0,    # 1 G downward
                 acceleration_z=0.0,
             ),
         )
@@ -189,26 +187,36 @@ async def main() -> int:
         print()
 
         # == Step 11 — ULS and SLS combinations ========================
+        # Combination cases now POST as a single CombinationCaseCreate with
+        # combination_items inline — one call per combination, no follow-up
+        # PUT to set the items.
         print("Defining ULS and SLS combinations to AS/NZS 1170...")
 
-        uls_case = await client.job.loads.load_cases.post(
-            LoadCaseCreate(id=10, title="ULS - Strength"))
-        sls_case = await client.job.loads.load_cases.post(
-            LoadCaseCreate(id=20, title="SLS - Short-term Deflection"))
+        uls_case = await client.job.loads.combination_load_cases.post(
+            CombinationCaseCreate(
+                id=10,
+                title="ULS - Strength",
+                # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
+                combination_items=[
+                    CombinationItem(case=self_weight_case.id, multiplying_factor=1.2),
+                    CombinationItem(case=dead_case.id,        multiplying_factor=1.2),
+                    CombinationItem(case=live_case.id,        multiplying_factor=1.5),
+                ],
+            ),
+        )
 
-        # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
-        await client.job.loads.combination_cases.by_combination_case(uls_case.id).put([
-            CombinationItem(case=self_weight_case.id, multiplying_factor=1.2),
-            CombinationItem(case=dead_case.id,        multiplying_factor=1.2),
-            CombinationItem(case=live_case.id,        multiplying_factor=1.5),
-        ])
-
-        # SLS short-term: 1.0 G + 0.7 Q
-        await client.job.loads.combination_cases.by_combination_case(sls_case.id).put([
-            CombinationItem(case=self_weight_case.id, multiplying_factor=1.0),
-            CombinationItem(case=dead_case.id,        multiplying_factor=1.0),
-            CombinationItem(case=live_case.id,        multiplying_factor=0.7),
-        ])
+        sls_case = await client.job.loads.combination_load_cases.post(
+            CombinationCaseCreate(
+                id=20,
+                title="SLS - Short-term Deflection",
+                # SLS short-term: 1.0 G + 0.7 Q
+                combination_items=[
+                    CombinationItem(case=self_weight_case.id, multiplying_factor=1.0),
+                    CombinationItem(case=dead_case.id,        multiplying_factor=1.0),
+                    CombinationItem(case=live_case.id,        multiplying_factor=0.7),
+                ],
+            ),
+        )
 
         print(f"  ULS  case Id = {uls_case.id}")
         print(f"  SLS  case Id = {sls_case.id}")

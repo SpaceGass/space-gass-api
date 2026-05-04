@@ -1,5 +1,4 @@
 using SpaceGassApi;
-using SpaceGassApi.Job.New;
 using SpaceGassApi.Models;
 
 
@@ -41,7 +40,7 @@ try
 {
     // == Step 1 — Create a new blank project =======================
     Console.WriteLine("Creating new blank project...");
-    await client.Job.New.PostAsync(new NewPostRequestBody());
+    await client.Job.New.PostAsync();
     Console.WriteLine("New project created.");
     Console.WriteLine();
 
@@ -71,16 +70,13 @@ try
     Console.WriteLine($"  Node {node2.Id}: Pinned (RRRFFF)");
     Console.WriteLine();
 
-    // == Step 4 — Add a material ===================================
-    Console.WriteLine("Creating material...");
-    var steel = await client.Job.Structure.Materials.PostAsync(
-        new MaterialCreate
+    // == Step 4 — Add a library material ===========================
+    Console.WriteLine("Adding library material...");
+    var steel = await client.Job.Structure.Materials.Library.PostAsync(
+        new MaterialLibraryCreate
         {
-            Name = "350 Grade Steel",
-            YoungsModulus = 200000.0,    // MPa
-            PoissonsRatio = 0.3,
-            MassDensity = 7850.0,        // kg/m^3
-            ThermalCoeff = 1.17e-5,      // per °C
+            Library = "Aust",
+            Name = "STEEL",
         });
     Console.WriteLine($"  Material {steel!.Id}: {steel.Name}");
     Console.WriteLine();
@@ -127,7 +123,7 @@ try
         new SelfWeightLoadCreate
         {
             AccelerationX = 0.0,
-            AccelerationY = -9.81,   // m/s² downward
+            AccelerationY = -1.0,    // 1 G downward
             AccelerationZ = 0.0,
         });
     Console.WriteLine();
@@ -163,33 +159,41 @@ try
     Console.WriteLine();
 
     // == Step 11 — ULS and SLS combinations ========================
+    // Combination cases now POST as a single CombinationCaseCreate with
+    // CombinationItems inline — one call per combination, no follow-up
+    // PUT to set the items.
     Console.WriteLine("Defining ULS and SLS combinations to AS/NZS 1170...");
 
-    var ulsCase = await client.Job.Loads.LoadCases.PostAsync(
-        new LoadCaseCreate { Id = 10, Title = "ULS - Strength" });
-    var slsCase = await client.Job.Loads.LoadCases.PostAsync(
-        new LoadCaseCreate { Id = 20, Title = "SLS - Short-term Deflection" });
-
-    // ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
-    await client.Job.Loads.CombinationCases[ulsCase!.Id!.Value].PutAsync(
-        new List<CombinationItem>
+    var ulsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
+        new CombinationCaseCreate
         {
-            new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
-            new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
-            new() { Case = liveCase.Id,       MultiplyingFactor = 1.5 },
+            Id = 10,
+            Title = "ULS - Strength",
+            // ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
+            CombinationItems = new List<CombinationItem>
+            {
+                new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
+                new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
+                new() { Case = liveCase.Id,       MultiplyingFactor = 1.5 },
+            },
         });
 
-    // SLS short-term: 1.0 G + 0.7 Q
-    await client.Job.Loads.CombinationCases[slsCase!.Id!.Value].PutAsync(
-        new List<CombinationItem>
+    var slsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
+        new CombinationCaseCreate
         {
-            new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
-            new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
-            new() { Case = liveCase.Id,       MultiplyingFactor = 0.7 },
+            Id = 20,
+            Title = "SLS - Short-term Deflection",
+            // SLS short-term: 1.0 G + 0.7 Q
+            CombinationItems = new List<CombinationItem>
+            {
+                new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
+                new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
+                new() { Case = liveCase.Id,       MultiplyingFactor = 0.7 },
+            },
         });
 
-    Console.WriteLine($"  ULS  case Id = {ulsCase.Id}");
-    Console.WriteLine($"  SLS  case Id = {slsCase.Id}");
+    Console.WriteLine($"  ULS  case Id = {ulsCase!.Id}");
+    Console.WriteLine($"  SLS  case Id = {slsCase!.Id}");
     Console.WriteLine();
 
     // == Step 12 — Run a linear static analysis ====================

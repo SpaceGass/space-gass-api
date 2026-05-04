@@ -1,0 +1,266 @@
+---
+title: Service Automation
+description: Start, wait for, use, and stop the SPACE GASS API service from your own code
+---
+
+The SPACE GASS API runs as a local HTTP service launched from the
+SpaceGassApi executable installed with SPACE GASS. For interactive use
+you can double-click the shortcut and leave it running, but for
+scripts and batch jobs you usually want your code to manage the
+service itself — start it on demand, wait until it is ready, run your
+work, and shut it down cleanly when done.
+
+The SDK does not ship a service-lifecycle helper. The pattern is short
+enough to keep in your own project; the boilerplate below is a
+copy-paste starting point for both C# and Python.
+
+## The Lifecycle
+
+A typical script does four things:
+
+1. **Probe** — try `Service.Info` to see if the service is already
+   running. If yes, reuse it (don't kill someone else's instance).
+2. **Start** — if not running, launch `SpaceGassApi.exe` as a child
+   process.
+3. **Wait** — poll `Service.Info` until it responds, or fail with a
+   timeout if the service never comes up.
+4. **Stop** — when your script is finished, terminate the child
+   process if (and only if) you started it. Skip cleanup if the
+   service was already running before your script ran.
+
+Wrap steps 2–4 in a `try / finally` (C#) or context manager (Python)
+so the service still shuts down if your code throws.
+
+## Boilerplate
+
+The example below probes for an existing service, starts one if
+needed, waits up to 30 seconds for it to become ready, fetches
+`Service.Info` to confirm, then shuts the service down.
+
+<CodeTabs>
+```csharp title="C#"
+using System.Diagnostics;
+using SpaceGassApi;
+
+const string ServiceExePath = @"C:\Program Files\SPACE GASS 14.5\SpaceGassApi.exe";
+
+var client = SpaceGassApiClient.CreateClient();
+Process? serviceProcess = null;
+
+try
+{
+    // 1. Probe — reuse an already-running service if there is one
+    if (!await IsServiceReadyAsync(client))
+    {
+        // 2. Start
+        Console.WriteLine("Starting the SPACE GASS API service...");
+        serviceProcess = Process.Start(new ProcessStartInfo
+        {
+            FileName = ServiceExePath,
+            UseShellExecute = false,
+            CreateNoWindow = true,
+        });
+
+        // 3. Wait — poll until ready or fail with a timeout
+        await WaitForServiceReadyAsync(client, TimeSpan.FromSeconds(30));
+        Console.WriteLine("Service is ready.");
+    }
+    else
+    {
+        Console.WriteLine("Service was already running — reusing it.");
+    }
+
+    // Do your work here
+    var info = await client.Service.Info.GetAsync();
+    Console.WriteLine($"Connected to SPACE GASS {info?.SpaceGassVersion} at {info?.ApiPath}");
+}
+finally
+{
+    // 4. Stop — only if we started it
+    if (serviceProcess is not null && !serviceProcess.HasExited)
+    {
+        Console.WriteLine("Stopping the service...");
+        serviceProcess.Kill(entireProcessTree: true);
+        serviceProcess.WaitForExit();
+    }
+}
+
+static async Task<bool> IsServiceReadyAsync(SpaceGassApiClient c)
+{
+    try
+    {
+        await c.Service.Info.GetAsync();
+        return true;
+    }
+    catch
+    {
+        return false;
+    }
+}
+
+static async Task WaitForServiceReadyAsync(SpaceGassApiClient c, TimeSpan timeout)
+{
+    var deadline = DateTime.UtcNow + timeout;
+    while (DateTime.UtcNow < deadline)
+    {
+        if (await IsServiceReadyAsync(c)) return;
+        await Task.Delay(500);
+    }
+    throw new TimeoutException("SPACE GASS API service did not become ready in time.");
+}
+```
+
+```python title="Python"
+import asyncio
+import subprocess
+import time
+
+from extensions.client_extensions import create_client
+
+SERVICE_EXE = r"C:\Program Files\SPACE GASS 14.5\SpaceGassApi.exe"
+
+
+async def is_service_ready(client) -> bool:
+    try:
+        await client.service.info.get()
+        return True
+    except Exception:
+        return False
+
+
+async def wait_for_service_ready(client, timeout: float = 30.0) -> None:
+    deadline = time.monotonic() + timeout
+    while time.monotonic() < deadline:
+        if await is_service_ready(client):
+            return
+        await asyncio.sleep(0.5)
+    raise TimeoutError("SPACE GASS API service did not become ready in time.")
+
+
+async def main() -> None:
+    client = create_client()
+    process: subprocess.Popen | None = None
+
+    try:
+        # 1. Probe — reuse an already-running service if there is one
+        if not await is_service_ready(client):
+            # 2. Start
+            print("Starting the SPACE GASS API service...")
+            process = subprocess.Popen(
+                [SERVICE_EXE],
+                creationflags=subprocess.CREATE_NO_WINDOW,
+            )
+
+            # 3. Wait
+            await wait_for_service_ready(client)
+            print("Service is ready.")
+        else:
+            print("Service was already running — reusing it.")
+
+        # Do your work here
+        info = await client.service.info.get()
+        print(f"Connected to SPACE GASS {info.space_gass_version} at {info.api_path}")
+
+    finally:
+        # 4. Stop — only if we started it
+        if process is not None and process.poll() is None:
+            print("Stopping the service...")
+            process.terminate()
+            try:
+                process.wait(timeout=5)
+            except subprocess.TimeoutExpired:
+                process.kill()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+</CodeTabs>
+
+## Custom Ports
+
+To run the service on a non-default port — useful if `34560` is in use,
+or if you want to run multiple instances side by side — pass `--port`
+to the executable and the matching base URL to `CreateClient`:
+
+<CodeTabs>
+```csharp title="C#"
+const int Port = 35000;
+var client = SpaceGassApiClient.CreateClient($"http://localhost:{Port}/api/v1");
+
+serviceProcess = Process.Start(new ProcessStartInfo
+{
+    FileName = ServiceExePath,
+    Arguments = $"--port={Port}",
+    UseShellExecute = false,
+    CreateNoWindow = true,
+});
+```
+
+```python title="Python"
+PORT = 35000
+client = create_client(f"http://localhost:{PORT}/api/v1")
+
+process = subprocess.Popen(
+    [SERVICE_EXE, f"--port={PORT}"],
+    creationflags=subprocess.CREATE_NO_WINDOW,
+)
+```
+</CodeTabs>
+
+## Handling Ctrl+C
+
+The `try / finally` (C#) and context manager (Python) above handle
+exceptions correctly, but a hard interrupt (Ctrl+C) skips them by
+default. Wire a signal handler so the service still shuts down on
+abort:
+
+<CodeTabs>
+```csharp title="C#"
+Console.CancelKeyPress += (_, e) =>
+{
+    if (serviceProcess is not null && !serviceProcess.HasExited)
+        serviceProcess.Kill(entireProcessTree: true);
+};
+```
+
+```python title="Python"
+import signal
+
+def _shutdown(*_):
+    if process is not None and process.poll() is None:
+        process.terminate()
+
+signal.signal(signal.SIGINT, _shutdown)
+signal.signal(signal.SIGTERM, _shutdown)
+```
+</CodeTabs>
+
+## Tips
+
+- **Locate the executable** — the install path varies by SPACE GASS
+  version. Read it from configuration or an environment variable
+  rather than hard-coding `C:\Program Files\SPACE GASS 14.5\` so the
+  same script keeps working after an upgrade.
+- **One service at a time on the default port** — if `34560` is
+  already bound (perhaps by an interactive instance the user
+  launched), starting another on the same port will fail. Either pick
+  a different port or accept the existing one (the boilerplate above
+  does the latter).
+- **Don't kill a service you didn't start** — the `finally` block
+  guards on `serviceProcess != null`, so a script that found an
+  already-running service leaves it running. Useful when developing
+  interactively in the same session as a long-lived service.
+- **Surface service stdout** — for debugging, redirect the child
+  process's `StandardOutput` / `StandardError` to a log file. The
+  boilerplate uses `CreateNoWindow = true` so the service runs
+  invisibly; flip that off (or omit it) if you want the console to
+  show service messages.
+
+## Full Source Code
+
+The complete examples with error handling and Ctrl+C wiring are
+available in the repository:
+
+- [C# — Example.ServiceAutomation](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.ServiceAutomation)
+- [Python — service_automation](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/service_automation)
