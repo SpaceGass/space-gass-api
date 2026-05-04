@@ -11,6 +11,7 @@ using SpaceGassApi.Job.Headings;
 using SpaceGassApi.Job.Import;
 using SpaceGassApi.Job.Loads;
 using SpaceGassApi.Job.New;
+using SpaceGassApi.Job.NewFromTemplate;
 using SpaceGassApi.Job.Open;
 using SpaceGassApi.Job.OpenSample;
 using SpaceGassApi.Job.Query;
@@ -72,6 +73,11 @@ namespace SpaceGassApi.Job
         public global::SpaceGassApi.Job.New.NewRequestBuilder New
         {
             get => new global::SpaceGassApi.Job.New.NewRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The newFromTemplate property</summary>
+        public global::SpaceGassApi.Job.NewFromTemplate.NewFromTemplateRequestBuilder NewFromTemplate
+        {
+            get => new global::SpaceGassApi.Job.NewFromTemplate.NewFromTemplateRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The open property</summary>
         public global::SpaceGassApi.Job.Open.OpenRequestBuilder Open

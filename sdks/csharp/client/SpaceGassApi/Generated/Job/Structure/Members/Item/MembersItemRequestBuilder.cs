@@ -70,7 +70,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item
             await RequestAdapter.SendNoContentAsync(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —            resources that don&apos;t define sub-resources ignore the parameter.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Member"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -143,7 +143,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item
             return requestInfo;
         }
         /// <summary>
-        /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —            resources that don&apos;t define sub-resources ignore the parameter.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -201,7 +201,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item
         {
         }
         /// <summary>
-        /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —            resources that don&apos;t define sub-resources ignore the parameter.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class MembersItemRequestBuilderGetQueryParameters 

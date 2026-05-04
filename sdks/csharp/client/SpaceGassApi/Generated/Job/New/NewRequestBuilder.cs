@@ -22,7 +22,7 @@ namespace SpaceGassApi.Job.New
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NewRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/new{?forceCreate*}", pathParameters)
+        public NewRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/new", pathParameters)
         {
         }
         /// <summary>
@@ -30,58 +30,51 @@ namespace SpaceGassApi.Job.New
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NewRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/new{?forceCreate*}", rawUrl)
+        public NewRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/new", rawUrl)
         {
         }
         /// <summary>
-        /// Creates a new blank job, or a new job from an uploaded template file (.sgbase).            **Blank job** (no file uploaded):Creates a new empty job with default configuration.            **From template** (file uploaded as multipart/form-data):The template data is loaded but treated as a new job — no file path is set.Use POST /save-as to save to a new location.            If there is an existing job with unsaved changes:- forceCreate=false (default): Returns 409 Conflict- forceCreate=true: Discards unsaved changes and creates new job            Example usage with curl (template):                curl -X POST &quot;/api/v1/job/new?forceCreate=true&quot; \      -F &quot;template=@/path/to/template.sgbase&quot;
+        /// Creates a new blank job with default configuration.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobStatus"/></returns>
-        /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.JobStatus?> PostAsync(global::SpaceGassApi.Job.New.NewPostRequestBody body, Action<RequestConfiguration<global::SpaceGassApi.Job.New.NewRequestBuilder.NewRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.JobStatus?> PostAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.JobStatus> PostAsync(global::SpaceGassApi.Job.New.NewPostRequestBody body, Action<RequestConfiguration<global::SpaceGassApi.Job.New.NewRequestBuilder.NewRequestBuilderPostQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.JobStatus> PostAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
-            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
-            var requestInfo = ToPostRequestInformation(body, requestConfiguration);
+            var requestInfo = ToPostRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobStatus>(requestInfo, global::SpaceGassApi.Models.JobStatus.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Creates a new blank job, or a new job from an uploaded template file (.sgbase).            **Blank job** (no file uploaded):Creates a new empty job with default configuration.            **From template** (file uploaded as multipart/form-data):The template data is loaded but treated as a new job — no file path is set.Use POST /save-as to save to a new location.            If there is an existing job with unsaved changes:- forceCreate=false (default): Returns 409 Conflict- forceCreate=true: Discards unsaved changes and creates new job            Example usage with curl (template):                curl -X POST &quot;/api/v1/job/new?forceCreate=true&quot; \      -F &quot;template=@/path/to/template.sgbase&quot;
+        /// Creates a new blank job with default configuration.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">The request body</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Job.New.NewPostRequestBody body, Action<RequestConfiguration<global::SpaceGassApi.Job.New.NewRequestBuilder.NewRequestBuilderPostQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Job.New.NewPostRequestBody body, Action<RequestConfiguration<global::SpaceGassApi.Job.New.NewRequestBuilder.NewRequestBuilderPostQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
         {
 #endif
-            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = new RequestInformation(Method.POST, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
             requestInfo.Headers.TryAdd("Accept", "application/json");
-            requestInfo.SetContentFromParsable(RequestAdapter, "multipart/form-data", body);
             return requestInfo;
         }
         /// <summary>
@@ -94,21 +87,11 @@ namespace SpaceGassApi.Job.New
             return new global::SpaceGassApi.Job.New.NewRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Creates a new blank job, or a new job from an uploaded template file (.sgbase).            **Blank job** (no file uploaded):Creates a new empty job with default configuration.            **From template** (file uploaded as multipart/form-data):The template data is loaded but treated as a new job — no file path is set.Use POST /save-as to save to a new location.            If there is an existing job with unsaved changes:- forceCreate=false (default): Returns 409 Conflict- forceCreate=true: Discards unsaved changes and creates new job            Example usage with curl (template):                curl -X POST &quot;/api/v1/job/new?forceCreate=true&quot; \      -F &quot;template=@/path/to/template.sgbase&quot;
-        /// </summary>
-        [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-        public partial class NewRequestBuilderPostQueryParameters 
-        {
-            /// <summary>If true, discards any existing unsaved job. If false (default), fails if unsaved changes exist.</summary>
-            [QueryParameter("forceCreate")]
-            public bool? ForceCreate { get; set; }
-        }
-        /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.
         /// </summary>
         [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-        public partial class NewRequestBuilderPostRequestConfiguration : RequestConfiguration<global::SpaceGassApi.Job.New.NewRequestBuilder.NewRequestBuilderPostQueryParameters>
+        public partial class NewRequestBuilderPostRequestConfiguration : RequestConfiguration<DefaultQueryParameters>
         {
         }
     }

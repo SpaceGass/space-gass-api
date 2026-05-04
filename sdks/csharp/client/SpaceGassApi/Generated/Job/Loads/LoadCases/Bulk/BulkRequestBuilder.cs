@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Bulk
         {
         }
         /// <summary>
-        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).
+        /// Deletes multiple load cases by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`). As with `DELETE /{id}`, this removes thetitle/notes/metadata only — assigned loads and combination items are preserved.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.ObjectBatchResult"/></returns>
         /// <param name="body">The request body</param>
@@ -61,7 +61,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Bulk
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ObjectBatchResult>(requestInfo, global::SpaceGassApi.Models.ObjectBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        /// Partially updates multiple load cases. Each item must include its `id`.Validation runs upfront; with `continueOnError=false` (default) any failurerejects the whole request. With `continueOnError=true`, valid items are updatedand failures are reported per-item.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.LoadCaseBatchResult"/></returns>
         /// <param name="body">The request body</param>
@@ -88,7 +88,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Bulk
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCaseBatchResult>(requestInfo, global::SpaceGassApi.Models.LoadCaseBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
+        /// Creates multiple load cases in a single request. Validation runs upfront on the wholebatch; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.LoadCaseBatchResult"/></returns>
         /// <param name="body">The request body</param>
@@ -115,7 +115,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Bulk
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCaseBatchResult>(requestInfo, global::SpaceGassApi.Models.LoadCaseBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).
+        /// Deletes multiple load cases by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`). As with `DELETE /{id}`, this removes thetitle/notes/metadata only — assigned loads and combination items are preserved.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -137,7 +137,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Bulk
             return requestInfo;
         }
         /// <summary>
-        /// Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        /// Partially updates multiple load cases. Each item must include its `id`.Validation runs upfront; with `continueOnError=false` (default) any failurerejects the whole request. With `continueOnError=true`, valid items are updatedand failures are reported per-item.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -159,7 +159,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Bulk
             return requestInfo;
         }
         /// <summary>
-        /// Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
+        /// Creates multiple load cases in a single request. Validation runs upfront on the wholebatch; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -190,12 +190,12 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Bulk
             return new global::SpaceGassApi.Job.Loads.LoadCases.Bulk.BulkRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).
+        /// Deletes multiple load cases by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`). As with `DELETE /{id}`, this removes thetitle/notes/metadata only — assigned loads and combination items are preserved.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderDeleteQueryParameters 
         {
-            /// <summary>Whether to continue on error</summary>
+            /// <summary>If true, continue processing remaining Ids after a failure. Default: false.</summary>
             [QueryParameter("continueOnError")]
             public bool? ContinueOnError { get; set; }
         }
@@ -208,12 +208,12 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Bulk
         {
         }
         /// <summary>
-        /// Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        /// Partially updates multiple load cases. Each item must include its `id`.Validation runs upfront; with `continueOnError=false` (default) any failurerejects the whole request. With `continueOnError=true`, valid items are updatedand failures are reported per-item.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderPatchQueryParameters 
         {
-            /// <summary>Whether to continue processing after individual failures</summary>
+            /// <summary>If true, process valid items even when some fail. Default: false.</summary>
             [QueryParameter("continueOnError")]
             public bool? ContinueOnError { get; set; }
         }
@@ -226,12 +226,12 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Bulk
         {
         }
         /// <summary>
-        /// Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
+        /// Creates multiple load cases in a single request. Validation runs upfront on the wholebatch; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderPostQueryParameters 
         {
-            /// <summary>Whether to continue processing after individual failures</summary>
+            /// <summary>If true, process valid items even when some fail. Default: false.</summary>
             [QueryParameter("continueOnError")]
             public bool? ContinueOnError { get; set; }
         }

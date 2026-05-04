@@ -31,7 +31,7 @@ class NextRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[NextRequestBuilderGetQueryParameters]] = None) -> Optional[int]:
         """
-        Gets the next available (unused) Id for this entity type.
+        Returns the next available (unused) load case Id, starting from start.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[int]
         """
@@ -49,7 +49,7 @@ class NextRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[NextRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets the next available (unused) Id for this entity type.
+        Returns the next available (unused) load case Id, starting from start.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -71,9 +71,9 @@ class NextRequestBuilder(BaseRequestBuilder):
     @dataclass
     class NextRequestBuilderGetQueryParameters():
         """
-        Gets the next available (unused) Id for this entity type.
+        Returns the next available (unused) load case Id, starting from start.
         """
-        # The Id value to start searching from (inclusive). Defaults to 1.
+        # The Id to start searching from (inclusive). Defaults to 1.
         start: Optional[int] = None
 
     

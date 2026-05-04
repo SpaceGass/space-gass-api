@@ -2,7 +2,7 @@
 #pragma warning disable CS0618
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
-using SpaceGassApi.Job.Loads.CombinationCases;
+using SpaceGassApi.Job.Loads.CombinationLoadCases;
 using SpaceGassApi.Job.Loads.LoadCaseGroups;
 using SpaceGassApi.Job.Loads.LoadCases;
 using SpaceGassApi.Job.Loads.LoadCategories;
@@ -28,10 +28,10 @@ namespace SpaceGassApi.Job.Loads
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class LoadsRequestBuilder : BaseRequestBuilder
     {
-        /// <summary>The combinationCases property</summary>
-        public global::SpaceGassApi.Job.Loads.CombinationCases.CombinationCasesRequestBuilder CombinationCases
+        /// <summary>The combinationLoadCases property</summary>
+        public global::SpaceGassApi.Job.Loads.CombinationLoadCases.CombinationLoadCasesRequestBuilder CombinationLoadCases
         {
-            get => new global::SpaceGassApi.Job.Loads.CombinationCases.CombinationCasesRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::SpaceGassApi.Job.Loads.CombinationLoadCases.CombinationLoadCasesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The loadCaseGroups property</summary>
         public global::SpaceGassApi.Job.Loads.LoadCaseGroups.LoadCaseGroupsRequestBuilder LoadCaseGroups

@@ -24,6 +24,7 @@ if TYPE_CHECKING:
     from .import_.import_request_builder import ImportRequestBuilder
     from .loads.loads_request_builder import LoadsRequestBuilder
     from .new.new_request_builder import NewRequestBuilder
+    from .new_from_template.new_from_template_request_builder import NewFromTemplateRequestBuilder
     from .open.open_request_builder import OpenRequestBuilder
     from .open_sample.open_sample_request_builder import OpenSampleRequestBuilder
     from .query.query_request_builder import QueryRequestBuilder
@@ -159,6 +160,15 @@ class JobRequestBuilder(BaseRequestBuilder):
         from .new.new_request_builder import NewRequestBuilder
 
         return NewRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def new_from_template(self) -> NewFromTemplateRequestBuilder:
+        """
+        The newFromTemplate property
+        """
+        from .new_from_template.new_from_template_request_builder import NewFromTemplateRequestBuilder
+
+        return NewFromTemplateRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def open(self) -> OpenRequestBuilder:

@@ -7,12 +7,10 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class CombinationItem(Parsable):
     """
-    Represents a single component within a load combination.Carries the composite key (CombinationCase + Case) plus its multiplying factor.
+    Represents a single component within a load combination — a component case Id andthe multiplying factor applied to it.
     """
     # Component load case number.
     case: Optional[int] = None
-    # The combination (parent) load case number that owns this item.Optional on the per-case PUT body (route wins); required for flat/bulk payloads.
-    combination_case: Optional[int] = None
     # Multiplying factor applied to the component load case (default: 1.0).
     multiplying_factor: Optional[float] = None
     
@@ -34,7 +32,6 @@ class CombinationItem(Parsable):
         """
         fields: dict[str, Callable[[Any], None]] = {
             "case": lambda n : setattr(self, 'case', n.get_int_value()),
-            "combinationCase": lambda n : setattr(self, 'combination_case', n.get_int_value()),
             "multiplyingFactor": lambda n : setattr(self, 'multiplying_factor', n.get_float_value()),
         }
         return fields
@@ -48,7 +45,6 @@ class CombinationItem(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_int_value("case", self.case)
-        writer.write_int_value("combinationCase", self.combination_case)
         writer.write_float_value("multiplyingFactor", self.multiplying_factor)
     
 

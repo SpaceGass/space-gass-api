@@ -40,7 +40,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
     def by_id(self,id: int) -> LoadCasesItemRequestBuilder:
         """
         Gets an item from the space_gass_api.job.loads.loadCases.item collection
-        param id: The entity Id
+        param id: The load case Id
         Returns: LoadCasesItemRequestBuilder
         """
         if id is None:
@@ -53,7 +53,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[LoadCasesRequestBuilderGetQueryParameters]] = None) -> Optional[list[LoadCase]]:
         """
-        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        Returns all load cases in the open job. Type is read-only and computed by SPACE GASSbased on assigned loads (Primary, Combination, Step, Unused). Filter by type, bycase-Id list, or by title substring. Results are sorted by Id ascending.Pagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).Pass `Expand=all` to hydrate `combinationItems` on combination cases (otherwise the`hasCombinationItems` indicator is populated but the array is omitted from the wire).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[LoadCase]]
         """
@@ -73,7 +73,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: LoadCaseCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[LoadCase]:
         """
-        Creates a new item. If a validator is registered, the item is validated before creation.
+        Creates a new load case. The case is initially type `Unused` until loads areassigned to it (or until combination items are added via `POST /combination-load-cases`,which creates the case as type `Combination`).
         param body: DTO for creating a new load case.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[LoadCase]
@@ -98,7 +98,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[LoadCasesRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        Returns all load cases in the open job. Type is read-only and computed by SPACE GASSbased on assigned loads (Primary, Combination, Step, Unused). Filter by type, bycase-Id list, or by title substring. Results are sorted by Id ascending.Pagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).Pass `Expand=all` to hydrate `combinationItems` on combination cases (otherwise the`hasCombinationItems` indicator is populated but the array is omitted from the wire).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -109,7 +109,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: LoadCaseCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Creates a new item. If a validator is registered, the item is validated before creation.
+        Creates a new load case. The case is initially type `Unused` until loads areassigned to it (or until combination items are added via `POST /combination-load-cases`,which creates the case as type `Combination`).
         param body: DTO for creating a new load case.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -162,7 +162,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
     @dataclass
     class LoadCasesRequestBuilderGetQueryParameters():
         """
-        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        Returns all load cases in the open job. Type is read-only and computed by SPACE GASSbased on assigned loads (Primary, Combination, Step, Unused). Filter by type, bycase-Id list, or by title substring. Results are sorted by Id ascending.Pagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).Pass `Expand=all` to hydrate `combinationItems` on combination cases (otherwise the`hasCombinationItems` indicator is populated but the array is omitted from the wire).
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -189,7 +189,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
         # Load case Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all load cases.
         cases: Optional[str] = None
 
-        # Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.
+        # Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items on combination cases.
         expand: Optional[ExpandOption] = None
 
         # Maximum number of items to return. Default is null (return all).

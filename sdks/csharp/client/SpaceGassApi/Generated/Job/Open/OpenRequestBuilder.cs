@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Open
         {
         }
         /// <summary>
-        /// Opens a job from a local .sg file.            For normal open, omit forceOption (or set to null).If the file has unsaved temporary files from a previous session, provide a forceOption:- OpenPreviousSaved: Discard unsaved changes, open last saved version- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown            Example request to recover unsaved work:                POST /api/v1/job/open    {      &quot;filePath&quot;: &quot;C:\\path\\to\\job.sg&quot;,      &quot;forceOption&quot;: &quot;OpenUnsavedMostRecent&quot;    }
+        /// Opens a job from a local .sg file.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.            For normal open, omit forceOption (or set to null).If the file has unsaved temporary files from a previous session, provide a forceOption:- OpenPreviousSaved: Discard unsaved changes, open last saved version- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown            Example request to recover unsaved work:                POST /api/v1/job/open    {      &quot;filePath&quot;: &quot;C:\\path\\to\\job.sg&quot;,      &quot;forceOption&quot;: &quot;OpenUnsavedMostRecent&quot;    }
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobStatus"/></returns>
         /// <param name="body">Request DTO for opening a job file.</param>
@@ -42,6 +42,7 @@ namespace SpaceGassApi.Job.Open
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.JobStatus?> PostAsync(global::SpaceGassApi.Models.OpenJobRequest body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -57,11 +58,12 @@ namespace SpaceGassApi.Job.Open
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobStatus>(requestInfo, global::SpaceGassApi.Models.JobStatus.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Opens a job from a local .sg file.            For normal open, omit forceOption (or set to null).If the file has unsaved temporary files from a previous session, provide a forceOption:- OpenPreviousSaved: Discard unsaved changes, open last saved version- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown            Example request to recover unsaved work:                POST /api/v1/job/open    {      &quot;filePath&quot;: &quot;C:\\path\\to\\job.sg&quot;,      &quot;forceOption&quot;: &quot;OpenUnsavedMostRecent&quot;    }
+        /// Opens a job from a local .sg file.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.            For normal open, omit forceOption (or set to null).If the file has unsaved temporary files from a previous session, provide a forceOption:- OpenPreviousSaved: Discard unsaved changes, open last saved version- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown            Example request to recover unsaved work:                POST /api/v1/job/open    {      &quot;filePath&quot;: &quot;C:\\path\\to\\job.sg&quot;,      &quot;forceOption&quot;: &quot;OpenUnsavedMostRecent&quot;    }
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Request DTO for opening a job file.</param>

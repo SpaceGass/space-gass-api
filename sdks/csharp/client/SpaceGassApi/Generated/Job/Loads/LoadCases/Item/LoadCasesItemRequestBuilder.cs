@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
         {
         }
         /// <summary>
-        /// Removes the title, notes, and metadata for the load case.Does not delete the actual loads assigned to the case or its combination items.The load case may still appear if it has loads assigned to it.
+        /// Removes the title, notes and metadata for the load case. Does not delete the actualloads assigned to the case or its combination items — the case may still appear inlistings if it has loads assigned to it.
         /// </summary>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -58,7 +58,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
             await RequestAdapter.SendNoContentAsync(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        /// Gets a single load case by Id. `Expand` defaults to `all`, which hydrates`combinationItems` for combination cases; pass `Expand=none` to suppress.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.LoadCase"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -83,7 +83,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCase>(requestInfo, global::SpaceGassApi.Models.LoadCase.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Updates an existing item. If a validator is registered, the update is validated first.
+        /// Partially updates a load case (title, notes). Only fields supplied in the body arechanged; omitted fields are left as-is.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.LoadCase"/></returns>
         /// <param name="body">DTO for updating an existing load case.All fields are optional to support partial updates.</param>
@@ -112,7 +112,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCase>(requestInfo, global::SpaceGassApi.Models.LoadCase.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Removes the title, notes, and metadata for the load case.Does not delete the actual loads assigned to the case or its combination items.The load case may still appear if it has loads assigned to it.
+        /// Removes the title, notes and metadata for the load case. Does not delete the actualloads assigned to the case or its combination items — the case may still appear inlistings if it has loads assigned to it.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -131,7 +131,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
             return requestInfo;
         }
         /// <summary>
-        /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        /// Gets a single load case by Id. `Expand` defaults to `all`, which hydrates`combinationItems` for combination cases; pass `Expand=none` to suppress.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -150,7 +150,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
             return requestInfo;
         }
         /// <summary>
-        /// Updates an existing item. If a validator is registered, the update is validated first.
+        /// Partially updates a load case (title, notes). Only fields supplied in the body arechanged; omitted fields are left as-is.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">DTO for updating an existing load case.All fields are optional to support partial updates.</param>
@@ -189,12 +189,12 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
         {
         }
         /// <summary>
-        /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        /// Gets a single load case by Id. `Expand` defaults to `all`, which hydrates`combinationItems` for combination cases; pass `Expand=none` to suppress.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class LoadCasesItemRequestBuilderGetQueryParameters 
         {
-            /// <summary>Sub-resource expansion. Defaults to `all`; pass `none` to suppress sub-resource hydration.</summary>
+            /// <summary>Sub-resource expansion. Defaults to `all`.</summary>
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -203,7 +203,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
 #else
             public string Expand { get; set; }
 #endif
-            /// <summary>Sub-resource expansion. Defaults to `all`; pass `none` to suppress sub-resource hydration.</summary>
+            /// <summary>Sub-resource expansion. Defaults to `all`.</summary>
             [QueryParameter("Expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
         }

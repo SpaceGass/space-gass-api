@@ -29,11 +29,11 @@ class TxtRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/import/txt{?merge*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/import/txt", path_parameters)
     
-    async def post(self,body: MultipartBody, request_configuration: Optional[RequestConfiguration[TxtRequestBuilderPostQueryParameters]] = None) -> Optional[JobStatus]:
+    async def post(self,body: MultipartBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[JobStatus]:
         """
-        Imports a SpaceGass text file into the current job.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt?merge=false" /      -F "file=@/path/to/model.txt"
+        Creates a new job and imports the SpaceGass text file into it.The new job will use the units defined in the imported text file — no conversion is performed.            No job must be open when calling this endpoint. If a job is already open (even an empty one),the request will return 409 Conflict — close the current job first using POST /job/close.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt" /      -F "file=@/path/to/model.txt"
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[JobStatus]
@@ -48,6 +48,7 @@ class TxtRequestBuilder(BaseRequestBuilder):
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
             "401": ProblemDetails,
+            "409": ProblemDetails,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -55,9 +56,9 @@ class TxtRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, JobStatus, error_mapping)
     
-    def to_post_request_information(self,body: MultipartBody, request_configuration: Optional[RequestConfiguration[TxtRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
+    def to_post_request_information(self,body: MultipartBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Imports a SpaceGass text file into the current job.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt?merge=false" /      -F "file=@/path/to/model.txt"
+        Creates a new job and imports the SpaceGass text file into it.The new job will use the units defined in the imported text file — no conversion is performed.            No job must be open when calling this endpoint. If a job is already open (even an empty one),the request will return 409 Conflict — close the current job first using POST /job/close.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt" /      -F "file=@/path/to/model.txt"
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -81,16 +82,7 @@ class TxtRequestBuilder(BaseRequestBuilder):
         return TxtRequestBuilder(self.request_adapter, raw_url)
     
     @dataclass
-    class TxtRequestBuilderPostQueryParameters():
-        """
-        Imports a SpaceGass text file into the current job.A job must be open before calling this endpoint.            The file should be uploaded as multipart/form-data with the field name "file".            Example usage with curl:                curl -X POST "/api/v1/job/import/txt?merge=false" /      -F "file=@/path/to/model.txt"
-        """
-        # If true, merges imported data with existing structure. If false (default), replaces existing data.
-        merge: Optional[bool] = None
-
-    
-    @dataclass
-    class TxtRequestBuilderPostRequestConfiguration(RequestConfiguration[TxtRequestBuilderPostQueryParameters]):
+    class TxtRequestBuilderPostRequestConfiguration(RequestConfiguration[QueryParameters]):
         """
         Configuration for the request such as headers, query parameters, and middleware options.
         """
