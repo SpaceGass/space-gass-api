@@ -13,11 +13,12 @@ Mirrors the Simple Beam walkthrough in the Zudoku docs site:
    9.  Apply a member distributed load to the dead case
    10. Apply a member distributed load to the live case
    11. Define ULS and SLS combinations to AS/NZS 1170
-   12. Run a linear static analysis and wait for completion
-   13. Query reactions under the ULS combination
-   14. Get the maximum ULS bending moment along the beam
-   15. Get the maximum SLS deflection along the beam
-   16. Save and close
+   12. Save the initial model (so you can open it in SPACE GASS to verify)
+   13. Run a linear static analysis and wait for completion
+   14. Query reactions under the ULS combination
+   15. Get the maximum ULS bending moment along the beam
+   16. Get the maximum SLS deflection along the beam
+   17. Save the analysed model and close
 
 Prerequisites:
   - SPACE GASS API running locally (default: http://localhost:34560)
@@ -32,11 +33,12 @@ from kiota_abstractions.base_request_configuration import RequestConfiguration
 
 from extensions.client_extensions import create_client
 from space_gass_api.models.analysis_run_status import AnalysisRunStatus
-from space_gass_api.models.combination_case_create import CombinationCaseCreate
-from space_gass_api.models.combination_item import CombinationItem
+from space_gass_api.models.combination_load_case_create import CombinationLoadCaseCreate
+from space_gass_api.models.combination_load_case_item import CombinationLoadCaseItem
 from space_gass_api.models.load_case_create import LoadCaseCreate
 from space_gass_api.models.load_position_units import LoadPositionUnits
 from space_gass_api.models.material_library_create import MaterialLibraryCreate
+from space_gass_api.models.problem_details import ProblemDetails
 from space_gass_api.models.member_create import MemberCreate
 from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
 from space_gass_api.models.node_create import NodeCreate
@@ -193,27 +195,27 @@ async def main() -> int:
         print("Defining ULS and SLS combinations to AS/NZS 1170...")
 
         uls_case = await client.job.loads.combination_load_cases.post(
-            CombinationCaseCreate(
+            CombinationLoadCaseCreate(
                 id=10,
                 title="ULS - Strength",
                 # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
                 combination_items=[
-                    CombinationItem(case=self_weight_case.id, multiplying_factor=1.2),
-                    CombinationItem(case=dead_case.id,        multiplying_factor=1.2),
-                    CombinationItem(case=live_case.id,        multiplying_factor=1.5),
+                    CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.2),
+                    CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.2),
+                    CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=1.5),
                 ],
             ),
         )
 
         sls_case = await client.job.loads.combination_load_cases.post(
-            CombinationCaseCreate(
+            CombinationLoadCaseCreate(
                 id=20,
                 title="SLS - Short-term Deflection",
                 # SLS short-term: 1.0 G + 0.7 Q
                 combination_items=[
-                    CombinationItem(case=self_weight_case.id, multiplying_factor=1.0),
-                    CombinationItem(case=dead_case.id,        multiplying_factor=1.0),
-                    CombinationItem(case=live_case.id,        multiplying_factor=0.7),
+                    CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.0),
+                    CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.0),
+                    CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=0.7),
                 ],
             ),
         )
@@ -222,7 +224,23 @@ async def main() -> int:
         print(f"  SLS  case Id = {sls_case.id}")
         print()
 
-        # == Step 12 — Run a linear static analysis ====================
+        # == Step 12 — Save the initial model ==========================
+        # Save before running the analysis so you can open the .sg in
+        # SPACE GASS and inspect the model state if anything fails.
+        print(f"Saving initial model to: {save_file_path}")
+        initial_save = await client.job.save.post(
+            SaveJobRequest(file_path=save_file_path),
+        )
+
+        job_file = initial_save.state.file if initial_save and initial_save.state else None
+        print(f"  Path:     {job_file.path if job_file else None}")
+        print(f"  Name:     {job_file.name if job_file else None}")
+        print(f"  Source:   {job_file.source if job_file else None}")
+        print(f"  IsNew:    {initial_save.state.is_new if initial_save and initial_save.state else None}")
+        print(f"  IsOpen:   {initial_save.state.is_open if initial_save and initial_save.state else None}")
+        print()
+
+        # == Step 13 — Run a linear static analysis ====================
         print("Running linear static analysis...")
         run = await client.job.analysis.static.run_linear.post(
             StaticSettingsUpdate())
@@ -244,7 +262,7 @@ async def main() -> int:
                 f"Analysis did not complete: {final_run.error_message}")
         print()
 
-        # == Step 13 — Query reactions =================================
+        # == Step 14 — Query reactions =================================
         print("Querying ULS reactions...")
         reaction_params = ReactionsRequestBuilder.ReactionsRequestBuilderGetQueryParameters(
             cases=str(uls_case.id))
@@ -262,7 +280,7 @@ async def main() -> int:
                 f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
         print()
 
-        # == Step 14 — Maximum ULS bending moment ======================
+        # == Step 15 — Maximum ULS bending moment ======================
         force_params = IntermediateForcesRequestBuilder.IntermediateForcesRequestBuilderGetQueryParameters(
             cases=str(uls_case.id),
             members=str(member.id))
@@ -273,7 +291,7 @@ async def main() -> int:
         max_mz = max(abs(v) for v in beam_forces.mz if v is not None)
         print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
 
-        # == Step 15 — Maximum SLS deflection ==========================
+        # == Step 16 — Maximum SLS deflection ==========================
         displ_params = IntermediateDisplacementsRequestBuilder.IntermediateDisplacementsRequestBuilderGetQueryParameters(
             cases=str(sls_case.id),
             members=str(member.id))
@@ -285,20 +303,39 @@ async def main() -> int:
         print(f"Max SLS deflection on Member {member.id}: {max_deflection * 1000:.2f} mm")
         print()
 
-        # == Step 16 — Save and close ==================================
-        print(f"Saving project to: {save_file_path}")
+        # == Step 17 — Save the analysed model =========================
+        # Closing the job runs in `finally` below, so it always happens
+        # even if a step above raised — leaving the service without a
+        # half-built active job.
+        print(f"Saving analysed model to: {save_file_path}")
         await client.job.save.post(
             SaveJobRequest(file_path=save_file_path),
         )
         print("Project saved.")
 
-        print("Closing project...")
-        await client.job.close.post()
-        print("Project closed.")
-
+    except ProblemDetails as pd:
+        # Typed except for the API's RFC 9457 error response. status /
+        # title / detail are the standard fields; anything the server
+        # adds beyond those (errorCode, errors, etc.) lands in
+        # additional_data.
+        print(f"API error {pd.status}: {pd.title}", file=sys.stderr)
+        if pd.detail:
+            print(f"  {pd.detail}", file=sys.stderr)
+        for key, value in (pd.additional_data or {}).items():
+            print(f"  {key}: {value}", file=sys.stderr)
+        return 1
     except Exception as ex:
         print(f"Error: {ex}", file=sys.stderr)
         return 1
+
+    finally:
+        # Always close the active job so the next run starts clean.
+        try:
+            print("Closing project...")
+            await client.job.close.post()
+            print("Project closed.")
+        except Exception as close_ex:
+            print(f"Warning: failed to close job: {close_ex}", file=sys.stderr)
 
     return 0
 

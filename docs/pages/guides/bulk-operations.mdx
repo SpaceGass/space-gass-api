@@ -1,0 +1,105 @@
+---
+title: Bulk Operations
+description: How bulk endpoints work, how they differ from single-item calls, and when to use them
+---
+
+Most collection endpoints — `Job.Structure.Nodes`,
+`Job.Structure.Members`, the load primitives, and so on — expose two
+shapes:
+
+- **Single**: `Nodes.PostAsync(NodeCreate body)` — one entity per call
+- **Bulk**: `Nodes.Bulk.PostAsync(List<NodeCreate> body)` — many entities per call
+
+## Differences
+
+| | Single | Bulk |
+| --- | --- | --- |
+| **Round trips** | One per item | One per batch |
+| **Validation** | Each item is validated as the call arrives | The full batch is validated up front, before any items are created |
+| **Failure response** | Throws on the first failing item | Returns a `*BatchResult` with `Succeeded` and `Errors` lists |
+| **Partial commit on validation failure** | Items submitted before the failure are already created | Nothing is created unless every item validates |
+| **Partial success** | Not applicable | Opt-in via `?continueOnError=true` |
+
+## Example: creating 100 nodes
+
+Bulk endpoints accept a `List<XCreate>` and return an `XBatchResult`
+with the created entities under `Succeeded` and any failures under
+`Errors`. `BatchError.Index` is the position in the input list, so you
+can match an error back to the body you sent.
+
+<CodeTabs>
+```csharp title="C#"
+var bodies = Enumerable.Range(0, 100)
+    .Select(i => new NodeCreate { X = i % 10, Y = 0, Z = i / 10 })
+    .ToList();
+
+var result = await client.Job.Structure.Nodes.Bulk.PostAsync(bodies);
+
+foreach (var node in result!.Succeeded!)
+{
+    Console.WriteLine($"  Node {node.Id}: ({node.X}, {node.Y}, {node.Z})");
+}
+
+foreach (var error in result.Errors!)
+{
+    Console.WriteLine($"  [{error.Index}] {error.Error}");
+}
+```
+
+```python title="Python"
+bodies = [
+    NodeCreate(x=i % 10, y=0, z=i // 10)
+    for i in range(100)
+]
+
+result = await client.job.structure.nodes.bulk.post(bodies)
+
+for node in result.succeeded or []:
+    print(f"  Node {node.id}: ({node.x}, {node.y}, {node.z})")
+
+for error in result.errors or []:
+    print(f"  [{error.index}] {error.error}")
+```
+</CodeTabs>
+
+The same pattern applies to `Job.Structure.Members`,
+`Job.Structure.Sections`, and the load primitives — every collection
+endpoint has a `.Bulk` counterpart.
+
+## Partial success with `continueOnError`
+
+A bulk POST is all-or-nothing by default — if any item fails
+validation, nothing is created and the call returns errors. Pass
+`continueOnError=true` to commit every item that validates and report
+the rest in `Errors`:
+
+<CodeTabs>
+```csharp title="C#"
+var result = await client.Job.Structure.Nodes.Bulk.PostAsync(
+    bodies,
+    config => config.QueryParameters.ContinueOnError = true);
+
+Console.WriteLine($"Succeeded: {result!.Succeeded!.Count}");
+Console.WriteLine($"Failed:    {result.Errors!.Count}");
+```
+
+```python title="Python"
+from kiota_abstractions.base_request_configuration import RequestConfiguration
+from space_gass_api.job.structure.nodes.bulk.bulk_request_builder import BulkRequestBuilder
+
+params = BulkRequestBuilder.BulkRequestBuilderPostQueryParameters(continue_on_error=True)
+result = await client.job.structure.nodes.bulk.post(
+    bodies,
+    request_configuration=RequestConfiguration(query_parameters=params))
+
+print(f"Succeeded: {len(result.succeeded or [])}")
+print(f"Failed:    {len(result.errors or [])}")
+```
+</CodeTabs>
+
+## When to use bulk
+
+- Creating or updating more than one entity in a single script or
+  automated job.
+- Importing or replicating a model from another source.
+- Anywhere you'd otherwise loop a single-item call.

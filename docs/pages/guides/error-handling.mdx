@@ -31,34 +31,40 @@ information.
 
 ## Handling Errors in SDK Clients
 
+The SDK raises a typed `ProblemDetails` exception that carries the
+fields from the JSON body — `Status`, `Title`, `Detail`, `Type`,
+`Instance`. Catch it directly so you can read those fields rather than
+the generic exception `Message` (which prints
+`Exception of type 'ProblemDetails' was thrown`):
+
 <CodeTabs>
 ```csharp title="C#"
-using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Models;
 
 try
 {
     var node = await client.Job.Structure.Nodes[999].GetAsync();
 }
-catch (ApiException ex) when (ex.ResponseStatusCode == 404)
+catch (ProblemDetails pd) when (pd.Status == 404)
 {
-    Console.WriteLine($"Node not found: {ex.Message}");
+    Console.WriteLine($"Node not found: {pd.Detail}");
 }
-catch (ApiException ex)
+catch (ProblemDetails pd)
 {
-    Console.WriteLine($"API error {ex.ResponseStatusCode}: {ex.Message}");
+    Console.WriteLine($"API error {pd.Status} ({pd.Title}): {pd.Detail}");
 }
 ```
 
 ```python title="Python"
-from kiota_abstractions.api_error import APIError
+from space_gass_api.models.problem_details import ProblemDetails
 
 try:
     node = await client.job.structure.nodes.by_id(999).get()
-except APIError as e:
-    if e.response_status_code == 404:
-        print(f"Node not found: {e.message}")
+except ProblemDetails as pd:
+    if pd.status == 404:
+        print(f"Node not found: {pd.detail}")
     else:
-        print(f"API error {e.response_status_code}: {e.message}")
+        print(f"API error {pd.status} ({pd.title}): {pd.detail}")
 ```
 
 ```bash title="curl"
@@ -69,3 +75,8 @@ curl -v http://localhost:34560/api/v1/job/structure/nodes/999
 # {"type":"...","title":"Not Found","status":404,"detail":"Node 999 not found"}
 ```
 </CodeTabs>
+
+`ProblemDetails` inherits from Kiota's base `ApiException` (C#) /
+`APIError` (Python), so you can still catch the broader type if you
+need to handle non-Problem-Details transport errors (network drops,
+timeouts) the same way.
