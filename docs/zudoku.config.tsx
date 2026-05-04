@@ -30,6 +30,9 @@ function singularize(word: string): string {
 const BODY_TYPE_OVERRIDES: Record<string, string> = {
   "POST /job/structure/sections": "SectionUserCreate",
   "POST /job/structure/sections/library": "SectionLibraryCreate",
+  "POST /job/structure/materials/library": "MaterialLibraryCreate",
+  "POST /job/loads/combination-load-cases": "CombinationCaseCreate",
+  "PATCH /job/loads/combination-load-cases/{id}": "CombinationCaseUpdate",
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

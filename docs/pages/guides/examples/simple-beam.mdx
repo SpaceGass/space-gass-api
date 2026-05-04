@@ -89,13 +89,12 @@ you `Job.Close` it in Step 16.
 <CodeTabs>
 ```csharp title="C#"
 using SpaceGassApi;
-using SpaceGassApi.Job.New;
 using SpaceGassApi.Models;
 
 var client = SpaceGassApiClient.CreateClient();
 
 // Create a new blank project
-await client.Job.New.PostAsync(new NewPostRequestBody());
+await client.Job.New.PostAsync();
 ```
 
 ```python title="Python"
@@ -109,6 +108,7 @@ from space_gass_api.models.load_case_create import LoadCaseCreate
 from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
 from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
 from space_gass_api.models.load_position_units import LoadPositionUnits
+from space_gass_api.models.combination_case_create import CombinationCaseCreate
 from space_gass_api.models.combination_item import CombinationItem
 from space_gass_api.models.static_settings_update import StaticSettingsUpdate
 from space_gass_api.models.analysis_run_status import AnalysisRunStatus
@@ -421,61 +421,67 @@ await client.job.loads.member_distributed_loads.post(
 
 ## Step 11 — Define the ULS and SLS Combinations
 
-A combination case is itself a load case (POSTed via
-`Job.Loads.LoadCases`). Its items — primary case + factor pairs — are
-then PUT to `Job.Loads.CombinationCases[caseId]` at the new case's Id.
-Below we define ULS (`1.2G + 1.5Q`) and SLS short-term (`1.0G + 0.7Q`)
-combinations to AS/NZS 1170.
+A combination case is created in a single call via
+`Job.Loads.CombinationLoadCases`, with the title, Id, and the list of
+items (primary case + factor pairs) supplied inline on
+`CombinationCaseCreate`. Below we define ULS (`1.2G + 1.5Q`) and SLS
+short-term (`1.0G + 0.7Q`) combinations to AS/NZS 1170.
 
 <CodeTabs>
 ```csharp title="C#"
-// Create the load cases that will hold the combinations
-var ulsCase = await client.Job.Loads.LoadCases.PostAsync(
-    new LoadCaseCreate { Id = 10, Title = "ULS - Strength" });
-
-var slsCase = await client.Job.Loads.LoadCases.PostAsync(
-    new LoadCaseCreate { Id = 20, Title = "SLS - Short-term Deflection" });
-
 // ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
-await client.Job.Loads.CombinationCases[ulsCase.Id!.Value].PutAsync(
-    new List<CombinationItem>
+var ulsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
+    new CombinationCaseCreate
     {
-        new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
-        new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
-        new() { Case = liveCase.Id,       MultiplyingFactor = 1.5 },
+        Id = 10,
+        Title = "ULS - Strength",
+        CombinationItems = new List<CombinationItem>
+        {
+            new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
+            new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
+            new() { Case = liveCase.Id,       MultiplyingFactor = 1.5 },
+        },
     });
 
 // SLS short-term: 1.0 G + 0.7 Q
-await client.Job.Loads.CombinationCases[slsCase.Id!.Value].PutAsync(
-    new List<CombinationItem>
+var slsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
+    new CombinationCaseCreate
     {
-        new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
-        new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
-        new() { Case = liveCase.Id,       MultiplyingFactor = 0.7 },
+        Id = 20,
+        Title = "SLS - Short-term Deflection",
+        CombinationItems = new List<CombinationItem>
+        {
+            new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
+            new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
+            new() { Case = liveCase.Id,       MultiplyingFactor = 0.7 },
+        },
     });
 ```
 
 ```python title="Python"
-# Create the load cases that will hold the combinations
-uls_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(id=10, title="ULS - Strength"))
-
-sls_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(id=20, title="SLS - Short-term Deflection"))
-
 # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
-await client.job.loads.combination_cases.by_combination_case(uls_case.id).put([
-    CombinationItem(case=self_weight_case.id, multiplying_factor=1.2),
-    CombinationItem(case=dead_case.id,        multiplying_factor=1.2),
-    CombinationItem(case=live_case.id,        multiplying_factor=1.5),
-])
+uls_case = await client.job.loads.combination_load_cases.post(
+    CombinationCaseCreate(
+        id=10,
+        title="ULS - Strength",
+        combination_items=[
+            CombinationItem(case=self_weight_case.id, multiplying_factor=1.2),
+            CombinationItem(case=dead_case.id,        multiplying_factor=1.2),
+            CombinationItem(case=live_case.id,        multiplying_factor=1.5),
+        ],
+    ))
 
 # SLS short-term: 1.0 G + 0.7 Q
-await client.job.loads.combination_cases.by_combination_case(sls_case.id).put([
-    CombinationItem(case=self_weight_case.id, multiplying_factor=1.0),
-    CombinationItem(case=dead_case.id,        multiplying_factor=1.0),
-    CombinationItem(case=live_case.id,        multiplying_factor=0.7),
-])
+sls_case = await client.job.loads.combination_load_cases.post(
+    CombinationCaseCreate(
+        id=20,
+        title="SLS - Short-term Deflection",
+        combination_items=[
+            CombinationItem(case=self_weight_case.id, multiplying_factor=1.0),
+            CombinationItem(case=dead_case.id,        multiplying_factor=1.0),
+            CombinationItem(case=live_case.id,        multiplying_factor=0.7),
+        ],
+    ))
 ```
 </CodeTabs>
 

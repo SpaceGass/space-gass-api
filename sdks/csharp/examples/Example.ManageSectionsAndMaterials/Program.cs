@@ -1,5 +1,4 @@
 using SpaceGassApi;
-using SpaceGassApi.Job.New;
 using SpaceGassApi.Models;
 
 
@@ -26,7 +25,7 @@ try
 {
     // -- Create a new blank project --------------------------------
     Console.WriteLine("Creating new blank project...");
-    await client.Job.New.PostAsync(new NewPostRequestBody());
+    await client.Job.New.PostAsync();
     Console.WriteLine("New project created.");
     Console.WriteLine();
 
