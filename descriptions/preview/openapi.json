@@ -1,18 +1,18 @@
 {
   "openapi": "3.0.4",
   "info": {
-    "title": "Space Gass API",
-    "description": "Structural analysis API for Space Gass data management",
+    "title": "SPACE GASS API",
+    "description": "REST API for SPACE GASS — structural analysis and design software.",
     "contact": {
-      "name": "Space Gass API Support",
+      "name": "SPACE GASS API Support",
       "email": "support@spacegass.com"
     },
     "license": {
-      "name": "Space Gass License",
+      "name": "SPACE GASS License",
       "url": "https://www.spacegass.com/license"
     },
     "version": "1",
-    "x-space-gass-build": "14.50.65"
+    "x-space-gass-build": "14.50.70"
   },
   "servers": [
     {
@@ -837,33 +837,142 @@
         }
       }
     },
-    "/job/loads/combination-cases": {
+    "/job/loads/combination-load-cases": {
       "get": {
         "tags": [
-          "Combination Cases"
+          "Combination Load Cases"
         ],
-        "summary": "List All Combination Items",
-        "description": "Returns a flat list of every combination item across every combination case.\r\nEach row includes the owning combination case, the component case, and its multiplying factor.\r\nOptionally filter by a comma-separated list of combination-case numbers.",
+        "summary": "List Combination Load Cases",
+        "description": "Returns all combination load cases (load cases of type `Combination`) in the open job.\r\nFilter by case-Id list or by title substring. Results are sorted by Id ascending.\r\nPagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).\r\n`Expand` defaults to `none` on this list endpoint; pass `Expand=all` to hydrate\r\neach case's `combinationItems` array (otherwise `hasCombinationItems` is populated\r\nbut the array is omitted from the wire).",
         "parameters": [
           {
-            "name": "combinationCases",
+            "name": "Cases",
             "in": "query",
-            "description": "Combination case Ids in SG list format (e.g. `\"101,103-105\"`). Omit to return all.",
+            "description": "Combination case Ids to filter by, in SG list format (e.g. `\"1,3-7,10\"`).\r\nOmit to return all combination cases.",
+            "schema": {
+              "type": "string",
+              "example": "1,3-7,10"
+            },
+            "example": "1,3-7,10"
+          },
+          {
+            "name": "TitleSearch",
+            "in": "query",
+            "description": "Search text to filter by title (case-insensitive contains).",
             "schema": {
               "type": "string"
+            }
+          },
+          {
+            "name": "Offset",
+            "in": "query",
+            "description": "Number of items to skip from the start of the result set. Default is 0.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Limit",
+            "in": "query",
+            "description": "Maximum number of items to return. Default is null (return all).",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Expand",
+            "in": "query",
+            "description": "Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items.",
+            "schema": {
+              "$ref": "#/components/schemas/ExpandOption"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "Returns the list of combination items",
+            "description": "Returns the list of combination load cases",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CombinationItem"
+                    "$ref": "#/components/schemas/LoadCase"
                   }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Combination Load Cases"
+        ],
+        "summary": "Create Combination Load Case",
+        "description": "Creates a combination load case (case + items) in a single atomic call. The\r\n`combinationItems` list is required and must contain at least one item; on\r\nfailure during item creation the parent case row is rolled back so the operation is\r\nall-or-nothing. Each component case must exist and be of type Primary, Combination\r\nor Unused (Step cases are rejected); no item may reference the parent case\r\n(self-reference); item `case` values must be unique within the request.",
+        "requestBody": {
+          "description": "The combination load case data (load-case fields plus a non-empty `combinationItems` list)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CombinationCaseCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CombinationCaseCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CombinationCaseCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Combination load case created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadCase"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed (missing items, self-reference, wrong-type component, duplicate items, etc.)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A load case with the supplied Id already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -881,13 +990,13 @@
         }
       }
     },
-    "/job/loads/combination-cases/{combinationCase}": {
+    "/job/loads/combination-load-cases/{combinationCase}/items": {
       "get": {
         "tags": [
-          "Combination Cases"
+          "Combination Load Cases"
         ],
         "summary": "Get Combination Items",
-        "description": "Gets the combination items for a specific combination case.\r\nReturns an empty array if the case has no combination items.",
+        "description": "Gets the combination items for a specific combination case.\r\nReturns 404 if no combination case exists with the supplied Id (Primary,\r\nStep or Unused load cases are not exposed by this endpoint).",
         "parameters": [
           {
             "name": "combinationCase",
@@ -915,7 +1024,7 @@
             }
           },
           "404": {
-            "description": "Load case not found",
+            "description": "Combination case not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -938,10 +1047,10 @@
       },
       "put": {
         "tags": [
-          "Combination Cases"
+          "Combination Load Cases"
         ],
         "summary": "Set Combination Items",
-        "description": "Sets (creates or replaces) the combination items for a combination case.\r\nThe load case must exist and be of Combination type.\r\nThe entire items array is replaced atomically.",
+        "description": "Replaces the combination items for a combination case atomically.\r\nThe case must already exist and be of type Combination.\r\nAll standard item rules apply: non-empty list, no duplicates, no self-reference,\r\nand every component case must exist and be of type Primary, Combination or Unused\r\n(Step cases are rejected).",
         "parameters": [
           {
             "name": "combinationCase",
@@ -998,7 +1107,7 @@
             }
           },
           "404": {
-            "description": "Load case not found",
+            "description": "Combination case not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1008,7 +1117,149 @@
             }
           },
           "400": {
-            "description": "Invalid items (empty array or self-reference)",
+            "description": "Invalid items (empty array, duplicates, self-reference, or wrong-type component)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/loads/combination-load-cases/{id}": {
+      "get": {
+        "tags": [
+          "Combination Load Cases"
+        ],
+        "summary": "Get Combination Load Case",
+        "description": "Gets a single combination load case by Id. Returns 404 if no case exists with that Id\r\nor if the case is not of type `Combination` (Primary, Step and Unused cases are\r\nnot exposed by this endpoint — use `GET /load-cases/{id}` for those).\r\n`Expand` defaults to `all`, which hydrates `combinationItems`;\r\npass `Expand=none` to suppress.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The combination load case Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "Expand",
+            "in": "query",
+            "description": "Sub-resource expansion. Defaults to `all`.",
+            "schema": {
+              "$ref": "#/components/schemas/ExpandOption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the combination load case",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadCase"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Combination load case not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Combination Load Cases"
+        ],
+        "summary": "Update Combination Load Case",
+        "description": "Partially updates a combination load case. Only fields supplied in the body are\r\nchanged; omitted fields are left as-is. The optional `combinationItems` field is\r\na full-replace when provided — it must be a non-empty list, and the same item rules\r\nfrom create apply (existence, type, no self-reference, no duplicates). Omit\r\n`combinationItems` to leave the existing items untouched. To remove all items,\r\ndelete the case (`DELETE /{id}`).",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The combination load case Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The partial update data (any of: title, notes, combinationItems)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CombinationCaseUpdate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CombinationCaseUpdate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CombinationCaseUpdate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the updated combination load case",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadCase"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Combination load case not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1031,15 +1282,15 @@
       },
       "delete": {
         "tags": [
-          "Combination Cases"
+          "Combination Load Cases"
         ],
-        "summary": "Delete Combination Items",
-        "description": "Deletes all combination items for a combination case.\r\nDoes NOT delete the load case itself.",
+        "summary": "Delete Combination Load Case",
+        "description": "Deletes the combination load case and all of its component items atomically.",
         "parameters": [
           {
-            "name": "combinationCase",
+            "name": "id",
             "in": "path",
-            "description": "The combination case Id",
+            "description": "The combination load case Id",
             "required": true,
             "schema": {
               "type": "integer",
@@ -1049,10 +1300,10 @@
         ],
         "responses": {
           "204": {
-            "description": "Items deleted successfully"
+            "description": "Combination load case deleted"
           },
           "404": {
-            "description": "Load case not found",
+            "description": "Combination load case not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -1074,12 +1325,12 @@
         }
       }
     },
-    "/job/loads/combination-cases/metadata": {
+    "/job/loads/combination-load-cases/items/metadata": {
       "get": {
         "tags": [
-          "Combination Cases"
+          "Combination Load Cases"
         ],
-        "summary": "Get Combinations Metadata",
+        "summary": "Get Items Metadata",
         "description": "Returns the schema for a single combination item: field definitions,\r\nunits resolved against current job units, and allowed values for enum fields.",
         "responses": {
           "200": {
@@ -1105,18 +1356,93 @@
         }
       }
     },
-    "/job/loads/combination-cases/bulk": {
+    "/job/loads/combination-load-cases/metadata": {
+      "get": {
+        "tags": [
+          "Combination Load Cases"
+        ],
+        "summary": "Get Combination Load Case Metadata",
+        "description": "Returns the schema for a combination load case: field definitions, units resolved\r\nagainst current job units, and allowed values for enum fields. The item DTO schema\r\n(component case + multiplying factor) is available at `GET /combination-load-cases/items/metadata`.",
+        "responses": {
+          "200": {
+            "description": "Returns combination load case schema metadata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceMetadata"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/loads/combination-load-cases/next": {
+      "get": {
+        "tags": [
+          "Combination Load Cases"
+        ],
+        "summary": "Get Next Combination Load Case Id",
+        "description": "Returns the next available (unused) load case Id, starting from start.\r\nThe Id space is shared with regular load cases — combination cases and primary cases\r\ncannot have the same Id.",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "description": "The Id to start searching from (inclusive). Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the next available Id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/loads/combination-load-cases/bulk": {
       "post": {
         "tags": [
-          "Combination Cases"
+          "Combination Load Cases"
         ],
-        "summary": "Bulk Upsert Combination Items",
-        "description": "Creates or updates individual combination items identified by their (combinationCase, case) composite key.\r\nUnlike PUT /{combinationCase} which replaces the entire item array for one case, this endpoint operates\r\nitem-by-item across potentially multiple combination cases.\r\nIf an item with the same (combinationCase, case) already exists its multiplyingFactor is updated in place;\r\notherwise a new row is added.\r\nUse continueOnError=true to process all items even if some fail.",
+        "summary": "Create Combination Load Cases (Bulk)",
+        "description": "Creates multiple combination load cases in a single request. Each item is a full\r\ncase + items payload; validation runs upfront on the whole batch. With\r\n`continueOnError=false` (default) any failure rejects the whole request; with\r\n`continueOnError=true`, valid items are created and failures are reported per-item.\r\nEach created case is atomic individually (case + items, with rollback on failure).",
         "parameters": [
           {
             "name": "continueOnError",
             "in": "query",
-            "description": "If true, continue processing remaining items after a failure. Default: false.",
+            "description": "If true, process valid items even when some fail. Default: false.",
             "schema": {
               "type": "boolean",
               "default": false
@@ -1124,13 +1450,13 @@
           }
         ],
         "requestBody": {
-          "description": "Array of flat combination entries. Each must include combinationCase, case, and multiplyingFactor.",
+          "description": "Array of combination load cases to create",
           "content": {
             "application/json": {
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationItem"
+                  "$ref": "#/components/schemas/CombinationCaseCreate"
                 }
               }
             },
@@ -1138,7 +1464,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationItem"
+                  "$ref": "#/components/schemas/CombinationCaseCreate"
                 }
               }
             },
@@ -1146,7 +1472,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationItem"
+                  "$ref": "#/components/schemas/CombinationCaseCreate"
                 }
               }
             }
@@ -1154,17 +1480,96 @@
         },
         "responses": {
           "200": {
-            "description": "Returns batch result (check errors array for partial failures)",
+            "description": "Returns the batch result",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CombinationItemBatchResult"
+                  "$ref": "#/components/schemas/LoadCaseBatchResult"
                 }
               }
             }
           },
           "400": {
-            "description": "If the request body is missing or malformed",
+            "description": "Validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Combination Load Cases"
+        ],
+        "summary": "Update Combination Load Cases (Bulk)",
+        "description": "Partially updates multiple combination load cases. Each item must include its `id`.\r\nAs with the single-item PATCH, an optional `combinationItems` list on a row\r\nperforms a full-replace of that case's items. Validation runs upfront on the whole\r\nbatch; with `continueOnError=true`, valid rows are applied and failures are reported per-item.",
+        "parameters": [
+          {
+            "name": "continueOnError",
+            "in": "query",
+            "description": "If true, process valid items even when some fail. Default: false.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Array of partial updates (each must include `id`)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CombinationCaseUpdate"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CombinationCaseUpdate"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/CombinationCaseUpdate"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Returns the batch result",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoadCaseBatchResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation failed",
             "content": {
               "application/json": {
                 "schema": {
@@ -1187,29 +1592,30 @@
       },
       "delete": {
         "tags": [
-          "Combination Cases"
+          "Combination Load Cases"
         ],
-        "summary": "Bulk Delete Combination Items",
-        "description": "Deletes individual combination items identified by their (combinationCase, case) composite key.\r\nItems not found are reported as errors but do not affect other items.",
+        "summary": "Delete Combination Load Cases (Bulk)",
+        "description": "Deletes multiple combination load cases by Id. The body is a JSON array of integer Ids\r\n(e.g. `[10, 11, 12]`). Each deletion removes the case and its items atomically.",
         "parameters": [
           {
             "name": "continueOnError",
             "in": "query",
-            "description": "If true, continue processing remaining items after a failure. Default: true.",
+            "description": "If true, continue processing remaining Ids after a failure. Default: false.",
             "schema": {
               "type": "boolean",
-              "default": true
+              "default": false
             }
           }
         ],
         "requestBody": {
-          "description": "Array of composite keys identifying the items to delete",
+          "description": "JSON array of combination load case Ids to delete",
           "content": {
             "application/json": {
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationItemKey"
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             },
@@ -1217,7 +1623,8 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationItemKey"
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             },
@@ -1225,7 +1632,8 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationItemKey"
+                  "type": "integer",
+                  "format": "int32"
                 }
               }
             }
@@ -1233,17 +1641,17 @@
         },
         "responses": {
           "200": {
-            "description": "Returns batch result",
+            "description": "Returns the batch result",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/CombinationItemKeyBatchResult"
+                  "$ref": "#/components/schemas/ObjectBatchResult"
                 }
               }
             }
           },
           "400": {
-            "description": "If the request body is missing",
+            "description": "Request body is missing or empty",
             "content": {
               "application/json": {
                 "schema": {
@@ -1751,18 +2159,7 @@
           "Import"
         ],
         "summary": "Import Text File",
-        "description": "Imports a SpaceGass text file into the current job.\r\nA job must be open before calling this endpoint.\r\n            \r\nThe file should be uploaded as multipart/form-data with the field name \"file\".\r\n            \r\nExample usage with curl:\r\n            \r\n    curl -X POST \"/api/v1/job/import/txt?merge=false\" \\\r\n      -F \"file=@/path/to/model.txt\"",
-        "parameters": [
-          {
-            "name": "merge",
-            "in": "query",
-            "description": "If true, merges imported data with existing structure. If false (default), replaces existing data.",
-            "schema": {
-              "type": "boolean",
-              "default": false
-            }
-          }
-        ],
+        "description": "Creates a new job and imports the SpaceGass text file into it.\r\nThe new job will use the units defined in the imported text file — no conversion is performed.\r\n            \r\nNo job must be open when calling this endpoint. If a job is already open (even an empty one),\r\nthe request will return 409 Conflict — close the current job first using POST /job/close.\r\n            \r\nThe file should be uploaded as multipart/form-data with the field name \"file\".\r\n            \r\nExample usage with curl:\r\n            \r\n    curl -X POST \"/api/v1/job/import/txt\" \\\r\n      -F \"file=@/path/to/model.txt\"",
         "requestBody": {
           "content": {
             "multipart/form-data": {
@@ -1786,7 +2183,7 @@
         },
         "responses": {
           "200": {
-            "description": "Text file imported successfully. Returns the updated job status with model counts.",
+            "description": "Text file imported successfully. Returns the new job status with model counts.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1797,6 +2194,16 @@
           },
           "400": {
             "description": "Invalid file or import failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A job is already open — close the current job first with POST /job/close",
             "content": {
               "application/json": {
                 "schema": {
@@ -2016,7 +2423,7 @@
           "Job"
         ],
         "summary": "Close Job",
-        "description": "Closes the current job session and unloads from memory.\r\n            \r\nUnsaved changes are discarded. Call POST /job/save before closing to persist changes.\r\n            \r\nThe .sg file on disk is never deleted or modified.\r\nReturns the file resource state after close (isOpen will be false).",
+        "description": "Closes the current job session and unloads from memory.\r\n            \r\nIdempotent: if no job is currently open, returns 200 with the current state\r\n(isOpen=false) without error.\r\n            \r\nUnsaved changes are discarded. Call POST /job/save before closing to persist changes.\r\n            \r\nThe .sg file on disk is never deleted or modified.\r\nReturns the file resource state after close (isOpen will be false).",
         "responses": {
           "200": {
             "description": "Returns the state confirming the job is closed",
@@ -2024,16 +2431,6 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/JobState"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "No job is currently open",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2057,44 +2454,60 @@
           "Job"
         ],
         "summary": "New Job",
-        "description": "Creates a new blank job, or a new job from an uploaded template file (.sgbase).\r\n            \r\n**Blank job** (no file uploaded):\r\nCreates a new empty job with default configuration.\r\n            \r\n**From template** (file uploaded as multipart/form-data):\r\nThe template data is loaded but treated as a new job — no file path is set.\r\nUse POST /save-as to save to a new location.\r\n            \r\nIf there is an existing job with unsaved changes:\r\n- forceCreate=false (default): Returns 409 Conflict\r\n- forceCreate=true: Discards unsaved changes and creates new job\r\n            \r\nExample usage with curl (template):\r\n            \r\n    curl -X POST \"/api/v1/job/new?forceCreate=true\" \\\r\n      -F \"template=@/path/to/template.sgbase\"",
-        "parameters": [
-          {
-            "name": "forceCreate",
-            "in": "query",
-            "description": "If true, discards any existing unsaved job. If false (default), fails if unsaved changes exist.",
-            "schema": {
-              "type": "boolean",
-              "default": false
+        "description": "Creates a new blank job with default configuration.\r\n            \r\nIf a job is currently open, returns 409 Conflict — close the current job first\r\nusing POST /job/close.",
+        "responses": {
+          "200": {
+            "description": "New blank job created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/JobStatus"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A job is already open — close it first with POST /job/close",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
             }
           }
+        }
+      }
+    },
+    "/job/new-from-template": {
+      "post": {
+        "tags": [
+          "Job"
         ],
+        "summary": "New Job From Template",
+        "description": "Creates a new job from an uploaded .sgbase template file.\r\n            \r\nThe template data is loaded but treated as a new job — no file path is set.\r\nUse POST /job/save with a filePath to save to a new location.\r\n            \r\nIf a job is currently open, returns 409 Conflict — close the current job first\r\nusing POST /job/close.\r\n            \r\nExample usage with curl:\r\n            \r\n    curl -X POST \"/api/v1/job/new-from-template\" \\\r\n      -F \"template=@/path/to/template.sgbase\"",
         "requestBody": {
           "content": {
             "multipart/form-data": {
               "schema": {
+                "required": [
+                  "template"
+                ],
                 "type": "object",
                 "properties": {
                   "template": {
                     "type": "string",
-                    "description": "Optional .sgbase template file uploaded as multipart/form-data",
-                    "format": "binary"
-                  }
-                }
-              },
-              "encoding": {
-                "template": {
-                  "style": "form"
-                }
-              }
-            },
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "template": {
-                    "type": "string",
-                    "description": "Optional .sgbase template file uploaded as multipart/form-data",
+                    "description": ".sgbase template file uploaded as multipart/form-data",
                     "format": "binary"
                   }
                 }
@@ -2108,16 +2521,6 @@
           }
         },
         "responses": {
-          "200": {
-            "description": "New blank job created",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/JobStatus"
-                }
-              }
-            }
-          },
           "201": {
             "description": "New job created from template",
             "content": {
@@ -2129,7 +2532,7 @@
             }
           },
           "400": {
-            "description": "Invalid template file or creation failed",
+            "description": "Invalid or missing template file, or creation failed",
             "content": {
               "application/json": {
                 "schema": {
@@ -2139,7 +2542,7 @@
             }
           },
           "409": {
-            "description": "Existing job has unsaved changes (use forceCreate=true to discard)",
+            "description": "A job is already open — close it first with POST /job/close",
             "content": {
               "application/json": {
                 "schema": {
@@ -2167,7 +2570,7 @@
           "Job"
         ],
         "summary": "Open Job",
-        "description": "Opens a job from a local .sg file.\r\n            \r\nFor normal open, omit forceOption (or set to null).\r\nIf the file has unsaved temporary files from a previous session, provide a forceOption:\r\n- OpenPreviousSaved: Discard unsaved changes, open last saved version\r\n- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown\r\n            \r\nExample request to recover unsaved work:\r\n            \r\n    POST /api/v1/job/open\r\n    {\r\n      \"filePath\": \"C:\\\\path\\\\to\\\\job.sg\",\r\n      \"forceOption\": \"OpenUnsavedMostRecent\"\r\n    }",
+        "description": "Opens a job from a local .sg file.\r\n            \r\nIf a job is currently open, returns 409 Conflict — close the current job first\r\nusing POST /job/close.\r\n            \r\nFor normal open, omit forceOption (or set to null).\r\nIf the file has unsaved temporary files from a previous session, provide a forceOption:\r\n- OpenPreviousSaved: Discard unsaved changes, open last saved version\r\n- OpenUnsavedMostRecent: Preserve unsaved changes, recover from abnormal shutdown\r\n            \r\nExample request to recover unsaved work:\r\n            \r\n    POST /api/v1/job/open\r\n    {\r\n      \"filePath\": \"C:\\\\path\\\\to\\\\job.sg\",\r\n      \"forceOption\": \"OpenUnsavedMostRecent\"\r\n    }",
         "requestBody": {
           "description": "File path and optional force option",
           "content": {
@@ -2209,6 +2612,16 @@
               }
             }
           },
+          "409": {
+            "description": "A job is already open — close it first with POST /job/close",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "401": {
             "description": "Unauthorized",
             "content": {
@@ -2228,7 +2641,7 @@
           "Job"
         ],
         "summary": "Open Sample Project",
-        "description": "Opens a sample SPACE GASS project as a new unsaved job.\r\nThe sample data is loaded but treated as a new job — use Save As to persist changes.\r\n            \r\nUse GET /api/v1/file/samples to list available sample files and their virtual paths.\r\n            \r\nExample request:\r\n            \r\n    POST /api/v1/job/open-sample\r\n    {\r\n      \"fileName\": \"Portal Frame.SG\"\r\n    }",
+        "description": "Opens a sample SPACE GASS project as a new unsaved job.\r\nThe sample data is loaded but treated as a new job — use Save As to persist changes.\r\n            \r\nIf a job is currently open, returns 409 Conflict — close the current job first\r\nusing POST /job/close.\r\n            \r\nUse GET /api/v1/file/samples to list available sample files and their virtual paths.\r\n            \r\nExample request:\r\n            \r\n    POST /api/v1/job/open-sample\r\n    {\r\n      \"fileName\": \"Portal Frame.SG\"\r\n    }",
         "requestBody": {
           "description": "Virtual sample path",
           "content": {
@@ -2262,6 +2675,16 @@
           },
           "400": {
             "description": "Sample file not found or open failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A job is already open — close it first with POST /job/close",
             "content": {
               "application/json": {
                 "schema": {
@@ -2442,7 +2865,7 @@
           "Load Case Groups"
         ],
         "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "Groups",
@@ -2518,6 +2941,7 @@
         "summary": "Create",
         "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
         "requestBody": {
+          "description": "The data for the new item",
           "content": {
             "application/json": {
               "schema": {
@@ -2586,7 +3010,7 @@
           "Load Case Groups"
         ],
         "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "id",
@@ -2659,6 +3083,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -3141,8 +3566,8 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "summary": "List Load Cases",
+        "description": "Returns all load cases in the open job. Type is read-only and computed by SPACE GASS\r\nbased on assigned loads (Primary, Combination, Step, Unused). Filter by type, by\r\ncase-Id list, or by title substring. Results are sorted by Id ascending.\r\nPagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).\r\nPass `Expand=all` to hydrate `combinationItems` on combination cases (otherwise the\r\n`hasCombinationItems` indicator is populated but the array is omitted from the wire).",
         "parameters": [
           {
             "name": "Cases",
@@ -3195,7 +3620,7 @@
           {
             "name": "Expand",
             "in": "query",
-            "description": "Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.",
+            "description": "Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items on combination cases.",
             "schema": {
               "$ref": "#/components/schemas/ExpandOption"
             }
@@ -3203,7 +3628,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the list of load cases",
             "content": {
               "application/json": {
                 "schema": {
@@ -3216,7 +3641,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3231,9 +3656,10 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "summary": "Create Load Case",
+        "description": "Creates a new load case. The case is initially type `Unused` until loads are\r\nassigned to it (or until combination items are added via `POST /combination-load-cases`,\r\nwhich creates the case as type `Combination`).",
         "requestBody": {
+          "description": "The load case data",
           "content": {
             "application/json": {
               "schema": {
@@ -3254,7 +3680,7 @@
         },
         "responses": {
           "201": {
-            "description": "Created",
+            "description": "Load case created",
             "content": {
               "application/json": {
                 "schema": {
@@ -3264,7 +3690,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "Validation failed",
             "content": {
               "application/json": {
                 "schema": {
@@ -3274,7 +3700,7 @@
             }
           },
           "409": {
-            "description": "Conflict",
+            "description": "A load case with the supplied Id already exists",
             "content": {
               "application/json": {
                 "schema": {
@@ -3284,7 +3710,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3301,13 +3727,13 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "summary": "Get Load Case",
+        "description": "Gets a single load case by Id. `Expand` defaults to `all`, which hydrates\r\n`combinationItems` for combination cases; pass `Expand=none` to suppress.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "The entity Id",
+            "description": "The load case Id",
             "required": true,
             "schema": {
               "type": "integer",
@@ -3317,7 +3743,7 @@
           {
             "name": "Expand",
             "in": "query",
-            "description": "Sub-resource expansion. Defaults to `all`; pass `none` to suppress sub-resource hydration.",
+            "description": "Sub-resource expansion. Defaults to `all`.",
             "schema": {
               "$ref": "#/components/schemas/ExpandOption"
             }
@@ -3325,7 +3751,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the load case",
             "content": {
               "application/json": {
                 "schema": {
@@ -3335,7 +3761,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Load case not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -3345,7 +3771,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3360,13 +3786,13 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Update",
-        "description": "Updates an existing item. If a validator is registered, the update is validated first.",
+        "summary": "Update Load Case",
+        "description": "Partially updates a load case (title, notes). Only fields supplied in the body are\r\nchanged; omitted fields are left as-is.",
         "parameters": [
           {
             "name": "id",
             "in": "path",
-            "description": "The entity Id",
+            "description": "The load case Id",
             "required": true,
             "schema": {
               "type": "integer",
@@ -3375,6 +3801,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -3395,7 +3822,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the updated load case",
             "content": {
               "application/json": {
                 "schema": {
@@ -3405,7 +3832,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "Validation failed",
             "content": {
               "application/json": {
                 "schema": {
@@ -3415,7 +3842,7 @@
             }
           },
           "404": {
-            "description": "Not Found",
+            "description": "Load case not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -3425,7 +3852,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3440,8 +3867,8 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Delete Title Info",
-        "description": "Removes the title, notes, and metadata for the load case.\r\nDoes not delete the actual loads assigned to the case or its combination items.\r\nThe load case may still appear if it has loads assigned to it.",
+        "summary": "Delete Load Case",
+        "description": "Removes the title, notes and metadata for the load case. Does not delete the actual\r\nloads assigned to the case or its combination items — the case may still appear in\r\nlistings if it has loads assigned to it.",
         "parameters": [
           {
             "name": "id",
@@ -3456,10 +3883,10 @@
         ],
         "responses": {
           "204": {
-            "description": "No Content"
+            "description": "Load case deleted"
           },
           "404": {
-            "description": "Not Found",
+            "description": "Load case not found",
             "content": {
               "application/json": {
                 "schema": {
@@ -3469,7 +3896,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3486,10 +3913,11 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Get Metadata",
+        "summary": "Get Load Case Metadata",
+        "description": "Returns the schema for a load case: field definitions, units resolved against current\r\njob units, and allowed values for enum fields (e.g. `type`).",
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns load case schema metadata",
             "content": {
               "application/json": {
                 "schema": {
@@ -3499,7 +3927,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3516,13 +3944,13 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Next Id",
-        "description": "Gets the next available (unused) Id for this entity type.",
+        "summary": "Get Next Load Case Id",
+        "description": "Returns the next available (unused) load case Id, starting from start.",
         "parameters": [
           {
             "name": "start",
             "in": "query",
-            "description": "The Id value to start searching from (inclusive). Defaults to 1.",
+            "description": "The Id to start searching from (inclusive). Defaults to 1.",
             "schema": {
               "type": "integer",
               "format": "int32",
@@ -3532,7 +3960,7 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the next available load case Id",
             "content": {
               "application/json": {
                 "schema": {
@@ -3543,7 +3971,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3560,13 +3988,13 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Create Bulk",
-        "description": "Creates multiple items in a bulk operation.\r\nIf a validator is registered, all items are validated upfront before any are created.",
+        "summary": "Create Load Cases (Bulk)",
+        "description": "Creates multiple load cases in a single request. Validation runs upfront on the whole\r\nbatch; if any item fails and `continueOnError` is false (default), the entire\r\nrequest is rejected. With `continueOnError=true`, valid items are created and\r\nfailures are reported per-item in the response.",
         "parameters": [
           {
             "name": "continueOnError",
             "in": "query",
-            "description": "Whether to continue processing after individual failures",
+            "description": "If true, process valid items even when some fail. Default: false.",
             "schema": {
               "type": "boolean",
               "default": false
@@ -3574,7 +4002,7 @@
           }
         ],
         "requestBody": {
-          "description": "Array of items to create",
+          "description": "Array of load cases to create",
           "content": {
             "application/json": {
               "schema": {
@@ -3604,7 +4032,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the batch result (check the `errors` array for partial failures)",
             "content": {
               "application/json": {
                 "schema": {
@@ -3614,7 +4042,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "Validation failed",
             "content": {
               "application/json": {
                 "schema": {
@@ -3624,7 +4052,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3639,13 +4067,13 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Update Bulk",
-        "description": "Updates multiple items in a bulk operation.\r\nEach item must include its Id in the request body.\r\nIf a validator is registered, all items are validated upfront before any are updated.",
+        "summary": "Update Load Cases (Bulk)",
+        "description": "Partially updates multiple load cases. Each item must include its `id`.\r\nValidation runs upfront; with `continueOnError=false` (default) any failure\r\nrejects the whole request. With `continueOnError=true`, valid items are updated\r\nand failures are reported per-item.",
         "parameters": [
           {
             "name": "continueOnError",
             "in": "query",
-            "description": "Whether to continue processing after individual failures",
+            "description": "If true, process valid items even when some fail. Default: false.",
             "schema": {
               "type": "boolean",
               "default": false
@@ -3653,7 +4081,7 @@
           }
         ],
         "requestBody": {
-          "description": "Array of update objects (each must include Id)",
+          "description": "Array of partial updates (each must include `id`)",
           "content": {
             "application/json": {
               "schema": {
@@ -3683,7 +4111,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the batch result",
             "content": {
               "application/json": {
                 "schema": {
@@ -3693,7 +4121,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "Validation failed",
             "content": {
               "application/json": {
                 "schema": {
@@ -3703,7 +4131,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3718,13 +4146,13 @@
         "tags": [
           "Load Cases"
         ],
-        "summary": "Delete Bulk",
-        "description": "Deletes multiple entities by Id. The body is a JSON array of integer Ids\r\n(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpoint\r\nin the API (see CLAUDE.md \"Query Parameter Conventions\").",
+        "summary": "Delete Load Cases (Bulk)",
+        "description": "Deletes multiple load cases by Id. The body is a JSON array of integer Ids\r\n(e.g. `[1, 5, 10]`). As with `DELETE /{id}`, this removes the\r\ntitle/notes/metadata only — assigned loads and combination items are preserved.",
         "parameters": [
           {
             "name": "continueOnError",
             "in": "query",
-            "description": "Whether to continue on error",
+            "description": "If true, continue processing remaining Ids after a failure. Default: false.",
             "schema": {
               "type": "boolean",
               "default": false
@@ -3732,7 +4160,7 @@
           }
         ],
         "requestBody": {
-          "description": "JSON array of entity Ids to delete",
+          "description": "JSON array of load case Ids to delete",
           "content": {
             "application/json": {
               "schema": {
@@ -3765,7 +4193,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
+            "description": "Returns the batch result",
             "content": {
               "application/json": {
                 "schema": {
@@ -3775,7 +4203,7 @@
             }
           },
           "400": {
-            "description": "Bad Request",
+            "description": "Request body is missing or empty",
             "content": {
               "application/json": {
                 "schema": {
@@ -3785,7 +4213,7 @@
             }
           },
           "401": {
-            "description": "Unauthorized",
+            "description": "If the API key is invalid",
             "content": {
               "application/json": {
                 "schema": {
@@ -3803,7 +4231,7 @@
           "Load Categories"
         ],
         "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "Categories",
@@ -3887,6 +4315,7 @@
         "summary": "Create",
         "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
         "requestBody": {
+          "description": "The data for the new item",
           "content": {
             "application/json": {
               "schema": {
@@ -3955,7 +4384,7 @@
           "Load Categories"
         ],
         "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "id",
@@ -4028,6 +4457,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -5088,7 +5518,7 @@
           "Materials"
         ],
         "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "Materials",
@@ -5164,6 +5594,7 @@
         "summary": "Create",
         "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
         "requestBody": {
+          "description": "The data for the new item",
           "content": {
             "application/json": {
               "schema": {
@@ -5232,7 +5663,7 @@
           "Materials"
         ],
         "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "id",
@@ -5305,6 +5736,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -5715,6 +6147,241 @@
           },
           "401": {
             "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/structure/materials/library": {
+      "post": {
+        "tags": [
+          "Materials"
+        ],
+        "summary": "Create Library Material",
+        "description": "Creates a material by looking it up in a SPACE GASS material library. All material\r\nproperties (Young's modulus, Poisson's ratio, mass density, thermal coefficient,\r\nconcrete strength) are populated from the library — the caller provides only the\r\nmaterial name and library.",
+        "requestBody": {
+          "description": "The library material to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialLibraryCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialLibraryCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialLibraryCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Material created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Material"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request, or the specified material does not exist in the given library",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A material with the specified Id already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/structure/materials/library/bulk": {
+      "post": {
+        "tags": [
+          "Materials"
+        ],
+        "summary": "Create Library Materials Bulk",
+        "description": "Creates multiple library-sourced materials in a single request. Each material is\r\nresolved from the SPACE GASS material library by (name, library).",
+        "parameters": [
+          {
+            "name": "continueOnError",
+            "in": "query",
+            "description": "Whether to continue processing after individual failures",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Array of library materials to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MaterialLibraryCreate"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MaterialLibraryCreate"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/MaterialLibraryCreate"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Bulk operation completed (check succeeded/errors arrays)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MaterialBatchResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request or validation failure",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/structure/materials/{id}/library": {
+      "put": {
+        "tags": [
+          "Materials"
+        ],
+        "summary": "Replace With Library Material",
+        "description": "Replaces the material at the given Id with a library-sourced material. The existing row\r\nis deleted and a new row is created at the same Id, resolved from the SPACE GASS\r\nmaterial library by (name, library). Use this to convert a User material to a Library\r\nmaterial, or to re-resolve an existing Library material against a different library\r\nentry. Any `id` in the request body is ignored — the route Id wins.",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The Id of the material to replace",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The library material to put in its place",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialLibraryCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialLibraryCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/MaterialLibraryCreate"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Material replaced",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Material"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request, or the specified material does not exist in the given library",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No material exists at the given Id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing API key",
             "content": {
               "application/json": {
                 "schema": {
@@ -8885,7 +9552,7 @@
           "Members"
         ],
         "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "Members",
@@ -8987,6 +9654,7 @@
         "summary": "Create",
         "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
         "requestBody": {
+          "description": "The data for the new item",
           "content": {
             "application/json": {
               "schema": {
@@ -9055,7 +9723,7 @@
           "Members"
         ],
         "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "id",
@@ -9128,6 +9796,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -12384,7 +13053,7 @@
           "Nodes"
         ],
         "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "NodeType",
@@ -12522,6 +13191,7 @@
         "summary": "Create",
         "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
         "requestBody": {
+          "description": "The data for the new item",
           "content": {
             "application/json": {
               "schema": {
@@ -12590,7 +13260,7 @@
           "Nodes"
         ],
         "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "id",
@@ -12663,6 +13333,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -13179,7 +13850,7 @@
           "Plate Cuts"
         ],
         "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "Cuts",
@@ -13255,6 +13926,7 @@
         "summary": "Create",
         "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
         "requestBody": {
+          "description": "The data for the new item",
           "content": {
             "application/json": {
               "schema": {
@@ -13323,7 +13995,7 @@
           "Plate Cuts"
         ],
         "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "id",
@@ -13396,6 +14068,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -14456,7 +15129,7 @@
           "Plate Strips"
         ],
         "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "Strips",
@@ -14532,6 +15205,7 @@
         "summary": "Create",
         "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
         "requestBody": {
+          "description": "The data for the new item",
           "content": {
             "application/json": {
               "schema": {
@@ -14600,7 +15274,7 @@
           "Plate Strips"
         ],
         "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "id",
@@ -14673,6 +15347,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -15100,7 +15775,7 @@
           "Plates"
         ],
         "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "Plates",
@@ -15193,6 +15868,7 @@
         "summary": "Create",
         "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
         "requestBody": {
+          "description": "The data for the new item",
           "content": {
             "application/json": {
               "schema": {
@@ -15261,7 +15937,7 @@
           "Plates"
         ],
         "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "id",
@@ -15334,6 +16010,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -15761,7 +16438,7 @@
           "Sections"
         ],
         "summary": "Get All",
-        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Entities without sub-resources\r\nignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "Gets all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "Sections",
@@ -15837,6 +16514,7 @@
         "summary": "Create",
         "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
         "requestBody": {
+          "description": "The data for the new item",
           "content": {
             "application/json": {
               "schema": {
@@ -15905,7 +16583,7 @@
           "Sections"
         ],
         "summary": "Get by Id",
-        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter\r\n            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
         "parameters": [
           {
             "name": "id",
@@ -15978,6 +16656,7 @@
           }
         ],
         "requestBody": {
+          "description": "The partial update data",
           "content": {
             "application/json": {
               "schema": {
@@ -19902,6 +20581,99 @@
         "additionalProperties": false,
         "description": "One case's missing-mode entry inside SpaceGassApi.Models.Dtos.Query.Analysis.QueryWarningsDto.ModesNotAnalyzed."
       },
+      "CombinationCaseCreate": {
+        "required": [
+          "combinationItems",
+          "title"
+        ],
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "string",
+            "description": "Optional GUID (hidden field in SPACEGASS)\r\nSome API users find this handy for tracking entities across systems",
+            "nullable": true
+          },
+          "id": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Primary identifier - must be unique, no duplicates allowed.\r\nOptional - will be auto-assigned to next available number if not provided.\r\nIf provided, must not already exist in the model.",
+            "format": "int32",
+            "nullable": true,
+            "example": 1
+          },
+          "title": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Load case title.",
+            "example": "Dead Load"
+          },
+          "notes": {
+            "maxLength": 2048,
+            "minLength": 0,
+            "type": "string",
+            "description": "Load case notes (supports multi-line text).",
+            "nullable": true,
+            "example": "Self-weight of structural steel members"
+          },
+          "combinationItems": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CombinationItem"
+            },
+            "description": "The component cases and their multiplying factors that make up this combination case."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Request payload for creating a combination load case in a single call.\r\nInherits Id, Guid, Title and Notes from SpaceGassApi.Models.Dtos.Entity.Loads.LoadCaseCreateDto and adds\r\na required, non-empty list of combination items."
+      },
+      "CombinationCaseUpdate": {
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "string",
+            "description": "Optional GUID (hidden field in SPACEGASS)\r\nSome API users find this handy for tracking entities across systems",
+            "nullable": true
+          },
+          "id": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Primary identifier of the entity to update.\r\nOptional for single updates (Id comes from route), required for batch updates.",
+            "format": "int32",
+            "nullable": true,
+            "example": 1
+          },
+          "title": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Load case title.",
+            "nullable": true,
+            "example": "Dead Load (revised)"
+          },
+          "notes": {
+            "maxLength": 2048,
+            "minLength": 0,
+            "type": "string",
+            "description": "Load case notes (supports multi-line text).",
+            "nullable": true,
+            "example": "Updated to include cladding self-weight"
+          },
+          "combinationItems": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CombinationItem"
+            },
+            "description": "Replacement combination items for this case. Omit to leave items unchanged.",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false,
+        "description": "Request payload for updating a combination load case.\r\nInherits Id, Title and Notes from SpaceGassApi.Models.Dtos.Entity.Loads.LoadCaseUpdateDto (each optional for\r\npartial update) and adds an optional `combinationItems` list."
+      },
       "CombinationItem": {
         "required": [
           "case",
@@ -19909,98 +20681,23 @@
         ],
         "type": "object",
         "properties": {
-          "combinationCase": {
-            "type": "integer",
-            "description": "The combination (parent) load case number that owns this item.\r\nOptional on the per-case PUT body (route wins); required for flat/bulk payloads.",
-            "format": "int32",
-            "nullable": true
-          },
           "case": {
             "maximum": 2147483647,
             "minimum": 1,
             "type": "integer",
             "description": "Component load case number.",
-            "format": "int32"
+            "format": "int32",
+            "example": 1
           },
           "multiplyingFactor": {
             "type": "number",
             "description": "Multiplying factor applied to the component load case (default: 1.0).",
-            "format": "double"
+            "format": "double",
+            "example": 1.2
           }
         },
         "additionalProperties": false,
-        "description": "Represents a single component within a load combination.\r\nCarries the composite key (CombinationCase + Case) plus its multiplying factor."
-      },
-      "CombinationItemBatchResult": {
-        "type": "object",
-        "properties": {
-          "succeeded": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CombinationItem"
-            },
-            "description": "Successfully processed items.",
-            "nullable": true
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BatchError"
-            },
-            "description": "Errors from failed items.",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false,
-        "description": "Result of a batch operation."
-      },
-      "CombinationItemKey": {
-        "required": [
-          "case",
-          "combinationCase"
-        ],
-        "type": "object",
-        "properties": {
-          "combinationCase": {
-            "maximum": 2147483647,
-            "minimum": 1,
-            "type": "integer",
-            "description": "The combination (parent) load case number.",
-            "format": "int32"
-          },
-          "case": {
-            "maximum": 2147483647,
-            "minimum": 1,
-            "type": "integer",
-            "description": "Component load case number to remove from the combination.",
-            "format": "int32"
-          }
-        },
-        "additionalProperties": false,
-        "description": "Composite-key reference to a single combination item.\r\nUsed as the body for `DELETE /combination-cases/bulk`."
-      },
-      "CombinationItemKeyBatchResult": {
-        "type": "object",
-        "properties": {
-          "succeeded": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/CombinationItemKey"
-            },
-            "description": "Successfully processed items.",
-            "nullable": true
-          },
-          "errors": {
-            "type": "array",
-            "items": {
-              "$ref": "#/components/schemas/BatchError"
-            },
-            "description": "Errors from failed items.",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false,
-        "description": "Result of a batch operation."
+        "description": "Represents a single component within a load combination — a component case Id and\r\nthe multiplying factor applied to it."
       },
       "ConstraintAxes": {
         "enum": [
@@ -20828,12 +21525,14 @@
           "title": {
             "minLength": 1,
             "type": "string",
-            "description": "Load case title."
+            "description": "Load case title.",
+            "example": "Dead Load"
           },
           "notes": {
             "type": "string",
             "description": "Load case notes (supports multi-line text).",
-            "nullable": true
+            "nullable": true,
+            "example": "Self-weight of structural steel members"
           },
           "type": {
             "$ref": "#/components/schemas/LoadCaseType"
@@ -20901,14 +21600,16 @@
             "maxLength": 100,
             "minLength": 0,
             "type": "string",
-            "description": "Load case title."
+            "description": "Load case title.",
+            "example": "Dead Load"
           },
           "notes": {
             "maxLength": 2048,
             "minLength": 0,
             "type": "string",
             "description": "Load case notes (supports multi-line text).",
-            "nullable": true
+            "nullable": true,
+            "example": "Self-weight of structural steel members"
           }
         },
         "additionalProperties": false,
@@ -21078,14 +21779,16 @@
             "minLength": 0,
             "type": "string",
             "description": "Load case title.",
-            "nullable": true
+            "nullable": true,
+            "example": "Dead Load (revised)"
           },
           "notes": {
             "maxLength": 2048,
             "minLength": 0,
             "type": "string",
             "description": "Load case notes (supports multi-line text).",
-            "nullable": true
+            "nullable": true,
+            "example": "Updated to include cladding self-weight"
           }
         },
         "additionalProperties": false,
@@ -21685,6 +22388,43 @@
         },
         "additionalProperties": false,
         "description": "DTO for creating a new user-defined material."
+      },
+      "MaterialLibraryCreate": {
+        "required": [
+          "library",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "guid": {
+            "type": "string",
+            "description": "Optional GUID (hidden field in SPACEGASS)\r\nSome API users find this handy for tracking entities across systems",
+            "nullable": true
+          },
+          "id": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Primary identifier - must be unique, no duplicates allowed.\r\nOptional - will be auto-assigned to next available number if not provided.\r\nIf provided, must not already exist in the model.",
+            "format": "int32",
+            "nullable": true,
+            "example": 1
+          },
+          "name": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Material item name within the library.",
+            "example": "Steel(AS)"
+          },
+          "library": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Library name.",
+            "example": "AustralianMaterials"
+          }
+        },
+        "additionalProperties": false,
+        "description": "DTO for creating a new library-sourced material.\r\nAll material properties (Young's modulus, Poisson's ratio, etc.) are resolved from the\r\nlibrary — the caller provides only the material name and library."
       },
       "MaterialStrengthUnit": {
         "enum": [
@@ -25184,22 +25924,22 @@
             "description": "Rotational Z plastic limit. Unit: Moment (see GET /job/units).",
             "format": "double"
           },
-          "txTable": {
+          "txVariableTable": {
             "$ref": "#/components/schemas/Table"
           },
-          "tyTable": {
+          "tyVariableTable": {
             "$ref": "#/components/schemas/Table"
           },
-          "tzTable": {
+          "tzVariableTable": {
             "$ref": "#/components/schemas/Table"
           },
-          "rxTable": {
+          "rxVariableTable": {
             "$ref": "#/components/schemas/Table"
           },
-          "ryTable": {
+          "ryVariableTable": {
             "$ref": "#/components/schemas/Table"
           },
-          "rzTable": {
+          "rzVariableTable": {
             "$ref": "#/components/schemas/Table"
           }
         },
@@ -25347,6 +26087,24 @@
             "type": "number",
             "description": "Rotational Z plastic limit. Unit: Moment (see GET /job/units).",
             "format": "double"
+          },
+          "txVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "tyVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "tzVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "rxVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "ryVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "rzVariableTable": {
+            "$ref": "#/components/schemas/Table"
           }
         },
         "additionalProperties": false,
@@ -25483,6 +26241,24 @@
             "description": "Rotational Z plastic limit. Unit: Moment (see GET /job/units).",
             "format": "double",
             "nullable": true
+          },
+          "txVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "tyVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "tzVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "rxVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "ryVariableTable": {
+            "$ref": "#/components/schemas/Table"
+          },
+          "rzVariableTable": {
+            "$ref": "#/components/schemas/Table"
           }
         },
         "additionalProperties": false,
@@ -28945,8 +29721,8 @@
       "description": "Buckling analysis results"
     },
     {
-      "name": "Combination Cases",
-      "description": "Components that make up a Combination load case"
+      "name": "Combination Load Cases",
+      "description": "Combination load cases"
     },
     {
       "name": "Dynamic Results",
@@ -29115,7 +29891,7 @@
       "name": "Cases",
       "tags": [
         "Load Cases",
-        "Combination Cases",
+        "Combination Load Cases",
         "Load Case Groups",
         "Load Categories"
       ]
