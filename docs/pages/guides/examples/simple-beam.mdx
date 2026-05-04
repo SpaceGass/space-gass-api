@@ -483,7 +483,44 @@ sls_case = await client.job.loads.combination_load_cases.post(
 ```
 </CodeTabs>
 
-## Step 12 — Run a Linear Static Analysis
+## Step 12 — Save the Initial Model
+
+Persist the project to disk before kicking off the analysis. If
+something fails downstream, you can open the saved `.sg` in SPACE GASS
+and inspect every entity, load, and combination to confirm the model
+is set up the way you expect.
+
+The `Save` response is a `JobStatus` whose `State.File` carries the
+file's `Path`, `Name`, and `Source` — useful both as a sanity check
+and for any tooling that needs to know where the file landed.
+
+<CodeTabs>
+```csharp title="C#"
+var initialSave = await client.Job.Save.PostAsync(
+    new SaveJobRequest { FilePath = @"C:\Projects\SimpleBeam.sg" });
+
+var jobFile = initialSave?.State?.File;
+Console.WriteLine($"  Path:   {jobFile?.Path}");
+Console.WriteLine($"  Name:   {jobFile?.Name}");
+Console.WriteLine($"  Source: {jobFile?.Source}");
+Console.WriteLine($"  IsNew:  {initialSave?.State?.IsNew}");
+Console.WriteLine($"  IsOpen: {initialSave?.State?.IsOpen}");
+```
+
+```python title="Python"
+initial_save = await client.job.save.post(
+    SaveJobRequest(file_path="C:\\Projects\\SimpleBeam.sg"))
+
+job_file = initial_save.state.file if initial_save and initial_save.state else None
+print(f"  Path:   {job_file.path if job_file else None}")
+print(f"  Name:   {job_file.name if job_file else None}")
+print(f"  Source: {job_file.source if job_file else None}")
+print(f"  IsNew:  {initial_save.state.is_new if initial_save and initial_save.state else None}")
+print(f"  IsOpen: {initial_save.state.is_open if initial_save and initial_save.state else None}")
+```
+</CodeTabs>
+
+## Step 13 — Run a Linear Static Analysis
 
 Analyses are **asynchronous** in SPACE GASS — when you start one, the
 API returns immediately with a run Id and your code keeps going. Before
@@ -553,7 +590,7 @@ if final_run.status != AnalysisRunStatus.Completed:
 ```
 </CodeTabs>
 
-## Step 13 — Query Reactions
+## Step 14 — Query Reactions
 
 Read the support reactions under the ULS combination. By default the
 query returns every result for every case; the `Cases` query parameter
@@ -603,7 +640,7 @@ for r in reactions.results:
 ```
 </CodeTabs>
 
-## Step 14 — Get the Maximum ULS Bending Moment
+## Step 15 — Get the Maximum ULS Bending Moment
 
 Read the peak bending moment along the beam under the ULS combination.
 The result is one row per (case, member) combination; force values are
@@ -654,7 +691,7 @@ print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
 ```
 </CodeTabs>
 
-## Step 15 — Get the SLS Midspan Deflection
+## Step 16 — Get the SLS Midspan Deflection
 
 Read the maximum vertical deflection along the beam under the SLS
 combination. `MemberIntermediateDisplacement` follows the same columnar
@@ -706,24 +743,50 @@ print(f"Max SLS midspan deflection on Member {member.id}: {max_deflection * 1000
 ```
 </CodeTabs>
 
-## Step 16 — Save and Close
+## Step 17 — Save and Close
 
 Save persists the project to disk so you can re-open it later from
-SPACE GASS. Close ends the active job and releases the file.
+SPACE GASS. Close ends the active job and releases the file. Run
+`Job.Close` from a `finally` (C#) or `finally`-equivalent (Python)
+block so the active job is always cleaned up — even if a step above
+threw — leaving the service ready for the next run.
 
 <CodeTabs>
 ```csharp title="C#"
-await client.Job.Save.PostAsync(
-    new SaveJobRequest { FilePath = @"C:\Projects\SimpleBeam.sg" });
+try
+{
+    // ...all the steps above...
 
-await client.Job.Close.PostAsync();
+    await client.Job.Save.PostAsync(
+        new SaveJobRequest { FilePath = @"C:\Projects\SimpleBeam.sg" });
+}
+finally
+{
+    // Always close the active job so the next run starts clean.
+    try
+    {
+        await client.Job.Close.PostAsync();
+    }
+    catch (Exception closeEx)
+    {
+        Console.Error.WriteLine($"Warning: failed to close job: {closeEx.Message}");
+    }
+}
 ```
 
 ```python title="Python"
-await client.job.save.post(
-    SaveJobRequest(file_path="C:\\Projects\\SimpleBeam.sg"))
+try:
+    # ...all the steps above...
 
-await client.job.close.post()
+    await client.job.save.post(
+        SaveJobRequest(file_path="C:\\Projects\\SimpleBeam.sg"))
+
+finally:
+    # Always close the active job so the next run starts clean.
+    try:
+        await client.job.close.post()
+    except Exception as close_ex:
+        print(f"Warning: failed to close job: {close_ex}", file=sys.stderr)
 ```
 </CodeTabs>
 

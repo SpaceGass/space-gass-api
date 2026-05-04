@@ -305,6 +305,7 @@ const config: ZudokuConfig = {
         "guides/file-handling",
         "guides/running-analysis",
         "guides/filtering-and-querying",
+        "guides/bulk-operations",
         "guides/error-handling",
         "guides/versioning",
         "guides/licensing",

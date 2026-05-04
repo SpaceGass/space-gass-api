@@ -1,3 +1,4 @@
+using Microsoft.Kiota.Abstractions.Serialization;
 using SpaceGassApi;
 using SpaceGassApi.Models;
 
@@ -17,11 +18,12 @@ using SpaceGassApi.Models;
 //   9.  Apply a member distributed load to the dead case
 //   10. Apply a member distributed load to the live case
 //   11. Define ULS and SLS combinations to AS/NZS 1170
-//   12. Run a linear static analysis and wait for completion
-//   13. Query reactions under the ULS combination
-//   14. Get the maximum ULS bending moment along the beam
-//   15. Get the maximum SLS deflection along the beam
-//   16. Save and close
+//   12. Save the initial model (so you can open it in SPACE GASS to verify)
+//   13. Run a linear static analysis and wait for completion
+//   14. Query reactions under the ULS combination
+//   15. Get the maximum ULS bending moment along the beam
+//   16. Get the maximum SLS deflection along the beam
+//   17. Save the analysed model and close
 //
 // Prerequisites:
 //   - SPACE GASS API running locally (default: http://localhost:34560)
@@ -34,7 +36,7 @@ var saveFilePath = Path.Combine(
     "SpaceGass Examples",
     "SimpleBeam.sg");
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("https://localhost:53483/api/v1");
 
 try
 {
@@ -196,7 +198,22 @@ try
     Console.WriteLine($"  SLS  case Id = {slsCase!.Id}");
     Console.WriteLine();
 
-    // == Step 12 — Run a linear static analysis ====================
+    // == Step 12 — Save the initial model ==========================
+    // Save before running the analysis so you can open the .sg in
+    // SPACE GASS and inspect the model state if anything fails.
+    Console.WriteLine($"Saving initial model to: {saveFilePath}");
+    var initialSave = await client.Job.Save.PostAsync(
+        new SaveJobRequest { FilePath = saveFilePath });
+
+    var jobFile = initialSave?.State?.File;
+    Console.WriteLine($"  Path:     {jobFile?.Path}");
+    Console.WriteLine($"  Name:     {jobFile?.Name}");
+    Console.WriteLine($"  Source:   {jobFile?.Source}");
+    Console.WriteLine($"  IsNew:    {initialSave?.State?.IsNew}");
+    Console.WriteLine($"  IsOpen:   {initialSave?.State?.IsOpen}");
+    Console.WriteLine();
+
+    // == Step 13 — Run a linear static analysis ====================
     Console.WriteLine("Running linear static analysis...");
     var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
         new StaticSettingsUpdate());
@@ -222,7 +239,7 @@ try
     }
     Console.WriteLine();
 
-    // == Step 13 — Query reactions =================================
+    // == Step 14 — Query reactions =================================
     Console.WriteLine("Querying ULS reactions...");
     var reactions = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync(
         config => config.QueryParameters.Cases = $"{ulsCase.Id}");
@@ -240,7 +257,7 @@ try
     }
     Console.WriteLine();
 
-    // == Step 14 — Maximum ULS bending moment ======================
+    // == Step 15 — Maximum ULS bending moment ======================
     var ulsForces = await client.Job.Query.Analysis.Static.Member.IntermediateForces
         .GetAsync(config =>
         {
@@ -252,7 +269,7 @@ try
     var maxMz = beamForces.Mz!.Max(v => Math.Abs(v ?? 0.0));
     Console.WriteLine($"Max ULS bending moment on Member {member.Id}: {maxMz:F2} kNm");
 
-    // == Step 15 — Maximum SLS deflection ==========================
+    // == Step 16 — Maximum SLS deflection ==========================
     var slsDisplacements = await client.Job.Query.Analysis.Static.Member.IntermediateDisplacements
         .GetAsync(config =>
         {
@@ -265,14 +282,27 @@ try
     Console.WriteLine($"Max SLS deflection on Member {member.Id}: {maxDeflection * 1000:F2} mm");
     Console.WriteLine();
 
-    // == Step 16 — Save and close ==================================
-    Console.WriteLine($"Saving project to: {saveFilePath}");
+    // == Step 17 — Save the analysed model =========================
+    // Closing the job runs in `finally` below, so it always happens
+    // even if a step above threw — leaving the service without a
+    // half-built active job.
+    Console.WriteLine($"Saving analysed model to: {saveFilePath}");
     await client.Job.Save.PostAsync(new SaveJobRequest { FilePath = saveFilePath });
     Console.WriteLine("Project saved.");
-
-    Console.WriteLine("Closing project...");
-    await client.Job.Close.PostAsync();
-    Console.WriteLine("Project closed.");
+}
+catch (ProblemDetails pd)
+{
+    // Typed catch for the API's RFC 9457 error response. Status / Title
+    // / Detail are the standard fields; anything the server adds beyond
+    // those (errorCode, errors, etc.) lands in AdditionalData.
+    Console.ForegroundColor = ConsoleColor.Red;
+    Console.Error.WriteLine($"API error {pd.Status}: {pd.Title}");
+    if (!string.IsNullOrWhiteSpace(pd.Detail))
+        Console.Error.WriteLine($"  {pd.Detail}");
+    foreach (var (key, value) in pd.AdditionalData ?? new Dictionary<string, object>())
+        Console.Error.WriteLine($"  {key}: {FormatUntyped(value)}");
+    Console.ResetColor();
+    return 1;
 }
 catch (Exception ex)
 {
@@ -281,5 +311,41 @@ catch (Exception ex)
     Console.ResetColor();
     return 1;
 }
+finally
+{
+    // Always close the active job so the next run starts clean.
+    try
+    {
+        Console.WriteLine("Closing project...");
+        await client.Job.Close.PostAsync();
+        Console.WriteLine("Project closed.");
+    }
+    catch (Exception closeEx)
+    {
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Error.WriteLine($"Warning: failed to close job: {closeEx.Message}");
+        Console.ResetColor();
+    }
+}
 
 return 0;
+
+
+// -- Helpers ------------------------------------------------------
+
+// Walks Kiota's UntypedNode tree (used for any field on
+// ProblemDetails.AdditionalData that the spec didn't model). Without
+// this, every UntypedObject prints as the type name.
+static string FormatUntyped(object? value) => value switch
+{
+    UntypedString s  => s.GetValue() ?? "",
+    UntypedBoolean b => $"{b.GetValue()}",
+    UntypedDouble d  => $"{d.GetValue()}",
+    UntypedInteger i => $"{i.GetValue()}",
+    UntypedFloat f   => $"{f.GetValue()}",
+    UntypedLong l    => $"{l.GetValue()}",
+    UntypedNull      => "null",
+    UntypedArray a   => "[" + string.Join(", ", (a.GetValue() ?? Array.Empty<UntypedNode>()).Select(FormatUntyped)) + "]",
+    UntypedObject o  => "{ " + string.Join(", ", (o.GetValue() ?? new Dictionary<string, UntypedNode>()).Select(kv => $"{kv.Key}: {FormatUntyped(kv.Value)}")) + " }",
+    _ => value?.ToString() ?? "",
+};
