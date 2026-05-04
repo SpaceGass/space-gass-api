@@ -32,7 +32,7 @@ class CloseRequestBuilder(BaseRequestBuilder):
     
     async def post(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[JobState]:
         """
-        Closes the current job session and unloads from memory.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
+        Closes the current job session and unloads from memory.            Idempotent: if no job is currently open, returns 200 with the current state(isOpen=false) without error.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[JobState]
         """
@@ -43,7 +43,6 @@ class CloseRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "401": ProblemDetails,
-            "404": ProblemDetails,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -53,7 +52,7 @@ class CloseRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Closes the current job session and unloads from memory.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
+        Closes the current job session and unloads from memory.            Idempotent: if no job is currently open, returns 200 with the current state(isOpen=false) without error.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

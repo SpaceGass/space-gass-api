@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from .....models.material import Material
     from .....models.material_update import MaterialUpdate
     from .....models.problem_details import ProblemDetails
+    from .library.library_request_builder import LibraryRequestBuilder
 
 class MaterialsItemRequestBuilder(BaseRequestBuilder):
     """
@@ -53,7 +54,7 @@ class MaterialsItemRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[MaterialsItemRequestBuilderGetQueryParameters]] = None) -> Optional[Material]:
         """
-        `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —            resources that don't define sub-resources ignore the parameter.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Material]
         """
@@ -110,7 +111,7 @@ class MaterialsItemRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[MaterialsItemRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —            resources that don't define sub-resources ignore the parameter.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -144,6 +145,15 @@ class MaterialsItemRequestBuilder(BaseRequestBuilder):
             raise TypeError("raw_url cannot be null.")
         return MaterialsItemRequestBuilder(self.request_adapter, raw_url)
     
+    @property
+    def library(self) -> LibraryRequestBuilder:
+        """
+        The library property
+        """
+        from .library.library_request_builder import LibraryRequestBuilder
+
+        return LibraryRequestBuilder(self.request_adapter, self.path_parameters)
+    
     @dataclass
     class MaterialsItemRequestBuilderDeleteRequestConfiguration(RequestConfiguration[QueryParameters]):
         """
@@ -154,7 +164,7 @@ class MaterialsItemRequestBuilder(BaseRequestBuilder):
     @dataclass
     class MaterialsItemRequestBuilderGetQueryParameters():
         """
-        `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —            resources that don't define sub-resources ignore the parameter.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

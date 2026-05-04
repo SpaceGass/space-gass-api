@@ -6,7 +6,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .combination_cases.combination_cases_request_builder import CombinationCasesRequestBuilder
+    from .combination_load_cases.combination_load_cases_request_builder import CombinationLoadCasesRequestBuilder
     from .load_cases.load_cases_request_builder import LoadCasesRequestBuilder
     from .load_case_groups.load_case_groups_request_builder import LoadCaseGroupsRequestBuilder
     from .load_categories.load_categories_request_builder import LoadCategoriesRequestBuilder
@@ -35,13 +35,13 @@ class LoadsRequestBuilder(BaseRequestBuilder):
         super().__init__(request_adapter, "{+baseurl}/job/loads", path_parameters)
     
     @property
-    def combination_cases(self) -> CombinationCasesRequestBuilder:
+    def combination_load_cases(self) -> CombinationLoadCasesRequestBuilder:
         """
-        The combinationCases property
+        The combinationLoadCases property
         """
-        from .combination_cases.combination_cases_request_builder import CombinationCasesRequestBuilder
+        from .combination_load_cases.combination_load_cases_request_builder import CombinationLoadCasesRequestBuilder
 
-        return CombinationCasesRequestBuilder(self.request_adapter, self.path_parameters)
+        return CombinationLoadCasesRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def load_case_groups(self) -> LoadCaseGroupsRequestBuilder:

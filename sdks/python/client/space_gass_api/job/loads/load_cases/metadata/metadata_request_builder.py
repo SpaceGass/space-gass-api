@@ -32,7 +32,7 @@ class MetadataRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[ResourceMetadata]:
         """
-        Get Metadata
+        Returns the schema for a load case: field definitions, units resolved against currentjob units, and allowed values for enum fields (e.g. `type`).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[ResourceMetadata]
         """
@@ -52,7 +52,7 @@ class MetadataRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Get Metadata
+        Returns the schema for a load case: field definitions, units resolved against currentjob units, and allowed values for enum fields (e.g. `type`).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

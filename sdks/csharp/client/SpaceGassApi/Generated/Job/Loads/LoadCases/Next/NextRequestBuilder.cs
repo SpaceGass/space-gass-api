@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Next
         {
         }
         /// <summary>
-        /// Gets the next available (unused) Id for this entity type.
+        /// Returns the next available (unused) load case Id, starting from start.
         /// </summary>
         /// <returns>A <see cref="int"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -57,7 +57,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Next
             return await RequestAdapter.SendPrimitiveAsync<int?>(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets the next available (unused) Id for this entity type.
+        /// Returns the next available (unused) load case Id, starting from start.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -85,12 +85,12 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Next
             return new global::SpaceGassApi.Job.Loads.LoadCases.Next.NextRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets the next available (unused) Id for this entity type.
+        /// Returns the next available (unused) load case Id, starting from start.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class NextRequestBuilderGetQueryParameters 
         {
-            /// <summary>The Id value to start searching from (inclusive). Defaults to 1.</summary>
+            /// <summary>The Id to start searching from (inclusive). Defaults to 1.</summary>
             [QueryParameter("start")]
             public int? Start { get; set; }
         }

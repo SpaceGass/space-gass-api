@@ -35,7 +35,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBatchResult]:
         """
-        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
+        Deletes multiple load cases by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`). As with `DELETE /{id}`, this removes thetitle/notes/metadata only — assigned loads and combination items are preserved.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[ObjectBatchResult]
@@ -59,7 +59,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     async def patch(self,body: list[LoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBatchResult]:
         """
-        Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        Partially updates multiple load cases. Each item must include its `id`.Validation runs upfront; with `continueOnError=false` (default) any failurerejects the whole request. With `continueOnError=true`, valid items are updatedand failures are reported per-item.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[LoadCaseBatchResult]
@@ -83,7 +83,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: list[LoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LoadCaseBatchResult]:
         """
-        Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
+        Creates multiple load cases in a single request. Validation runs upfront on the wholebatch; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[LoadCaseBatchResult]
@@ -107,7 +107,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
-        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
+        Deletes multiple load cases by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`). As with `DELETE /{id}`, this removes thetitle/notes/metadata only — assigned loads and combination items are preserved.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -122,7 +122,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: list[LoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> RequestInformation:
         """
-        Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        Partially updates multiple load cases. Each item must include its `id`.Validation runs upfront; with `continueOnError=false` (default) any failurerejects the whole request. With `continueOnError=true`, valid items are updatedand failures are reported per-item.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -137,7 +137,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: list[LoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """
-        Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
+        Creates multiple load cases in a single request. Validation runs upfront on the wholebatch; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -163,7 +163,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderDeleteQueryParameters():
         """
-        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
+        Deletes multiple load cases by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`). As with `DELETE /{id}`, this removes thetitle/notes/metadata only — assigned loads and combination items are preserved.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -177,7 +177,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
                 return "continueOnError"
             return original_name
         
-        # Whether to continue on error
+        # If true, continue processing remaining Ids after a failure. Default: false.
         continue_on_error: Optional[bool] = None
 
     
@@ -191,7 +191,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPatchQueryParameters():
         """
-        Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
+        Partially updates multiple load cases. Each item must include its `id`.Validation runs upfront; with `continueOnError=false` (default) any failurerejects the whole request. With `continueOnError=true`, valid items are updatedand failures are reported per-item.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -205,7 +205,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
                 return "continueOnError"
             return original_name
         
-        # Whether to continue processing after individual failures
+        # If true, process valid items even when some fail. Default: false.
         continue_on_error: Optional[bool] = None
 
     
@@ -219,7 +219,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPostQueryParameters():
         """
-        Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
+        Creates multiple load cases in a single request. Validation runs upfront on the wholebatch; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -233,7 +233,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
                 return "continueOnError"
             return original_name
         
-        # Whether to continue processing after individual failures
+        # If true, process valid items even when some fail. Default: false.
         continue_on_error: Optional[bool] = None
 
     

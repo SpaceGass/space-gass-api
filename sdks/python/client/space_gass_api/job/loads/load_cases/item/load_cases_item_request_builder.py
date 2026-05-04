@@ -34,7 +34,7 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> None:
         """
-        Removes the title, notes, and metadata for the load case.Does not delete the actual loads assigned to the case or its combination items.The load case may still appear if it has loads assigned to it.
+        Removes the title, notes and metadata for the load case. Does not delete the actualloads assigned to the case or its combination items — the case may still appear inlistings if it has loads assigned to it.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: None
         """
@@ -53,7 +53,7 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[LoadCasesItemRequestBuilderGetQueryParameters]] = None) -> Optional[LoadCase]:
         """
-        `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        Gets a single load case by Id. `Expand` defaults to `all`, which hydrates`combinationItems` for combination cases; pass `Expand=none` to suppress.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[LoadCase]
         """
@@ -74,7 +74,7 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
     
     async def patch(self,body: LoadCaseUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[LoadCase]:
         """
-        Updates an existing item. If a validator is registered, the update is validated first.
+        Partially updates a load case (title, notes). Only fields supplied in the body arechanged; omitted fields are left as-is.
         param body: DTO for updating an existing load case.All fields are optional to support partial updates.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[LoadCase]
@@ -99,7 +99,7 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Removes the title, notes, and metadata for the load case.Does not delete the actual loads assigned to the case or its combination items.The load case may still appear if it has loads assigned to it.
+        Removes the title, notes and metadata for the load case. Does not delete the actualloads assigned to the case or its combination items — the case may still appear inlistings if it has loads assigned to it.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -110,7 +110,7 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[LoadCasesItemRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        Gets a single load case by Id. `Expand` defaults to `all`, which hydrates`combinationItems` for combination cases; pass `Expand=none` to suppress.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -121,7 +121,7 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: LoadCaseUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Updates an existing item. If a validator is registered, the update is validated first.
+        Partially updates a load case (title, notes). Only fields supplied in the body arechanged; omitted fields are left as-is.
         param body: DTO for updating an existing load case.All fields are optional to support partial updates.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -154,7 +154,7 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
     @dataclass
     class LoadCasesItemRequestBuilderGetQueryParameters():
         """
-        `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Entities without sub-resources ignore the parameter            — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateSingle(`0,SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        Gets a single load case by Id. `Expand` defaults to `all`, which hydrates`combinationItems` for combination cases; pass `Expand=none` to suppress.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -168,7 +168,7 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
                 return "Expand"
             return original_name
         
-        # Sub-resource expansion. Defaults to `all`; pass `none` to suppress sub-resource hydration.
+        # Sub-resource expansion. Defaults to `all`.
         expand: Optional[ExpandOption] = None
 
     

@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.OpenSample
         {
         }
         /// <summary>
-        /// Opens a sample SPACE GASS project as a new unsaved job.The sample data is loaded but treated as a new job — use Save As to persist changes.            Use GET /api/v1/file/samples to list available sample files and their virtual paths.            Example request:                POST /api/v1/job/open-sample    {      &quot;fileName&quot;: &quot;Portal Frame.SG&quot;    }
+        /// Opens a sample SPACE GASS project as a new unsaved job.The sample data is loaded but treated as a new job — use Save As to persist changes.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.            Use GET /api/v1/file/samples to list available sample files and their virtual paths.            Example request:                POST /api/v1/job/open-sample    {      &quot;fileName&quot;: &quot;Portal Frame.SG&quot;    }
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobStatus"/></returns>
         /// <param name="body">Request DTO for opening a sample project as a new unsaved job.</param>
@@ -42,6 +42,7 @@ namespace SpaceGassApi.Job.OpenSample
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.JobStatus?> PostAsync(global::SpaceGassApi.Models.OpenSampleRequest body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -57,11 +58,12 @@ namespace SpaceGassApi.Job.OpenSample
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobStatus>(requestInfo, global::SpaceGassApi.Models.JobStatus.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Opens a sample SPACE GASS project as a new unsaved job.The sample data is loaded but treated as a new job — use Save As to persist changes.            Use GET /api/v1/file/samples to list available sample files and their virtual paths.            Example request:                POST /api/v1/job/open-sample    {      &quot;fileName&quot;: &quot;Portal Frame.SG&quot;    }
+        /// Opens a sample SPACE GASS project as a new unsaved job.The sample data is loaded but treated as a new job — use Save As to persist changes.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.            Use GET /api/v1/file/samples to list available sample files and their virtual paths.            Example request:                POST /api/v1/job/open-sample    {      &quot;fileName&quot;: &quot;Portal Frame.SG&quot;    }
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Request DTO for opening a sample project as a new unsaved job.</param>

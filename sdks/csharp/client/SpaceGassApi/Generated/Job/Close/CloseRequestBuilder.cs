@@ -34,13 +34,12 @@ namespace SpaceGassApi.Job.Close
         {
         }
         /// <summary>
-        /// Closes the current job session and unloads from memory.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
+        /// Closes the current job session and unloads from memory.            Idempotent: if no job is currently open, returns 200 with the current state(isOpen=false) without error.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobState"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.JobState?> PostAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -54,12 +53,11 @@ namespace SpaceGassApi.Job.Close
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobState>(requestInfo, global::SpaceGassApi.Models.JobState.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Closes the current job session and unloads from memory.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
+        /// Closes the current job session and unloads from memory.            Idempotent: if no job is currently open, returns 200 with the current state(isOpen=false) without error.            Unsaved changes are discarded. Call POST /job/save before closing to persist changes.            The .sg file on disk is never deleted or modified.Returns the file resource state after close (isOpen will be false).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

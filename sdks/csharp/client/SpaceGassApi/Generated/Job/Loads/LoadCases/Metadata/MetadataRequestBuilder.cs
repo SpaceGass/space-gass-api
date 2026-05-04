@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Metadata
         {
         }
         /// <summary>
-        /// Get Metadata
+        /// Returns the schema for a load case: field definitions, units resolved against currentjob units, and allowed values for enum fields (e.g. `type`).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.ResourceMetadata"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -57,7 +57,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Metadata
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ResourceMetadata>(requestInfo, global::SpaceGassApi.Models.ResourceMetadata.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Get Metadata
+        /// Returns the schema for a load case: field definitions, units resolved against currentjob units, and allowed values for enum fields (e.g. `type`).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

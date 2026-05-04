@@ -40,10 +40,10 @@ namespace SpaceGassApi.Models
         /// <summary>A generic 2D data table — row-major, where each row is an array of column values.Reused across the API for any tabular (X, Y, …) data such as restraintvariable-stiffness curves, derived force-vs-deflection views, material curves, etc.Schema (column names, types, units, bounds) is returned by the resource&apos;s dedicatedtable-metadata endpoint and is not embedded here.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::SpaceGassApi.Models.Table? RxTable { get; set; }
+        public global::SpaceGassApi.Models.Table? RxVariableTable { get; set; }
 #nullable restore
 #else
-        public global::SpaceGassApi.Models.Table RxTable { get; set; }
+        public global::SpaceGassApi.Models.Table RxVariableTable { get; set; }
 #endif
         /// <summary>Rotational Y plastic limit. Unit: Moment (see GET /job/units).</summary>
         public double? RyPlasticLimit { get; set; }
@@ -52,10 +52,10 @@ namespace SpaceGassApi.Models
         /// <summary>A generic 2D data table — row-major, where each row is an array of column values.Reused across the API for any tabular (X, Y, …) data such as restraintvariable-stiffness curves, derived force-vs-deflection views, material curves, etc.Schema (column names, types, units, bounds) is returned by the resource&apos;s dedicatedtable-metadata endpoint and is not embedded here.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::SpaceGassApi.Models.Table? RyTable { get; set; }
+        public global::SpaceGassApi.Models.Table? RyVariableTable { get; set; }
 #nullable restore
 #else
-        public global::SpaceGassApi.Models.Table RyTable { get; set; }
+        public global::SpaceGassApi.Models.Table RyVariableTable { get; set; }
 #endif
         /// <summary>Rotational Z plastic limit. Unit: Moment (see GET /job/units).</summary>
         public double? RzPlasticLimit { get; set; }
@@ -64,10 +64,10 @@ namespace SpaceGassApi.Models
         /// <summary>A generic 2D data table — row-major, where each row is an array of column values.Reused across the API for any tabular (X, Y, …) data such as restraintvariable-stiffness curves, derived force-vs-deflection views, material curves, etc.Schema (column names, types, units, bounds) is returned by the resource&apos;s dedicatedtable-metadata endpoint and is not embedded here.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::SpaceGassApi.Models.Table? RzTable { get; set; }
+        public global::SpaceGassApi.Models.Table? RzVariableTable { get; set; }
 #nullable restore
 #else
-        public global::SpaceGassApi.Models.Table RzTable { get; set; }
+        public global::SpaceGassApi.Models.Table RzVariableTable { get; set; }
 #endif
         /// <summary>Translational X plastic limit. Unit: Force (see GET /job/units).</summary>
         public double? TxPlasticLimit { get; set; }
@@ -76,10 +76,10 @@ namespace SpaceGassApi.Models
         /// <summary>A generic 2D data table — row-major, where each row is an array of column values.Reused across the API for any tabular (X, Y, …) data such as restraintvariable-stiffness curves, derived force-vs-deflection views, material curves, etc.Schema (column names, types, units, bounds) is returned by the resource&apos;s dedicatedtable-metadata endpoint and is not embedded here.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::SpaceGassApi.Models.Table? TxTable { get; set; }
+        public global::SpaceGassApi.Models.Table? TxVariableTable { get; set; }
 #nullable restore
 #else
-        public global::SpaceGassApi.Models.Table TxTable { get; set; }
+        public global::SpaceGassApi.Models.Table TxVariableTable { get; set; }
 #endif
         /// <summary>Translational Y plastic limit. Unit: Force (see GET /job/units).</summary>
         public double? TyPlasticLimit { get; set; }
@@ -88,10 +88,10 @@ namespace SpaceGassApi.Models
         /// <summary>A generic 2D data table — row-major, where each row is an array of column values.Reused across the API for any tabular (X, Y, …) data such as restraintvariable-stiffness curves, derived force-vs-deflection views, material curves, etc.Schema (column names, types, units, bounds) is returned by the resource&apos;s dedicatedtable-metadata endpoint and is not embedded here.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::SpaceGassApi.Models.Table? TyTable { get; set; }
+        public global::SpaceGassApi.Models.Table? TyVariableTable { get; set; }
 #nullable restore
 #else
-        public global::SpaceGassApi.Models.Table TyTable { get; set; }
+        public global::SpaceGassApi.Models.Table TyVariableTable { get; set; }
 #endif
         /// <summary>Translational Z plastic limit. Unit: Force (see GET /job/units).</summary>
         public double? TzPlasticLimit { get; set; }
@@ -100,10 +100,10 @@ namespace SpaceGassApi.Models
         /// <summary>A generic 2D data table — row-major, where each row is an array of column values.Reused across the API for any tabular (X, Y, …) data such as restraintvariable-stiffness curves, derived force-vs-deflection views, material curves, etc.Schema (column names, types, units, bounds) is returned by the resource&apos;s dedicatedtable-metadata endpoint and is not embedded here.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::SpaceGassApi.Models.Table? TzTable { get; set; }
+        public global::SpaceGassApi.Models.Table? TzVariableTable { get; set; }
 #nullable restore
 #else
-        public global::SpaceGassApi.Models.Table TzTable { get; set; }
+        public global::SpaceGassApi.Models.Table TzVariableTable { get; set; }
 #endif
         /// <summary>X-axis friction factor.</summary>
         public double? XFrictionFactor { get; set; }
@@ -147,22 +147,22 @@ namespace SpaceGassApi.Models
                 { "restraintCode", n => { RestraintCode = n.GetStringValue(); } },
                 { "rxPlasticLimit", n => { RxPlasticLimit = n.GetDoubleValue(); } },
                 { "rxStiffness", n => { RxStiffness = n.GetDoubleValue(); } },
-                { "rxTable", n => { RxTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
+                { "rxVariableTable", n => { RxVariableTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
                 { "ryPlasticLimit", n => { RyPlasticLimit = n.GetDoubleValue(); } },
                 { "ryStiffness", n => { RyStiffness = n.GetDoubleValue(); } },
-                { "ryTable", n => { RyTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
+                { "ryVariableTable", n => { RyVariableTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
                 { "rzPlasticLimit", n => { RzPlasticLimit = n.GetDoubleValue(); } },
                 { "rzStiffness", n => { RzStiffness = n.GetDoubleValue(); } },
-                { "rzTable", n => { RzTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
+                { "rzVariableTable", n => { RzVariableTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
                 { "txPlasticLimit", n => { TxPlasticLimit = n.GetDoubleValue(); } },
                 { "txStiffness", n => { TxStiffness = n.GetDoubleValue(); } },
-                { "txTable", n => { TxTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
+                { "txVariableTable", n => { TxVariableTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
                 { "tyPlasticLimit", n => { TyPlasticLimit = n.GetDoubleValue(); } },
                 { "tyStiffness", n => { TyStiffness = n.GetDoubleValue(); } },
-                { "tyTable", n => { TyTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
+                { "tyVariableTable", n => { TyVariableTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
                 { "tzPlasticLimit", n => { TzPlasticLimit = n.GetDoubleValue(); } },
                 { "tzStiffness", n => { TzStiffness = n.GetDoubleValue(); } },
-                { "tzTable", n => { TzTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
+                { "tzVariableTable", n => { TzVariableTable = n.GetObjectValue<global::SpaceGassApi.Models.Table>(global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue); } },
                 { "xFrictionFactor", n => { XFrictionFactor = n.GetDoubleValue(); } },
                 { "xFrictionNormalAxis", n => { XFrictionNormalAxis = n.GetEnumValue<global::SpaceGassApi.Models.FrictionNormalAxis>(); } },
                 { "xFrictionNormalDirection", n => { XFrictionNormalDirection = n.GetEnumValue<global::SpaceGassApi.Models.FrictionNormalDirection>(); } },
@@ -187,22 +187,22 @@ namespace SpaceGassApi.Models
             writer.WriteStringValue("restraintCode", RestraintCode);
             writer.WriteDoubleValue("rxPlasticLimit", RxPlasticLimit);
             writer.WriteDoubleValue("rxStiffness", RxStiffness);
-            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("rxTable", RxTable);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("rxVariableTable", RxVariableTable);
             writer.WriteDoubleValue("ryPlasticLimit", RyPlasticLimit);
             writer.WriteDoubleValue("ryStiffness", RyStiffness);
-            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("ryTable", RyTable);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("ryVariableTable", RyVariableTable);
             writer.WriteDoubleValue("rzPlasticLimit", RzPlasticLimit);
             writer.WriteDoubleValue("rzStiffness", RzStiffness);
-            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("rzTable", RzTable);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("rzVariableTable", RzVariableTable);
             writer.WriteDoubleValue("txPlasticLimit", TxPlasticLimit);
             writer.WriteDoubleValue("txStiffness", TxStiffness);
-            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("txTable", TxTable);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("txVariableTable", TxVariableTable);
             writer.WriteDoubleValue("tyPlasticLimit", TyPlasticLimit);
             writer.WriteDoubleValue("tyStiffness", TyStiffness);
-            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("tyTable", TyTable);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("tyVariableTable", TyVariableTable);
             writer.WriteDoubleValue("tzPlasticLimit", TzPlasticLimit);
             writer.WriteDoubleValue("tzStiffness", TzStiffness);
-            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("tzTable", TzTable);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.Table>("tzVariableTable", TzVariableTable);
             writer.WriteDoubleValue("xFrictionFactor", XFrictionFactor);
             writer.WriteEnumValue<global::SpaceGassApi.Models.FrictionNormalAxis>("xFrictionNormalAxis", XFrictionNormalAxis);
             writer.WriteEnumValue<global::SpaceGassApi.Models.FrictionNormalDirection>("xFrictionNormalDirection", XFrictionNormalDirection);

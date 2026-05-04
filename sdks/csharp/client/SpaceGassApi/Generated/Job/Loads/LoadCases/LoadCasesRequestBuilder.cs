@@ -37,7 +37,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
             get => new global::SpaceGassApi.Job.Loads.LoadCases.Next.NextRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the SpaceGassApi.job.loads.loadCases.item collection</summary>
-        /// <param name="position">The entity Id</param>
+        /// <param name="position">The load case Id</param>
         /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.LoadCases.Item.LoadCasesItemRequestBuilder"/></returns>
         public global::SpaceGassApi.Job.Loads.LoadCases.Item.LoadCasesItemRequestBuilder this[int position]
         {
@@ -49,7 +49,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
             }
         }
         /// <summary>Gets an item from the SpaceGassApi.job.loads.loadCases.item collection</summary>
-        /// <param name="position">The entity Id</param>
+        /// <param name="position">The load case Id</param>
         /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.LoadCases.Item.LoadCasesItemRequestBuilder"/></returns>
         [Obsolete("This indexer is deprecated and will be removed in the next major version. Use the one with the typed parameter instead.")]
         public global::SpaceGassApi.Job.Loads.LoadCases.Item.LoadCasesItemRequestBuilder this[string position]
@@ -78,7 +78,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
         {
         }
         /// <summary>
-        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        /// Returns all load cases in the open job. Type is read-only and computed by SPACE GASSbased on assigned loads (Primary, Combination, Step, Unused). Filter by type, bycase-Id list, or by title substring. Results are sorted by Id ascending.Pagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).Pass `Expand=all` to hydrate `combinationItems` on combination cases (otherwise the`hasCombinationItems` indicator is populated but the array is omitted from the wire).
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.LoadCase&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -102,7 +102,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Creates a new item. If a validator is registered, the item is validated before creation.
+        /// Creates a new load case. The case is initially type `Unused` until loads areassigned to it (or until combination items are added via `POST /combination-load-cases`,which creates the case as type `Combination`).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.LoadCase"/></returns>
         /// <param name="body">DTO for creating a new load case.</param>
@@ -131,7 +131,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCase>(requestInfo, global::SpaceGassApi.Models.LoadCase.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        /// Returns all load cases in the open job. Type is read-only and computed by SPACE GASSbased on assigned loads (Primary, Combination, Step, Unused). Filter by type, bycase-Id list, or by title substring. Results are sorted by Id ascending.Pagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).Pass `Expand=all` to hydrate `combinationItems` on combination cases (otherwise the`hasCombinationItems` indicator is populated but the array is omitted from the wire).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -150,7 +150,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
             return requestInfo;
         }
         /// <summary>
-        /// Creates a new item. If a validator is registered, the item is validated before creation.
+        /// Creates a new load case. The case is initially type `Unused` until loads areassigned to it (or until combination items are added via `POST /combination-load-cases`,which creates the case as type `Combination`).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">DTO for creating a new load case.</param>
@@ -181,7 +181,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
             return new global::SpaceGassApi.Job.Loads.LoadCases.LoadCasesRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Entities without sub-resourcesignore the parameter — overriding M:SpaceGassApi.Controllers.Entity.EntityControllerBase`4.HydrateList(System.Collections.Generic.List{`0},SpaceGassApi.Models.Enums.ExpandOption) opts in.
+        /// Returns all load cases in the open job. Type is read-only and computed by SPACE GASSbased on assigned loads (Primary, Combination, Step, Unused). Filter by type, bycase-Id list, or by title substring. Results are sorted by Id ascending.Pagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).Pass `Expand=all` to hydrate `combinationItems` on combination cases (otherwise the`hasCombinationItems` indicator is populated but the array is omitted from the wire).
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class LoadCasesRequestBuilderGetQueryParameters 
@@ -194,7 +194,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
 #else
             public string Cases { get; set; }
 #endif
-            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
+            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items on combination cases.</summary>
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -203,7 +203,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
 #else
             public string Expand { get; set; }
 #endif
-            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
+            /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items on combination cases.</summary>
             [QueryParameter("Expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
