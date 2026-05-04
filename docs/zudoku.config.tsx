@@ -46,14 +46,20 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   const cleanPath = path.replace(/^\//, "");
   const segments = cleanPath.split("/").filter(Boolean);
 
-  // Bulk endpoints (.../bulk) take a list of the parent entity, not a `BulkCreate`.
-  const isBulk = segments[segments.length - 1] === "bulk";
+  // Endpoints that take a list body rather than a single object:
+  //   .../bulk      → List<{Parent}Create> (bulk-create the parent entity)
+  //   .../items     → List<{Parent}Item>   (set the item collection of a parent)
+  const lastSegment = segments[segments.length - 1];
+  const isBulk = lastSegment === "bulk";
+  const isItems = lastSegment === "items";
+  const isList = isBulk || isItems;
 
   // Find the last non-parameter segment for deriving body type names. For
-  // bulk endpoints, skip the literal "bulk" segment so we land on the entity.
+  // list endpoints, skip the literal "bulk"/"items" segment so we land on
+  // the parent entity.
   const entitySegment = [...segments]
     .reverse()
-    .find((s: string) => !s.startsWith("{") && s !== "bulk");
+    .find((s: string) => !s.startsWith("{") && s !== "bulk" && s !== "items");
   const entityName = entitySegment
     ? toPascalCase(singularize(entitySegment))
     : "Item";
@@ -64,8 +70,11 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   // body schema doesn't follow the {Entity}Create/{Entity}Update convention.
   const overrideKey = `${httpMethod} /${cleanPath}`;
   const overriddenType = BODY_TYPE_OVERRIDES[overrideKey];
-  const defaultBodyType =
-    httpMethod === "POST" ? `${entityName}Create` : `${entityName}Update`;
+  const defaultBodyType = isItems
+    ? `${entityName}Item`
+    : httpMethod === "POST"
+      ? `${entityName}Create`
+      : `${entityName}Update`;
   const bodyType = overriddenType ?? defaultBodyType;
 
   // ── C# SDK ──
@@ -85,7 +94,7 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
 
     let code = "// C# SDK Client\n";
     if (hasBody) {
-      if (isBulk) {
+      if (isList) {
         code += `var bodies = new List<${bodyType}>\n`;
         code += `{\n`;
         code += `    new ${bodyType} { /* Set properties */ },\n`;
@@ -126,7 +135,7 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
     if (hasBody) {
       const bodyModule = pascalToSnake(bodyType);
       code += `from space_gass_api.models.${bodyModule} import ${bodyType}\n\n`;
-      if (isBulk) {
+      if (isList) {
         code += `bodies = [\n`;
         code += `    ${bodyType}(\n`;
         code += `        # Set properties\n`;
