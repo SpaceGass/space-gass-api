@@ -64,7 +64,8 @@
                 "$ref": "#/components/schemas/BucklingSettingsUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -134,7 +135,8 @@
                 "$ref": "#/components/schemas/DynamicFrequencySettingsUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -358,7 +360,8 @@
                 "$ref": "#/components/schemas/StaticSettingsUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -931,20 +934,21 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CombinationCaseCreate"
+                "$ref": "#/components/schemas/CombinationLoadCaseCreate"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CombinationCaseCreate"
+                "$ref": "#/components/schemas/CombinationLoadCaseCreate"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CombinationCaseCreate"
+                "$ref": "#/components/schemas/CombinationLoadCaseCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -1017,7 +1021,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CombinationItem"
+                    "$ref": "#/components/schemas/CombinationLoadCaseItem"
                   }
                 }
               }
@@ -1070,7 +1074,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationItem"
+                  "$ref": "#/components/schemas/CombinationLoadCaseItem"
                 }
               }
             },
@@ -1078,7 +1082,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationItem"
+                  "$ref": "#/components/schemas/CombinationLoadCaseItem"
                 }
               }
             },
@@ -1086,11 +1090,12 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationItem"
+                  "$ref": "#/components/schemas/CombinationLoadCaseItem"
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1100,7 +1105,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/CombinationItem"
+                    "$ref": "#/components/schemas/CombinationLoadCaseItem"
                   }
                 }
               }
@@ -1222,20 +1227,21 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/CombinationCaseUpdate"
+                "$ref": "#/components/schemas/CombinationLoadCaseUpdate"
               }
             },
             "text/json": {
               "schema": {
-                "$ref": "#/components/schemas/CombinationCaseUpdate"
+                "$ref": "#/components/schemas/CombinationLoadCaseUpdate"
               }
             },
             "application/*+json": {
               "schema": {
-                "$ref": "#/components/schemas/CombinationCaseUpdate"
+                "$ref": "#/components/schemas/CombinationLoadCaseUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1456,7 +1462,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationCaseCreate"
+                  "$ref": "#/components/schemas/CombinationLoadCaseCreate"
                 }
               }
             },
@@ -1464,7 +1470,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationCaseCreate"
+                  "$ref": "#/components/schemas/CombinationLoadCaseCreate"
                 }
               }
             },
@@ -1472,11 +1478,12 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationCaseCreate"
+                  "$ref": "#/components/schemas/CombinationLoadCaseCreate"
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1535,7 +1542,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationCaseUpdate"
+                  "$ref": "#/components/schemas/CombinationLoadCaseUpdate"
                 }
               }
             },
@@ -1543,7 +1550,7 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationCaseUpdate"
+                  "$ref": "#/components/schemas/CombinationLoadCaseUpdate"
                 }
               }
             },
@@ -1551,11 +1558,12 @@
               "schema": {
                 "type": "array",
                 "items": {
-                  "$ref": "#/components/schemas/CombinationCaseUpdate"
+                  "$ref": "#/components/schemas/CombinationLoadCaseUpdate"
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -1637,7 +1645,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -2330,7 +2339,8 @@
                 "$ref": "#/components/schemas/JobHeadingsUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -2589,7 +2599,8 @@
                 "$ref": "#/components/schemas/OpenJobRequest"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -2660,7 +2671,8 @@
                 "$ref": "#/components/schemas/OpenSampleRequest"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -2958,7 +2970,8 @@
                 "$ref": "#/components/schemas/LoadCaseGroupCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -3100,7 +3113,8 @@
                 "$ref": "#/components/schemas/LoadCaseGroupUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -3364,7 +3378,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -3443,7 +3458,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -3525,7 +3541,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -3676,7 +3693,8 @@
                 "$ref": "#/components/schemas/LoadCaseCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -3818,7 +3836,8 @@
                 "$ref": "#/components/schemas/LoadCaseUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -4028,7 +4047,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -4107,7 +4127,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -4189,7 +4210,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -4332,7 +4354,8 @@
                 "$ref": "#/components/schemas/LoadCategoryCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -4474,7 +4497,8 @@
                 "$ref": "#/components/schemas/LoadCategoryUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -4682,7 +4706,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -4761,7 +4786,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -4843,7 +4869,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -4998,7 +5025,8 @@
                 "$ref": "#/components/schemas/LumpedMassLoadCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -5152,7 +5180,8 @@
                 "$ref": "#/components/schemas/LumpedMassLoadUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -5328,7 +5357,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -5397,7 +5427,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -5476,7 +5507,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -5611,7 +5643,8 @@
                 "$ref": "#/components/schemas/MaterialCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -5753,7 +5786,8 @@
                 "$ref": "#/components/schemas/MaterialUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -5961,7 +5995,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -6040,7 +6075,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -6122,7 +6158,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -6183,7 +6220,8 @@
                 "$ref": "#/components/schemas/MaterialLibraryCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -6274,7 +6312,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -6347,7 +6386,8 @@
                 "$ref": "#/components/schemas/MaterialLibraryCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -6512,7 +6552,8 @@
                 "$ref": "#/components/schemas/MemberConcentratedLoadCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -6686,7 +6727,8 @@
                 "$ref": "#/components/schemas/MemberConcentratedLoadUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -6872,7 +6914,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -6941,7 +6984,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -7020,7 +7064,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -7175,7 +7220,8 @@
                 "$ref": "#/components/schemas/MemberDistributedLoadCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -7349,7 +7395,8 @@
                 "$ref": "#/components/schemas/MemberDistributedLoadUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -7535,7 +7582,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -7604,7 +7652,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -7683,7 +7732,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -7838,7 +7888,8 @@
                 "$ref": "#/components/schemas/MemberDistributedMomentCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -8012,7 +8063,8 @@
                 "$ref": "#/components/schemas/MemberDistributedMomentUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -8198,7 +8250,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -8267,7 +8320,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -8346,7 +8400,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -8470,7 +8525,8 @@
                 "$ref": "#/components/schemas/MemberOffsetCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -8551,7 +8607,8 @@
                 "$ref": "#/components/schemas/MemberOffsetUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -8716,7 +8773,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -8795,7 +8853,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -8877,7 +8936,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -9032,7 +9092,8 @@
                 "$ref": "#/components/schemas/MemberPrestressLoadCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -9186,7 +9247,8 @@
                 "$ref": "#/components/schemas/MemberPrestressLoadUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -9362,7 +9424,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -9431,7 +9494,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -9510,7 +9574,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -9671,7 +9736,8 @@
                 "$ref": "#/components/schemas/MemberCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -9813,7 +9879,8 @@
                 "$ref": "#/components/schemas/MemberUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -9990,7 +10057,8 @@
                 "$ref": "#/components/schemas/MemberReleaseUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -10230,7 +10298,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -10309,7 +10378,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -10391,7 +10461,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -10515,7 +10586,8 @@
                 "$ref": "#/components/schemas/NodeConstraintCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -10596,7 +10668,8 @@
                 "$ref": "#/components/schemas/NodeConstraintUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -10815,7 +10888,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -10894,7 +10968,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -10976,7 +11051,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -11131,7 +11207,8 @@
                 "$ref": "#/components/schemas/PrescribedDisplacementCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -11285,7 +11362,8 @@
                 "$ref": "#/components/schemas/PrescribedDisplacementUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -11461,7 +11539,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -11530,7 +11609,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -11609,7 +11689,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -11764,7 +11845,8 @@
                 "$ref": "#/components/schemas/NodeLoadCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -11918,7 +12000,8 @@
                 "$ref": "#/components/schemas/NodeLoadUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -12094,7 +12177,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -12163,7 +12247,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -12242,7 +12327,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -12356,7 +12442,8 @@
                 "$ref": "#/components/schemas/NodeRestraintCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -12437,7 +12524,8 @@
                 "$ref": "#/components/schemas/NodeRestraintUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -12589,7 +12677,8 @@
                 "$ref": "#/components/schemas/Table"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -12850,7 +12939,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -12929,7 +13019,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -13011,7 +13102,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -13208,7 +13300,8 @@
                 "$ref": "#/components/schemas/NodeCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -13350,7 +13443,8 @@
                 "$ref": "#/components/schemas/NodeUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -13647,7 +13741,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -13726,7 +13821,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -13808,7 +13904,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -13943,7 +14040,8 @@
                 "$ref": "#/components/schemas/PlateCutCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -14085,7 +14183,8 @@
                 "$ref": "#/components/schemas/PlateCutUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -14293,7 +14392,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -14372,7 +14472,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -14454,7 +14555,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -14609,7 +14711,8 @@
                 "$ref": "#/components/schemas/PlatePressureLoadCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -14763,7 +14866,8 @@
                 "$ref": "#/components/schemas/PlatePressureLoadUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -14939,7 +15043,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -15008,7 +15113,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -15087,7 +15193,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -15222,7 +15329,8 @@
                 "$ref": "#/components/schemas/PlateStripCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -15364,7 +15472,8 @@
                 "$ref": "#/components/schemas/PlateStripUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -15572,7 +15681,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -15651,7 +15761,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -15733,7 +15844,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -15885,7 +15997,8 @@
                 "$ref": "#/components/schemas/PlateCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -16027,7 +16140,8 @@
                 "$ref": "#/components/schemas/PlateUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -16235,7 +16349,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -16314,7 +16429,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -16396,7 +16512,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -16531,7 +16648,8 @@
                 "$ref": "#/components/schemas/SectionUserCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -16673,7 +16791,8 @@
                 "$ref": "#/components/schemas/SectionUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -16881,7 +17000,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -16960,7 +17080,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -17042,7 +17163,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -17103,7 +17225,8 @@
                 "$ref": "#/components/schemas/SectionLibraryCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -17194,7 +17317,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -17267,7 +17391,8 @@
                 "$ref": "#/components/schemas/SectionLibraryCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -17488,7 +17613,8 @@
                 "$ref": "#/components/schemas/SelfWeightLoadCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "201": {
@@ -17579,7 +17705,8 @@
                 "$ref": "#/components/schemas/SelfWeightLoadUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -19092,7 +19219,8 @@
                 "$ref": "#/components/schemas/ThermalLoadCreate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -19246,7 +19374,8 @@
                 "$ref": "#/components/schemas/ThermalLoadUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -19485,7 +19614,8 @@
                 "$ref": "#/components/schemas/ThermalLoadUpdate"
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -19630,7 +19760,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "400": {
@@ -19699,7 +19830,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -19778,7 +19910,8 @@
                 }
               }
             }
-          }
+          },
+          "required": true
         },
         "responses": {
           "200": {
@@ -20581,7 +20714,7 @@
         "additionalProperties": false,
         "description": "One case's missing-mode entry inside SpaceGassApi.Models.Dtos.Query.Analysis.QueryWarningsDto.ModesNotAnalyzed."
       },
-      "CombinationCaseCreate": {
+      "CombinationLoadCaseCreate": {
         "required": [
           "combinationItems",
           "title"
@@ -20621,7 +20754,7 @@
             "minItems": 1,
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CombinationItem"
+              "$ref": "#/components/schemas/CombinationLoadCaseItem"
             },
             "description": "The component cases and their multiplying factors that make up this combination case."
           }
@@ -20629,7 +20762,32 @@
         "additionalProperties": false,
         "description": "Request payload for creating a combination load case in a single call.\r\nInherits Id, Guid, Title and Notes from SpaceGassApi.Models.Dtos.Entity.Loads.LoadCaseCreateDto and adds\r\na required, non-empty list of combination items."
       },
-      "CombinationCaseUpdate": {
+      "CombinationLoadCaseItem": {
+        "required": [
+          "case",
+          "multiplyingFactor"
+        ],
+        "type": "object",
+        "properties": {
+          "case": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Component load case number.",
+            "format": "int32",
+            "example": 1
+          },
+          "multiplyingFactor": {
+            "type": "number",
+            "description": "Multiplying factor applied to the component load case (default: 1.0).",
+            "format": "double",
+            "example": 1.2
+          }
+        },
+        "additionalProperties": false,
+        "description": "Represents a single component within a load combination — a component case Id and\r\nthe multiplying factor applied to it."
+      },
+      "CombinationLoadCaseUpdate": {
         "type": "object",
         "properties": {
           "guid": {
@@ -20665,7 +20823,7 @@
           "combinationItems": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CombinationItem"
+              "$ref": "#/components/schemas/CombinationLoadCaseItem"
             },
             "description": "Replacement combination items for this case. Omit to leave items unchanged.",
             "nullable": true
@@ -20673,31 +20831,6 @@
         },
         "additionalProperties": false,
         "description": "Request payload for updating a combination load case.\r\nInherits Id, Title and Notes from SpaceGassApi.Models.Dtos.Entity.Loads.LoadCaseUpdateDto (each optional for\r\npartial update) and adds an optional `combinationItems` list."
-      },
-      "CombinationItem": {
-        "required": [
-          "case",
-          "multiplyingFactor"
-        ],
-        "type": "object",
-        "properties": {
-          "case": {
-            "maximum": 2147483647,
-            "minimum": 1,
-            "type": "integer",
-            "description": "Component load case number.",
-            "format": "int32",
-            "example": 1
-          },
-          "multiplyingFactor": {
-            "type": "number",
-            "description": "Multiplying factor applied to the component load case (default: 1.0).",
-            "format": "double",
-            "example": 1.2
-          }
-        },
-        "additionalProperties": false,
-        "description": "Represents a single component within a load combination — a component case Id and\r\nthe multiplying factor applied to it."
       },
       "ConstraintAxes": {
         "enum": [
@@ -21544,7 +21677,7 @@
           "combinationItems": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CombinationItem"
+              "$ref": "#/components/schemas/CombinationLoadCaseItem"
             },
             "description": "The combination items (component case + multiplying factor rows) that make up this case.\r\nPopulated only when `?expand=all` is passed AND `hasCombinationItems` is true;\r\nomitted from the wire otherwise.",
             "nullable": true
