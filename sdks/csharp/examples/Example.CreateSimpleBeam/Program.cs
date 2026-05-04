@@ -60,16 +60,21 @@ try
 
     // == Step 3 — Apply restraints =================================
     // Restraint code: 6 characters for TX, TY, TZ, RX, RY, RZ
-    //   F = Free, R = Restrained
+    //   F = Fixed (prevents movement)
+    //   R = Released (allows movement)
+    //   S = Spring (governed by a spring stiffness)
+    //   V = Variable spring (stiffness-vs-deflection table)
+    //   P = Plastic (upper force/moment limit on the reaction)
+    //   N = Friction (limit proportional to the normal-axis reaction)
     Console.WriteLine("Applying restraints...");
 
     await client.Job.Structure.Nodes[node1.Id!.Value].Restraint.PostAsync(
-        new NodeRestraintCreate { RestraintCode = "RRRRRR" });
-    Console.WriteLine($"  Node {node1.Id}: Fixed (RRRRRR)");
+        new NodeRestraintCreate { RestraintCode = "FFFFFF" });
+    Console.WriteLine($"  Node {node1.Id}: Fixed (FFFFFF)");
 
     await client.Job.Structure.Nodes[node2.Id!.Value].Restraint.PostAsync(
-        new NodeRestraintCreate { RestraintCode = "RRRFFF" });
-    Console.WriteLine($"  Node {node2.Id}: Pinned (RRRFFF)");
+        new NodeRestraintCreate { RestraintCode = "FFFRRR" });
+    Console.WriteLine($"  Node {node2.Id}: Pinned (FFFRRR)");
     Console.WriteLine();
 
     // == Step 4 — Add a library material ===========================

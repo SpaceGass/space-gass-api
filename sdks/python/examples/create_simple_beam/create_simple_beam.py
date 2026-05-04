@@ -86,18 +86,23 @@ async def main() -> int:
 
         # == Step 3 — Apply restraints =================================
         # Restraint code: 6 characters for TX, TY, TZ, RX, RY, RZ
-        #   F = Free, R = Restrained
+        #   F = Fixed (prevents movement)
+        #   R = Released (allows movement)
+        #   S = Spring (governed by a spring stiffness)
+        #   V = Variable spring (stiffness-vs-deflection table)
+        #   P = Plastic (upper force/moment limit on the reaction)
+        #   N = Friction (limit proportional to the normal-axis reaction)
         print("Applying restraints...")
 
         await client.job.structure.nodes.by_id(node1.id).restraint.post(
-            NodeRestraintCreate(restraint_code="RRRRRR"),
+            NodeRestraintCreate(restraint_code="FFFFFF"),
         )
-        print(f"  Node {node1.id}: Fixed (RRRRRR)")
+        print(f"  Node {node1.id}: Fixed (FFFFFF)")
 
         await client.job.structure.nodes.by_id(node2.id).restraint.post(
-            NodeRestraintCreate(restraint_code="RRRFFF"),
+            NodeRestraintCreate(restraint_code="FFFRRR"),
         )
-        print(f"  Node {node2.id}: Pinned (RRRFFF)")
+        print(f"  Node {node2.id}: Pinned (FFFRRR)")
         print()
 
         # == Step 4 — Add a library material ===========================
