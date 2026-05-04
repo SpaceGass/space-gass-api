@@ -75,8 +75,8 @@ try
     var steel = await client.Job.Structure.Materials.Library.PostAsync(
         new MaterialLibraryCreate
         {
-            Library = "Aust300",
-            Name = "350",
+            Library = "Aust",
+            Name = "STEEL",
         });
     Console.WriteLine($"  Material {steel!.Id}: {steel.Name}");
     Console.WriteLine();
@@ -123,7 +123,7 @@ try
         new SelfWeightLoadCreate
         {
             AccelerationX = 0.0,
-            AccelerationY = -9.81,   // m/s² downward
+            AccelerationY = -1.0,    // 1 G downward
             AccelerationZ = 0.0,
         });
     Console.WriteLine();

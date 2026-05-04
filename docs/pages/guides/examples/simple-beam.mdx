@@ -196,8 +196,8 @@ material instead.)
 var steel = await client.Job.Structure.Materials.Library.PostAsync(
     new MaterialLibraryCreate
     {
-        Library = "Aust300",
-        Name = "350",
+        Library = "Aust",
+        Name = "STEEL",
     });
 
 Console.WriteLine($"Material {steel.Id}: {steel.Name}");
@@ -206,8 +206,8 @@ Console.WriteLine($"Material {steel.Id}: {steel.Name}");
 ```python title="Python"
 steel = await client.job.structure.materials.library.post(
     MaterialLibraryCreate(
-        library="Aust300",
-        name="350",
+        library="Aust",
+        name="STEEL",
     ))
 
 print(f"Material {steel.id}: {steel.name}")
@@ -321,7 +321,8 @@ print(f"Load cases: SW={self_weight_case.id}, G={dead_case.id}, Q={live_case.id}
 Attach a self-weight load to the self-weight case. POSTing a
 `SelfWeightLoadCreate` to `Job.Loads.SelfWeightLoads[caseId]` is keyed
 by load case Id (the case must already exist), and one self-weight
-load per case is allowed. Set `AccelerationY = -9.81` m/s² for gravity
+load per case is allowed. Acceleration is expressed in **G** (multiples
+of gravity), so set `AccelerationY = -1.0` for one G of gravity
 in the negative-Y direction.
 
 <CodeTabs>
@@ -330,7 +331,7 @@ await client.Job.Loads.SelfWeightLoads[selfWeightCase.Id.Value].PostAsync(
     new SelfWeightLoadCreate
     {
         AccelerationX = 0.0,
-        AccelerationY = -9.81,   // m/s² downward
+        AccelerationY = -1.0,    // 1 G downward
         AccelerationZ = 0.0,
     });
 ```
@@ -339,7 +340,7 @@ await client.Job.Loads.SelfWeightLoads[selfWeightCase.Id.Value].PostAsync(
 await client.job.loads.self_weight_loads.by_case_id(self_weight_case.id).post(
     SelfWeightLoadCreate(
         acceleration_x=0.0,
-        acceleration_y=-9.81,    # m/s² downward
+        acceleration_y=-1.0,    # 1 G downward
         acceleration_z=0.0,
     ))
 ```

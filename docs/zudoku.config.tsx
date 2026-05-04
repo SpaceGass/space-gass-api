@@ -292,6 +292,7 @@ const config: ZudokuConfig = {
       items: [
         "guides/sdk-terminology",
         "guides/authentication",
+        "guides/service-automation",
         "guides/file-handling",
         "guides/running-analysis",
         "guides/filtering-and-querying",

@@ -102,8 +102,8 @@ async def main() -> int:
         print("Adding library material...")
         steel = await client.job.structure.materials.library.post(
             MaterialLibraryCreate(
-                library="Aust300",
-                name="350",
+                library="Aust",
+                name="STEEL",
             ),
         )
         print(f"  Material {steel.id}: {steel.name}")
@@ -150,7 +150,7 @@ async def main() -> int:
         await client.job.loads.self_weight_loads.by_case_id(self_weight_case.id).post(
             SelfWeightLoadCreate(
                 acceleration_x=0.0,
-                acceleration_y=-9.81,    # m/s² downward
+                acceleration_y=-1.0,    # 1 G downward
                 acceleration_z=0.0,
             ),
         )
