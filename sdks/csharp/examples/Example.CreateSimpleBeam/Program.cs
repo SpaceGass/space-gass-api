@@ -159,18 +159,18 @@ try
     Console.WriteLine();
 
     // == Step 11 — ULS and SLS combinations ========================
-    // Combination cases now POST as a single CombinationCaseCreate with
+    // Combination cases now POST as a single CombinationLoadCaseCreate with
     // CombinationItems inline — one call per combination, no follow-up
     // PUT to set the items.
     Console.WriteLine("Defining ULS and SLS combinations to AS/NZS 1170...");
 
     var ulsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
-        new CombinationCaseCreate
+        new CombinationLoadCaseCreate
         {
             Id = 10,
             Title = "ULS - Strength",
             // ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
-            CombinationItems = new List<CombinationItem>
+            CombinationItems = new List<CombinationLoadCaseItem>
             {
                 new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
                 new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
@@ -179,12 +179,12 @@ try
         });
 
     var slsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
-        new CombinationCaseCreate
+        new CombinationLoadCaseCreate
         {
             Id = 20,
             Title = "SLS - Short-term Deflection",
             // SLS short-term: 1.0 G + 0.7 Q
-            CombinationItems = new List<CombinationItem>
+            CombinationItems = new List<CombinationLoadCaseItem>
             {
                 new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
                 new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },

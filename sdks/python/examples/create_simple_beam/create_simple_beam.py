@@ -32,8 +32,8 @@ from kiota_abstractions.base_request_configuration import RequestConfiguration
 
 from extensions.client_extensions import create_client
 from space_gass_api.models.analysis_run_status import AnalysisRunStatus
-from space_gass_api.models.combination_case_create import CombinationCaseCreate
-from space_gass_api.models.combination_item import CombinationItem
+from space_gass_api.models.combination_load_case_create import CombinationLoadCaseCreate
+from space_gass_api.models.combination_load_case_item import CombinationLoadCaseItem
 from space_gass_api.models.load_case_create import LoadCaseCreate
 from space_gass_api.models.load_position_units import LoadPositionUnits
 from space_gass_api.models.material_library_create import MaterialLibraryCreate
@@ -193,27 +193,27 @@ async def main() -> int:
         print("Defining ULS and SLS combinations to AS/NZS 1170...")
 
         uls_case = await client.job.loads.combination_load_cases.post(
-            CombinationCaseCreate(
+            CombinationLoadCaseCreate(
                 id=10,
                 title="ULS - Strength",
                 # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
                 combination_items=[
-                    CombinationItem(case=self_weight_case.id, multiplying_factor=1.2),
-                    CombinationItem(case=dead_case.id,        multiplying_factor=1.2),
-                    CombinationItem(case=live_case.id,        multiplying_factor=1.5),
+                    CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.2),
+                    CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.2),
+                    CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=1.5),
                 ],
             ),
         )
 
         sls_case = await client.job.loads.combination_load_cases.post(
-            CombinationCaseCreate(
+            CombinationLoadCaseCreate(
                 id=20,
                 title="SLS - Short-term Deflection",
                 # SLS short-term: 1.0 G + 0.7 Q
                 combination_items=[
-                    CombinationItem(case=self_weight_case.id, multiplying_factor=1.0),
-                    CombinationItem(case=dead_case.id,        multiplying_factor=1.0),
-                    CombinationItem(case=live_case.id,        multiplying_factor=0.7),
+                    CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.0),
+                    CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.0),
+                    CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=0.7),
                 ],
             ),
         )

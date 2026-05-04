@@ -108,8 +108,8 @@ from space_gass_api.models.load_case_create import LoadCaseCreate
 from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
 from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
 from space_gass_api.models.load_position_units import LoadPositionUnits
-from space_gass_api.models.combination_case_create import CombinationCaseCreate
-from space_gass_api.models.combination_item import CombinationItem
+from space_gass_api.models.combination_load_case_create import CombinationLoadCaseCreate
+from space_gass_api.models.combination_load_case_item import CombinationLoadCaseItem
 from space_gass_api.models.static_settings_update import StaticSettingsUpdate
 from space_gass_api.models.analysis_run_status import AnalysisRunStatus
 from space_gass_api.models.save_job_request import SaveJobRequest
@@ -422,18 +422,18 @@ await client.job.loads.member_distributed_loads.post(
 A combination case is created in a single call via
 `Job.Loads.CombinationLoadCases`, with the title, Id, and the list of
 items (primary case + factor pairs) supplied inline on
-`CombinationCaseCreate`. Below we define ULS (`1.2G + 1.5Q`) and SLS
+`CombinationLoadCaseCreate`. Below we define ULS (`1.2G + 1.5Q`) and SLS
 short-term (`1.0G + 0.7Q`) combinations to AS/NZS 1170.
 
 <CodeTabs>
 ```csharp title="C#"
 // ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
 var ulsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
-    new CombinationCaseCreate
+    new CombinationLoadCaseCreate
     {
         Id = 10,
         Title = "ULS - Strength",
-        CombinationItems = new List<CombinationItem>
+        CombinationItems = new List<CombinationLoadCaseItem>
         {
             new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
             new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
@@ -443,11 +443,11 @@ var ulsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
 
 // SLS short-term: 1.0 G + 0.7 Q
 var slsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
-    new CombinationCaseCreate
+    new CombinationLoadCaseCreate
     {
         Id = 20,
         Title = "SLS - Short-term Deflection",
-        CombinationItems = new List<CombinationItem>
+        CombinationItems = new List<CombinationLoadCaseItem>
         {
             new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
             new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
@@ -459,25 +459,25 @@ var slsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
 ```python title="Python"
 # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
 uls_case = await client.job.loads.combination_load_cases.post(
-    CombinationCaseCreate(
+    CombinationLoadCaseCreate(
         id=10,
         title="ULS - Strength",
         combination_items=[
-            CombinationItem(case=self_weight_case.id, multiplying_factor=1.2),
-            CombinationItem(case=dead_case.id,        multiplying_factor=1.2),
-            CombinationItem(case=live_case.id,        multiplying_factor=1.5),
+            CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.2),
+            CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.2),
+            CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=1.5),
         ],
     ))
 
 # SLS short-term: 1.0 G + 0.7 Q
 sls_case = await client.job.loads.combination_load_cases.post(
-    CombinationCaseCreate(
+    CombinationLoadCaseCreate(
         id=20,
         title="SLS - Short-term Deflection",
         combination_items=[
-            CombinationItem(case=self_weight_case.id, multiplying_factor=1.0),
-            CombinationItem(case=dead_case.id,        multiplying_factor=1.0),
-            CombinationItem(case=live_case.id,        multiplying_factor=0.7),
+            CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.0),
+            CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.0),
+            CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=0.7),
         ],
     ))
 ```
