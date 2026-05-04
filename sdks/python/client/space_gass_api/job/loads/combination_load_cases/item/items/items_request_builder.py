@@ -14,7 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from ......models.combination_item import CombinationItem
+    from ......models.combination_load_case_item import CombinationLoadCaseItem
     from ......models.problem_details import ProblemDetails
 
 class ItemsRequestBuilder(BaseRequestBuilder):
@@ -30,11 +30,11 @@ class ItemsRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/combination-load-cases/{combinationCase%2Did}/items", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[list[CombinationItem]]:
+    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[list[CombinationLoadCaseItem]]:
         """
         Gets the combination items for a specific combination case.Returns 404 if no combination case exists with the supplied Id (Primary,Step or Unused load cases are not exposed by this endpoint).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[list[CombinationItem]]
+        Returns: Optional[list[CombinationLoadCaseItem]]
         """
         request_info = self.to_get_request_information(
             request_configuration
@@ -47,16 +47,16 @@ class ItemsRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from ......models.combination_item import CombinationItem
+        from ......models.combination_load_case_item import CombinationLoadCaseItem
 
-        return await self.request_adapter.send_collection_async(request_info, CombinationItem, error_mapping)
+        return await self.request_adapter.send_collection_async(request_info, CombinationLoadCaseItem, error_mapping)
     
-    async def put(self,body: list[CombinationItem], request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[list[CombinationItem]]:
+    async def put(self,body: list[CombinationLoadCaseItem], request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[list[CombinationLoadCaseItem]]:
         """
         Replaces the combination items for a combination case atomically.The case must already exist and be of type Combination.All standard item rules apply: non-empty list, no duplicates, no self-reference,and every component case must exist and be of type Primary, Combination or Unused(Step cases are rejected).
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[list[CombinationItem]]
+        Returns: Optional[list[CombinationLoadCaseItem]]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -72,9 +72,9 @@ class ItemsRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from ......models.combination_item import CombinationItem
+        from ......models.combination_load_case_item import CombinationLoadCaseItem
 
-        return await self.request_adapter.send_collection_async(request_info, CombinationItem, error_mapping)
+        return await self.request_adapter.send_collection_async(request_info, CombinationLoadCaseItem, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
@@ -87,7 +87,7 @@ class ItemsRequestBuilder(BaseRequestBuilder):
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def to_put_request_information(self,body: list[CombinationItem], request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+    def to_put_request_information(self,body: list[CombinationLoadCaseItem], request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Replaces the combination items for a combination case atomically.The case must already exist and be of type Combination.All standard item rules apply: non-empty list, no duplicates, no self-reference,and every component case must exist and be of type Primary, Combination or Unused(Step cases are rejected).
         param body: The request body

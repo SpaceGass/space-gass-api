@@ -16,10 +16,10 @@ namespace SpaceGassApi.Models
         /// <summary>The combination items (component case + multiplying factor rows) that make up this case.Populated only when `?expand=all` is passed AND `hasCombinationItems` is true;omitted from the wire otherwise.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<global::SpaceGassApi.Models.CombinationItem>? CombinationItems { get; set; }
+        public List<global::SpaceGassApi.Models.CombinationLoadCaseItem>? CombinationItems { get; set; }
 #nullable restore
 #else
-        public List<global::SpaceGassApi.Models.CombinationItem> CombinationItems { get; set; }
+        public List<global::SpaceGassApi.Models.CombinationLoadCaseItem> CombinationItems { get; set; }
 #endif
         /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -69,7 +69,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "combinationItems", n => { CombinationItems = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationItem>(global::SpaceGassApi.Models.CombinationItem.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "combinationItems", n => { CombinationItems = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationLoadCaseItem>(global::SpaceGassApi.Models.CombinationLoadCaseItem.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
                 { "hasCombinationItems", n => { HasCombinationItems = n.GetBoolValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
@@ -85,7 +85,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationItem>("combinationItems", CombinationItems);
+            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationLoadCaseItem>("combinationItems", CombinationItems);
             writer.WriteStringValue("guid", Guid);
             writer.WriteBoolValue("hasCombinationItems", HasCombinationItems);
             writer.WriteIntValue("id", Id);

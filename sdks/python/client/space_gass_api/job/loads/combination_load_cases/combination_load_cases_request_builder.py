@@ -14,7 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from ....models.combination_case_create import CombinationCaseCreate
+    from ....models.combination_load_case_create import CombinationLoadCaseCreate
     from ....models.expand_option import ExpandOption
     from ....models.load_case import LoadCase
     from ....models.problem_details import ProblemDetails
@@ -71,7 +71,7 @@ class CombinationLoadCasesRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_collection_async(request_info, LoadCase, error_mapping)
     
-    async def post(self,body: CombinationCaseCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[LoadCase]:
+    async def post(self,body: CombinationLoadCaseCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[LoadCase]:
         """
         Creates a combination load case (case + items) in a single atomic call. The`combinationItems` list is required and must contain at least one item; onfailure during item creation the parent case row is rolled back so the operation isall-or-nothing. Each component case must exist and be of type Primary, Combinationor Unused (Step cases are rejected); no item may reference the parent case(self-reference); item `case` values must be unique within the request.
         param body: Request payload for creating a combination load case in a single call.Inherits Id, Guid, Title and Notes from SpaceGassApi.Models.Dtos.Entity.Loads.LoadCaseCreateDto and addsa required, non-empty list of combination items.
@@ -107,7 +107,7 @@ class CombinationLoadCasesRequestBuilder(BaseRequestBuilder):
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def to_post_request_information(self,body: CombinationCaseCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+    def to_post_request_information(self,body: CombinationLoadCaseCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Creates a combination load case (case + items) in a single atomic call. The`combinationItems` list is required and must contain at least one item; onfailure during item creation the parent case row is rolled back so the operation isall-or-nothing. Each component case must exist and be of type Primary, Combinationor Unused (Step cases are rejected); no item may reference the parent case(self-reference); item `case` values must be unique within the request.
         param body: Request payload for creating a combination load case in a single call.Inherits Id, Guid, Title and Notes from SpaceGassApi.Models.Dtos.Entity.Loads.LoadCaseCreateDto and addsa required, non-empty list of combination items.
