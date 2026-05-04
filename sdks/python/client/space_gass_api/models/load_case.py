@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .combination_item import CombinationItem
+    from .combination_load_case_item import CombinationLoadCaseItem
     from .load_case_type import LoadCaseType
 
 @dataclass
@@ -14,7 +14,7 @@ class LoadCase(Parsable):
     DTO for a load case (from Loads - Titles table, FileID=28).Returns all load cases including primary, combination, and step types.When `Type` is `Combination`, the case owns a list of combination items(hydrated inline via `?expand=all`).
     """
     # The combination items (component case + multiplying factor rows) that make up this case.Populated only when `?expand=all` is passed AND `hasCombinationItems` is true;omitted from the wire otherwise.
-    combination_items: Optional[list[CombinationItem]] = None
+    combination_items: Optional[list[CombinationLoadCaseItem]] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
     # True when this case has at least one combination item defined.Only meaningful for cases where `Type` is `Combination`.Use `?expand=all` to include the full `combinationItems` array.
@@ -44,14 +44,14 @@ class LoadCase(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .combination_item import CombinationItem
+        from .combination_load_case_item import CombinationLoadCaseItem
         from .load_case_type import LoadCaseType
 
-        from .combination_item import CombinationItem
+        from .combination_load_case_item import CombinationLoadCaseItem
         from .load_case_type import LoadCaseType
 
         fields: dict[str, Callable[[Any], None]] = {
-            "combinationItems": lambda n : setattr(self, 'combination_items', n.get_collection_of_object_values(CombinationItem)),
+            "combinationItems": lambda n : setattr(self, 'combination_items', n.get_collection_of_object_values(CombinationLoadCaseItem)),
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "hasCombinationItems": lambda n : setattr(self, 'has_combination_items', n.get_bool_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),

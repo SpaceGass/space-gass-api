@@ -14,7 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from .....models.combination_case_update import CombinationCaseUpdate
+    from .....models.combination_load_case_update import CombinationLoadCaseUpdate
     from .....models.expand_option import ExpandOption
     from .....models.load_case import LoadCase
     from .....models.problem_details import ProblemDetails
@@ -73,7 +73,7 @@ class CombinationCaseItemRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, LoadCase, error_mapping)
     
-    async def patch(self,body: CombinationCaseUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[LoadCase]:
+    async def patch(self,body: CombinationLoadCaseUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[LoadCase]:
         """
         Partially updates a combination load case. Only fields supplied in the body arechanged; omitted fields are left as-is. The optional `combinationItems` field isa full-replace when provided — it must be a non-empty list, and the same item rulesfrom create apply (existence, type, no self-reference, no duplicates). Omit`combinationItems` to leave the existing items untouched. To remove all items,delete the case (`DELETE /{id}`).
         param body: Request payload for updating a combination load case.Inherits Id, Title and Notes from SpaceGassApi.Models.Dtos.Entity.Loads.LoadCaseUpdateDto (each optional forpartial update) and adds an optional `combinationItems` list.
@@ -120,7 +120,7 @@ class CombinationCaseItemRequestBuilder(BaseRequestBuilder):
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def to_patch_request_information(self,body: CombinationCaseUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+    def to_patch_request_information(self,body: CombinationLoadCaseUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Partially updates a combination load case. Only fields supplied in the body arechanged; omitted fields are left as-is. The optional `combinationItems` field isa full-replace when provided — it must be a non-empty list, and the same item rulesfrom create apply (existence, type, no self-reference, no duplicates). Omit`combinationItems` to leave the existing items untouched. To remove all items,delete the case (`DELETE /{id}`).
         param body: Request payload for updating a combination load case.Inherits Id, Title and Notes from SpaceGassApi.Models.Dtos.Entity.Loads.LoadCaseUpdateDto (each optional forpartial update) and adds an optional `combinationItems` list.

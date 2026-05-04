@@ -11,7 +11,7 @@ namespace SpaceGassApi.Models
     /// Represents a single component within a load combination — a component case Id andthe multiplying factor applied to it.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public partial class CombinationItem : IParsable
+    public partial class CombinationLoadCaseItem : IParsable
     {
         /// <summary>Component load case number.</summary>
         public int? Case { get; set; }
@@ -20,12 +20,12 @@ namespace SpaceGassApi.Models
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.CombinationItem"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.CombinationLoadCaseItem"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static global::SpaceGassApi.Models.CombinationItem CreateFromDiscriminatorValue(IParseNode parseNode)
+        public static global::SpaceGassApi.Models.CombinationLoadCaseItem CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::SpaceGassApi.Models.CombinationItem();
+            return new global::SpaceGassApi.Models.CombinationLoadCaseItem();
         }
         /// <summary>
         /// The deserialization information for the current model

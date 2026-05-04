@@ -11,15 +11,15 @@ namespace SpaceGassApi.Models
     /// Request payload for creating a combination load case in a single call.Inherits Id, Guid, Title and Notes from SpaceGassApi.Models.Dtos.Entity.Loads.LoadCaseCreateDto and addsa required, non-empty list of combination items.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public partial class CombinationCaseCreate : IParsable
+    public partial class CombinationLoadCaseCreate : IParsable
     {
         /// <summary>The component cases and their multiplying factors that make up this combination case.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<global::SpaceGassApi.Models.CombinationItem>? CombinationItems { get; set; }
+        public List<global::SpaceGassApi.Models.CombinationLoadCaseItem>? CombinationItems { get; set; }
 #nullable restore
 #else
-        public List<global::SpaceGassApi.Models.CombinationItem> CombinationItems { get; set; }
+        public List<global::SpaceGassApi.Models.CombinationLoadCaseItem> CombinationItems { get; set; }
 #endif
         /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -50,12 +50,12 @@ namespace SpaceGassApi.Models
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.CombinationCaseCreate"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.CombinationLoadCaseCreate"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static global::SpaceGassApi.Models.CombinationCaseCreate CreateFromDiscriminatorValue(IParseNode parseNode)
+        public static global::SpaceGassApi.Models.CombinationLoadCaseCreate CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::SpaceGassApi.Models.CombinationCaseCreate();
+            return new global::SpaceGassApi.Models.CombinationLoadCaseCreate();
         }
         /// <summary>
         /// The deserialization information for the current model
@@ -65,7 +65,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "combinationItems", n => { CombinationItems = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationItem>(global::SpaceGassApi.Models.CombinationItem.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "combinationItems", n => { CombinationItems = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationLoadCaseItem>(global::SpaceGassApi.Models.CombinationLoadCaseItem.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "notes", n => { Notes = n.GetStringValue(); } },
@@ -79,7 +79,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationItem>("combinationItems", CombinationItems);
+            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationLoadCaseItem>("combinationItems", CombinationItems);
             writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteStringValue("notes", Notes);

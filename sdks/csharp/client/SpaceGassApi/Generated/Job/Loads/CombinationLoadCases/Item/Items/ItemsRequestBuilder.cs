@@ -36,18 +36,18 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item.Items
         /// <summary>
         /// Gets the combination items for a specific combination case.Returns 404 if no combination case exists with the supplied Id (Primary,Step or Unused load cases are not exposed by this endpoint).
         /// </summary>
-        /// <returns>A List&lt;global::SpaceGassApi.Models.CombinationItem&gt;</returns>
+        /// <returns>A List&lt;global::SpaceGassApi.Models.CombinationLoadCaseItem&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<List<global::SpaceGassApi.Models.CombinationItem>?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<List<global::SpaceGassApi.Models.CombinationLoadCaseItem>?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<List<global::SpaceGassApi.Models.CombinationItem>> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<List<global::SpaceGassApi.Models.CombinationLoadCaseItem>> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
@@ -56,13 +56,13 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item.Items
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
-            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.CombinationItem>(requestInfo, global::SpaceGassApi.Models.CombinationItem.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.CombinationLoadCaseItem>(requestInfo, global::SpaceGassApi.Models.CombinationLoadCaseItem.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
             return collectionResult?.AsList();
         }
         /// <summary>
         /// Replaces the combination items for a combination case atomically.The case must already exist and be of type Combination.All standard item rules apply: non-empty list, no duplicates, no self-reference,and every component case must exist and be of type Primary, Combination or Unused(Step cases are rejected).
         /// </summary>
-        /// <returns>A List&lt;global::SpaceGassApi.Models.CombinationItem&gt;</returns>
+        /// <returns>A List&lt;global::SpaceGassApi.Models.CombinationLoadCaseItem&gt;</returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -71,11 +71,11 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item.Items
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<List<global::SpaceGassApi.Models.CombinationItem>?> PutAsync(List<global::SpaceGassApi.Models.CombinationItem> body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<List<global::SpaceGassApi.Models.CombinationLoadCaseItem>?> PutAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseItem> body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<List<global::SpaceGassApi.Models.CombinationItem>> PutAsync(List<global::SpaceGassApi.Models.CombinationItem> body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<List<global::SpaceGassApi.Models.CombinationLoadCaseItem>> PutAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseItem> body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -86,7 +86,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item.Items
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
-            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.CombinationItem>(requestInfo, global::SpaceGassApi.Models.CombinationItem.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.CombinationLoadCaseItem>(requestInfo, global::SpaceGassApi.Models.CombinationLoadCaseItem.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
             return collectionResult?.AsList();
         }
         /// <summary>
@@ -116,11 +116,11 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item.Items
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToPutRequestInformation(List<global::SpaceGassApi.Models.CombinationItem> body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToPutRequestInformation(List<global::SpaceGassApi.Models.CombinationLoadCaseItem> body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToPutRequestInformation(List<global::SpaceGassApi.Models.CombinationItem> body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToPutRequestInformation(List<global::SpaceGassApi.Models.CombinationLoadCaseItem> body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
