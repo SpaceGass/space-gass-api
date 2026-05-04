@@ -103,7 +103,7 @@ from space_gass_api.models.node_create import NodeCreate
 from space_gass_api.models.node_restraint_create import NodeRestraintCreate
 from space_gass_api.models.member_create import MemberCreate
 from space_gass_api.models.section_library_create import SectionLibraryCreate
-from space_gass_api.models.material_create import MaterialCreate
+from space_gass_api.models.material_library_create import MaterialLibraryCreate
 from space_gass_api.models.load_case_create import LoadCaseCreate
 from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
 from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
@@ -183,34 +183,31 @@ await client.job.structure.nodes.by_id(node2.id).restraint.post(
 
 ## Step 4 — Add a Material
 
-Create the material before the member so its `Id` is available to
-assign. `MaterialCreate` defines a user-specified material. Library
-materials — referencing a pre-defined material from a SPACE GASS
-library file — are on the roadmap but not yet exposed by the API.
+Add the material before the member so its `Id` is available to assign.
+POSTing a `MaterialLibraryCreate` to `Job.Structure.Materials.Library`
+pulls a standard material from a SPACE GASS library — `Library` is the
+library file name installed with SPACE GASS and `Name` is the material
+designation in that library. (Pass a `MaterialCreate` to
+`Job.Structure.Materials` directly if you need a fully user-defined
+material instead.)
 
 <CodeTabs>
 ```csharp title="C#"
-var steel = await client.Job.Structure.Materials.PostAsync(
-    new MaterialCreate
+var steel = await client.Job.Structure.Materials.Library.PostAsync(
+    new MaterialLibraryCreate
     {
-        Name = "350 Grade Steel",
-        YoungsModulus = 200000.0,    // MPa
-        PoissonsRatio = 0.3,
-        MassDensity = 7850.0,        // kg/m^3
-        ThermalCoeff = 1.17e-5,      // per °C
+        Library = "Aust300",
+        Name = "350",
     });
 
 Console.WriteLine($"Material {steel.Id}: {steel.Name}");
 ```
 
 ```python title="Python"
-steel = await client.job.structure.materials.post(
-    MaterialCreate(
-        name="350 Grade Steel",
-        youngs_modulus=200000.0,    # MPa
-        poissons_ratio=0.3,
-        mass_density=7850.0,        # kg/m^3
-        thermal_coeff=1.17e-5,      # per °C
+steel = await client.job.structure.materials.library.post(
+    MaterialLibraryCreate(
+        library="Aust300",
+        name="350",
     ))
 
 print(f"Material {steel.id}: {steel.name}")

@@ -36,7 +36,7 @@ from space_gass_api.models.combination_case_create import CombinationCaseCreate
 from space_gass_api.models.combination_item import CombinationItem
 from space_gass_api.models.load_case_create import LoadCaseCreate
 from space_gass_api.models.load_position_units import LoadPositionUnits
-from space_gass_api.models.material_create import MaterialCreate
+from space_gass_api.models.material_library_create import MaterialLibraryCreate
 from space_gass_api.models.member_create import MemberCreate
 from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
 from space_gass_api.models.node_create import NodeCreate
@@ -98,15 +98,12 @@ async def main() -> int:
         print(f"  Node {node2.id}: Pinned (RRRFFF)")
         print()
 
-        # == Step 4 — Add a material ===================================
-        print("Creating material...")
-        steel = await client.job.structure.materials.post(
-            MaterialCreate(
-                name="350 Grade Steel",
-                youngs_modulus=200000.0,    # MPa
-                poissons_ratio=0.3,
-                mass_density=7850.0,        # kg/m^3
-                thermal_coeff=1.17e-5,      # per °C
+        # == Step 4 — Add a library material ===========================
+        print("Adding library material...")
+        steel = await client.job.structure.materials.library.post(
+            MaterialLibraryCreate(
+                library="Aust300",
+                name="350",
             ),
         )
         print(f"  Material {steel.id}: {steel.name}")

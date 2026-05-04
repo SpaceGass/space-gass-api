@@ -70,16 +70,13 @@ try
     Console.WriteLine($"  Node {node2.Id}: Pinned (RRRFFF)");
     Console.WriteLine();
 
-    // == Step 4 — Add a material ===================================
-    Console.WriteLine("Creating material...");
-    var steel = await client.Job.Structure.Materials.PostAsync(
-        new MaterialCreate
+    // == Step 4 — Add a library material ===========================
+    Console.WriteLine("Adding library material...");
+    var steel = await client.Job.Structure.Materials.Library.PostAsync(
+        new MaterialLibraryCreate
         {
-            Name = "350 Grade Steel",
-            YoungsModulus = 200000.0,    // MPa
-            PoissonsRatio = 0.3,
-            MassDensity = 7850.0,        // kg/m^3
-            ThermalCoeff = 1.17e-5,      // per °C
+            Library = "Aust300",
+            Name = "350",
         });
     Console.WriteLine($"  Material {steel!.Id}: {steel.Name}");
     Console.WriteLine();

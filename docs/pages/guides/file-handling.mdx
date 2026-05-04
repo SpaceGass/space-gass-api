@@ -119,6 +119,42 @@ curl -X POST http://localhost:34560/api/v1/job/new
 ```
 </CodeTabs>
 
+## Creating a New Job From a Template
+
+Upload a `.sgbase` template file to seed a new job. The template data
+is loaded but the new job has no file path — use `Job.Save` with a
+`FilePath` (see [Saving](#saving)) to write it to disk.
+
+The body is a `multipart/form-data` upload. Both SDKs expose this via
+the Kiota `MultipartBody` abstraction with one part named `template`.
+
+<CodeTabs>
+```csharp title="C#"
+using Microsoft.Kiota.Abstractions;
+
+var multipart = new MultipartBody { RequestAdapter = client.RequestAdapter };
+using var stream = File.OpenRead(@"C:\Templates\my-template.sgbase");
+multipart.AddOrReplacePart("template", "application/octet-stream", stream);
+
+await client.Job.NewFromTemplate.PostAsync(multipart);
+```
+
+```python title="Python"
+from kiota_abstractions.multipart_body import MultipartBody
+
+multipart = MultipartBody()
+multipart.request_adapter = client.request_adapter
+with open(r"C:\Templates\my-template.sgbase", "rb") as f:
+    multipart.add_or_replace_part("template", "application/octet-stream", f)
+    await client.job.new_from_template.post(multipart)
+```
+
+```bash title="curl"
+curl -X POST http://localhost:34560/api/v1/job/new-from-template \
+  -F "template=@C:/Templates/my-template.sgbase"
+```
+</CodeTabs>
+
 ## Closing
 
 <CodeTabs>
