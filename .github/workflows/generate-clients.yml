@@ -17,6 +17,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      - name: Patch spec — make optional requestBody.required explicit
+        run: |
+          # Microsoft.OpenApi 1.6.x's serializer drops `required: false` because
+          # false is the default. Kiota then treats the missing field as required
+          # and generates a non-optional body parameter. The C# RequestBodyRequiredFilter
+          # already emits `"required": true` for non-nullable bodies, so any requestBody
+          # still missing `required` here is the optional case — make it explicit.
+          node -e '
+            const fs = require("fs");
+            const p = process.argv[1];
+            const spec = JSON.parse(fs.readFileSync(p, "utf8"));
+            let touched = 0;
+            for (const path of Object.values(spec.paths || {})) {
+              for (const op of Object.values(path)) {
+                if (op && typeof op === "object" && op.requestBody && !("required" in op.requestBody)) {
+                  op.requestBody.required = false;
+                  touched++;
+                }
+              }
+            }
+            fs.writeFileSync(p, JSON.stringify(spec, null, 2));
+            console.log("Made " + touched + " requestBody parameter(s) explicitly optional.");
+          ' "$SPEC_PATH"
+
       - name: Install Kiota
         run: dotnet tool install --global Microsoft.OpenApi.Kiota
 
