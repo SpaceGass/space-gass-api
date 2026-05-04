@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 @dataclass
 class NodeRestraint(Parsable):
     """
-    DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, free, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.
+    DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.
     """
     # 6-character active direction code for TX,TY,TZ,RX,RY,RZ.Each character: B=Both, P=Positive only, N=Negative only.
     active_direction: Optional[str] = None
@@ -20,7 +20,7 @@ class NodeRestraint(Parsable):
     general_restraint: Optional[bool] = None
     # The node Id this restraint applies to.
     node: Optional[int] = None
-    # 6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Free, R=Restrained, S=Spring, V=Variable spring, P=Plastic, N=Nonlinear friction.
+    # 6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Fixed (prevents movement), R=Released (allows movement), S=Spring (movement governed by a spring stiffness), V=Variable spring (multiple stiffnesses via a stiffness-vs-deflection table), P=Plastic (upper force/moment limit on the reaction), N=Friction (upper limit on reaction proportional to the normal-axis reaction).
     restraint_code: Optional[str] = None
     # Rotational X plastic limit. Unit: Moment (see GET /job/units).
     rx_plastic_limit: Optional[float] = None

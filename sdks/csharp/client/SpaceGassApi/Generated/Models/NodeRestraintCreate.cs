@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeRestraintCreate : IParsable
     {
-        /// <summary>6-character active direction code for TX,TY,TZ,RX,RY,RZ.Each character: B=Both, P=Positive only, N=Negative only.</summary>
+        /// <summary>6-character active direction code for TX,TY,TZ,RX,RY,RZ.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? ActiveDirection { get; set; }
@@ -25,7 +25,7 @@ namespace SpaceGassApi.Models
         public bool? GeneralRestraint { get; set; }
         /// <summary>The node Id to create the restraint for.Optional in body — if omitted, set from the route parameter by the controller.</summary>
         public int? Node { get; set; }
-        /// <summary>6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Free, R=Restrained, S=Spring, V=Variable spring, P=Plastic, N=Nonlinear friction.</summary>
+        /// <summary>6-character restraint code for TX,TY,TZ,RX,RY,RZ.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? RestraintCode { get; set; }

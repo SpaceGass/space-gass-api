@@ -23,7 +23,7 @@ class Node(Parsable):
     has_restraint: Optional[bool] = None
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
     id: Optional[int] = None
-    # DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, free, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.
+    # DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.
     restraint: Optional[NodeRestraint] = None
     # X coordinate. Unit: Length (see GET /job/units).
     x: Optional[float] = None

@@ -35,7 +35,7 @@ namespace SpaceGassApi.Models
         public bool? HasRestraint { get; set; }
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
         public int? Id { get; set; }
-        /// <summary>DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, free, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.</summary>
+        /// <summary>DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.NodeRestraint? Restraint { get; set; }
