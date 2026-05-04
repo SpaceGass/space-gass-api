@@ -20,7 +20,7 @@ class NodeRestraintUpdate(Parsable):
     general_restraint: Optional[bool] = None
     # The node number that identifies which restraint to update.Required for bulk PATCH (PATCH /restraints/bulk).Ignored for single-node PATCH (PATCH /{key}/restraint) — the route value is used instead.
     node: Optional[int] = None
-    # 6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Free, R=Restrained, S=Spring, V=Variable spring, P=Plastic, N=Nonlinear friction.
+    # 6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Fixed (prevents movement), R=Released (allows movement), S=Spring (movement governed by a spring stiffness), V=Variable spring (multiple stiffnesses via a stiffness-vs-deflection table), P=Plastic (upper force/moment limit on the reaction), N=Friction (upper limit on reaction proportional to the normal-axis reaction).
     restraint_code: Optional[str] = None
     # Rotational X plastic limit. Unit: Moment (see GET /job/units).
     rx_plastic_limit: Optional[float] = None

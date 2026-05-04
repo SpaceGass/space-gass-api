@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, free, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.
+    /// DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeRestraint : IParsable
@@ -25,7 +25,7 @@ namespace SpaceGassApi.Models
         public bool? GeneralRestraint { get; set; }
         /// <summary>The node Id this restraint applies to.</summary>
         public int? Node { get; set; }
-        /// <summary>6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Free, R=Restrained, S=Spring, V=Variable spring, P=Plastic, N=Nonlinear friction.</summary>
+        /// <summary>6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Fixed (prevents movement), R=Released (allows movement), S=Spring (movement governed by a spring stiffness), V=Variable spring (multiple stiffnesses via a stiffness-vs-deflection table), P=Plastic (upper force/moment limit on the reaction), N=Friction (upper limit on reaction proportional to the normal-axis reaction).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? RestraintCode { get; set; }
