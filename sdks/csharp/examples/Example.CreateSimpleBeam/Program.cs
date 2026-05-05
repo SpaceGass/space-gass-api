@@ -19,11 +19,12 @@ using SpaceGassApi.Models;
 //   10. Apply a member distributed load to the live case
 //   11. Define ULS and SLS combinations to AS/NZS 1170
 //   12. Save the initial model (so you can open it in SPACE GASS to verify)
-//   13. Run a linear static analysis and wait for completion
-//   14. Query reactions under the ULS combination
-//   15. Get the maximum ULS bending moment along the beam
-//   16. Get the maximum SLS deflection along the beam
-//   17. Save the analysed model and close
+//   13. Configure the static analysis settings (solver, optimisation)
+//   14. Run a linear static analysis and wait for completion
+//   15. Query reactions under the ULS combination
+//   16. Get the maximum ULS bending moment along the beam
+//   17. Get the maximum SLS deflection along the beam
+//   18. Save the analysed model and close
 //
 // Prerequisites:
 //   - SPACE GASS API running locally (default: http://localhost:34560)
@@ -60,16 +61,21 @@ try
 
     // == Step 3 — Apply restraints =================================
     // Restraint code: 6 characters for TX, TY, TZ, RX, RY, RZ
-    //   F = Free, R = Restrained
+    //   F = Fixed (prevents movement)
+    //   R = Released (allows movement)
+    //   S = Spring (governed by a spring stiffness)
+    //   V = Variable spring (stiffness-vs-deflection table)
+    //   P = Plastic (upper force/moment limit on the reaction)
+    //   N = Friction (limit proportional to the normal-axis reaction)
     Console.WriteLine("Applying restraints...");
 
     await client.Job.Structure.Nodes[node1.Id!.Value].Restraint.PostAsync(
-        new NodeRestraintCreate { RestraintCode = "RRRRRR" });
-    Console.WriteLine($"  Node {node1.Id}: Fixed (RRRRRR)");
+        new NodeRestraintCreate { RestraintCode = "FFFFFF" });
+    Console.WriteLine($"  Node {node1.Id}: Fixed (FFFFFF)");
 
     await client.Job.Structure.Nodes[node2.Id!.Value].Restraint.PostAsync(
-        new NodeRestraintCreate { RestraintCode = "RRRFFF" });
-    Console.WriteLine($"  Node {node2.Id}: Pinned (RRRFFF)");
+        new NodeRestraintCreate { RestraintCode = "FFFRRR" });
+    Console.WriteLine($"  Node {node2.Id}: Pinned (FFFRRR)");
     Console.WriteLine();
 
     // == Step 4 — Add a library material ===========================
@@ -213,7 +219,18 @@ try
     Console.WriteLine($"  IsOpen:   {initialSave?.State?.IsOpen}");
     Console.WriteLine();
 
-    // == Step 13 — Run a linear static analysis ====================
+    // == Step 13 — Configure the static analysis settings ==========
+    // PATCH the stored static analysis settings before running. The
+    // API currently only supports the Pardiso solver, so pin
+    // SolverType = Pardiso here.
+    Console.WriteLine("Configuring static analysis settings...");
+    await client.Job.Analysis.Static.Settings.PatchAsync(
+        new StaticSettingsUpdate
+        {
+            SolverType = SolverType.Pardiso,
+        });
+
+    // == Step 14 — Run a linear static analysis ====================
     Console.WriteLine("Running linear static analysis...");
     var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
         new StaticSettingsUpdate());
@@ -239,7 +256,7 @@ try
     }
     Console.WriteLine();
 
-    // == Step 14 — Query reactions =================================
+    // == Step 15 — Query reactions =================================
     Console.WriteLine("Querying ULS reactions...");
     var reactions = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync(
         config => config.QueryParameters.Cases = $"{ulsCase.Id}");
@@ -257,7 +274,7 @@ try
     }
     Console.WriteLine();
 
-    // == Step 15 — Maximum ULS bending moment ======================
+    // == Step 16 — Maximum ULS bending moment ======================
     var ulsForces = await client.Job.Query.Analysis.Static.Member.IntermediateForces
         .GetAsync(config =>
         {
@@ -269,7 +286,7 @@ try
     var maxMz = beamForces.Mz!.Max(v => Math.Abs(v ?? 0.0));
     Console.WriteLine($"Max ULS bending moment on Member {member.Id}: {maxMz:F2} kNm");
 
-    // == Step 16 — Maximum SLS deflection ==========================
+    // == Step 17 — Maximum SLS deflection ==========================
     var slsDisplacements = await client.Job.Query.Analysis.Static.Member.IntermediateDisplacements
         .GetAsync(config =>
         {
@@ -282,7 +299,7 @@ try
     Console.WriteLine($"Max SLS deflection on Member {member.Id}: {maxDeflection * 1000:F2} mm");
     Console.WriteLine();
 
-    // == Step 17 — Save the analysed model =========================
+    // == Step 18 — Save the analysed model =========================
     // Closing the job runs in `finally` below, so it always happens
     // even if a step above threw — leaving the service without a
     // half-built active job.

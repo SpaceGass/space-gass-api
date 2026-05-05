@@ -155,29 +155,41 @@ print(f"Node {node2.id}: ({node2.x}, {node2.y}, {node2.z})")
 ## Step 3 — Apply Restraints
 
 Restraints are attached to a node via `Nodes[id].Restraint`. The
-6-character `RestraintCode` maps to the TX, TY, TZ, RX, RY, RZ DOFs —
-`R` for restrained, `F` for free. Node 1 is fully fixed (`RRRRRR`),
-Node 2 is pinned (`RRRFFF`).
+6-character `RestraintCode` maps to the TX, TY, TZ, RX, RY, RZ DOFs.
+Each character is one of:
+
+| Code | Meaning |
+| --- | --- |
+| `F` | **Fixed** — prevents movement |
+| `R` | **Released** — allows movement |
+| `S` | Spring (movement governed by a spring stiffness) |
+| `V` | Variable spring (stiffness-vs-deflection table) |
+| `P` | Plastic (upper force / moment limit on the reaction) |
+| `N` | Friction (limit proportional to the normal-axis reaction) |
+
+For our beam, Node 1 is fully fixed (`FFFFFF` — all six DOFs prevented
+from moving) and Node 2 is pinned (`FFFRRR` — translations fixed,
+rotations released).
 
 <CodeTabs>
 ```csharp title="C#"
-// Node 1: Fixed support (all DOFs restrained)
+// Node 1: Fully fixed support (all 6 DOFs Fixed)
 await client.Job.Structure.Nodes[node1.Id.Value].Restraint.PostAsync(
-    new NodeRestraintCreate { RestraintCode = "RRRRRR" });
+    new NodeRestraintCreate { RestraintCode = "FFFFFF" });
 
-// Node 2: Pinned support (translations restrained, rotations free)
+// Node 2: Pinned support (translations Fixed, rotations Released)
 await client.Job.Structure.Nodes[node2.Id.Value].Restraint.PostAsync(
-    new NodeRestraintCreate { RestraintCode = "RRRFFF" });
+    new NodeRestraintCreate { RestraintCode = "FFFRRR" });
 ```
 
 ```python title="Python"
-# Node 1: Fixed support (all DOFs restrained)
+# Node 1: Fully fixed support (all 6 DOFs Fixed)
 await client.job.structure.nodes.by_id(node1.id).restraint.post(
-    NodeRestraintCreate(restraint_code="RRRRRR"))
+    NodeRestraintCreate(restraint_code="FFFFFF"))
 
-# Node 2: Pinned support (translations restrained, rotations free)
+# Node 2: Pinned support (translations Fixed, rotations Released)
 await client.job.structure.nodes.by_id(node2.id).restraint.post(
-    NodeRestraintCreate(restraint_code="RRRFFF"))
+    NodeRestraintCreate(restraint_code="FFFRRR"))
 ```
 </CodeTabs>
 

@@ -14,11 +14,12 @@ Mirrors the Simple Beam walkthrough in the Zudoku docs site:
    10. Apply a member distributed load to the live case
    11. Define ULS and SLS combinations to AS/NZS 1170
    12. Save the initial model (so you can open it in SPACE GASS to verify)
-   13. Run a linear static analysis and wait for completion
-   14. Query reactions under the ULS combination
-   15. Get the maximum ULS bending moment along the beam
-   16. Get the maximum SLS deflection along the beam
-   17. Save the analysed model and close
+   13. Configure the static analysis settings (solver, optimisation)
+   14. Run a linear static analysis and wait for completion
+   15. Query reactions under the ULS combination
+   16. Get the maximum ULS bending moment along the beam
+   17. Get the maximum SLS deflection along the beam
+   18. Save the analysed model and close
 
 Prerequisites:
   - SPACE GASS API running locally (default: http://localhost:34560)
@@ -46,6 +47,7 @@ from space_gass_api.models.node_restraint_create import NodeRestraintCreate
 from space_gass_api.models.save_job_request import SaveJobRequest
 from space_gass_api.models.section_library_create import SectionLibraryCreate
 from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
+from space_gass_api.models.solver_type import SolverType
 from space_gass_api.models.static_settings_update import StaticSettingsUpdate
 
 from space_gass_api.job.query.analysis.static.member.intermediate_forces.intermediate_forces_request_builder import IntermediateForcesRequestBuilder
@@ -86,18 +88,23 @@ async def main() -> int:
 
         # == Step 3 — Apply restraints =================================
         # Restraint code: 6 characters for TX, TY, TZ, RX, RY, RZ
-        #   F = Free, R = Restrained
+        #   F = Fixed (prevents movement)
+        #   R = Released (allows movement)
+        #   S = Spring (governed by a spring stiffness)
+        #   V = Variable spring (stiffness-vs-deflection table)
+        #   P = Plastic (upper force/moment limit on the reaction)
+        #   N = Friction (limit proportional to the normal-axis reaction)
         print("Applying restraints...")
 
         await client.job.structure.nodes.by_id(node1.id).restraint.post(
-            NodeRestraintCreate(restraint_code="RRRRRR"),
+            NodeRestraintCreate(restraint_code="FFFFFF"),
         )
-        print(f"  Node {node1.id}: Fixed (RRRRRR)")
+        print(f"  Node {node1.id}: Fixed (FFFFFF)")
 
         await client.job.structure.nodes.by_id(node2.id).restraint.post(
-            NodeRestraintCreate(restraint_code="RRRFFF"),
+            NodeRestraintCreate(restraint_code="FFFRRR"),
         )
-        print(f"  Node {node2.id}: Pinned (RRRFFF)")
+        print(f"  Node {node2.id}: Pinned (FFFRRR)")
         print()
 
         # == Step 4 — Add a library material ===========================
@@ -240,7 +247,17 @@ async def main() -> int:
         print(f"  IsOpen:   {initial_save.state.is_open if initial_save and initial_save.state else None}")
         print()
 
-        # == Step 13 — Run a linear static analysis ====================
+        # == Step 13 — Configure the static analysis settings ==========
+        # PATCH the stored static analysis settings before running. The
+        # API currently only supports the Pardiso solver, so pin
+        # solver_type = Pardiso here.
+        print("Configuring static analysis settings...")
+        await client.job.analysis.static.settings.patch(
+            StaticSettingsUpdate(
+                solver_type=SolverType.Pardiso,
+            ))
+
+        # == Step 14 — Run a linear static analysis ====================
         print("Running linear static analysis...")
         run = await client.job.analysis.static.run_linear.post(
             StaticSettingsUpdate())
@@ -262,7 +279,7 @@ async def main() -> int:
                 f"Analysis did not complete: {final_run.error_message}")
         print()
 
-        # == Step 14 — Query reactions =================================
+        # == Step 15 — Query reactions =================================
         print("Querying ULS reactions...")
         reaction_params = ReactionsRequestBuilder.ReactionsRequestBuilderGetQueryParameters(
             cases=str(uls_case.id))
@@ -280,7 +297,7 @@ async def main() -> int:
                 f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
         print()
 
-        # == Step 15 — Maximum ULS bending moment ======================
+        # == Step 16 — Maximum ULS bending moment ======================
         force_params = IntermediateForcesRequestBuilder.IntermediateForcesRequestBuilderGetQueryParameters(
             cases=str(uls_case.id),
             members=str(member.id))
@@ -291,7 +308,7 @@ async def main() -> int:
         max_mz = max(abs(v) for v in beam_forces.mz if v is not None)
         print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
 
-        # == Step 16 — Maximum SLS deflection ==========================
+        # == Step 17 — Maximum SLS deflection ==========================
         displ_params = IntermediateDisplacementsRequestBuilder.IntermediateDisplacementsRequestBuilderGetQueryParameters(
             cases=str(sls_case.id),
             members=str(member.id))
@@ -303,7 +320,7 @@ async def main() -> int:
         print(f"Max SLS deflection on Member {member.id}: {max_deflection * 1000:.2f} mm")
         print()
 
-        # == Step 17 — Save the analysed model =========================
+        # == Step 18 — Save the analysed model =========================
         # Closing the job runs in `finally` below, so it always happens
         # even if a step above raised — leaving the service without a
         # half-built active job.

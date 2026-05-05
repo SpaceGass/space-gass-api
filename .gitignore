@@ -448,6 +448,11 @@ docs/.zudoku/
 .env.*.local
 
 # ============================================
+# Throwaway / WIP examples (delete when done)
+# ============================================
+sdks/csharp/examples/WIP/
+
+# ============================================
 # Claude Code
 # ============================================
 # Ignore local-only Claude config; commit shared skills only.
