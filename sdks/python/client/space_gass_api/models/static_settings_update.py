@@ -67,7 +67,7 @@ class StaticSettingsUpdate(Parsable):
     reversal_iterations: Optional[int] = None
     # The rotateLocalLoads property
     rotate_local_loads: Optional[bool] = None
-    # Matrix solver type used by the analysis engine.
+    # Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS's `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Pardiso, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).
     solver_type: Optional[SolverType] = None
     # The stabilizeUnrestrainedNodes property
     stabilize_unrestrained_nodes: Optional[bool] = None

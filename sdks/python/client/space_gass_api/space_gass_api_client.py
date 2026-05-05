@@ -17,6 +17,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from .file.file_request_builder import FileRequestBuilder
     from .job.job_request_builder import JobRequestBuilder
+    from .license.license_request_builder import LicenseRequestBuilder
     from .service.service_request_builder import ServiceRequestBuilder
 
 class SpaceGassApiClient(BaseRequestBuilder):
@@ -60,6 +61,15 @@ class SpaceGassApiClient(BaseRequestBuilder):
         from .job.job_request_builder import JobRequestBuilder
 
         return JobRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def license(self) -> LicenseRequestBuilder:
+        """
+        The license property
+        """
+        from .license.license_request_builder import LicenseRequestBuilder
+
+        return LicenseRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def service(self) -> ServiceRequestBuilder:

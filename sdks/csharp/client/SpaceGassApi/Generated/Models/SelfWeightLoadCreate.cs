@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for creating a new self-weight load.Only one self-weight load is permitted per load case.Use PUT /self-weight/{case} to create or replace.
+    /// DTO for creating a new self-weight load.Only one self-weight load is permitted per load case (case is the entire key).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SelfWeightLoadCreate : IParsable

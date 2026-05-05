@@ -16,7 +16,6 @@ from warnings import warn
 if TYPE_CHECKING:
     from .....models.problem_details import ProblemDetails
     from .....models.self_weight_load import SelfWeightLoad
-    from .....models.self_weight_load_create import SelfWeightLoadCreate
     from .....models.self_weight_load_update import SelfWeightLoadUpdate
 
 class WithCaseItemRequestBuilder(BaseRequestBuilder):
@@ -74,7 +73,7 @@ class WithCaseItemRequestBuilder(BaseRequestBuilder):
     
     async def patch(self,body: SelfWeightLoadUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SelfWeightLoad]:
         """
-        Updates an existing self-weight load. Only provided fields are updated.The load case must be a Primary load case.
+        Updates an existing self-weight load. Only provided fields are updated.
         param body: DTO for updating an existing self-weight load.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[SelfWeightLoad]
@@ -90,32 +89,6 @@ class WithCaseItemRequestBuilder(BaseRequestBuilder):
             "400": ProblemDetails,
             "401": ProblemDetails,
             "404": ProblemDetails,
-        }
-        if not self.request_adapter:
-            raise Exception("Http core is null") 
-        from .....models.self_weight_load import SelfWeightLoad
-
-        return await self.request_adapter.send_async(request_info, SelfWeightLoad, error_mapping)
-    
-    async def post(self,body: SelfWeightLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SelfWeightLoad]:
-        """
-        Creates a self-weight load for a load case.The load case must exist and be a Primary load case.Returns 409 if a self-weight load already exists for the case.The case is taken from the route — do not include it in the body.
-        param body: DTO for creating a new self-weight load.Only one self-weight load is permitted per load case.Use PUT /self-weight/{case} to create or replace.
-        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[SelfWeightLoad]
-        """
-        if body is None:
-            raise TypeError("body cannot be null.")
-        request_info = self.to_post_request_information(
-            body, request_configuration
-        )
-        from .....models.problem_details import ProblemDetails
-
-        error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
-            "401": ProblemDetails,
-            "404": ProblemDetails,
-            "409": ProblemDetails,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -147,7 +120,7 @@ class WithCaseItemRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: SelfWeightLoadUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Updates an existing self-weight load. Only provided fields are updated.The load case must be a Primary load case.
+        Updates an existing self-weight load. Only provided fields are updated.
         param body: DTO for updating an existing self-weight load.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -155,21 +128,6 @@ class WithCaseItemRequestBuilder(BaseRequestBuilder):
         if body is None:
             raise TypeError("body cannot be null.")
         request_info = RequestInformation(Method.PATCH, self.url_template, self.path_parameters)
-        request_info.configure(request_configuration)
-        request_info.headers.try_add("Accept", "application/json")
-        request_info.set_content_from_parsable(self.request_adapter, "application/json", body)
-        return request_info
-    
-    def to_post_request_information(self,body: SelfWeightLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
-        """
-        Creates a self-weight load for a load case.The load case must exist and be a Primary load case.Returns 409 if a self-weight load already exists for the case.The case is taken from the route — do not include it in the body.
-        param body: DTO for creating a new self-weight load.Only one self-weight load is permitted per load case.Use PUT /self-weight/{case} to create or replace.
-        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: RequestInformation
-        """
-        if body is None:
-            raise TypeError("body cannot be null.")
-        request_info = RequestInformation(Method.POST, self.url_template, self.path_parameters)
         request_info.configure(request_configuration)
         request_info.headers.try_add("Accept", "application/json")
         request_info.set_content_from_parsable(self.request_adapter, "application/json", body)
@@ -201,13 +159,6 @@ class WithCaseItemRequestBuilder(BaseRequestBuilder):
     
     @dataclass
     class WithCaseItemRequestBuilderPatchRequestConfiguration(RequestConfiguration[QueryParameters]):
-        """
-        Configuration for the request such as headers, query parameters, and middleware options.
-        """
-        warn("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.", DeprecationWarning)
-    
-    @dataclass
-    class WithCaseItemRequestBuilderPostRequestConfiguration(RequestConfiguration[QueryParameters]):
         """
         Configuration for the request such as headers, query parameters, and middleware options.
         """

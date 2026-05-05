@@ -16,8 +16,6 @@ class NodeRestraintUpdate(Parsable):
     """
     # 6-character active direction code for TX,TY,TZ,RX,RY,RZ.Each character: B=Both, P=Positive only, N=Negative only.
     active_direction: Optional[str] = None
-    # Whether this is a general restraint.
-    general_restraint: Optional[bool] = None
     # The node number that identifies which restraint to update.Required for bulk PATCH (PATCH /restraints/bulk).Ignored for single-node PATCH (PATCH /{key}/restraint) — the route value is used instead.
     node: Optional[int] = None
     # 6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Fixed (prevents movement), R=Released (allows movement), S=Spring (movement governed by a spring stiffness), V=Variable spring (multiple stiffnesses via a stiffness-vs-deflection table), P=Plastic (upper force/moment limit on the reaction), N=Friction (upper limit on reaction proportional to the normal-axis reaction).
@@ -103,7 +101,6 @@ class NodeRestraintUpdate(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "activeDirection": lambda n : setattr(self, 'active_direction', n.get_str_value()),
-            "generalRestraint": lambda n : setattr(self, 'general_restraint', n.get_bool_value()),
             "node": lambda n : setattr(self, 'node', n.get_int_value()),
             "restraintCode": lambda n : setattr(self, 'restraint_code', n.get_str_value()),
             "rxPlasticLimit": lambda n : setattr(self, 'rx_plastic_limit', n.get_float_value()),
@@ -145,7 +142,6 @@ class NodeRestraintUpdate(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_str_value("activeDirection", self.active_direction)
-        writer.write_bool_value("generalRestraint", self.general_restraint)
         writer.write_int_value("node", self.node)
         writer.write_str_value("restraintCode", self.restraint_code)
         writer.write_float_value("rxPlasticLimit", self.rx_plastic_limit)

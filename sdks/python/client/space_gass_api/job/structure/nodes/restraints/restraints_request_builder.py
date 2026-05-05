@@ -17,6 +17,7 @@ if TYPE_CHECKING:
     from .....models.node_restraint import NodeRestraint
     from .....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
+    from .set_general.set_general_request_builder import SetGeneralRequestBuilder
 
 class RestraintsRequestBuilder(BaseRequestBuilder):
     """
@@ -80,6 +81,15 @@ class RestraintsRequestBuilder(BaseRequestBuilder):
         from .bulk.bulk_request_builder import BulkRequestBuilder
 
         return BulkRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def set_general(self) -> SetGeneralRequestBuilder:
+        """
+        The setGeneral property
+        """
+        from .set_general.set_general_request_builder import SetGeneralRequestBuilder
+
+        return SetGeneralRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class RestraintsRequestBuilderGetQueryParameters():

@@ -83,7 +83,7 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads.Item
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.SelfWeightLoad>(requestInfo, global::SpaceGassApi.Models.SelfWeightLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Updates an existing self-weight load. Only provided fields are updated.The load case must be a Primary load case.
+        /// Updates an existing self-weight load. Only provided fields are updated.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SelfWeightLoad"/></returns>
         /// <param name="body">DTO for updating an existing self-weight load.Only fields included in the request are updated; omit a field to keep its current value.</param>
@@ -108,37 +108,6 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads.Item
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-            };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.SelfWeightLoad>(requestInfo, global::SpaceGassApi.Models.SelfWeightLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
-        }
-        /// <summary>
-        /// Creates a self-weight load for a load case.The load case must exist and be a Primary load case.Returns 409 if a self-weight load already exists for the case.The case is taken from the route — do not include it in the body.
-        /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.SelfWeightLoad"/></returns>
-        /// <param name="body">DTO for creating a new self-weight load.Only one self-weight load is permitted per load case.Use PUT /self-weight/{case} to create or replace.</param>
-        /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
-        /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public async Task<global::SpaceGassApi.Models.SelfWeightLoad?> PostAsync(global::SpaceGassApi.Models.SelfWeightLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
-        {
-#nullable restore
-#else
-        public async Task<global::SpaceGassApi.Models.SelfWeightLoad> PostAsync(global::SpaceGassApi.Models.SelfWeightLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
-        {
-#endif
-            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
-            var requestInfo = ToPostRequestInformation(body, requestConfiguration);
-            var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
-            {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.SelfWeightLoad>(requestInfo, global::SpaceGassApi.Models.SelfWeightLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -181,7 +150,7 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads.Item
             return requestInfo;
         }
         /// <summary>
-        /// Updates an existing self-weight load. Only provided fields are updated.The load case must be a Primary load case.
+        /// Updates an existing self-weight load. Only provided fields are updated.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">DTO for updating an existing self-weight load.Only fields included in the request are updated; omit a field to keep its current value.</param>
@@ -197,28 +166,6 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads.Item
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = new RequestInformation(Method.PATCH, UrlTemplate, PathParameters);
-            requestInfo.Configure(requestConfiguration);
-            requestInfo.Headers.TryAdd("Accept", "application/json");
-            requestInfo.SetContentFromParsable(RequestAdapter, "application/json", body);
-            return requestInfo;
-        }
-        /// <summary>
-        /// Creates a self-weight load for a load case.The load case must exist and be a Primary load case.Returns 409 if a self-weight load already exists for the case.The case is taken from the route — do not include it in the body.
-        /// </summary>
-        /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for creating a new self-weight load.Only one self-weight load is permitted per load case.Use PUT /self-weight/{case} to create or replace.</param>
-        /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.SelfWeightLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
-        {
-#nullable restore
-#else
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.SelfWeightLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
-        {
-#endif
-            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
-            var requestInfo = new RequestInformation(Method.POST, UrlTemplate, PathParameters);
             requestInfo.Configure(requestConfiguration);
             requestInfo.Headers.TryAdd("Accept", "application/json");
             requestInfo.SetContentFromParsable(RequestAdapter, "application/json", body);
@@ -255,14 +202,6 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads.Item
         [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class WithCaseItemRequestBuilderPatchRequestConfiguration : RequestConfiguration<DefaultQueryParameters>
-        {
-        }
-        /// <summary>
-        /// Configuration for the request such as headers, query parameters, and middleware options.
-        /// </summary>
-        [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
-        [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-        public partial class WithCaseItemRequestBuilderPostRequestConfiguration : RequestConfiguration<DefaultQueryParameters>
         {
         }
     }

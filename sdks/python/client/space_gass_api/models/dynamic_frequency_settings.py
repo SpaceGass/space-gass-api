@@ -43,7 +43,7 @@ class DynamicFrequencySettings(Parsable):
     plate_type: Optional[PlateType] = None
     # Whether to retain results of other load cases during analysis.When true, results from previously analysed load cases are preserved.
     retain_cases: Optional[bool] = None
-    # Matrix solver type used by the analysis engine.
+    # Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS's `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Pardiso, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).
     solver_type: Optional[SolverType] = None
     # Whether to stabilize unrestrained nodes during analysis.When true, temporary restraints are added to prevent instability.
     stabilize_unrestrained_nodes: Optional[bool] = None
