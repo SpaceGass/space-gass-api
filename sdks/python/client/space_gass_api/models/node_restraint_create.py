@@ -16,11 +16,9 @@ class NodeRestraintCreate(Parsable):
     """
     # 6-character active direction code for TX,TY,TZ,RX,RY,RZ.
     active_direction: Optional[str] = None
-    # Whether this is a general restraint.
-    general_restraint: Optional[bool] = None
     # The node Id to create the restraint for.Optional in body — if omitted, set from the route parameter by the controller.
     node: Optional[int] = None
-    # 6-character restraint code for TX,TY,TZ,RX,RY,RZ.
+    # 6-character restraint code for TX,TY,TZ,RX,RY,RZ. Each character is one of:F = Fixed (prevents movement);R = Released (allows movement);S = Spring (movement governed by a spring stiffness);V = Variable spring (multiple stiffnesses via a stiffness-vs-deflection table);P = Plastic (upper force/moment limit on the reaction);N = Friction (upper limit proportional to the normal-axis reaction).
     restraint_code: Optional[str] = None
     # Rotational X plastic limit. Unit: Moment (see GET /job/units).
     rx_plastic_limit: Optional[float] = None
@@ -103,7 +101,6 @@ class NodeRestraintCreate(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "activeDirection": lambda n : setattr(self, 'active_direction', n.get_str_value()),
-            "generalRestraint": lambda n : setattr(self, 'general_restraint', n.get_bool_value()),
             "node": lambda n : setattr(self, 'node', n.get_int_value()),
             "restraintCode": lambda n : setattr(self, 'restraint_code', n.get_str_value()),
             "rxPlasticLimit": lambda n : setattr(self, 'rx_plastic_limit', n.get_float_value()),
@@ -145,7 +142,6 @@ class NodeRestraintCreate(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_str_value("activeDirection", self.active_direction)
-        writer.write_bool_value("generalRestraint", self.general_restraint)
         writer.write_int_value("node", self.node)
         writer.write_str_value("restraintCode", self.restraint_code)
         writer.write_float_value("rxPlasticLimit", self.rx_plastic_limit)

@@ -21,11 +21,9 @@ namespace SpaceGassApi.Models
 #else
         public string ActiveDirection { get; set; }
 #endif
-        /// <summary>Whether this is a general restraint.</summary>
-        public bool? GeneralRestraint { get; set; }
         /// <summary>The node Id to create the restraint for.Optional in body — if omitted, set from the route parameter by the controller.</summary>
         public int? Node { get; set; }
-        /// <summary>6-character restraint code for TX,TY,TZ,RX,RY,RZ.</summary>
+        /// <summary>6-character restraint code for TX,TY,TZ,RX,RY,RZ. Each character is one of:F = Fixed (prevents movement);R = Released (allows movement);S = Spring (movement governed by a spring stiffness);V = Variable spring (multiple stiffnesses via a stiffness-vs-deflection table);P = Plastic (upper force/moment limit on the reaction);N = Friction (upper limit proportional to the normal-axis reaction).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? RestraintCode { get; set; }
@@ -142,7 +140,6 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "activeDirection", n => { ActiveDirection = n.GetStringValue(); } },
-                { "generalRestraint", n => { GeneralRestraint = n.GetBoolValue(); } },
                 { "node", n => { Node = n.GetIntValue(); } },
                 { "restraintCode", n => { RestraintCode = n.GetStringValue(); } },
                 { "rxPlasticLimit", n => { RxPlasticLimit = n.GetDoubleValue(); } },
@@ -182,7 +179,6 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("activeDirection", ActiveDirection);
-            writer.WriteBoolValue("generalRestraint", GeneralRestraint);
             writer.WriteIntValue("node", Node);
             writer.WriteStringValue("restraintCode", RestraintCode);
             writer.WriteDoubleValue("rxPlasticLimit", RxPlasticLimit);

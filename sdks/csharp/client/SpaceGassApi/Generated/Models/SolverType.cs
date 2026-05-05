@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Matrix solver type used by the analysis engine.</summary>
+    /// <summary>Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS&apos;s `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Pardiso, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum SolverType
     {
@@ -14,6 +14,10 @@ namespace SpaceGassApi.Models
         [EnumMember(Value = "Wavefront")]
         #pragma warning disable CS1591
         Wavefront,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "SGX")]
+        #pragma warning disable CS1591
+        SGX,
         #pragma warning restore CS1591
     }
 }

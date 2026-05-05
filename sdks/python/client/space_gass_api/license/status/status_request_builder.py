@@ -14,45 +14,45 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from .....models.problem_details import ProblemDetails
-    from .....models.resource_metadata import ResourceMetadata
+    from ...models.license_status import LicenseStatus
+    from ...models.problem_details import ProblemDetails
 
-class MetadataRequestBuilder(BaseRequestBuilder):
+class StatusRequestBuilder(BaseRequestBuilder):
     """
-    Builds and executes requests for operations under /job/loads/self-weight-loads/metadata
+    Builds and executes requests for operations under /license/status
     """
     def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
         """
-        Instantiates a new MetadataRequestBuilder and sets the default values.
+        Instantiates a new StatusRequestBuilder and sets the default values.
         param path_parameters: The raw url or the url-template parameters for the request.
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/self-weight-loads/metadata", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/license/status", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[ResourceMetadata]:
+    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[LicenseStatus]:
         """
-        Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and allowed value ranges.
+        Returns the current licensing status: backend type, organisation, and all held modules.This endpoint is accessible even when the API is unlicensed so clients can diagnosewhy their other requests are being refused.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ResourceMetadata]
+        Returns: Optional[LicenseStatus]
         """
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from .....models.problem_details import ProblemDetails
+        from ...models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "401": ProblemDetails,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.resource_metadata import ResourceMetadata
+        from ...models.license_status import LicenseStatus
 
-        return await self.request_adapter.send_async(request_info, ResourceMetadata, error_mapping)
+        return await self.request_adapter.send_async(request_info, LicenseStatus, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and allowed value ranges.
+        Returns the current licensing status: backend type, organisation, and all held modules.This endpoint is accessible even when the API is unlicensed so clients can diagnosewhy their other requests are being refused.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -61,18 +61,18 @@ class MetadataRequestBuilder(BaseRequestBuilder):
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def with_url(self,raw_url: str) -> MetadataRequestBuilder:
+    def with_url(self,raw_url: str) -> StatusRequestBuilder:
         """
         Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         param raw_url: The raw URL to use for the request builder.
-        Returns: MetadataRequestBuilder
+        Returns: StatusRequestBuilder
         """
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
-        return MetadataRequestBuilder(self.request_adapter, raw_url)
+        return StatusRequestBuilder(self.request_adapter, raw_url)
     
     @dataclass
-    class MetadataRequestBuilderGetRequestConfiguration(RequestConfiguration[QueryParameters]):
+    class StatusRequestBuilderGetRequestConfiguration(RequestConfiguration[QueryParameters]):
         """
         Configuration for the request such as headers, query parameters, and middleware options.
         """

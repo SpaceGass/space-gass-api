@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Loads.SelfWeightLoads.Bulk;
 using SpaceGassApi.Job.Loads.SelfWeightLoads.Item;
 using SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata;
 using SpaceGassApi.Models;
@@ -19,6 +20,11 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SelfWeightLoadsRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The bulk property</summary>
+        public global::SpaceGassApi.Job.Loads.SelfWeightLoads.Bulk.BulkRequestBuilder Bulk
+        {
+            get => new global::SpaceGassApi.Job.Loads.SelfWeightLoads.Bulk.BulkRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The metadata property</summary>
         public global::SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata.MetadataRequestBuilder Metadata
         {
@@ -66,7 +72,7 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
         {
         }
         /// <summary>
-        /// Gets all self-weight loads with optional filtering and pagination.Use the &apos;cases&apos; query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by case number ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.SelfWeightLoad&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -92,7 +98,38 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Gets all self-weight loads with optional filtering and pagination.Use the &apos;cases&apos; query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by case number ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Creates a new load. The load case must exist and be a Primary load case.
+        /// </summary>
+        /// <returns>A <see cref="Stream"/></returns>
+        /// <param name="body">DTO for creating a new self-weight load.Only one self-weight load is permitted per load case (case is the entire key).</param>
+        /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
+        /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public async Task<Stream?> PostAsync(global::SpaceGassApi.Models.SelfWeightLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
+#nullable restore
+#else
+        public async Task<Stream> PostAsync(global::SpaceGassApi.Models.SelfWeightLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        {
+#endif
+            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
+            var requestInfo = ToPostRequestInformation(body, requestConfiguration);
+            var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
+            {
+                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+            };
+            return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
+        }
+        /// <summary>
+        /// Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -111,6 +148,28 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
             return requestInfo;
         }
         /// <summary>
+        /// Creates a new load. The load case must exist and be a Primary load case.
+        /// </summary>
+        /// <returns>A <see cref="RequestInformation"/></returns>
+        /// <param name="body">DTO for creating a new self-weight load.Only one self-weight load is permitted per load case (case is the entire key).</param>
+        /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.SelfWeightLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        {
+#nullable restore
+#else
+        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.SelfWeightLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        {
+#endif
+            if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
+            var requestInfo = new RequestInformation(Method.POST, UrlTemplate, PathParameters);
+            requestInfo.Configure(requestConfiguration);
+            requestInfo.Headers.TryAdd("Accept", "application/json");
+            requestInfo.SetContentFromParsable(RequestAdapter, "application/json", body);
+            return requestInfo;
+        }
+        /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.SelfWeightLoads.SelfWeightLoadsRequestBuilder"/></returns>
@@ -120,7 +179,7 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
             return new global::SpaceGassApi.Job.Loads.SelfWeightLoads.SelfWeightLoadsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets all self-weight loads with optional filtering and pagination.Use the &apos;cases&apos; query parameter to filter by specific load cases.Returns an empty array when no loads match the filter — never 404.Results are sorted by case number ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class SelfWeightLoadsRequestBuilderGetQueryParameters 
@@ -146,6 +205,14 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
         [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class SelfWeightLoadsRequestBuilderGetRequestConfiguration : RequestConfiguration<global::SpaceGassApi.Job.Loads.SelfWeightLoads.SelfWeightLoadsRequestBuilder.SelfWeightLoadsRequestBuilderGetQueryParameters>
+        {
+        }
+        /// <summary>
+        /// Configuration for the request such as headers, query parameters, and middleware options.
+        /// </summary>
+        [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
+        [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
+        public partial class SelfWeightLoadsRequestBuilderPostRequestConfiguration : RequestConfiguration<DefaultQueryParameters>
         {
         }
     }

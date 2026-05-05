@@ -9,44 +9,44 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
 using System;
-namespace SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata
+namespace SpaceGassApi.License.Status
 {
     /// <summary>
-    /// Builds and executes requests for operations under \job\loads\self-weight-loads\metadata
+    /// Builds and executes requests for operations under \license\status
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public partial class MetadataRequestBuilder : BaseRequestBuilder
+    public partial class StatusRequestBuilder : BaseRequestBuilder
     {
         /// <summary>
-        /// Instantiates a new <see cref="global::SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata.MetadataRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::SpaceGassApi.License.Status.StatusRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MetadataRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/self-weight-loads/metadata", pathParameters)
+        public StatusRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/license/status", pathParameters)
         {
         }
         /// <summary>
-        /// Instantiates a new <see cref="global::SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata.MetadataRequestBuilder"/> and sets the default values.
+        /// Instantiates a new <see cref="global::SpaceGassApi.License.Status.StatusRequestBuilder"/> and sets the default values.
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MetadataRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/self-weight-loads/metadata", rawUrl)
+        public StatusRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/license/status", rawUrl)
         {
         }
         /// <summary>
-        /// Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and allowed value ranges.
+        /// Returns the current licensing status: backend type, organisation, and all held modules.This endpoint is accessible even when the API is unlicensed so clients can diagnosewhy their other requests are being refused.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.ResourceMetadata"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.LicenseStatus"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.ResourceMetadata?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.LicenseStatus?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.ResourceMetadata> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.LicenseStatus> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
@@ -54,10 +54,10 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata
             {
                 { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ResourceMetadata>(requestInfo, global::SpaceGassApi.Models.ResourceMetadata.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LicenseStatus>(requestInfo, global::SpaceGassApi.Models.LicenseStatus.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Returns schema metadata for this load entity type: field definitions, count, and key structure.Field definitions include names, data types, units, and allowed value ranges.
+        /// Returns the current licensing status: backend type, organisation, and all held modules.This endpoint is accessible even when the API is unlicensed so clients can diagnosewhy their other requests are being refused.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -78,18 +78,18 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata
         /// <summary>
         /// Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata.MetadataRequestBuilder"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.License.Status.StatusRequestBuilder"/></returns>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
-        public global::SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata.MetadataRequestBuilder WithUrl(string rawUrl)
+        public global::SpaceGassApi.License.Status.StatusRequestBuilder WithUrl(string rawUrl)
         {
-            return new global::SpaceGassApi.Job.Loads.SelfWeightLoads.Metadata.MetadataRequestBuilder(rawUrl, RequestAdapter);
+            return new global::SpaceGassApi.License.Status.StatusRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.
         /// </summary>
         [Obsolete("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.")]
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-        public partial class MetadataRequestBuilderGetRequestConfiguration : RequestConfiguration<DefaultQueryParameters>
+        public partial class StatusRequestBuilderGetRequestConfiguration : RequestConfiguration<DefaultQueryParameters>
         {
         }
     }

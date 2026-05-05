@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
 #else
         public string ActiveDirection { get; set; }
 #endif
-        /// <summary>Whether this is a general restraint.</summary>
+        /// <summary>Whether this is the general restraint for the model.</summary>
         public bool? GeneralRestraint { get; set; }
         /// <summary>The node Id this restraint applies to.</summary>
         public int? Node { get; set; }

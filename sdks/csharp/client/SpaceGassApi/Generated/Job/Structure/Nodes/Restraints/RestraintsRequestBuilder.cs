@@ -4,6 +4,7 @@ using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Structure.Nodes.Restraints.Bulk;
+using SpaceGassApi.Job.Structure.Nodes.Restraints.SetGeneral;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -22,6 +23,11 @@ namespace SpaceGassApi.Job.Structure.Nodes.Restraints
         public global::SpaceGassApi.Job.Structure.Nodes.Restraints.Bulk.BulkRequestBuilder Bulk
         {
             get => new global::SpaceGassApi.Job.Structure.Nodes.Restraints.Bulk.BulkRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The setGeneral property</summary>
+        public global::SpaceGassApi.Job.Structure.Nodes.Restraints.SetGeneral.SetGeneralRequestBuilder SetGeneral
+        {
+            get => new global::SpaceGassApi.Job.Structure.Nodes.Restraints.SetGeneral.SetGeneralRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Structure.Nodes.Restraints.RestraintsRequestBuilder"/> and sets the default values.

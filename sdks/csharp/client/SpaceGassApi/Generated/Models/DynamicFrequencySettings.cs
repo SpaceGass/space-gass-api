@@ -47,7 +47,7 @@ namespace SpaceGassApi.Models
         public global::SpaceGassApi.Models.PlateType? PlateType { get; set; }
         /// <summary>Whether to retain results of other load cases during analysis.When true, results from previously analysed load cases are preserved.</summary>
         public bool? RetainCases { get; set; }
-        /// <summary>Matrix solver type used by the analysis engine.</summary>
+        /// <summary>Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS&apos;s `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Pardiso, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).</summary>
         public global::SpaceGassApi.Models.SolverType? SolverType { get; set; }
         /// <summary>Whether to stabilize unrestrained nodes during analysis.When true, temporary restraints are added to prevent instability.</summary>
         public bool? StabilizeUnrestrainedNodes { get; set; }

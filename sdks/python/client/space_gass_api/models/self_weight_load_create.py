@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class SelfWeightLoadCreate(Parsable):
     """
-    DTO for creating a new self-weight load.Only one self-weight load is permitted per load case.Use PUT /self-weight/{case} to create or replace.
+    DTO for creating a new self-weight load.Only one self-weight load is permitted per load case (case is the entire key).
     """
     # Gravitational acceleration in the global X direction.
     acceleration_x: Optional[float] = None

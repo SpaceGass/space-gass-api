@@ -16,7 +16,7 @@ class NodeRestraint(Parsable):
     """
     # 6-character active direction code for TX,TY,TZ,RX,RY,RZ.Each character: B=Both, P=Positive only, N=Negative only.
     active_direction: Optional[str] = None
-    # Whether this is a general restraint.
+    # Whether this is the general restraint for the model.
     general_restraint: Optional[bool] = None
     # The node Id this restraint applies to.
     node: Optional[int] = None
