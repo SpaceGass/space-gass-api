@@ -47,7 +47,6 @@ from space_gass_api.models.node_restraint_create import NodeRestraintCreate
 from space_gass_api.models.save_job_request import SaveJobRequest
 from space_gass_api.models.section_library_create import SectionLibraryCreate
 from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
-from space_gass_api.models.optimization_method import OptimizationMethod
 from space_gass_api.models.solver_type import SolverType
 from space_gass_api.models.static_settings_update import StaticSettingsUpdate
 
@@ -249,18 +248,13 @@ async def main() -> int:
         print()
 
         # == Step 13 — Configure the static analysis settings ==========
-        # PATCH the stored static analysis settings so subsequent runs
-        # pick up the values you want. Pin SolverType to Pardiso and
-        # OptimizationMethod to Auto — the API's current stored defaults
-        # can leave the wavefront solver paired with
-        # OptimizationMethod = None, which crashes the solver on
-        # otherwise-valid models. Setting them explicitly matches what
-        # the SPACE GASS GUI applies when you press Analyse.
+        # PATCH the stored static analysis settings before running. The
+        # API currently only supports the Pardiso solver, so pin
+        # solver_type = Pardiso here.
         print("Configuring static analysis settings...")
         await client.job.analysis.static.settings.patch(
             StaticSettingsUpdate(
                 solver_type=SolverType.Pardiso,
-                optimization_method=OptimizationMethod.Auto,
             ))
 
         # == Step 14 — Run a linear static analysis ====================

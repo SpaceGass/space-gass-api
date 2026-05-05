@@ -220,19 +220,14 @@ try
     Console.WriteLine();
 
     // == Step 13 — Configure the static analysis settings ==========
-    // PATCH the stored static analysis settings so subsequent runs
-    // pick up the values you want. Pin SolverType to Pardiso and
-    // OptimizationMethod to Auto — the API's current stored defaults
-    // can leave the wavefront solver paired with
-    // OptimizationMethod = None, which crashes the solver on
-    // otherwise-valid models. Setting them explicitly matches what
-    // the SPACE GASS GUI applies when you press Analyse.
+    // PATCH the stored static analysis settings before running. The
+    // API currently only supports the Pardiso solver, so pin
+    // SolverType = Pardiso here.
     Console.WriteLine("Configuring static analysis settings...");
     await client.Job.Analysis.Static.Settings.PatchAsync(
         new StaticSettingsUpdate
         {
             SolverType = SolverType.Pardiso,
-            OptimizationMethod = OptimizationMethod.Auto,
         });
 
     // == Step 14 — Run a linear static analysis ====================
