@@ -156,8 +156,9 @@ async def main() -> int:
 
         # == Step 8 — Apply the self-weight load =======================
         print("Applying self-weight load...")
-        await client.job.loads.self_weight_loads.by_case_id(self_weight_case.id).post(
+        await client.job.loads.self_weight_loads.post(
             SelfWeightLoadCreate(
+                case=self_weight_case.id,
                 acceleration_x=0.0,
                 acceleration_y=-1.0,    # 1 G downward
                 acceleration_z=0.0,

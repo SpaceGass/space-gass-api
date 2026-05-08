@@ -33,6 +33,7 @@ const BODY_TYPE_OVERRIDES: Record<string, string> = {
   "POST /job/structure/materials/library": "MaterialLibraryCreate",
   "POST /job/loads/combination-load-cases": "CombinationLoadCaseCreate",
   "PATCH /job/loads/combination-load-cases/{id}": "CombinationLoadCaseUpdate",
+  "POST /job/structure/nodes/restraints/set-general": "SetGeneralRestraintRequest",
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

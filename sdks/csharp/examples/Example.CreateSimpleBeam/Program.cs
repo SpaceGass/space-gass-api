@@ -127,9 +127,10 @@ try
 
     // == Step 8 — Apply the self-weight load =======================
     Console.WriteLine("Applying self-weight load...");
-    await client.Job.Loads.SelfWeightLoads[selfWeightCase.Id!.Value].PostAsync(
+    await client.Job.Loads.SelfWeightLoads.PostAsync(
         new SelfWeightLoadCreate
         {
+            Case = selfWeightCase.Id,
             AccelerationX = 0.0,
             AccelerationY = -1.0,    // 1 G downward
             AccelerationZ = 0.0,
