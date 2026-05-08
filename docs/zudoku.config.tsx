@@ -1,6 +1,15 @@
 import React from "react";
 import type { ZudokuConfig } from "zudoku";
 
+// Build version — sourced from `info.x-space-gass-build` in the spec at
+// build time so the API reference label always tracks the current SDK
+// build (e.g. "Preview (build 14.50.75)") without manual updates.
+import openapiSpec from "../descriptions/preview/openapi.json";
+const SPACE_GASS_BUILD: string =
+  ((openapiSpec as { info?: { ["x-space-gass-build"]?: string } }).info?.[
+    "x-space-gass-build"
+  ]) ?? "preview";
+
 // --- SDK code snippet helpers ---
 
 function toPascalCase(segment: string): string {
@@ -284,6 +293,7 @@ const config: ZudokuConfig = {
       items: [
         "getting-started/introduction",
         "getting-started/quick-start",
+        "getting-started/using-the-sdk",
         "getting-started/support",
       ],
     },
@@ -292,7 +302,25 @@ const config: ZudokuConfig = {
       label: "Examples",
       icon: "play",
       items: [
-        "guides/examples/simple-beam",
+        {
+          type: "category",
+          label: "Tutorials",
+          collapsible: true,
+          collapsed: false,
+          items: [
+            "guides/examples/simple-beam",
+          ],
+        },
+        {
+          type: "category",
+          label: "Recipes",
+          collapsible: true,
+          collapsed: false,
+          items: [
+            // Add one MDX file per recipe under docs/pages/guides/examples/recipes/
+            // Each entry shows up as its own sidebar item.
+          ],
+        },
       ],
     },
     {
@@ -300,7 +328,6 @@ const config: ZudokuConfig = {
       label: "Guides",
       icon: "compass",
       items: [
-        "guides/sdk-terminology",
         "guides/authentication",
         "guides/service-automation",
         "guides/file-handling",
@@ -330,7 +357,7 @@ const config: ZudokuConfig = {
       type: "file",
       input: "../descriptions/preview/openapi.json",
       path: "/api",
-      label: "14.5.0 (Preview)",
+      label: `Preview (build ${SPACE_GASS_BUILD})`,
       options: {
         expandAllTags: false,
         expandApiInformation: true,

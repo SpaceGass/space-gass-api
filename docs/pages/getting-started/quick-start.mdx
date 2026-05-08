@@ -3,22 +3,31 @@ title: Quick Start
 description: Get started with the SpaceGass API in 5 minutes
 ---
 
-This guide walks you through connecting to the API, opening a project
-file, and reading nodes — using the SDK clients or plain HTTP.
+This guide walks you through connecting to the API, opening a built-in
+sample project, and reading nodes — using the SDK clients or plain
+HTTP. No project file of your own is required.
 
 ### Prerequisites
 
 - [SPACE GASS](https://www.spacegass.com/) installed on your machine
-- SPACE GASS has been opened at least once to initialize the required
+- SPACE GASS has been opened at least once to initialise the required
   data files
-- An existing `.sg` project file on disk
+- One of:
+  - **C#** — [.NET 8 SDK](https://dotnet.microsoft.com/download) (any
+    editor works; [Visual Studio Code](https://code.visualstudio.com/)
+    + the C# Dev Kit extension is a free option), or
+  - **Python** — [Python 3.10 or newer](https://www.python.org/downloads/)
+    (any editor works; VS Code + the Python extension is a free option), or
+  - **Just an HTTP client** — `curl` is built into Windows 10+;
+    [Postman](https://www.postman.com/) and [Insomnia](https://insomnia.rest/)
+    also work.
 
 <Stepper>
 1. **Start the Service**
 
    The API runs as a local server. The easiest way to start it is to
    double-click the **SPACE GASS API** shortcut under the SPACE GASS
-   windows application folder.
+   Windows application folder.
 
    Alternatively, open a terminal and run:
 
@@ -49,34 +58,34 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    from your browser — no SDK or code required. This is the quickest
    way to get familiar with the API.
 
-   To try it out, use the **Open** endpoint to open a `.sg` project
-   file, then use any of the **GET** endpoints to read structural
-   data — nodes, members, sections, and more.
-
    When you are ready to integrate the API into your own code,
    continue with the steps below.
 
-1. **Install the SDK**
+1. **Create a Project Folder and Install the SDK**
 
    The API includes generated SDK clients for C# and Python. These
    handle serialisation and give you typed methods for every endpoint.
-   If you prefer raw HTTP requests, you can skip this step and use
-   curl or any HTTP client.
+   If you prefer raw HTTP, you can skip this step and use the **curl**
+   tab in every snippet below.
 
    <CodeTabs>
-   ```csharp title="C#"
-   // From your project directory, add the NuGet package:
+   ```bash title="C#"
+   # In a fresh folder:
+   dotnet new console -n SpaceGassQuickStart
+   cd SpaceGassQuickStart
    dotnet add package SpaceGassApi
    ```
 
-   ```python title="Python"
-   # Install from PyPI:
+   ```bash title="Python"
+   # In a fresh folder:
+   python -m venv .venv
+   .venv\Scripts\activate          # macOS/Linux: source .venv/bin/activate
    pip install space-gass-api
    ```
 
    ```bash title="curl"
-   # No installation needed — curl is included with Windows 10+.
-   # You can also use any HTTP client (Postman, Insomnia, etc.)
+   # No installation needed — curl is built into Windows 10+ and most
+   # macOS/Linux installations. Postman or Insomnia work too.
    ```
    </CodeTabs>
 
@@ -91,12 +100,14 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    <CodeTabs>
    ```csharp title="C#"
    using SpaceGassApi;
+   using SpaceGassApi.Models;
 
    var client = SpaceGassApiClient.CreateClient();
    ```
 
    ```python title="Python"
    from space_gass_api import SpaceGassApiClient
+   import space_gass_api.models as models
 
    client = SpaceGassApiClient.create_client()
    ```
@@ -107,27 +118,33 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    ```
    </CodeTabs>
 
-1. **Open a Project File**
+1. **Open a Sample Project**
+
+   `Job.OpenSample` loads one of the built-in SPACE GASS samples as a
+   new unsaved job — perfect for getting going without your own `.sg`
+   file. List available samples with `GET /file/samples` (or
+   [browse them in Swagger](http://localhost:34560/swagger#/File/get_file_samples));
+   here we'll open `Portal Frame.SG`, which ships with every install.
+
+   When you have your own file, use `Job.Open` with `FilePath` instead.
+   See [File Handling](/guides/file-handling) for the full set of
+   open/save/close patterns.
 
    <CodeTabs>
    ```csharp title="C#"
-   using SpaceGassApi.Models;
-
-   await client.Job.Open.PostAsync(
-       new OpenJobRequest { FilePath = @"C:\Projects\MyStructure.sg" });
+   await client.Job.OpenSample.PostAsync(
+       new OpenSampleRequest { FileName = "Portal Frame.SG" });
    ```
 
    ```python title="Python"
-   import space_gass_api.models as models
-
-   await client.job.open.post(
-       models.OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
+   await client.job.open_sample.post(
+       models.OpenSampleRequest(file_name="Portal Frame.SG"))
    ```
 
    ```bash title="curl"
-   curl -X POST http://localhost:34560/api/v1/job/open \
+   curl -X POST http://localhost:34560/api/v1/job/open-sample \
      -H "Content-Type: application/json" \
-     -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
+     -d '{"fileName": "Portal Frame.SG"}'
    ```
    </CodeTabs>
 
@@ -171,6 +188,79 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    ```
    </CodeTabs>
 </Stepper>
+
+## Putting It All Together
+
+Drop this complete program into the project you created in Step 3 and
+run it. It opens the `Portal Frame.SG` sample, lists every node, and
+closes cleanly.
+
+<CodeTabs>
+```csharp title="C# (Program.cs)"
+using SpaceGassApi;
+using SpaceGassApi.Models;
+
+var client = SpaceGassApiClient.CreateClient();
+
+try
+{
+    await client.Job.OpenSample.PostAsync(
+        new OpenSampleRequest { FileName = "Portal Frame.SG" });
+
+    var nodes = await client.Job.Structure.Nodes.GetAsync();
+    foreach (var node in nodes!)
+    {
+        Console.WriteLine($"Node {node.Id}: ({node.X}, {node.Y}, {node.Z})");
+    }
+}
+finally
+{
+    await client.Job.Close.PostAsync();
+}
+```
+
+```python title="Python (main.py)"
+import asyncio
+
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
+
+
+async def main():
+    client = SpaceGassApiClient.create_client()
+    try:
+        await client.job.open_sample.post(
+            models.OpenSampleRequest(file_name="Portal Frame.SG"))
+
+        nodes = await client.job.structure.nodes.get()
+        for node in nodes:
+            print(f"Node {node.id}: ({node.x}, {node.y}, {node.z})")
+    finally:
+        await client.job.close.post()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
+```bash title="curl"
+# Open the sample, list nodes, close the job. Run from a terminal —
+# bash on Linux/macOS or Git Bash / WSL on Windows.
+curl -X POST http://localhost:34560/api/v1/job/open-sample \
+  -H "Content-Type: application/json" \
+  -d '{"fileName": "Portal Frame.SG"}'
+
+curl http://localhost:34560/api/v1/job/structure/nodes
+
+curl -X POST http://localhost:34560/api/v1/job/close
+```
+</CodeTabs>
+
+The C# and Python versions are also runnable as
+[Example.QuickStart](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.QuickStart)
+(C#) and
+[quick_start](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/quick_start)
+(Python) in the repo — clone and run, no copy-paste needed.
 
 ## Next Steps
 
