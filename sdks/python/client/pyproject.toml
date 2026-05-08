@@ -16,7 +16,6 @@ keywords = ["spacegass", "structural-analysis", "api", "sdk", "kiota"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
     "Topic :: Scientific/Engineering",
 ]
@@ -30,4 +29,7 @@ Repository = "https://github.com/Spacegass/space-gass-api"
 Issues = "https://github.com/Spacegass/space-gass-api/issues"
 
 [tool.setuptools.packages.find]
-include = ["space_gass_api*", "extensions*"]
+include = ["space_gass_api*"]
+
+[tool.setuptools]
+py-modules = ["space_gass_api_extensions"]

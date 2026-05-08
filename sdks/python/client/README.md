@@ -5,17 +5,17 @@ Official Python SDK for the SPACE GASS structural analysis API.
 ## Quick Start
 
 ```python
-from extensions.client_extensions import create_client
-from space_gass_api.models.node_create import NodeCreate
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
 
-client = create_client()
+client = SpaceGassApiClient.create_client()
 
 # Create a new project
 await client.job.new.post()
 
 # Add a node
 node = await client.job.structure.nodes.post(
-    NodeCreate(x=0, y=0, z=0))
+    models.NodeCreate(x=0, y=0, z=0))
 
 # Close the project
 await client.job.close.post()

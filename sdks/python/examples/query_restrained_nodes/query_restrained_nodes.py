@@ -18,9 +18,9 @@ import sys
 
 from kiota_abstractions.base_request_configuration import RequestConfiguration
 
-from extensions.client_extensions import create_client
-from space_gass_api.models.open_job_request import OpenJobRequest
-from space_gass_api.models.node_type_filter import NodeTypeFilter
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
+
 from space_gass_api.job.structure.nodes.nodes_request_builder import NodesRequestBuilder
 from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
@@ -30,12 +30,12 @@ PROJECT_FILE_PATH = r"C:\Path\To\Your\Project.sg"
 
 
 async def main() -> int:
-    client = create_client()
+    client = SpaceGassApiClient.create_client()
 
     try:
         # -- Open the project ------------------------------------------
         print(f"Opening project: {PROJECT_FILE_PATH}")
-        await client.job.open.post(OpenJobRequest(file_path=PROJECT_FILE_PATH))
+        await client.job.open.post(models.OpenJobRequest(file_path=PROJECT_FILE_PATH))
         print("Project opened successfully.")
         print()
 
@@ -43,7 +43,7 @@ async def main() -> int:
         print("Querying restrained nodes...")
 
         query_params = NodesRequestBuilder.NodesRequestBuilderGetQueryParameters(
-            node_type=NodeTypeFilter.Restrained,
+            node_type=models.NodeTypeFilter.Restrained,
         )
         config = RequestConfiguration(query_parameters=query_params)
         restrained_nodes = await client.job.structure.nodes.get(request_configuration=config)

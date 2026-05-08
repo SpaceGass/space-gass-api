@@ -20,9 +20,9 @@ var client = SpaceGassApiClient.CreateClient();
 ```
 
 ```python title="Python"
-from extensions.client_extensions import create_client
+from space_gass_api import SpaceGassApiClient
 
-client = create_client()
+client = SpaceGassApiClient.create_client()
 # Connects to http://localhost:34560/api/v1
 ```
 
@@ -41,7 +41,7 @@ var client = SpaceGassApiClient.CreateClient("http://localhost:8080/api/v1");
 ```
 
 ```python title="Python"
-client = create_client("http://localhost:8080/api/v1")
+client = SpaceGassApiClient.create_client("http://localhost:8080/api/v1")
 ```
 </CodeTabs>
 

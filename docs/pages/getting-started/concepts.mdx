@@ -1,0 +1,148 @@
+---
+title: Concepts
+description: The mental model for working with the SPACE GASS API — the active job, the entity model, units, and common pitfalls
+---
+
+This page is the conceptual map of the API. It does not show code — the
+[Quick Start](/getting-started/quick-start) and the
+[Examples](/guides/examples/simple-beam) cover that. Read this once
+and the calls in those examples will make sense.
+
+## The Active Job
+
+The API is **stateful** with respect to a single active job. At any
+moment the service is in one of two states:
+
+- **No job open** — most endpoints under `/job/...` will return
+  `409 Conflict` until you open one.
+- **One job open** — every `/job/...` call acts on that job. There is
+  no way to open two jobs simultaneously.
+
+You move between states with three endpoints:
+
+| Endpoint | When to use |
+|---|---|
+| `POST /job/new` | Start fresh, in-memory only — no file on disk yet. |
+| `POST /job/open` | Load an existing `.sg` file from disk into the active job. |
+| `POST /job/open-sample` | Load one of the built-in sample projects (`Portal Frame.SG`, etc.) — useful for getting started without a file of your own. List them at `GET /file/samples`. |
+| `POST /job/save` | Persist the current job (use `Save As` semantics by passing a `filePath`). |
+| `POST /job/close` | Close the active job and return to the no-job-open state. |
+
+The recommended pattern in your code is **`open` → work → `close`** in
+a `try / finally` so the job is always cleaned up, even if a step in
+the middle throws. The [Quick Start](/getting-started/quick-start) and
+the [Simple Beam tutorial](/guides/examples/simple-beam) both follow
+this pattern.
+
+### Why this matters
+
+If you call `GET /job/structure/nodes` (or any other entity endpoint)
+without an open job, you'll see a `409 Conflict` with a
+`ProblemDetails` body explaining the active-job requirement. This is
+the most common error a new user hits. The fix is always: open a job
+first.
+
+## The Entity Model
+
+A SPACE GASS job is built from a small number of entity types. Most of
+the API surface is CRUD over these:
+
+| Entity | Path prefix | What it represents |
+|---|---|---|
+| **Node** | `/job/structure/nodes` | A point in 3D space (x, y, z). Identified by an `Id`. |
+| **Member** | `/job/structure/members` | A 1D line element between two nodes. References a section + material. |
+| **Plate** | `/job/structure/plates` | A 2D shell element on three or four nodes. References a section + material. |
+| **Section** | `/job/structure/sections` | A cross-section (user-defined or pulled from a library). |
+| **Material** | `/job/structure/materials` | A material (user-defined or pulled from a library). |
+| **Node restraint** | `/job/structure/node-restraints` | A support condition (fixed, pinned, spring, etc.) attached to a node. Top-level entity, not a sub-resource of nodes. |
+| **Node constraint** | `/job/structure/node-constraints` | A master/slave kinematic relationship between nodes. |
+| **Member offset** | `/job/structure/member-offsets` | Rigid end zones at each end of a member. Top-level entity. |
+| **Load case** | `/job/loads/load-cases` | A grouping of loads (primary, e.g. dead, live, wind). |
+| **Combination case** | `/job/loads/combination-load-cases` | A weighted combination of primary cases (e.g. ULS, SLS). |
+| **Loads** | `/job/loads/...` | Node loads, member distributed loads, member concentrated loads, plate pressure loads, prestress loads, thermal loads, self-weight loads, etc. — each its own collection. |
+
+### Collection vs single-item endpoints
+
+Every entity follows a uniform shape:
+
+- `GET /…/<entity>` returns the whole collection (often supports
+  filtering and pagination — see
+  [Filtering & Querying](/guides/filtering-and-querying)).
+- `POST /…/<entity>` creates one entity from a `<Entity>Create` body.
+  The response includes the `Id` SPACE GASS allocated.
+- `POST /…/<entity>/bulk` creates many at once with a list body — see
+  [Bulk Operations](/guides/bulk-operations).
+- `GET /…/<entity>/{id}` reads one entity.
+- `PATCH /…/<entity>/{id}` partially updates one entity from an
+  `<Entity>Update` body — only fields included in the request change.
+- `DELETE /…/<entity>/{id}` removes one entity.
+
+The SDK's typed methods mirror this 1:1.
+
+### Ids are allocated by SPACE GASS
+
+For most entities you don't pick the `Id` — POST returns the saved
+object with the `Id` populated, and you hold onto that for any later
+calls that reference it. Two entity families are an exception, where
+you supply a meaningful integer key directly:
+
+- **Load cases** and **combination cases** — you provide the `Id` in
+  the create body so they have stable user-visible numbers. The
+  numeric Id IS the user-meaningful name.
+- **Self-weight loads** — keyed by the load case Id (one per case).
+
+## Units
+
+The API is unit-agnostic. Numeric values are interpreted according to
+whatever unit set the active job is configured with. Read or change the
+active set via `GET /job/units` and `PATCH /job/units`. Most model
+field descriptions in the [API Reference](/api) tell you which
+unit family applies (Length, Force, Section Properties, etc.).
+
+If you create a model entirely from the API (no opened `.sg` file),
+units default to SPACE GASS's standard SI set. Check first if you're
+unsure.
+
+## Analysis Runs
+
+Running an analysis is asynchronous. The pattern is:
+
+1. **Configure** with `PATCH /job/settings/...` (e.g. solver, optimisation).
+2. **Start** with `POST /job/analysis/static/run-linear` (or the
+   nonlinear / buckling / dynamic counterpart). This returns a `runId`
+   and an initial status of `Running` — it does **not** wait.
+3. **Poll** with `GET /job/analysis/runs/{runId}` until `status` is
+   `Completed`, `Failed`, or `Cancelled`. The response includes a
+   `progress` block (current step, percentage, load-case status) you
+   can render.
+4. **Query** results via the static / dynamic / buckling endpoints
+   under `/job/query/analysis/...`. Each result endpoint returns one
+   row per (case, entity) combination.
+
+If a case asked for hasn't been analysed (or any of its constituent
+primaries, for combinations), it appears in
+`Warnings.CasesNotAnalyzed` in the result envelope — check this before
+reading `Results` so a missing run doesn't silently look like
+zero rows.
+
+See [Running Analysis](/guides/running-analysis) for the full pattern
+with both languages, including `WaitForCompletion` helpers.
+
+## Common Pitfalls
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| `409 Conflict` on every endpoint | No active job. | Open one with `POST /job/new`, `POST /job/open`, or `POST /job/open-sample`. |
+| `404 Not Found` on a node / member you just created | Wrong Id, or the entity was created in a previous job that has since been closed. | The Id is returned on POST — capture and reuse it within the same active job. |
+| Result `Warnings.CasesNotAnalyzed` is non-empty | The combination's primary cases (or the case itself) haven't been analysed. | Run the relevant analysis before querying, or filter to only analysed cases. |
+| `409 Conflict` on creating a restraint / constraint / offset | One already exists for that node / member. They are entity-style: at most one per parent. | `DELETE` the existing one first, or `PATCH` to update it. |
+| Numbers come back wrong by a factor of 1000 | Unit mismatch — your code assumed kN, model is in N (or vice versa). | Check / set `GET /job/units` before sending or interpreting numeric data. |
+
+## Next Steps
+
+- [Quick Start](/getting-started/quick-start) — open the `Portal Frame.SG`
+  sample and read its nodes in five minutes.
+- [Using the SDK](/getting-started/using-the-sdk) — REST verbs and
+  async patterns translated for engineers.
+- [Simple Beam Model](/guides/examples/simple-beam) — the full
+  build-to-result walkthrough.

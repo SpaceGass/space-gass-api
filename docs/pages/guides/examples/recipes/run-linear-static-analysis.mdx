@@ -1,0 +1,112 @@
+---
+title: Run a linear static analysis
+description: Start a linear static run, poll for completion, and read the result status
+---
+
+Analysis is asynchronous — `POST /run-linear` starts it and returns a
+`runId` immediately, then you poll `GET /runs/{runId}` until the
+status reaches a terminal state (`Completed`, `Failed`, or `Cancelled`).
+
+The snippet below opens your project, runs analysis with the current
+settings, polls every half-second, and prints a one-line summary on
+completion. The empty `StaticSettingsUpdate()` body means "use whatever
+settings the job already has" — pass non-null fields to override,
+including a selection of the load cases and combinations you would
+like to run.
+
+<CodeTabs>
+```csharp title="C#"
+using SpaceGassApi;
+using SpaceGassApi.Models;
+
+var client = SpaceGassApiClient.CreateClient();
+
+try
+{
+    await client.Job.OpenSample.PostAsync(
+        new OpenSampleRequest { FileName = "Portal Frame.SG" });
+
+    var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
+        new StaticSettingsUpdate());
+
+    while (true)
+    {
+        await Task.Delay(500);
+        var status = await client.Job.Analysis.Runs[run!.RunId!.Value].GetAsync();
+
+        if (status!.Status is AnalysisRunStatus.Completed
+                           or AnalysisRunStatus.Failed
+                           or AnalysisRunStatus.Cancelled)
+        {
+            Console.WriteLine($"{status.Status} in {status.ElapsedTime}");
+            break;
+        }
+    }
+}
+finally
+{
+    await client.Job.Close.PostAsync();
+}
+```
+
+```python title="Python"
+import asyncio
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
+
+client = SpaceGassApiClient.create_client()
+
+try:
+    await client.job.open_sample.post(
+        models.OpenSampleRequest(file_name="Portal Frame.SG"))
+
+    run = await client.job.analysis.static.run_linear.post(
+        models.StaticSettingsUpdate())
+
+    while True:
+        await asyncio.sleep(0.5)
+        status = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
+
+        if status.status in (
+            models.AnalysisRunStatus.Completed,
+            models.AnalysisRunStatus.Failed,
+            models.AnalysisRunStatus.Cancelled,
+        ):
+            print(f"{status.status} in {status.elapsed_time}")
+            break
+finally:
+    await client.job.close.post()
+```
+</CodeTabs>
+
+## Run this example locally
+
+A richer version with progress polling, a reusable `WaitForCompletion`
+helper, and a result summary is in the repo as
+[`Example.RunAnalysis`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.RunAnalysis) (C#) and
+[`run_analysis`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/run_analysis) (Python).
+Clone and run:
+
+<CodeTabs>
+```bash title="C#"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/csharp/examples/Example.RunAnalysis
+dotnet run
+```
+
+```bash title="Python"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/python/examples/run_analysis
+pip install space-gass-api    # once per environment
+python run_analysis.py
+```
+</CodeTabs>
+
+Edit the example's `project_file_path` constant first to point at a
+`.sg` file with structure and loads defined.
+
+## See also
+
+- [Running Analysis](/guides/running-analysis) — the full pattern with
+  a reusable `WaitForCompletion` helper and richer progress display.
+- [Concepts — Analysis Runs](/getting-started/concepts#analysis-runs)

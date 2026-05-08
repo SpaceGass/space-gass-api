@@ -23,7 +23,7 @@ import subprocess
 import sys
 import time
 
-from extensions.client_extensions import create_client
+from space_gass_api import SpaceGassApiClient
 
 SERVICE_EXE = r"C:\Program Files\SPACE GASS 14.5\SpaceGassApi.exe"
 
@@ -46,7 +46,7 @@ async def wait_for_service_ready(client, timeout: float = 30.0) -> None:
 
 
 async def main() -> int:
-    client = create_client()
+    client = SpaceGassApiClient.create_client()
     process: subprocess.Popen | None = None
 
     # Hook Ctrl+C so the service still shuts down on a hard interrupt

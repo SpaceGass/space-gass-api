@@ -18,16 +18,12 @@ Prerequisites:
 import asyncio
 import sys
 
-from extensions.client_extensions import create_client
-from space_gass_api.models.material_create import MaterialCreate
-from space_gass_api.models.member_create import MemberCreate
-from space_gass_api.models.node_create import NodeCreate
-from space_gass_api.models.section_user_create import SectionUserCreate
-from space_gass_api.models.section_update import SectionUpdate
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
 
 
 async def main() -> int:
-    client = create_client()
+    client = SpaceGassApiClient.create_client()
 
     try:
         # -- Create a new blank project --------------------------------
@@ -42,7 +38,7 @@ async def main() -> int:
         print("Creating materials...")
 
         steel = await client.job.structure.materials.post(
-            MaterialCreate(
+            models.MaterialCreate(
                 name="350 Grade Steel",
                 youngs_modulus=200000.0,    # MPa
                 poissons_ratio=0.3,
@@ -60,7 +56,7 @@ async def main() -> int:
 
         # -- Create a concrete material --------------------------------
         concrete = await client.job.structure.materials.post(
-            MaterialCreate(
+            models.MaterialCreate(
                 name="40 MPa Concrete",
                 youngs_modulus=32800.0,     # MPa
                 poissons_ratio=0.2,
@@ -79,7 +75,7 @@ async def main() -> int:
         print("Creating sections...")
 
         rhs = await client.job.structure.sections.post(
-            SectionUserCreate(
+            models.SectionUserCreate(
                 name="200x100x6 RHS",
                 mark="RHS",
                 a=3360.0,       # mm^2  - cross-sectional area
@@ -99,7 +95,7 @@ async def main() -> int:
 
         # -- Create a second section (circular hollow) -----------------
         chs = await client.job.structure.sections.post(
-            SectionUserCreate(
+            models.SectionUserCreate(
                 name="168.3x6 CHS",
                 mark="CHS",
                 a=3060.0,       # mm^2
@@ -134,7 +130,7 @@ async def main() -> int:
         # -- Update the RHS section's area (partial update) ------------
         print(f"Updating section {rhs.id} area...")
         updated = await client.job.structure.sections.by_id(rhs.id).patch(
-            SectionUpdate(
+            models.SectionUpdate(
                 a=3500.0,       # Increased area
                 name="200x100x6.3 RHS",
             ),
@@ -149,14 +145,14 @@ async def main() -> int:
         print("Creating a beam using the new section and material...")
 
         node_a = await client.job.structure.nodes.post(
-            NodeCreate(x=0.0, y=0.0, z=0.0),
+            models.NodeCreate(x=0.0, y=0.0, z=0.0),
         )
         node_b = await client.job.structure.nodes.post(
-            NodeCreate(x=5.0, y=0.0, z=0.0),
+            models.NodeCreate(x=5.0, y=0.0, z=0.0),
         )
 
         member = await client.job.structure.members.post(
-            MemberCreate(
+            models.MemberCreate(
                 node_a=node_a.id,
                 node_b=node_b.id,
                 section=rhs.id,

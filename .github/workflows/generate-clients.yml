@@ -64,6 +64,15 @@ jobs:
             --class-name SpaceGassApiClient \
             --clean-output
 
+      - name: Regenerate Python __init__ aggregators
+        run: |
+          # Kiota emits a PEP 420 namespace package (no __init__.py files),
+          # so `import space_gass_api.models as models` + `models.NodeCreate`
+          # doesn't resolve. This script writes the aggregator __init__.py
+          # files inside the generated tree, glued to the hand-maintained
+          # `space_gass_api_extensions.py` at the client root.
+          python3 tools/regen_python_inits.py
+
       - name: Sync SDK source versions to spec
         id: sync_version
         run: |
