@@ -330,18 +330,19 @@ print(f"Load cases: SW={self_weight_case.id}, G={dead_case.id}, Q={live_case.id}
 
 ## Step 8 — Apply the Self-Weight Load
 
-Attach a self-weight load to the self-weight case. POSTing a
-`SelfWeightLoadCreate` to `Job.Loads.SelfWeightLoads[caseId]` is keyed
-by load case Id (the case must already exist), and one self-weight
+Attach a self-weight load to the self-weight case. POST a
+`SelfWeightLoadCreate` to `Job.Loads.SelfWeightLoads` with `Case` set
+on the body — the load case must already exist, and one self-weight
 load per case is allowed. Acceleration is expressed in **G** (multiples
 of gravity), so set `AccelerationY = -1.0` for one G of gravity
 in the negative-Y direction.
 
 <CodeTabs>
 ```csharp title="C#"
-await client.Job.Loads.SelfWeightLoads[selfWeightCase.Id.Value].PostAsync(
+await client.Job.Loads.SelfWeightLoads.PostAsync(
     new SelfWeightLoadCreate
     {
+        Case = selfWeightCase.Id,
         AccelerationX = 0.0,
         AccelerationY = -1.0,    // 1 G downward
         AccelerationZ = 0.0,
@@ -349,8 +350,9 @@ await client.Job.Loads.SelfWeightLoads[selfWeightCase.Id.Value].PostAsync(
 ```
 
 ```python title="Python"
-await client.job.loads.self_weight_loads.by_case_id(self_weight_case.id).post(
+await client.job.loads.self_weight_loads.post(
     SelfWeightLoadCreate(
+        case=self_weight_case.id,
         acceleration_x=0.0,
         acceleration_y=-1.0,    # 1 G downward
         acceleration_z=0.0,
