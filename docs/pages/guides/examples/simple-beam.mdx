@@ -154,7 +154,8 @@ print(f"Node {node2.id}: ({node2.x}, {node2.y}, {node2.z})")
 
 ## Step 3 — Apply Restraints
 
-Restraints are attached to a node via `Nodes[id].Restraint`. The
+Restraints are top-level entities — POST a `NodeRestraintCreate` (with
+`Node` set on the body) to `Job.Structure.NodeRestraints`. The
 6-character `RestraintCode` maps to the TX, TY, TZ, RX, RY, RZ DOFs.
 Each character is one of:
 
@@ -174,22 +175,22 @@ rotations released).
 <CodeTabs>
 ```csharp title="C#"
 // Node 1: Fully fixed support (all 6 DOFs Fixed)
-await client.Job.Structure.Nodes[node1.Id.Value].Restraint.PostAsync(
-    new NodeRestraintCreate { RestraintCode = "FFFFFF" });
+await client.Job.Structure.NodeRestraints.PostAsync(
+    new NodeRestraintCreate { Node = node1.Id, RestraintCode = "FFFFFF" });
 
 // Node 2: Pinned support (translations Fixed, rotations Released)
-await client.Job.Structure.Nodes[node2.Id.Value].Restraint.PostAsync(
-    new NodeRestraintCreate { RestraintCode = "FFFRRR" });
+await client.Job.Structure.NodeRestraints.PostAsync(
+    new NodeRestraintCreate { Node = node2.Id, RestraintCode = "FFFRRR" });
 ```
 
 ```python title="Python"
 # Node 1: Fully fixed support (all 6 DOFs Fixed)
-await client.job.structure.nodes.by_id(node1.id).restraint.post(
-    NodeRestraintCreate(restraint_code="FFFFFF"))
+await client.job.structure.node_restraints.post(
+    NodeRestraintCreate(node=node1.id, restraint_code="FFFFFF"))
 
 # Node 2: Pinned support (translations Fixed, rotations Released)
-await client.job.structure.nodes.by_id(node2.id).restraint.post(
-    NodeRestraintCreate(restraint_code="FFFRRR"))
+await client.job.structure.node_restraints.post(
+    NodeRestraintCreate(node=node2.id, restraint_code="FFFRRR"))
 ```
 </CodeTabs>
 
@@ -618,7 +619,7 @@ rows.
 
 <CodeTabs>
 ```csharp title="C#"
-var reactions = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync(
+var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
     config => config.QueryParameters.Cases = $"{ulsCase.Id}");
 
 if (reactions.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
@@ -636,11 +637,11 @@ foreach (var r in reactions.Results)
 
 ```python title="Python"
 from kiota_abstractions.base_request_configuration import RequestConfiguration
-from space_gass_api.job.query.analysis.static.node.reactions.reactions_request_builder import ReactionsRequestBuilder
+from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
-reaction_params = ReactionsRequestBuilder.ReactionsRequestBuilderGetQueryParameters(
+reaction_params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
     cases=str(uls_case.id))
-reactions = await client.job.query.analysis.static.node.reactions.get(
+reactions = await client.job.query.analysis.static.node_reactions.get(
     request_configuration=RequestConfiguration(query_parameters=reaction_params))
 
 if reactions.warnings and reactions.warnings.cases_not_analyzed:
@@ -676,7 +677,7 @@ Filter by ULS case + the member Id and take the maximum of `|Mz|`.
 
 <CodeTabs>
 ```csharp title="C#"
-var ulsForces = await client.Job.Query.Analysis.Static.Member.IntermediateForces
+var ulsForces = await client.Job.Query.Analysis.Static.MemberIntermediateForces
     .GetAsync(config =>
     {
         config.QueryParameters.Cases   = $"{ulsCase.Id}";
@@ -690,12 +691,12 @@ Console.WriteLine($"Max ULS bending moment on Member {member.Id}: {maxMz:F2} kNm
 ```
 
 ```python title="Python"
-from space_gass_api.job.query.analysis.static.member.intermediate_forces.intermediate_forces_request_builder import IntermediateForcesRequestBuilder
+from space_gass_api.job.query.analysis.static.member_intermediate_forces.member_intermediate_forces_request_builder import MemberIntermediateForcesRequestBuilder
 
-force_params = IntermediateForcesRequestBuilder.IntermediateForcesRequestBuilderGetQueryParameters(
+force_params = MemberIntermediateForcesRequestBuilder.MemberIntermediateForcesRequestBuilderGetQueryParameters(
     cases=str(uls_case.id),
     members=str(member.id))
-uls_forces = await client.job.query.analysis.static.member.intermediate_forces.get(
+uls_forces = await client.job.query.analysis.static.member_intermediate_forces.get(
     request_configuration=RequestConfiguration(query_parameters=force_params))
 
 beam_forces = uls_forces.results[0]
@@ -728,7 +729,7 @@ case + the member Id and take the maximum of `|TyGlobal|`.
 
 <CodeTabs>
 ```csharp title="C#"
-var slsDisplacements = await client.Job.Query.Analysis.Static.Member.IntermediateDisplacements
+var slsDisplacements = await client.Job.Query.Analysis.Static.MemberIntermediateDisplacements
     .GetAsync(config =>
     {
         config.QueryParameters.Cases   = $"{slsCase.Id}";
@@ -742,12 +743,12 @@ Console.WriteLine($"Max SLS midspan deflection on Member {member.Id}: {maxDeflec
 ```
 
 ```python title="Python"
-from space_gass_api.job.query.analysis.static.member.intermediate_displacements.intermediate_displacements_request_builder import IntermediateDisplacementsRequestBuilder
+from space_gass_api.job.query.analysis.static.member_intermediate_displacements.member_intermediate_displacements_request_builder import MemberIntermediateDisplacementsRequestBuilder
 
-displ_params = IntermediateDisplacementsRequestBuilder.IntermediateDisplacementsRequestBuilderGetQueryParameters(
+displ_params = MemberIntermediateDisplacementsRequestBuilder.MemberIntermediateDisplacementsRequestBuilderGetQueryParameters(
     cases=str(sls_case.id),
     members=str(member.id))
-sls_displacements = await client.job.query.analysis.static.member.intermediate_displacements.get(
+sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.get(
     request_configuration=RequestConfiguration(query_parameters=displ_params))
 
 beam_displacements = sls_displacements.results[0]

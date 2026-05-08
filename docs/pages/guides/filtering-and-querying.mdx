@@ -68,7 +68,7 @@ load case and entity key.
 
 <CodeTabs>
 ```csharp title="C#"
-var result = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync();
+var result = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync();
 
 foreach (var r in result.Results)
 {
@@ -78,7 +78,7 @@ foreach (var r in result.Results)
 ```
 
 ```python title="Python"
-result = await client.job.query.analysis.static.node.reactions.get()
+result = await client.job.query.analysis.static.node_reactions.get()
 
 for r in result.results:
     print(f"Case {r.case}, Node {r.node}: "
@@ -86,7 +86,7 @@ for r in result.results:
 ```
 
 ```bash title="curl"
-curl http://localhost:34560/api/v1/job/query/analysis/static/node/reactions
+curl http://localhost:34560/api/v1/job/query/analysis/static/node-reactions
 ```
 </CodeTabs>
 
@@ -98,7 +98,7 @@ or omit the parameter to return all results.
 
 <CodeTabs>
 ```csharp title="C#"
-var result = await client.Job.Query.Analysis.Static.Node.Displacements
+var result = await client.Job.Query.Analysis.Static.NodeDisplacements
     .GetAsync(config =>
     {
         config.QueryParameters.Cases = "1,3";
@@ -107,7 +107,7 @@ var result = await client.Job.Query.Analysis.Static.Node.Displacements
 ```
 
 ```python title="Python"
-result = await client.job.query.analysis.static.node.displacements.get(
+result = await client.job.query.analysis.static.node_displacements.get(
     request_configuration=lambda c: (
         setattr(c.query_parameters, 'cases', '1,3'),
         setattr(c.query_parameters, 'nodes', '10-12')
@@ -115,7 +115,7 @@ result = await client.job.query.analysis.static.node.displacements.get(
 ```
 
 ```bash title="curl"
-curl "http://localhost:34560/api/v1/job/query/analysis/static/node/displacements?cases=1,3&nodes=10-12"
+curl "http://localhost:34560/api/v1/job/query/analysis/static/node-displacements?cases=1,3&nodes=10-12"
 ```
 </CodeTabs>
 
@@ -127,7 +127,7 @@ arrays indexed by station.
 
 <CodeTabs>
 ```csharp title="C#"
-var result = await client.Job.Query.Analysis.Static.Member.IntermediateForces
+var result = await client.Job.Query.Analysis.Static.MemberIntermediateForces
     .GetAsync(config =>
     {
         config.QueryParameters.Members = "1";
@@ -145,7 +145,7 @@ foreach (var m in result.Results)
 ```
 
 ```python title="Python"
-result = await client.job.query.analysis.static.member.intermediate_forces.get(
+result = await client.job.query.analysis.static.member_intermediate_forces.get(
     request_configuration=lambda c:
         setattr(c.query_parameters, 'members', '1'))
 
@@ -157,7 +157,7 @@ for m in result.results:
 ```
 
 ```bash title="curl"
-curl "http://localhost:34560/api/v1/job/query/analysis/static/member/intermediate-forces?members=1"
+curl "http://localhost:34560/api/v1/job/query/analysis/static/member-intermediate-forces?members=1"
 ```
 </CodeTabs>
 
@@ -248,7 +248,7 @@ default all results are returned. Use pagination for large result sets.
 <CodeTabs>
 ```csharp title="C#"
 // Get the first 100 node displacements
-var page1 = await client.Job.Query.Analysis.Static.Node.Displacements
+var page1 = await client.Job.Query.Analysis.Static.NodeDisplacements
     .GetAsync(config =>
     {
         config.QueryParameters.Offset = 0;
@@ -256,7 +256,7 @@ var page1 = await client.Job.Query.Analysis.Static.Node.Displacements
     });
 
 // Get the next 100
-var page2 = await client.Job.Query.Analysis.Static.Node.Displacements
+var page2 = await client.Job.Query.Analysis.Static.NodeDisplacements
     .GetAsync(config =>
     {
         config.QueryParameters.Offset = 100;
@@ -265,13 +265,13 @@ var page2 = await client.Job.Query.Analysis.Static.Node.Displacements
 ```
 
 ```python title="Python"
-page1 = await client.job.query.analysis.static.node.displacements.get(
+page1 = await client.job.query.analysis.static.node_displacements.get(
     request_configuration=lambda c: (
         setattr(c.query_parameters, 'offset', 0),
         setattr(c.query_parameters, 'limit', 100)
     ))
 
-page2 = await client.job.query.analysis.static.node.displacements.get(
+page2 = await client.job.query.analysis.static.node_displacements.get(
     request_configuration=lambda c: (
         setattr(c.query_parameters, 'offset', 100),
         setattr(c.query_parameters, 'limit', 100)
@@ -280,9 +280,9 @@ page2 = await client.job.query.analysis.static.node.displacements.get(
 
 ```bash title="curl"
 # Page 1
-curl "http://localhost:34560/api/v1/job/query/analysis/static/node/displacements?offset=0&limit=100"
+curl "http://localhost:34560/api/v1/job/query/analysis/static/node-displacements?offset=0&limit=100"
 
 # Page 2
-curl "http://localhost:34560/api/v1/job/query/analysis/static/node/displacements?offset=100&limit=100"
+curl "http://localhost:34560/api/v1/job/query/analysis/static/node-displacements?offset=100&limit=100"
 ```
 </CodeTabs>

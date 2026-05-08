@@ -50,9 +50,9 @@ from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
 from space_gass_api.models.solver_type import SolverType
 from space_gass_api.models.static_settings_update import StaticSettingsUpdate
 
-from space_gass_api.job.query.analysis.static.member.intermediate_forces.intermediate_forces_request_builder import IntermediateForcesRequestBuilder
-from space_gass_api.job.query.analysis.static.member.intermediate_displacements.intermediate_displacements_request_builder import IntermediateDisplacementsRequestBuilder
-from space_gass_api.job.query.analysis.static.node.reactions.reactions_request_builder import ReactionsRequestBuilder
+from space_gass_api.job.query.analysis.static.member_intermediate_forces.member_intermediate_forces_request_builder import MemberIntermediateForcesRequestBuilder
+from space_gass_api.job.query.analysis.static.member_intermediate_displacements.member_intermediate_displacements_request_builder import MemberIntermediateDisplacementsRequestBuilder
+from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
 # -- Configuration ------------------------------------------------
 save_file_path = os.path.join(
@@ -96,13 +96,13 @@ async def main() -> int:
         #   N = Friction (limit proportional to the normal-axis reaction)
         print("Applying restraints...")
 
-        await client.job.structure.nodes.by_id(node1.id).restraint.post(
-            NodeRestraintCreate(restraint_code="FFFFFF"),
+        await client.job.structure.node_restraints.post(
+            NodeRestraintCreate(node=node1.id, restraint_code="FFFFFF"),
         )
         print(f"  Node {node1.id}: Fixed (FFFFFF)")
 
-        await client.job.structure.nodes.by_id(node2.id).restraint.post(
-            NodeRestraintCreate(restraint_code="FFFRRR"),
+        await client.job.structure.node_restraints.post(
+            NodeRestraintCreate(node=node2.id, restraint_code="FFFRRR"),
         )
         print(f"  Node {node2.id}: Pinned (FFFRRR)")
         print()
@@ -282,9 +282,9 @@ async def main() -> int:
 
         # == Step 15 — Query reactions =================================
         print("Querying ULS reactions...")
-        reaction_params = ReactionsRequestBuilder.ReactionsRequestBuilderGetQueryParameters(
+        reaction_params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
             cases=str(uls_case.id))
-        reactions = await client.job.query.analysis.static.node.reactions.get(
+        reactions = await client.job.query.analysis.static.node_reactions.get(
             request_configuration=RequestConfiguration(query_parameters=reaction_params))
 
         if reactions.warnings and reactions.warnings.cases_not_analyzed:
@@ -299,10 +299,10 @@ async def main() -> int:
         print()
 
         # == Step 16 — Maximum ULS bending moment ======================
-        force_params = IntermediateForcesRequestBuilder.IntermediateForcesRequestBuilderGetQueryParameters(
+        force_params = MemberIntermediateForcesRequestBuilder.MemberIntermediateForcesRequestBuilderGetQueryParameters(
             cases=str(uls_case.id),
             members=str(member.id))
-        uls_forces = await client.job.query.analysis.static.member.intermediate_forces.get(
+        uls_forces = await client.job.query.analysis.static.member_intermediate_forces.get(
             request_configuration=RequestConfiguration(query_parameters=force_params))
 
         beam_forces = uls_forces.results[0]
@@ -310,10 +310,10 @@ async def main() -> int:
         print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
 
         # == Step 17 — Maximum SLS deflection ==========================
-        displ_params = IntermediateDisplacementsRequestBuilder.IntermediateDisplacementsRequestBuilderGetQueryParameters(
+        displ_params = MemberIntermediateDisplacementsRequestBuilder.MemberIntermediateDisplacementsRequestBuilderGetQueryParameters(
             cases=str(sls_case.id),
             members=str(member.id))
-        sls_displacements = await client.job.query.analysis.static.member.intermediate_displacements.get(
+        sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.get(
             request_configuration=RequestConfiguration(query_parameters=displ_params))
 
         beam_displacements = sls_displacements.results[0]

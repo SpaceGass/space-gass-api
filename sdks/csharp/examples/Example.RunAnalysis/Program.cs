@@ -163,7 +163,7 @@ try
     Console.WriteLine();
     Console.WriteLine("Querying node reactions...");
 
-    var queryResult = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync();
+    var queryResult = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync();
     var reactions = queryResult?.Results;
     if (reactions != null && reactions.Count > 0)
     {

@@ -69,12 +69,12 @@ try
     //   N = Friction (limit proportional to the normal-axis reaction)
     Console.WriteLine("Applying restraints...");
 
-    await client.Job.Structure.Nodes[node1.Id!.Value].Restraint.PostAsync(
-        new NodeRestraintCreate { RestraintCode = "FFFFFF" });
+    await client.Job.Structure.NodeRestraints.PostAsync(
+        new NodeRestraintCreate { Node = node1.Id, RestraintCode = "FFFFFF" });
     Console.WriteLine($"  Node {node1.Id}: Fixed (FFFFFF)");
 
-    await client.Job.Structure.Nodes[node2.Id!.Value].Restraint.PostAsync(
-        new NodeRestraintCreate { RestraintCode = "FFFRRR" });
+    await client.Job.Structure.NodeRestraints.PostAsync(
+        new NodeRestraintCreate { Node = node2.Id, RestraintCode = "FFFRRR" });
     Console.WriteLine($"  Node {node2.Id}: Pinned (FFFRRR)");
     Console.WriteLine();
 
@@ -259,7 +259,7 @@ try
 
     // == Step 15 — Query reactions =================================
     Console.WriteLine("Querying ULS reactions...");
-    var reactions = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync(
+    var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
         config => config.QueryParameters.Cases = $"{ulsCase.Id}");
 
     if (reactions!.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
@@ -276,7 +276,7 @@ try
     Console.WriteLine();
 
     // == Step 16 — Maximum ULS bending moment ======================
-    var ulsForces = await client.Job.Query.Analysis.Static.Member.IntermediateForces
+    var ulsForces = await client.Job.Query.Analysis.Static.MemberIntermediateForces
         .GetAsync(config =>
         {
             config.QueryParameters.Cases   = $"{ulsCase.Id}";
@@ -288,7 +288,7 @@ try
     Console.WriteLine($"Max ULS bending moment on Member {member.Id}: {maxMz:F2} kNm");
 
     // == Step 17 — Maximum SLS deflection ==========================
-    var slsDisplacements = await client.Job.Query.Analysis.Static.Member.IntermediateDisplacements
+    var slsDisplacements = await client.Job.Query.Analysis.Static.MemberIntermediateDisplacements
         .GetAsync(config =>
         {
             config.QueryParameters.Cases   = $"{slsCase.Id}";

@@ -43,7 +43,7 @@ Console.WriteLine($"Analysis {result.Status} in {result.ElapsedTime}");
 if (result.Status == AnalysisRunStatus.Completed)
 {
     // Query results...
-    var reactions = await client.Job.Query.Analysis.Static.Node.Reactions.GetAsync();
+    var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync();
     Console.WriteLine($"Got {reactions.Results.Count} reactions");
 }
 
@@ -103,7 +103,7 @@ print(f"Analysis {result.status} in {result.elapsed_time}")
 
 if result.status == AnalysisRunStatus.Completed:
     # Query results...
-    reactions = await client.job.query.analysis.static.node.reactions.get()
+    reactions = await client.job.query.analysis.static.node_reactions.get()
     print(f"Got {len(reactions.results)} reactions")
 
 await client.job.close.post()
