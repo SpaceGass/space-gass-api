@@ -83,13 +83,13 @@ namespace SpaceGassApi.Models
         #pragma warning disable CS1591
         Materials,
         #pragma warning restore CS1591
-        [EnumMember(Value = "Constraints")]
-        #pragma warning disable CS1591
-        Constraints,
-        #pragma warning restore CS1591
         [EnumMember(Value = "NodeRestraints")]
         #pragma warning disable CS1591
         NodeRestraints,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "NodeConstraints")]
+        #pragma warning disable CS1591
+        NodeConstraints,
         #pragma warning restore CS1591
         [EnumMember(Value = "MemberOffsets")]
         #pragma warning disable CS1591
@@ -98,6 +98,14 @@ namespace SpaceGassApi.Models
         [EnumMember(Value = "MemberReleases")]
         #pragma warning disable CS1591
         MemberReleases,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "MemberDirection")]
+        #pragma warning disable CS1591
+        MemberDirection,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "PlateDirection")]
+        #pragma warning disable CS1591
+        PlateDirection,
         #pragma warning restore CS1591
         [EnumMember(Value = "Units")]
         #pragma warning disable CS1591

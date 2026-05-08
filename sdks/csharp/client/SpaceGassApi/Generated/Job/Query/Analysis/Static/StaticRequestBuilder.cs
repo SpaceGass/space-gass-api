@@ -2,9 +2,15 @@
 #pragma warning disable CS0618
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
-using SpaceGassApi.Job.Query.Analysis.Static.Member;
-using SpaceGassApi.Job.Query.Analysis.Static.Node;
-using SpaceGassApi.Job.Query.Analysis.Static.Plate;
+using SpaceGassApi.Job.Query.Analysis.Static.MemberEndForces;
+using SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateDisplacements;
+using SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateForces;
+using SpaceGassApi.Job.Query.Analysis.Static.MemberStresses;
+using SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements;
+using SpaceGassApi.Job.Query.Analysis.Static.NodeReactions;
+using SpaceGassApi.Job.Query.Analysis.Static.PlateElementForces;
+using SpaceGassApi.Job.Query.Analysis.Static.PlateElementStresses;
+using SpaceGassApi.Job.Query.Analysis.Static.PlateNodalForces;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -17,20 +23,50 @@ namespace SpaceGassApi.Job.Query.Analysis.Static
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class StaticRequestBuilder : BaseRequestBuilder
     {
-        /// <summary>The member property</summary>
-        public global::SpaceGassApi.Job.Query.Analysis.Static.Member.MemberRequestBuilder Member
+        /// <summary>The memberEndForces property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.MemberEndForces.MemberEndForcesRequestBuilder MemberEndForces
         {
-            get => new global::SpaceGassApi.Job.Query.Analysis.Static.Member.MemberRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.MemberEndForces.MemberEndForcesRequestBuilder(PathParameters, RequestAdapter);
         }
-        /// <summary>The node property</summary>
-        public global::SpaceGassApi.Job.Query.Analysis.Static.Node.NodeRequestBuilder Node
+        /// <summary>The memberIntermediateDisplacements property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateDisplacements.MemberIntermediateDisplacementsRequestBuilder MemberIntermediateDisplacements
         {
-            get => new global::SpaceGassApi.Job.Query.Analysis.Static.Node.NodeRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateDisplacements.MemberIntermediateDisplacementsRequestBuilder(PathParameters, RequestAdapter);
         }
-        /// <summary>The plate property</summary>
-        public global::SpaceGassApi.Job.Query.Analysis.Static.Plate.PlateRequestBuilder Plate
+        /// <summary>The memberIntermediateForces property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateForces.MemberIntermediateForcesRequestBuilder MemberIntermediateForces
         {
-            get => new global::SpaceGassApi.Job.Query.Analysis.Static.Plate.PlateRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateForces.MemberIntermediateForcesRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The memberStresses property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.MemberStresses.MemberStressesRequestBuilder MemberStresses
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.MemberStresses.MemberStressesRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The nodeDisplacements property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements.NodeDisplacementsRequestBuilder NodeDisplacements
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements.NodeDisplacementsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The nodeReactions property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.NodeReactions.NodeReactionsRequestBuilder NodeReactions
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.NodeReactions.NodeReactionsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The plateElementForces property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.PlateElementForces.PlateElementForcesRequestBuilder PlateElementForces
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.PlateElementForces.PlateElementForcesRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The plateElementStresses property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.PlateElementStresses.PlateElementStressesRequestBuilder PlateElementStresses
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.PlateElementStresses.PlateElementStressesRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The plateNodalForces property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.PlateNodalForces.PlateNodalForcesRequestBuilder PlateNodalForces
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.PlateNodalForces.PlateNodalForcesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Analysis.Static.StaticRequestBuilder"/> and sets the default values.

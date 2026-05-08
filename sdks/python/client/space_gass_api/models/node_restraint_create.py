@@ -12,11 +12,11 @@ if TYPE_CHECKING:
 @dataclass
 class NodeRestraintCreate(Parsable):
     """
-    DTO for creating (or replacing) a node restraint.The node Id comes from the route parameter, not the body.
+    DTO for creating a node restraint. POST is entity-style: 409 if a restraintalready exists for the supplied node — caller must DELETE first or PATCH instead.
     """
     # 6-character active direction code for TX,TY,TZ,RX,RY,RZ.
     active_direction: Optional[str] = None
-    # The node Id to create the restraint for.Optional in body — if omitted, set from the route parameter by the controller.
+    # The node Id to create the restraint for. Required in the request body.
     node: Optional[int] = None
     # 6-character restraint code for TX,TY,TZ,RX,RY,RZ. Each character is one of:F = Fixed (prevents movement);R = Released (allows movement);S = Spring (movement governed by a spring stiffness);V = Variable spring (multiple stiffnesses via a stiffness-vs-deflection table);P = Plastic (upper force/moment limit on the reaction);N = Friction (upper limit proportional to the normal-axis reaction).
     restraint_code: Optional[str] = None

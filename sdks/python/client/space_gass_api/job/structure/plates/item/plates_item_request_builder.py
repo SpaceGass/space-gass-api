@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from .....models.plate import Plate
     from .....models.plate_update import PlateUpdate
     from .....models.problem_details import ProblemDetails
+    from .direction.direction_request_builder import DirectionRequestBuilder
 
 class PlatesItemRequestBuilder(BaseRequestBuilder):
     """
@@ -44,7 +45,6 @@ class PlatesItemRequestBuilder(BaseRequestBuilder):
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -63,7 +63,6 @@ class PlatesItemRequestBuilder(BaseRequestBuilder):
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -88,7 +87,6 @@ class PlatesItemRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -143,6 +141,15 @@ class PlatesItemRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return PlatesItemRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def direction(self) -> DirectionRequestBuilder:
+        """
+        The direction property
+        """
+        from .direction.direction_request_builder import DirectionRequestBuilder
+
+        return DirectionRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class PlatesItemRequestBuilderDeleteRequestConfiguration(RequestConfiguration[QueryParameters]):

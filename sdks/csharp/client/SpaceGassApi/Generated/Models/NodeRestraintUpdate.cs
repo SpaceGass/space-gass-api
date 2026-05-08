@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
 #else
         public string ActiveDirection { get; set; }
 #endif
-        /// <summary>The node number that identifies which restraint to update.Required for bulk PATCH (PATCH /restraints/bulk).Ignored for single-node PATCH (PATCH /{key}/restraint) — the route value is used instead.</summary>
+        /// <summary>The node number that identifies which restraint to update.Required for bulk PATCH; ignored for single-node PATCH (route value wins).</summary>
         public int? Node { get; set; }
         /// <summary>6-character restraint code for TX,TY,TZ,RX,RY,RZ.Each character: F=Fixed (prevents movement), R=Released (allows movement), S=Spring (movement governed by a spring stiffness), V=Variable spring (multiple stiffnesses via a stiffness-vs-deflection table), P=Plastic (upper force/moment limit on the reaction), N=Friction (upper limit on reaction proportional to the normal-axis reaction).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER

@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for creating or replacing a node constraint.The slave node is taken from the route — do not include it in the request body.
+    /// DTO for creating a node constraint. POST is entity-style: 409 if a constraint already existsfor the supplied slave node — caller must DELETE first or PATCH instead.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeConstraintCreate : IParsable
@@ -33,7 +33,7 @@ namespace SpaceGassApi.Models
 #endif
         /// <summary>The master node number. The slave node&apos;s constrained DOFs will follow this node&apos;s motion.</summary>
         public int? MasterNode { get; set; }
-        /// <summary>The slave node number.For single-node endpoints (POST /{key}/constraint), this is set from the route and any body value is ignored.For bulk endpoints (POST /constraints/bulk), this must be provided in the request body.</summary>
+        /// <summary>The slave node number. Required in the request body.</summary>
         public int? SlaveNode { get; set; }
         /// <summary>X component of the constraint axis direction vector.</summary>
         public double? XVector { get; set; }

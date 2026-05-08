@@ -18,8 +18,6 @@ if TYPE_CHECKING:
     from .....models.node import Node
     from .....models.node_update import NodeUpdate
     from .....models.problem_details import ProblemDetails
-    from .constraint.constraint_request_builder import ConstraintRequestBuilder
-    from .restraint.restraint_request_builder import RestraintRequestBuilder
 
 class NodesItemRequestBuilder(BaseRequestBuilder):
     """
@@ -46,7 +44,6 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -65,7 +62,6 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -90,7 +86,6 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -145,24 +140,6 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return NodesItemRequestBuilder(self.request_adapter, raw_url)
-    
-    @property
-    def constraint(self) -> ConstraintRequestBuilder:
-        """
-        The constraint property
-        """
-        from .constraint.constraint_request_builder import ConstraintRequestBuilder
-
-        return ConstraintRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def restraint(self) -> RestraintRequestBuilder:
-        """
-        The restraint property
-        """
-        from .restraint.restraint_request_builder import RestraintRequestBuilder
-
-        return RestraintRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class NodesItemRequestBuilderDeleteRequestConfiguration(RequestConfiguration[QueryParameters]):

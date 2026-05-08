@@ -43,7 +43,6 @@ class HeadingsRequestBuilder(BaseRequestBuilder):
         from ...models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -68,7 +67,6 @@ class HeadingsRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:

@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from ....models.plate_theory import PlateTheory
     from ....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
+    from .direction.direction_request_builder import DirectionRequestBuilder
     from .item.plates_item_request_builder import PlatesItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
     from .next.next_request_builder import NextRequestBuilder
@@ -60,16 +61,11 @@ class PlatesRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from ....models.problem_details import ProblemDetails
-
-        error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
-        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from ....models.plate import Plate
 
-        return await self.request_adapter.send_collection_async(request_info, Plate, error_mapping)
+        return await self.request_adapter.send_collection_async(request_info, Plate, None)
     
     async def post(self,body: PlateCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Plate]:
         """
@@ -87,7 +83,6 @@ class PlatesRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
-            "401": ProblemDetails,
             "409": ProblemDetails,
         }
         if not self.request_adapter:
@@ -140,6 +135,15 @@ class PlatesRequestBuilder(BaseRequestBuilder):
         from .bulk.bulk_request_builder import BulkRequestBuilder
 
         return BulkRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def direction(self) -> DirectionRequestBuilder:
+        """
+        The direction property
+        """
+        from .direction.direction_request_builder import DirectionRequestBuilder
+
+        return DirectionRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def metadata(self) -> MetadataRequestBuilder:

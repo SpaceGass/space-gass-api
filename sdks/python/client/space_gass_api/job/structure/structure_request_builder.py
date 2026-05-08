@@ -8,7 +8,10 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from .materials.materials_request_builder import MaterialsRequestBuilder
     from .members.members_request_builder import MembersRequestBuilder
+    from .member_offsets.member_offsets_request_builder import MemberOffsetsRequestBuilder
     from .nodes.nodes_request_builder import NodesRequestBuilder
+    from .node_constraints.node_constraints_request_builder import NodeConstraintsRequestBuilder
+    from .node_restraints.node_restraints_request_builder import NodeRestraintsRequestBuilder
     from .plates.plates_request_builder import PlatesRequestBuilder
     from .plate_cuts.plate_cuts_request_builder import PlateCutsRequestBuilder
     from .plate_strips.plate_strips_request_builder import PlateStripsRequestBuilder
@@ -37,6 +40,15 @@ class StructureRequestBuilder(BaseRequestBuilder):
         return MaterialsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
+    def member_offsets(self) -> MemberOffsetsRequestBuilder:
+        """
+        The memberOffsets property
+        """
+        from .member_offsets.member_offsets_request_builder import MemberOffsetsRequestBuilder
+
+        return MemberOffsetsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
     def members(self) -> MembersRequestBuilder:
         """
         The members property
@@ -44,6 +56,24 @@ class StructureRequestBuilder(BaseRequestBuilder):
         from .members.members_request_builder import MembersRequestBuilder
 
         return MembersRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def node_constraints(self) -> NodeConstraintsRequestBuilder:
+        """
+        The nodeConstraints property
+        """
+        from .node_constraints.node_constraints_request_builder import NodeConstraintsRequestBuilder
+
+        return NodeConstraintsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def node_restraints(self) -> NodeRestraintsRequestBuilder:
+        """
+        The nodeRestraints property
+        """
+        from .node_restraints.node_restraints_request_builder import NodeRestraintsRequestBuilder
+
+        return NodeRestraintsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def nodes(self) -> NodesRequestBuilder:

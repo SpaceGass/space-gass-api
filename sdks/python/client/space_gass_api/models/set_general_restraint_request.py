@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class SetGeneralRestraintRequest(Parsable):
     """
-    Request body for `POST job/structure/nodes/restraints/set-general`.Provide a node Id to promote that node as the general restraint(demoting every other row); pass `null` to clear the flag from every node.
+    Request body for `POST job/structure/node-restraints/set-general`.Provide a node Id to promote that node as the general restraint(demoting every other row); pass `null` to clear the flag from every node.
     """
     # The node to promote as the general restraint, or `null` to clear.
     node: Optional[int] = None

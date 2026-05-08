@@ -15,8 +15,6 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Number of combination load cases.</summary>
         public int? CombinationLoadCases { get; set; }
-        /// <summary>Number of multi-point constraint definitions.</summary>
-        public int? Constraints { get; set; }
         /// <summary>Number of load case groups.</summary>
         public int? LoadCaseGroups { get; set; }
         /// <summary>Number of primary load cases defined.</summary>
@@ -39,6 +37,8 @@ namespace SpaceGassApi.Models
         public int? Members { get; set; }
         /// <summary>Number of torsion loads applied to members.</summary>
         public int? MemberTorsionLoads { get; set; }
+        /// <summary>Number of master-slave node constraint definitions.</summary>
+        public int? NodeConstraints { get; set; }
         /// <summary>Number of point loads applied to nodes.</summary>
         public int? NodeLoads { get; set; }
         /// <summary>Number of nodes with support restraint conditions.</summary>
@@ -76,7 +76,6 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "combinationLoadCases", n => { CombinationLoadCases = n.GetIntValue(); } },
-                { "constraints", n => { Constraints = n.GetIntValue(); } },
                 { "loadCaseGroups", n => { LoadCaseGroups = n.GetIntValue(); } },
                 { "loadCases", n => { LoadCases = n.GetIntValue(); } },
                 { "loadCategories", n => { LoadCategories = n.GetIntValue(); } },
@@ -88,6 +87,7 @@ namespace SpaceGassApi.Models
                 { "memberPrestressLoads", n => { MemberPrestressLoads = n.GetIntValue(); } },
                 { "memberTorsionLoads", n => { MemberTorsionLoads = n.GetIntValue(); } },
                 { "members", n => { Members = n.GetIntValue(); } },
+                { "nodeConstraints", n => { NodeConstraints = n.GetIntValue(); } },
                 { "nodeLoads", n => { NodeLoads = n.GetIntValue(); } },
                 { "nodeRestraints", n => { NodeRestraints = n.GetIntValue(); } },
                 { "nodes", n => { Nodes = n.GetIntValue(); } },
@@ -107,7 +107,6 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteIntValue("combinationLoadCases", CombinationLoadCases);
-            writer.WriteIntValue("constraints", Constraints);
             writer.WriteIntValue("loadCaseGroups", LoadCaseGroups);
             writer.WriteIntValue("loadCases", LoadCases);
             writer.WriteIntValue("loadCategories", LoadCategories);
@@ -119,6 +118,7 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("memberPrestressLoads", MemberPrestressLoads);
             writer.WriteIntValue("members", Members);
             writer.WriteIntValue("memberTorsionLoads", MemberTorsionLoads);
+            writer.WriteIntValue("nodeConstraints", NodeConstraints);
             writer.WriteIntValue("nodeLoads", NodeLoads);
             writer.WriteIntValue("nodeRestraints", NodeRestraints);
             writer.WriteIntValue("nodes", Nodes);

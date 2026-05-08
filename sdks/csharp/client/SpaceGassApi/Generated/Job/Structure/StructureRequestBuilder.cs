@@ -3,7 +3,10 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Structure.Materials;
+using SpaceGassApi.Job.Structure.MemberOffsets;
 using SpaceGassApi.Job.Structure.Members;
+using SpaceGassApi.Job.Structure.NodeConstraints;
+using SpaceGassApi.Job.Structure.NodeRestraints;
 using SpaceGassApi.Job.Structure.Nodes;
 using SpaceGassApi.Job.Structure.PlateCuts;
 using SpaceGassApi.Job.Structure.PlateStrips;
@@ -26,10 +29,25 @@ namespace SpaceGassApi.Job.Structure
         {
             get => new global::SpaceGassApi.Job.Structure.Materials.MaterialsRequestBuilder(PathParameters, RequestAdapter);
         }
+        /// <summary>The memberOffsets property</summary>
+        public global::SpaceGassApi.Job.Structure.MemberOffsets.MemberOffsetsRequestBuilder MemberOffsets
+        {
+            get => new global::SpaceGassApi.Job.Structure.MemberOffsets.MemberOffsetsRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The members property</summary>
         public global::SpaceGassApi.Job.Structure.Members.MembersRequestBuilder Members
         {
             get => new global::SpaceGassApi.Job.Structure.Members.MembersRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The nodeConstraints property</summary>
+        public global::SpaceGassApi.Job.Structure.NodeConstraints.NodeConstraintsRequestBuilder NodeConstraints
+        {
+            get => new global::SpaceGassApi.Job.Structure.NodeConstraints.NodeConstraintsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The nodeRestraints property</summary>
+        public global::SpaceGassApi.Job.Structure.NodeRestraints.NodeRestraintsRequestBuilder NodeRestraints
+        {
+            get => new global::SpaceGassApi.Job.Structure.NodeRestraints.NodeRestraintsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The nodes property</summary>
         public global::SpaceGassApi.Job.Structure.Nodes.NodesRequestBuilder Nodes

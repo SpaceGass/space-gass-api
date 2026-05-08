@@ -21,6 +21,8 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.BatchError> Errors { get; set; }
 #endif
+        /// <summary>True when the bulk operation stopped accumulating errors after reachingSpaceGassApi.Models.Dtos.Entity.BatchResultDto`1.ErrorMessageCap. Further failures may exist beyond what is reported.</summary>
+        public bool? ErrorsTruncated { get; set; }
         /// <summary>Successfully processed items.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -48,6 +50,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "errors", n => { Errors = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.BatchError>(global::SpaceGassApi.Models.BatchError.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "errorsTruncated", n => { ErrorsTruncated = n.GetBoolValue(); } },
                 { "succeeded", n => { Succeeded = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.Plate>(global::SpaceGassApi.Models.Plate.CreateFromDiscriminatorValue)?.AsList(); } },
             };
         }
@@ -59,6 +62,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.BatchError>("errors", Errors);
+            writer.WriteBoolValue("errorsTruncated", ErrorsTruncated);
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.Plate>("succeeded", Succeeded);
         }
     }

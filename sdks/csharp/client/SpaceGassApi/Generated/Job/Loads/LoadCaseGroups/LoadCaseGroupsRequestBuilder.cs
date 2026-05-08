@@ -83,7 +83,6 @@ namespace SpaceGassApi.Job.Loads.LoadCaseGroups
         /// <returns>A List&lt;global::SpaceGassApi.Models.LoadCaseGroup&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<List<global::SpaceGassApi.Models.LoadCaseGroup>?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.LoadCaseGroups.LoadCaseGroupsRequestBuilder.LoadCaseGroupsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -94,11 +93,7 @@ namespace SpaceGassApi.Job.Loads.LoadCaseGroups
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
-            {
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-            };
-            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.LoadCaseGroup>(requestInfo, global::SpaceGassApi.Models.LoadCaseGroup.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.LoadCaseGroup>(requestInfo, global::SpaceGassApi.Models.LoadCaseGroup.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
             return collectionResult?.AsList();
         }
         /// <summary>
@@ -109,7 +104,6 @@ namespace SpaceGassApi.Job.Loads.LoadCaseGroups
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -125,7 +119,6 @@ namespace SpaceGassApi.Job.Loads.LoadCaseGroups
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCaseGroup>(requestInfo, global::SpaceGassApi.Models.LoadCaseGroup.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);

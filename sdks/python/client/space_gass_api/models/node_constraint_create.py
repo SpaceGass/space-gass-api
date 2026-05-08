@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class NodeConstraintCreate(Parsable):
     """
-    DTO for creating or replacing a node constraint.The slave node is taken from the route — do not include it in the request body.
+    DTO for creating a node constraint. POST is entity-style: 409 if a constraint already existsfor the supplied slave node — caller must DELETE first or PATCH instead.
     """
     # Coordinate axis system used for master-slave constraint equations.Maps to SPACE GASS lookup table "Constraint Axes".
     axes: Optional[ConstraintAxes] = None
@@ -20,7 +20,7 @@ class NodeConstraintCreate(Parsable):
     guid: Optional[str] = None
     # The master node number. The slave node's constrained DOFs will follow this node's motion.
     master_node: Optional[int] = None
-    # The slave node number.For single-node endpoints (POST /{key}/constraint), this is set from the route and any body value is ignored.For bulk endpoints (POST /constraints/bulk), this must be provided in the request body.
+    # The slave node number. Required in the request body.
     slave_node: Optional[int] = None
     # X component of the constraint axis direction vector.
     x_vector: Optional[float] = None

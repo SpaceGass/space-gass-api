@@ -17,12 +17,14 @@ namespace SpaceGassApi.Models
         public double? ActualThickness { get; set; }
         /// <summary>Bending thickness of the plate. Unit: Section Properties (see GET /job/units).</summary>
         public double? BendingThickness { get; set; }
-        /// <summary>Direction angle for plate orientation.</summary>
-        public double? DirAngle { get; set; }
-        /// <summary>Direction axis for member orientation.Maps to SPACE GASS lookup table &quot;Direction Axis&quot;.</summary>
-        public global::SpaceGassApi.Models.DirectionAxis? DirAxis { get; set; }
-        /// <summary>Direction node for plate orientation.</summary>
-        public int? DirNode { get; set; }
+        /// <summary>DTO for updating the direction on a member or plate (partial-update semantics).</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.DirectionUpdate? Direction { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.DirectionUpdate Direction { get; set; }
+#endif
         /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -71,9 +73,7 @@ namespace SpaceGassApi.Models
             {
                 { "actualThickness", n => { ActualThickness = n.GetDoubleValue(); } },
                 { "bendingThickness", n => { BendingThickness = n.GetDoubleValue(); } },
-                { "dirAngle", n => { DirAngle = n.GetDoubleValue(); } },
-                { "dirAxis", n => { DirAxis = n.GetEnumValue<global::SpaceGassApi.Models.DirectionAxis>(); } },
-                { "dirNode", n => { DirNode = n.GetIntValue(); } },
+                { "direction", n => { Direction = n.GetObjectValue<global::SpaceGassApi.Models.DirectionUpdate>(global::SpaceGassApi.Models.DirectionUpdate.CreateFromDiscriminatorValue); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "material", n => { Material = n.GetIntValue(); } },
@@ -96,9 +96,7 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteDoubleValue("actualThickness", ActualThickness);
             writer.WriteDoubleValue("bendingThickness", BendingThickness);
-            writer.WriteDoubleValue("dirAngle", DirAngle);
-            writer.WriteEnumValue<global::SpaceGassApi.Models.DirectionAxis>("dirAxis", DirAxis);
-            writer.WriteIntValue("dirNode", DirNode);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.DirectionUpdate>("direction", Direction);
             writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteIntValue("material", Material);

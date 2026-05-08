@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from .load_factors.load_factors_request_builder import LoadFactorsRequestBuilder
-    from .member.member_request_builder import MemberRequestBuilder
+    from .member_effective_lengths.member_effective_lengths_request_builder import MemberEffectiveLengthsRequestBuilder
 
 class BucklingRequestBuilder(BaseRequestBuilder):
     """
@@ -32,12 +32,12 @@ class BucklingRequestBuilder(BaseRequestBuilder):
         return LoadFactorsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
-    def member(self) -> MemberRequestBuilder:
+    def member_effective_lengths(self) -> MemberEffectiveLengthsRequestBuilder:
         """
-        The member property
+        The memberEffectiveLengths property
         """
-        from .member.member_request_builder import MemberRequestBuilder
+        from .member_effective_lengths.member_effective_lengths_request_builder import MemberEffectiveLengthsRequestBuilder
 
-        return MemberRequestBuilder(self.request_adapter, self.path_parameters)
+        return MemberEffectiveLengthsRequestBuilder(self.request_adapter, self.path_parameters)
     
 

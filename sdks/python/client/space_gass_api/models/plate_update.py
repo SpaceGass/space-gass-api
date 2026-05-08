@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .direction_axis import DirectionAxis
+    from .direction_update import DirectionUpdate
     from .plate_theory import PlateTheory
 
 @dataclass
@@ -17,12 +17,8 @@ class PlateUpdate(Parsable):
     actual_thickness: Optional[float] = None
     # Bending thickness of the plate. Unit: Section Properties (see GET /job/units).
     bending_thickness: Optional[float] = None
-    # Direction angle for plate orientation.
-    dir_angle: Optional[float] = None
-    # Direction axis for member orientation.Maps to SPACE GASS lookup table "Direction Axis".
-    dir_axis: Optional[DirectionAxis] = None
-    # Direction node for plate orientation.
-    dir_node: Optional[int] = None
+    # DTO for updating the direction on a member or plate (partial-update semantics).
+    direction: Optional[DirectionUpdate] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
     # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.
@@ -62,18 +58,16 @@ class PlateUpdate(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .direction_axis import DirectionAxis
+        from .direction_update import DirectionUpdate
         from .plate_theory import PlateTheory
 
-        from .direction_axis import DirectionAxis
+        from .direction_update import DirectionUpdate
         from .plate_theory import PlateTheory
 
         fields: dict[str, Callable[[Any], None]] = {
             "actualThickness": lambda n : setattr(self, 'actual_thickness', n.get_float_value()),
             "bendingThickness": lambda n : setattr(self, 'bending_thickness', n.get_float_value()),
-            "dirAngle": lambda n : setattr(self, 'dir_angle', n.get_float_value()),
-            "dirAxis": lambda n : setattr(self, 'dir_axis', n.get_enum_value(DirectionAxis)),
-            "dirNode": lambda n : setattr(self, 'dir_node', n.get_int_value()),
+            "direction": lambda n : setattr(self, 'direction', n.get_object_value(DirectionUpdate)),
             "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "material": lambda n : setattr(self, 'material', n.get_int_value()),
@@ -98,9 +92,7 @@ class PlateUpdate(Parsable):
             raise TypeError("writer cannot be null.")
         writer.write_float_value("actualThickness", self.actual_thickness)
         writer.write_float_value("bendingThickness", self.bending_thickness)
-        writer.write_float_value("dirAngle", self.dir_angle)
-        writer.write_enum_value("dirAxis", self.dir_axis)
-        writer.write_int_value("dirNode", self.dir_node)
+        writer.write_object_value("direction", self.direction)
         writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_int_value("material", self.material)

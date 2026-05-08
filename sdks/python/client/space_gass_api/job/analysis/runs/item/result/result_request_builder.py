@@ -32,7 +32,7 @@ class ResultRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[AnalysisRunResult]:
         """
-        Gets a summary of the completed analysis run.Returns 409 Conflict if the analysis is still running.            For actual result data (reactions, displacements, etc.), use the query endpoints:- GET /api/v1/job/query/analysis/static/node/reactions- GET /api/v1/job/query/analysis/static/node/displacements
+        Gets a summary of the completed analysis run.Returns 409 Conflict if the analysis is still running.            For actual result data (reactions, displacements, etc.), use the query endpoints:- GET /api/v1/job/query/analysis/static/node-reactions- GET /api/v1/job/query/analysis/static/node-displacements
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[AnalysisRunResult]
         """
@@ -53,7 +53,7 @@ class ResultRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Gets a summary of the completed analysis run.Returns 409 Conflict if the analysis is still running.            For actual result data (reactions, displacements, etc.), use the query endpoints:- GET /api/v1/job/query/analysis/static/node/reactions- GET /api/v1/job/query/analysis/static/node/displacements
+        Gets a summary of the completed analysis run.Returns 409 Conflict if the analysis is still running.            For actual result data (reactions, displacements, etc.), use the query endpoints:- GET /api/v1/job/query/analysis/static/node-reactions- GET /api/v1/job/query/analysis/static/node-displacements
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

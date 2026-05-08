@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Result summary DTO returned once an analysis run completes.For actual analysis result data, use the query endpoints(e.g., /api/v1/job/query/analysis/static/node/reactions).
+    /// Result summary DTO returned once an analysis run completes.For actual analysis result data, use the query endpoints(e.g., /api/v1/job/query/analysis/static/node-reactions).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class AnalysisRunResult : IParsable

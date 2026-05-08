@@ -3,7 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors;
-using SpaceGassApi.Job.Query.Analysis.Buckling.Member;
+using SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -21,10 +21,10 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling
         {
             get => new global::SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors.LoadFactorsRequestBuilder(PathParameters, RequestAdapter);
         }
-        /// <summary>The member property</summary>
-        public global::SpaceGassApi.Job.Query.Analysis.Buckling.Member.MemberRequestBuilder Member
+        /// <summary>The memberEffectiveLengths property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths.MemberEffectiveLengthsRequestBuilder MemberEffectiveLengths
         {
-            get => new global::SpaceGassApi.Job.Query.Analysis.Buckling.Member.MemberRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths.MemberEffectiveLengthsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Analysis.Buckling.BucklingRequestBuilder"/> and sets the default values.

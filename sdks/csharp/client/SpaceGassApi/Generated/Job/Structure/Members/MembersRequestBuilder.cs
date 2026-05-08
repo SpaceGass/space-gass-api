@@ -4,10 +4,10 @@ using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Structure.Members.Bulk;
+using SpaceGassApi.Job.Structure.Members.Direction;
 using SpaceGassApi.Job.Structure.Members.Item;
 using SpaceGassApi.Job.Structure.Members.Metadata;
 using SpaceGassApi.Job.Structure.Members.Next;
-using SpaceGassApi.Job.Structure.Members.Offsets;
 using SpaceGassApi.Job.Structure.Members.Releases;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
@@ -28,6 +28,11 @@ namespace SpaceGassApi.Job.Structure.Members
         {
             get => new global::SpaceGassApi.Job.Structure.Members.Bulk.BulkRequestBuilder(PathParameters, RequestAdapter);
         }
+        /// <summary>The direction property</summary>
+        public global::SpaceGassApi.Job.Structure.Members.Direction.DirectionRequestBuilder Direction
+        {
+            get => new global::SpaceGassApi.Job.Structure.Members.Direction.DirectionRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The metadata property</summary>
         public global::SpaceGassApi.Job.Structure.Members.Metadata.MetadataRequestBuilder Metadata
         {
@@ -37,11 +42,6 @@ namespace SpaceGassApi.Job.Structure.Members
         public global::SpaceGassApi.Job.Structure.Members.Next.NextRequestBuilder Next
         {
             get => new global::SpaceGassApi.Job.Structure.Members.Next.NextRequestBuilder(PathParameters, RequestAdapter);
-        }
-        /// <summary>The offsets property</summary>
-        public global::SpaceGassApi.Job.Structure.Members.Offsets.OffsetsRequestBuilder Offsets
-        {
-            get => new global::SpaceGassApi.Job.Structure.Members.Offsets.OffsetsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The releases property</summary>
         public global::SpaceGassApi.Job.Structure.Members.Releases.ReleasesRequestBuilder Releases
@@ -95,7 +95,6 @@ namespace SpaceGassApi.Job.Structure.Members
         /// <returns>A List&lt;global::SpaceGassApi.Models.Member&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<List<global::SpaceGassApi.Models.Member>?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Members.MembersRequestBuilder.MembersRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -106,11 +105,7 @@ namespace SpaceGassApi.Job.Structure.Members
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
-            {
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-            };
-            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.Member>(requestInfo, global::SpaceGassApi.Models.Member.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.Member>(requestInfo, global::SpaceGassApi.Models.Member.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
             return collectionResult?.AsList();
         }
         /// <summary>
@@ -121,7 +116,6 @@ namespace SpaceGassApi.Job.Structure.Members
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -137,7 +131,6 @@ namespace SpaceGassApi.Job.Structure.Members
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Member>(requestInfo, global::SpaceGassApi.Models.Member.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);

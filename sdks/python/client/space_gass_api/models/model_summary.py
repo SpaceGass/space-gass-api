@@ -11,8 +11,6 @@ class ModelSummary(Parsable):
     """
     # Number of combination load cases.
     combination_load_cases: Optional[int] = None
-    # Number of multi-point constraint definitions.
-    constraints: Optional[int] = None
     # Number of load case groups.
     load_case_groups: Optional[int] = None
     # Number of primary load cases defined.
@@ -35,6 +33,8 @@ class ModelSummary(Parsable):
     member_torsion_loads: Optional[int] = None
     # Number of members (beam/column elements) in the structure.
     members: Optional[int] = None
+    # Number of master-slave node constraint definitions.
+    node_constraints: Optional[int] = None
     # Number of point loads applied to nodes.
     node_loads: Optional[int] = None
     # Number of nodes with support restraint conditions.
@@ -72,7 +72,6 @@ class ModelSummary(Parsable):
         """
         fields: dict[str, Callable[[Any], None]] = {
             "combinationLoadCases": lambda n : setattr(self, 'combination_load_cases', n.get_int_value()),
-            "constraints": lambda n : setattr(self, 'constraints', n.get_int_value()),
             "loadCaseGroups": lambda n : setattr(self, 'load_case_groups', n.get_int_value()),
             "loadCases": lambda n : setattr(self, 'load_cases', n.get_int_value()),
             "loadCategories": lambda n : setattr(self, 'load_categories', n.get_int_value()),
@@ -84,6 +83,7 @@ class ModelSummary(Parsable):
             "memberPrestressLoads": lambda n : setattr(self, 'member_prestress_loads', n.get_int_value()),
             "memberTorsionLoads": lambda n : setattr(self, 'member_torsion_loads', n.get_int_value()),
             "members": lambda n : setattr(self, 'members', n.get_int_value()),
+            "nodeConstraints": lambda n : setattr(self, 'node_constraints', n.get_int_value()),
             "nodeLoads": lambda n : setattr(self, 'node_loads', n.get_int_value()),
             "nodeRestraints": lambda n : setattr(self, 'node_restraints', n.get_int_value()),
             "nodes": lambda n : setattr(self, 'nodes', n.get_int_value()),
@@ -105,7 +105,6 @@ class ModelSummary(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_int_value("combinationLoadCases", self.combination_load_cases)
-        writer.write_int_value("constraints", self.constraints)
         writer.write_int_value("loadCaseGroups", self.load_case_groups)
         writer.write_int_value("loadCases", self.load_cases)
         writer.write_int_value("loadCategories", self.load_categories)
@@ -117,6 +116,7 @@ class ModelSummary(Parsable):
         writer.write_int_value("memberPrestressLoads", self.member_prestress_loads)
         writer.write_int_value("memberTorsionLoads", self.member_torsion_loads)
         writer.write_int_value("members", self.members)
+        writer.write_int_value("nodeConstraints", self.node_constraints)
         writer.write_int_value("nodeLoads", self.node_loads)
         writer.write_int_value("nodeRestraints", self.node_restraints)
         writer.write_int_value("nodes", self.nodes)
