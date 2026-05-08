@@ -30,7 +30,7 @@ import asyncio
 import os
 import sys
 
-from space_gass_api import SpaceGassApiClient, query
+from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
 # -- Configuration ------------------------------------------------
@@ -261,8 +261,7 @@ async def main() -> int:
 
         # == Step 15 — Query reactions =================================
         print("Querying ULS reactions...")
-        reactions = await query(
-            client.job.query.analysis.static.node_reactions,
+        reactions = await client.job.query.analysis.static.node_reactions.query(
             cases=str(uls_case.id),
         )
 
@@ -278,8 +277,7 @@ async def main() -> int:
         print()
 
         # == Step 16 — Maximum ULS bending moment ======================
-        uls_forces = await query(
-            client.job.query.analysis.static.member_intermediate_forces,
+        uls_forces = await client.job.query.analysis.static.member_intermediate_forces.query(
             cases=str(uls_case.id),
             members=str(member.id),
         )
@@ -289,8 +287,7 @@ async def main() -> int:
         print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
 
         # == Step 17 — Maximum SLS deflection ==========================
-        sls_displacements = await query(
-            client.job.query.analysis.static.member_intermediate_displacements,
+        sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.query(
             cases=str(sls_case.id),
             members=str(member.id),
         )

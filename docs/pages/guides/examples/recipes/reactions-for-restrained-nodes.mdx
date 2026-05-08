@@ -67,7 +67,7 @@ finally
 
 ```python title="Python"
 import asyncio
-from space_gass_api import SpaceGassApiClient, query
+from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
 client = SpaceGassApiClient.create_client()
@@ -91,15 +91,13 @@ try:
             break
 
     # 1. Get the restrained nodes
-    restrained = await query(
-        client.job.structure.nodes,
+    restrained = await client.job.structure.nodes.query(
         node_type=models.NodeTypeFilter.Restrained)
 
     node_filter = ",".join(str(n.id) for n in restrained if n.id is not None)
 
     # 2. Read reactions filtered to those nodes
-    result = await query(
-        client.job.query.analysis.static.node_reactions,
+    result = await client.job.query.analysis.static.node_reactions.query(
         nodes=node_filter)
 
     for r in result.results:

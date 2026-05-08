@@ -68,7 +68,7 @@ finally
 
 ```python title="Python"
 import asyncio
-from space_gass_api import SpaceGassApiClient, query
+from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
 client = SpaceGassApiClient.create_client()
@@ -90,8 +90,7 @@ try:
         ):
             break
 
-    reactions = await query(
-        client.job.query.analysis.static.node_reactions,
+    reactions = await client.job.query.analysis.static.node_reactions.query(
         cases="1")
 
     if reactions.warnings and reactions.warnings.cases_not_analyzed:
