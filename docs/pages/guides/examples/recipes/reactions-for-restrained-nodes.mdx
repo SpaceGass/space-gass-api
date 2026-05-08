@@ -11,51 +11,107 @@ the reactions endpoint.
 `Nodes` accepts SG list format — comma-separated Ids and dash ranges
 (`"1,3-7,10"`). Build it with `string.Join(",", ids)` (C#) or `",".join(...)` (Python).
 
-Assumes the project is open and analysed.
+The snippet below opens the `Portal Frame.SG` sample, runs a linear
+static analysis to populate reactions, queries restrained nodes, then
+prints their reactions. `try / finally` closes the job even if a step
+in the middle throws.
 
 <CodeTabs>
 ```csharp title="C#"
-// 1. Get the restrained nodes
-var restrained = await client.Job.Structure.Nodes.GetAsync(
-    config => config.QueryParameters.NodeType = NodeTypeFilter.Restrained);
+using SpaceGassApi;
+using SpaceGassApi.Models;
 
-var nodeFilter = string.Join(",",
-    restrained!.Where(n => n.Id != null).Select(n => n.Id!.Value));
+var client = SpaceGassApiClient.CreateClient();
 
-// 2. Read reactions filtered to those nodes
-var result = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
-    config => config.QueryParameters.Nodes = nodeFilter);
-
-foreach (var r in result!.Results!)
+try
 {
-    Console.WriteLine(
-        $"Node {r.Node}, Case {r.Case}: " +
-        $"Fx={r.Fx:F2}, Fy={r.Fy:F2}, Fz={r.Fz:F2}");
+    await client.Job.OpenSample.PostAsync(
+        new OpenSampleRequest { FileName = "Portal Frame.SG" });
+
+    // Run analysis so reactions are available.
+    var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
+        new StaticSettingsUpdate());
+
+    while (true)
+    {
+        await Task.Delay(500);
+        var s = await client.Job.Analysis.Runs[run!.RunId!.Value].GetAsync();
+        if (s!.Status is AnalysisRunStatus.Completed
+                      or AnalysisRunStatus.Failed
+                      or AnalysisRunStatus.Cancelled) break;
+    }
+
+    // 1. Get the restrained nodes
+    var restrained = await client.Job.Structure.Nodes.GetAsync(
+        config => config.QueryParameters.NodeType = NodeTypeFilter.Restrained);
+
+    var nodeFilter = string.Join(",",
+        restrained!.Where(n => n.Id != null).Select(n => n.Id!.Value));
+
+    // 2. Read reactions filtered to those nodes
+    var result = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
+        config => config.QueryParameters.Nodes = nodeFilter);
+
+    foreach (var r in result!.Results!)
+    {
+        Console.WriteLine(
+            $"Node {r.Node}, Case {r.Case}: " +
+            $"Fx={r.Fx:F2}, Fy={r.Fy:F2}, Fz={r.Fz:F2}");
+    }
+}
+finally
+{
+    await client.Job.Close.PostAsync();
 }
 ```
 
 ```python title="Python"
+import asyncio
 from kiota_abstractions.base_request_configuration import RequestConfiguration
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
 from space_gass_api.job.structure.nodes.nodes_request_builder import NodesRequestBuilder
 from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
-# 1. Get the restrained nodes
-node_params = NodesRequestBuilder.NodesRequestBuilderGetQueryParameters(
-    node_type=models.NodeTypeFilter.Restrained)
-restrained = await client.job.structure.nodes.get(
-    request_configuration=RequestConfiguration(query_parameters=node_params))
+client = SpaceGassApiClient.create_client()
 
-node_filter = ",".join(str(n.id) for n in restrained if n.id is not None)
+try:
+    await client.job.open_sample.post(
+        models.OpenSampleRequest(file_name="Portal Frame.SG"))
 
-# 2. Read reactions filtered to those nodes
-reaction_params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
-    nodes=node_filter)
-result = await client.job.query.analysis.static.node_reactions.get(
-    request_configuration=RequestConfiguration(query_parameters=reaction_params))
+    # Run analysis so reactions are available.
+    run = await client.job.analysis.static.run_linear.post(
+        models.StaticSettingsUpdate())
 
-for r in result.results:
-    print(f"Node {r.node}, Case {r.case}: "
-          f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
+    while True:
+        await asyncio.sleep(0.5)
+        s = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
+        if s.status in (
+            models.AnalysisRunStatus.Completed,
+            models.AnalysisRunStatus.Failed,
+            models.AnalysisRunStatus.Cancelled,
+        ):
+            break
+
+    # 1. Get the restrained nodes
+    node_params = NodesRequestBuilder.NodesRequestBuilderGetQueryParameters(
+        node_type=models.NodeTypeFilter.Restrained)
+    restrained = await client.job.structure.nodes.get(
+        request_configuration=RequestConfiguration(query_parameters=node_params))
+
+    node_filter = ",".join(str(n.id) for n in restrained if n.id is not None)
+
+    # 2. Read reactions filtered to those nodes
+    reaction_params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
+        nodes=node_filter)
+    result = await client.job.query.analysis.static.node_reactions.get(
+        request_configuration=RequestConfiguration(query_parameters=reaction_params))
+
+    for r in result.results:
+        print(f"Node {r.node}, Case {r.case}: "
+              f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
+finally:
+    await client.job.close.post()
 ```
 
 ```bash title="curl"

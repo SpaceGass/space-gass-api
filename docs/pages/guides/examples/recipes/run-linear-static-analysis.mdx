@@ -10,7 +10,9 @@ status reaches a terminal state (`Completed`, `Failed`, or `Cancelled`).
 The snippet below opens your project, runs analysis with the current
 settings, polls every half-second, and prints a one-line summary on
 completion. The empty `StaticSettingsUpdate()` body means "use whatever
-settings the job already has" — pass non-null fields to override.
+settings the job already has" — pass non-null fields to override,
+including a selection of the load cases and combinations you would
+like to run.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -19,27 +21,32 @@ using SpaceGassApi.Models;
 
 var client = SpaceGassApiClient.CreateClient();
 
-await client.Job.Open.PostAsync(
-    new OpenJobRequest { FilePath = @"C:\Projects\MyStructure.sg" });
-
-var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
-    new StaticSettingsUpdate());
-
-while (true)
+try
 {
-    await Task.Delay(500);
-    var status = await client.Job.Analysis.Runs[run!.RunId!.Value].GetAsync();
+    await client.Job.OpenSample.PostAsync(
+        new OpenSampleRequest { FileName = "Portal Frame.SG" });
 
-    if (status!.Status is AnalysisRunStatus.Completed
-                       or AnalysisRunStatus.Failed
-                       or AnalysisRunStatus.Cancelled)
+    var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
+        new StaticSettingsUpdate());
+
+    while (true)
     {
-        Console.WriteLine($"{status.Status} in {status.ElapsedTime}");
-        break;
+        await Task.Delay(500);
+        var status = await client.Job.Analysis.Runs[run!.RunId!.Value].GetAsync();
+
+        if (status!.Status is AnalysisRunStatus.Completed
+                           or AnalysisRunStatus.Failed
+                           or AnalysisRunStatus.Cancelled)
+        {
+            Console.WriteLine($"{status.Status} in {status.ElapsedTime}");
+            break;
+        }
     }
 }
-
-await client.Job.Close.PostAsync();
+finally
+{
+    await client.Job.Close.PostAsync();
+}
 ```
 
 ```python title="Python"
@@ -49,25 +56,26 @@ import space_gass_api.models as models
 
 client = SpaceGassApiClient.create_client()
 
-await client.job.open.post(
-    models.OpenJobRequest(file_path=r"C:\Projects\MyStructure.sg"))
+try:
+    await client.job.open_sample.post(
+        models.OpenSampleRequest(file_name="Portal Frame.SG"))
 
-run = await client.job.analysis.static.run_linear.post(
-    models.StaticSettingsUpdate())
+    run = await client.job.analysis.static.run_linear.post(
+        models.StaticSettingsUpdate())
 
-while True:
-    await asyncio.sleep(0.5)
-    status = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
+    while True:
+        await asyncio.sleep(0.5)
+        status = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
 
-    if status.status in (
-        models.AnalysisRunStatus.Completed,
-        models.AnalysisRunStatus.Failed,
-        models.AnalysisRunStatus.Cancelled,
-    ):
-        print(f"{status.status} in {status.elapsed_time}")
-        break
-
-await client.job.close.post()
+        if status.status in (
+            models.AnalysisRunStatus.Completed,
+            models.AnalysisRunStatus.Failed,
+            models.AnalysisRunStatus.Cancelled,
+        ):
+            print(f"{status.status} in {status.elapsed_time}")
+            break
+finally:
+    await client.job.close.post()
 ```
 </CodeTabs>
 

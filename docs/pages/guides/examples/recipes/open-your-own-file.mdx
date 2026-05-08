@@ -8,9 +8,11 @@ to load a built-in sample so you don't need a project file. Once you
 have your own `.sg` file, switch to `Job.Open` — same shape, but you
 supply the path.
 
-`Job.Open` returns `409 Conflict` if a job is already open. Close it
-first with `Job.Close`, or use `Job.OpenForce` to override (see
-[File Handling](/guides/file-handling) for the force-open pattern).
+`Job.Open` returns `409 Conflict` if a job is already open — close it
+first with `Job.Close`. If the file has unsaved temporary files from a
+previous crashed session, set `ForceOption` on the request body to
+either `OpenPreviousSaved` (discard the unsaved changes) or
+`OpenUnsavedMostRecent` (recover them).
 
 <CodeTabs>
 ```csharp title="C#"
@@ -62,4 +64,4 @@ curl -X POST http://localhost:34560/api/v1/job/close
 
 - [Concepts — The Active Job](/getting-started/concepts#the-active-job)
 - [File Handling](/guides/file-handling) — full set of open / save /
-  force-open / status patterns.
+  status patterns.

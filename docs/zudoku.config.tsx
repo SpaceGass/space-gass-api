@@ -319,10 +319,10 @@ const config: ZudokuConfig = {
           collapsed: false,
           items: [
             "guides/examples/recipes/open-your-own-file",
+            "guides/examples/recipes/save-and-close",
             "guides/examples/recipes/run-linear-static-analysis",
             "guides/examples/recipes/reactions-for-restrained-nodes",
             "guides/examples/recipes/filter-results-by-case",
-            "guides/examples/recipes/save-and-close",
           ],
         },
       ],

@@ -10,6 +10,10 @@ overwritten) at that location. Wrap the work in `try / finally` so
 service is left holding an active job and the next `Open` will
 return `409`.
 
+The snippet below opens the `Portal Frame.SG` sample, saves it as a
+new file on the desktop, and closes the job — useful as a template
+for any "open something, save it as something else" workflow.
+
 <CodeTabs>
 ```csharp title="C#"
 using SpaceGassApi;
@@ -17,13 +21,16 @@ using SpaceGassApi.Models;
 
 var savePath = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
-    "MyResults.sg");
+    "PortalFrameCopy.sg");
 
 var client = SpaceGassApiClient.CreateClient();
 
 try
 {
-    // ...build / open / analyse...
+    await client.Job.OpenSample.PostAsync(
+        new OpenSampleRequest { FileName = "Portal Frame.SG" });
+
+    // ...modify the model however you like...
 
     await client.Job.Save.PostAsync(
         new SaveJobRequest { FilePath = savePath });
@@ -42,13 +49,16 @@ import space_gass_api.models as models
 
 save_path = os.path.join(
     os.path.expanduser("~/Desktop"),
-    "MyResults.sg",
+    "PortalFrameCopy.sg",
 )
 
 client = SpaceGassApiClient.create_client()
 
 try:
-    # ...build / open / analyse...
+    await client.job.open_sample.post(
+        models.OpenSampleRequest(file_name="Portal Frame.SG"))
+
+    # ...modify the model however you like...
 
     await client.job.save.post(
         models.SaveJobRequest(file_path=save_path))
@@ -58,16 +68,25 @@ finally:
 ```
 
 ```bash title="curl"
+# Open the sample
+curl -X POST http://localhost:34560/api/v1/job/open-sample \
+  -H "Content-Type: application/json" \
+  -d '{"fileName": "Portal Frame.SG"}'
+
+# ...modify the model however you like...
+
 curl -X POST http://localhost:34560/api/v1/job/save \
   -H "Content-Type: application/json" \
-  -d '{"filePath": "C:\\Users\\you\\Desktop\\MyResults.sg"}'
+  -d '{"filePath": "C:\\Users\\you\\Desktop\\PortalFrameCopy.sg"}'
 
 curl -X POST http://localhost:34560/api/v1/job/close
 ```
 </CodeTabs>
 
 If you want to save to the path the job was originally opened from,
-omit `filePath` — the API saves over the original.
+omit `filePath` — the API saves over the original. (Sample projects
+opened with `Job.OpenSample` are unsaved and have no original path,
+so you must supply one.)
 
 ## See also
 

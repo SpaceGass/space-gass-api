@@ -17,41 +17,95 @@ syntax — comma-separated Ids and dash ranges in a single string:
 The same format applies to `Nodes`, `Members`, `Modes`, and any other
 list filter.
 
-Assumes the project is open and analysed; `ulsCase.Id` is the Id of
-the combination case you ran.
+The snippet below opens the `Portal Frame.SG` sample, runs a linear
+static analysis, then reads node reactions filtered to load case `1`.
+Adjust the case Id to match a case that exists in your model.
+`try / finally` closes the job at the end even if a step in the middle
+throws.
 
 <CodeTabs>
 ```csharp title="C#"
-var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
-    config => config.QueryParameters.Cases = $"{ulsCase.Id}");
+using SpaceGassApi;
+using SpaceGassApi.Models;
 
-if (reactions!.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
+var client = SpaceGassApiClient.CreateClient();
+
+try
 {
-    throw new Exception($"Cases not analysed: {missing}. Run the analysis first.");
+    await client.Job.OpenSample.PostAsync(
+        new OpenSampleRequest { FileName = "Portal Frame.SG" });
+
+    var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
+        new StaticSettingsUpdate());
+
+    while (true)
+    {
+        await Task.Delay(500);
+        var s = await client.Job.Analysis.Runs[run!.RunId!.Value].GetAsync();
+        if (s!.Status is AnalysisRunStatus.Completed
+                      or AnalysisRunStatus.Failed
+                      or AnalysisRunStatus.Cancelled) break;
+    }
+
+    var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
+        config => config.QueryParameters.Cases = "1");
+
+    if (reactions!.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
+    {
+        throw new Exception($"Cases not analysed: {missing}. Run the analysis first.");
+    }
+
+    foreach (var r in reactions.Results!)
+    {
+        Console.WriteLine($"Node {r.Node}: Fx={r.Fx:F2}, Fy={r.Fy:F2}, Fz={r.Fz:F2}");
+    }
 }
-
-foreach (var r in reactions.Results!)
+finally
 {
-    Console.WriteLine($"Node {r.Node}: Fx={r.Fx:F2}, Fy={r.Fy:F2}, Fz={r.Fz:F2}");
+    await client.Job.Close.PostAsync();
 }
 ```
 
 ```python title="Python"
+import asyncio
 from kiota_abstractions.base_request_configuration import RequestConfiguration
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
 from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
-params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
-    cases=str(uls_case.id))
-reactions = await client.job.query.analysis.static.node_reactions.get(
-    request_configuration=RequestConfiguration(query_parameters=params))
+client = SpaceGassApiClient.create_client()
 
-if reactions.warnings and reactions.warnings.cases_not_analyzed:
-    raise RuntimeError(
-        f"Cases not analysed: {reactions.warnings.cases_not_analyzed}. "
-        "Run the analysis first.")
+try:
+    await client.job.open_sample.post(
+        models.OpenSampleRequest(file_name="Portal Frame.SG"))
 
-for r in reactions.results:
-    print(f"Node {r.node}: Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
+    run = await client.job.analysis.static.run_linear.post(
+        models.StaticSettingsUpdate())
+
+    while True:
+        await asyncio.sleep(0.5)
+        s = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
+        if s.status in (
+            models.AnalysisRunStatus.Completed,
+            models.AnalysisRunStatus.Failed,
+            models.AnalysisRunStatus.Cancelled,
+        ):
+            break
+
+    params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
+        cases="1")
+    reactions = await client.job.query.analysis.static.node_reactions.get(
+        request_configuration=RequestConfiguration(query_parameters=params))
+
+    if reactions.warnings and reactions.warnings.cases_not_analyzed:
+        raise RuntimeError(
+            f"Cases not analysed: {reactions.warnings.cases_not_analyzed}. "
+            "Run the analysis first.")
+
+    for r in reactions.results:
+        print(f"Node {r.node}: Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
+finally:
+    await client.job.close.post()
 ```
 
 ```bash title="curl"
