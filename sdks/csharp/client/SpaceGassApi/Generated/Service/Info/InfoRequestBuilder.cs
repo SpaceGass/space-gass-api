@@ -39,7 +39,6 @@ namespace SpaceGassApi.Service.Info
         /// <returns>A <see cref="global::SpaceGassApi.Models.ServiceInfo"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.ServiceInfo?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -50,11 +49,7 @@ namespace SpaceGassApi.Service.Info
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
-            {
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-            };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ServiceInfo>(requestInfo, global::SpaceGassApi.Models.ServiceInfo.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ServiceInfo>(requestInfo, global::SpaceGassApi.Models.ServiceInfo.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns the API base URL and the SPACE GASS version number.

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class MemberOffset(Parsable):
     """
-    DTO for reading member offset data.Offsets define rigid end zones at each end of a member.This is a sub-resource of Member, not a standalone entity.
+    DTO for reading member offset data.Offsets define rigid end zones at each end of a member.Top-level entity attribute keyed on the parent member.
     """
     # Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table "L/G Axes".
     axes: Optional[AxesType] = None

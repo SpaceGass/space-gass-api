@@ -13,7 +13,7 @@ class Node(Parsable):
     """
     DTO for a single node in the structureOnly includes non-hidden fields from the SPACEGASS node definition
     """
-    # DTO for reading a node constraint (master-slave constraint).Defines a kinematic relationship between a slave node and a master node.The slave node's degrees of freedom are tied to the master node according to the constraint code.Key: SlaveNode — each node can be a slave in at most one constraint.
+    # DTO for reading a node constraint (master-slave constraint).Defines a kinematic relationship between a slave node and a master node.The slave node's degrees of freedom are tied to the master node according to the constraint code.Top-level entity attribute keyed on the slave node — each node can be a slave in at most one constraint.
     constraint: Optional[NodeConstraint] = None
     # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
     guid: Optional[str] = None
@@ -23,7 +23,7 @@ class Node(Parsable):
     has_restraint: Optional[bool] = None
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
     id: Optional[int] = None
-    # DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.
+    # DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).Top-level entity attribute keyed on the parent node.
     restraint: Optional[NodeRestraint] = None
     # X coordinate. Unit: Length (see GET /job/units).
     x: Optional[float] = None

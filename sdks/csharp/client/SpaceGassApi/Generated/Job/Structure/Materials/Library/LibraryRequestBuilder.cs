@@ -47,7 +47,6 @@ namespace SpaceGassApi.Job.Structure.Materials.Library
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -63,7 +62,6 @@ namespace SpaceGassApi.Job.Structure.Materials.Library
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Material>(requestInfo, global::SpaceGassApi.Models.Material.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);

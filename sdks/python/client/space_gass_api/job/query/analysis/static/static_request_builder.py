@@ -6,9 +6,15 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .member.member_request_builder import MemberRequestBuilder
-    from .node.node_request_builder import NodeRequestBuilder
-    from .plate.plate_request_builder import PlateRequestBuilder
+    from .member_end_forces.member_end_forces_request_builder import MemberEndForcesRequestBuilder
+    from .member_intermediate_displacements.member_intermediate_displacements_request_builder import MemberIntermediateDisplacementsRequestBuilder
+    from .member_intermediate_forces.member_intermediate_forces_request_builder import MemberIntermediateForcesRequestBuilder
+    from .member_stresses.member_stresses_request_builder import MemberStressesRequestBuilder
+    from .node_displacements.node_displacements_request_builder import NodeDisplacementsRequestBuilder
+    from .node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
+    from .plate_element_forces.plate_element_forces_request_builder import PlateElementForcesRequestBuilder
+    from .plate_element_stresses.plate_element_stresses_request_builder import PlateElementStressesRequestBuilder
+    from .plate_nodal_forces.plate_nodal_forces_request_builder import PlateNodalForcesRequestBuilder
 
 class StaticRequestBuilder(BaseRequestBuilder):
     """
@@ -24,30 +30,84 @@ class StaticRequestBuilder(BaseRequestBuilder):
         super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static", path_parameters)
     
     @property
-    def member(self) -> MemberRequestBuilder:
+    def member_end_forces(self) -> MemberEndForcesRequestBuilder:
         """
-        The member property
+        The memberEndForces property
         """
-        from .member.member_request_builder import MemberRequestBuilder
+        from .member_end_forces.member_end_forces_request_builder import MemberEndForcesRequestBuilder
 
-        return MemberRequestBuilder(self.request_adapter, self.path_parameters)
+        return MemberEndForcesRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
-    def node(self) -> NodeRequestBuilder:
+    def member_intermediate_displacements(self) -> MemberIntermediateDisplacementsRequestBuilder:
         """
-        The node property
+        The memberIntermediateDisplacements property
         """
-        from .node.node_request_builder import NodeRequestBuilder
+        from .member_intermediate_displacements.member_intermediate_displacements_request_builder import MemberIntermediateDisplacementsRequestBuilder
 
-        return NodeRequestBuilder(self.request_adapter, self.path_parameters)
+        return MemberIntermediateDisplacementsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
-    def plate(self) -> PlateRequestBuilder:
+    def member_intermediate_forces(self) -> MemberIntermediateForcesRequestBuilder:
         """
-        The plate property
+        The memberIntermediateForces property
         """
-        from .plate.plate_request_builder import PlateRequestBuilder
+        from .member_intermediate_forces.member_intermediate_forces_request_builder import MemberIntermediateForcesRequestBuilder
 
-        return PlateRequestBuilder(self.request_adapter, self.path_parameters)
+        return MemberIntermediateForcesRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def member_stresses(self) -> MemberStressesRequestBuilder:
+        """
+        The memberStresses property
+        """
+        from .member_stresses.member_stresses_request_builder import MemberStressesRequestBuilder
+
+        return MemberStressesRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def node_displacements(self) -> NodeDisplacementsRequestBuilder:
+        """
+        The nodeDisplacements property
+        """
+        from .node_displacements.node_displacements_request_builder import NodeDisplacementsRequestBuilder
+
+        return NodeDisplacementsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def node_reactions(self) -> NodeReactionsRequestBuilder:
+        """
+        The nodeReactions property
+        """
+        from .node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
+
+        return NodeReactionsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def plate_element_forces(self) -> PlateElementForcesRequestBuilder:
+        """
+        The plateElementForces property
+        """
+        from .plate_element_forces.plate_element_forces_request_builder import PlateElementForcesRequestBuilder
+
+        return PlateElementForcesRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def plate_element_stresses(self) -> PlateElementStressesRequestBuilder:
+        """
+        The plateElementStresses property
+        """
+        from .plate_element_stresses.plate_element_stresses_request_builder import PlateElementStressesRequestBuilder
+
+        return PlateElementStressesRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def plate_nodal_forces(self) -> PlateNodalForcesRequestBuilder:
+        """
+        The plateNodalForces property
+        """
+        from .plate_nodal_forces.plate_nodal_forces_request_builder import PlateNodalForcesRequestBuilder
+
+        return PlateNodalForcesRequestBuilder(self.request_adapter, self.path_parameters)
     
 

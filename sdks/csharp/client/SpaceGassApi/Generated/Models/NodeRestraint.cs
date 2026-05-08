@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.
+    /// DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).Top-level entity attribute keyed on the parent node.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeRestraint : IParsable

@@ -11,6 +11,8 @@ class BatchError(Parsable):
     """
     # Error message describing what went wrong.
     error: Optional[str] = None
+    # Detailed SPACE GASS validation messages for this item, when available.Populated from `SpaceGassException.SpaceGassErrors` so callers seethe exact field-level diagnostic ("Restraint Code: Valid characters are FRSVPN")without needing a follow-up call to `GET /job/errors/last`.
+    errors: Optional[list[str]] = None
     # Entity Id of the failed item (for single-Id entities).
     id: Optional[int] = None
     # Id values of the failed item (for multi-Id entities).
@@ -36,6 +38,7 @@ class BatchError(Parsable):
         """
         fields: dict[str, Callable[[Any], None]] = {
             "error": lambda n : setattr(self, 'error', n.get_str_value()),
+            "errors": lambda n : setattr(self, 'errors', n.get_collection_of_primitive_values(str)),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "ids": lambda n : setattr(self, 'ids', n.get_collection_of_primitive_values(int)),
             "index": lambda n : setattr(self, 'index', n.get_int_value()),
@@ -51,6 +54,7 @@ class BatchError(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_str_value("error", self.error)
+        writer.write_collection_of_primitive_values("errors", self.errors)
         writer.write_int_value("id", self.id)
         writer.write_collection_of_primitive_values("ids", self.ids)
         writer.write_int_value("index", self.index)

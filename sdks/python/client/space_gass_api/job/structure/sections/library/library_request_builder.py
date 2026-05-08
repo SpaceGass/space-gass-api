@@ -48,7 +48,6 @@ class LibraryRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
-            "401": ProblemDetails,
             "409": ProblemDetails,
         }
         if not self.request_adapter:

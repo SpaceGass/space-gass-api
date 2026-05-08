@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .direction_axis import DirectionAxis
+    from .member_direction import MemberDirection
     from .member_offset import MemberOffset
     from .member_release import MemberRelease
     from .member_type import MemberType
@@ -17,12 +17,8 @@ class Member(Parsable):
     """
     # Cable length (for Cable type members). Unit: Length (see GET /job/units).
     cable_length: Optional[float] = None
-    # Direction angle for member orientation.
-    dir_angle: Optional[float] = None
-    # Direction axis for member orientation.Maps to SPACE GASS lookup table "Direction Axis".
-    dir_axis: Optional[DirectionAxis] = None
-    # Direction node for member orientation.
-    dir_node: Optional[int] = None
+    # DTO for reading member direction data.Direction defines the orientation of the member's local coordinate system.Always present on every member — the parent MemberDto's `id` is authoritative.
+    direction: Optional[MemberDirection] = None
     # Fuse compression limit (for Fuse type members). Unit: Force (see GET /job/units).
     fuse_compression_limit: Optional[float] = None
     # Fuse tension limit (for Fuse type members). Unit: Force (see GET /job/units).
@@ -43,7 +39,7 @@ class Member(Parsable):
     node_a: Optional[int] = None
     # Node at end B of the member.
     node_b: Optional[int] = None
-    # DTO for reading member offset data.Offsets define rigid end zones at each end of a member.This is a sub-resource of Member, not a standalone entity.
+    # DTO for reading member offset data.Offsets define rigid end zones at each end of a member.Top-level entity attribute keyed on the parent member.
     offsets: Optional[MemberOffset] = None
     # DTO for reading member release data.Releases define fixity codes and spring stiffness at each end of a member.Always present on every member, so the owning member Idis not duplicated here — the parent MemberDto's `id` is authoritative whenreturned inline, and the route parameter is authoritative on the standalone endpoint.
     releases: Optional[MemberRelease] = None
@@ -68,21 +64,19 @@ class Member(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .direction_axis import DirectionAxis
+        from .member_direction import MemberDirection
         from .member_offset import MemberOffset
         from .member_release import MemberRelease
         from .member_type import MemberType
 
-        from .direction_axis import DirectionAxis
+        from .member_direction import MemberDirection
         from .member_offset import MemberOffset
         from .member_release import MemberRelease
         from .member_type import MemberType
 
         fields: dict[str, Callable[[Any], None]] = {
             "cableLength": lambda n : setattr(self, 'cable_length', n.get_float_value()),
-            "dirAngle": lambda n : setattr(self, 'dir_angle', n.get_float_value()),
-            "dirAxis": lambda n : setattr(self, 'dir_axis', n.get_enum_value(DirectionAxis)),
-            "dirNode": lambda n : setattr(self, 'dir_node', n.get_int_value()),
+            "direction": lambda n : setattr(self, 'direction', n.get_object_value(MemberDirection)),
             "fuseCompressionLimit": lambda n : setattr(self, 'fuse_compression_limit', n.get_float_value()),
             "fuseTensionLimit": lambda n : setattr(self, 'fuse_tension_limit', n.get_float_value()),
             "gapCompressionLimit": lambda n : setattr(self, 'gap_compression_limit', n.get_float_value()),
@@ -109,9 +103,7 @@ class Member(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_float_value("cableLength", self.cable_length)
-        writer.write_float_value("dirAngle", self.dir_angle)
-        writer.write_enum_value("dirAxis", self.dir_axis)
-        writer.write_int_value("dirNode", self.dir_node)
+        writer.write_object_value("direction", self.direction)
         writer.write_float_value("fuseCompressionLimit", self.fuse_compression_limit)
         writer.write_float_value("fuseTensionLimit", self.fuse_tension_limit)
         writer.write_float_value("gapCompressionLimit", self.gap_compression_limit)

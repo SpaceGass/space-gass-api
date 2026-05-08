@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a node constraint (master-slave constraint).Defines a kinematic relationship between a slave node and a master node.The slave node&apos;s degrees of freedom are tied to the master node according to the constraint code.Key: SlaveNode — each node can be a slave in at most one constraint.
+    /// DTO for reading a node constraint (master-slave constraint).Defines a kinematic relationship between a slave node and a master node.The slave node&apos;s degrees of freedom are tied to the master node according to the constraint code.Top-level entity attribute keyed on the slave node — each node can be a slave in at most one constraint.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeConstraint : IParsable

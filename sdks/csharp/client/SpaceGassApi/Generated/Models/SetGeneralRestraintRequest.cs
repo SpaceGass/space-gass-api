@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Request body for `POST job/structure/nodes/restraints/set-general`.Provide a node Id to promote that node as the general restraint(demoting every other row); pass `null` to clear the flag from every node.
+    /// Request body for `POST job/structure/node-restraints/set-general`.Provide a node Id to promote that node as the general restraint(demoting every other row); pass `null` to clear the flag from every node.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SetGeneralRestraintRequest : IParsable

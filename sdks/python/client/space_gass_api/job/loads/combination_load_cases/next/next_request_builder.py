@@ -13,9 +13,6 @@ from kiota_abstractions.serialization import Parsable, ParsableFactory
 from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
-if TYPE_CHECKING:
-    from .....models.problem_details import ProblemDetails
-
 class NextRequestBuilder(BaseRequestBuilder):
     """
     Builds and executes requests for operations under /job/loads/combination-load-cases/next
@@ -38,14 +35,9 @@ class NextRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from .....models.problem_details import ProblemDetails
-
-        error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
-        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        return await self.request_adapter.send_primitive_async(request_info, "int", error_mapping)
+        return await self.request_adapter.send_primitive_async(request_info, "int", None)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[NextRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """

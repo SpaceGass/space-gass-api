@@ -14,7 +14,7 @@ class MemberOffsetUpdate(Parsable):
     """
     # Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table "L/G Axes".
     axes: Optional[AxesType] = None
-    # The member Id whose offset is being updated.Optional in body for the per-member PATCH endpoint (route parameter wins).Required for bulk-update payloads, where each item must identify its member.
+    # The member Id whose offset is being updated.Required for bulk PATCH; ignored for single-member PATCH (route value wins).
     member: Optional[int] = None
     # X offset at end A. Unit: Length (see GET /job/units).
     x_offset_at_a: Optional[float] = None

@@ -3,7 +3,6 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Service.Info;
-using SpaceGassApi.Service.VersionNamespace;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -20,11 +19,6 @@ namespace SpaceGassApi.Service
         public global::SpaceGassApi.Service.Info.InfoRequestBuilder Info
         {
             get => new global::SpaceGassApi.Service.Info.InfoRequestBuilder(PathParameters, RequestAdapter);
-        }
-        /// <summary>The version property</summary>
-        public global::SpaceGassApi.Service.VersionNamespace.VersionRequestBuilder Version
-        {
-            get => new global::SpaceGassApi.Service.VersionNamespace.VersionRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Service.ServiceRequestBuilder"/> and sets the default values.

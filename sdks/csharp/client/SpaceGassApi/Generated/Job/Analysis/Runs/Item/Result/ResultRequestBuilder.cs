@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Analysis.Runs.Item.Result
         {
         }
         /// <summary>
-        /// Gets a summary of the completed analysis run.Returns 409 Conflict if the analysis is still running.            For actual result data (reactions, displacements, etc.), use the query endpoints:- GET /api/v1/job/query/analysis/static/node/reactions- GET /api/v1/job/query/analysis/static/node/displacements
+        /// Gets a summary of the completed analysis run.Returns 409 Conflict if the analysis is still running.            For actual result data (reactions, displacements, etc.), use the query endpoints:- GET /api/v1/job/query/analysis/static/node-reactions- GET /api/v1/job/query/analysis/static/node-displacements
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.AnalysisRunResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -59,7 +59,7 @@ namespace SpaceGassApi.Job.Analysis.Runs.Item.Result
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.AnalysisRunResult>(requestInfo, global::SpaceGassApi.Models.AnalysisRunResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets a summary of the completed analysis run.Returns 409 Conflict if the analysis is still running.            For actual result data (reactions, displacements, etc.), use the query endpoints:- GET /api/v1/job/query/analysis/static/node/reactions- GET /api/v1/job/query/analysis/static/node/displacements
+        /// Gets a summary of the completed analysis run.Returns 409 Conflict if the analysis is still running.            For actual result data (reactions, displacements, etc.), use the query endpoints:- GET /api/v1/job/query/analysis/static/node-reactions- GET /api/v1/job/query/analysis/static/node-displacements
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

@@ -15,12 +15,14 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Cable length (for Cable type members). Unit: Length (see GET /job/units).</summary>
         public double? CableLength { get; set; }
-        /// <summary>Direction angle for member orientation.</summary>
-        public double? DirAngle { get; set; }
-        /// <summary>Direction axis for member orientation.Maps to SPACE GASS lookup table &quot;Direction Axis&quot;.</summary>
-        public global::SpaceGassApi.Models.DirectionAxis? DirAxis { get; set; }
-        /// <summary>Direction node for member orientation.</summary>
-        public int? DirNode { get; set; }
+        /// <summary>DTO for updating the direction on a member or plate (partial-update semantics).</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.DirectionUpdate? Direction { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.DirectionUpdate Direction { get; set; }
+#endif
         /// <summary>Fuse compression limit (for Fuse type members). Unit: Force (see GET /job/units).</summary>
         public double? FuseCompressionLimit { get; set; }
         /// <summary>Fuse tension limit (for Fuse type members). Unit: Force (see GET /job/units).</summary>
@@ -45,6 +47,14 @@ namespace SpaceGassApi.Models
         public int? NodeA { get; set; }
         /// <summary>Node at end B of the member.</summary>
         public int? NodeB { get; set; }
+        /// <summary>DTO for partial updates to a member release.Only fields included in the request are updated; omit a field to keep its current value.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.MemberReleaseUpdate? Releases { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.MemberReleaseUpdate Releases { get; set; }
+#endif
         /// <summary>Section number assigned to this member.</summary>
         public int? Section { get; set; }
         /// <summary>Member element type. Determines the structural behavior of the member.Maps to SPACE GASS lookup table &quot;Member Type&quot;.</summary>
@@ -68,9 +78,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "cableLength", n => { CableLength = n.GetDoubleValue(); } },
-                { "dirAngle", n => { DirAngle = n.GetDoubleValue(); } },
-                { "dirAxis", n => { DirAxis = n.GetEnumValue<global::SpaceGassApi.Models.DirectionAxis>(); } },
-                { "dirNode", n => { DirNode = n.GetIntValue(); } },
+                { "direction", n => { Direction = n.GetObjectValue<global::SpaceGassApi.Models.DirectionUpdate>(global::SpaceGassApi.Models.DirectionUpdate.CreateFromDiscriminatorValue); } },
                 { "fuseCompressionLimit", n => { FuseCompressionLimit = n.GetDoubleValue(); } },
                 { "fuseTensionLimit", n => { FuseTensionLimit = n.GetDoubleValue(); } },
                 { "gapCompressionLimit", n => { GapCompressionLimit = n.GetDoubleValue(); } },
@@ -80,6 +88,7 @@ namespace SpaceGassApi.Models
                 { "material", n => { Material = n.GetIntValue(); } },
                 { "nodeA", n => { NodeA = n.GetIntValue(); } },
                 { "nodeB", n => { NodeB = n.GetIntValue(); } },
+                { "releases", n => { Releases = n.GetObjectValue<global::SpaceGassApi.Models.MemberReleaseUpdate>(global::SpaceGassApi.Models.MemberReleaseUpdate.CreateFromDiscriminatorValue); } },
                 { "section", n => { Section = n.GetIntValue(); } },
                 { "type", n => { Type = n.GetEnumValue<global::SpaceGassApi.Models.MemberType>(); } },
             };
@@ -92,9 +101,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteDoubleValue("cableLength", CableLength);
-            writer.WriteDoubleValue("dirAngle", DirAngle);
-            writer.WriteEnumValue<global::SpaceGassApi.Models.DirectionAxis>("dirAxis", DirAxis);
-            writer.WriteIntValue("dirNode", DirNode);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.DirectionUpdate>("direction", Direction);
             writer.WriteDoubleValue("fuseCompressionLimit", FuseCompressionLimit);
             writer.WriteDoubleValue("fuseTensionLimit", FuseTensionLimit);
             writer.WriteDoubleValue("gapCompressionLimit", GapCompressionLimit);
@@ -104,6 +111,7 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("material", Material);
             writer.WriteIntValue("nodeA", NodeA);
             writer.WriteIntValue("nodeB", NodeB);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.MemberReleaseUpdate>("releases", Releases);
             writer.WriteIntValue("section", Section);
             writer.WriteEnumValue<global::SpaceGassApi.Models.MemberType>("type", Type);
         }

@@ -33,7 +33,7 @@ namespace SpaceGassApi.Models
 #endif
         /// <summary>The master node number.</summary>
         public int? MasterNode { get; set; }
-        /// <summary>The slave node number that identifies which constraint to update.Required for bulk PATCH (PATCH /constraints/bulk).Ignored for single-node PATCH (PATCH /{key}/constraint) — the route value is used instead.</summary>
+        /// <summary>The slave node number that identifies which constraint to update.Required for bulk PATCH; ignored for single-node PATCH (route value wins).</summary>
         public int? SlaveNode { get; set; }
         /// <summary>X component of the constraint axis direction vector.</summary>
         public double? XVector { get; set; }

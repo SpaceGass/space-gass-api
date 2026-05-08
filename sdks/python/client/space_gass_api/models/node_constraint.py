@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class NodeConstraint(Parsable):
     """
-    DTO for reading a node constraint (master-slave constraint).Defines a kinematic relationship between a slave node and a master node.The slave node's degrees of freedom are tied to the master node according to the constraint code.Key: SlaveNode — each node can be a slave in at most one constraint.
+    DTO for reading a node constraint (master-slave constraint).Defines a kinematic relationship between a slave node and a master node.The slave node's degrees of freedom are tied to the master node according to the constraint code.Top-level entity attribute keyed on the slave node — each node can be a slave in at most one constraint.
     """
     # Coordinate axis system used for master-slave constraint equations.Maps to SPACE GASS lookup table "Constraint Axes".
     axes: Optional[ConstraintAxes] = None

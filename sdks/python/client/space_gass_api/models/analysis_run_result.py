@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 @dataclass
 class AnalysisRunResult(Parsable):
     """
-    Result summary DTO returned once an analysis run completes.For actual analysis result data, use the query endpoints(e.g., /api/v1/job/query/analysis/static/node/reactions).
+    Result summary DTO returned once an analysis run completes.For actual analysis result data, use the query endpoints(e.g., /api/v1/job/query/analysis/static/node-reactions).
     """
     # SPACEGASS analysis types. Values map to the SPACEGASS internal SGAnalysisType IDs.
     analysis_type: Optional[AnalysisType] = None

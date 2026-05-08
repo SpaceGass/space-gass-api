@@ -8,14 +8,14 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for creating (or replacing) a member offset.The member Id comes from the route parameter, not the body.
+    /// DTO for creating member offsets. POST is entity-style: 409 if offsets already existfor the supplied member — caller must DELETE first or PATCH instead.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberOffsetCreate : IParsable
     {
         /// <summary>Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table &quot;L/G Axes&quot;.</summary>
         public global::SpaceGassApi.Models.AxesType? Axes { get; set; }
-        /// <summary>The member Id to create the offset for.Optional in body — if omitted, set from the route parameter by the controller.</summary>
+        /// <summary>The member Id to create the offset for. Required in the request body.</summary>
         public int? Member { get; set; }
         /// <summary>X offset at end A. Unit: Length (see GET /job/units).</summary>
         public double? XOffsetAtA { get; set; }

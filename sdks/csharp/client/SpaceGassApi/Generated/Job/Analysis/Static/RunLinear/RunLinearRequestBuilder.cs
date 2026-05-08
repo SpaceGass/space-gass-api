@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Analysis.Static.RunLinear
         {
         }
         /// <summary>
-        /// Starts a Linear Static Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.If omitted, the analysis runs with the current job settings as-is.            Once complete, results are available via the query endpoints(e.g., GET /api/v1/job/query/analysis/static/node/reactions).
+        /// Starts a Linear Static Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.If omitted, the analysis runs with the current job settings as-is.            Once complete, results are available via the query endpoints(e.g., GET /api/v1/job/query/analysis/static/node-reactions).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.AnalysisRun"/></returns>
         /// <param name="body">Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.</param>
@@ -61,7 +61,7 @@ namespace SpaceGassApi.Job.Analysis.Static.RunLinear
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.AnalysisRun>(requestInfo, global::SpaceGassApi.Models.AnalysisRun.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Starts a Linear Static Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.If omitted, the analysis runs with the current job settings as-is.            Once complete, results are available via the query endpoints(e.g., GET /api/v1/job/query/analysis/static/node/reactions).
+        /// Starts a Linear Static Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.If omitted, the analysis runs with the current job settings as-is.            Once complete, results are available via the query endpoints(e.g., GET /api/v1/job/query/analysis/static/node-reactions).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.</param>

@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for creating (or replacing) a node restraint.The node Id comes from the route parameter, not the body.
+    /// DTO for creating a node restraint. POST is entity-style: 409 if a restraintalready exists for the supplied node — caller must DELETE first or PATCH instead.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeRestraintCreate : IParsable
@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
 #else
         public string ActiveDirection { get; set; }
 #endif
-        /// <summary>The node Id to create the restraint for.Optional in body — if omitted, set from the route parameter by the controller.</summary>
+        /// <summary>The node Id to create the restraint for. Required in the request body.</summary>
         public int? Node { get; set; }
         /// <summary>6-character restraint code for TX,TY,TZ,RX,RY,RZ. Each character is one of:F = Fixed (prevents movement);R = Released (allows movement);S = Spring (movement governed by a spring stiffness);V = Variable spring (multiple stiffnesses via a stiffness-vs-deflection table);P = Plastic (upper force/moment limit on the reaction);N = Friction (upper limit proportional to the normal-axis reaction).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER

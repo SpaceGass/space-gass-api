@@ -20,7 +20,7 @@ class NodeConstraintUpdate(Parsable):
     guid: Optional[str] = None
     # The master node number.
     master_node: Optional[int] = None
-    # The slave node number that identifies which constraint to update.Required for bulk PATCH (PATCH /constraints/bulk).Ignored for single-node PATCH (PATCH /{key}/constraint) — the route value is used instead.
+    # The slave node number that identifies which constraint to update.Required for bulk PATCH; ignored for single-node PATCH (route value wins).
     slave_node: Optional[int] = None
     # X component of the constraint axis direction vector.
     x_vector: Optional[float] = None

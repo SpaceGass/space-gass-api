@@ -15,12 +15,14 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Cable length (for Cable type members). Unit: Length (see GET /job/units).</summary>
         public double? CableLength { get; set; }
-        /// <summary>Direction angle for member orientation.</summary>
-        public double? DirAngle { get; set; }
-        /// <summary>Direction axis for member orientation.Maps to SPACE GASS lookup table &quot;Direction Axis&quot;.</summary>
-        public global::SpaceGassApi.Models.DirectionAxis? DirAxis { get; set; }
-        /// <summary>Direction node for member orientation.</summary>
-        public int? DirNode { get; set; }
+        /// <summary>DTO for reading member direction data.Direction defines the orientation of the member&apos;s local coordinate system.Always present on every member — the parent MemberDto&apos;s `id` is authoritative.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.MemberDirection? Direction { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.MemberDirection Direction { get; set; }
+#endif
         /// <summary>Fuse compression limit (for Fuse type members). Unit: Force (see GET /job/units).</summary>
         public double? FuseCompressionLimit { get; set; }
         /// <summary>Fuse tension limit (for Fuse type members). Unit: Force (see GET /job/units).</summary>
@@ -47,7 +49,7 @@ namespace SpaceGassApi.Models
         public int? NodeA { get; set; }
         /// <summary>Node at end B of the member.</summary>
         public int? NodeB { get; set; }
-        /// <summary>DTO for reading member offset data.Offsets define rigid end zones at each end of a member.This is a sub-resource of Member, not a standalone entity.</summary>
+        /// <summary>DTO for reading member offset data.Offsets define rigid end zones at each end of a member.Top-level entity attribute keyed on the parent member.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.MemberOffset? Offsets { get; set; }
@@ -86,9 +88,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "cableLength", n => { CableLength = n.GetDoubleValue(); } },
-                { "dirAngle", n => { DirAngle = n.GetDoubleValue(); } },
-                { "dirAxis", n => { DirAxis = n.GetEnumValue<global::SpaceGassApi.Models.DirectionAxis>(); } },
-                { "dirNode", n => { DirNode = n.GetIntValue(); } },
+                { "direction", n => { Direction = n.GetObjectValue<global::SpaceGassApi.Models.MemberDirection>(global::SpaceGassApi.Models.MemberDirection.CreateFromDiscriminatorValue); } },
                 { "fuseCompressionLimit", n => { FuseCompressionLimit = n.GetDoubleValue(); } },
                 { "fuseTensionLimit", n => { FuseTensionLimit = n.GetDoubleValue(); } },
                 { "gapCompressionLimit", n => { GapCompressionLimit = n.GetDoubleValue(); } },
@@ -113,9 +113,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteDoubleValue("cableLength", CableLength);
-            writer.WriteDoubleValue("dirAngle", DirAngle);
-            writer.WriteEnumValue<global::SpaceGassApi.Models.DirectionAxis>("dirAxis", DirAxis);
-            writer.WriteIntValue("dirNode", DirNode);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.MemberDirection>("direction", Direction);
             writer.WriteDoubleValue("fuseCompressionLimit", FuseCompressionLimit);
             writer.WriteDoubleValue("fuseTensionLimit", FuseTensionLimit);
             writer.WriteDoubleValue("gapCompressionLimit", GapCompressionLimit);

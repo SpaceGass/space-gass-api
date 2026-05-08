@@ -42,7 +42,6 @@ class NewRequestBuilder(BaseRequestBuilder):
         from ...models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
             "409": ProblemDetails,
         }
         if not self.request_adapter:

@@ -15,6 +15,8 @@ class NodeLoadBatchResult(Parsable):
     """
     # Errors from failed items.
     errors: Optional[list[BatchError]] = None
+    # True when the bulk operation stopped accumulating errors after reachingSpaceGassApi.Models.Dtos.Entity.BatchResultDto`1.ErrorMessageCap. Further failures may exist beyond what is reported.
+    errors_truncated: Optional[bool] = None
     # Successfully processed items.
     succeeded: Optional[list[NodeLoad]] = None
     
@@ -42,6 +44,7 @@ class NodeLoadBatchResult(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "errors": lambda n : setattr(self, 'errors', n.get_collection_of_object_values(BatchError)),
+            "errorsTruncated": lambda n : setattr(self, 'errors_truncated', n.get_bool_value()),
             "succeeded": lambda n : setattr(self, 'succeeded', n.get_collection_of_object_values(NodeLoad)),
         }
         return fields
@@ -55,6 +58,7 @@ class NodeLoadBatchResult(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_collection_of_object_values("errors", self.errors)
+        writer.write_bool_value("errorsTruncated", self.errors_truncated)
         writer.write_collection_of_object_values("succeeded", self.succeeded)
     
 

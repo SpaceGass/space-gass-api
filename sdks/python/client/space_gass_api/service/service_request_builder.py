@@ -7,7 +7,6 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from .info.info_request_builder import InfoRequestBuilder
-    from .version.version_request_builder import VersionRequestBuilder
 
 class ServiceRequestBuilder(BaseRequestBuilder):
     """
@@ -30,14 +29,5 @@ class ServiceRequestBuilder(BaseRequestBuilder):
         from .info.info_request_builder import InfoRequestBuilder
 
         return InfoRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def version(self) -> VersionRequestBuilder:
-        """
-        The version property
-        """
-        from .version.version_request_builder import VersionRequestBuilder
-
-        return VersionRequestBuilder(self.request_adapter, self.path_parameters)
     
 

@@ -45,7 +45,6 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors
         /// <returns>A <see cref="global::SpaceGassApi.Models.BucklingLoadFactorQueryResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.BucklingLoadFactorQueryResult?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors.LoadFactorsRequestBuilder.LoadFactorsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -56,11 +55,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
-            {
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-            };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.BucklingLoadFactorQueryResult>(requestInfo, global::SpaceGassApi.Models.BucklingLoadFactorQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.BucklingLoadFactorQueryResult>(requestInfo, global::SpaceGassApi.Models.BucklingLoadFactorQueryResult.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Gets buckling load factor results for all load cases and modes.

@@ -13,23 +13,21 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class LicenseStatus : IParsable
     {
-        /// <summary>The licensing backend in use (&quot;TitanCloud&quot; or &quot;TitanSoftlock&quot;).Empty when the machine is not registered for a supported backend.</summary>
+        /// <summary>Names of module licenses currently active for this API instance.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public string? BackendType { get; set; }
+        public List<string>? ActiveModules { get; set; }
 #nullable restore
 #else
-        public string BackendType { get; set; }
+        public List<string> ActiveModules { get; set; }
 #endif
-        /// <summary>Timestamp when the SPACE GASS core module was acquired, if any.</summary>
-        public DateTimeOffset? CoreModuleAcquiredAt { get; set; }
-        /// <summary>Modules this company / user is entitled to (has purchased), whether or notthey are currently acquired. Analogous to the SPACE GASS desktop&quot;Help &gt; About&quot; dialog&apos;s licensed-module list. Empty if the backendquery failed (see SpaceGassApi.Models.Dtos.License.LicenseStatusDto.ErrorMessage).</summary>
+        /// <summary>Names of modules this company / user is entitled to (has purchased),whether or not they are currently acquired. Analogous to the SPACEGASS desktop &quot;Help &gt; About&quot; dialog&apos;s licensed-module list. Emptyif the backend query failed (see SpaceGassApi.Models.Dtos.License.LicenseStatusDto.ErrorMessage).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<global::SpaceGassApi.Models.HeldModule>? Entitlements { get; set; }
+        public List<string>? Entitlements { get; set; }
 #nullable restore
 #else
-        public List<global::SpaceGassApi.Models.HeldModule> Entitlements { get; set; }
+        public List<string> Entitlements { get; set; }
 #endif
         /// <summary>Last error message when the license is not active; null otherwise.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -39,14 +37,6 @@ namespace SpaceGassApi.Models
 #else
         public string ErrorMessage { get; set; }
 #endif
-        /// <summary>All module licenses currently held by this API instance.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public List<global::SpaceGassApi.Models.HeldModule>? HeldModules { get; set; }
-#nullable restore
-#else
-        public List<global::SpaceGassApi.Models.HeldModule> HeldModules { get; set; }
-#endif
         /// <summary>Whether a job is currently open (Tier 2 SPACE GASS core held).</summary>
         public bool? IsJobOpen { get; set; }
         /// <summary>True when the API is currently licensed (Tier 1 API module is held).</summary>
@@ -55,8 +45,10 @@ namespace SpaceGassApi.Models
         public bool? IsRegistered { get; set; }
         /// <summary>True when the active Titan LM session is backed by an offlineroaming licence file (no live LM server connection). Always falsefor TitanCloud and for non-roaming Titan LM. Operator-facingsignal so dashboards can tell which path is in use.</summary>
         public bool? IsRoaming { get; set; }
-        /// <summary>Company registration / lock ID from the license server.</summary>
-        public int? LockId { get; set; }
+        /// <summary>UTC timestamp when the current job was opened (and the SPACE GASSlicence seat became active), or `null` when no job is open.</summary>
+        public DateTimeOffset? JobOpenedAt { get; set; }
+        /// <summary>License ID from the license server (the company registration number).</summary>
+        public int? LicenseId { get; set; }
         /// <summary>Company or organisation name from the license server.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -65,7 +57,7 @@ namespace SpaceGassApi.Models
 #else
         public string Organization { get; set; }
 #endif
-        /// <summary>Human-readable explanation of the registration state — what wasdetected, and what the operator should do if registration is missingor unsupported.</summary>
+        /// <summary>Human-readable explanation of the registration state. Alwayspopulated. For TitanCloud / TitanLM it confirms the registrationis active; for Unsupported / Unregistered it explains what theoperator should do to fix it.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? RegistrationDetail { get; set; }
@@ -73,14 +65,8 @@ namespace SpaceGassApi.Models
 #else
         public string RegistrationDetail { get; set; }
 #endif
-        /// <summary>Detected registration status: &quot;TitanCloud&quot;, &quot;TitanLm&quot;, &quot;Unsupported&quot;,or &quot;Unregistered&quot;.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? RegistrationStatus { get; set; }
-#nullable restore
-#else
-        public string RegistrationStatus { get; set; }
-#endif
+        /// <summary>Outcome of probing the machine for a SPACE GASS registration.Mirrors the precedence used by desktop SPACE GASS in`NETLicenses\Licenses.vb::RegistrationSetupCheck`: legacy SGREG.DATshort-circuits before any Titan-type probing, then TitanCloud, then Titan LM.</summary>
+        public global::SpaceGassApi.Models.RegistrationStatus? RegistrationType { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
@@ -99,19 +85,18 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "backendType", n => { BackendType = n.GetStringValue(); } },
-                { "coreModuleAcquiredAt", n => { CoreModuleAcquiredAt = n.GetDateTimeOffsetValue(); } },
-                { "entitlements", n => { Entitlements = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.HeldModule>(global::SpaceGassApi.Models.HeldModule.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "activeModules", n => { ActiveModules = n.GetCollectionOfPrimitiveValues<string>()?.AsList(); } },
+                { "entitlements", n => { Entitlements = n.GetCollectionOfPrimitiveValues<string>()?.AsList(); } },
                 { "errorMessage", n => { ErrorMessage = n.GetStringValue(); } },
-                { "heldModules", n => { HeldModules = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.HeldModule>(global::SpaceGassApi.Models.HeldModule.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "isJobOpen", n => { IsJobOpen = n.GetBoolValue(); } },
                 { "isLicensed", n => { IsLicensed = n.GetBoolValue(); } },
                 { "isRegistered", n => { IsRegistered = n.GetBoolValue(); } },
                 { "isRoaming", n => { IsRoaming = n.GetBoolValue(); } },
-                { "lockId", n => { LockId = n.GetIntValue(); } },
+                { "jobOpenedAt", n => { JobOpenedAt = n.GetDateTimeOffsetValue(); } },
+                { "licenseId", n => { LicenseId = n.GetIntValue(); } },
                 { "organization", n => { Organization = n.GetStringValue(); } },
                 { "registrationDetail", n => { RegistrationDetail = n.GetStringValue(); } },
-                { "registrationStatus", n => { RegistrationStatus = n.GetStringValue(); } },
+                { "registrationType", n => { RegistrationType = n.GetEnumValue<global::SpaceGassApi.Models.RegistrationStatus>(); } },
             };
         }
         /// <summary>
@@ -121,19 +106,18 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteStringValue("backendType", BackendType);
-            writer.WriteDateTimeOffsetValue("coreModuleAcquiredAt", CoreModuleAcquiredAt);
-            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.HeldModule>("entitlements", Entitlements);
+            writer.WriteCollectionOfPrimitiveValues<string>("activeModules", ActiveModules);
+            writer.WriteCollectionOfPrimitiveValues<string>("entitlements", Entitlements);
             writer.WriteStringValue("errorMessage", ErrorMessage);
-            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.HeldModule>("heldModules", HeldModules);
             writer.WriteBoolValue("isJobOpen", IsJobOpen);
             writer.WriteBoolValue("isLicensed", IsLicensed);
             writer.WriteBoolValue("isRegistered", IsRegistered);
             writer.WriteBoolValue("isRoaming", IsRoaming);
-            writer.WriteIntValue("lockId", LockId);
+            writer.WriteDateTimeOffsetValue("jobOpenedAt", JobOpenedAt);
+            writer.WriteIntValue("licenseId", LicenseId);
             writer.WriteStringValue("organization", Organization);
             writer.WriteStringValue("registrationDetail", RegistrationDetail);
-            writer.WriteStringValue("registrationStatus", RegistrationStatus);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.RegistrationStatus>("registrationType", RegistrationType);
         }
     }
 }

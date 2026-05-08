@@ -20,10 +20,10 @@ if TYPE_CHECKING:
     from ....models.member_type import MemberType
     from ....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
+    from .direction.direction_request_builder import DirectionRequestBuilder
     from .item.members_item_request_builder import MembersItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
     from .next.next_request_builder import NextRequestBuilder
-    from .offsets.offsets_request_builder import OffsetsRequestBuilder
     from .releases.releases_request_builder import ReleasesRequestBuilder
 
 class MembersRequestBuilder(BaseRequestBuilder):
@@ -62,16 +62,11 @@ class MembersRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from ....models.problem_details import ProblemDetails
-
-        error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
-        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from ....models.member import Member
 
-        return await self.request_adapter.send_collection_async(request_info, Member, error_mapping)
+        return await self.request_adapter.send_collection_async(request_info, Member, None)
     
     async def post(self,body: MemberCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Member]:
         """
@@ -89,7 +84,6 @@ class MembersRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
-            "401": ProblemDetails,
             "409": ProblemDetails,
         }
         if not self.request_adapter:
@@ -144,6 +138,15 @@ class MembersRequestBuilder(BaseRequestBuilder):
         return BulkRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
+    def direction(self) -> DirectionRequestBuilder:
+        """
+        The direction property
+        """
+        from .direction.direction_request_builder import DirectionRequestBuilder
+
+        return DirectionRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
     def metadata(self) -> MetadataRequestBuilder:
         """
         The metadata property
@@ -160,15 +163,6 @@ class MembersRequestBuilder(BaseRequestBuilder):
         from .next.next_request_builder import NextRequestBuilder
 
         return NextRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def offsets(self) -> OffsetsRequestBuilder:
-        """
-        The offsets property
-        """
-        from .offsets.offsets_request_builder import OffsetsRequestBuilder
-
-        return OffsetsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def releases(self) -> ReleasesRequestBuilder:

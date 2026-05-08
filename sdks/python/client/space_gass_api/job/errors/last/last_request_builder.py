@@ -15,7 +15,6 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ....models.last_error import LastError
-    from ....models.problem_details import ProblemDetails
 
 class LastRequestBuilder(BaseRequestBuilder):
     """
@@ -39,16 +38,11 @@ class LastRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from ....models.problem_details import ProblemDetails
-
-        error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
-        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from ....models.last_error import LastError
 
-        return await self.request_adapter.send_async(request_info, LastError, error_mapping)
+        return await self.request_adapter.send_async(request_info, LastError, None)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """

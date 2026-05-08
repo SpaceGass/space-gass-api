@@ -20,14 +20,10 @@ if TYPE_CHECKING:
     from ....models.node_type_filter import NodeTypeFilter
     from ....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
-    from .constraint.constraint_request_builder import ConstraintRequestBuilder
-    from .constraints.constraints_request_builder import ConstraintsRequestBuilder
     from .exists.exists_request_builder import ExistsRequestBuilder
     from .item.nodes_item_request_builder import NodesItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
     from .next.next_request_builder import NextRequestBuilder
-    from .restraint.restraint_request_builder import RestraintRequestBuilder
-    from .restraints.restraints_request_builder import RestraintsRequestBuilder
 
 class NodesRequestBuilder(BaseRequestBuilder):
     """
@@ -65,16 +61,11 @@ class NodesRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from ....models.problem_details import ProblemDetails
-
-        error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
-        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from ....models.node import Node
 
-        return await self.request_adapter.send_collection_async(request_info, Node, error_mapping)
+        return await self.request_adapter.send_collection_async(request_info, Node, None)
     
     async def post(self,body: NodeCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Node]:
         """
@@ -92,7 +83,6 @@ class NodesRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
-            "401": ProblemDetails,
             "409": ProblemDetails,
         }
         if not self.request_adapter:
@@ -147,24 +137,6 @@ class NodesRequestBuilder(BaseRequestBuilder):
         return BulkRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
-    def constraint(self) -> ConstraintRequestBuilder:
-        """
-        The constraint property
-        """
-        from .constraint.constraint_request_builder import ConstraintRequestBuilder
-
-        return ConstraintRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def constraints(self) -> ConstraintsRequestBuilder:
-        """
-        The constraints property
-        """
-        from .constraints.constraints_request_builder import ConstraintsRequestBuilder
-
-        return ConstraintsRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
     def exists(self) -> ExistsRequestBuilder:
         """
         The exists property
@@ -190,24 +162,6 @@ class NodesRequestBuilder(BaseRequestBuilder):
         from .next.next_request_builder import NextRequestBuilder
 
         return NextRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def restraint(self) -> RestraintRequestBuilder:
-        """
-        The restraint property
-        """
-        from .restraint.restraint_request_builder import RestraintRequestBuilder
-
-        return RestraintRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def restraints(self) -> RestraintsRequestBuilder:
-        """
-        The restraints property
-        """
-        from .restraints.restraints_request_builder import RestraintsRequestBuilder
-
-        return RestraintsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class NodesRequestBuilderGetQueryParameters():

@@ -15,7 +15,7 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table &quot;L/G Axes&quot;.</summary>
         public global::SpaceGassApi.Models.AxesType? Axes { get; set; }
-        /// <summary>The member Id whose offset is being updated.Optional in body for the per-member PATCH endpoint (route parameter wins).Required for bulk-update payloads, where each item must identify its member.</summary>
+        /// <summary>The member Id whose offset is being updated.Required for bulk PATCH; ignored for single-member PATCH (route value wins).</summary>
         public int? Member { get; set; }
         /// <summary>X offset at end A. Unit: Length (see GET /job/units).</summary>
         public double? XOffsetAtA { get; set; }

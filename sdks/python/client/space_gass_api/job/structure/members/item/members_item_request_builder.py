@@ -18,7 +18,7 @@ if TYPE_CHECKING:
     from .....models.member import Member
     from .....models.member_update import MemberUpdate
     from .....models.problem_details import ProblemDetails
-    from .offsets.offsets_request_builder import OffsetsRequestBuilder
+    from .direction.direction_request_builder import DirectionRequestBuilder
     from .releases.releases_request_builder import ReleasesRequestBuilder
 
 class MembersItemRequestBuilder(BaseRequestBuilder):
@@ -46,7 +46,6 @@ class MembersItemRequestBuilder(BaseRequestBuilder):
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -65,7 +64,6 @@ class MembersItemRequestBuilder(BaseRequestBuilder):
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -90,7 +88,6 @@ class MembersItemRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
-            "401": ProblemDetails,
             "404": ProblemDetails,
         }
         if not self.request_adapter:
@@ -147,13 +144,13 @@ class MembersItemRequestBuilder(BaseRequestBuilder):
         return MembersItemRequestBuilder(self.request_adapter, raw_url)
     
     @property
-    def offsets(self) -> OffsetsRequestBuilder:
+    def direction(self) -> DirectionRequestBuilder:
         """
-        The offsets property
+        The direction property
         """
-        from .offsets.offsets_request_builder import OffsetsRequestBuilder
+        from .direction.direction_request_builder import DirectionRequestBuilder
 
-        return OffsetsRequestBuilder(self.request_adapter, self.path_parameters)
+        return DirectionRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def releases(self) -> ReleasesRequestBuilder:

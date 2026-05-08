@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 @dataclass
 class NodeRestraint(Parsable):
     """
-    DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).This is a sub-resource of Node, not a standalone entity.
+    DTO for reading a node restraint. Restraints define boundary conditionsat nodes (fixed, released, spring, etc.) using a 6-character restraint code (FRSVPN).Top-level entity attribute keyed on the parent node.
     """
     # 6-character active direction code for TX,TY,TZ,RX,RY,RZ.Each character: B=Both, P=Positive only, N=Negative only.
     active_direction: Optional[str] = None

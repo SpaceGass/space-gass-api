@@ -78,7 +78,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedLoads
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<List<global::SpaceGassApi.Models.MemberDistributedLoad>?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.MemberDistributedLoads.MemberDistributedLoadsRequestBuilder.MemberDistributedLoadsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -92,7 +91,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedLoads
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.MemberDistributedLoad>(requestInfo, global::SpaceGassApi.Models.MemberDistributedLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
             return collectionResult?.AsList();
@@ -105,7 +103,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedLoads
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -122,7 +119,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedLoads
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };

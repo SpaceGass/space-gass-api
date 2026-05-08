@@ -41,7 +41,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments.Bulk
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.MemberDistributedMomentKeyBatchResult?> DeleteAsync(List<global::SpaceGassApi.Models.MemberDistributedMomentKey> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.MemberDistributedMoments.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -56,7 +55,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments.Bulk
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MemberDistributedMomentKeyBatchResult>(requestInfo, global::SpaceGassApi.Models.MemberDistributedMomentKeyBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -68,7 +66,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments.Bulk
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.MemberDistributedMomentBatchResult?> PatchAsync(List<global::SpaceGassApi.Models.MemberDistributedMomentUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.MemberDistributedMoments.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -83,7 +80,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments.Bulk
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MemberDistributedMomentBatchResult>(requestInfo, global::SpaceGassApi.Models.MemberDistributedMomentBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -95,7 +91,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments.Bulk
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<Stream?> PostAsync(List<global::SpaceGassApi.Models.MemberDistributedMomentCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.MemberDistributedMoments.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -110,7 +105,6 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments.Bulk
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }

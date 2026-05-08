@@ -39,7 +39,6 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item.Items
         /// <returns>A List&lt;global::SpaceGassApi.Models.CombinationLoadCaseItem&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -53,7 +52,6 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item.Items
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.CombinationLoadCaseItem>(requestInfo, global::SpaceGassApi.Models.CombinationLoadCaseItem.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
@@ -67,7 +65,6 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item.Items
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 401 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -83,7 +80,6 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item.Items
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
-                { "401", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
             var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.CombinationLoadCaseItem>(requestInfo, global::SpaceGassApi.Models.CombinationLoadCaseItem.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
