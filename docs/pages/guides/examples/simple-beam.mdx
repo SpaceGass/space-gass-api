@@ -623,13 +623,8 @@ foreach (var r in reactions.Results)
 ```
 
 ```python title="Python"
-from kiota_abstractions.base_request_configuration import RequestConfiguration
-from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
-
-reaction_params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
+reactions = await client.job.query.analysis.static.node_reactions.query(
     cases=str(uls_case.id))
-reactions = await client.job.query.analysis.static.node_reactions.get(
-    request_configuration=RequestConfiguration(query_parameters=reaction_params))
 
 if reactions.warnings and reactions.warnings.cases_not_analyzed:
     raise RuntimeError(
@@ -678,13 +673,9 @@ Console.WriteLine($"Max ULS bending moment on Member {member.Id}: {maxMz:F2} kNm
 ```
 
 ```python title="Python"
-from space_gass_api.job.query.analysis.static.member_intermediate_forces.member_intermediate_forces_request_builder import MemberIntermediateForcesRequestBuilder
-
-force_params = MemberIntermediateForcesRequestBuilder.MemberIntermediateForcesRequestBuilderGetQueryParameters(
+uls_forces = await client.job.query.analysis.static.member_intermediate_forces.query(
     cases=str(uls_case.id),
     members=str(member.id))
-uls_forces = await client.job.query.analysis.static.member_intermediate_forces.get(
-    request_configuration=RequestConfiguration(query_parameters=force_params))
 
 beam_forces = uls_forces.results[0]
 max_mz = max(abs(v) for v in beam_forces.mz if v is not None)
@@ -730,13 +721,9 @@ Console.WriteLine($"Max SLS midspan deflection on Member {member.Id}: {maxDeflec
 ```
 
 ```python title="Python"
-from space_gass_api.job.query.analysis.static.member_intermediate_displacements.member_intermediate_displacements_request_builder import MemberIntermediateDisplacementsRequestBuilder
-
-displ_params = MemberIntermediateDisplacementsRequestBuilder.MemberIntermediateDisplacementsRequestBuilderGetQueryParameters(
+sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.query(
     cases=str(sls_case.id),
     members=str(member.id))
-sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.get(
-    request_configuration=RequestConfiguration(query_parameters=displ_params))
 
 beam_displacements = sls_displacements.results[0]
 max_deflection = max(abs(v) for v in beam_displacements.ty_global if v is not None)

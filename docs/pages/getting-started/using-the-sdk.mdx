@@ -91,13 +91,8 @@ await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(config =>
 ```
 
 ```python title="Python"
-from kiota_abstractions.base_request_configuration import RequestConfiguration
-from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
-
-params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
+await client.job.query.analysis.static.node_reactions.query(
     cases="1,3-7", nodes="10-12")
-await client.job.query.analysis.static.node_reactions.get(
-    request_configuration=RequestConfiguration(query_parameters=params))
 ```
 
 ```bash title="curl"

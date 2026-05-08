@@ -30,14 +30,8 @@ import asyncio
 import os
 import sys
 
-from kiota_abstractions.base_request_configuration import RequestConfiguration
-
 from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
-
-from space_gass_api.job.query.analysis.static.member_intermediate_forces.member_intermediate_forces_request_builder import MemberIntermediateForcesRequestBuilder
-from space_gass_api.job.query.analysis.static.member_intermediate_displacements.member_intermediate_displacements_request_builder import MemberIntermediateDisplacementsRequestBuilder
-from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
 # -- Configuration ------------------------------------------------
 save_file_path = os.path.join(
@@ -267,10 +261,9 @@ async def main() -> int:
 
         # == Step 15 — Query reactions =================================
         print("Querying ULS reactions...")
-        reaction_params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
-            cases=str(uls_case.id))
-        reactions = await client.job.query.analysis.static.node_reactions.get(
-            request_configuration=RequestConfiguration(query_parameters=reaction_params))
+        reactions = await client.job.query.analysis.static.node_reactions.query(
+            cases=str(uls_case.id),
+        )
 
         if reactions.warnings and reactions.warnings.cases_not_analyzed:
             raise RuntimeError(
@@ -284,22 +277,20 @@ async def main() -> int:
         print()
 
         # == Step 16 — Maximum ULS bending moment ======================
-        force_params = MemberIntermediateForcesRequestBuilder.MemberIntermediateForcesRequestBuilderGetQueryParameters(
+        uls_forces = await client.job.query.analysis.static.member_intermediate_forces.query(
             cases=str(uls_case.id),
-            members=str(member.id))
-        uls_forces = await client.job.query.analysis.static.member_intermediate_forces.get(
-            request_configuration=RequestConfiguration(query_parameters=force_params))
+            members=str(member.id),
+        )
 
         beam_forces = uls_forces.results[0]
         max_mz = max(abs(v) for v in beam_forces.mz if v is not None)
         print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
 
         # == Step 17 — Maximum SLS deflection ==========================
-        displ_params = MemberIntermediateDisplacementsRequestBuilder.MemberIntermediateDisplacementsRequestBuilderGetQueryParameters(
+        sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.query(
             cases=str(sls_case.id),
-            members=str(member.id))
-        sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.get(
-            request_configuration=RequestConfiguration(query_parameters=displ_params))
+            members=str(member.id),
+        )
 
         beam_displacements = sls_displacements.results[0]
         max_deflection = max(abs(v) for v in beam_displacements.ty_global if v is not None)
