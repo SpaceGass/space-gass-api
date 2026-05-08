@@ -16,7 +16,7 @@ Prerequisites:
 import asyncio
 import sys
 
-from space_gass_api import SpaceGassApiClient, query
+from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
 # -- Configuration ------------------------------------------------
@@ -37,8 +37,7 @@ async def main() -> int:
         # -- Get restrained nodes --------------------------------------
         print("Querying restrained nodes...")
 
-        restrained_nodes = await query(
-            client.job.structure.nodes,
+        restrained_nodes = await client.job.structure.nodes.query(
             node_type=models.NodeTypeFilter.Restrained,
         )
 
@@ -60,8 +59,7 @@ async def main() -> int:
             # Nodes filter uses SG list format (e.g. "1,5-10") — comma-separated Ids works for an arbitrary set.
             node_filter = ",".join(str(n.id) for n in restrained_nodes if n.id is not None)
 
-            reaction_result = await query(
-                client.job.query.analysis.static.node_reactions,
+            reaction_result = await client.job.query.analysis.static.node_reactions.query(
                 nodes=node_filter,
             )
 

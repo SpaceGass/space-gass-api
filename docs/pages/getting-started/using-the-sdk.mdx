@@ -91,10 +91,8 @@ await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(config =>
 ```
 
 ```python title="Python"
-from space_gass_api import query
-
-await query(client.job.query.analysis.static.node_reactions,
-            cases="1,3-7", nodes="10-12")
+await client.job.query.analysis.static.node_reactions.query(
+    cases="1,3-7", nodes="10-12")
 ```
 
 ```bash title="curl"
