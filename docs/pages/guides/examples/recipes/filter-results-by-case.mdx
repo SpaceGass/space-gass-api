@@ -68,10 +68,8 @@ finally
 
 ```python title="Python"
 import asyncio
-from kiota_abstractions.base_request_configuration import RequestConfiguration
-from space_gass_api import SpaceGassApiClient
+from space_gass_api import SpaceGassApiClient, query
 import space_gass_api.models as models
-from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
 client = SpaceGassApiClient.create_client()
 
@@ -92,10 +90,9 @@ try:
         ):
             break
 
-    params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
+    reactions = await query(
+        client.job.query.analysis.static.node_reactions,
         cases="1")
-    reactions = await client.job.query.analysis.static.node_reactions.get(
-        request_configuration=RequestConfiguration(query_parameters=params))
 
     if reactions.warnings and reactions.warnings.cases_not_analyzed:
         raise RuntimeError(
