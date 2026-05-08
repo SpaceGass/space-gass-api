@@ -16,13 +16,8 @@ Prerequisites:
 import asyncio
 import sys
 
-from kiota_abstractions.base_request_configuration import RequestConfiguration
-
-from space_gass_api import SpaceGassApiClient
+from space_gass_api import SpaceGassApiClient, query
 import space_gass_api.models as models
-
-from space_gass_api.job.structure.nodes.nodes_request_builder import NodesRequestBuilder
-from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
 # -- Configuration ------------------------------------------------
 # Update this path to match your local environment.
@@ -42,11 +37,10 @@ async def main() -> int:
         # -- Get restrained nodes --------------------------------------
         print("Querying restrained nodes...")
 
-        query_params = NodesRequestBuilder.NodesRequestBuilderGetQueryParameters(
+        restrained_nodes = await query(
+            client.job.structure.nodes,
             node_type=models.NodeTypeFilter.Restrained,
         )
-        config = RequestConfiguration(query_parameters=query_params)
-        restrained_nodes = await client.job.structure.nodes.get(request_configuration=config)
 
         if not restrained_nodes:
             print("  No restrained nodes found in this project.")
@@ -66,12 +60,9 @@ async def main() -> int:
             # Nodes filter uses SG list format (e.g. "1,5-10") — comma-separated Ids works for an arbitrary set.
             node_filter = ",".join(str(n.id) for n in restrained_nodes if n.id is not None)
 
-            reaction_params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
+            reaction_result = await query(
+                client.job.query.analysis.static.node_reactions,
                 nodes=node_filter,
-            )
-            reaction_config = RequestConfiguration(query_parameters=reaction_params)
-            reaction_result = await client.job.query.analysis.static.node_reactions.get(
-                request_configuration=reaction_config,
             )
 
             reactions = reaction_result.results if reaction_result else None

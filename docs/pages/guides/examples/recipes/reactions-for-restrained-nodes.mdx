@@ -67,11 +67,8 @@ finally
 
 ```python title="Python"
 import asyncio
-from kiota_abstractions.base_request_configuration import RequestConfiguration
-from space_gass_api import SpaceGassApiClient
+from space_gass_api import SpaceGassApiClient, query
 import space_gass_api.models as models
-from space_gass_api.job.structure.nodes.nodes_request_builder import NodesRequestBuilder
-from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
 client = SpaceGassApiClient.create_client()
 
@@ -94,18 +91,16 @@ try:
             break
 
     # 1. Get the restrained nodes
-    node_params = NodesRequestBuilder.NodesRequestBuilderGetQueryParameters(
+    restrained = await query(
+        client.job.structure.nodes,
         node_type=models.NodeTypeFilter.Restrained)
-    restrained = await client.job.structure.nodes.get(
-        request_configuration=RequestConfiguration(query_parameters=node_params))
 
     node_filter = ",".join(str(n.id) for n in restrained if n.id is not None)
 
     # 2. Read reactions filtered to those nodes
-    reaction_params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
+    result = await query(
+        client.job.query.analysis.static.node_reactions,
         nodes=node_filter)
-    result = await client.job.query.analysis.static.node_reactions.get(
-        request_configuration=RequestConfiguration(query_parameters=reaction_params))
 
     for r in result.results:
         print(f"Node {r.node}, Case {r.case}: "

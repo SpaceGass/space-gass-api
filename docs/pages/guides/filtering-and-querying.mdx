@@ -25,11 +25,11 @@ var filtered = await client.Job.Structure.Nodes.GetAsync(
 ```
 
 ```python title="Python"
-filtered = await client.job.structure.nodes.get(
-    request_configuration=lambda c: setattr(
-        c.query_parameters, 'min_x', 0) or
-        setattr(c.query_parameters, 'max_x', 100) or
-        setattr(c.query_parameters, 'limit', 50))
+from space_gass_api import query
+
+filtered = await query(
+    client.job.structure.nodes,
+    min_x=0, max_x=100, limit=50)
 ```
 
 ```bash title="curl"
@@ -107,11 +107,11 @@ var result = await client.Job.Query.Analysis.Static.NodeDisplacements
 ```
 
 ```python title="Python"
-result = await client.job.query.analysis.static.node_displacements.get(
-    request_configuration=lambda c: (
-        setattr(c.query_parameters, 'cases', '1,3'),
-        setattr(c.query_parameters, 'nodes', '10-12')
-    ))
+from space_gass_api import query
+
+result = await query(
+    client.job.query.analysis.static.node_displacements,
+    cases="1,3", nodes="10-12")
 ```
 
 ```bash title="curl"
@@ -145,9 +145,11 @@ foreach (var m in result.Results)
 ```
 
 ```python title="Python"
-result = await client.job.query.analysis.static.member_intermediate_forces.get(
-    request_configuration=lambda c:
-        setattr(c.query_parameters, 'members', '1'))
+from space_gass_api import query
+
+result = await query(
+    client.job.query.analysis.static.member_intermediate_forces,
+    members="1")
 
 for m in result.results:
     print(f"Case {m.case}, Member {m.member}:")
@@ -265,17 +267,15 @@ var page2 = await client.Job.Query.Analysis.Static.NodeDisplacements
 ```
 
 ```python title="Python"
-page1 = await client.job.query.analysis.static.node_displacements.get(
-    request_configuration=lambda c: (
-        setattr(c.query_parameters, 'offset', 0),
-        setattr(c.query_parameters, 'limit', 100)
-    ))
+from space_gass_api import query
 
-page2 = await client.job.query.analysis.static.node_displacements.get(
-    request_configuration=lambda c: (
-        setattr(c.query_parameters, 'offset', 100),
-        setattr(c.query_parameters, 'limit', 100)
-    ))
+page1 = await query(
+    client.job.query.analysis.static.node_displacements,
+    offset=0, limit=100)
+
+page2 = await query(
+    client.job.query.analysis.static.node_displacements,
+    offset=100, limit=100)
 ```
 
 ```bash title="curl"
