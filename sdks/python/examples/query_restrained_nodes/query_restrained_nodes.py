@@ -22,7 +22,7 @@ from extensions.client_extensions import create_client
 from space_gass_api.models.open_job_request import OpenJobRequest
 from space_gass_api.models.node_type_filter import NodeTypeFilter
 from space_gass_api.job.structure.nodes.nodes_request_builder import NodesRequestBuilder
-from space_gass_api.job.query.analysis.static.node.reactions.reactions_request_builder import ReactionsRequestBuilder
+from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
 
 # -- Configuration ------------------------------------------------
 # Update this path to match your local environment.
@@ -66,11 +66,11 @@ async def main() -> int:
             # Nodes filter uses SG list format (e.g. "1,5-10") — comma-separated Ids works for an arbitrary set.
             node_filter = ",".join(str(n.id) for n in restrained_nodes if n.id is not None)
 
-            reaction_params = ReactionsRequestBuilder.ReactionsRequestBuilderGetQueryParameters(
+            reaction_params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
                 nodes=node_filter,
             )
             reaction_config = RequestConfiguration(query_parameters=reaction_params)
-            reaction_result = await client.job.query.analysis.static.node.reactions.get(
+            reaction_result = await client.job.query.analysis.static.node_reactions.get(
                 request_configuration=reaction_config,
             )
 

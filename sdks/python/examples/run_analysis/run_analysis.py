@@ -150,7 +150,7 @@ async def main() -> int:
         print()
         print("Querying node reactions...")
 
-        query_result = await client.job.query.analysis.static.node.reactions.get()
+        query_result = await client.job.query.analysis.static.node_reactions.get()
         reactions = query_result.results if query_result else None
         if reactions:
             print(f"  Found {len(reactions)} reaction result(s).")
