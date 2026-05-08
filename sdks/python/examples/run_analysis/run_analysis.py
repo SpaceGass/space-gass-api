@@ -18,10 +18,8 @@ import asyncio
 import os
 import sys
 
-from extensions.client_extensions import create_client
-from space_gass_api.models.open_job_request import OpenJobRequest
-from space_gass_api.models.static_settings_update import StaticSettingsUpdate
-from space_gass_api.models.analysis_run_status import AnalysisRunStatus
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
 
 # -- Configuration ------------------------------------------------
 # Path to an existing SPACE GASS project file with structure and loads.
@@ -36,13 +34,13 @@ poll_interval_s = 0.5  # How often to poll for progress (seconds)
 
 
 async def main() -> int:
-    client = create_client()
+    client = SpaceGassApiClient.create_client()
 
     try:
         # -- Open the project ------------------------------------------
         print(f"Opening project: {project_file_path}")
         await client.job.open.post(
-            OpenJobRequest(file_path=project_file_path),
+            models.OpenJobRequest(file_path=project_file_path),
         )
         print("Project opened.")
         print()
@@ -53,7 +51,7 @@ async def main() -> int:
         # current settings as-is.
         print("Starting linear static analysis...")
         run = await client.job.analysis.static.run_linear.post(
-            StaticSettingsUpdate(),
+            models.StaticSettingsUpdate(),
         )
 
         if run is None:
@@ -108,9 +106,9 @@ async def main() -> int:
 
             # Check for terminal states
             if status.status in (
-                AnalysisRunStatus.Completed,
-                AnalysisRunStatus.Failed,
-                AnalysisRunStatus.Cancelled,
+                models.AnalysisRunStatus.Completed,
+                models.AnalysisRunStatus.Failed,
+                models.AnalysisRunStatus.Cancelled,
             ):
                 print()
                 print()

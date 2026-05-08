@@ -96,9 +96,9 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    ```
 
    ```python title="Python"
-   from extensions.client_extensions import create_client
+   from space_gass_api import SpaceGassApiClient
 
-   client = create_client()
+   client = SpaceGassApiClient.create_client()
    ```
 
    ```bash title="curl"
@@ -118,10 +118,10 @@ file, and reading nodes — using the SDK clients or plain HTTP.
    ```
 
    ```python title="Python"
-   from space_gass_api.models.open_job_request import OpenJobRequest
+   import space_gass_api.models as models
 
    await client.job.open.post(
-       OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
+       models.OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
    ```
 
    ```bash title="curl"

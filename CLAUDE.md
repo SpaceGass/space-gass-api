@@ -44,7 +44,7 @@ This is the public developer-facing repo for the SPACE GASS API. It contains the
 - Both point to `descriptions/preview/openapi.json` (stable path)
 - The `generate-clients` workflow is **manual trigger** (`workflow_dispatch`) with `--clean-output`
 - C# output: `sdks/csharp/client/SpaceGassApi/Generated/` — never hand-edit
-- Python output: `sdks/python/client/space_gass_api/` — never hand-edit
+- Python output: `sdks/python/client/space_gass_api/` — never hand-edit, **except** the two `__init__.py` files (`space_gass_api/__init__.py` and `space_gass_api/models/__init__.py`) which are written by `tools/regen_python_inits.py` after every regen. The `generate-clients` workflow runs that script automatically; for local Kiota regens, run `python tools/regen_python_inits.py` afterwards. The actual `create_client(...)` body lives in the hand-maintained `sdks/python/client/space_gass_api_extensions.py` at the client root, outside the Kiota tree.
 
 ### C# Client Structure
 
@@ -63,6 +63,24 @@ sdks/csharp/client/
 
 - `.csproj` uses `EnableDefaultCompileItems=false` and explicit `<Compile Include>` for `Generated\**\*.cs` and `Extensions\**\*.cs`
 - `SpaceGassApiClient` is a `partial class` — the Extensions file adds `CreateClient()` via another partial definition
+
+### Python Client Structure
+
+```
+sdks/python/client/
+├── pyproject.toml                  ← installs space_gass_api/ + the top-level extensions module
+├── space_gass_api_extensions.py    ← hand-maintained (create_client factory) — NEVER touched by Kiota
+└── space_gass_api/                 ← Kiota output (wiped on --clean-output)
+    ├── __init__.py                 ← AUTO-WRITTEN post-Kiota by tools/regen_python_inits.py
+    ├── models/
+    │   └── __init__.py             ← AUTO-WRITTEN post-Kiota (re-exports every model class)
+    ├── space_gass_api_client.py
+    └── ...rest is Kiota...
+```
+
+- The post-regen script `tools/regen_python_inits.py` writes `__init__.py` files inside the Kiota tree so callers can write `from space_gass_api import SpaceGassApiClient` and `import space_gass_api.models as models`. Without these aggregators, Kiota's PEP 420 namespace package layout means `models.NodeCreate` doesn't resolve.
+- `space_gass_api/__init__.py` glues `create_client` from the hand-maintained `space_gass_api_extensions` top-level module onto `SpaceGassApiClient` as a static method, so the public API is `SpaceGassApiClient.create_client()` — symmetric with the C# `SpaceGassApiClient.CreateClient()`.
+- `pyproject.toml` uses `[tool.setuptools] py-modules = ["space_gass_api_extensions"]` to install the helper as a top-level module alongside the `space_gass_api` package.
 
 ### Authentication
 

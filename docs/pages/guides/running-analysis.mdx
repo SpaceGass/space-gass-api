@@ -71,19 +71,17 @@ static async Task<AnalysisRun> WaitForCompletion(
 
 ```python title="Python"
 import asyncio
-from extensions.client_extensions import create_client
-from space_gass_api.models.open_job_request import OpenJobRequest
-from space_gass_api.models.static_settings_update import StaticSettingsUpdate
-from space_gass_api.models.analysis_run_status import AnalysisRunStatus
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
 
-client = create_client()
+client = SpaceGassApiClient.create_client()
 
 # Open a project and run linear static analysis
 await client.job.open.post(
-    OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
+    models.OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
 
 run = await client.job.analysis.static.run_linear.post(
-    StaticSettingsUpdate())
+    models.StaticSettingsUpdate())
 
 # Poll until complete
 async def wait_for_completion(client, run_id, poll_interval=0.5):
@@ -91,9 +89,9 @@ async def wait_for_completion(client, run_id, poll_interval=0.5):
         await asyncio.sleep(poll_interval)
         status = await client.job.analysis.runs.by_run_id(str(run_id)).get()
         if status.status in (
-            AnalysisRunStatus.Completed,
-            AnalysisRunStatus.Failed,
-            AnalysisRunStatus.Cancelled,
+            models.AnalysisRunStatus.Completed,
+            models.AnalysisRunStatus.Failed,
+            models.AnalysisRunStatus.Cancelled,
         ):
             return status
 
@@ -101,7 +99,7 @@ result = await wait_for_completion(client, run.run_id)
 
 print(f"Analysis {result.status} in {result.elapsed_time}")
 
-if result.status == AnalysisRunStatus.Completed:
+if result.status == models.AnalysisRunStatus.Completed:
     # Query results...
     reactions = await client.job.query.analysis.static.node_reactions.get()
     print(f"Got {len(reactions.results)} reactions")

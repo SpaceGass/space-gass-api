@@ -32,23 +32,8 @@ import sys
 
 from kiota_abstractions.base_request_configuration import RequestConfiguration
 
-from extensions.client_extensions import create_client
-from space_gass_api.models.analysis_run_status import AnalysisRunStatus
-from space_gass_api.models.combination_load_case_create import CombinationLoadCaseCreate
-from space_gass_api.models.combination_load_case_item import CombinationLoadCaseItem
-from space_gass_api.models.load_case_create import LoadCaseCreate
-from space_gass_api.models.load_position_units import LoadPositionUnits
-from space_gass_api.models.material_library_create import MaterialLibraryCreate
-from space_gass_api.models.problem_details import ProblemDetails
-from space_gass_api.models.member_create import MemberCreate
-from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
-from space_gass_api.models.node_create import NodeCreate
-from space_gass_api.models.node_restraint_create import NodeRestraintCreate
-from space_gass_api.models.save_job_request import SaveJobRequest
-from space_gass_api.models.section_library_create import SectionLibraryCreate
-from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
-from space_gass_api.models.solver_type import SolverType
-from space_gass_api.models.static_settings_update import StaticSettingsUpdate
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
 
 from space_gass_api.job.query.analysis.static.member_intermediate_forces.member_intermediate_forces_request_builder import MemberIntermediateForcesRequestBuilder
 from space_gass_api.job.query.analysis.static.member_intermediate_displacements.member_intermediate_displacements_request_builder import MemberIntermediateDisplacementsRequestBuilder
@@ -63,7 +48,7 @@ save_file_path = os.path.join(
 
 
 async def main() -> int:
-    client = create_client()
+    client = SpaceGassApiClient.create_client()
 
     try:
         # == Step 1 — Create a new blank project =======================
@@ -76,12 +61,12 @@ async def main() -> int:
         print("Creating nodes...")
 
         node1 = await client.job.structure.nodes.post(
-            NodeCreate(x=0.0, y=0.0, z=0.0),
+            models.NodeCreate(x=0.0, y=0.0, z=0.0),
         )
         print(f"  Node {node1.id}: ({node1.x}, {node1.y}, {node1.z})")
 
         node2 = await client.job.structure.nodes.post(
-            NodeCreate(x=6.0, y=0.0, z=0.0),
+            models.NodeCreate(x=6.0, y=0.0, z=0.0),
         )
         print(f"  Node {node2.id}: ({node2.x}, {node2.y}, {node2.z})")
         print()
@@ -97,12 +82,12 @@ async def main() -> int:
         print("Applying restraints...")
 
         await client.job.structure.node_restraints.post(
-            NodeRestraintCreate(node=node1.id, restraint_code="FFFFFF"),
+            models.NodeRestraintCreate(node=node1.id, restraint_code="FFFFFF"),
         )
         print(f"  Node {node1.id}: Fixed (FFFFFF)")
 
         await client.job.structure.node_restraints.post(
-            NodeRestraintCreate(node=node2.id, restraint_code="FFFRRR"),
+            models.NodeRestraintCreate(node=node2.id, restraint_code="FFFRRR"),
         )
         print(f"  Node {node2.id}: Pinned (FFFRRR)")
         print()
@@ -110,7 +95,7 @@ async def main() -> int:
         # == Step 4 — Add a library material ===========================
         print("Adding library material...")
         steel = await client.job.structure.materials.library.post(
-            MaterialLibraryCreate(
+            models.MaterialLibraryCreate(
                 library="Aust",
                 name="STEEL",
             ),
@@ -121,7 +106,7 @@ async def main() -> int:
         # == Step 5 — Add a library section ============================
         print("Adding library section...")
         section = await client.job.structure.sections.library.post(
-            SectionLibraryCreate(
+            models.SectionLibraryCreate(
                 library="Aust300",
                 name="360 UB 44.7",
                 mark="B1",
@@ -133,7 +118,7 @@ async def main() -> int:
         # == Step 6 — Create the member ================================
         print("Creating beam member...")
         member = await client.job.structure.members.post(
-            MemberCreate(
+            models.MemberCreate(
                 node_a=node1.id,
                 node_b=node2.id,
                 section=section.id,
@@ -146,18 +131,18 @@ async def main() -> int:
         # == Step 7 — Create primary load cases ========================
         print("Creating primary load cases...")
         self_weight_case = await client.job.loads.load_cases.post(
-            LoadCaseCreate(id=1, title="Self-weight"))
+            models.LoadCaseCreate(id=1, title="Self-weight"))
         dead_case = await client.job.loads.load_cases.post(
-            LoadCaseCreate(id=2, title="Dead Load"))
+            models.LoadCaseCreate(id=2, title="Dead Load"))
         live_case = await client.job.loads.load_cases.post(
-            LoadCaseCreate(id=3, title="Live Load"))
+            models.LoadCaseCreate(id=3, title="Live Load"))
         print(f"  Cases: SW={self_weight_case.id}, G={dead_case.id}, Q={live_case.id}")
         print()
 
         # == Step 8 — Apply the self-weight load =======================
         print("Applying self-weight load...")
         await client.job.loads.self_weight_loads.post(
-            SelfWeightLoadCreate(
+            models.SelfWeightLoadCreate(
                 case=self_weight_case.id,
                 acceleration_x=0.0,
                 acceleration_y=-1.0,    # 1 G downward
@@ -169,10 +154,10 @@ async def main() -> int:
         # == Step 9 — Member distributed load on the dead case =========
         print("Applying 2 kN/m dead load across the span...")
         await client.job.loads.member_distributed_loads.post(
-            MemberDistributedLoadCreate(
+            models.MemberDistributedLoadCreate(
                 case=dead_case.id,
                 member=member.id,
-                position_units=LoadPositionUnits.Percent,
+                position_units=models.LoadPositionUnits.Percent,
                 start_position=0.0,
                 finish_position=100.0,
                 fy_start=-2.0,    # kN/m downward
@@ -184,10 +169,10 @@ async def main() -> int:
         # == Step 10 — Member distributed load on the live case ========
         print("Applying 5 kN/m live load across the span...")
         await client.job.loads.member_distributed_loads.post(
-            MemberDistributedLoadCreate(
+            models.MemberDistributedLoadCreate(
                 case=live_case.id,
                 member=member.id,
-                position_units=LoadPositionUnits.Percent,
+                position_units=models.LoadPositionUnits.Percent,
                 start_position=0.0,
                 finish_position=100.0,
                 fy_start=-5.0,
@@ -203,27 +188,27 @@ async def main() -> int:
         print("Defining ULS and SLS combinations to AS/NZS 1170...")
 
         uls_case = await client.job.loads.combination_load_cases.post(
-            CombinationLoadCaseCreate(
+            models.CombinationLoadCaseCreate(
                 id=10,
                 title="ULS - Strength",
                 # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
                 combination_items=[
-                    CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.2),
-                    CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.2),
-                    CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=1.5),
+                    models.CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.2),
+                    models.CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.2),
+                    models.CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=1.5),
                 ],
             ),
         )
 
         sls_case = await client.job.loads.combination_load_cases.post(
-            CombinationLoadCaseCreate(
+            models.CombinationLoadCaseCreate(
                 id=20,
                 title="SLS - Short-term Deflection",
                 # SLS short-term: 1.0 G + 0.7 Q
                 combination_items=[
-                    CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.0),
-                    CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.0),
-                    CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=0.7),
+                    models.CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.0),
+                    models.CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.0),
+                    models.CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=0.7),
                 ],
             ),
         )
@@ -237,7 +222,7 @@ async def main() -> int:
         # SPACE GASS and inspect the model state if anything fails.
         print(f"Saving initial model to: {save_file_path}")
         initial_save = await client.job.save.post(
-            SaveJobRequest(file_path=save_file_path),
+            models.SaveJobRequest(file_path=save_file_path),
         )
 
         job_file = initial_save.state.file if initial_save and initial_save.state else None
@@ -254,28 +239,28 @@ async def main() -> int:
         # solver_type = Pardiso here.
         print("Configuring static analysis settings...")
         await client.job.analysis.static.settings.patch(
-            StaticSettingsUpdate(
-                solver_type=SolverType.Pardiso,
+            models.StaticSettingsUpdate(
+                solver_type=models.SolverType.Pardiso,
             ))
 
         # == Step 14 — Run a linear static analysis ====================
         print("Running linear static analysis...")
         run = await client.job.analysis.static.run_linear.post(
-            StaticSettingsUpdate())
+            models.StaticSettingsUpdate())
         print(f"  Run {run.run_id} queued; waiting for completion...")
 
         while True:
             await asyncio.sleep(0.5)
             final_run = await client.job.analysis.runs.by_run_id(run.run_id).get()
             if final_run.status in (
-                AnalysisRunStatus.Completed,
-                AnalysisRunStatus.Failed,
-                AnalysisRunStatus.Cancelled,
+                models.AnalysisRunStatus.Completed,
+                models.AnalysisRunStatus.Failed,
+                models.AnalysisRunStatus.Cancelled,
             ):
                 break
 
         print(f"  Analysis {final_run.status} in {final_run.elapsed_time}")
-        if final_run.status != AnalysisRunStatus.Completed:
+        if final_run.status != models.AnalysisRunStatus.Completed:
             raise RuntimeError(
                 f"Analysis did not complete: {final_run.error_message}")
         print()
@@ -327,11 +312,11 @@ async def main() -> int:
         # half-built active job.
         print(f"Saving analysed model to: {save_file_path}")
         await client.job.save.post(
-            SaveJobRequest(file_path=save_file_path),
+            models.SaveJobRequest(file_path=save_file_path),
         )
         print("Project saved.")
 
-    except ProblemDetails as pd:
+    except models.ProblemDetails as pd:
         # Typed except for the API's RFC 9457 error response. status /
         # title / detail are the standard fields; anything the server
         # adds beyond those (errorCode, errors, etc.) lands in

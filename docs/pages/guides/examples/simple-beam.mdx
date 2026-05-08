@@ -98,23 +98,10 @@ await client.Job.New.PostAsync();
 ```
 
 ```python title="Python"
-from extensions.client_extensions import create_client
-from space_gass_api.models.node_create import NodeCreate
-from space_gass_api.models.node_restraint_create import NodeRestraintCreate
-from space_gass_api.models.member_create import MemberCreate
-from space_gass_api.models.section_library_create import SectionLibraryCreate
-from space_gass_api.models.material_library_create import MaterialLibraryCreate
-from space_gass_api.models.load_case_create import LoadCaseCreate
-from space_gass_api.models.self_weight_load_create import SelfWeightLoadCreate
-from space_gass_api.models.member_distributed_load_create import MemberDistributedLoadCreate
-from space_gass_api.models.load_position_units import LoadPositionUnits
-from space_gass_api.models.combination_load_case_create import CombinationLoadCaseCreate
-from space_gass_api.models.combination_load_case_item import CombinationLoadCaseItem
-from space_gass_api.models.static_settings_update import StaticSettingsUpdate
-from space_gass_api.models.analysis_run_status import AnalysisRunStatus
-from space_gass_api.models.save_job_request import SaveJobRequest
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
 
-client = create_client()
+client = SpaceGassApiClient.create_client()
 
 # Create a new blank project
 await client.job.new.post()
@@ -142,10 +129,10 @@ Console.WriteLine($"Node {node2.Id}: ({node2.X}, {node2.Y}, {node2.Z})");
 
 ```python title="Python"
 node1 = await client.job.structure.nodes.post(
-    NodeCreate(x=0.0, y=0.0, z=0.0))
+    models.NodeCreate(x=0.0, y=0.0, z=0.0))
 
 node2 = await client.job.structure.nodes.post(
-    NodeCreate(x=6.0, y=0.0, z=0.0))
+    models.NodeCreate(x=6.0, y=0.0, z=0.0))
 
 print(f"Node {node1.id}: ({node1.x}, {node1.y}, {node1.z})")
 print(f"Node {node2.id}: ({node2.x}, {node2.y}, {node2.z})")
@@ -186,11 +173,11 @@ await client.Job.Structure.NodeRestraints.PostAsync(
 ```python title="Python"
 # Node 1: Fully fixed support (all 6 DOFs Fixed)
 await client.job.structure.node_restraints.post(
-    NodeRestraintCreate(node=node1.id, restraint_code="FFFFFF"))
+    models.NodeRestraintCreate(node=node1.id, restraint_code="FFFFFF"))
 
 # Node 2: Pinned support (translations Fixed, rotations Released)
 await client.job.structure.node_restraints.post(
-    NodeRestraintCreate(node=node2.id, restraint_code="FFFRRR"))
+    models.NodeRestraintCreate(node=node2.id, restraint_code="FFFRRR"))
 ```
 </CodeTabs>
 
@@ -218,7 +205,7 @@ Console.WriteLine($"Material {steel.Id}: {steel.Name}");
 
 ```python title="Python"
 steel = await client.job.structure.materials.library.post(
-    MaterialLibraryCreate(
+    models.MaterialLibraryCreate(
         library="Aust",
         name="STEEL",
     ))
@@ -250,7 +237,7 @@ Console.WriteLine($"Section {section.Id}: {section.Name}");
 
 ```python title="Python"
 section = await client.job.structure.sections.library.post(
-    SectionLibraryCreate(
+    models.SectionLibraryCreate(
         library="Aust300",
         name="360 UB 44.7",
         mark="B1",
@@ -283,7 +270,7 @@ Console.WriteLine($"Member {member.Id}: Node {member.NodeA} → Node {member.Nod
 
 ```python title="Python"
 member = await client.job.structure.members.post(
-    MemberCreate(
+    models.MemberCreate(
         node_a=node1.id,
         node_b=node2.id,
         section=section.id,
@@ -317,13 +304,13 @@ Console.WriteLine($"Load cases: SW={selfWeightCase.Id}, G={deadCase.Id}, Q={live
 
 ```python title="Python"
 self_weight_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(id=1, title="Self-weight"))
+    models.LoadCaseCreate(id=1, title="Self-weight"))
 
 dead_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(id=2, title="Dead Load"))
+    models.LoadCaseCreate(id=2, title="Dead Load"))
 
 live_case = await client.job.loads.load_cases.post(
-    LoadCaseCreate(id=3, title="Live Load"))
+    models.LoadCaseCreate(id=3, title="Live Load"))
 
 print(f"Load cases: SW={self_weight_case.id}, G={dead_case.id}, Q={live_case.id}")
 ```
@@ -352,7 +339,7 @@ await client.Job.Loads.SelfWeightLoads.PostAsync(
 
 ```python title="Python"
 await client.job.loads.self_weight_loads.post(
-    SelfWeightLoadCreate(
+    models.SelfWeightLoadCreate(
         case=self_weight_case.id,
         acceleration_x=0.0,
         acceleration_y=-1.0,    # 1 G downward
@@ -386,10 +373,10 @@ await client.Job.Loads.MemberDistributedLoads.PostAsync(
 
 ```python title="Python"
 await client.job.loads.member_distributed_loads.post(
-    MemberDistributedLoadCreate(
+    models.MemberDistributedLoadCreate(
         case=dead_case.id,
         member=member.id,
-        position_units=LoadPositionUnits.Percent,
+        position_units=models.LoadPositionUnits.Percent,
         start_position=0.0,
         finish_position=100.0,
         fy_start=-2.0,    # kN/m downward
@@ -420,10 +407,10 @@ await client.Job.Loads.MemberDistributedLoads.PostAsync(
 
 ```python title="Python"
 await client.job.loads.member_distributed_loads.post(
-    MemberDistributedLoadCreate(
+    models.MemberDistributedLoadCreate(
         case=live_case.id,
         member=member.id,
-        position_units=LoadPositionUnits.Percent,
+        position_units=models.LoadPositionUnits.Percent,
         start_position=0.0,
         finish_position=100.0,
         fy_start=-5.0,    # kN/m downward
@@ -474,25 +461,25 @@ var slsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
 ```python title="Python"
 # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
 uls_case = await client.job.loads.combination_load_cases.post(
-    CombinationLoadCaseCreate(
+    models.CombinationLoadCaseCreate(
         id=10,
         title="ULS - Strength",
         combination_items=[
-            CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.2),
-            CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.2),
-            CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=1.5),
+            models.CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.2),
+            models.CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.2),
+            models.CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=1.5),
         ],
     ))
 
 # SLS short-term: 1.0 G + 0.7 Q
 sls_case = await client.job.loads.combination_load_cases.post(
-    CombinationLoadCaseCreate(
+    models.CombinationLoadCaseCreate(
         id=20,
         title="SLS - Short-term Deflection",
         combination_items=[
-            CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.0),
-            CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.0),
-            CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=0.7),
+            models.CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.0),
+            models.CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.0),
+            models.CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=0.7),
         ],
     ))
 ```
@@ -524,7 +511,7 @@ Console.WriteLine($"  IsOpen: {initialSave?.State?.IsOpen}");
 
 ```python title="Python"
 initial_save = await client.job.save.post(
-    SaveJobRequest(file_path="C:\\Projects\\SimpleBeam.sg"))
+    models.SaveJobRequest(file_path="C:\\Projects\\SimpleBeam.sg"))
 
 job_file = initial_save.state.file if initial_save and initial_save.state else None
 print(f"  Path:   {job_file.path if job_file else None}")
@@ -580,10 +567,10 @@ if (finalRun.Status != AnalysisRunStatus.Completed)
 ```python title="Python"
 import asyncio
 
-# Start a linear static analysis. Pass an empty StaticSettingsUpdate to
+# Start a linear static analysis. Pass an empty models.StaticSettingsUpdate to
 # use the project's current settings as-is.
 run = await client.job.analysis.static.run_linear.post(
-    StaticSettingsUpdate())
+    models.StaticSettingsUpdate())
 
 print(f"Run {run.run_id} queued; waiting for completion...")
 
@@ -592,15 +579,15 @@ while True:
     await asyncio.sleep(0.5)
     final_run = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
     if final_run.status in (
-        AnalysisRunStatus.Completed,
-        AnalysisRunStatus.Failed,
-        AnalysisRunStatus.Cancelled,
+        models.AnalysisRunStatus.Completed,
+        models.AnalysisRunStatus.Failed,
+        models.AnalysisRunStatus.Cancelled,
     ):
         break
 
 print(f"Analysis {final_run.status} in {final_run.elapsed_time}")
 
-if final_run.status != AnalysisRunStatus.Completed:
+if final_run.status != models.AnalysisRunStatus.Completed:
     raise RuntimeError(f"Analysis did not complete: {final_run.error_message}")
 ```
 </CodeTabs>
@@ -794,7 +781,7 @@ try:
     # ...all the steps above...
 
     await client.job.save.post(
-        SaveJobRequest(file_path="C:\\Projects\\SimpleBeam.sg"))
+        models.SaveJobRequest(file_path="C:\\Projects\\SimpleBeam.sg"))
 
 finally:
     # Always close the active job so the next run starts clean.
