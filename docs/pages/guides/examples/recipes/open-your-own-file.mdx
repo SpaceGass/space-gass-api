@@ -1,0 +1,65 @@
+---
+title: Open your own .sg file
+description: Load a SPACE GASS project from disk into the active job
+---
+
+The [Quick Start](/getting-started/quick-start) uses `Job.OpenSample`
+to load a built-in sample so you don't need a project file. Once you
+have your own `.sg` file, switch to `Job.Open` — same shape, but you
+supply the path.
+
+`Job.Open` returns `409 Conflict` if a job is already open. Close it
+first with `Job.Close`, or use `Job.OpenForce` to override (see
+[File Handling](/guides/file-handling) for the force-open pattern).
+
+<CodeTabs>
+```csharp title="C#"
+using SpaceGassApi;
+using SpaceGassApi.Models;
+
+var client = SpaceGassApiClient.CreateClient();
+
+try
+{
+    await client.Job.Open.PostAsync(
+        new OpenJobRequest { FilePath = @"C:\Projects\MyStructure.sg" });
+
+    // ...do work on the open job...
+}
+finally
+{
+    await client.Job.Close.PostAsync();
+}
+```
+
+```python title="Python"
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
+
+client = SpaceGassApiClient.create_client()
+
+try:
+    await client.job.open.post(
+        models.OpenJobRequest(file_path=r"C:\Projects\MyStructure.sg"))
+
+    # ...do work on the open job...
+finally:
+    await client.job.close.post()
+```
+
+```bash title="curl"
+curl -X POST http://localhost:34560/api/v1/job/open \
+  -H "Content-Type: application/json" \
+  -d '{"filePath": "C:\\Projects\\MyStructure.sg"}'
+
+# ...calls against the open job...
+
+curl -X POST http://localhost:34560/api/v1/job/close
+```
+</CodeTabs>
+
+## See also
+
+- [Concepts — The Active Job](/getting-started/concepts#the-active-job)
+- [File Handling](/guides/file-handling) — full set of open / save /
+  force-open / status patterns.

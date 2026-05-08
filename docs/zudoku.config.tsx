@@ -293,6 +293,7 @@ const config: ZudokuConfig = {
       items: [
         "getting-started/introduction",
         "getting-started/quick-start",
+        "getting-started/concepts",
         "getting-started/using-the-sdk",
         "getting-started/support",
       ],
@@ -317,8 +318,11 @@ const config: ZudokuConfig = {
           collapsible: true,
           collapsed: false,
           items: [
-            // Add one MDX file per recipe under docs/pages/guides/examples/recipes/
-            // Each entry shows up as its own sidebar item.
+            "guides/examples/recipes/open-your-own-file",
+            "guides/examples/recipes/run-linear-static-analysis",
+            "guides/examples/recipes/reactions-for-restrained-nodes",
+            "guides/examples/recipes/filter-results-by-case",
+            "guides/examples/recipes/save-and-close",
           ],
         },
       ],

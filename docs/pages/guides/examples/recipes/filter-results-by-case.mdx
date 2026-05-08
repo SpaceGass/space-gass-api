@@ -1,0 +1,76 @@
+---
+title: Filter analysis results by load case
+description: Read reactions or member forces for one specific case (or set of cases) using SG list format
+---
+
+Every result endpoint accepts a `Cases` query parameter to restrict
+the response to a subset of analysed cases. The format is SG's list
+syntax — comma-separated Ids and dash ranges in a single string:
+
+| Filter | Meaning |
+|---|---|
+| `"1"` | Just case 1 |
+| `"1,3,7"` | Cases 1, 3, and 7 |
+| `"1,3-7,10"` | Case 1, 3 through 7 inclusive, and 10 |
+| `""` or omit | All analysed cases |
+
+The same format applies to `Nodes`, `Members`, `Modes`, and any other
+list filter.
+
+Assumes the project is open and analysed; `ulsCase.Id` is the Id of
+the combination case you ran.
+
+<CodeTabs>
+```csharp title="C#"
+var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
+    config => config.QueryParameters.Cases = $"{ulsCase.Id}");
+
+if (reactions!.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
+{
+    throw new Exception($"Cases not analysed: {missing}. Run the analysis first.");
+}
+
+foreach (var r in reactions.Results!)
+{
+    Console.WriteLine($"Node {r.Node}: Fx={r.Fx:F2}, Fy={r.Fy:F2}, Fz={r.Fz:F2}");
+}
+```
+
+```python title="Python"
+from kiota_abstractions.base_request_configuration import RequestConfiguration
+from space_gass_api.job.query.analysis.static.node_reactions.node_reactions_request_builder import NodeReactionsRequestBuilder
+
+params = NodeReactionsRequestBuilder.NodeReactionsRequestBuilderGetQueryParameters(
+    cases=str(uls_case.id))
+reactions = await client.job.query.analysis.static.node_reactions.get(
+    request_configuration=RequestConfiguration(query_parameters=params))
+
+if reactions.warnings and reactions.warnings.cases_not_analyzed:
+    raise RuntimeError(
+        f"Cases not analysed: {reactions.warnings.cases_not_analyzed}. "
+        "Run the analysis first.")
+
+for r in reactions.results:
+    print(f"Node {r.node}: Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
+```
+
+```bash title="curl"
+# Single case
+curl "http://localhost:34560/api/v1/job/query/analysis/static/node-reactions?cases=10"
+
+# Multiple cases via SG list
+curl "http://localhost:34560/api/v1/job/query/analysis/static/node-reactions?cases=1,3-7,10"
+```
+</CodeTabs>
+
+### Always check `Warnings.CasesNotAnalyzed`
+
+If you ask for a case that hasn't been analysed (or, for a combination,
+any of its primary cases), it appears in `Warnings.CasesNotAnalyzed`
+and silently returns no rows for that case. Check the warning before
+reading `Results` so a missing run doesn't look like clean data.
+
+## See also
+
+- [Filtering & Querying](/guides/filtering-and-querying)
+- [Concepts — Analysis Runs](/getting-started/concepts#analysis-runs)
