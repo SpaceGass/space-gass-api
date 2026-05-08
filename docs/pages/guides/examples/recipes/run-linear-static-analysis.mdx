@@ -79,10 +79,34 @@ finally:
 ```
 </CodeTabs>
 
+## Run this example locally
+
+A richer version with progress polling, a reusable `WaitForCompletion`
+helper, and a result summary is in the repo as
+[`Example.RunAnalysis`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.RunAnalysis) (C#) and
+[`run_analysis`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/run_analysis) (Python).
+Clone and run:
+
+<CodeTabs>
+```bash title="C#"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/csharp/examples/Example.RunAnalysis
+dotnet run
+```
+
+```bash title="Python"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/python/examples/run_analysis
+pip install space-gass-api    # once per environment
+python run_analysis.py
+```
+</CodeTabs>
+
+Edit the example's `project_file_path` constant first to point at a
+`.sg` file with structure and loads defined.
+
 ## See also
 
 - [Running Analysis](/guides/running-analysis) — the full pattern with
   a reusable `WaitForCompletion` helper and richer progress display.
 - [Concepts — Analysis Runs](/getting-started/concepts#analysis-runs)
-- [Example.RunAnalysis](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.RunAnalysis) /
-  [run_analysis](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/run_analysis) — runnable.

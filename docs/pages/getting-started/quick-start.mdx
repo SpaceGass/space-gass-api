@@ -256,11 +256,29 @@ curl -X POST http://localhost:34560/api/v1/job/close
 ```
 </CodeTabs>
 
-The C# and Python versions are also runnable as
-[Example.QuickStart](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.QuickStart)
-(C#) and
-[quick_start](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/quick_start)
-(Python) in the repo — clone and run, no copy-paste needed.
+## Run this example locally
+
+The same code is in the repo as
+[`Example.QuickStart`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.QuickStart) (C#) and
+[`quick_start`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/quick_start) (Python).
+Clone the repo and run it directly — no copy-paste:
+
+<CodeTabs>
+```bash title="C#"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/csharp/examples/Example.QuickStart
+dotnet run
+```
+
+```bash title="Python"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/python/examples/quick_start
+pip install space-gass-api    # once per environment
+python quick_start.py
+```
+</CodeTabs>
+
+Make sure the SPACE GASS API service is running first (step 1 above).
 
 ## Next Steps
 

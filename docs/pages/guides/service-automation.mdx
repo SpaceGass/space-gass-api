@@ -257,10 +257,28 @@ signal.signal(signal.SIGTERM, _shutdown)
   invisibly; flip that off (or omit it) if you want the console to
   show service messages.
 
-## Full Source Code
+## Run this example locally
 
-The complete examples with error handling and Ctrl+C wiring are
-available in the repository:
+The complete program with error handling and Ctrl+C wiring is in the
+repo as
+[`Example.ServiceAutomation`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.ServiceAutomation) (C#) and
+[`service_automation`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/service_automation) (Python).
+Clone the repo and run it directly — no copy-paste:
 
-- [C# — Example.ServiceAutomation](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.ServiceAutomation)
-- [Python — service_automation](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/service_automation)
+<CodeTabs>
+```bash title="C#"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/csharp/examples/Example.ServiceAutomation
+dotnet run
+```
+
+```bash title="Python"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/python/examples/service_automation
+pip install space-gass-api    # once per environment
+python service_automation.py
+```
+</CodeTabs>
+
+Edit the `ServiceExePath` / `SERVICE_EXE` constant first to match the
+SPACE GASS install path on your machine.

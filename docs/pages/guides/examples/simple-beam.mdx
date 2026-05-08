@@ -792,10 +792,28 @@ finally:
 ```
 </CodeTabs>
 
-## Full Source Code
+## Run this example locally
 
-The complete examples with error handling are available in the
-repository:
+The complete program with error handling is in the repo as
+[`Example.CreateSimpleBeam`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.CreateSimpleBeam) (C#) and
+[`create_simple_beam`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/create_simple_beam) (Python).
+Clone the repo and run it directly — no copy-paste:
 
-- [C# — Example.CreateSimpleBeam](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.CreateSimpleBeam)
-- [Python — create_simple_beam](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/create_simple_beam)
+<CodeTabs>
+```bash title="C#"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/csharp/examples/Example.CreateSimpleBeam
+dotnet run
+```
+
+```bash title="Python"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/python/examples/create_simple_beam
+pip install space-gass-api    # once per environment
+python create_simple_beam.py
+```
+</CodeTabs>
+
+The example saves the model to `~/Desktop/SpaceGass Examples/SimpleBeam.sg` so
+you can open it in SPACE GASS Desktop and verify the geometry / results
+visually.

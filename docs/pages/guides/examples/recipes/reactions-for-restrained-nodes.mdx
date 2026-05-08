@@ -123,9 +123,33 @@ curl "http://localhost:34560/api/v1/job/query/analysis/static/node-reactions?nod
 ```
 </CodeTabs>
 
+## Run this example locally
+
+The same code (against your own .sg file rather than the sample) is
+in the repo as
+[`Example.QueryRestrainedNodes`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.QueryRestrainedNodes) (C#) and
+[`query_restrained_nodes`](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/query_restrained_nodes) (Python).
+Clone and run:
+
+<CodeTabs>
+```bash title="C#"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/csharp/examples/Example.QueryRestrainedNodes
+dotnet run
+```
+
+```bash title="Python"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/python/examples/query_restrained_nodes
+pip install space-gass-api    # once per environment
+python query_restrained_nodes.py
+```
+</CodeTabs>
+
+Edit the example's `PROJECT_FILE_PATH` constant first to point at an
+analysed `.sg` file.
+
 ## See also
 
 - [Filtering & Querying](/guides/filtering-and-querying) — full SG-list
   filter syntax and pagination.
-- [Example.QueryRestrainedNodes](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples/Example.QueryRestrainedNodes) /
-  [query_restrained_nodes](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples/query_restrained_nodes) — runnable.
