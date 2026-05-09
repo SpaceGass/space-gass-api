@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -31,7 +31,21 @@ class ModeShapesRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?Limit*,Offset*,cases*,modes*,nodes*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[ModeShapesRequestBuilderGetQueryParameters]] = None) -> Optional[ModeShapeQueryResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        limit: Optional[int] = None,
+        modes: Optional[str] = None,
+        nodes: Optional[str] = None,
+        offset: Optional[int] = None,
+    ) -> Optional[ModeShapeQueryResult]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[ModeShapesRequestBuilderGetQueryParameters]] = None) -> Optional[ModeShapeQueryResult]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[ModeShapesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[ModeShapeQueryResult]:
         """
         Gets mode shape results grouped by load case and mode.Each result contains displacement values at each node.Optionally filtered by load cases, modes and node Ids.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

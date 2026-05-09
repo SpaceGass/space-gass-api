@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -52,7 +52,27 @@ class NodesRequestBuilder(BaseRequestBuilder):
         url_tpl_params["id"] = id
         return NodesItemRequestBuilder(self.request_adapter, url_tpl_params)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[NodesRequestBuilderGetQueryParameters]] = None) -> Optional[list[Node]]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        expand: Optional[ExpandOption] = None,
+        limit: Optional[int] = None,
+        max_x: Optional[float] = None,
+        max_y: Optional[float] = None,
+        max_z: Optional[float] = None,
+        min_x: Optional[float] = None,
+        min_y: Optional[float] = None,
+        min_z: Optional[float] = None,
+        node_type: Optional[NodeTypeFilter] = None,
+        nodes: Optional[str] = None,
+        offset: Optional[int] = None,
+    ) -> Optional[list[Node]]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[NodesRequestBuilderGetQueryParameters]] = None) -> Optional[list[Node]]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[NodesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[Node]]:
         """
         Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Sub-resource expansion isopt-in per resource type — resources that don't define sub-resources ignore the parameter.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

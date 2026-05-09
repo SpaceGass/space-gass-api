@@ -91,13 +91,13 @@ try:
             break
 
     # 1. Get the restrained nodes
-    restrained = await client.job.structure.nodes.query(
+    restrained = await client.job.structure.nodes.get(
         node_type=models.NodeTypeFilter.Restrained)
 
     node_filter = ",".join(str(n.id) for n in restrained if n.id is not None)
 
     # 2. Read reactions filtered to those nodes
-    result = await client.job.query.analysis.static.node_reactions.query(
+    result = await client.job.query.analysis.static.node_reactions.get(
         nodes=node_filter)
 
     for r in result.results:

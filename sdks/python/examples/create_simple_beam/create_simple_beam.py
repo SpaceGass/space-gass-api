@@ -261,7 +261,7 @@ async def main() -> int:
 
         # == Step 15 — Query reactions =================================
         print("Querying ULS reactions...")
-        reactions = await client.job.query.analysis.static.node_reactions.query(
+        reactions = await client.job.query.analysis.static.node_reactions.get(
             cases=str(uls_case.id),
         )
 
@@ -277,7 +277,7 @@ async def main() -> int:
         print()
 
         # == Step 16 — Maximum ULS bending moment ======================
-        uls_forces = await client.job.query.analysis.static.member_intermediate_forces.query(
+        uls_forces = await client.job.query.analysis.static.member_intermediate_forces.get(
             cases=str(uls_case.id),
             members=str(member.id),
         )
@@ -287,7 +287,7 @@ async def main() -> int:
         print(f"Max ULS bending moment on Member {member.id}: {max_mz:.2f} kNm")
 
         # == Step 17 — Maximum SLS deflection ==========================
-        sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.query(
+        sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.get(
             cases=str(sls_case.id),
             members=str(member.id),
         )

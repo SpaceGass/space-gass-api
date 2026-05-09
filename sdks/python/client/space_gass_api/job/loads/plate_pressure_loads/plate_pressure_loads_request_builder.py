@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -48,7 +48,21 @@ class PlatePressureLoadsRequestBuilder(BaseRequestBuilder):
         url_tpl_params["caseId"] = case_id
         return WithCaseItemRequestBuilder(self.request_adapter, url_tpl_params)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[PlatePressureLoadsRequestBuilderGetQueryParameters]] = None) -> Optional[list[PlatePressureLoad]]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        limit: Optional[int] = None,
+        load_category: Optional[int] = None,
+        offset: Optional[int] = None,
+        plates: Optional[str] = None,
+    ) -> Optional[list[PlatePressureLoad]]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[PlatePressureLoadsRequestBuilderGetQueryParameters]] = None) -> Optional[list[PlatePressureLoad]]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[PlatePressureLoadsRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[PlatePressureLoad]]:
         """
         Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

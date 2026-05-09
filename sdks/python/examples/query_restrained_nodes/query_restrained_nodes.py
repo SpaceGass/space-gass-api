@@ -37,7 +37,7 @@ async def main() -> int:
         # -- Get restrained nodes --------------------------------------
         print("Querying restrained nodes...")
 
-        restrained_nodes = await client.job.structure.nodes.query(
+        restrained_nodes = await client.job.structure.nodes.get(
             node_type=models.NodeTypeFilter.Restrained,
         )
 
@@ -59,7 +59,7 @@ async def main() -> int:
             # Nodes filter uses SG list format (e.g. "1,5-10") — comma-separated Ids works for an arbitrary set.
             node_filter = ",".join(str(n.id) for n in restrained_nodes if n.id is not None)
 
-            reaction_result = await client.job.query.analysis.static.node_reactions.query(
+            reaction_result = await client.job.query.analysis.static.node_reactions.get(
                 nodes=node_filter,
             )
 

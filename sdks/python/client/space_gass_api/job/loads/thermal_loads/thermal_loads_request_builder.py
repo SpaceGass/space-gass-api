@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -36,7 +36,22 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/thermal-loads{?Cases*,ElementType*,Elements*,Limit*,LoadCategory*,Offset*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[ThermalLoadsRequestBuilderGetQueryParameters]] = None) -> Optional[list[ThermalLoad]]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        element_type: Optional[ThermalElementType] = None,
+        elements: Optional[str] = None,
+        limit: Optional[int] = None,
+        load_category: Optional[int] = None,
+        offset: Optional[int] = None,
+    ) -> Optional[list[ThermalLoad]]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[ThermalLoadsRequestBuilderGetQueryParameters]] = None) -> Optional[list[ThermalLoad]]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[ThermalLoadsRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[ThermalLoad]]:
         """
         Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

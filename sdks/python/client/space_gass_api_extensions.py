@@ -9,11 +9,10 @@ Defines two helpers:
 - ``create_client(...)`` — attached to ``SpaceGassApiClient`` as a static
   method by the post-regen ``space_gass_api/__init__.py``.
 
-- ``_query_method`` — attached to ``BaseRequestBuilder`` as an instance
-  method named ``.query()`` by the post-regen
-  ``space_gass_api/__init__.py``. Lets every kiota builder accept GET
-  query parameters as keyword arguments, instead of forcing callers to
-  hand-import the deeply-nested ``{Builder}GetQueryParameters`` class.
+- ``_enhance_get_methods()`` — called once at package init to patch
+  ``BaseRequestBuilder.__init_subclass__``. Every Kiota builder that has
+  a nested ``{ClassName}GetQueryParameters`` dataclass gets its ``.get()``
+  method wrapped so callers can pass query parameters as keyword arguments.
 
 Public API:
 
@@ -22,21 +21,28 @@ Public API:
 
     client = SpaceGassApiClient.create_client()
 
-    # GET with query params — same fluent shape as .get() / .post() / .patch()
-    restrained = await client.job.structure.nodes.query(
+    # GET with keyword query parameters
+    restrained = await client.job.structure.nodes.get(
         node_type=models.NodeTypeFilter.Restrained)
 
-    reactions = await client.job.query.analysis.static.node_reactions.query(
+    reactions = await client.job.query.analysis.static.node_reactions.get(
         cases="1,3-7", nodes="10-12")
 """
+
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from kiota_abstractions.authentication import AnonymousAuthenticationProvider
 from kiota_http.httpx_request_adapter import HttpxRequestAdapter
 
+if TYPE_CHECKING:
+    from space_gass_api.space_gass_api_client import SpaceGassApiClient
+
 DEFAULT_BASE_URL = "http://localhost:34560/api/v1"
 
 
-def create_client(base_url: str = DEFAULT_BASE_URL):
+def create_client(base_url: str = DEFAULT_BASE_URL) -> SpaceGassApiClient:
     """Create a SpaceGassApiClient bound to the local SPACE GASS API service.
 
     Parameters
@@ -59,56 +65,46 @@ def create_client(base_url: str = DEFAULT_BASE_URL):
     return SpaceGassApiClient(adapter)
 
 
-async def _query_method(self, **params):
-    """Run a GET against this builder with kwargs as query parameters.
+def _enhance_get_methods():
+    """Patch ``BaseRequestBuilder.__init_subclass__`` so every Kiota builder
+    whose class body contains a ``{ClassName}GetQueryParameters`` dataclass
+    gets its ``.get()`` wrapped to accept keyword arguments directly.
 
-    Replaces the verbose pattern:
-
-        from kiota_abstractions.base_request_configuration import RequestConfiguration
-        from space_gass_api.job.structure.nodes.nodes_request_builder import NodesRequestBuilder
-
-        qp = NodesRequestBuilder.NodesRequestBuilderGetQueryParameters(
-            node_type=models.NodeTypeFilter.Restrained)
-        nodes = await client.job.structure.nodes.get(
-            request_configuration=RequestConfiguration(query_parameters=qp))
-
-    with the fluent:
-
-        nodes = await client.job.structure.nodes.query(
-            node_type=models.NodeTypeFilter.Restrained)
-
-    Works because kiota generates a nested
-    ``{BuilderName}GetQueryParameters`` dataclass on every builder that
-    accepts GET query parameters; this method finds it by name and
-    builds the request configuration for you.
-
-    Attached to ``kiota_abstractions.base_request_builder.BaseRequestBuilder``
-    by the auto-generated ``space_gass_api/__init__.py`` so every builder
-    inherits it without per-class registration.
-
-    Parameters
-    ----------
-    **params:
-        Keyword arguments forwarded to the dataclass constructor — must
-        match its field names (snake_case in Python).
-
-    Raises
-    ------
-    TypeError
-        If this builder has no nested GetQueryParameters class (i.e. it
-        doesn't accept GET query parameters).
+    Must be called **once**, before any builder module is imported.  The
+    auto-generated ``space_gass_api/__init__.py`` takes care of this.
     """
-    # Lazy import — same reason as create_client.
+    from kiota_abstractions.base_request_builder import BaseRequestBuilder
     from kiota_abstractions.base_request_configuration import RequestConfiguration
+    import functools
 
-    qp_class_name = f"{type(self).__name__}GetQueryParameters"
-    qp_class = getattr(type(self), qp_class_name, None)
-    if qp_class is None:
-        raise TypeError(
-            f"{type(self).__name__} has no nested {qp_class_name} class — "
-            "this builder does not accept GET query parameters."
-        )
-    qp = qp_class(**params)
-    return await self.get(
-        request_configuration=RequestConfiguration(query_parameters=qp)
-    )
+    if getattr(BaseRequestBuilder, "_get_enhanced", False):
+        return
+
+    def _init_subclass(cls, **kwargs):
+        qp_name = f"{cls.__name__}GetQueryParameters"
+        qp_class = cls.__dict__.get(qp_name)
+
+        if qp_class is not None and "get" in cls.__dict__:
+            original_get = cls.__dict__["get"]
+
+            @functools.wraps(original_get)
+            async def enhanced_get(self, request_configuration=None, **params):
+                if params:
+                    if request_configuration is not None:
+                        raise TypeError(
+                            f"Cannot pass both request_configuration and "
+                            f"keyword query parameters to "
+                            f"{type(self).__name__}.get()."
+                        )
+                    qp = qp_class(**params)
+                    request_configuration = RequestConfiguration(
+                        query_parameters=qp
+                    )
+                return await original_get(
+                    self, request_configuration=request_configuration
+                )
+
+            cls.get = enhanced_get
+
+    BaseRequestBuilder.__init_subclass__ = classmethod(_init_subclass)
+    BaseRequestBuilder._get_enhanced = True

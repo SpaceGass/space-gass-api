@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -50,7 +50,17 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
             raise Exception("Http core is null") 
         return await self.request_adapter.send_no_response_content_async(request_info, error_mapping)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[LoadCasesItemRequestBuilderGetQueryParameters]] = None) -> Optional[LoadCase]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        expand: Optional[ExpandOption] = None,
+    ) -> Optional[LoadCase]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[LoadCasesItemRequestBuilderGetQueryParameters]] = None) -> Optional[LoadCase]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[LoadCasesItemRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[LoadCase]:
         """
         Gets a single load case by Id. `Expand` defaults to `all`, which hydrates`combinationItems` for combination cases; pass `Expand=none` to suppress.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

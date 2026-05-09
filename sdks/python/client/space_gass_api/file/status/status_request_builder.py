@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -30,7 +30,17 @@ class StatusRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/file/status{?filePath*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[StatusRequestBuilderGetQueryParameters]] = None) -> Optional[FileOpeningStatus]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        file_path: Optional[str] = None,
+    ) -> Optional[FileOpeningStatus]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[StatusRequestBuilderGetQueryParameters]] = None) -> Optional[FileOpeningStatus]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[StatusRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[FileOpeningStatus]:
         """
         Status values from SPACE GASS library (SGJobStatus):- 0 (NoSGandNoATS): File does not exist- 1 (SGandNoATS): Ready to open safely- 3: File is locked (another user has it open)- 4 (NoSGbutATS): Only temporary files exist, .sg file missing- 5 (SGandATS): Abnormal shutdown detected, unsaved changes exist- 7: File is locked with unsaved changes- -1 (UnknownStatus): Cannot write to file or temporary files
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

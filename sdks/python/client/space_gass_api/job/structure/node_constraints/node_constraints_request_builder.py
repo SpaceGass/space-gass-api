@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -48,7 +48,20 @@ class NodeConstraintsRequestBuilder(BaseRequestBuilder):
         url_tpl_params["nodeId"] = node_id
         return WithNodeItemRequestBuilder(self.request_adapter, url_tpl_params)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[NodeConstraintsRequestBuilderGetQueryParameters]] = None) -> Optional[list[NodeConstraint]]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        limit: Optional[int] = None,
+        master_node: Optional[int] = None,
+        offset: Optional[int] = None,
+        slaves: Optional[str] = None,
+    ) -> Optional[list[NodeConstraint]]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[NodeConstraintsRequestBuilderGetQueryParameters]] = None) -> Optional[list[NodeConstraint]]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[NodeConstraintsRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[NodeConstraint]]:
         """
         Returns all attribute rows for this resource type, with optional filtering.Sorted by parent Id ascending. Pagination metadata is returned in responseheaders (Total-Count, Offset, Limit).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

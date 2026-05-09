@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -30,7 +30,20 @@ class ExistsRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/nodes/exists{?tolerance*,x*,y*,z*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[ExistsRequestBuilderGetQueryParameters]] = None) -> Optional[Node]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        tolerance: Optional[float] = None,
+        x: Optional[float] = None,
+        y: Optional[float] = None,
+        z: Optional[float] = None,
+    ) -> Optional[Node]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[ExistsRequestBuilderGetQueryParameters]] = None) -> Optional[Node]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[ExistsRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[Node]:
         """
         Checks if a node exists within a given tolerance of the specified coordinates.Returns the first matching node found within the Euclidean distance tolerance.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

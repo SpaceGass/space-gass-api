@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -50,7 +50,17 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
             raise Exception("Http core is null") 
         return await self.request_adapter.send_no_response_content_async(request_info, error_mapping)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[NodesItemRequestBuilderGetQueryParameters]] = None) -> Optional[Node]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        expand: Optional[ExpandOption] = None,
+    ) -> Optional[Node]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[NodesItemRequestBuilderGetQueryParameters]] = None) -> Optional[Node]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[NodesItemRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[Node]:
         """
         `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —            resources that don't define sub-resources ignore the parameter.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

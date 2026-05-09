@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -31,7 +31,20 @@ class NodeReactionsRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/node-reactions{?Limit*,Offset*,cases*,nodes*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[NodeReactionsRequestBuilderGetQueryParameters]] = None) -> Optional[NodeReactionQueryResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        limit: Optional[int] = None,
+        nodes: Optional[str] = None,
+        offset: Optional[int] = None,
+    ) -> Optional[NodeReactionQueryResult]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[NodeReactionsRequestBuilderGetQueryParameters]] = None) -> Optional[NodeReactionQueryResult]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[NodeReactionsRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[NodeReactionQueryResult]:
         """
         Gets reaction results for nodes, optionally filtered by load cases and node Ids.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
