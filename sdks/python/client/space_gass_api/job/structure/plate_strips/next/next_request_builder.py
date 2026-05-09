@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 class NextRequestBuilder(BaseRequestBuilder):
@@ -26,7 +26,17 @@ class NextRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/plate-strips/next{?start*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[NextRequestBuilderGetQueryParameters]] = None) -> Optional[int]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        start: Optional[int] = None,
+    ) -> Optional[int]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[NextRequestBuilderGetQueryParameters]] = None) -> Optional[int]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[NextRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[int]:
         """
         Gets the next available (unused) Id for this entity type.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

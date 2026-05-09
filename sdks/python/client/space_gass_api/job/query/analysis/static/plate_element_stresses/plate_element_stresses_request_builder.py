@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -31,7 +31,20 @@ class PlateElementStressesRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/plate-element-stresses{?Limit*,Offset*,cases*,plates*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[PlateElementStressesRequestBuilderGetQueryParameters]] = None) -> Optional[PlateStressQueryResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        plates: Optional[str] = None,
+    ) -> Optional[PlateStressQueryResult]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[PlateElementStressesRequestBuilderGetQueryParameters]] = None) -> Optional[PlateStressQueryResult]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[PlateElementStressesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[PlateStressQueryResult]:
         """
         Gets element stress results for plates, optionally filtered by load cases and plate Ids.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

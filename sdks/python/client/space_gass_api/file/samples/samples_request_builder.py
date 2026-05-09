@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -29,7 +29,17 @@ class SamplesRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/file/samples{?includeImages*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None) -> Optional[list[JobFilePreviewInfo]]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        include_images: Optional[bool] = None,
+    ) -> Optional[list[JobFilePreviewInfo]]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None) -> Optional[list[JobFilePreviewInfo]]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[JobFilePreviewInfo]]:
         """
         Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.The file paths use virtual `samples://` scheme (e.g. "samples://Portal Frame.SG")which can be used with the preview and open endpoints.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET "/api/v1/file/samples?includeImages=true"
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

@@ -25,7 +25,7 @@ var filtered = await client.Job.Structure.Nodes.GetAsync(
 ```
 
 ```python title="Python"
-filtered = await client.job.structure.nodes.query(
+filtered = await client.job.structure.nodes.get(
     min_x=0, max_x=100, limit=50)
 ```
 
@@ -104,7 +104,7 @@ var result = await client.Job.Query.Analysis.Static.NodeDisplacements
 ```
 
 ```python title="Python"
-result = await client.job.query.analysis.static.node_displacements.query(
+result = await client.job.query.analysis.static.node_displacements.get(
     cases="1,3", nodes="10-12")
 ```
 
@@ -139,7 +139,7 @@ foreach (var m in result.Results)
 ```
 
 ```python title="Python"
-result = await client.job.query.analysis.static.member_intermediate_forces.query(
+result = await client.job.query.analysis.static.member_intermediate_forces.get(
     members="1")
 
 for m in result.results:
@@ -258,10 +258,10 @@ var page2 = await client.Job.Query.Analysis.Static.NodeDisplacements
 ```
 
 ```python title="Python"
-page1 = await client.job.query.analysis.static.node_displacements.query(
+page1 = await client.job.query.analysis.static.node_displacements.get(
     offset=0, limit=100)
 
-page2 = await client.job.query.analysis.static.node_displacements.query(
+page2 = await client.job.query.analysis.static.node_displacements.get(
     offset=100, limit=100)
 ```
 

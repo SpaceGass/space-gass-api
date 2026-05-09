@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -31,7 +31,20 @@ class MemberIntermediateDisplacementsRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/member-intermediate-displacements{?Limit*,Offset*,cases*,members*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[MemberIntermediateDisplacementsRequestBuilderGetQueryParameters]] = None) -> Optional[MemberIntermediateDisplacementQueryResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        limit: Optional[int] = None,
+        members: Optional[str] = None,
+        offset: Optional[int] = None,
+    ) -> Optional[MemberIntermediateDisplacementQueryResult]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[MemberIntermediateDisplacementsRequestBuilderGetQueryParameters]] = None) -> Optional[MemberIntermediateDisplacementQueryResult]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[MemberIntermediateDisplacementsRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[MemberIntermediateDisplacementQueryResult]:
         """
         Gets intermediate displacement results for members, grouped by load case and member.Each result contains global and local displacement values at stations along the member.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

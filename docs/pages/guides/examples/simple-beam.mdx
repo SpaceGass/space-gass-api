@@ -623,7 +623,7 @@ foreach (var r in reactions.Results)
 ```
 
 ```python title="Python"
-reactions = await client.job.query.analysis.static.node_reactions.query(
+reactions = await client.job.query.analysis.static.node_reactions.get(
     cases=str(uls_case.id))
 
 if reactions.warnings and reactions.warnings.cases_not_analyzed:
@@ -673,7 +673,7 @@ Console.WriteLine($"Max ULS bending moment on Member {member.Id}: {maxMz:F2} kNm
 ```
 
 ```python title="Python"
-uls_forces = await client.job.query.analysis.static.member_intermediate_forces.query(
+uls_forces = await client.job.query.analysis.static.member_intermediate_forces.get(
     cases=str(uls_case.id),
     members=str(member.id))
 
@@ -721,7 +721,7 @@ Console.WriteLine($"Max SLS midspan deflection on Member {member.Id}: {maxDeflec
 ```
 
 ```python title="Python"
-sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.query(
+sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.get(
     cases=str(sls_case.id),
     members=str(member.id))
 

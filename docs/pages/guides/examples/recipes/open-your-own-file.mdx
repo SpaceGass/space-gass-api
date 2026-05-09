@@ -8,6 +8,57 @@ to load a built-in sample so you don't need a project file. Once you
 have your own `.sg` file, switch to `Job.Open` — same shape, but you
 supply the path.
 
+## Check the file status first
+
+Before opening, call `File.Status` to find out whether the file is in
+a safe state. The response includes `CanOpenSafely` (a simple boolean),
+a human-readable `Description`, and a `RecommendedAction` string you
+can show to the user if something is wrong.
+
+<CodeTabs>
+```csharp title="C#"
+using SpaceGassApi;
+using SpaceGassApi.Models;
+
+var client = SpaceGassApiClient.CreateClient();
+
+var status = await client.File.Status.GetAsync(
+    config => config.QueryParameters.FilePath = @"C:\Projects\MyStructure.sg");
+
+Console.WriteLine($"Status: {status!.Status}");
+Console.WriteLine($"Description: {status.Description}");
+Console.WriteLine($"Can open safely: {status.CanOpenSafely}");
+
+if (status.CanOpenSafely != true)
+{
+    Console.WriteLine($"Recommended action: {status.RecommendedAction}");
+}
+```
+
+```python title="Python"
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
+
+client = SpaceGassApiClient.create_client()
+
+status = await client.file.status.get(
+    file_path=r"C:\Projects\MyStructure.sg")
+
+print(f"Status: {status.status}")
+print(f"Description: {status.description}")
+print(f"Can open safely: {status.can_open_safely}")
+
+if not status.can_open_safely:
+    print(f"Recommended action: {status.recommended_action}")
+```
+
+```bash title="curl"
+curl "http://localhost:34560/api/v1/file/status?filePath=C%3A%5CProjects%5CMyStructure.sg"
+```
+</CodeTabs>
+
+## Open the file
+
 `Job.Open` returns `409 Conflict` if a job is already open — close it
 first with `Job.Close`. If the file has unsaved temporary files from a
 previous crashed session, set `ForceOption` on the request body to

@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -51,7 +51,21 @@ class CombinationLoadCasesRequestBuilder(BaseRequestBuilder):
         url_tpl_params["combinationCase%2Did"] = combination_case_id
         return CombinationCaseItemRequestBuilder(self.request_adapter, url_tpl_params)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[CombinationLoadCasesRequestBuilderGetQueryParameters]] = None) -> Optional[list[LoadCase]]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        expand: Optional[ExpandOption] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        title_search: Optional[str] = None,
+    ) -> Optional[list[LoadCase]]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[CombinationLoadCasesRequestBuilderGetQueryParameters]] = None) -> Optional[list[LoadCase]]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[CombinationLoadCasesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[LoadCase]]:
         """
         Returns all combination load cases (load cases of type `Combination`) in the open job.Filter by case-Id list or by title substring. Results are sorted by Id ascending.Pagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).`Expand` defaults to `none` on this list endpoint; pass `Expand=all` to hydrateeach case's `combinationItems` array (otherwise `hasCombinationItems` is populatedbut the array is omitted from the wire).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -30,7 +30,18 @@ class PreviewRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/file/preview{?filePath*,includeImage*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None) -> Optional[JobFilePreviewInfo]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        file_path: Optional[str] = None,
+        include_image: Optional[bool] = None,
+    ) -> Optional[JobFilePreviewInfo]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None) -> Optional[JobFilePreviewInfo]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[JobFilePreviewInfo]:
         """
         This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Check dataAvailable in response.            Example usage with curl:                curl -X GET "/api/v1/file/preview?filePath=C:/path/to/job.sg&includeImage=true"
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

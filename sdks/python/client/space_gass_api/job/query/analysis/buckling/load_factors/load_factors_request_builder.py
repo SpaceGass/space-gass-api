@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -30,7 +30,18 @@ class LoadFactorsRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/query/analysis/buckling/load-factors{?Limit*,Offset*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[LoadFactorsRequestBuilderGetQueryParameters]] = None) -> Optional[BucklingLoadFactorQueryResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+    ) -> Optional[BucklingLoadFactorQueryResult]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[LoadFactorsRequestBuilderGetQueryParameters]] = None) -> Optional[BucklingLoadFactorQueryResult]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[LoadFactorsRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[BucklingLoadFactorQueryResult]:
         """
         Gets buckling load factor results for all load cases and modes.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

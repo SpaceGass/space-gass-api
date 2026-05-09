@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -51,7 +51,22 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
         url_tpl_params["id"] = id
         return LoadCasesItemRequestBuilder(self.request_adapter, url_tpl_params)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[LoadCasesRequestBuilderGetQueryParameters]] = None) -> Optional[list[LoadCase]]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        expand: Optional[ExpandOption] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        title_search: Optional[str] = None,
+        type: Optional[LoadCaseType] = None,
+    ) -> Optional[list[LoadCase]]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[LoadCasesRequestBuilderGetQueryParameters]] = None) -> Optional[list[LoadCase]]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[LoadCasesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[LoadCase]]:
         """
         Returns all load cases in the open job. Type is read-only and computed by SPACE GASSbased on assigned loads (Primary, Combination, Step, Unused). Filter by type, bycase-Id list, or by title substring. Results are sorted by Id ascending.Pagination metadata is returned in response headers (`Total-Count`, `Offset`, `Limit`).Pass `Expand=all` to hydrate `combinationItems` on combination cases (otherwise the`hasCombinationItems` indicator is populated but the array is omitted from the wire).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

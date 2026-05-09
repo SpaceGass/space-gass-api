@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -31,7 +31,20 @@ class MemberIntermediateForcesRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/member-intermediate-forces{?Limit*,Offset*,cases*,members*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[MemberIntermediateForcesRequestBuilderGetQueryParameters]] = None) -> Optional[MemberIntermediateForceQueryResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        limit: Optional[int] = None,
+        members: Optional[str] = None,
+        offset: Optional[int] = None,
+    ) -> Optional[MemberIntermediateForceQueryResult]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[MemberIntermediateForcesRequestBuilderGetQueryParameters]] = None) -> Optional[MemberIntermediateForceQueryResult]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[MemberIntermediateForcesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[MemberIntermediateForceQueryResult]:
         """
         Gets intermediate force results for members, grouped by load case and member.Each result contains force values at stations along the member.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

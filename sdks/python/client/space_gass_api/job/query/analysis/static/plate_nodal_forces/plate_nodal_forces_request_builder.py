@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -31,7 +31,20 @@ class PlateNodalForcesRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/plate-nodal-forces{?Limit*,Offset*,cases*,plates*}", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[PlateNodalForcesRequestBuilderGetQueryParameters]] = None) -> Optional[PlateNodalForceQueryResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        cases: Optional[str] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
+        plates: Optional[str] = None,
+    ) -> Optional[PlateNodalForceQueryResult]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[PlateNodalForcesRequestBuilderGetQueryParameters]] = None) -> Optional[PlateNodalForceQueryResult]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[PlateNodalForcesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[PlateNodalForceQueryResult]:
         """
         Gets nodal force results for plates, grouped by load case and plate.Each result contains force values at each node of the plate element.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
