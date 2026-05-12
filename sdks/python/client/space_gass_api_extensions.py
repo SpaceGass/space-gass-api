@@ -33,8 +33,10 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
+import httpx
 from kiota_abstractions.authentication import AnonymousAuthenticationProvider
-from kiota_http.httpx_request_adapter import HttpxRequestAdapter
+from kiota_http.httpx_request_adapter import HttpxRequestAdapter, KiotaClientFactory
+from kiota_http.middleware.options.redirect_handler_option import RedirectHandlerOption
 
 if TYPE_CHECKING:
     from space_gass_api.space_gass_api_client import SpaceGassApiClient
@@ -50,17 +52,40 @@ def create_client(base_url: str = DEFAULT_BASE_URL) -> SpaceGassApiClient:
     base_url:
         Base URL of the SPACE GASS API. Defaults to
         ``http://localhost:34560/api/v1``. Override only if the service
-        is running on a non-default port.
+        is running on a non-default port. Use ``https://`` for HTTPS
+        connections (e.g. ``https://localhost:53484/api/v1``).
 
     Returns
     -------
     A configured `SpaceGassApiClient` ready to make API calls.
+
+    Notes
+    -----
+    The API may serve HTTPS with a self-signed certificate, so SSL
+    verification is disabled by default.  HTTP-to-HTTPS redirects are
+    also allowed so either scheme works for the same port.
     """
     # Lazy import to avoid a circular load when this module is imported
     # from the auto-generated `space_gass_api/__init__.py` at package init.
     from space_gass_api.space_gass_api_client import SpaceGassApiClient
 
-    adapter = HttpxRequestAdapter(AnonymousAuthenticationProvider())
+    # Allow HTTP ↔ HTTPS redirects (the local API may redirect).
+    options = {
+        RedirectHandlerOption.REDIRECT_HANDLER_OPTION_KEY: RedirectHandlerOption(
+            allow_redirect_on_scheme_change=True,
+        ),
+    }
+    # Disable SSL verification for the self-signed certificate the
+    # local SPACE GASS API uses.
+    http_client = KiotaClientFactory.create_with_default_middleware(
+        client=httpx.AsyncClient(verify=False),
+        options=options,
+    )
+
+    adapter = HttpxRequestAdapter(
+        AnonymousAuthenticationProvider(),
+        http_client=http_client,
+    )
     adapter.base_url = base_url
     return SpaceGassApiClient(adapter)
 
