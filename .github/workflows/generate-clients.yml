@@ -58,8 +58,8 @@ jobs:
           kiota generate \
             --openapi "$SPEC_PATH" \
             --language python \
-            --output sdks/python/client/space_gass_api \
-            --namespace-name space_gass_api \
+            --output sdks/python/client/space_gass_api/generated \
+            --namespace-name space_gass_api.generated \
             --clean-output
 
       - name: Regenerate Python __init__ aggregators

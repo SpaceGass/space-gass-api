@@ -12,9 +12,9 @@
     },
     "SpaceGassApi-python": {
       "descriptionLocation": "descriptions/preview/openapi.json",
-      "outputPath": "sdks/python/client/space_gass_api",
+      "outputPath": "sdks/python/client/space_gass_api/generated",
       "language": "python",
-      "namespace": "space_gass_api",
+      "namespace": "space_gass_api.generated",
       "clientClassName": "BaseApiClient",
       "excludeBackwardCompatible": false,
       "structuredMimeTypes": ["application/json"]

@@ -1,29 +1,23 @@
 """
-Post-Kiota regenerator for the Python SDK's `__init__.py` aggregators.
+Post-Kiota regenerator for the Python SDK's ``__init__.py`` aggregators.
 
-Kiota generates `sdks/python/client/space_gass_api/` as a PEP 420
-namespace package — no `__init__.py` files anywhere in the tree. That
-makes `import space_gass_api.models as models` + `models.NodeCreate`
-fail to resolve, and prevents us from attaching `create_client` as a
-static method on `SpaceGassApiClient`.
+Kiota generates into ``space_gass_api/generated/`` as a PEP 420
+namespace package — no ``__init__.py`` files anywhere in the tree. That
+makes ``import space_gass_api.models as models`` + ``models.NodeCreate``
+fail to resolve.
 
-This script does four things inside the generated tree:
+This script does four things after Kiota regeneration:
 
-  1. Writes `space_gass_api/__init__.py`
-       - imports SpaceGassApiClient
-       - imports create_client from the hand-maintained
-         `space_gass_api_extensions` top-level module
-       - attaches it as a static method on the client class
-       - re-exports SpaceGassApiClient
+  1. Writes ``space_gass_api/__init__.py``
+       - calls ``_enhance_get_methods()`` to enable ``.get(**kwargs)``
+       - imports and re-exports ``SpaceGassApiClient``
 
-  2. Writes `space_gass_api/__init__.pyi`
-       - type stub declaring create_client on SpaceGassApiClient
-         (Pyright can't track class attribute assignments on imported
-         classes, so the stub provides the type info for IDE support)
+  2. Writes ``space_gass_api/__init__.pyi``
+       - type stub so Pyright / Pylance resolves ``SpaceGassApiClient``
 
-  3. Writes `space_gass_api/models/__init__.py`
-       - re-exports every model class from the snake_case submodules
-         so callers can write `models.NodeCreate` etc.
+  3. Writes ``space_gass_api/models/__init__.py``
+       - re-exports every model class from the generated submodules
+         so callers can write ``models.NodeCreate`` etc.
 
   4. Injects ``@overload`` stubs into every ``*_request_builder.py``
        whose class body contains a ``GetQueryParameters`` dataclass,
@@ -33,7 +27,7 @@ This script does four things inside the generated tree:
 Idempotent — rerunning produces byte-identical output.
 
 Run this whenever Kiota regenerates the SDK. CI does it automatically
-in `.github/workflows/generate-clients.yml`. For local regens:
+in ``.github/workflows/generate-clients.yml``. For local regens::
 
     python tools/regen_python_inits.py
 """
@@ -47,11 +41,13 @@ from pathlib import Path
 REPO_ROOT = Path(__file__).resolve().parent.parent
 PY_CLIENT = REPO_ROOT / "sdks" / "python" / "client"
 PKG_DIR = PY_CLIENT / "space_gass_api"
-MODELS_DIR = PKG_DIR / "models"
+GENERATED_DIR = PKG_DIR / "generated"
+MODELS_SRC = GENERATED_DIR / "models"
+MODELS_SHIM = PKG_DIR / "models"
 
 PKG_INIT = PKG_DIR / "__init__.py"
 PKG_INIT_PYI = PKG_DIR / "__init__.pyi"
-MODELS_INIT = MODELS_DIR / "__init__.py"
+MODELS_INIT = MODELS_SHIM / "__init__.py"
 
 CLASS_RE = re.compile(r"^class\s+([A-Z][A-Za-z0-9_]*)\b", re.MULTILINE)
 
@@ -61,7 +57,7 @@ Auto-generated post-Kiota by `tools/regen_python_inits.py` — DO NOT EDIT.
 Wires up the hand-maintained extensions on top of the Kiota-generated
 client:
 
-- ``SpaceGassApiClient`` extends the generated ``BaseSpaceGassApiClient``
+- ``SpaceGassApiClient`` extends the generated ``BaseApiClient``
   with the ``create_client()`` factory method.
 
 - ``.get(**kwargs)`` is auto-enhanced on every builder that has GET
@@ -79,17 +75,17 @@ Usage:
         node_type=models.NodeTypeFilter.Restrained)
 """
 
-from space_gass_api_client import _enhance_get_methods
+from .space_gass_api_client import _enhance_get_methods
 
 _enhance_get_methods()
 
-from space_gass_api_client import SpaceGassApiClient
+from .space_gass_api_client import SpaceGassApiClient
 
 __all__ = ["SpaceGassApiClient"]
 '''
 
 PKG_INIT_STUB = '''# Auto-generated post-Kiota by `tools/regen_python_inits.py` — DO NOT EDIT.
-from space_gass_api_client import SpaceGassApiClient as SpaceGassApiClient
+from .space_gass_api_client import SpaceGassApiClient as SpaceGassApiClient
 
 __all__: list[str]
 '''
@@ -98,7 +94,7 @@ __all__: list[str]
 def collect_model_classes() -> list[tuple[str, str]]:
     """Return [(module_stem, ClassName), ...] sorted by (module, class)."""
     out: list[tuple[str, str]] = []
-    for path in sorted(MODELS_DIR.glob("*.py")):
+    for path in sorted(MODELS_SRC.glob("*.py")):
         if path.name.startswith("__"):
             continue
         text = path.read_text(encoding="utf-8")
@@ -112,14 +108,15 @@ def render_models_init(entries: list[tuple[str, str]]) -> str:
     lines.append('"""')
     lines.append("Auto-generated post-Kiota by `tools/regen_python_inits.py` — DO NOT EDIT.")
     lines.append("")
-    lines.append("Aggregator that re-exports every model class so callers can write:")
+    lines.append("Re-exports every model class from the generated submodules so callers")
+    lines.append("can write:")
     lines.append("")
     lines.append("    import space_gass_api.models as models")
     lines.append("    body = models.NodeCreate(x=0, y=0, z=0)")
     lines.append('"""')
     lines.append("")
     for module, cls in entries:
-        lines.append(f"from .{module} import {cls}")
+        lines.append(f"from ..generated.models.{module} import {cls}")
     lines.append("")
     lines.append("__all__ = [")
     for _, cls in entries:
@@ -254,7 +251,7 @@ def enhance_builder_get_methods() -> int:
     Idempotent — strips previous injections before re-applying.
     """
     count = 0
-    for path in sorted(PKG_DIR.rglob("*_request_builder.py")):
+    for path in sorted(GENERATED_DIR.rglob("*_request_builder.py")):
         source = path.read_text(encoding="utf-8")
         clean = _strip_overloads(source)
 
@@ -275,16 +272,21 @@ def enhance_builder_get_methods() -> int:
 
 
 def main() -> None:
-    if not MODELS_DIR.is_dir():
+    if not MODELS_SRC.is_dir():
         raise SystemExit(
-            f"models dir not found: {MODELS_DIR}\n"
+            f"generated models dir not found: {MODELS_SRC}\n"
             "Has the Python SDK been generated yet? Run the kiota generate "
             "step first, then rerun this script."
         )
 
     entries = collect_model_classes()
     if not entries:
-        raise SystemExit(f"no model classes found under {MODELS_DIR}")
+        raise SystemExit(f"no model classes found under {MODELS_SRC}")
+
+    # Create the models shim directory (outside generated/, safe from
+    # --clean-output). This re-exports generated models so users can
+    # write `import space_gass_api.models as models`.
+    MODELS_SHIM.mkdir(exist_ok=True)
 
     PKG_INIT.write_text(PKG_INIT_CONTENTS, encoding="utf-8")
     PKG_INIT_PYI.write_text(PKG_INIT_STUB, encoding="utf-8")
