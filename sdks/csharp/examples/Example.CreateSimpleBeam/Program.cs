@@ -37,7 +37,7 @@ var saveFilePath = Path.Combine(
     "SpaceGass Examples",
     "SimpleBeam.sg");
 
-var client = SpaceGassApiClient.CreateClient("https://localhost:53483/api/v1");
+var client = SpaceGassApiClient.CreateClient();
 
 try
 {

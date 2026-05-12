@@ -30,6 +30,4 @@ Issues = "https://github.com/Spacegass/space-gass-api/issues"
 
 [tool.setuptools.packages.find]
 include = ["space_gass_api*"]
-
-[tool.setuptools]
-py-modules = ["space_gass_api_extensions"]
+namespaces = true

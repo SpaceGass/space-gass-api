@@ -1,83 +1,135 @@
+"""
+Hand-maintained client for the SPACE GASS API.
+
+Extends the Kiota-generated ``BaseSpaceGassApiClient`` with a
+``create_client()`` factory and the ``.get(**kwargs)`` enhancement.
+
+Lives inside the ``space_gass_api`` package but outside the
+``generated/`` folder, so Kiota's ``--clean-output`` never touches it.
+
+Usage:
+
+    from space_gass_api import SpaceGassApiClient
+    import space_gass_api.models as models
+
+    client = SpaceGassApiClient.create_client()
+
+    # GET with keyword query parameters
+    restrained = await client.job.structure.nodes.get(
+        node_type=models.NodeTypeFilter.Restrained)
+
+    reactions = await client.job.query.analysis.static.node_reactions.get(
+        cases="1,3-7", nodes="10-12")
+"""
+
 from __future__ import annotations
-from collections.abc import Callable
-from kiota_abstractions.api_client_builder import enable_backing_store_for_serialization_writer_factory, register_default_deserializer, register_default_serializer
-from kiota_abstractions.base_request_builder import BaseRequestBuilder
-from kiota_abstractions.get_path_parameters import get_path_parameters
+
+import httpx
+from kiota_abstractions.authentication import AnonymousAuthenticationProvider
 from kiota_abstractions.request_adapter import RequestAdapter
-from kiota_abstractions.serialization import ParseNodeFactoryRegistry, SerializationWriterFactoryRegistry
-from kiota_serialization_form.form_parse_node_factory import FormParseNodeFactory
-from kiota_serialization_form.form_serialization_writer_factory import FormSerializationWriterFactory
-from kiota_serialization_json.json_parse_node_factory import JsonParseNodeFactory
-from kiota_serialization_json.json_serialization_writer_factory import JsonSerializationWriterFactory
-from kiota_serialization_multipart.multipart_serialization_writer_factory import MultipartSerializationWriterFactory
-from kiota_serialization_text.text_parse_node_factory import TextParseNodeFactory
-from kiota_serialization_text.text_serialization_writer_factory import TextSerializationWriterFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from kiota_http.httpx_request_adapter import HttpxRequestAdapter, KiotaClientFactory
+from kiota_http.middleware.options.redirect_handler_option import RedirectHandlerOption
 
-if TYPE_CHECKING:
-    from .file.file_request_builder import FileRequestBuilder
-    from .job.job_request_builder import JobRequestBuilder
-    from .license.license_request_builder import LicenseRequestBuilder
-    from .service.service_request_builder import ServiceRequestBuilder
+from .generated.base_space_gass_api_client import BaseSpaceGassApiClient
 
-class SpaceGassApiClient(BaseRequestBuilder):
+API_PATH = "/api/v1"
+DEFAULT_BASE_URL = "http://localhost:34560"
+
+
+class SpaceGassApiClient(BaseSpaceGassApiClient):
+    """SPACE GASS API client.
+
+    Extends the Kiota-generated ``BaseSpaceGassApiClient`` with a convenience
+    factory. Use ``SpaceGassApiClient.create_client()`` to get a fully
+    configured instance.
     """
-    The main entry point of the SDK, exposes the configuration and the fluent API.
+
+    def __init__(self, request_adapter: RequestAdapter) -> None:
+        super().__init__(request_adapter)
+
+    @staticmethod
+    def create_client(base_url: str = DEFAULT_BASE_URL) -> SpaceGassApiClient:
+        """Create a SpaceGassApiClient bound to the local SPACE GASS API.
+
+        Parameters
+        ----------
+        base_url:
+            Root URL of the SPACE GASS API (without ``/api/v1``).
+            Defaults to ``http://localhost:34560``. Override only if the
+            service is running on a non-default port. Use ``https://``
+            for HTTPS connections (e.g. ``https://localhost:53484``).
+
+        Returns
+        -------
+        A configured ``SpaceGassApiClient`` ready to make API calls.
+
+        Notes
+        -----
+        The API may serve HTTPS with a self-signed certificate, so SSL
+        verification is disabled by default.  HTTP-to-HTTPS redirects
+        are also allowed so either scheme works for the same port.
+        """
+        # Allow HTTP ↔ HTTPS redirects (the local API may redirect).
+        options = {
+            RedirectHandlerOption.REDIRECT_HANDLER_OPTION_KEY: RedirectHandlerOption(
+                allow_redirect_on_scheme_change=True,
+            ),
+        }
+        # Disable SSL verification for the self-signed certificate the
+        # local SPACE GASS API uses.
+        http_client = KiotaClientFactory.create_with_default_middleware(
+            client=httpx.AsyncClient(verify=False),
+            options=options,
+        )
+
+        adapter = HttpxRequestAdapter(
+            AnonymousAuthenticationProvider(),
+            http_client=http_client,
+        )
+        adapter.base_url = base_url.rstrip("/") + API_PATH
+        return SpaceGassApiClient(adapter)
+
+
+def _enhance_get_methods():
+    """Patch ``BaseRequestBuilder.__init_subclass__`` so every Kiota builder
+    whose class body contains a ``{ClassName}GetQueryParameters`` dataclass
+    gets its ``.get()`` wrapped to accept keyword arguments directly.
+
+    Must be called **once**, before any builder module is imported.  The
+    auto-generated ``space_gass_api/__init__.py`` takes care of this.
     """
-    def __init__(self,request_adapter: RequestAdapter) -> None:
-        """
-        Instantiates a new SpaceGassApiClient and sets the default values.
-        param request_adapter: The request adapter to use to execute the requests.
-        Returns: None
-        """
-        if request_adapter is None:
-            raise TypeError("request_adapter cannot be null.")
-        super().__init__(request_adapter, "{+baseurl}", None)
-        register_default_serializer(JsonSerializationWriterFactory)
-        register_default_serializer(TextSerializationWriterFactory)
-        register_default_serializer(FormSerializationWriterFactory)
-        register_default_serializer(MultipartSerializationWriterFactory)
-        register_default_deserializer(JsonParseNodeFactory)
-        register_default_deserializer(TextParseNodeFactory)
-        register_default_deserializer(FormParseNodeFactory)
-        if not self.request_adapter.base_url:
-            self.request_adapter.base_url = "/api/v1"
-        self.path_parameters["base_url"] = self.request_adapter.base_url
-    
-    @property
-    def file(self) -> FileRequestBuilder:
-        """
-        The file property
-        """
-        from .file.file_request_builder import FileRequestBuilder
+    from kiota_abstractions.base_request_builder import BaseRequestBuilder
+    from kiota_abstractions.base_request_configuration import RequestConfiguration
+    import functools
 
-        return FileRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def job(self) -> JobRequestBuilder:
-        """
-        The job property
-        """
-        from .job.job_request_builder import JobRequestBuilder
+    if getattr(BaseRequestBuilder, "_get_enhanced", False):
+        return
 
-        return JobRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def license(self) -> LicenseRequestBuilder:
-        """
-        The license property
-        """
-        from .license.license_request_builder import LicenseRequestBuilder
+    def _init_subclass(cls, **kwargs):
+        qp_name = f"{cls.__name__}GetQueryParameters"
+        qp_class = cls.__dict__.get(qp_name)
 
-        return LicenseRequestBuilder(self.request_adapter, self.path_parameters)
-    
-    @property
-    def service(self) -> ServiceRequestBuilder:
-        """
-        The service property
-        """
-        from .service.service_request_builder import ServiceRequestBuilder
+        if qp_class is not None and "get" in cls.__dict__:
+            original_get = cls.__dict__["get"]
 
-        return ServiceRequestBuilder(self.request_adapter, self.path_parameters)
-    
+            @functools.wraps(original_get)
+            async def enhanced_get(self, request_configuration=None, **params):
+                if params:
+                    if request_configuration is not None:
+                        raise TypeError(
+                            f"Cannot pass both request_configuration and "
+                            f"keyword query parameters to "
+                            f"{type(self).__name__}.get()."
+                        )
+                    qp = qp_class(**params)
+                    request_configuration = RequestConfiguration(
+                        query_parameters=qp
+                    )
+                return await original_get(
+                    self, request_configuration=request_configuration
+                )
 
+            cls.get = enhanced_get
+
+    BaseRequestBuilder.__init_subclass__ = classmethod(_init_subclass)
+    BaseRequestBuilder._get_enhanced = True

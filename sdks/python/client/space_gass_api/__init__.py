@@ -4,9 +4,8 @@ Auto-generated post-Kiota by `tools/regen_python_inits.py` — DO NOT EDIT.
 Wires up the hand-maintained extensions on top of the Kiota-generated
 client:
 
-- ``create_client(...)`` is attached as a static method on
-  ``SpaceGassApiClient`` so callers can write
-  ``SpaceGassApiClient.create_client()``.
+- ``SpaceGassApiClient`` extends the generated ``BaseApiClient``
+  with the ``create_client()`` factory method.
 
 - ``.get(**kwargs)`` is auto-enhanced on every builder that has GET
   query parameters, so callers can pass filters as keyword arguments
@@ -23,12 +22,10 @@ Usage:
         node_type=models.NodeTypeFilter.Restrained)
 """
 
-from space_gass_api_extensions import create_client, _enhance_get_methods
+from .space_gass_api_client import _enhance_get_methods
 
 _enhance_get_methods()
 
 from .space_gass_api_client import SpaceGassApiClient
-
-SpaceGassApiClient.create_client = staticmethod(create_client)
 
 __all__ = ["SpaceGassApiClient"]
