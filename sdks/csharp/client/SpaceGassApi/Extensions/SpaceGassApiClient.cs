@@ -1,4 +1,5 @@
 using System.Net.Http;
+using Microsoft.Kiota.Abstractions;
 using Microsoft.Kiota.Abstractions.Authentication;
 using Microsoft.Kiota.Http.HttpClientLibrary;
 using Microsoft.Kiota.Http.HttpClientLibrary.Middleware.Options;
@@ -6,23 +7,39 @@ using Microsoft.Kiota.Http.HttpClientLibrary.Middleware.Options;
 namespace SpaceGassApi;
 
 /// <summary>
-/// Hand-maintained convenience methods added to the Kiota-generated client.
-/// This file lives outside the generated SpaceGassApi/ folder and is safe
-/// from <c>--clean-output</c> during regeneration.
+/// SPACE GASS API client.
+/// Extends the Kiota-generated <see cref="BaseSpaceGassApiClient"/> with
+/// a convenience factory. Use <see cref="CreateClient"/> to get a fully
+/// configured instance.
 /// </summary>
-public partial class SpaceGassApiClient
+/// <remarks>
+/// This file lives outside the <c>Generated/</c> folder and is safe
+/// from <c>--clean-output</c> during Kiota regeneration.
+/// </remarks>
+public class SpaceGassApiClient : BaseSpaceGassApiClient
 {
+    private const string ApiPath = "/api/v1";
+
     /// <summary>
     /// Default base URL for the SPACE GASS API running locally.
     /// </summary>
-    public const string DefaultBaseUrl = "http://localhost:34560/api/v1";
+    public const string DefaultBaseUrl = "http://localhost:34560";
+
+    /// <summary>
+    /// Initialises a new <see cref="SpaceGassApiClient"/>.
+    /// </summary>
+    /// <param name="requestAdapter">The request adapter to use.</param>
+    public SpaceGassApiClient(IRequestAdapter requestAdapter)
+        : base(requestAdapter)
+    {
+    }
 
     /// <summary>
     /// Create a <see cref="SpaceGassApiClient"/> with default settings.
     /// </summary>
     /// <param name="baseUrl">
-    /// Base URL of the SPACE GASS API.
-    /// Defaults to <c>http://localhost:34560/api/v1</c>.
+    /// Root URL of the SPACE GASS API (without <c>/api/v1</c>).
+    /// Defaults to <c>http://localhost:34560</c>.
     /// Use <c>https://</c> for HTTPS connections.
     /// </param>
     /// <returns>A configured client ready to make API calls.</returns>
@@ -54,7 +71,7 @@ public partial class SpaceGassApiClient
         var adapter = new HttpClientRequestAdapter(
             new AnonymousAuthenticationProvider(),
             httpClient: httpClient);
-        adapter.BaseUrl = baseUrl;
+        adapter.BaseUrl = baseUrl.TrimEnd('/') + ApiPath;
         return new SpaceGassApiClient(adapter);
     }
 }

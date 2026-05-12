@@ -1,20 +1,13 @@
 """
-Hand-maintained companion module for the Kiota-generated SpaceGassApiClient.
+Hand-maintained client for the SPACE GASS API.
+
+Extends the Kiota-generated ``BaseSpaceGassApiClient`` with a
+``create_client()`` factory and the ``.get(**kwargs)`` enhancement.
 
 Lives at the root of the Python client tree (next to space_gass_api/) so
-Kiota's `--clean-output` regen never touches it.
+Kiota's ``--clean-output`` regen never touches it.
 
-Defines two helpers:
-
-- ``create_client(...)`` — attached to ``SpaceGassApiClient`` as a static
-  method by the post-regen ``space_gass_api/__init__.py``.
-
-- ``_enhance_get_methods()`` — called once at package init to patch
-  ``BaseRequestBuilder.__init_subclass__``. Every Kiota builder that has
-  a nested ``{ClassName}GetQueryParameters`` dataclass gets its ``.get()``
-  method wrapped so callers can pass query parameters as keyword arguments.
-
-Public API:
+Usage:
 
     from space_gass_api import SpaceGassApiClient
     import space_gass_api.models as models
@@ -31,63 +24,70 @@ Public API:
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
 import httpx
 from kiota_abstractions.authentication import AnonymousAuthenticationProvider
+from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_http.httpx_request_adapter import HttpxRequestAdapter, KiotaClientFactory
 from kiota_http.middleware.options.redirect_handler_option import RedirectHandlerOption
 
-if TYPE_CHECKING:
-    from space_gass_api.space_gass_api_client import SpaceGassApiClient
+from space_gass_api.base_space_gass_api_client import BaseSpaceGassApiClient
 
-DEFAULT_BASE_URL = "http://localhost:34560/api/v1"
+API_PATH = "/api/v1"
+DEFAULT_BASE_URL = "http://localhost:34560"
 
 
-def create_client(base_url: str = DEFAULT_BASE_URL) -> SpaceGassApiClient:
-    """Create a SpaceGassApiClient bound to the local SPACE GASS API service.
+class SpaceGassApiClient(BaseSpaceGassApiClient):
+    """SPACE GASS API client.
 
-    Parameters
-    ----------
-    base_url:
-        Base URL of the SPACE GASS API. Defaults to
-        ``http://localhost:34560/api/v1``. Override only if the service
-        is running on a non-default port. Use ``https://`` for HTTPS
-        connections (e.g. ``https://localhost:53484/api/v1``).
-
-    Returns
-    -------
-    A configured `SpaceGassApiClient` ready to make API calls.
-
-    Notes
-    -----
-    The API may serve HTTPS with a self-signed certificate, so SSL
-    verification is disabled by default.  HTTP-to-HTTPS redirects are
-    also allowed so either scheme works for the same port.
+    Extends the Kiota-generated ``BaseSpaceGassApiClient`` with a
+    convenience factory. Use ``SpaceGassApiClient.create_client()`` to
+    get a fully configured instance.
     """
-    # Lazy import to avoid a circular load when this module is imported
-    # from the auto-generated `space_gass_api/__init__.py` at package init.
-    from space_gass_api.space_gass_api_client import SpaceGassApiClient
 
-    # Allow HTTP ↔ HTTPS redirects (the local API may redirect).
-    options = {
-        RedirectHandlerOption.REDIRECT_HANDLER_OPTION_KEY: RedirectHandlerOption(
-            allow_redirect_on_scheme_change=True,
-        ),
-    }
-    # Disable SSL verification for the self-signed certificate the
-    # local SPACE GASS API uses.
-    http_client = KiotaClientFactory.create_with_default_middleware(
-        client=httpx.AsyncClient(verify=False),
-        options=options,
-    )
+    def __init__(self, request_adapter: RequestAdapter) -> None:
+        super().__init__(request_adapter)
 
-    adapter = HttpxRequestAdapter(
-        AnonymousAuthenticationProvider(),
-        http_client=http_client,
-    )
-    adapter.base_url = base_url
-    return SpaceGassApiClient(adapter)
+    @staticmethod
+    def create_client(base_url: str = DEFAULT_BASE_URL) -> SpaceGassApiClient:
+        """Create a SpaceGassApiClient bound to the local SPACE GASS API.
+
+        Parameters
+        ----------
+        base_url:
+            Root URL of the SPACE GASS API (without ``/api/v1``).
+            Defaults to ``http://localhost:34560``. Override only if the
+            service is running on a non-default port. Use ``https://``
+            for HTTPS connections (e.g. ``https://localhost:53484``).
+
+        Returns
+        -------
+        A configured ``SpaceGassApiClient`` ready to make API calls.
+
+        Notes
+        -----
+        The API may serve HTTPS with a self-signed certificate, so SSL
+        verification is disabled by default.  HTTP-to-HTTPS redirects
+        are also allowed so either scheme works for the same port.
+        """
+        # Allow HTTP ↔ HTTPS redirects (the local API may redirect).
+        options = {
+            RedirectHandlerOption.REDIRECT_HANDLER_OPTION_KEY: RedirectHandlerOption(
+                allow_redirect_on_scheme_change=True,
+            ),
+        }
+        # Disable SSL verification for the self-signed certificate the
+        # local SPACE GASS API uses.
+        http_client = KiotaClientFactory.create_with_default_middleware(
+            client=httpx.AsyncClient(verify=False),
+            options=options,
+        )
+
+        adapter = HttpxRequestAdapter(
+            AnonymousAuthenticationProvider(),
+            http_client=http_client,
+        )
+        adapter.base_url = base_url.rstrip("/") + API_PATH
+        return SpaceGassApiClient(adapter)
 
 
 def _enhance_get_methods():

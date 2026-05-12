@@ -44,7 +44,8 @@ This is the public developer-facing repo for the SPACE GASS API. It contains the
 - Both point to `descriptions/preview/openapi.json` (stable path)
 - The `generate-clients` workflow is **manual trigger** (`workflow_dispatch`) with `--clean-output`
 - C# output: `sdks/csharp/client/SpaceGassApi/Generated/` — never hand-edit
-- Python output: `sdks/python/client/space_gass_api/` — never hand-edit, **except** the two `__init__.py` files (`space_gass_api/__init__.py` and `space_gass_api/models/__init__.py`) which are written by `tools/regen_python_inits.py` after every regen. The `generate-clients` workflow runs that script automatically; for local Kiota regens, run `python tools/regen_python_inits.py` afterwards. The actual `create_client(...)` body lives in the hand-maintained `sdks/python/client/space_gass_api_extensions.py` at the client root, outside the Kiota tree.
+- Python output: `sdks/python/client/space_gass_api/` — never hand-edit, **except** the `__init__.py` and `__init__.pyi` files which are written by `tools/regen_python_inits.py` after every regen. The `generate-clients` workflow runs that script automatically; for local Kiota regens, run `python tools/regen_python_inits.py` afterwards.
+- Python Kiota config uses `clientClassName: "BaseSpaceGassApiClient"` so the generated class is a base. The hand-maintained `sdks/python/client/space_gass_api_client.py` defines `SpaceGassApiClient(BaseSpaceGassApiClient)` with the `create_client()` factory (same pattern as MS Graph SDK).
 
 ### C# Client Structure
 
@@ -53,40 +54,44 @@ sdks/csharp/client/
 ├── SpaceGassApi.sln                     ← client solution (+ future tests)
 └── SpaceGassApi/
     ├── SpaceGassApi.csproj              ← hand-maintained (safe from Kiota regen)
-    ├── Extensions/                      ← hand-maintained (CreateClient factory, etc.)
-    │   └── SpaceGassApiClientExtensions.cs
+    ├── Extensions/                      ← hand-maintained
+    │   └── SpaceGassApiClient.cs        ← SpaceGassApiClient : BaseSpaceGassApiClient
     └── Generated/                       ← Kiota output (wiped on --clean-output)
-        ├── SpaceGassApiClient.cs
+        ├── BaseSpaceGassApiClient.cs    ← Kiota-generated base client
         ├── Models/
         └── ...
 ```
 
+- Kiota generates `BaseSpaceGassApiClient` (set via `clientClassName` in `kiota.config.json`). The hand-maintained `Extensions/SpaceGassApiClient.cs` defines `SpaceGassApiClient : BaseSpaceGassApiClient` which adds `CreateClient()`. Same pattern as the [Microsoft Graph .NET SDK](https://github.com/microsoftgraph/msgraph-sdk-dotnet).
 - `.csproj` uses `EnableDefaultCompileItems=false` and explicit `<Compile Include>` for `Generated\**\*.cs` and `Extensions\**\*.cs`
-- `SpaceGassApiClient` is a `partial class` — the Extensions file adds `CreateClient()` via another partial definition
 
 ### Python Client Structure
 
 ```
 sdks/python/client/
-├── pyproject.toml                  ← installs space_gass_api/ + the top-level extensions module
-├── space_gass_api_extensions.py    ← hand-maintained (create_client factory) — NEVER touched by Kiota
+├── pyproject.toml                  ← installs space_gass_api/ + the hand-maintained client module
+├── space_gass_api_client.py        ← hand-maintained (SpaceGassApiClient, create_client, _enhance_get_methods) — NEVER touched by Kiota
 └── space_gass_api/                 ← Kiota output (wiped on --clean-output)
     ├── __init__.py                 ← AUTO-WRITTEN post-Kiota by tools/regen_python_inits.py
+    ├── __init__.pyi                ← AUTO-WRITTEN post-Kiota (type stub for IDE support)
+    ├── base_space_gass_api_client.py ← Kiota-generated base client
     ├── models/
     │   └── __init__.py             ← AUTO-WRITTEN post-Kiota (re-exports every model class)
-    ├── space_gass_api_client.py
     └── ...rest is Kiota...
 ```
 
+- Kiota generates `BaseSpaceGassApiClient` (set via `clientClassName` in `kiota.config.json`). The hand-maintained `space_gass_api_client.py` defines `SpaceGassApiClient(BaseSpaceGassApiClient)` which adds `create_client()` as a static method. This follows the same pattern as the [Microsoft Graph Python SDK](https://github.com/microsoftgraph/msgraph-sdk-python).
 - The post-regen script `tools/regen_python_inits.py` writes `__init__.py` files inside the Kiota tree so callers can write `from space_gass_api import SpaceGassApiClient` and `import space_gass_api.models as models`. Without these aggregators, Kiota's PEP 420 namespace package layout means `models.NodeCreate` doesn't resolve.
-- `space_gass_api/__init__.py` glues `create_client` from the hand-maintained `space_gass_api_extensions` top-level module onto `SpaceGassApiClient` as a static method, so the public API is `SpaceGassApiClient.create_client()` — symmetric with the C# `SpaceGassApiClient.CreateClient()`.
-- `pyproject.toml` uses `[tool.setuptools] py-modules = ["space_gass_api_extensions"]` to install the helper as a top-level module alongside the `space_gass_api` package.
+- `space_gass_api/__init__.py` imports `SpaceGassApiClient` from the hand-maintained `space_gass_api_client` module and calls `_enhance_get_methods()` to enable `.get(**kwargs)` on builders.
+- `pyproject.toml` uses `[tool.setuptools] py-modules = ["space_gass_api_client"]` to install the hand-maintained module alongside the `space_gass_api` package.
 
 ### Authentication
 
 - **No authentication required** — the API runs locally on the user's machine
 - SDK ships with `SpaceGassApiClient.CreateClient()` which uses `AnonymousAuthenticationProvider`
-- Default base URL: `http://localhost:34560/api/v1` (plain HTTP, no SSL bypass needed)
+- Default base URL: `http://localhost:34560` — the SDK auto-appends `/api/v1`
+- SSL verification is disabled by default (local API may use self-signed certs)
+- HTTP↔HTTPS redirects are allowed so either scheme works
 - When API key auth is added later, `CreateClient(apiKey: "...")` will be a non-breaking addition
 
 ### Examples
