@@ -54,16 +54,15 @@ sdks/csharp/client/
 ├── SpaceGassApi.sln                     ← client solution (+ future tests)
 └── SpaceGassApi/
     ├── SpaceGassApi.csproj              ← hand-maintained (safe from Kiota regen)
-    ├── Extensions/                      ← hand-maintained
-    │   └── SpaceGassApiClient.cs        ← SpaceGassApiClient : BaseSpaceGassApiClient
+    ├── SpaceGassApiClient.cs            ← hand-maintained — SpaceGassApiClient : BaseSpaceGassApiClient
     └── Generated/                       ← Kiota output (wiped on --clean-output)
         ├── BaseSpaceGassApiClient.cs    ← Kiota-generated base client
         ├── Models/
         └── ...
 ```
 
-- Kiota generates `BaseSpaceGassApiClient` (set via `--class-name` in the workflow). The hand-maintained `Extensions/SpaceGassApiClient.cs` defines `SpaceGassApiClient : BaseSpaceGassApiClient` which adds `CreateClient()`. Same pattern as the [Microsoft Graph .NET SDK](https://github.com/microsoftgraph/msgraph-sdk-dotnet).
-- `.csproj` uses `EnableDefaultCompileItems=false` and explicit `<Compile Include>` for `Generated\**\*.cs` and `Extensions\**\*.cs`
+- Kiota generates `BaseSpaceGassApiClient` (set via `--class-name` in the workflow). The hand-maintained `SpaceGassApiClient.cs` defines `SpaceGassApiClient : BaseSpaceGassApiClient` which adds `CreateClient()`. Same pattern as the [Microsoft Graph .NET SDK](https://github.com/microsoftgraph/msgraph-sdk-dotnet).
+- `.csproj` uses `EnableDefaultCompileItems=false` and explicit `<Compile Include>` for `Generated\**\*.cs` and `SpaceGassApiClient.cs`
 
 ### Python Client Structure
 

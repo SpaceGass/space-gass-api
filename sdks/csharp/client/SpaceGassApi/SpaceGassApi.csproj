@@ -25,10 +25,10 @@
     <PackageReference Include="Microsoft.Kiota.Bundle" Version="1.21.2" />
   </ItemGroup>
 
-  <!-- Include generated source files and hand-maintained extensions -->
+  <!-- Include generated source files and the hand-maintained client -->
   <ItemGroup>
     <Compile Include="Generated\**\*.cs" />
-    <Compile Include="Extensions\**\*.cs" />
+    <Compile Include="SpaceGassApiClient.cs" />
   </ItemGroup>
 
   <ItemGroup>
