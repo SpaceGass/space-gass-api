@@ -51,6 +51,7 @@ jobs:
             --language csharp \
             --output sdks/csharp/client/SpaceGassApi/Generated \
             --namespace-name SpaceGassApi \
+            --class-name BaseSpaceGassApiClient \
             --clean-output
 
       - name: Generate Python client
@@ -60,6 +61,7 @@ jobs:
             --language python \
             --output sdks/python/client/space_gass_api/generated \
             --namespace-name space_gass_api.generated \
+            --class-name BaseSpaceGassApiClient \
             --clean-output
 
       - name: Regenerate Python __init__ aggregators

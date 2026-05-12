@@ -6,7 +6,7 @@
       "outputPath": "sdks/csharp/client/SpaceGassApi/Generated",
       "language": "csharp",
       "namespace": "SpaceGassApi",
-      "clientClassName": "BaseApiClient",
+      "clientClassName": "BaseSpaceGassApiClient",
       "excludeBackwardCompatible": false,
       "structuredMimeTypes": ["application/json"]
     },
@@ -15,7 +15,7 @@
       "outputPath": "sdks/python/client/space_gass_api/generated",
       "language": "python",
       "namespace": "space_gass_api.generated",
-      "clientClassName": "BaseApiClient",
+      "clientClassName": "BaseSpaceGassApiClient",
       "excludeBackwardCompatible": false,
       "structuredMimeTypes": ["application/json"]
     }

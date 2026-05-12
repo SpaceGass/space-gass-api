@@ -1,7 +1,7 @@
 """
 Hand-maintained client for the SPACE GASS API.
 
-Extends the Kiota-generated ``BaseApiClient`` with a
+Extends the Kiota-generated ``BaseSpaceGassApiClient`` with a
 ``create_client()`` factory and the ``.get(**kwargs)`` enhancement.
 
 Lives inside the ``space_gass_api`` package but outside the
@@ -30,16 +30,16 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_http.httpx_request_adapter import HttpxRequestAdapter, KiotaClientFactory
 from kiota_http.middleware.options.redirect_handler_option import RedirectHandlerOption
 
-from .generated.base_api_client import BaseApiClient
+from .generated.base_space_gass_api_client import BaseSpaceGassApiClient
 
 API_PATH = "/api/v1"
 DEFAULT_BASE_URL = "http://localhost:34560"
 
 
-class SpaceGassApiClient(BaseApiClient):
+class SpaceGassApiClient(BaseSpaceGassApiClient):
     """SPACE GASS API client.
 
-    Extends the Kiota-generated ``BaseApiClient`` with a convenience
+    Extends the Kiota-generated ``BaseSpaceGassApiClient`` with a convenience
     factory. Use ``SpaceGassApiClient.create_client()`` to get a fully
     configured instance.
     """
