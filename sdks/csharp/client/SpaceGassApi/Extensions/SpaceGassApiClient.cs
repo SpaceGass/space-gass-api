@@ -8,15 +8,15 @@ namespace SpaceGassApi;
 
 /// <summary>
 /// SPACE GASS API client.
-/// Extends the Kiota-generated <see cref="ApiClient"/> with a convenience
-/// factory. Use <see cref="CreateClient"/> to get a fully configured
-/// instance.
+/// Extends the Kiota-generated <see cref="BaseApiClient"/> with a
+/// convenience factory. Use <see cref="CreateClient"/> to get a fully
+/// configured instance.
 /// </summary>
 /// <remarks>
 /// This file lives outside the <c>Generated/</c> folder and is safe
 /// from <c>--clean-output</c> during Kiota regeneration.
 /// </remarks>
-public class SpaceGassApiClient : ApiClient
+public class SpaceGassApiClient : BaseApiClient
 {
     private const string ApiPath = "/api/v1";
 

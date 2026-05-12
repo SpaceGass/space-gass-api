@@ -30,16 +30,16 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_http.httpx_request_adapter import HttpxRequestAdapter, KiotaClientFactory
 from kiota_http.middleware.options.redirect_handler_option import RedirectHandlerOption
 
-from space_gass_api.api_client import ApiClient
+from space_gass_api.base_api_client import BaseApiClient
 
 API_PATH = "/api/v1"
 DEFAULT_BASE_URL = "http://localhost:34560"
 
 
-class SpaceGassApiClient(ApiClient):
+class SpaceGassApiClient(BaseApiClient):
     """SPACE GASS API client.
 
-    Extends the Kiota-generated ``ApiClient`` with a convenience
+    Extends the Kiota-generated ``BaseApiClient`` with a convenience
     factory. Use ``SpaceGassApiClient.create_client()`` to get a fully
     configured instance.
     """
