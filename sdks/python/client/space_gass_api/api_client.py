@@ -20,13 +20,13 @@ if TYPE_CHECKING:
     from .license.license_request_builder import LicenseRequestBuilder
     from .service.service_request_builder import ServiceRequestBuilder
 
-class SpaceGassApiClient(BaseRequestBuilder):
+class ApiClient(BaseRequestBuilder):
     """
     The main entry point of the SDK, exposes the configuration and the fluent API.
     """
     def __init__(self,request_adapter: RequestAdapter) -> None:
         """
-        Instantiates a new SpaceGassApiClient and sets the default values.
+        Instantiates a new ApiClient and sets the default values.
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """

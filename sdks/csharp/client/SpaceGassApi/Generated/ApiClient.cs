@@ -20,7 +20,7 @@ namespace SpaceGassApi
     /// The main entry point of the SDK, exposes the configuration and the fluent API.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public partial class SpaceGassApiClient : BaseRequestBuilder
+    public partial class ApiClient : BaseRequestBuilder
     {
         /// <summary>The file property</summary>
         public global::SpaceGassApi.FileNamespace.FileRequestBuilder File
@@ -43,10 +43,10 @@ namespace SpaceGassApi
             get => new global::SpaceGassApi.Service.ServiceRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
-        /// Instantiates a new <see cref="global::SpaceGassApi.SpaceGassApiClient"/> and sets the default values.
+        /// Instantiates a new <see cref="global::SpaceGassApi.ApiClient"/> and sets the default values.
         /// </summary>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SpaceGassApiClient(IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}", new Dictionary<string, object>())
+        public ApiClient(IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}", new Dictionary<string, object>())
         {
             ApiClientBuilder.RegisterDefaultSerializer<JsonSerializationWriterFactory>();
             ApiClientBuilder.RegisterDefaultSerializer<TextSerializationWriterFactory>();
