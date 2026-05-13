@@ -90,7 +90,7 @@ The generated client code should never be hand-edited — changes come from upda
 
 ```
 space-gass-api/
-├── descriptions/       # OpenAPI specifications (CC BY-ND 4.0)
+├── descriptions/       # OpenAPI specifications
 │   ├── current/        # Latest released spec (SDKs are generated from this)
 │   └── archive/        # Previously released versions
 ├── sdks/
@@ -108,7 +108,7 @@ space-gass-api/
 ## Licensing
 
 - **SDKs, examples, and sandbox scripts** — [MIT](LICENSE)
-- **OpenAPI specifications** (`descriptions/`) — [CC BY-ND 4.0](LICENSE-SPEC)
+- **OpenAPI specifications** (`descriptions/`) — subject to the [SPACE GASS License](LICENSE-SPEC)
 
 ## Contributing
 

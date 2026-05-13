@@ -16,8 +16,8 @@ This is the public developer-facing repo for the SPACE GASS API. It contains the
 ### Licensing
 
 - **MIT** — SDKs, examples, sandbox (`sdks/`, `sandbox/`)
-- **CC BY-ND 4.0** — OpenAPI specifications (`descriptions/`)
-- `LICENSE` at root covers MIT; `LICENSE-SPEC` covers CC BY-ND
+- **SPACE GASS License** — OpenAPI specifications (`descriptions/`)
+- `LICENSE` at root covers MIT; `LICENSE-SPEC` covers the SPACE GASS License
 - `descriptions/NOTICE.md` explains the boundary to developers
 
 ### OpenAPI Spec Naming
