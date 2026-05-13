@@ -17,7 +17,7 @@ This repository contains:
 
 ## Quick Start
 
-### Install
+### Install the SDK
 
 **C# (.NET 8+)**
 
