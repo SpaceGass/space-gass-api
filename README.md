@@ -84,7 +84,7 @@ For the full walk-through see the [Quick Start](https://spacegass.github.io/spac
 
 The C# and Python SDKs are auto-generated using [Kiota](https://learn.microsoft.com/en-us/openapi/kiota/) from the current spec (`descriptions/current/`). Previously released specs are kept in `descriptions/archive/` for reference.
 
-The generated client code should never be hand-edited — changes come from updating the OpenAPI spec and re-running the generation workflow. Hand-maintained wrapper classes (`SpaceGassApiClient`) sit alongside the generated code and provide the public `CreateClient()` / `create_client()` factory methods.
+The generated client code should never be hand-edited — changes come from updating the OpenAPI spec and re-running the generation workflow.
 
 ## Repository Structure
 
