@@ -36,7 +36,7 @@ import space_gass_api.models as models
 # -- Configuration ------------------------------------------------
 save_file_path = os.path.join(
     os.path.expanduser("~/Desktop"),
-    "SpaceGass Examples",
+    "SpaceGass Examples-py",
     "SimpleBeam.sg",
 )
 
@@ -245,7 +245,7 @@ async def main() -> int:
 
         while True:
             await asyncio.sleep(0.5)
-            final_run = await client.job.analysis.runs.by_run_id(run.run_id).get()
+            final_run = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
             if final_run.status in (
                 models.AnalysisRunStatus.Completed,
                 models.AnalysisRunStatus.Failed,
