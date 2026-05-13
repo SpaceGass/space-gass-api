@@ -108,7 +108,7 @@ space-gass-api/
 ## Licensing
 
 - **SDKs, examples, and sandbox scripts** — [MIT](LICENSE)
-- **OpenAPI specifications** (`descriptions/`) — subject to the [SPACE GASS License](LICENSE-SPEC)
+- **OpenAPI specifications** (`descriptions/`) — subject to the [SPACE GASS License](https://www.spacegass.com)
 
 ## Contributing
 
