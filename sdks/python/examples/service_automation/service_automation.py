@@ -46,7 +46,7 @@ async def wait_for_service_ready(client, timeout: float = 30.0) -> None:
 
 
 async def main() -> int:
-    client = SpaceGassApiClient.create_client()
+    client = SpaceGassApiClient.create_client("http://localhost:34560")
     process: subprocess.Popen | None = None
 
     # Hook Ctrl+C so the service still shuts down on a hard interrupt

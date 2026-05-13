@@ -9,7 +9,6 @@ Demonstrates how to:
 
 Prerequisites:
   - SPACE GASS API running locally (default: http://localhost:34560)
-  - A valid API key
   - An existing .sg project file that has been analysed
 """
 
@@ -25,7 +24,7 @@ PROJECT_FILE_PATH = r"C:\Path\To\Your\Project.sg"
 
 
 async def main() -> int:
-    client = SpaceGassApiClient.create_client()
+    client = SpaceGassApiClient.create_client("http://localhost:34560")
 
     try:
         # -- Open the project ------------------------------------------

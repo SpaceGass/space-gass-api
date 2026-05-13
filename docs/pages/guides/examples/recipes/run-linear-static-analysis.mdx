@@ -19,7 +19,7 @@ like to run.
 using SpaceGassApi;
 using SpaceGassApi.Models;
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 try
 {
@@ -54,7 +54,7 @@ import asyncio
 from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
-client = SpaceGassApiClient.create_client()
+client = SpaceGassApiClient.create_client("http://localhost:34560")
 
 try:
     await client.job.open_sample.post(

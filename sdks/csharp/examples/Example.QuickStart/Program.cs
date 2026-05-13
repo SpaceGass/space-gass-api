@@ -16,7 +16,7 @@
 using SpaceGassApi;
 using SpaceGassApi.Models;
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 try
 {

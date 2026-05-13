@@ -23,7 +23,7 @@ using SpaceGassApi;
 
 const string ServiceExePath = @"C:\Program Files\SPACE GASS 14.5\SpaceGassApi.exe";
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 Process? serviceProcess = null;
 
 // Hook Ctrl+C so the service still shuts down on a hard interrupt

@@ -16,10 +16,9 @@ using SpaceGassApi.Models;
 //
 // Prerequisites:
 //   - SPACE GASS API running locally (default: http://localhost:34560)
-//   - A valid API key
 // ---------------------------------------------------------------
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 try
 {

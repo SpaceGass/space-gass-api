@@ -20,7 +20,7 @@ can show to the user if something is wrong.
 using SpaceGassApi;
 using SpaceGassApi.Models;
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 var status = await client.File.Status.GetAsync(
     config => config.QueryParameters.FilePath = @"C:\Projects\MyStructure.sg");
@@ -39,7 +39,7 @@ if (status.CanOpenSafely != true)
 from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
-client = SpaceGassApiClient.create_client()
+client = SpaceGassApiClient.create_client("http://localhost:34560")
 
 status = await client.file.status.get(
     file_path=r"C:\Projects\MyStructure.sg")
@@ -70,7 +70,7 @@ either `OpenPreviousSaved` (discard the unsaved changes) or
 using SpaceGassApi;
 using SpaceGassApi.Models;
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 try
 {
@@ -89,7 +89,7 @@ finally
 from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
-client = SpaceGassApiClient.create_client()
+client = SpaceGassApiClient.create_client("http://localhost:34560")
 
 try:
     await client.job.open.post(

@@ -13,7 +13,6 @@ using SpaceGassApi.Models;
 //
 // Prerequisites:
 //   - SPACE GASS API running locally (default: http://localhost:34560)
-//   - A valid API key
 //   - An existing .sg project file that has been analysed
 // ---------------------------------------------------------------
 
@@ -21,7 +20,7 @@ using SpaceGassApi.Models;
 // Update these values to match your local environment.
 const string projectFilePath = @"C:\Path\To\Your\Project.sg";
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 try
 {

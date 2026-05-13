@@ -12,7 +12,6 @@ Demonstrates how to:
 
 Prerequisites:
   - SPACE GASS API running locally (default: http://localhost:34560)
-  - A valid API key
 """
 
 import asyncio
@@ -23,7 +22,7 @@ import space_gass_api.models as models
 
 
 async def main() -> int:
-    client = SpaceGassApiClient.create_client()
+    client = SpaceGassApiClient.create_client("http://localhost:34560")
 
     try:
         # -- Create a new blank project --------------------------------
