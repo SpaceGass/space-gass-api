@@ -107,11 +107,11 @@ space-gass-api/
 └── docs/               # Developer documentation site (Zudoku)
 ```
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get involved.
+
 ## Licensing
 
 - **SDKs, examples, and sandbox scripts** — [MIT](LICENSE)
 - **OpenAPI specifications** (`descriptions/`) — subject to the [SPACE GASS End User Licence Agreement](https://www.spacegass.com/manual/Introduction/End_User_Licence_Agreement.htm)
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for how to get involved.
