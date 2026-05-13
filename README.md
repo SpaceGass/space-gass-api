@@ -86,6 +86,8 @@ The C# and Python SDKs are auto-generated using [Kiota](https://learn.microsoft.
 
 The generated client code should never be hand-edited — changes come from updating the OpenAPI spec and re-running the generation workflow.
 
+Kiota generates fluent builder chains that use REST terms explicitly — `GetAsync()`, `PostAsync()`, `PatchAsync()`, `DeleteAsync()` — so the SDK reads like the HTTP calls it makes under the hood. See the [Concepts page](https://spacegass.github.io/space-gass-api/getting-started/concepts) for how these map to the API.
+
 ## Repository Structure
 
 ```
