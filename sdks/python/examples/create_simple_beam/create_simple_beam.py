@@ -42,7 +42,7 @@ save_file_path = os.path.join(
 
 
 async def main() -> int:
-    client = SpaceGassApiClient.create_client()
+    client = SpaceGassApiClient.create_client("http://localhost:34560")
 
     try:
         # == Step 1 — Create a new blank project =======================
@@ -229,12 +229,12 @@ async def main() -> int:
 
         # == Step 13 — Configure the static analysis settings ==========
         # PATCH the stored static analysis settings before running. The
-        # API currently only supports the Pardiso solver, so pin
-        # solver_type = Pardiso here.
+        # API currently only supports the Paradise solver, so pin
+        # solver_type = Paradise here.
         print("Configuring static analysis settings...")
         await client.job.analysis.static.settings.patch(
             models.StaticSettingsUpdate(
-                solver_type=models.SolverType.Pardiso,
+                solver_type=models.SolverType.Paradise,
             ))
 
         # == Step 14 — Run a linear static analysis ====================

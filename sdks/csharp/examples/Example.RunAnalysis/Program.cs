@@ -14,7 +14,6 @@ using SpaceGassApi.Models;
 //
 // Prerequisites:
 //   - SPACE GASS API running locally (default: http://localhost:34560)
-//   - A valid API key
 //   - An existing .sg project file with structure and loads defined
 // ---------------------------------------------------------------
 
@@ -28,7 +27,7 @@ var projectFilePath = Path.Combine(
 
 var pollIntervalMs = 500; // How often to poll for progress (milliseconds)
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 try
 {

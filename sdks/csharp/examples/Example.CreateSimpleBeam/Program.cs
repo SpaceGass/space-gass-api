@@ -37,7 +37,7 @@ var saveFilePath = Path.Combine(
     "SpaceGass Examples",
     "SimpleBeam.sg");
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 try
 {
@@ -222,13 +222,13 @@ try
 
     // == Step 13 — Configure the static analysis settings ==========
     // PATCH the stored static analysis settings before running. The
-    // API currently only supports the Pardiso solver, so pin
-    // SolverType = Pardiso here.
+    // API currently only supports the Paradise solver, so pin
+    // SolverType = Paradise here.
     Console.WriteLine("Configuring static analysis settings...");
     await client.Job.Analysis.Static.Settings.PatchAsync(
         new StaticSettingsUpdate
         {
-            SolverType = SolverType.Pardiso,
+            SolverType = SolverType.Paradise,
         });
 
     // == Step 14 — Run a linear static analysis ====================

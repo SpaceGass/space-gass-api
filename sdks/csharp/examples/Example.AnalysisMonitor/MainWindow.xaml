@@ -86,7 +86,7 @@
                     <Ellipse x:Name="ConnDot" Width="10" Height="10" Fill="{StaticResource Red}" Margin="0,0,8,0"/>
                     <TextBlock x:Name="ConnText" Text="Disconnected" Foreground="{StaticResource TextMuted}"
                                VerticalAlignment="Center" Width="90"/>
-                    <TextBox x:Name="TxtServiceUrl" Text="https://localhost:53483"
+                    <TextBox x:Name="TxtServiceUrl" Text="http://localhost:34560"
                              Background="{StaticResource SurfaceBg}" Foreground="#FFf8fafc"
                              BorderBrush="{StaticResource Border}" Padding="6,4"
                              FontFamily="Cascadia Code,Consolas" FontSize="12"/>

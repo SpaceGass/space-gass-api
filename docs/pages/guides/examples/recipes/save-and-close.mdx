@@ -23,7 +23,7 @@ var savePath = Path.Combine(
     Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
     "PortalFrameCopy.sg");
 
-var client = SpaceGassApiClient.CreateClient();
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 try
 {
@@ -52,7 +52,7 @@ save_path = os.path.join(
     "PortalFrameCopy.sg",
 )
 
-client = SpaceGassApiClient.create_client()
+client = SpaceGassApiClient.create_client("http://localhost:34560")
 
 try:
     await client.job.open_sample.post(

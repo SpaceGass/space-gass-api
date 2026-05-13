@@ -43,8 +43,6 @@ public partial class MainWindow : Window
         }
 
         var baseUrl = TxtServiceUrl.Text.TrimEnd('/');
-        if (!baseUrl.EndsWith("/api/v1"))
-            baseUrl += "/api/v1";
 
         ConnDot.Fill = (SolidColorBrush)FindResource("Orange");
         ConnText.Text = "Connecting...";
