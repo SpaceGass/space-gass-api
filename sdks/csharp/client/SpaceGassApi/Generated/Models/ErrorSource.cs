@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Source of the error</summary>
+    /// <summary>Source of the error. Serialised as its string identifier (e.g. &quot;Infrastructure&quot;) on the wireregardless of which JSON pipeline emits the response — the MVC `AddJsonOptions` string-enumconverter doesn&apos;t apply to direct `HttpResponse.WriteAsJsonAsync` writes (used by`GlobalExceptionHandler`), so the converter is declared on the enum itself.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum ErrorSource
     {

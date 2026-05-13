@@ -65,6 +65,7 @@ namespace SpaceGassApi.Job.Analysis.Runs
         /// <returns>A List&lt;global::SpaceGassApi.Models.AnalysisRun&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<List<global::SpaceGassApi.Models.AnalysisRun>?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -75,7 +76,11 @@ namespace SpaceGassApi.Job.Analysis.Runs
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.AnalysisRun>(requestInfo, global::SpaceGassApi.Models.AnalysisRun.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
+            {
+                { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+            };
+            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.AnalysisRun>(requestInfo, global::SpaceGassApi.Models.AnalysisRun.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
             return collectionResult?.AsList();
         }
         /// <summary>

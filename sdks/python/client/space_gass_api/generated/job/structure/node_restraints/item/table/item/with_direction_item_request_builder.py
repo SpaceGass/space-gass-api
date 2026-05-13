@@ -15,7 +15,6 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .......models.problem_details import ProblemDetails
-    from .......models.table import Table
 
 class WithDirectionItemRequestBuilder(BaseRequestBuilder):
     """
@@ -48,11 +47,11 @@ class WithDirectionItemRequestBuilder(BaseRequestBuilder):
             raise Exception("Http core is null") 
         return await self.request_adapter.send_no_response_content_async(request_info, error_mapping)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Table]:
+    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[bytes]:
         """
         Returns the variable-stiffness table for one DOF on a node restraint.404 if the node has no restraint row, or if the table for that DOF is empty.Schema metadata (axis labels, units, bounds) is available at`GET /node-restraints/table/{direction}/metadata`.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[Table]
+        Returns: bytes
         """
         request_info = self.to_get_request_information(
             request_configuration
@@ -64,16 +63,14 @@ class WithDirectionItemRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .......models.table import Table
-
-        return await self.request_adapter.send_async(request_info, Table, error_mapping)
+        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
     
-    async def post(self,body: Table, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Table]:
+    async def post(self,body: bytes, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[bytes]:
         """
         Creates or replaces the variable-stiffness table for one DOF on a node restraint.The node must already have a restraint row (POST `/node-restraints` to create one),and the corresponding character of `restraintCode` must be 'V'.            Body is a TableDto whose `rows` field is a list of 1–15 (x, y) pairs.X is deflection (translational) or rotation (rotational), Y is the spring stiffness.The first point's X must be 0 (the base stiffness anchor); X values must be unique;X and Y must be ≥ 0.
         param body: A generic 2D data table — row-major, where each row is an array of column values.Reused across the API for any tabular (X, Y, …) data such as restraintvariable-stiffness curves, derived force-vs-deflection views, material curves, etc.Schema (column names, types, units, bounds) is returned by the resource's dedicatedtable-metadata endpoint and is not embedded here.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[Table]
+        Returns: bytes
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -88,9 +85,7 @@ class WithDirectionItemRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .......models.table import Table
-
-        return await self.request_adapter.send_async(request_info, Table, error_mapping)
+        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
@@ -114,7 +109,7 @@ class WithDirectionItemRequestBuilder(BaseRequestBuilder):
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def to_post_request_information(self,body: Table, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+    def to_post_request_information(self,body: UntypedNode, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Creates or replaces the variable-stiffness table for one DOF on a node restraint.The node must already have a restraint row (POST `/node-restraints` to create one),and the corresponding character of `restraintCode` must be 'V'.            Body is a TableDto whose `rows` field is a list of 1–15 (x, y) pairs.X is deflection (translational) or rotation (rotational), Y is the spring stiffness.The first point's X must be 0 (the base stiffness anchor); X values must be unique;X and Y must be ≥ 0.
         param body: A generic 2D data table — row-major, where each row is an array of column values.Reused across the API for any tabular (X, Y, …) data such as restraintvariable-stiffness curves, derived force-vs-deflection views, material curves, etc.Schema (column names, types, units, bounds) is returned by the resource's dedicatedtable-metadata endpoint and is not embedded here.
@@ -126,7 +121,7 @@ class WithDirectionItemRequestBuilder(BaseRequestBuilder):
         request_info = RequestInformation(Method.POST, self.url_template, self.path_parameters)
         request_info.configure(request_configuration)
         request_info.headers.try_add("Accept", "application/json")
-        request_info.set_content_from_parsable(self.request_adapter, "application/json", body)
+        request_info.set_content_from_scalar(self.request_adapter, "application/json", body)
         return request_info
     
     def with_url(self,raw_url: str) -> WithDirectionItemRequestBuilder:

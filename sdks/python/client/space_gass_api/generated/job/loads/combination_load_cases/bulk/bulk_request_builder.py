@@ -16,6 +16,7 @@ from warnings import warn
 if TYPE_CHECKING:
     from .....models.combination_load_case_create import CombinationLoadCaseCreate
     from .....models.combination_load_case_update import CombinationLoadCaseUpdate
+    from .....models.error_response import ErrorResponse
     from .....models.load_case_batch_result import LoadCaseBatchResult
     from .....models.object_batch_result import ObjectBatchResult
     from .....models.problem_details import ProblemDetails
@@ -45,10 +46,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info = self.to_delete_request_information(
             body, request_configuration
         )
+        from .....models.error_response import ErrorResponse
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -68,10 +71,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info = self.to_patch_request_information(
             body, request_configuration
         )
+        from .....models.error_response import ErrorResponse
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -91,10 +96,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
+        from .....models.error_response import ErrorResponse
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
+    from ....models.error_response import ErrorResponse
     from ....models.expand_option import ExpandOption
     from ....models.load_case_group import LoadCaseGroup
     from ....models.load_case_group_create import LoadCaseGroupCreate
@@ -72,11 +73,17 @@ class LoadCaseGroupsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
+        from ....models.error_response import ErrorResponse
+        from ....models.problem_details import ProblemDetails
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "404": ErrorResponse,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from ....models.load_case_group import LoadCaseGroup
 
-        return await self.request_adapter.send_collection_async(request_info, LoadCaseGroup, None)
+        return await self.request_adapter.send_collection_async(request_info, LoadCaseGroup, error_mapping)
     
     async def post(self,body: LoadCaseGroupCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[LoadCaseGroup]:
         """
@@ -90,10 +97,12 @@ class LoadCaseGroupsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
+        from ....models.error_response import ErrorResponse
         from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
+            "404": ErrorResponse,
             "409": ProblemDetails,
         }
         if not self.request_adapter:

@@ -58,17 +58,17 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Item.Table.Item
         /// <summary>
         /// Returns the variable-stiffness table for one DOF on a node restraint.404 if the node has no restraint row, or if the table for that DOF is empty.Schema metadata (axis labels, units, bounds) is available at`GET /node-restraints/table/{direction}/metadata`.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.Table"/></returns>
+        /// <returns>A <see cref="UntypedNode"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.Table?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<UntypedNode?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.Table> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<UntypedNode> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
@@ -76,12 +76,12 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Item.Table.Item
             {
                 { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Table>(requestInfo, global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<UntypedNode>(requestInfo, UntypedNode.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Creates or replaces the variable-stiffness table for one DOF on a node restraint.The node must already have a restraint row (POST `/node-restraints` to create one),and the corresponding character of `restraintCode` must be &apos;V&apos;.            Body is a TableDto whose `rows` field is a list of 1–15 (x, y) pairs.X is deflection (translational) or rotation (rotational), Y is the spring stiffness.The first point&apos;s X must be 0 (the base stiffness anchor); X values must be unique;X and Y must be ≥ 0.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.Table"/></returns>
+        /// <returns>A <see cref="UntypedNode"/></returns>
         /// <param name="body">A generic 2D data table — row-major, where each row is an array of column values.Reused across the API for any tabular (X, Y, …) data such as restraintvariable-stiffness curves, derived force-vs-deflection views, material curves, etc.Schema (column names, types, units, bounds) is returned by the resource&apos;s dedicatedtable-metadata endpoint and is not embedded here.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -89,11 +89,11 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Item.Table.Item
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.Table?> PostAsync(global::SpaceGassApi.Models.Table body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<UntypedNode?> PostAsync(UntypedNode body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.Table> PostAsync(global::SpaceGassApi.Models.Table body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<UntypedNode> PostAsync(UntypedNode body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -103,7 +103,7 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Item.Table.Item
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Table>(requestInfo, global::SpaceGassApi.Models.Table.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<UntypedNode>(requestInfo, UntypedNode.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Clears the variable-stiffness table for one DOF on a node restraint(writes Count = 0 — the binary field stays allocated but holds no points).
@@ -151,11 +151,11 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Item.Table.Item
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.Table body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(UntypedNode body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.Table body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(UntypedNode body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));

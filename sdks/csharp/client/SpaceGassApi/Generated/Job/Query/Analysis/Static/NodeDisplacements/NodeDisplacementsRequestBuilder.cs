@@ -46,6 +46,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.NodeDisplacementQueryResult?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements.NodeDisplacementsRequestBuilder.NodeDisplacementsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -59,6 +60,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.NodeDisplacementQueryResult>(requestInfo, global::SpaceGassApi.Models.NodeDisplacementQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }

@@ -40,11 +40,16 @@ class SettingsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
+        from .....models.error_response import ErrorResponse
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "404": ErrorResponse,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from .....models.buckling_settings import BucklingSettings
 
-        return await self.request_adapter.send_async(request_info, BucklingSettings, None)
+        return await self.request_adapter.send_async(request_info, BucklingSettings, error_mapping)
     
     async def patch(self,body: BucklingSettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[BucklingSettings]:
         """
@@ -62,6 +67,7 @@ class SettingsRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
