@@ -78,7 +78,7 @@ class SpaceGassApiClient(BaseSpaceGassApiClient):
         # Disable SSL verification for the self-signed certificate the
         # local SPACE GASS API uses.
         http_client = KiotaClientFactory.create_with_default_middleware(
-            client=httpx.AsyncClient(verify=False),
+            client=httpx.AsyncClient(verify=False, timeout=httpx.Timeout(1800)),
             options=options,
         )
 
