@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
+    from ....models.error_response import ErrorResponse
     from ....models.member_offset import MemberOffset
     from ....models.member_offset_create import MemberOffsetCreate
     from ....models.problem_details import ProblemDetails
@@ -69,11 +70,17 @@ class MemberOffsetsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
+        from ....models.error_response import ErrorResponse
+        from ....models.problem_details import ProblemDetails
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "404": ErrorResponse,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from ....models.member_offset import MemberOffset
 
-        return await self.request_adapter.send_collection_async(request_info, MemberOffset, None)
+        return await self.request_adapter.send_collection_async(request_info, MemberOffset, error_mapping)
     
     async def post(self,body: MemberOffsetCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[MemberOffset]:
         """
@@ -87,6 +94,7 @@ class MemberOffsetsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
+        from ....models.error_response import ErrorResponse
         from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {

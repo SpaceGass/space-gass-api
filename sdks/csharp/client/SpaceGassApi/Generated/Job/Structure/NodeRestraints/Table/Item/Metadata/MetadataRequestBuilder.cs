@@ -39,6 +39,7 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Table.Item.Metadata
         /// <returns>A <see cref="global::SpaceGassApi.Models.TableMetadata"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.TableMetadata?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -49,7 +50,11 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Table.Item.Metadata
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.TableMetadata>(requestInfo, global::SpaceGassApi.Models.TableMetadata.CreateFromDiscriminatorValue, default, cancellationToken).ConfigureAwait(false);
+            var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
+            {
+                { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+            };
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.TableMetadata>(requestInfo, global::SpaceGassApi.Models.TableMetadata.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns the schema for a variable-stiffness table on the given DOF — title, axis labelsand units (resolved against current job units), per-axis bounds, and the maximum numberof points the table accepts.            Metadata is the same for any restraint of a given direction; it does not depend on aspecific node Id and is therefore not part of `{nodeId:int}/table/...`.

@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .....models.error_response import ErrorResponse
     from .....models.member_concentrated_load_batch_result import MemberConcentratedLoadBatchResult
     from .....models.member_concentrated_load_create import MemberConcentratedLoadCreate
     from .....models.member_concentrated_load_key import MemberConcentratedLoadKey
@@ -46,10 +47,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info = self.to_delete_request_information(
             body, request_configuration
         )
+        from .....models.error_response import ErrorResponse
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -69,10 +72,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info = self.to_patch_request_information(
             body, request_configuration
         )
+        from .....models.error_response import ErrorResponse
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -92,10 +97,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
+        from .....models.error_response import ErrorResponse
         from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

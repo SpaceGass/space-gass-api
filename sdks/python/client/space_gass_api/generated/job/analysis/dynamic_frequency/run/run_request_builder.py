@@ -47,6 +47,7 @@ class RunRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "404": ErrorResponse,
             "409": ErrorResponse,
         }
         if not self.request_adapter:

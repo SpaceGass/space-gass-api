@@ -234,7 +234,6 @@ from ..generated.models.steel_check_summary import SteelCheckSummary
 from ..generated.models.steel_check_summary_query_result import SteelCheckSummaryQueryResult
 from ..generated.models.stepping_method import SteppingMethod
 from ..generated.models.stress_unit import StressUnit
-from ..generated.models.table import Table
 from ..generated.models.table_metadata import TableMetadata
 from ..generated.models.temperature_unit import TemperatureUnit
 from ..generated.models.tension_compression_only_mode import TensionCompressionOnlyMode
@@ -477,7 +476,6 @@ __all__ = [
     "SteelCheckSummaryQueryResult",
     "SteppingMethod",
     "StressUnit",
-    "Table",
     "TableMetadata",
     "TemperatureUnit",
     "TensionCompressionOnlyMode",

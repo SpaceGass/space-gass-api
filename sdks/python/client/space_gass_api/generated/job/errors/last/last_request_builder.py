@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from ....models.error_response import ErrorResponse
     from ....models.last_error import LastError
 
 class LastRequestBuilder(BaseRequestBuilder):
@@ -38,11 +39,16 @@ class LastRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
+        from ....models.error_response import ErrorResponse
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "404": ErrorResponse,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from ....models.last_error import LastError
 
-        return await self.request_adapter.send_async(request_info, LastError, None)
+        return await self.request_adapter.send_async(request_info, LastError, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """

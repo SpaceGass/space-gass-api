@@ -572,7 +572,8 @@
                 "$ref": "#/components/schemas/BucklingSettingsUpdate"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "202": {
@@ -587,16 +588,6 @@
           },
           "400": {
             "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -620,6 +611,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -652,7 +653,8 @@
                 "$ref": "#/components/schemas/DynamicFrequencySettingsUpdate"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "202": {
@@ -667,16 +669,6 @@
           },
           "400": {
             "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -700,6 +692,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -732,7 +734,8 @@
                 "$ref": "#/components/schemas/StaticSettingsUpdate"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "202": {
@@ -747,16 +750,6 @@
           },
           "400": {
             "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -780,6 +773,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -812,7 +815,8 @@
                 "$ref": "#/components/schemas/StaticSettingsUpdate"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "202": {
@@ -827,16 +831,6 @@
           },
           "400": {
             "description": "Bad Request",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "409": {
-            "description": "Conflict",
             "content": {
               "application/json": {
                 "schema": {
@@ -860,6 +854,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -1252,16 +1256,6 @@
               }
             }
           },
-          "409": {
-            "description": "A load case with the supplied Id already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -1277,6 +1271,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A load case with the supplied Id already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -1400,6 +1404,16 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid items (empty array, duplicates, self-reference, or wrong-type component)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Combination case not found",
             "content": {
@@ -1415,16 +1429,6 @@
                       "message": "No job is currently open."
                     }
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid items (empty array, duplicates, self-reference, or wrong-type component)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -2570,7 +2574,8 @@
                 }
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "200": {
@@ -2895,7 +2900,8 @@
                 }
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "201": {
@@ -3119,7 +3125,8 @@
                 "$ref": "#/components/schemas/SaveJobRequest"
               }
             }
-          }
+          },
+          "required": false
         },
         "responses": {
           "200": {
@@ -3404,16 +3411,6 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -3429,6 +3426,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -4186,16 +4193,6 @@
               }
             }
           },
-          "409": {
-            "description": "A load case with the supplied Id already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -4211,6 +4208,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A load case with the supplied Id already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -4907,16 +4914,6 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -4932,6 +4929,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -6297,16 +6304,6 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -6322,6 +6319,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -6925,16 +6932,6 @@
               }
             }
           },
-          "409": {
-            "description": "A material with the specified Id already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -6950,6 +6947,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A material with the specified Id already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -9514,6 +9521,16 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid update data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "No offsets row exists for this member",
             "content": {
@@ -9529,16 +9546,6 @@
                       "message": "No job is currently open."
                     }
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid update data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -10732,16 +10739,6 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -10757,6 +10754,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -10977,6 +10984,16 @@
               }
             }
           },
+          "401": {
+            "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Member not found",
             "content": {
@@ -10992,16 +11009,6 @@
                       "message": "No job is currently open."
                     }
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "If the API key is invalid",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -11058,25 +11065,6 @@
               }
             }
           },
-          "404": {
-            "description": "Member not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                },
-                "examples": {
-                  "JobNotOpen": {
-                    "summary": "No job is currently open",
-                    "value": {
-                      "errorCode": "JOB_NOT_OPEN",
-                      "message": "No job is currently open."
-                    }
-                  }
-                }
-              }
-            }
-          },
           "400": {
             "description": "Invalid direction data — missing or empty body, multiple value fields supplied, or a non-existent direction node",
             "content": {
@@ -11093,6 +11081,25 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Member not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "JobNotOpen": {
+                    "summary": "No job is currently open",
+                    "value": {
+                      "errorCode": "JOB_NOT_OPEN",
+                      "message": "No job is currently open."
+                    }
+                  }
                 }
               }
             }
@@ -11201,6 +11208,16 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid update data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Member not found",
             "content": {
@@ -11216,16 +11233,6 @@
                       "message": "No job is currently open."
                     }
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid update data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -11997,6 +12004,16 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid update data (e.g. master == slave, or master node not found)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "No constraint defined for this node",
             "content": {
@@ -12012,16 +12029,6 @@
                       "message": "No job is currently open."
                     }
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid update data (e.g. master == slave, or master node not found)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -14019,6 +14026,16 @@
               }
             }
           },
+          "400": {
+            "description": "Invalid update data (e.g. malformed restraintCode or table)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "No restraint row exists for this node",
             "content": {
@@ -14034,16 +14051,6 @@
                       "message": "No job is currently open."
                     }
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Invalid update data (e.g. malformed restraintCode or table)",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -14747,6 +14754,16 @@
               }
             }
           },
+          "400": {
+            "description": "Request body missing or malformed.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Node not found, or node has no restraint row.",
             "content": {
@@ -14762,16 +14779,6 @@
                       "message": "No job is currently open."
                     }
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Request body missing or malformed.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -14973,16 +14980,6 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -14998,6 +14995,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -15244,6 +15251,16 @@
               }
             }
           },
+          "400": {
+            "description": "If tolerance is negative",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "No node exists within the specified tolerance",
             "content": {
@@ -15259,16 +15276,6 @@
                       "message": "No job is currently open."
                     }
                   }
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "If tolerance is negative",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -15772,16 +15779,6 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -15797,6 +15794,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -17162,16 +17169,6 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -17187,6 +17184,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -17890,16 +17897,6 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -17915,6 +17912,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -18135,6 +18142,16 @@
               }
             }
           },
+          "401": {
+            "description": "If the API key is invalid",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
           "404": {
             "description": "Plate not found",
             "content": {
@@ -18150,16 +18167,6 @@
                       "message": "No job is currently open."
                     }
                   }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "If the API key is invalid",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -18216,25 +18223,6 @@
               }
             }
           },
-          "404": {
-            "description": "Plate not found",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                },
-                "examples": {
-                  "JobNotOpen": {
-                    "summary": "No job is currently open",
-                    "value": {
-                      "errorCode": "JOB_NOT_OPEN",
-                      "message": "No job is currently open."
-                    }
-                  }
-                }
-              }
-            }
-          },
           "400": {
             "description": "Invalid direction data — missing or empty body, multiple value fields supplied, or a non-existent direction node",
             "content": {
@@ -18251,6 +18239,25 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ProblemDetails"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Plate not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
+                },
+                "examples": {
+                  "JobNotOpen": {
+                    "summary": "No job is currently open",
+                    "value": {
+                      "errorCode": "JOB_NOT_OPEN",
+                      "message": "No job is currently open."
+                    }
+                  }
                 }
               }
             }
@@ -18804,16 +18811,6 @@
               }
             }
           },
-          "409": {
-            "description": "Conflict",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -18829,6 +18826,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -19432,16 +19439,6 @@
               }
             }
           },
-          "409": {
-            "description": "A section with the specified Id already exists",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ProblemDetails"
-                }
-              }
-            }
-          },
           "404": {
             "description": "Resource not found.",
             "content": {
@@ -19457,6 +19454,16 @@
                       "message": "No job is currently open."
                     }
                   }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "A section with the specified Id already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProblemDetails"
                 }
               }
             }
@@ -23658,7 +23665,7 @@
           },
           "extensions": {
             "type": "object",
-            "additionalProperties": { },
+            "additionalProperties": {},
             "description": "Additional context-specific data",
             "nullable": true
           },
@@ -25099,8 +25106,8 @@
             "description": "Material name."
           },
           "youngsModulus": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Young's modulus. Must be greater than zero.",
             "format": "double"
@@ -25111,8 +25118,8 @@
             "format": "double"
           },
           "massDensity": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Mass density. Must be greater than zero.",
             "format": "double"
@@ -25208,8 +25215,8 @@
             "nullable": true
           },
           "youngsModulus": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Young's modulus. Must be greater than zero if provided.",
             "format": "double",
@@ -25222,8 +25229,8 @@
             "nullable": true
           },
           "massDensity": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Mass density. Must be greater than zero if provided.",
             "format": "double",
@@ -29286,7 +29293,7 @@
         "properties": {
           "succeeded": {
             "type": "array",
-            "items": { },
+            "items": {},
             "description": "Successfully processed items.",
             "nullable": true
           },
@@ -31189,7 +31196,7 @@
             "nullable": true
           }
         },
-        "additionalProperties": { }
+        "additionalProperties": {}
       },
       "PropertySource": {
         "enum": [
@@ -31379,25 +31386,25 @@
             "type": "number",
             "description": "Area modification factor.",
             "format": "double",
-            "example": 1.0
+            "example": 1
           },
           "torsionFactor": {
             "type": "number",
             "description": "Torsion modification factor.",
             "format": "double",
-            "example": 1.0
+            "example": 1
           },
           "iyFactor": {
             "type": "number",
             "description": "Iy modification factor.",
             "format": "double",
-            "example": 1.0
+            "example": 1
           },
           "izFactor": {
             "type": "number",
             "description": "Iz modification factor.",
             "format": "double",
-            "example": 1.0
+            "example": 1
           },
           "angleType": {
             "$ref": "#/components/schemas/AngleType"
@@ -31487,8 +31494,8 @@
             "example": false
           },
           "ay": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Shear area in the Y direction.",
             "format": "double",
@@ -31496,8 +31503,8 @@
             "example": 2720
           },
           "az": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Shear area in the Z direction.",
             "format": "double",
@@ -31505,40 +31512,40 @@
             "example": 2010
           },
           "areaFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Area modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           },
           "torsionFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Torsion modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           },
           "iyFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Iy modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           },
           "izFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Iz modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           }
         },
         "additionalProperties": false,
@@ -31585,8 +31592,8 @@
             "example": "B1"
           },
           "a": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Cross-sectional area.",
             "format": "double",
@@ -31594,8 +31601,8 @@
             "example": 5720
           },
           "j": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Torsion constant.",
             "format": "double",
@@ -31603,8 +31610,8 @@
             "example": 158000
           },
           "iy": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Second moment of area about the principal Y axis.",
             "format": "double",
@@ -31612,8 +31619,8 @@
             "example": 121000000
           },
           "iz": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Second moment of area about the principal Z axis.",
             "format": "double",
@@ -31621,8 +31628,8 @@
             "example": 8970000
           },
           "ay": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Shear area in the Y direction.",
             "format": "double",
@@ -31630,8 +31637,8 @@
             "example": 2720
           },
           "az": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Shear area in the Z direction.",
             "format": "double",
@@ -31646,40 +31653,40 @@
             "example": 0
           },
           "areaFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Area modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           },
           "torsionFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Torsion modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           },
           "iyFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Iy modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           },
           "izFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Iz modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           }
         },
         "additionalProperties": false,
@@ -31724,48 +31731,48 @@
             "example": "B1"
           },
           "a": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Cross-sectional area.",
             "format": "double",
             "example": 5720
           },
           "j": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Torsion constant.",
             "format": "double",
             "example": 158000
           },
           "iy": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Second moment of area about the principal Y axis.",
             "format": "double",
             "example": 121000000
           },
           "iz": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Second moment of area about the principal Z axis.",
             "format": "double",
             "example": 8970000
           },
           "ay": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Shear area in the Y direction.",
             "format": "double",
             "example": 2720
           },
           "az": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Shear area in the Z direction.",
             "format": "double",
@@ -31779,40 +31786,40 @@
             "example": 0
           },
           "areaFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Area modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           },
           "torsionFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Torsion modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           },
           "iyFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Iy modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           },
           "izFactor": {
-            "maximum": 1.7976931348623157E+308,
-            "minimum": 5E-324,
+            "maximum": 1.7976931348623157e+308,
+            "minimum": 5e-324,
             "type": "number",
             "description": "Iz modification factor.",
             "format": "double",
             "nullable": true,
-            "example": 1.0
+            "example": 1
           }
         },
         "additionalProperties": false,

@@ -20,13 +20,13 @@ class ErrorResponse(APIError, Parsable):
     detail: Optional[str] = None
     # Machine-readable error code for programmatic handling
     error_code: Optional[str] = None
-    # List of validation errors (if applicable)
+    # List of errors describing what went wrong. Always populated on the wire — falls backto a single entry derived from SpaceGassApi.Models.Dtos.Common.ErrorResponseDto.Detail / SpaceGassApi.Models.Dtos.Common.ErrorResponseDto.ErrorCode when nocaller-supplied list is present, so clients can iterate uniformly.Multiple entries appear for validation failures (one entry per failed rule).
     errors: Optional[list[ValidationError]] = None
     # Additional context-specific data
     extensions: Optional[ErrorResponse_extensions] = None
     # A URI reference that identifies the specific occurrence
     instance: Optional[str] = None
-    # Source of the error
+    # Source of the error. Serialised as its string identifier (e.g. "Infrastructure") on the wireregardless of which JSON pipeline emits the response — the MVC `AddJsonOptions` string-enumconverter doesn't apply to direct `HttpResponse.WriteAsJsonAsync` writes (used by`GlobalExceptionHandler`), so the converter is declared on the enum itself.
     source: Optional[ErrorSource] = None
     # HTTP status code
     status: Optional[int] = None

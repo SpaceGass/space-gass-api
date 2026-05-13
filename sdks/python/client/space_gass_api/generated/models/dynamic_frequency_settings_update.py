@@ -43,7 +43,7 @@ class DynamicFrequencySettingsUpdate(Parsable):
     plate_type: Optional[PlateType] = None
     # The retainCases property
     retain_cases: Optional[bool] = None
-    # Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS's `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Pardiso, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).
+    # Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS's `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Paradise, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).
     solver_type: Optional[SolverType] = None
     # The stabilizeUnrestrainedNodes property
     stabilize_unrestrained_nodes: Optional[bool] = None

@@ -30,7 +30,7 @@ namespace SpaceGassApi.Models
 #else
         public string ErrorCode { get; set; }
 #endif
-        /// <summary>List of validation errors (if applicable)</summary>
+        /// <summary>List of errors describing what went wrong. Always populated on the wire — falls backto a single entry derived from SpaceGassApi.Models.Dtos.Common.ErrorResponseDto.Detail / SpaceGassApi.Models.Dtos.Common.ErrorResponseDto.ErrorCode when nocaller-supplied list is present, so clients can iterate uniformly.Multiple entries appear for validation failures (one entry per failed rule).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<global::SpaceGassApi.Models.ValidationError>? Errors { get; set; }
@@ -56,7 +56,7 @@ namespace SpaceGassApi.Models
 #endif
         /// <summary>The primary error message.</summary>
         public override string Message { get => base.Message; }
-        /// <summary>Source of the error</summary>
+        /// <summary>Source of the error. Serialised as its string identifier (e.g. &quot;Infrastructure&quot;) on the wireregardless of which JSON pipeline emits the response — the MVC `AddJsonOptions` string-enumconverter doesn&apos;t apply to direct `HttpResponse.WriteAsJsonAsync` writes (used by`GlobalExceptionHandler`), so the converter is declared on the enum itself.</summary>
         public global::SpaceGassApi.Models.ErrorSource? SourceEscaped { get; set; }
         /// <summary>HTTP status code</summary>
         public int? Status { get; set; }

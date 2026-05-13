@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "space-gass-api"
-version = "14.50.75"
+version = "14.50.78"
 description = "Official Python SDK for the SPACE GASS structural analysis API. Auto-generated from the OpenAPI specification with Microsoft Kiota."
 readme = "README.md"
 license = "MIT"

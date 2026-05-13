@@ -47,6 +47,7 @@ class OpenRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ProblemDetails,
+            "404": ProblemDetails,
             "409": ProblemDetails,
         }
         if not self.request_adapter:
