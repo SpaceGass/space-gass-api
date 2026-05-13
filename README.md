@@ -78,7 +78,7 @@ finally:
     await client.job.close.post()
 ```
 
-For the full walk-through see the [Quick Start](https://spacegass.github.io/space-gass-api/getting-started/quick-start) and the [Concepts page](https://spacegass.github.io/space-gass-api/getting-started/concepts). More examples are in `sdks/csharp/examples/` and `sdks/python/examples/`, or clone the repo and browse.
+For the full walk-through see the [Quick Start](https://spacegass.github.io/space-gass-api/getting-started/quick-start). More examples are in `sdks/csharp/examples/` and `sdks/python/examples/`, or clone the repo and browse.
 
 ## Descriptions & Client Generation
 
