@@ -80,13 +80,20 @@ finally:
 
 For the full walk-through see the [Quick Start](https://spacegass.github.io/space-gass-api/getting-started/quick-start) and the [Concepts page](https://spacegass.github.io/space-gass-api/getting-started/concepts). More examples are in `sdks/csharp/examples/` and `sdks/python/examples/`, or clone the repo and browse.
 
+## Descriptions & Client Generation
+
+The C# and Python SDKs are auto-generated from the OpenAPI spec using [Kiota](https://learn.microsoft.com/en-us/openapi/kiota/). The generation workflow reads the current spec from `descriptions/preview/openapi.json` (or `descriptions/current/` once the first formal release ships) and writes the generated code into `sdks/*/client/`. Previously released specs are kept in `descriptions/archive/` for reference.
+
+The generated client code should never be hand-edited — changes come from updating the OpenAPI spec and re-running the generation workflow. Hand-maintained wrapper classes (`SpaceGassApiClient`) sit alongside the generated code and provide the public `CreateClient()` / `create_client()` factory methods.
+
 ## Repository Structure
 
 ```
 space-gass-api/
 ├── descriptions/       # OpenAPI specifications (CC BY-ND 4.0)
 │   ├── preview/        # Pre-release spec (subject to breaking changes)
-│   └── archive/        # Previous released versions
+│   ├── current/        # Latest released spec (SDKs are generated from this)
+│   └── archive/        # Previously released versions
 ├── sdks/
 │   ├── csharp/
 │   │   ├── client/     # Auto-generated Kiota client (do not hand-edit)
