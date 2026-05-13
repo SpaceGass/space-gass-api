@@ -68,6 +68,8 @@ public class SpaceGassApiClient : BaseSpaceGassApiClient
                 },
             ]);
 
+        httpClient.Timeout = TimeSpan.FromMinutes(30);
+
         var adapter = new HttpClientRequestAdapter(
             new AnonymousAuthenticationProvider(),
             httpClient: httpClient);
