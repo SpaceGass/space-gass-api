@@ -14,7 +14,7 @@
     <Description>Official .NET SDK for the SPACE GASS structural analysis API. Auto-generated from the OpenAPI specification with Microsoft Kiota.</Description>
     <Authors>Space Gass Pty Ltd</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://spacegass.github.io/space-gass-api/</PackageProjectUrl>
+    <PackageProjectUrl>https://api.spacegass.com/docs/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/Spacegass/space-gass-api</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>spacegass;structural-analysis;api;sdk;kiota</PackageTags>

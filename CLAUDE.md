@@ -105,8 +105,8 @@ sdks/python/client/
 ### Documentation Site (Zudoku)
 
 - Built with [Zudoku](https://zudoku.dev) v0.69.3
-- **`basePath: "/space-gass-api"`** is required in `zudoku.config.tsx` for GitHub Pages asset paths
-- The deploy workflow uploads `docs/dist/space-gass-api` (the inner basePath directory) as the Pages artifact to avoid double-nesting
+- **`basePath: "/docs"`** is required in `zudoku.config.tsx` — the docs site is served at `https://api.spacegass.com/docs/`
+- The deploy workflow uploads `docs/dist/docs` (the inner basePath directory) as the Pages artifact to avoid double-nesting
 - A postinstall patch (`docs/patches/fix-zudoku-mjs.js`) fixes a Vite 7 SSR `.mjs` issue
 - The API reference reads from `../descriptions/preview/openapi.json` (single source of truth)
 - `node_modules/` is never committed — `npm ci` regenerates it
@@ -114,7 +114,7 @@ sdks/python/client/
 ### GitHub Pages Deployment
 
 - Source: **GitHub Actions** (not "Deploy from a branch")
-- URL: `https://spacegass.github.io/space-gass-api/`
+- URL: `https://api.spacegass.com/docs/`
 - Workflow: `.github/workflows/deploy-docs.yml`
 - Uses `FORCE_JAVASCRIPT_ACTIONS_TO_NODE24=true` to suppress Node 20 deprecation warnings
 
