@@ -60,7 +60,7 @@ Files: `docs/pages/**/*.mdx`. Use `grep -rn "\.Key\|\.key\|by_key\|case_\|FileSt
 
 Do NOT introduce hand-rolled curl URLs that expand request body fields as query string — only the endpoints whose spec changed (e.g. `/file/status`).
 
-Verify: `cd docs && npm ci && npm run build`. The Zudoku build must succeed and produce `docs/dist/space-gass-api/`. If the Vite SSR `.mjs` patch fires (postinstall), that's expected — see [docs/patches/fix-zudoku-mjs.js](../../../docs/patches/fix-zudoku-mjs.js).
+Verify: `cd docs && npm ci && npm run build`. The Zudoku build must succeed and produce `docs/dist/docs/`. If the Vite SSR `.mjs` patch fires (postinstall), that's expected — see [docs/patches/fix-zudoku-mjs.js](../../../docs/patches/fix-zudoku-mjs.js).
 
 ## Phase 5 — Snippet generator audit
 

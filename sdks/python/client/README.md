@@ -116,6 +116,6 @@ registration needed.
 
 ## Documentation
 
-- [Getting Started](https://spacegass.github.io/space-gass-api/)
-- [API Reference](https://spacegass.github.io/space-gass-api/api)
+- [Getting Started](https://api.spacegass.com/docs/)
+- [API Reference](https://api.spacegass.com/docs/api)
 - [Examples](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples)

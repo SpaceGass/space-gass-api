@@ -24,7 +24,7 @@ dependencies = [
 ]
 
 [project.urls]
-Documentation = "https://spacegass.github.io/space-gass-api/"
+Documentation = "https://api.spacegass.com/docs/"
 Repository = "https://github.com/Spacegass/space-gass-api"
 Issues = "https://github.com/Spacegass/space-gass-api/issues"
 

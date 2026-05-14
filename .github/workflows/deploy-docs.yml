@@ -39,12 +39,12 @@ jobs:
         run: npx zudoku build
 
       - name: Copy error pages into deploy directory
-        run: cp docs/dist/404.html docs/dist/space-gass-api/404.html 2>/dev/null || true
+        run: cp docs/dist/404.html docs/dist/docs/404.html 2>/dev/null || true
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v4
         with:
-          path: docs/dist/space-gass-api
+          path: docs/dist/docs
 
   deploy:
     needs: build

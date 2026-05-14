@@ -13,4 +13,4 @@ Demonstrates the end-to-end async-job pattern: `POST /run-linear` returns a run 
    dotnet run
    ```
 
-See also: [Running Analysis guide](https://spacegass.github.io/space-gass-api/guides/running-analysis).
+See also: [Running Analysis guide](https://api.spacegass.com/docs/guides/running-analysis).

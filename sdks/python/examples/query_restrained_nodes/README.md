@@ -17,4 +17,4 @@ Demonstrates SG list-format filtering: nodes are passed as a comma-separated str
    python query_restrained_nodes.py
    ```
 
-See also: [Filtering & Querying guide](https://spacegass.github.io/space-gass-api/guides/filtering-and-querying).
+See also: [Filtering & Querying guide](https://api.spacegass.com/docs/guides/filtering-and-querying).

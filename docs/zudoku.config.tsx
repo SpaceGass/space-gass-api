@@ -173,7 +173,7 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
 // --- Zudoku config ---
 
 const config: ZudokuConfig = {
-  basePath: "/space-gass-api",
+  basePath: "/docs",
   slots: {
     "head-navigation-end": (
       <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
@@ -228,7 +228,7 @@ const config: ZudokuConfig = {
     title: "SpaceGass API Documentation",
     description:
       "Programmatic access to SPACE GASS structural analysis data",
-    favicon: "/space-gass-api/blue-sg-256-clear-bg.ico",
+    favicon: "/docs/blue-sg-256-clear-bg.ico",
   },
   theme: {
     fonts: {

@@ -12,4 +12,4 @@ The probe + start + wait + stop lifecycle for any script or batch job that wants
    dotnet run
    ```
 
-See also: [Service Automation guide](https://spacegass.github.io/space-gass-api/guides/service-automation) for the full pattern including Ctrl+C handling and custom-port setups.
+See also: [Service Automation guide](https://api.spacegass.com/docs/guides/service-automation) for the full pattern including Ctrl+C handling and custom-port setups.
