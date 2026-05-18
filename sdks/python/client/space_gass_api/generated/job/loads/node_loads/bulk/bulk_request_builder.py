@@ -15,12 +15,11 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.node_load_batch_result import NodeLoadBatchResult
+    from .....models.node_load_bulk_result import NodeLoadBulkResult
     from .....models.node_load_create import NodeLoadCreate
     from .....models.node_load_key import NodeLoadKey
-    from .....models.node_load_key_batch_result import NodeLoadKeyBatchResult
+    from .....models.node_load_key_bulk_result import NodeLoadKeyBulkResult
     from .....models.node_load_update import NodeLoadUpdate
-    from .....models.problem_details import ProblemDetails
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -35,12 +34,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/node-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[NodeLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[NodeLoadKeyBatchResult]:
+    async def delete(self,body: list[NodeLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[NodeLoadKeyBulkResult]:
         """
         Deletes multiple node loads. Both case and node are required for each entry —providing only a case does not delete all loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[NodeLoadKeyBatchResult]
+        Returns: Optional[NodeLoadKeyBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -48,24 +47,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.node_load_key_batch_result import NodeLoadKeyBatchResult
+        from .....models.node_load_key_bulk_result import NodeLoadKeyBulkResult
 
-        return await self.request_adapter.send_async(request_info, NodeLoadKeyBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, NodeLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[NodeLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[NodeLoadBatchResult]:
+    async def patch(self,body: list[NodeLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[NodeLoadBulkResult]:
         """
         Updates multiple node loads. Each item must include case and node in the body.All load cases referenced must be Primary.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[NodeLoadBatchResult]
+        Returns: Optional[NodeLoadBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -73,17 +71,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.node_load_batch_result import NodeLoadBatchResult
+        from .....models.node_load_bulk_result import NodeLoadBulkResult
 
-        return await self.request_adapter.send_async(request_info, NodeLoadBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, NodeLoadBulkResult, error_mapping)
     
     async def post(self,body: list[NodeLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
@@ -98,10 +95,9 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

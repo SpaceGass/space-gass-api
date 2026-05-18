@@ -17,9 +17,8 @@ if TYPE_CHECKING:
     from .....models.combination_load_case_create import CombinationLoadCaseCreate
     from .....models.combination_load_case_update import CombinationLoadCaseUpdate
     from .....models.error_response import ErrorResponse
-    from .....models.load_case_batch_result import LoadCaseBatchResult
-    from .....models.object_batch_result import ObjectBatchResult
-    from .....models.problem_details import ProblemDetails
+    from .....models.load_case_bulk_result import LoadCaseBulkResult
+    from .....models.object_bulk_result import ObjectBulkResult
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -34,12 +33,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/combination-load-cases/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBatchResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBulkResult]:
         """
         Deletes multiple combination load cases by Id. The body is a JSON array of integer Ids(e.g. `[10, 11, 12]`). Each deletion removes the case and its items atomically.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ObjectBatchResult]
+        Returns: Optional[ObjectBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -47,24 +46,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.object_batch_result import ObjectBatchResult
+        from .....models.object_bulk_result import ObjectBulkResult
 
-        return await self.request_adapter.send_async(request_info, ObjectBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, ObjectBulkResult, error_mapping)
     
-    async def patch(self,body: list[CombinationLoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBatchResult]:
+    async def patch(self,body: list[CombinationLoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBulkResult]:
         """
-        Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case's items. Validation runs upfront on the wholebatch; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
+        Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case's items. Validation runs upfront on the wholerequest; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[LoadCaseBatchResult]
+        Returns: Optional[LoadCaseBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -72,24 +70,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.load_case_batch_result import LoadCaseBatchResult
+        from .....models.load_case_bulk_result import LoadCaseBulkResult
 
-        return await self.request_adapter.send_async(request_info, LoadCaseBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, LoadCaseBulkResult, error_mapping)
     
-    async def post(self,body: list[CombinationLoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LoadCaseBatchResult]:
+    async def post(self,body: list[CombinationLoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LoadCaseBulkResult]:
         """
-        Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole batch. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
+        Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole request. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[LoadCaseBatchResult]
+        Returns: Optional[LoadCaseBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -97,17 +94,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.load_case_batch_result import LoadCaseBatchResult
+        from .....models.load_case_bulk_result import LoadCaseBulkResult
 
-        return await self.request_adapter.send_async(request_info, LoadCaseBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, LoadCaseBulkResult, error_mapping)
     
     def to_delete_request_information(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
@@ -126,7 +122,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: list[CombinationLoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> RequestInformation:
         """
-        Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case's items. Validation runs upfront on the wholebatch; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
+        Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case's items. Validation runs upfront on the wholerequest; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -141,7 +137,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: list[CombinationLoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """
-        Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole batch. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
+        Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole request. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -195,7 +191,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPatchQueryParameters():
         """
-        Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case's items. Validation runs upfront on the wholebatch; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
+        Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case's items. Validation runs upfront on the wholerequest; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -223,7 +219,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPostQueryParameters():
         """
-        Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole batch. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
+        Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole request. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

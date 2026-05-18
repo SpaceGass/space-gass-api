@@ -15,12 +15,11 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.member_prestress_load_batch_result import MemberPrestressLoadBatchResult
+    from .....models.member_prestress_load_bulk_result import MemberPrestressLoadBulkResult
     from .....models.member_prestress_load_create import MemberPrestressLoadCreate
     from .....models.member_prestress_load_key import MemberPrestressLoadKey
-    from .....models.member_prestress_load_key_batch_result import MemberPrestressLoadKeyBatchResult
+    from .....models.member_prestress_load_key_bulk_result import MemberPrestressLoadKeyBulkResult
     from .....models.member_prestress_load_update import MemberPrestressLoadUpdate
-    from .....models.problem_details import ProblemDetails
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -35,12 +34,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/member-prestress-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[MemberPrestressLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberPrestressLoadKeyBatchResult]:
+    async def delete(self,body: list[MemberPrestressLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberPrestressLoadKeyBulkResult]:
         """
         Deletes multiple member prestress loads. Both case and member are required for each entry —providing only a case does not delete all prestress loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberPrestressLoadKeyBatchResult]
+        Returns: Optional[MemberPrestressLoadKeyBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -48,24 +47,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.member_prestress_load_key_batch_result import MemberPrestressLoadKeyBatchResult
+        from .....models.member_prestress_load_key_bulk_result import MemberPrestressLoadKeyBulkResult
 
-        return await self.request_adapter.send_async(request_info, MemberPrestressLoadKeyBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MemberPrestressLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[MemberPrestressLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberPrestressLoadBatchResult]:
+    async def patch(self,body: list[MemberPrestressLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberPrestressLoadBulkResult]:
         """
         Updates multiple member prestress loads. Each item must include case and member in the body.All load cases referenced must be Primary.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberPrestressLoadBatchResult]
+        Returns: Optional[MemberPrestressLoadBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -73,17 +71,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.member_prestress_load_batch_result import MemberPrestressLoadBatchResult
+        from .....models.member_prestress_load_bulk_result import MemberPrestressLoadBulkResult
 
-        return await self.request_adapter.send_async(request_info, MemberPrestressLoadBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MemberPrestressLoadBulkResult, error_mapping)
     
     async def post(self,body: list[MemberPrestressLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
@@ -98,10 +95,9 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

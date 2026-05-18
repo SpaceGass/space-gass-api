@@ -19,8 +19,6 @@ class MemberDistributedMomentCreate(Parsable):
     case: Optional[int] = None
     # Finish position of the distributed moment along the member.
     finish_position: Optional[float] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Load category for grouping/organization.
     load_category: Optional[int] = None
     # The member number to apply this load to.
@@ -68,7 +66,6 @@ class MemberDistributedMomentCreate(Parsable):
             "axes": lambda n : setattr(self, 'axes', n.get_enum_value(LoadAxes)),
             "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "finishPosition": lambda n : setattr(self, 'finish_position', n.get_float_value()),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "mxFinish": lambda n : setattr(self, 'mx_finish', n.get_float_value()),
@@ -93,7 +90,6 @@ class MemberDistributedMomentCreate(Parsable):
         writer.write_enum_value("axes", self.axes)
         writer.write_int_value("case", self.case)
         writer.write_float_value("finishPosition", self.finish_position)
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_int_value("member", self.member)
         writer.write_float_value("mxFinish", self.mx_finish)

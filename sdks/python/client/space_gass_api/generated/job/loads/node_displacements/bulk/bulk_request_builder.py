@@ -15,12 +15,11 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.prescribed_displacement_batch_result import PrescribedDisplacementBatchResult
+    from .....models.prescribed_displacement_bulk_result import PrescribedDisplacementBulkResult
     from .....models.prescribed_displacement_create import PrescribedDisplacementCreate
     from .....models.prescribed_displacement_key import PrescribedDisplacementKey
-    from .....models.prescribed_displacement_key_batch_result import PrescribedDisplacementKeyBatchResult
+    from .....models.prescribed_displacement_key_bulk_result import PrescribedDisplacementKeyBulkResult
     from .....models.prescribed_displacement_update import PrescribedDisplacementUpdate
-    from .....models.problem_details import ProblemDetails
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -35,12 +34,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/node-displacements/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[PrescribedDisplacementKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[PrescribedDisplacementKeyBatchResult]:
+    async def delete(self,body: list[PrescribedDisplacementKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[PrescribedDisplacementKeyBulkResult]:
         """
         Deletes multiple prescribed displacements. Both case and node are required for each entry —providing only a case does not delete all displacements for that case.The succeeded array echoes back the Ids of each successfully deleted displacement.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[PrescribedDisplacementKeyBatchResult]
+        Returns: Optional[PrescribedDisplacementKeyBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -48,24 +47,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.prescribed_displacement_key_batch_result import PrescribedDisplacementKeyBatchResult
+        from .....models.prescribed_displacement_key_bulk_result import PrescribedDisplacementKeyBulkResult
 
-        return await self.request_adapter.send_async(request_info, PrescribedDisplacementKeyBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, PrescribedDisplacementKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[PrescribedDisplacementUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PrescribedDisplacementBatchResult]:
+    async def patch(self,body: list[PrescribedDisplacementUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PrescribedDisplacementBulkResult]:
         """
         Updates multiple prescribed displacements. Each item must include case and node in the body.All load cases referenced must be Primary.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[PrescribedDisplacementBatchResult]
+        Returns: Optional[PrescribedDisplacementBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -73,17 +71,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.prescribed_displacement_batch_result import PrescribedDisplacementBatchResult
+        from .....models.prescribed_displacement_bulk_result import PrescribedDisplacementBulkResult
 
-        return await self.request_adapter.send_async(request_info, PrescribedDisplacementBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, PrescribedDisplacementBulkResult, error_mapping)
     
     async def post(self,body: list[PrescribedDisplacementCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
@@ -98,10 +95,9 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

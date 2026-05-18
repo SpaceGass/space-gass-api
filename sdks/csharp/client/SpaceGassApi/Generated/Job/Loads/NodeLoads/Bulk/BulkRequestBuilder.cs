@@ -36,56 +36,56 @@ namespace SpaceGassApi.Job.Loads.NodeLoads.Bulk
         /// <summary>
         /// Deletes multiple node loads. Both case and node are required for each entry —providing only a case does not delete all loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.NodeLoadKeyBatchResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.NodeLoadKeyBulkResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.NodeLoadKeyBatchResult?> DeleteAsync(List<global::SpaceGassApi.Models.NodeLoadKey> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.NodeLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.NodeLoadKeyBulkResult?> DeleteAsync(List<global::SpaceGassApi.Models.NodeLoadKey> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.NodeLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.NodeLoadKeyBatchResult> DeleteAsync(List<global::SpaceGassApi.Models.NodeLoadKey> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.NodeLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.NodeLoadKeyBulkResult> DeleteAsync(List<global::SpaceGassApi.Models.NodeLoadKey> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.NodeLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToDeleteRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.NodeLoadKeyBatchResult>(requestInfo, global::SpaceGassApi.Models.NodeLoadKeyBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.NodeLoadKeyBulkResult>(requestInfo, global::SpaceGassApi.Models.NodeLoadKeyBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Updates multiple node loads. Each item must include case and node in the body.All load cases referenced must be Primary.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.NodeLoadBatchResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.NodeLoadBulkResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.NodeLoadBatchResult?> PatchAsync(List<global::SpaceGassApi.Models.NodeLoadUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.NodeLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.NodeLoadBulkResult?> PatchAsync(List<global::SpaceGassApi.Models.NodeLoadUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.NodeLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.NodeLoadBatchResult> PatchAsync(List<global::SpaceGassApi.Models.NodeLoadUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.NodeLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.NodeLoadBulkResult> PatchAsync(List<global::SpaceGassApi.Models.NodeLoadUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.NodeLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToPatchRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.NodeLoadBatchResult>(requestInfo, global::SpaceGassApi.Models.NodeLoadBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.NodeLoadBulkResult>(requestInfo, global::SpaceGassApi.Models.NodeLoadBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
@@ -94,7 +94,7 @@ namespace SpaceGassApi.Job.Loads.NodeLoads.Bulk
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -109,7 +109,7 @@ namespace SpaceGassApi.Job.Loads.NodeLoads.Bulk
             var requestInfo = ToPostRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);

@@ -15,12 +15,11 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.member_concentrated_load_batch_result import MemberConcentratedLoadBatchResult
+    from .....models.member_concentrated_load_bulk_result import MemberConcentratedLoadBulkResult
     from .....models.member_concentrated_load_create import MemberConcentratedLoadCreate
     from .....models.member_concentrated_load_key import MemberConcentratedLoadKey
-    from .....models.member_concentrated_load_key_batch_result import MemberConcentratedLoadKeyBatchResult
+    from .....models.member_concentrated_load_key_bulk_result import MemberConcentratedLoadKeyBulkResult
     from .....models.member_concentrated_load_update import MemberConcentratedLoadUpdate
-    from .....models.problem_details import ProblemDetails
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -35,12 +34,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/member-concentrated-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[MemberConcentratedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberConcentratedLoadKeyBatchResult]:
+    async def delete(self,body: list[MemberConcentratedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberConcentratedLoadKeyBulkResult]:
         """
         Deletes multiple member concentrated loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberConcentratedLoadKeyBatchResult]
+        Returns: Optional[MemberConcentratedLoadKeyBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -48,24 +47,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.member_concentrated_load_key_batch_result import MemberConcentratedLoadKeyBatchResult
+        from .....models.member_concentrated_load_key_bulk_result import MemberConcentratedLoadKeyBulkResult
 
-        return await self.request_adapter.send_async(request_info, MemberConcentratedLoadKeyBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MemberConcentratedLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[MemberConcentratedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberConcentratedLoadBatchResult]:
+    async def patch(self,body: list[MemberConcentratedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberConcentratedLoadBulkResult]:
         """
         Updates multiple member concentrated loads. Each item must include case, member, and subLoad in the body.All load cases referenced must be Primary.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberConcentratedLoadBatchResult]
+        Returns: Optional[MemberConcentratedLoadBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -73,17 +71,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.member_concentrated_load_batch_result import MemberConcentratedLoadBatchResult
+        from .....models.member_concentrated_load_bulk_result import MemberConcentratedLoadBulkResult
 
-        return await self.request_adapter.send_async(request_info, MemberConcentratedLoadBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MemberConcentratedLoadBulkResult, error_mapping)
     
     async def post(self,body: list[MemberConcentratedLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
@@ -98,10 +95,9 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

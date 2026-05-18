@@ -15,9 +15,8 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.error_response import ErrorResponse
-    from ......models.material_batch_result import MaterialBatchResult
+    from ......models.material_bulk_result import MaterialBulkResult
     from ......models.material_library_create import MaterialLibraryCreate
-    from ......models.problem_details import ProblemDetails
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -32,12 +31,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/materials/library/bulk{?continueOnError*}", path_parameters)
     
-    async def post(self,body: list[MaterialLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBatchResult]:
+    async def post(self,body: list[MaterialLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBulkResult]:
         """
         Creates multiple library-sourced materials in a single request. Each material isresolved from the SPACE GASS material library by (name, library).
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MaterialBatchResult]
+        Returns: Optional[MaterialBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -45,17 +44,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from ......models.error_response import ErrorResponse
-        from ......models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from ......models.material_batch_result import MaterialBatchResult
+        from ......models.material_bulk_result import MaterialBulkResult
 
-        return await self.request_adapter.send_async(request_info, MaterialBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MaterialBulkResult, error_mapping)
     
     def to_post_request_information(self,body: list[MaterialLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """

@@ -15,8 +15,8 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.direction_update import DirectionUpdate
+    from ......models.error_response import ErrorResponse
     from ......models.plate_direction import PlateDirection
-    from ......models.problem_details import ProblemDetails
 
 class DirectionRequestBuilder(BaseRequestBuilder):
     """
@@ -40,11 +40,11 @@ class DirectionRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from ......models.problem_details import ProblemDetails
+        from ......models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
-            "404": ProblemDetails,
+            "401": ErrorResponse,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -64,12 +64,12 @@ class DirectionRequestBuilder(BaseRequestBuilder):
         request_info = self.to_put_request_information(
             body, request_configuration
         )
-        from ......models.problem_details import ProblemDetails
+        from ......models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
-            "401": ProblemDetails,
-            "404": ProblemDetails,
+            "400": ErrorResponse,
+            "401": ErrorResponse,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

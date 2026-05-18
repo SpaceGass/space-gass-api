@@ -14,9 +14,9 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .....models.error_response import ErrorResponse
     from .....models.node_restraint import NodeRestraint
     from .....models.node_restraint_update import NodeRestraintUpdate
-    from .....models.problem_details import ProblemDetails
     from .table.table_request_builder import TableRequestBuilder
 
 class WithNodeItemRequestBuilder(BaseRequestBuilder):
@@ -41,10 +41,10 @@ class WithNodeItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_delete_request_information(
             request_configuration
         )
-        from .....models.problem_details import ProblemDetails
+        from .....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "404": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -59,10 +59,10 @@ class WithNodeItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from .....models.problem_details import ProblemDetails
+        from .....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "404": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -82,11 +82,11 @@ class WithNodeItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_patch_request_information(
             body, request_configuration
         )
-        from .....models.problem_details import ProblemDetails
+        from .....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
-            "404": ProblemDetails,
+            "400": ErrorResponse,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

@@ -15,11 +15,10 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.load_case_batch_result import LoadCaseBatchResult
+    from .....models.load_case_bulk_result import LoadCaseBulkResult
     from .....models.load_case_create import LoadCaseCreate
     from .....models.load_case_update import LoadCaseUpdate
-    from .....models.object_batch_result import ObjectBatchResult
-    from .....models.problem_details import ProblemDetails
+    from .....models.object_bulk_result import ObjectBulkResult
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -34,12 +33,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/load-cases/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBatchResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBulkResult]:
         """
         Deletes multiple load cases by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`). As with `DELETE /{id}`, this removes thetitle/notes/metadata only — assigned loads and combination items are preserved.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ObjectBatchResult]
+        Returns: Optional[ObjectBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -47,24 +46,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.object_batch_result import ObjectBatchResult
+        from .....models.object_bulk_result import ObjectBulkResult
 
-        return await self.request_adapter.send_async(request_info, ObjectBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, ObjectBulkResult, error_mapping)
     
-    async def patch(self,body: list[LoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBatchResult]:
+    async def patch(self,body: list[LoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBulkResult]:
         """
         Partially updates multiple load cases. Each item must include its `id`.Validation runs upfront; with `continueOnError=false` (default) any failurerejects the whole request. With `continueOnError=true`, valid items are updatedand failures are reported per-item.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[LoadCaseBatchResult]
+        Returns: Optional[LoadCaseBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -72,24 +70,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.load_case_batch_result import LoadCaseBatchResult
+        from .....models.load_case_bulk_result import LoadCaseBulkResult
 
-        return await self.request_adapter.send_async(request_info, LoadCaseBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, LoadCaseBulkResult, error_mapping)
     
-    async def post(self,body: list[LoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LoadCaseBatchResult]:
+    async def post(self,body: list[LoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LoadCaseBulkResult]:
         """
-        Creates multiple load cases in a single request. Validation runs upfront on the wholebatch; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
+        Creates multiple load cases in a single request. Validation runs upfront on the wholerequest; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[LoadCaseBatchResult]
+        Returns: Optional[LoadCaseBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -97,17 +94,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.load_case_batch_result import LoadCaseBatchResult
+        from .....models.load_case_bulk_result import LoadCaseBulkResult
 
-        return await self.request_adapter.send_async(request_info, LoadCaseBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, LoadCaseBulkResult, error_mapping)
     
     def to_delete_request_information(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
@@ -141,7 +137,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: list[LoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """
-        Creates multiple load cases in a single request. Validation runs upfront on the wholebatch; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
+        Creates multiple load cases in a single request. Validation runs upfront on the wholerequest; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -223,7 +219,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPostQueryParameters():
         """
-        Creates multiple load cases in a single request. Validation runs upfront on the wholebatch; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
+        Creates multiple load cases in a single request. Validation runs upfront on the wholerequest; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

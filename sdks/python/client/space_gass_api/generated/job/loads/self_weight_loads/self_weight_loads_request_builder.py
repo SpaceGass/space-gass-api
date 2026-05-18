@@ -15,7 +15,6 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ....models.error_response import ErrorResponse
-    from ....models.problem_details import ProblemDetails
     from ....models.self_weight_load import SelfWeightLoad
     from ....models.self_weight_load_create import SelfWeightLoadCreate
     from .bulk.bulk_request_builder import BulkRequestBuilder
@@ -72,10 +71,9 @@ class SelfWeightLoadsRequestBuilder(BaseRequestBuilder):
             request_configuration
         )
         from ....models.error_response import ErrorResponse
-        from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -97,12 +95,11 @@ class SelfWeightLoadsRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from ....models.error_response import ErrorResponse
-        from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
-            "404": ProblemDetails,
-            "409": ProblemDetails,
+            "400": ErrorResponse,
+            "404": ErrorResponse,
+            "409": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

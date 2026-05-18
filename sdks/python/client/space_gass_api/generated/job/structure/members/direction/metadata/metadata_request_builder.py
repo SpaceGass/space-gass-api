@@ -15,7 +15,6 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.error_response import ErrorResponse
-    from ......models.problem_details import ProblemDetails
     from ......models.resource_metadata import ResourceMetadata
 
 class MetadataRequestBuilder(BaseRequestBuilder):
@@ -41,10 +40,9 @@ class MetadataRequestBuilder(BaseRequestBuilder):
             request_configuration
         )
         from ......models.error_response import ErrorResponse
-        from ......models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ProblemDetails,
+            "401": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

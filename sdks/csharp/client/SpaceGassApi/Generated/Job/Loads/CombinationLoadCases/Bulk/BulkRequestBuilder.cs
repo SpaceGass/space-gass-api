@@ -36,83 +36,83 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
         /// <summary>
         /// Deletes multiple combination load cases by Id. The body is a JSON array of integer Ids(e.g. `[10, 11, 12]`). Each deletion removes the case and its items atomically.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.ObjectBatchResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.ObjectBulkResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.ObjectBatchResult?> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ObjectBulkResult?> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.ObjectBatchResult> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ObjectBulkResult> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToDeleteRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ObjectBatchResult>(requestInfo, global::SpaceGassApi.Models.ObjectBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ObjectBulkResult>(requestInfo, global::SpaceGassApi.Models.ObjectBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case&apos;s items. Validation runs upfront on the wholebatch; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
+        /// Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case&apos;s items. Validation runs upfront on the wholerequest; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.LoadCaseBatchResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.LoadCaseBulkResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.LoadCaseBatchResult?> PatchAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.LoadCaseBulkResult?> PatchAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.LoadCaseBatchResult> PatchAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.LoadCaseBulkResult> PatchAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToPatchRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCaseBatchResult>(requestInfo, global::SpaceGassApi.Models.LoadCaseBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCaseBulkResult>(requestInfo, global::SpaceGassApi.Models.LoadCaseBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole batch. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
+        /// Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole request. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.LoadCaseBatchResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.LoadCaseBulkResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.LoadCaseBatchResult?> PostAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.LoadCaseBulkResult?> PostAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.LoadCaseBatchResult> PostAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.LoadCaseBulkResult> PostAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToPostRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCaseBatchResult>(requestInfo, global::SpaceGassApi.Models.LoadCaseBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCaseBulkResult>(requestInfo, global::SpaceGassApi.Models.LoadCaseBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Deletes multiple combination load cases by Id. The body is a JSON array of integer Ids(e.g. `[10, 11, 12]`). Each deletion removes the case and its items atomically.
@@ -137,7 +137,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
             return requestInfo;
         }
         /// <summary>
-        /// Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case&apos;s items. Validation runs upfront on the wholebatch; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
+        /// Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case&apos;s items. Validation runs upfront on the wholerequest; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -159,7 +159,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
             return requestInfo;
         }
         /// <summary>
-        /// Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole batch. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
+        /// Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole request. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -208,7 +208,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
         {
         }
         /// <summary>
-        /// Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case&apos;s items. Validation runs upfront on the wholebatch; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
+        /// Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case&apos;s items. Validation runs upfront on the wholerequest; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderPatchQueryParameters 
@@ -226,7 +226,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
         {
         }
         /// <summary>
-        /// Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole batch. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
+        /// Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole request. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderPostQueryParameters 

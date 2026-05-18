@@ -9,8 +9,6 @@ class LoadCaseCreate(Parsable):
     """
     DTO for creating a new load case.
     """
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.
     id: Optional[int] = None
     # Load case notes (supports multi-line text).
@@ -35,7 +33,6 @@ class LoadCaseCreate(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "notes": lambda n : setattr(self, 'notes', n.get_str_value()),
             "title": lambda n : setattr(self, 'title', n.get_str_value()),
@@ -50,7 +47,6 @@ class LoadCaseCreate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_str_value("notes", self.notes)
         writer.write_str_value("title", self.title)

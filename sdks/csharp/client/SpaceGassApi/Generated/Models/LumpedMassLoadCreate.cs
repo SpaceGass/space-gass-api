@@ -15,14 +15,6 @@ namespace SpaceGassApi.Models
     {
         /// <summary>The load case number to create this load in.</summary>
         public int? Case { get; set; }
-        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Guid { get; set; }
-#nullable restore
-#else
-        public string Guid { get; set; }
-#endif
         /// <summary>Load category for grouping/organization.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>The node number to apply this lumped mass to.</summary>
@@ -58,7 +50,6 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "case", n => { Case = n.GetIntValue(); } },
-                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
                 { "node", n => { Node = n.GetIntValue(); } },
                 { "rmx", n => { Rmx = n.GetDoubleValue(); } },
@@ -77,7 +68,6 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteIntValue("case", Case);
-            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("loadCategory", LoadCategory);
             writer.WriteIntValue("node", Node);
             writer.WriteDoubleValue("rmx", Rmx);
