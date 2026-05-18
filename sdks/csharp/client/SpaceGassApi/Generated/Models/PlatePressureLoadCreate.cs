@@ -17,14 +17,6 @@ namespace SpaceGassApi.Models
         public global::SpaceGassApi.Models.LoadAxes? Axes { get; set; }
         /// <summary>The load case number to create this load in.</summary>
         public int? Case { get; set; }
-        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Guid { get; set; }
-#nullable restore
-#else
-        public string Guid { get; set; }
-#endif
         /// <summary>Load category for grouping/organization.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>The plate number to apply this pressure load to.</summary>
@@ -55,7 +47,6 @@ namespace SpaceGassApi.Models
             {
                 { "axes", n => { Axes = n.GetEnumValue<global::SpaceGassApi.Models.LoadAxes>(); } },
                 { "case", n => { Case = n.GetIntValue(); } },
-                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
                 { "plate", n => { Plate = n.GetIntValue(); } },
                 { "px", n => { Px = n.GetDoubleValue(); } },
@@ -72,7 +63,6 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteEnumValue<global::SpaceGassApi.Models.LoadAxes>("axes", Axes);
             writer.WriteIntValue("case", Case);
-            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("loadCategory", LoadCategory);
             writer.WriteIntValue("plate", Plate);
             writer.WriteDoubleValue("px", Px);

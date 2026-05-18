@@ -15,12 +15,11 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.member_distributed_load_batch_result import MemberDistributedLoadBatchResult
+    from .....models.member_distributed_load_bulk_result import MemberDistributedLoadBulkResult
     from .....models.member_distributed_load_create import MemberDistributedLoadCreate
     from .....models.member_distributed_load_key import MemberDistributedLoadKey
-    from .....models.member_distributed_load_key_batch_result import MemberDistributedLoadKeyBatchResult
+    from .....models.member_distributed_load_key_bulk_result import MemberDistributedLoadKeyBulkResult
     from .....models.member_distributed_load_update import MemberDistributedLoadUpdate
-    from .....models.problem_details import ProblemDetails
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -35,12 +34,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/member-distributed-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[MemberDistributedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberDistributedLoadKeyBatchResult]:
+    async def delete(self,body: list[MemberDistributedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberDistributedLoadKeyBulkResult]:
         """
         Deletes multiple member distributed loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberDistributedLoadKeyBatchResult]
+        Returns: Optional[MemberDistributedLoadKeyBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -48,24 +47,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.member_distributed_load_key_batch_result import MemberDistributedLoadKeyBatchResult
+        from .....models.member_distributed_load_key_bulk_result import MemberDistributedLoadKeyBulkResult
 
-        return await self.request_adapter.send_async(request_info, MemberDistributedLoadKeyBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MemberDistributedLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[MemberDistributedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberDistributedLoadBatchResult]:
+    async def patch(self,body: list[MemberDistributedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberDistributedLoadBulkResult]:
         """
         Updates multiple member distributed loads. Each item must include case, member, and subLoad in the body.All load cases referenced must be Primary.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberDistributedLoadBatchResult]
+        Returns: Optional[MemberDistributedLoadBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -73,17 +71,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.member_distributed_load_batch_result import MemberDistributedLoadBatchResult
+        from .....models.member_distributed_load_bulk_result import MemberDistributedLoadBulkResult
 
-        return await self.request_adapter.send_async(request_info, MemberDistributedLoadBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MemberDistributedLoadBulkResult, error_mapping)
     
     async def post(self,body: list[MemberDistributedLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
@@ -98,10 +95,9 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

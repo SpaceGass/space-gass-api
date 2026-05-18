@@ -1,4 +1,3 @@
-using Microsoft.Kiota.Abstractions.Serialization;
 using SpaceGassApi;
 using SpaceGassApi.Models;
 
@@ -308,17 +307,16 @@ try
     await client.Job.Save.PostAsync(new SaveJobRequest { FilePath = saveFilePath });
     Console.WriteLine("Project saved.");
 }
-catch (ProblemDetails pd)
+catch (ErrorResponse err)
 {
-    // Typed catch for the API's RFC 9457 error response. Status / Title
-    // / Detail are the standard fields; anything the server adds beyond
-    // those (errorCode, errors, etc.) lands in AdditionalData.
     Console.ForegroundColor = ConsoleColor.Red;
-    Console.Error.WriteLine($"API error {pd.Status}: {pd.Title}");
-    if (!string.IsNullOrWhiteSpace(pd.Detail))
-        Console.Error.WriteLine($"  {pd.Detail}");
-    foreach (var (key, value) in pd.AdditionalData ?? new Dictionary<string, object>())
-        Console.Error.WriteLine($"  {key}: {FormatUntyped(value)}");
+    Console.Error.WriteLine($"API error {err.Status}: {err.Title}");
+    if (!string.IsNullOrWhiteSpace(err.Detail))
+        Console.Error.WriteLine($"  {err.Detail}");
+    if (!string.IsNullOrWhiteSpace(err.ErrorCode))
+        Console.Error.WriteLine($"  Code: {err.ErrorCode}");
+    foreach (var ve in err.Errors ?? [])
+        Console.Error.WriteLine($"  [{ve.Field}] {ve.Message}");
     Console.ResetColor();
     return 1;
 }
@@ -347,23 +345,3 @@ finally
 }
 
 return 0;
-
-
-// -- Helpers ------------------------------------------------------
-
-// Walks Kiota's UntypedNode tree (used for any field on
-// ProblemDetails.AdditionalData that the spec didn't model). Without
-// this, every UntypedObject prints as the type name.
-static string FormatUntyped(object? value) => value switch
-{
-    UntypedString s  => s.GetValue() ?? "",
-    UntypedBoolean b => $"{b.GetValue()}",
-    UntypedDouble d  => $"{d.GetValue()}",
-    UntypedInteger i => $"{i.GetValue()}",
-    UntypedFloat f   => $"{f.GetValue()}",
-    UntypedLong l    => $"{l.GetValue()}",
-    UntypedNull      => "null",
-    UntypedArray a   => "[" + string.Join(", ", (a.GetValue() ?? Array.Empty<UntypedNode>()).Select(FormatUntyped)) + "]",
-    UntypedObject o  => "{ " + string.Join(", ", (o.GetValue() ?? new Dictionary<string, UntypedNode>()).Select(kv => $"{kv.Key}: {FormatUntyped(kv.Value)}")) + " }",
-    _ => value?.ToString() ?? "",
-};

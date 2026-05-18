@@ -17,8 +17,6 @@ class SelfWeightLoadCreate(Parsable):
     acceleration_z: Optional[float] = None
     # The load case number to create this load in.
     case: Optional[int] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Load category for grouping/organization.
     load_category: Optional[int] = None
     
@@ -43,7 +41,6 @@ class SelfWeightLoadCreate(Parsable):
             "accelerationY": lambda n : setattr(self, 'acceleration_y', n.get_float_value()),
             "accelerationZ": lambda n : setattr(self, 'acceleration_z', n.get_float_value()),
             "case": lambda n : setattr(self, 'case', n.get_int_value()),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
         }
         return fields
@@ -60,7 +57,6 @@ class SelfWeightLoadCreate(Parsable):
         writer.write_float_value("accelerationY", self.acceleration_y)
         writer.write_float_value("accelerationZ", self.acceleration_z)
         writer.write_int_value("case", self.case)
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("loadCategory", self.load_category)
     
 

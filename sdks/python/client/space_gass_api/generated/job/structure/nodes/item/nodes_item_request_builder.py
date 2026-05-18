@@ -14,10 +14,10 @@ from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .....models.error_response import ErrorResponse
     from .....models.expand_option import ExpandOption
     from .....models.node import Node
     from .....models.node_update import NodeUpdate
-    from .....models.problem_details import ProblemDetails
 
 class NodesItemRequestBuilder(BaseRequestBuilder):
     """
@@ -41,10 +41,10 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_delete_request_information(
             request_configuration
         )
-        from .....models.problem_details import ProblemDetails
+        from .....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "404": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -69,10 +69,10 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from .....models.problem_details import ProblemDetails
+        from .....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "404": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -83,7 +83,7 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
     async def patch(self,body: NodeUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Node]:
         """
         Updates an existing item. If a validator is registered, the update is validated first.
-        param body: DTO for updating an existing node.All coordinate fields are optional to support partial updates.Id is inherited from EntityUpdateBaseDto - nullable because single updatesreceive the Id from the route, while batch updates include it in the body.
+        param body: DTO for updating an existing node.All coordinate fields are optional to support partial updates.Id is inherited from EntityUpdateBaseDto - nullable because single updatesreceive the Id from the route, while bulk updates include it in the body.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Node]
         """
@@ -92,11 +92,11 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
         request_info = self.to_patch_request_information(
             body, request_configuration
         )
-        from .....models.problem_details import ProblemDetails
+        from .....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
-            "404": ProblemDetails,
+            "400": ErrorResponse,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -129,7 +129,7 @@ class NodesItemRequestBuilder(BaseRequestBuilder):
     def to_patch_request_information(self,body: NodeUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Updates an existing item. If a validator is registered, the update is validated first.
-        param body: DTO for updating an existing node.All coordinate fields are optional to support partial updates.Id is inherited from EntityUpdateBaseDto - nullable because single updatesreceive the Id from the route, while batch updates include it in the body.
+        param body: DTO for updating an existing node.All coordinate fields are optional to support partial updates.Id is inherited from EntityUpdateBaseDto - nullable because single updatesreceive the Id from the route, while bulk updates include it in the body.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

@@ -31,14 +31,6 @@ namespace SpaceGassApi.Models
         public double? GapCompressionLimit { get; set; }
         /// <summary>Gap tension limit (for Gap type members). Unit: Force (see GET /job/units).</summary>
         public double? GapTensionLimit { get; set; }
-        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Guid { get; set; }
-#nullable restore
-#else
-        public string Guid { get; set; }
-#endif
         /// <summary>True when this member has an explicit offsets row defined (rigid end zones at A/B).False means the member has no offsets (end rigid zones zero).Use `?expand=all` to include the full `offsets` object.</summary>
         public bool? HasOffsets { get; set; }
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
@@ -93,7 +85,6 @@ namespace SpaceGassApi.Models
                 { "fuseTensionLimit", n => { FuseTensionLimit = n.GetDoubleValue(); } },
                 { "gapCompressionLimit", n => { GapCompressionLimit = n.GetDoubleValue(); } },
                 { "gapTensionLimit", n => { GapTensionLimit = n.GetDoubleValue(); } },
-                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "hasOffsets", n => { HasOffsets = n.GetBoolValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "material", n => { Material = n.GetIntValue(); } },
@@ -118,7 +109,6 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("fuseTensionLimit", FuseTensionLimit);
             writer.WriteDoubleValue("gapCompressionLimit", GapCompressionLimit);
             writer.WriteDoubleValue("gapTensionLimit", GapTensionLimit);
-            writer.WriteStringValue("guid", Guid);
             writer.WriteBoolValue("hasOffsets", HasOffsets);
             writer.WriteIntValue("id", Id);
             writer.WriteIntValue("material", Material);

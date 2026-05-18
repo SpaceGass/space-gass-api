@@ -15,11 +15,10 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.problem_details import ProblemDetails
-    from .....models.thermal_load_batch_result import ThermalLoadBatchResult
+    from .....models.thermal_load_bulk_result import ThermalLoadBulkResult
     from .....models.thermal_load_create import ThermalLoadCreate
     from .....models.thermal_load_element_id import ThermalLoadElementId
-    from .....models.thermal_load_element_id_batch_result import ThermalLoadElementIdBatchResult
+    from .....models.thermal_load_element_id_bulk_result import ThermalLoadElementIdBulkResult
     from .....models.thermal_load_update import ThermalLoadUpdate
 
 class BulkRequestBuilder(BaseRequestBuilder):
@@ -35,12 +34,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/thermal-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[ThermalLoadElementId], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ThermalLoadElementIdBatchResult]:
+    async def delete(self,body: list[ThermalLoadElementId], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ThermalLoadElementIdBulkResult]:
         """
         Deletes multiple thermal loads. Case, element, and elementType are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ThermalLoadElementIdBatchResult]
+        Returns: Optional[ThermalLoadElementIdBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -48,24 +47,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.thermal_load_element_id_batch_result import ThermalLoadElementIdBatchResult
+        from .....models.thermal_load_element_id_bulk_result import ThermalLoadElementIdBulkResult
 
-        return await self.request_adapter.send_async(request_info, ThermalLoadElementIdBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, ThermalLoadElementIdBulkResult, error_mapping)
     
-    async def patch(self,body: list[ThermalLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[ThermalLoadBatchResult]:
+    async def patch(self,body: list[ThermalLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[ThermalLoadBulkResult]:
         """
         Updates multiple thermal loads. Each item must include case, element, and elementType in the body.All load cases referenced must be Primary.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ThermalLoadBatchResult]
+        Returns: Optional[ThermalLoadBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -73,17 +71,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.thermal_load_batch_result import ThermalLoadBatchResult
+        from .....models.thermal_load_bulk_result import ThermalLoadBulkResult
 
-        return await self.request_adapter.send_async(request_info, ThermalLoadBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, ThermalLoadBulkResult, error_mapping)
     
     async def post(self,body: list[ThermalLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
@@ -98,10 +95,9 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

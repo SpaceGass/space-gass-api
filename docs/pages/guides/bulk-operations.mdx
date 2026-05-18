@@ -16,15 +16,15 @@ shapes:
 | --- | --- | --- |
 | **Round trips** | One per item | One per batch |
 | **Validation** | Each item is validated as the call arrives | The full batch is validated up front, before any items are created |
-| **Failure response** | Throws on the first failing item | Returns a `*BatchResult` with `Succeeded` and `Errors` lists |
+| **Failure response** | Throws on the first failing item | Returns a `*BulkResult` with `Succeeded` and `Errors` lists |
 | **Partial commit on validation failure** | Items submitted before the failure are already created | Nothing is created unless every item validates |
 | **Partial success** | Not applicable | Opt-in via `?continueOnError=true` |
 
 ## Example: creating 100 nodes
 
-Bulk endpoints accept a `List<XCreate>` and return an `XBatchResult`
+Bulk endpoints accept a `List<XCreate>` and return an `XBulkResult`
 with the created entities under `Succeeded` and any failures under
-`Errors`. `BatchError.Index` is the position in the input list, so you
+`Errors`. `BulkError.Index` is the position in the input list, so you
 can match an error back to the body you sent.
 
 <CodeTabs>

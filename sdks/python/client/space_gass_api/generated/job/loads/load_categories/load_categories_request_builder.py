@@ -18,7 +18,6 @@ if TYPE_CHECKING:
     from ....models.expand_option import ExpandOption
     from ....models.load_category import LoadCategory
     from ....models.load_category_create import LoadCategoryCreate
-    from ....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
     from .item.load_categories_item_request_builder import LoadCategoriesItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
@@ -75,7 +74,6 @@ class LoadCategoriesRequestBuilder(BaseRequestBuilder):
             request_configuration
         )
         from ....models.error_response import ErrorResponse
-        from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "404": ErrorResponse,
@@ -99,12 +97,11 @@ class LoadCategoriesRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from ....models.error_response import ErrorResponse
-        from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
-            "409": ProblemDetails,
+            "409": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

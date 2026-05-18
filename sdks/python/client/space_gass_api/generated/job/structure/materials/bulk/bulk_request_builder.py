@@ -15,11 +15,10 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.material_batch_result import MaterialBatchResult
+    from .....models.material_bulk_result import MaterialBulkResult
     from .....models.material_create import MaterialCreate
     from .....models.material_update import MaterialUpdate
-    from .....models.object_batch_result import ObjectBatchResult
-    from .....models.problem_details import ProblemDetails
+    from .....models.object_bulk_result import ObjectBulkResult
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -34,12 +33,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/materials/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBatchResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBulkResult]:
         """
         Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ObjectBatchResult]
+        Returns: Optional[ObjectBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -47,24 +46,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.object_batch_result import ObjectBatchResult
+        from .....models.object_bulk_result import ObjectBulkResult
 
-        return await self.request_adapter.send_async(request_info, ObjectBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, ObjectBulkResult, error_mapping)
     
-    async def patch(self,body: list[MaterialUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MaterialBatchResult]:
+    async def patch(self,body: list[MaterialUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MaterialBulkResult]:
         """
         Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MaterialBatchResult]
+        Returns: Optional[MaterialBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -72,24 +70,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.material_batch_result import MaterialBatchResult
+        from .....models.material_bulk_result import MaterialBulkResult
 
-        return await self.request_adapter.send_async(request_info, MaterialBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MaterialBulkResult, error_mapping)
     
-    async def post(self,body: list[MaterialCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBatchResult]:
+    async def post(self,body: list[MaterialCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBulkResult]:
         """
         Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MaterialBatchResult]
+        Returns: Optional[MaterialBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -97,17 +94,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.material_batch_result import MaterialBatchResult
+        from .....models.material_bulk_result import MaterialBulkResult
 
-        return await self.request_adapter.send_async(request_info, MaterialBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MaterialBulkResult, error_mapping)
     
     def to_delete_request_information(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """

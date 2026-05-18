@@ -15,11 +15,10 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.node_restraint_batch_result import NodeRestraintBatchResult
+    from .....models.node_restraint_bulk_result import NodeRestraintBulkResult
     from .....models.node_restraint_create import NodeRestraintCreate
     from .....models.node_restraint_update import NodeRestraintUpdate
-    from .....models.object_batch_result import ObjectBatchResult
-    from .....models.problem_details import ProblemDetails
+    from .....models.object_bulk_result import ObjectBulkResult
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -34,12 +33,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/node-restraints/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBatchResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBulkResult]:
         """
         Deletes multiple attribute rows by parent Id. The body is a JSON array of integer parent Ids.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ObjectBatchResult]
+        Returns: Optional[ObjectBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -47,24 +46,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.object_batch_result import ObjectBatchResult
+        from .....models.object_bulk_result import ObjectBulkResult
 
-        return await self.request_adapter.send_async(request_info, ObjectBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, ObjectBulkResult, error_mapping)
     
-    async def patch(self,body: list[NodeRestraintUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[NodeRestraintBatchResult]:
+    async def patch(self,body: list[NodeRestraintUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[NodeRestraintBulkResult]:
         """
-        Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a batch error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
+        Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[NodeRestraintBatchResult]
+        Returns: Optional[NodeRestraintBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -72,24 +70,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.node_restraint_batch_result import NodeRestraintBatchResult
+        from .....models.node_restraint_bulk_result import NodeRestraintBulkResult
 
-        return await self.request_adapter.send_async(request_info, NodeRestraintBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, NodeRestraintBulkResult, error_mapping)
     
-    async def post(self,body: list[NodeRestraintCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[NodeRestraintBatchResult]:
+    async def post(self,body: list[NodeRestraintCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[NodeRestraintBulkResult]:
         """
-        Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a batch error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
+        Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[NodeRestraintBatchResult]
+        Returns: Optional[NodeRestraintBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -97,17 +94,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.node_restraint_batch_result import NodeRestraintBatchResult
+        from .....models.node_restraint_bulk_result import NodeRestraintBulkResult
 
-        return await self.request_adapter.send_async(request_info, NodeRestraintBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, NodeRestraintBulkResult, error_mapping)
     
     def to_delete_request_information(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
@@ -126,7 +122,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: list[NodeRestraintUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> RequestInformation:
         """
-        Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a batch error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
+        Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -141,7 +137,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: list[NodeRestraintCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """
-        Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a batch error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
+        Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -194,7 +190,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPatchQueryParameters():
         """
-        Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a batch error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
+        Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -222,7 +218,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPostQueryParameters():
         """
-        Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a batch error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
+        Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

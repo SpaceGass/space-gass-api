@@ -22,7 +22,6 @@ from ..generated.models.analysis_type import AnalysisType
 from ..generated.models.angle_type import AngleType
 from ..generated.models.axes_type import AxesType
 from ..generated.models.axial_force_distribution import AxialForceDistribution
-from ..generated.models.batch_error import BatchError
 from ..generated.models.buckling_effective_length import BucklingEffectiveLength
 from ..generated.models.buckling_effective_length_query_result import BucklingEffectiveLengthQueryResult
 from ..generated.models.buckling_load_factor import BucklingLoadFactor
@@ -30,6 +29,7 @@ from ..generated.models.buckling_load_factor_query_result import BucklingLoadFac
 from ..generated.models.buckling_settings import BucklingSettings
 from ..generated.models.buckling_settings_update import BucklingSettingsUpdate
 from ..generated.models.buckling_theory import BucklingTheory
+from ..generated.models.bulk_error import BulkError
 from ..generated.models.case_modes_warning import CaseModesWarning
 from ..generated.models.combination_load_case_create import CombinationLoadCaseCreate
 from ..generated.models.combination_load_case_item import CombinationLoadCaseItem
@@ -69,56 +69,56 @@ from ..generated.models.length_unit import LengthUnit
 from ..generated.models.license_status import LicenseStatus
 from ..generated.models.load_axes import LoadAxes
 from ..generated.models.load_case import LoadCase
-from ..generated.models.load_case_batch_result import LoadCaseBatchResult
+from ..generated.models.load_case_bulk_result import LoadCaseBulkResult
 from ..generated.models.load_case_create import LoadCaseCreate
 from ..generated.models.load_case_group import LoadCaseGroup
-from ..generated.models.load_case_group_batch_result import LoadCaseGroupBatchResult
+from ..generated.models.load_case_group_bulk_result import LoadCaseGroupBulkResult
 from ..generated.models.load_case_group_create import LoadCaseGroupCreate
 from ..generated.models.load_case_group_update import LoadCaseGroupUpdate
 from ..generated.models.load_case_type import LoadCaseType
 from ..generated.models.load_case_update import LoadCaseUpdate
 from ..generated.models.load_category import LoadCategory
-from ..generated.models.load_category_batch_result import LoadCategoryBatchResult
+from ..generated.models.load_category_bulk_result import LoadCategoryBulkResult
 from ..generated.models.load_category_create import LoadCategoryCreate
 from ..generated.models.load_category_update import LoadCategoryUpdate
 from ..generated.models.load_position_units import LoadPositionUnits
 from ..generated.models.loading_type import LoadingType
 from ..generated.models.lumped_mass_load import LumpedMassLoad
-from ..generated.models.lumped_mass_load_batch_result import LumpedMassLoadBatchResult
+from ..generated.models.lumped_mass_load_bulk_result import LumpedMassLoadBulkResult
 from ..generated.models.lumped_mass_load_create import LumpedMassLoadCreate
 from ..generated.models.lumped_mass_load_key import LumpedMassLoadKey
-from ..generated.models.lumped_mass_load_key_batch_result import LumpedMassLoadKeyBatchResult
+from ..generated.models.lumped_mass_load_key_bulk_result import LumpedMassLoadKeyBulkResult
 from ..generated.models.lumped_mass_load_update import LumpedMassLoadUpdate
 from ..generated.models.mass_density_unit import MassDensityUnit
 from ..generated.models.mass_unit import MassUnit
 from ..generated.models.material import Material
-from ..generated.models.material_batch_result import MaterialBatchResult
+from ..generated.models.material_bulk_result import MaterialBulkResult
 from ..generated.models.material_create import MaterialCreate
 from ..generated.models.material_library_create import MaterialLibraryCreate
 from ..generated.models.material_strength_unit import MaterialStrengthUnit
 from ..generated.models.material_update import MaterialUpdate
 from ..generated.models.matrix_type import MatrixType
 from ..generated.models.member import Member
-from ..generated.models.member_batch_result import MemberBatchResult
+from ..generated.models.member_bulk_result import MemberBulkResult
 from ..generated.models.member_concentrated_load import MemberConcentratedLoad
-from ..generated.models.member_concentrated_load_batch_result import MemberConcentratedLoadBatchResult
+from ..generated.models.member_concentrated_load_bulk_result import MemberConcentratedLoadBulkResult
 from ..generated.models.member_concentrated_load_create import MemberConcentratedLoadCreate
 from ..generated.models.member_concentrated_load_key import MemberConcentratedLoadKey
-from ..generated.models.member_concentrated_load_key_batch_result import MemberConcentratedLoadKeyBatchResult
+from ..generated.models.member_concentrated_load_key_bulk_result import MemberConcentratedLoadKeyBulkResult
 from ..generated.models.member_concentrated_load_update import MemberConcentratedLoadUpdate
 from ..generated.models.member_create import MemberCreate
 from ..generated.models.member_direction import MemberDirection
 from ..generated.models.member_distributed_load import MemberDistributedLoad
-from ..generated.models.member_distributed_load_batch_result import MemberDistributedLoadBatchResult
+from ..generated.models.member_distributed_load_bulk_result import MemberDistributedLoadBulkResult
 from ..generated.models.member_distributed_load_create import MemberDistributedLoadCreate
 from ..generated.models.member_distributed_load_key import MemberDistributedLoadKey
-from ..generated.models.member_distributed_load_key_batch_result import MemberDistributedLoadKeyBatchResult
+from ..generated.models.member_distributed_load_key_bulk_result import MemberDistributedLoadKeyBulkResult
 from ..generated.models.member_distributed_load_update import MemberDistributedLoadUpdate
 from ..generated.models.member_distributed_moment import MemberDistributedMoment
-from ..generated.models.member_distributed_moment_batch_result import MemberDistributedMomentBatchResult
+from ..generated.models.member_distributed_moment_bulk_result import MemberDistributedMomentBulkResult
 from ..generated.models.member_distributed_moment_create import MemberDistributedMomentCreate
 from ..generated.models.member_distributed_moment_key import MemberDistributedMomentKey
-from ..generated.models.member_distributed_moment_key_batch_result import MemberDistributedMomentKeyBatchResult
+from ..generated.models.member_distributed_moment_key_bulk_result import MemberDistributedMomentKeyBulkResult
 from ..generated.models.member_distributed_moment_update import MemberDistributedMomentUpdate
 from ..generated.models.member_end_force import MemberEndForce
 from ..generated.models.member_end_force_query_result import MemberEndForceQueryResult
@@ -127,14 +127,14 @@ from ..generated.models.member_intermediate_displacement_query_result import Mem
 from ..generated.models.member_intermediate_force import MemberIntermediateForce
 from ..generated.models.member_intermediate_force_query_result import MemberIntermediateForceQueryResult
 from ..generated.models.member_offset import MemberOffset
-from ..generated.models.member_offset_batch_result import MemberOffsetBatchResult
+from ..generated.models.member_offset_bulk_result import MemberOffsetBulkResult
 from ..generated.models.member_offset_create import MemberOffsetCreate
 from ..generated.models.member_offset_update import MemberOffsetUpdate
 from ..generated.models.member_prestress_load import MemberPrestressLoad
-from ..generated.models.member_prestress_load_batch_result import MemberPrestressLoadBatchResult
+from ..generated.models.member_prestress_load_bulk_result import MemberPrestressLoadBulkResult
 from ..generated.models.member_prestress_load_create import MemberPrestressLoadCreate
 from ..generated.models.member_prestress_load_key import MemberPrestressLoadKey
-from ..generated.models.member_prestress_load_key_batch_result import MemberPrestressLoadKeyBatchResult
+from ..generated.models.member_prestress_load_key_bulk_result import MemberPrestressLoadKeyBulkResult
 from ..generated.models.member_prestress_load_update import MemberPrestressLoadUpdate
 from ..generated.models.member_release import MemberRelease
 from ..generated.models.member_release_update import MemberReleaseUpdate
@@ -149,39 +149,39 @@ from ..generated.models.moment_unit import MomentUnit
 from ..generated.models.natural_frequency import NaturalFrequency
 from ..generated.models.natural_frequency_query_result import NaturalFrequencyQueryResult
 from ..generated.models.node import Node
-from ..generated.models.node_batch_result import NodeBatchResult
+from ..generated.models.node_bulk_result import NodeBulkResult
 from ..generated.models.node_constraint import NodeConstraint
-from ..generated.models.node_constraint_batch_result import NodeConstraintBatchResult
+from ..generated.models.node_constraint_bulk_result import NodeConstraintBulkResult
 from ..generated.models.node_constraint_create import NodeConstraintCreate
 from ..generated.models.node_constraint_update import NodeConstraintUpdate
 from ..generated.models.node_create import NodeCreate
 from ..generated.models.node_displacement import NodeDisplacement
 from ..generated.models.node_displacement_query_result import NodeDisplacementQueryResult
 from ..generated.models.node_load import NodeLoad
-from ..generated.models.node_load_batch_result import NodeLoadBatchResult
+from ..generated.models.node_load_bulk_result import NodeLoadBulkResult
 from ..generated.models.node_load_create import NodeLoadCreate
 from ..generated.models.node_load_key import NodeLoadKey
-from ..generated.models.node_load_key_batch_result import NodeLoadKeyBatchResult
+from ..generated.models.node_load_key_bulk_result import NodeLoadKeyBulkResult
 from ..generated.models.node_load_update import NodeLoadUpdate
 from ..generated.models.node_reaction import NodeReaction
 from ..generated.models.node_reaction_query_result import NodeReactionQueryResult
 from ..generated.models.node_restraint import NodeRestraint
-from ..generated.models.node_restraint_batch_result import NodeRestraintBatchResult
+from ..generated.models.node_restraint_bulk_result import NodeRestraintBulkResult
 from ..generated.models.node_restraint_create import NodeRestraintCreate
 from ..generated.models.node_restraint_update import NodeRestraintUpdate
 from ..generated.models.node_type_filter import NodeTypeFilter
 from ..generated.models.node_update import NodeUpdate
 from ..generated.models.non_linear_theory import NonLinearTheory
-from ..generated.models.object_batch_result import ObjectBatchResult
+from ..generated.models.object_bulk_result import ObjectBulkResult
 from ..generated.models.open_job_request import OpenJobRequest
 from ..generated.models.open_sample_request import OpenSampleRequest
 from ..generated.models.optimization_axis import OptimizationAxis
 from ..generated.models.optimization_method import OptimizationMethod
 from ..generated.models.plate import Plate
-from ..generated.models.plate_batch_result import PlateBatchResult
+from ..generated.models.plate_bulk_result import PlateBulkResult
 from ..generated.models.plate_create import PlateCreate
 from ..generated.models.plate_cut import PlateCut
-from ..generated.models.plate_cut_batch_result import PlateCutBatchResult
+from ..generated.models.plate_cut_bulk_result import PlateCutBulkResult
 from ..generated.models.plate_cut_create import PlateCutCreate
 from ..generated.models.plate_cut_update import PlateCutUpdate
 from ..generated.models.plate_direction import PlateDirection
@@ -190,34 +190,33 @@ from ..generated.models.plate_element_force_query_result import PlateElementForc
 from ..generated.models.plate_nodal_force import PlateNodalForce
 from ..generated.models.plate_nodal_force_query_result import PlateNodalForceQueryResult
 from ..generated.models.plate_pressure_load import PlatePressureLoad
-from ..generated.models.plate_pressure_load_batch_result import PlatePressureLoadBatchResult
+from ..generated.models.plate_pressure_load_bulk_result import PlatePressureLoadBulkResult
 from ..generated.models.plate_pressure_load_create import PlatePressureLoadCreate
 from ..generated.models.plate_pressure_load_key import PlatePressureLoadKey
-from ..generated.models.plate_pressure_load_key_batch_result import PlatePressureLoadKeyBatchResult
+from ..generated.models.plate_pressure_load_key_bulk_result import PlatePressureLoadKeyBulkResult
 from ..generated.models.plate_pressure_load_update import PlatePressureLoadUpdate
 from ..generated.models.plate_stress import PlateStress
 from ..generated.models.plate_stress_query_result import PlateStressQueryResult
 from ..generated.models.plate_strip import PlateStrip
-from ..generated.models.plate_strip_batch_result import PlateStripBatchResult
+from ..generated.models.plate_strip_bulk_result import PlateStripBulkResult
 from ..generated.models.plate_strip_create import PlateStripCreate
 from ..generated.models.plate_strip_update import PlateStripUpdate
 from ..generated.models.plate_theory import PlateTheory
 from ..generated.models.plate_type import PlateType
 from ..generated.models.plate_update import PlateUpdate
 from ..generated.models.prescribed_displacement import PrescribedDisplacement
-from ..generated.models.prescribed_displacement_batch_result import PrescribedDisplacementBatchResult
+from ..generated.models.prescribed_displacement_bulk_result import PrescribedDisplacementBulkResult
 from ..generated.models.prescribed_displacement_create import PrescribedDisplacementCreate
 from ..generated.models.prescribed_displacement_key import PrescribedDisplacementKey
-from ..generated.models.prescribed_displacement_key_batch_result import PrescribedDisplacementKeyBatchResult
+from ..generated.models.prescribed_displacement_key_bulk_result import PrescribedDisplacementKeyBulkResult
 from ..generated.models.prescribed_displacement_update import PrescribedDisplacementUpdate
-from ..generated.models.problem_details import ProblemDetails
 from ..generated.models.property_source import PropertySource
 from ..generated.models.query_warnings import QueryWarnings
 from ..generated.models.registration_status import RegistrationStatus
 from ..generated.models.resource_metadata import ResourceMetadata
 from ..generated.models.save_job_request import SaveJobRequest
 from ..generated.models.section import Section
-from ..generated.models.section_batch_result import SectionBatchResult
+from ..generated.models.section_bulk_result import SectionBulkResult
 from ..generated.models.section_library_create import SectionLibraryCreate
 from ..generated.models.section_properties_unit import SectionPropertiesUnit
 from ..generated.models.section_update import SectionUpdate
@@ -239,10 +238,10 @@ from ..generated.models.temperature_unit import TemperatureUnit
 from ..generated.models.tension_compression_only_mode import TensionCompressionOnlyMode
 from ..generated.models.thermal_element_type import ThermalElementType
 from ..generated.models.thermal_load import ThermalLoad
-from ..generated.models.thermal_load_batch_result import ThermalLoadBatchResult
+from ..generated.models.thermal_load_bulk_result import ThermalLoadBulkResult
 from ..generated.models.thermal_load_create import ThermalLoadCreate
 from ..generated.models.thermal_load_element_id import ThermalLoadElementId
-from ..generated.models.thermal_load_element_id_batch_result import ThermalLoadElementIdBatchResult
+from ..generated.models.thermal_load_element_id_bulk_result import ThermalLoadElementIdBulkResult
 from ..generated.models.thermal_load_update import ThermalLoadUpdate
 from ..generated.models.translation_unit import TranslationUnit
 from ..generated.models.units import Units
@@ -264,7 +263,6 @@ __all__ = [
     "AngleType",
     "AxesType",
     "AxialForceDistribution",
-    "BatchError",
     "BucklingEffectiveLength",
     "BucklingEffectiveLengthQueryResult",
     "BucklingLoadFactor",
@@ -272,6 +270,7 @@ __all__ = [
     "BucklingSettings",
     "BucklingSettingsUpdate",
     "BucklingTheory",
+    "BulkError",
     "CaseModesWarning",
     "CombinationLoadCaseCreate",
     "CombinationLoadCaseItem",
@@ -311,56 +310,56 @@ __all__ = [
     "LicenseStatus",
     "LoadAxes",
     "LoadCase",
-    "LoadCaseBatchResult",
+    "LoadCaseBulkResult",
     "LoadCaseCreate",
     "LoadCaseGroup",
-    "LoadCaseGroupBatchResult",
+    "LoadCaseGroupBulkResult",
     "LoadCaseGroupCreate",
     "LoadCaseGroupUpdate",
     "LoadCaseType",
     "LoadCaseUpdate",
     "LoadCategory",
-    "LoadCategoryBatchResult",
+    "LoadCategoryBulkResult",
     "LoadCategoryCreate",
     "LoadCategoryUpdate",
     "LoadPositionUnits",
     "LoadingType",
     "LumpedMassLoad",
-    "LumpedMassLoadBatchResult",
+    "LumpedMassLoadBulkResult",
     "LumpedMassLoadCreate",
     "LumpedMassLoadKey",
-    "LumpedMassLoadKeyBatchResult",
+    "LumpedMassLoadKeyBulkResult",
     "LumpedMassLoadUpdate",
     "MassDensityUnit",
     "MassUnit",
     "Material",
-    "MaterialBatchResult",
+    "MaterialBulkResult",
     "MaterialCreate",
     "MaterialLibraryCreate",
     "MaterialStrengthUnit",
     "MaterialUpdate",
     "MatrixType",
     "Member",
-    "MemberBatchResult",
+    "MemberBulkResult",
     "MemberConcentratedLoad",
-    "MemberConcentratedLoadBatchResult",
+    "MemberConcentratedLoadBulkResult",
     "MemberConcentratedLoadCreate",
     "MemberConcentratedLoadKey",
-    "MemberConcentratedLoadKeyBatchResult",
+    "MemberConcentratedLoadKeyBulkResult",
     "MemberConcentratedLoadUpdate",
     "MemberCreate",
     "MemberDirection",
     "MemberDistributedLoad",
-    "MemberDistributedLoadBatchResult",
+    "MemberDistributedLoadBulkResult",
     "MemberDistributedLoadCreate",
     "MemberDistributedLoadKey",
-    "MemberDistributedLoadKeyBatchResult",
+    "MemberDistributedLoadKeyBulkResult",
     "MemberDistributedLoadUpdate",
     "MemberDistributedMoment",
-    "MemberDistributedMomentBatchResult",
+    "MemberDistributedMomentBulkResult",
     "MemberDistributedMomentCreate",
     "MemberDistributedMomentKey",
-    "MemberDistributedMomentKeyBatchResult",
+    "MemberDistributedMomentKeyBulkResult",
     "MemberDistributedMomentUpdate",
     "MemberEndForce",
     "MemberEndForceQueryResult",
@@ -369,14 +368,14 @@ __all__ = [
     "MemberIntermediateForce",
     "MemberIntermediateForceQueryResult",
     "MemberOffset",
-    "MemberOffsetBatchResult",
+    "MemberOffsetBulkResult",
     "MemberOffsetCreate",
     "MemberOffsetUpdate",
     "MemberPrestressLoad",
-    "MemberPrestressLoadBatchResult",
+    "MemberPrestressLoadBulkResult",
     "MemberPrestressLoadCreate",
     "MemberPrestressLoadKey",
-    "MemberPrestressLoadKeyBatchResult",
+    "MemberPrestressLoadKeyBulkResult",
     "MemberPrestressLoadUpdate",
     "MemberRelease",
     "MemberReleaseUpdate",
@@ -391,39 +390,39 @@ __all__ = [
     "NaturalFrequency",
     "NaturalFrequencyQueryResult",
     "Node",
-    "NodeBatchResult",
+    "NodeBulkResult",
     "NodeConstraint",
-    "NodeConstraintBatchResult",
+    "NodeConstraintBulkResult",
     "NodeConstraintCreate",
     "NodeConstraintUpdate",
     "NodeCreate",
     "NodeDisplacement",
     "NodeDisplacementQueryResult",
     "NodeLoad",
-    "NodeLoadBatchResult",
+    "NodeLoadBulkResult",
     "NodeLoadCreate",
     "NodeLoadKey",
-    "NodeLoadKeyBatchResult",
+    "NodeLoadKeyBulkResult",
     "NodeLoadUpdate",
     "NodeReaction",
     "NodeReactionQueryResult",
     "NodeRestraint",
-    "NodeRestraintBatchResult",
+    "NodeRestraintBulkResult",
     "NodeRestraintCreate",
     "NodeRestraintUpdate",
     "NodeTypeFilter",
     "NodeUpdate",
     "NonLinearTheory",
-    "ObjectBatchResult",
+    "ObjectBulkResult",
     "OpenJobRequest",
     "OpenSampleRequest",
     "OptimizationAxis",
     "OptimizationMethod",
     "Plate",
-    "PlateBatchResult",
+    "PlateBulkResult",
     "PlateCreate",
     "PlateCut",
-    "PlateCutBatchResult",
+    "PlateCutBulkResult",
     "PlateCutCreate",
     "PlateCutUpdate",
     "PlateDirection",
@@ -432,34 +431,33 @@ __all__ = [
     "PlateNodalForce",
     "PlateNodalForceQueryResult",
     "PlatePressureLoad",
-    "PlatePressureLoadBatchResult",
+    "PlatePressureLoadBulkResult",
     "PlatePressureLoadCreate",
     "PlatePressureLoadKey",
-    "PlatePressureLoadKeyBatchResult",
+    "PlatePressureLoadKeyBulkResult",
     "PlatePressureLoadUpdate",
     "PlateStress",
     "PlateStressQueryResult",
     "PlateStrip",
-    "PlateStripBatchResult",
+    "PlateStripBulkResult",
     "PlateStripCreate",
     "PlateStripUpdate",
     "PlateTheory",
     "PlateType",
     "PlateUpdate",
     "PrescribedDisplacement",
-    "PrescribedDisplacementBatchResult",
+    "PrescribedDisplacementBulkResult",
     "PrescribedDisplacementCreate",
     "PrescribedDisplacementKey",
-    "PrescribedDisplacementKeyBatchResult",
+    "PrescribedDisplacementKeyBulkResult",
     "PrescribedDisplacementUpdate",
-    "ProblemDetails",
     "PropertySource",
     "QueryWarnings",
     "RegistrationStatus",
     "ResourceMetadata",
     "SaveJobRequest",
     "Section",
-    "SectionBatchResult",
+    "SectionBulkResult",
     "SectionLibraryCreate",
     "SectionPropertiesUnit",
     "SectionUpdate",
@@ -481,10 +479,10 @@ __all__ = [
     "TensionCompressionOnlyMode",
     "ThermalElementType",
     "ThermalLoad",
-    "ThermalLoadBatchResult",
+    "ThermalLoadBulkResult",
     "ThermalLoadCreate",
     "ThermalLoadElementId",
-    "ThermalLoadElementIdBatchResult",
+    "ThermalLoadElementIdBulkResult",
     "ThermalLoadUpdate",
     "TranslationUnit",
     "Units",

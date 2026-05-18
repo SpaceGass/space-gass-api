@@ -15,12 +15,11 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.lumped_mass_load_batch_result import LumpedMassLoadBatchResult
+    from .....models.lumped_mass_load_bulk_result import LumpedMassLoadBulkResult
     from .....models.lumped_mass_load_create import LumpedMassLoadCreate
     from .....models.lumped_mass_load_key import LumpedMassLoadKey
-    from .....models.lumped_mass_load_key_batch_result import LumpedMassLoadKeyBatchResult
+    from .....models.lumped_mass_load_key_bulk_result import LumpedMassLoadKeyBulkResult
     from .....models.lumped_mass_load_update import LumpedMassLoadUpdate
-    from .....models.problem_details import ProblemDetails
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -35,12 +34,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/lumped-mass-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[LumpedMassLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[LumpedMassLoadKeyBatchResult]:
+    async def delete(self,body: list[LumpedMassLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[LumpedMassLoadKeyBulkResult]:
         """
         Deletes multiple lumped mass loads. Both case and node are required for each entry —providing only a case does not delete all lumped masses for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[LumpedMassLoadKeyBatchResult]
+        Returns: Optional[LumpedMassLoadKeyBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -48,24 +47,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.lumped_mass_load_key_batch_result import LumpedMassLoadKeyBatchResult
+        from .....models.lumped_mass_load_key_bulk_result import LumpedMassLoadKeyBulkResult
 
-        return await self.request_adapter.send_async(request_info, LumpedMassLoadKeyBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, LumpedMassLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[LumpedMassLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LumpedMassLoadBatchResult]:
+    async def patch(self,body: list[LumpedMassLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LumpedMassLoadBulkResult]:
         """
         Updates multiple lumped mass loads. Each item must include case and node in the body.All load cases referenced must be Primary.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[LumpedMassLoadBatchResult]
+        Returns: Optional[LumpedMassLoadBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -73,17 +71,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.lumped_mass_load_batch_result import LumpedMassLoadBatchResult
+        from .....models.lumped_mass_load_bulk_result import LumpedMassLoadBulkResult
 
-        return await self.request_adapter.send_async(request_info, LumpedMassLoadBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, LumpedMassLoadBulkResult, error_mapping)
     
     async def post(self,body: list[LumpedMassLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
@@ -98,10 +95,9 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

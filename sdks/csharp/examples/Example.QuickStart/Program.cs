@@ -31,12 +31,12 @@ try
         Console.WriteLine($"  Node {node.Id}: ({node.X}, {node.Y}, {node.Z})");
     }
 }
-catch (ProblemDetails pd)
+catch (ErrorResponse err)
 {
     Console.ForegroundColor = ConsoleColor.Red;
-    Console.Error.WriteLine($"API error {pd.Status}: {pd.Title}");
-    if (!string.IsNullOrWhiteSpace(pd.Detail))
-        Console.Error.WriteLine($"  {pd.Detail}");
+    Console.Error.WriteLine($"API error {err.Status}: {err.Title}");
+    if (!string.IsNullOrWhiteSpace(err.Detail))
+        Console.Error.WriteLine($"  {err.Detail}");
     Console.ResetColor();
     return 1;
 }

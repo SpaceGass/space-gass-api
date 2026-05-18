@@ -11,8 +11,6 @@ class MaterialCreate(Parsable):
     """
     # Concrete compressive strength.
     concrete_strength: Optional[float] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.
     id: Optional[int] = None
     # Mass density. Must be greater than zero.
@@ -44,7 +42,6 @@ class MaterialCreate(Parsable):
         """
         fields: dict[str, Callable[[Any], None]] = {
             "concreteStrength": lambda n : setattr(self, 'concrete_strength', n.get_float_value()),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "massDensity": lambda n : setattr(self, 'mass_density', n.get_float_value()),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
@@ -63,7 +60,6 @@ class MaterialCreate(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_float_value("concreteStrength", self.concrete_strength)
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_float_value("massDensity", self.mass_density)
         writer.write_str_value("name", self.name)

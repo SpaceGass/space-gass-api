@@ -16,7 +16,6 @@ from warnings import warn
 if TYPE_CHECKING:
     from ......models.error_response import ErrorResponse
     from ......models.member_end_force_query_result import MemberEndForceQueryResult
-    from ......models.problem_details import ProblemDetails
     from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class MemberEndForcesRequestBuilder(BaseRequestBuilder):
@@ -55,10 +54,9 @@ class MemberEndForcesRequestBuilder(BaseRequestBuilder):
             request_configuration
         )
         from ......models.error_response import ErrorResponse
-        from ......models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

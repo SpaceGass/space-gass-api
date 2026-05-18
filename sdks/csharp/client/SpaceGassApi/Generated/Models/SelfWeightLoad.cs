@@ -21,14 +21,6 @@ namespace SpaceGassApi.Models
         public double? AccelerationZ { get; set; }
         /// <summary>The load case number this load belongs to.</summary>
         public int? Case { get; set; }
-        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Guid { get; set; }
-#nullable restore
-#else
-        public string Guid { get; set; }
-#endif
         /// <summary>Load category for grouping/organization.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>
@@ -53,7 +45,6 @@ namespace SpaceGassApi.Models
                 { "accelerationY", n => { AccelerationY = n.GetDoubleValue(); } },
                 { "accelerationZ", n => { AccelerationZ = n.GetDoubleValue(); } },
                 { "case", n => { Case = n.GetIntValue(); } },
-                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
             };
         }
@@ -68,7 +59,6 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("accelerationY", AccelerationY);
             writer.WriteDoubleValue("accelerationZ", AccelerationZ);
             writer.WriteIntValue("case", Case);
-            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("loadCategory", LoadCategory);
         }
     }

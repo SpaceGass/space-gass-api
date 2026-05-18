@@ -14,7 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
-    from ...models.problem_details import ProblemDetails
+    from ...models.error_response import ErrorResponse
     from ...models.units import Units
     from .metadata.metadata_request_builder import MetadataRequestBuilder
 
@@ -40,10 +40,10 @@ class UnitsRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
-        from ...models.problem_details import ProblemDetails
+        from ...models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "404": ProblemDetails,
+            "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

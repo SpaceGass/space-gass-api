@@ -36,56 +36,56 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads.Bulk
         /// <summary>
         /// Deletes multiple thermal loads. Case, element, and elementType are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.ThermalLoadElementIdBatchResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.ThermalLoadElementIdBulkResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.ThermalLoadElementIdBatchResult?> DeleteAsync(List<global::SpaceGassApi.Models.ThermalLoadElementId> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.ThermalLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ThermalLoadElementIdBulkResult?> DeleteAsync(List<global::SpaceGassApi.Models.ThermalLoadElementId> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.ThermalLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.ThermalLoadElementIdBatchResult> DeleteAsync(List<global::SpaceGassApi.Models.ThermalLoadElementId> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.ThermalLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ThermalLoadElementIdBulkResult> DeleteAsync(List<global::SpaceGassApi.Models.ThermalLoadElementId> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.ThermalLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToDeleteRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ThermalLoadElementIdBatchResult>(requestInfo, global::SpaceGassApi.Models.ThermalLoadElementIdBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ThermalLoadElementIdBulkResult>(requestInfo, global::SpaceGassApi.Models.ThermalLoadElementIdBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Updates multiple thermal loads. Each item must include case, element, and elementType in the body.All load cases referenced must be Primary.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.ThermalLoadBatchResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.ThermalLoadBulkResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.ThermalLoadBatchResult?> PatchAsync(List<global::SpaceGassApi.Models.ThermalLoadUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.ThermalLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ThermalLoadBulkResult?> PatchAsync(List<global::SpaceGassApi.Models.ThermalLoadUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.ThermalLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.ThermalLoadBatchResult> PatchAsync(List<global::SpaceGassApi.Models.ThermalLoadUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.ThermalLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ThermalLoadBulkResult> PatchAsync(List<global::SpaceGassApi.Models.ThermalLoadUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.ThermalLoads.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
             var requestInfo = ToPatchRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ThermalLoadBatchResult>(requestInfo, global::SpaceGassApi.Models.ThermalLoadBatchResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ThermalLoadBulkResult>(requestInfo, global::SpaceGassApi.Models.ThermalLoadBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
@@ -94,7 +94,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads.Bulk
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
-        /// <exception cref="global::SpaceGassApi.Models.ProblemDetails">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -109,7 +109,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads.Bulk
             var requestInfo = ToPostRequestInformation(body, requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
-                { "400", global::SpaceGassApi.Models.ProblemDetails.CreateFromDiscriminatorValue },
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);

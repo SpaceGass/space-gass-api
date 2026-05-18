@@ -15,8 +15,7 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.error_response import ErrorResponse
-    from ......models.problem_details import ProblemDetails
-    from ......models.section_batch_result import SectionBatchResult
+    from ......models.section_bulk_result import SectionBulkResult
     from ......models.section_library_create import SectionLibraryCreate
 
 class BulkRequestBuilder(BaseRequestBuilder):
@@ -32,12 +31,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/sections/library/bulk{?continueOnError*}", path_parameters)
     
-    async def post(self,body: list[SectionLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[SectionBatchResult]:
+    async def post(self,body: list[SectionLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[SectionBulkResult]:
         """
         Creates multiple library-sourced sections in a single request. Each section isresolved from the SPACE GASS section library by (name, library).
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[SectionBatchResult]
+        Returns: Optional[SectionBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -45,17 +44,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from ......models.error_response import ErrorResponse
-        from ......models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from ......models.section_batch_result import SectionBatchResult
+        from ......models.section_bulk_result import SectionBulkResult
 
-        return await self.request_adapter.send_async(request_info, SectionBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, SectionBulkResult, error_mapping)
     
     def to_post_request_information(self,body: list[SectionLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """

@@ -14,9 +14,9 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from ...models.error_response import ErrorResponse
     from ...models.job_status import JobStatus
     from ...models.open_sample_request import OpenSampleRequest
-    from ...models.problem_details import ProblemDetails
 
 class OpenSampleRequestBuilder(BaseRequestBuilder):
     """
@@ -43,12 +43,13 @@ class OpenSampleRequestBuilder(BaseRequestBuilder):
         request_info = self.to_post_request_information(
             body, request_configuration
         )
-        from ...models.problem_details import ProblemDetails
+        from ...models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
-            "404": ProblemDetails,
-            "409": ProblemDetails,
+            "400": ErrorResponse,
+            "404": ErrorResponse,
+            "409": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
