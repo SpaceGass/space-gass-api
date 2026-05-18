@@ -4,8 +4,9 @@ Example: Create a Geodesic Dome
 Builds a geodesic hemisphere from an icosahedron subdivision, showcasing
 the bulk creation endpoints for nodes, members, and restraints.
 
-The dome is parametric — adjust RADIUS, FREQUENCY, and SECTION_NAME
-below to change the geometry and member sizing.
+The dome is parametric — adjust RADIUS and FREQUENCY below to change
+the geometry. All 19 CHS sizes are used as sections, assigned by
+elevation to produce concentric colour bands.
 
 Prerequisites:
   - SPACE GASS API running locally (default: http://localhost:34560)
@@ -16,6 +17,8 @@ import asyncio
 import math
 import os
 import sys
+import time
+import winreg
 
 from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
@@ -24,13 +27,12 @@ import space_gass_api.models as models
 # -- Parametric Configuration --------------------------------------
 # Adjust these values to change the dome geometry and member sizing.
 
-RADIUS = 100.0       # Dome radius in metres
-FREQUENCY = 36        # Subdivision frequency (1-50, higher = more triangles)
+RADIUS = 150.0       # Dome radius in metres
+FREQUENCY = 45        # Subdivision frequency (1-50, higher = more triangles)
 
-SECTION_NAME = "273.1x6.4 CHS"   # CHS section (see list below)
-
-# Available CHS sections in Aust300:
-AVAILABLE_SECTIONS = [
+# All CHS sections from Aust300 — each gets its own colour in SPACE GASS.
+# Assigned to members by elevation so the dome shows concentric colour bands.
+SECTIONS = [
     "273.1x4.8 CHS",
     "273.1x6.4 CHS",
     "273.1x9.3 CHS",
@@ -52,11 +54,151 @@ AVAILABLE_SECTIONS = [
     "508x12.7 CHS",
 ]
 
-SAVE_PATH = os.path.join(
-    os.path.expanduser("~/Desktop"),
-    "SpaceGass Examples-py",
-    "GeodesicDome.sg",
-)
+with winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+        r"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders") as _k:
+    _DESKTOP = winreg.QueryValueEx(_k, "Desktop")[0]
+
+SAVE_PATH = os.path.join(_DESKTOP, "SpaceGass Examples-py", "GeodesicDome.sg")
+
+
+# -- Main ----------------------------------------------------------
+
+async def main() -> int:
+    if not 1 <= FREQUENCY <= 50:
+        print("FREQUENCY must be between 1 and 50.", file=sys.stderr)
+        return 1
+
+    # Generate dome geometry.
+    print(f"Generating geodesic hemisphere (radius={RADIUS}m, frequency={FREQUENCY})...")
+    vertices, edges, base_indices = generate_geodesic_hemisphere(RADIUS, FREQUENCY)
+    print(f"  {len(vertices)} nodes, {len(edges)} members, {len(base_indices)} base restraints")
+    print()
+
+    t_total = time.perf_counter()
+
+    client = SpaceGassApiClient.create_client("http://localhost:34560")
+
+    try:
+        # == Create a new blank project ================================
+        print("Creating new blank project...")
+        await client.job.new.post()
+        print()
+
+        # == Add material ==============================================
+        print("Adding steel material...")
+        steel = await client.job.structure.materials.library.post(
+            models.MaterialLibraryCreate(library="Aust", name="STEEL"))
+        print(f"  Material {steel.id}: {steel.name}")
+        print()
+
+        # == Add sections (one per CHS size for colour bands) =========
+        print(f"Adding {len(SECTIONS)} sections...")
+        sections = []
+        for name in SECTIONS:
+            s = await client.job.structure.sections.library.post(
+                models.SectionLibraryCreate(library="Aust300", name=name, mark="CHS"))
+            sections.append(s)
+        print(f"  {len(sections)} sections added")
+        print()
+
+        # == Bulk-create nodes =========================================
+        print(f"Creating {len(vertices)} nodes (bulk)...")
+        node_creates = [
+            models.NodeCreate(x=round(x, 6), y=round(y, 6), z=round(z, 6))
+            for x, y, z in vertices
+        ]
+        t0 = time.perf_counter()
+        node_result = await client.job.structure.nodes.bulk.post(node_creates)
+        t_nodes = time.perf_counter() - t0
+
+        if node_result.errors:
+            print(f"  WARNING: {len(node_result.errors)} node(s) failed", file=sys.stderr)
+            for e in node_result.errors[:5]:
+                print(f"    {e}", file=sys.stderr)
+
+        created_nodes = node_result.succeeded
+        print(f"  {len(created_nodes)} nodes created in {t_nodes:.2f}s")
+
+        # Build a map from local vertex index → API node Id.
+        node_id_map: dict[int, int] = {}
+        for local_idx, node in enumerate(created_nodes):
+            node_id_map[local_idx] = node.id
+        print()
+
+        # == Bulk-create members =======================================
+        print(f"Creating {len(edges)} members (bulk)...")
+        n_sec = len(sections)
+        member_creates = []
+        for a, b in edges:
+            mid_y = (vertices[a][1] + vertices[b][1]) / 2
+            band = min(int(mid_y / RADIUS * n_sec), n_sec - 1)
+            member_creates.append(models.MemberCreate(
+                node_a=node_id_map[a],
+                node_b=node_id_map[b],
+                section=sections[band].id,
+                material=steel.id,
+                type="Normal",
+            ))
+        t0 = time.perf_counter()
+        member_result = await client.job.structure.members.bulk.post(member_creates)
+        t_members = time.perf_counter() - t0
+
+        if member_result.errors:
+            print(f"  WARNING: {len(member_result.errors)} member(s) failed", file=sys.stderr)
+            for e in member_result.errors[:5]:
+                print(f"    {e}", file=sys.stderr)
+
+        print(f"  {len(member_result.succeeded)} members created in {t_members:.2f}s")
+        print()
+
+        # == Bulk-create base restraints ===============================
+        print(f"Restraining {len(base_indices)} base nodes (pinned)...")
+        restraint_creates = [
+            models.NodeRestraintCreate(
+                node=node_id_map[idx],
+                restraint_code="FFFFFF",
+            )
+            for idx in sorted(base_indices)
+        ]
+        t0 = time.perf_counter()
+        restraint_result = await client.job.structure.node_restraints.bulk.post(
+            restraint_creates)
+        t_restraints = time.perf_counter() - t0
+
+        if restraint_result.errors:
+            print(f"  WARNING: {len(restraint_result.errors)} restraint(s) failed",
+                  file=sys.stderr)
+
+        print(f"  {len(restraint_result.succeeded)} restraints applied in {t_restraints:.2f}s")
+        print()
+
+        # == Save ======================================================
+        print(f"Saving model to: {SAVE_PATH}")
+        await client.job.save.post(
+            models.SaveJobRequest(file_path=SAVE_PATH))
+        print("Project saved.")
+
+    except models.ProblemDetails as pd:
+        print(f"API error {pd.status}: {pd.title}", file=sys.stderr)
+        if pd.detail:
+            print(f"  {pd.detail}", file=sys.stderr)
+        for key, value in (pd.additional_data or {}).items():
+            print(f"  {key}: {value}", file=sys.stderr)
+        return 1
+    except Exception as ex:
+        print(f"Error: {ex}", file=sys.stderr)
+        return 1
+
+    finally:
+        try:
+            print("Closing project...")
+            await client.job.close.post()
+            print("Project closed.")
+        except Exception as close_ex:
+            print(f"Warning: failed to close job: {close_ex}", file=sys.stderr)
+
+    print(f"Total time: {time.perf_counter() - t_total:.2f}s")
+    return 0
 
 
 # -- Geodesic Geometry ---------------------------------------------
@@ -166,7 +308,7 @@ def generate_geodesic_hemisphere(radius: float, frequency: int):
     # -- Hemisphere filter --------------------------------------------
     # Keep vertices with y >= 0 (with tolerance for floating-point).
     # Snap near-zero y values to exactly 0 → these form the base ring.
-    tolerance = 1e-6
+    tolerance = 0.6 / frequency
     keep: dict[int, int] = {}      # old index → new index
     vertices: list[tuple[float, float, float]] = []
     base_indices: set[int] = set()
@@ -201,143 +343,6 @@ def generate_geodesic_hemisphere(radius: float, frequency: int):
             edges.append((keep[a], keep[b]))
 
     return vertices, edges, base_indices
-
-
-# -- Main ----------------------------------------------------------
-
-async def main() -> int:
-    # Validate section choice.
-    if SECTION_NAME not in AVAILABLE_SECTIONS:
-        print(f"Unknown section '{SECTION_NAME}'. Choose from:", file=sys.stderr)
-        for s in AVAILABLE_SECTIONS:
-            print(f"  {s}", file=sys.stderr)
-        return 1
-
-    if not 1 <= FREQUENCY <= 50:
-        print("FREQUENCY must be between 1 and 50.", file=sys.stderr)
-        return 1
-
-    # Generate dome geometry.
-    print(f"Generating geodesic hemisphere (radius={RADIUS}m, frequency={FREQUENCY})...")
-    vertices, edges, base_indices = generate_geodesic_hemisphere(RADIUS, FREQUENCY)
-    print(f"  {len(vertices)} nodes, {len(edges)} members, {len(base_indices)} base restraints")
-    print()
-
-    client = SpaceGassApiClient.create_client("http://localhost:34560")
-
-    try:
-        # == Create a new blank project ================================
-        print("Creating new blank project...")
-        await client.job.new.post()
-        print()
-
-        # == Add material ==============================================
-        print("Adding steel material...")
-        steel = await client.job.structure.materials.library.post(
-            models.MaterialLibraryCreate(library="Aust", name="STEEL"))
-        print(f"  Material {steel.id}: {steel.name}")
-        print()
-
-        # == Add section ===============================================
-        print(f"Adding section: {SECTION_NAME}...")
-        section = await client.job.structure.sections.library.post(
-            models.SectionLibraryCreate(
-                library="Aust300",
-                name=SECTION_NAME,
-                mark="CHS",
-            ))
-        print(f"  Section {section.id}: {section.name}")
-        print()
-
-        # == Bulk-create nodes =========================================
-        print(f"Creating {len(vertices)} nodes (bulk)...")
-        node_creates = [
-            models.NodeCreate(x=round(x, 6), y=round(y, 6), z=round(z, 6))
-            for x, y, z in vertices
-        ]
-        node_result = await client.job.structure.nodes.bulk.post(node_creates)
-
-        if node_result.errors:
-            print(f"  WARNING: {len(node_result.errors)} node(s) failed", file=sys.stderr)
-            for e in node_result.errors[:5]:
-                print(f"    {e}", file=sys.stderr)
-
-        created_nodes = node_result.succeeded
-        print(f"  {len(created_nodes)} nodes created")
-
-        # Build a map from local vertex index → API node Id.
-        node_id_map: dict[int, int] = {}
-        for local_idx, node in enumerate(created_nodes):
-            node_id_map[local_idx] = node.id
-        print()
-
-        # == Bulk-create members =======================================
-        print(f"Creating {len(edges)} members (bulk)...")
-        member_creates = [
-            models.MemberCreate(
-                node_a=node_id_map[a],
-                node_b=node_id_map[b],
-                section=section.id,
-                material=steel.id,
-                type="Normal"
-            )
-            for a, b in edges
-        ]
-        member_result = await client.job.structure.members.bulk.post(member_creates)
-
-        if member_result.errors:
-            print(f"  WARNING: {len(member_result.errors)} member(s) failed", file=sys.stderr)
-            for e in member_result.errors[:5]:
-                print(f"    {e}", file=sys.stderr)
-
-        print(f"  {len(member_result.succeeded)} members created")
-        print()
-
-        # == Bulk-create base restraints ===============================
-        print(f"Restraining {len(base_indices)} base nodes (pinned)...")
-        restraint_creates = [
-            models.NodeRestraintCreate(
-                node=node_id_map[idx],
-                restraint_code="FFFFFF",
-            )
-            for idx in sorted(base_indices)
-        ]
-        restraint_result = await client.job.structure.node_restraints.bulk.post(
-            restraint_creates)
-
-        if restraint_result.errors:
-            print(f"  WARNING: {len(restraint_result.errors)} restraint(s) failed",
-                  file=sys.stderr)
-
-        print(f"  {len(restraint_result.succeeded)} restraints applied")
-        print()
-
-        # == Save ======================================================
-        print(f"Saving model to: {SAVE_PATH}")
-        await client.job.save.post(
-            models.SaveJobRequest(file_path=SAVE_PATH))
-        print("Project saved.")
-
-    except models.ProblemDetails as pd:
-        print(f"API error {pd.status}: {pd.title}", file=sys.stderr)
-        if pd.detail:
-            print(f"  {pd.detail}", file=sys.stderr)
-        for key, value in (pd.additional_data or {}).items():
-            print(f"  {key}: {value}", file=sys.stderr)
-        return 1
-    except Exception as ex:
-        print(f"Error: {ex}", file=sys.stderr)
-        return 1
-
-    finally:
-        try:
-            print("Closing project...")
-            await client.job.close.post()
-            print("Project closed.")
-        except Exception as close_ex:
-            print(f"Warning: failed to close job: {close_ex}", file=sys.stderr)
-
-    return 0
 
 
 if __name__ == "__main__":

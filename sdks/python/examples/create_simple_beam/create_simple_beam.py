@@ -29,16 +29,17 @@ Prerequisites:
 import asyncio
 import os
 import sys
+import winreg
 
 from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
 # -- Configuration ------------------------------------------------
-save_file_path = os.path.join(
-    os.path.expanduser("~/Desktop"),
-    "SpaceGass Examples-py",
-    "SimpleBeam.sg",
-)
+with winreg.OpenKey(winreg.HKEY_CURRENT_USER,
+        r"Software\Microsoft\Windows\CurrentVersion\Explorer\Shell Folders") as _k:
+    _DESKTOP = winreg.QueryValueEx(_k, "Desktop")[0]
+
+save_file_path = os.path.join(_DESKTOP, "SpaceGass Examples-py", "SimpleBeam.sg")
 
 
 async def main() -> int:

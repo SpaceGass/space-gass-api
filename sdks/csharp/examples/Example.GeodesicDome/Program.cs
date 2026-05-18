@@ -9,8 +9,9 @@ using SpaceGassApi.Models;
 // showcasing the bulk creation endpoints for nodes, members,
 // and restraints.
 //
-// The dome is parametric — adjust Radius, Frequency, and
-// SectionName below to change the geometry and member sizing.
+// The dome is parametric — adjust Radius and Frequency below
+// to change the geometry. All 19 CHS sizes are used as sections,
+// assigned by elevation to produce concentric colour bands.
 //
 // Prerequisites:
 //   - SPACE GASS API running locally (default: http://localhost:34560)
@@ -22,10 +23,9 @@ using SpaceGassApi.Models;
 
 const double Radius = 150.0;             // Dome radius in metres
 const int Frequency = 45;                // Subdivision frequency (1-50, higher = more triangles)
-const string SectionName = "273.1x6.4 CHS";  // CHS section (see list below)
-
-// Available CHS sections in Aust300:
-string[] availableSections =
+// All CHS sections from Aust300 — each gets its own colour in SPACE GASS.
+// Assigned to members by elevation so the dome shows concentric colour bands.
+string[] sectionNames =
 [
     "273.1x4.8 CHS",
     "273.1x6.4 CHS",
@@ -55,13 +55,6 @@ var saveFilePath = Path.Combine(
 
 
 // -- Validate inputs -----------------------------------------------
-
-if (!availableSections.Contains(SectionName))
-{
-    Console.Error.WriteLine($"Unknown section '{SectionName}'. Choose from:");
-    foreach (var s in availableSections) Console.Error.WriteLine($"  {s}");
-    return 1;
-}
 
 if (Frequency < 1 || Frequency > 50)
 {
@@ -100,16 +93,16 @@ try
     Console.WriteLine($"  Material {steel!.Id}: {steel.Name}");
     Console.WriteLine();
 
-    // == Add section ===============================================
-    Console.WriteLine($"Adding section: {SectionName}...");
-    var section = await client.Job.Structure.Sections.Library.PostAsync(
-        new SectionLibraryCreate
-        {
-            Library = "Aust300",
-            Name = SectionName,
-            Mark = "CHS",
-        });
-    Console.WriteLine($"  Section {section!.Id}: {section.Name}");
+    // == Add sections (one per CHS size for colour bands) =========
+    Console.WriteLine($"Adding {sectionNames.Length} sections...");
+    var sections = new List<Section>();
+    foreach (var name in sectionNames)
+    {
+        var s = await client.Job.Structure.Sections.Library.PostAsync(
+            new SectionLibraryCreate { Library = "Aust300", Name = name, Mark = "CHS" });
+        sections.Add(s!);
+    }
+    Console.WriteLine($"  {sections.Count} sections added");
     Console.WriteLine();
 
     // == Bulk-create nodes =========================================
@@ -146,14 +139,19 @@ try
     // == Bulk-create members =======================================
     Console.WriteLine($"Creating {edges.Count} members (bulk)...");
 
+    var nSec = sections.Count;
     var memberCreates = edges.Select(e =>
-        new MemberCreate
+    {
+        var midY = (vertices[e.A].Y + vertices[e.B].Y) / 2;
+        var band = Math.Min((int)(midY / Radius * nSec), nSec - 1);
+        return new MemberCreate
         {
             NodeA = nodeIdMap[e.A],
             NodeB = nodeIdMap[e.B],
-            Section = section.Id,
+            Section = sections[band].Id,
             Material = steel.Id,
-        }).ToList();
+        };
+    }).ToList();
 
     var memberTimer = System.Diagnostics.Stopwatch.StartNew();
     var memberResult = await client.Job.Structure.Members.Bulk.PostAsync(memberCreates);
@@ -338,7 +336,7 @@ static (List<(double X, double Y, double Z)> Vertices,
     }
 
     // -- Hemisphere filter ----------------------------------------
-    const double tolerance = 1e-6;
+    var tolerance = 0.6 / frequency;
     var keep = new Dictionary<int, int>();
     var vertices = new List<(double X, double Y, double Z)>();
     var baseIndices = new HashSet<int>();
