@@ -34,10 +34,10 @@ async def main() -> int:
         for node in nodes:
             print(f"  Node {node.id}: ({node.x}, {node.y}, {node.z})")
 
-    except models.ProblemDetails as pd:
-        print(f"API error {pd.status}: {pd.title}", file=sys.stderr)
-        if pd.detail:
-            print(f"  {pd.detail}", file=sys.stderr)
+    except models.ErrorResponse as err:
+        print(f"API error {err.status}: {err.title}", file=sys.stderr)
+        if err.detail:
+            print(f"  {err.detail}", file=sys.stderr)
         return 1
     finally:
         print("Closing project...")

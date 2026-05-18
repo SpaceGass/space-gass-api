@@ -195,13 +195,15 @@ try
         new SaveJobRequest { FilePath = saveFilePath });
     Console.WriteLine("Project saved.");
 }
-catch (ProblemDetails pd)
+catch (ErrorResponse err)
 {
-    Console.Error.WriteLine($"API error {pd.Status}: {pd.Title}");
-    if (pd.Detail != null)
-        Console.Error.WriteLine($"  {pd.Detail}");
-    foreach (var (key, value) in pd.AdditionalData)
-        Console.Error.WriteLine($"  {key}: {value}");
+    Console.Error.WriteLine($"API error {err.Status}: {err.Title}");
+    if (err.Detail != null)
+        Console.Error.WriteLine($"  {err.Detail}");
+    if (err.ErrorCode != null)
+        Console.Error.WriteLine($"  Code: {err.ErrorCode}");
+    foreach (var ve in err.Errors ?? [])
+        Console.Error.WriteLine($"  [{ve.Field}] {ve.Message}");
     return 1;
 }
 catch (Exception ex)

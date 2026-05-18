@@ -178,12 +178,14 @@ async def main() -> int:
             models.SaveJobRequest(file_path=SAVE_PATH))
         print("Project saved.")
 
-    except models.ProblemDetails as pd:
-        print(f"API error {pd.status}: {pd.title}", file=sys.stderr)
-        if pd.detail:
-            print(f"  {pd.detail}", file=sys.stderr)
-        for key, value in (pd.additional_data or {}).items():
-            print(f"  {key}: {value}", file=sys.stderr)
+    except models.ErrorResponse as err:
+        print(f"API error {err.status}: {err.title}", file=sys.stderr)
+        if err.detail:
+            print(f"  {err.detail}", file=sys.stderr)
+        if err.error_code:
+            print(f"  Code: {err.error_code}", file=sys.stderr)
+        for ve in err.errors or []:
+            print(f"  [{ve.field}] {ve.message}", file=sys.stderr)
         return 1
     except Exception as ex:
         print(f"Error: {ex}", file=sys.stderr)

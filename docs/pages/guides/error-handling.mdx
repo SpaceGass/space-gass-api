@@ -3,22 +3,37 @@ title: Error Handling
 description: How the SpaceGass API reports and handles errors
 ---
 
-The API returns structured error responses using the
-[RFC 9457](https://www.rfc-editor.org/rfc/rfc9457) Problem Details
-format. All error responses include a JSON body with diagnostic
+Every error response from the API uses a standard `ErrorResponse`
+envelope. All error responses include a JSON body with diagnostic
 information.
 
 ## Error Response Format
 
 ```json
 {
-  "type": "https://tools.ietf.org/html/rfc9110#section-15.5.1",
   "title": "Bad Request",
   "status": 400,
-  "detail": "Node with key 1 already exists",
-  "traceId": "00-abc123..."
+  "detail": "Node with Id 1 already exists",
+  "errorCode": "DUPLICATE_ENTITY",
+  "errors": [
+    { "field": "id", "message": "Node with Id 1 already exists", "code": "DUPLICATE_ENTITY" }
+  ],
+  "source": "Application",
+  "timestamp": "2026-05-18T10:30:00+10:00"
 }
 ```
+
+| Field | Type | Description |
+|-------|------|-------------|
+| `title` | `string` | Short human-readable summary |
+| `status` | `int` | HTTP status code |
+| `detail` | `string` | Human-readable explanation specific to this occurrence |
+| `errorCode` | `string` | Machine-readable error code for programmatic handling |
+| `errors` | `ValidationError[]` | One entry per failed validation rule (field, message, code) |
+| `source` | `string` | Where the error originated (e.g. `"Application"`, `"Infrastructure"`) |
+| `timestamp` | `string` | ISO 8601 timestamp when the error occurred |
+| `instance` | `string` | URI reference for the specific occurrence |
+| `extensions` | `object` | Additional context-specific data |
 
 ## HTTP Status Codes
 
@@ -31,11 +46,10 @@ information.
 
 ## Handling Errors in SDK Clients
 
-The SDK raises a typed `ProblemDetails` exception that carries the
-fields from the JSON body — `Status`, `Title`, `Detail`, `Type`,
-`Instance`. Catch it directly so you can read those fields rather than
-the generic exception `Message` (which prints
-`Exception of type 'ProblemDetails' was thrown`):
+The SDK raises a typed `ErrorResponse` exception that carries the
+fields from the JSON body — `Status`, `Title`, `Detail`, `ErrorCode`,
+`Errors`, and more. Catch it directly so you can inspect the structured
+error rather than relying on the generic exception message:
 
 <CodeTabs>
 ```csharp title="C#"
@@ -45,26 +59,34 @@ try
 {
     var node = await client.Job.Structure.Nodes[999].GetAsync();
 }
-catch (ProblemDetails pd) when (pd.Status == 404)
+catch (ErrorResponse err) when (err.Status == 404)
 {
-    Console.WriteLine($"Node not found: {pd.Detail}");
+    Console.WriteLine($"Node not found: {err.Detail}");
 }
-catch (ProblemDetails pd)
+catch (ErrorResponse err)
 {
-    Console.WriteLine($"API error {pd.Status} ({pd.Title}): {pd.Detail}");
+    Console.WriteLine($"API error {err.Status} ({err.Title}): {err.Detail}");
+    if (err.ErrorCode != null)
+        Console.WriteLine($"  Code: {err.ErrorCode}");
+    foreach (var ve in err.Errors ?? [])
+        Console.WriteLine($"  [{ve.Field}] {ve.Message}");
 }
 ```
 
 ```python title="Python"
-from space_gass_api.models.problem_details import ProblemDetails
+from space_gass_api.models.error_response import ErrorResponse
 
 try:
     node = await client.job.structure.nodes.by_id(999).get()
-except ProblemDetails as pd:
-    if pd.status == 404:
-        print(f"Node not found: {pd.detail}")
+except ErrorResponse as err:
+    if err.status == 404:
+        print(f"Node not found: {err.detail}")
     else:
-        print(f"API error {pd.status} ({pd.title}): {pd.detail}")
+        print(f"API error {err.status} ({err.title}): {err.detail}")
+        if err.error_code:
+            print(f"  Code: {err.error_code}")
+        for ve in err.errors or []:
+            print(f"  [{ve.field}] {ve.message}")
 ```
 
 ```bash title="curl"
@@ -72,11 +94,10 @@ except ProblemDetails as pd:
 curl -v http://localhost:34560/api/v1/job/structure/nodes/999
 
 # Response (404):
-# {"type":"...","title":"Not Found","status":404,"detail":"Node 999 not found"}
+# {"title":"Not Found","status":404,"detail":"Node 999 not found","errorCode":"NOT_FOUND",...}
 ```
 </CodeTabs>
 
-`ProblemDetails` inherits from Kiota's base `ApiException` (C#) /
+`ErrorResponse` inherits from Kiota's base `ApiException` (C#) /
 `APIError` (Python), so you can still catch the broader type if you
-need to handle non-Problem-Details transport errors (network drops,
-timeouts) the same way.
+need to handle transport errors (network drops, timeouts) the same way.

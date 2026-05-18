@@ -38,7 +38,7 @@ this pattern.
 
 If you call `GET /job/structure/nodes` (or any other entity endpoint)
 without an open job, you'll see a `409 Conflict` with a
-`ProblemDetails` body explaining the active-job requirement. This is
+`ErrorResponse` body explaining the active-job requirement. This is
 the most common error a new user hits. The fix is always: open a job
 first.
 
