@@ -9,8 +9,6 @@ class LoadCategory(Parsable):
     """
     A load category used to group load cases (e.g. dead, live, wind).Includes read-only audit fields (Source, Version, Username) set automatically by the application.
     """
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
     id: Optional[int] = None
     # Notes (supports multi-line text).
@@ -41,7 +39,6 @@ class LoadCategory(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "notes": lambda n : setattr(self, 'notes', n.get_str_value()),
             "source": lambda n : setattr(self, 'source', n.get_str_value()),
@@ -59,7 +56,6 @@ class LoadCategory(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_str_value("notes", self.notes)
         writer.write_str_value("source", self.source)

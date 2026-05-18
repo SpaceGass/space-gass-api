@@ -19,7 +19,6 @@ if TYPE_CHECKING:
     from ....models.load_case import LoadCase
     from ....models.load_case_create import LoadCaseCreate
     from ....models.load_case_type import LoadCaseType
-    from ....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
     from .item.load_cases_item_request_builder import LoadCasesItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
@@ -77,7 +76,6 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
             request_configuration
         )
         from ....models.error_response import ErrorResponse
-        from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "404": ErrorResponse,
@@ -101,12 +99,11 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from ....models.error_response import ErrorResponse
-        from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
-            "409": ProblemDetails,
+            "409": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

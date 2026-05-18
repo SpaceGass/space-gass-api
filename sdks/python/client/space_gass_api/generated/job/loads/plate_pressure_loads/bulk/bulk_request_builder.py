@@ -15,12 +15,11 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.plate_pressure_load_batch_result import PlatePressureLoadBatchResult
+    from .....models.plate_pressure_load_bulk_result import PlatePressureLoadBulkResult
     from .....models.plate_pressure_load_create import PlatePressureLoadCreate
     from .....models.plate_pressure_load_key import PlatePressureLoadKey
-    from .....models.plate_pressure_load_key_batch_result import PlatePressureLoadKeyBatchResult
+    from .....models.plate_pressure_load_key_bulk_result import PlatePressureLoadKeyBulkResult
     from .....models.plate_pressure_load_update import PlatePressureLoadUpdate
-    from .....models.problem_details import ProblemDetails
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -35,12 +34,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/plate-pressure-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[PlatePressureLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[PlatePressureLoadKeyBatchResult]:
+    async def delete(self,body: list[PlatePressureLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[PlatePressureLoadKeyBulkResult]:
         """
         Deletes multiple plate pressure loads. Both case and plate are required for each entry —providing only a case does not delete all pressure loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[PlatePressureLoadKeyBatchResult]
+        Returns: Optional[PlatePressureLoadKeyBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -48,24 +47,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.plate_pressure_load_key_batch_result import PlatePressureLoadKeyBatchResult
+        from .....models.plate_pressure_load_key_bulk_result import PlatePressureLoadKeyBulkResult
 
-        return await self.request_adapter.send_async(request_info, PlatePressureLoadKeyBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, PlatePressureLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[PlatePressureLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PlatePressureLoadBatchResult]:
+    async def patch(self,body: list[PlatePressureLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PlatePressureLoadBulkResult]:
         """
         Updates multiple plate pressure loads. Each item must include case and plate in the body.All load cases referenced must be Primary.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[PlatePressureLoadBatchResult]
+        Returns: Optional[PlatePressureLoadBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -73,17 +71,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.plate_pressure_load_batch_result import PlatePressureLoadBatchResult
+        from .....models.plate_pressure_load_bulk_result import PlatePressureLoadBulkResult
 
-        return await self.request_adapter.send_async(request_info, PlatePressureLoadBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, PlatePressureLoadBulkResult, error_mapping)
     
     async def post(self,body: list[PlatePressureLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
         """
@@ -98,10 +95,9 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

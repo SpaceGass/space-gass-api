@@ -18,7 +18,6 @@ if TYPE_CHECKING:
     from ....models.expand_option import ExpandOption
     from ....models.plate_cut import PlateCut
     from ....models.plate_cut_create import PlateCutCreate
-    from ....models.problem_details import ProblemDetails
     from .bulk.bulk_request_builder import BulkRequestBuilder
     from .item.plate_cuts_item_request_builder import PlateCutsItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
@@ -74,7 +73,6 @@ class PlateCutsRequestBuilder(BaseRequestBuilder):
             request_configuration
         )
         from ....models.error_response import ErrorResponse
-        from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "404": ErrorResponse,
@@ -98,12 +96,11 @@ class PlateCutsRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from ....models.error_response import ErrorResponse
-        from ....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
-            "409": ProblemDetails,
+            "409": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

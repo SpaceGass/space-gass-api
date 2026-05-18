@@ -19,14 +19,6 @@ namespace SpaceGassApi.Models
         public int? Case { get; set; }
         /// <summary>Finish position of the distributed moment along the member.</summary>
         public double? FinishPosition { get; set; }
-        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Guid { get; set; }
-#nullable restore
-#else
-        public string Guid { get; set; }
-#endif
         /// <summary>Load category for grouping/organization.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>The member number.</summary>
@@ -70,7 +62,6 @@ namespace SpaceGassApi.Models
                 { "axes", n => { Axes = n.GetEnumValue<global::SpaceGassApi.Models.LoadAxes>(); } },
                 { "case", n => { Case = n.GetIntValue(); } },
                 { "finishPosition", n => { FinishPosition = n.GetDoubleValue(); } },
-                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
                 { "mxFinish", n => { MxFinish = n.GetDoubleValue(); } },
@@ -94,7 +85,6 @@ namespace SpaceGassApi.Models
             writer.WriteEnumValue<global::SpaceGassApi.Models.LoadAxes>("axes", Axes);
             writer.WriteIntValue("case", Case);
             writer.WriteDoubleValue("finishPosition", FinishPosition);
-            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("loadCategory", LoadCategory);
             writer.WriteIntValue("member", Member);
             writer.WriteDoubleValue("mxFinish", MxFinish);

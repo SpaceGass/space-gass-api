@@ -15,11 +15,10 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from .....models.error_response import ErrorResponse
-    from .....models.member_offset_batch_result import MemberOffsetBatchResult
+    from .....models.member_offset_bulk_result import MemberOffsetBulkResult
     from .....models.member_offset_create import MemberOffsetCreate
     from .....models.member_offset_update import MemberOffsetUpdate
-    from .....models.object_batch_result import ObjectBatchResult
-    from .....models.problem_details import ProblemDetails
+    from .....models.object_bulk_result import ObjectBulkResult
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -34,12 +33,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/member-offsets/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBatchResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBulkResult]:
         """
         Deletes multiple attribute rows by parent Id. The body is a JSON array of integer parent Ids.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ObjectBatchResult]
+        Returns: Optional[ObjectBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -47,24 +46,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.object_batch_result import ObjectBatchResult
+        from .....models.object_bulk_result import ObjectBulkResult
 
-        return await self.request_adapter.send_async(request_info, ObjectBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, ObjectBulkResult, error_mapping)
     
-    async def patch(self,body: list[MemberOffsetUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberOffsetBatchResult]:
+    async def patch(self,body: list[MemberOffsetUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberOffsetBulkResult]:
         """
-        Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a batch error if no row exists for the supplied parent.
+        Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a bulk error if no row exists for the supplied parent.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberOffsetBatchResult]
+        Returns: Optional[MemberOffsetBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -72,24 +70,23 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.member_offset_batch_result import MemberOffsetBatchResult
+        from .....models.member_offset_bulk_result import MemberOffsetBulkResult
 
-        return await self.request_adapter.send_async(request_info, MemberOffsetBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MemberOffsetBulkResult, error_mapping)
     
-    async def post(self,body: list[MemberOffsetCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberOffsetBatchResult]:
+    async def post(self,body: list[MemberOffsetCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberOffsetBulkResult]:
         """
         Creates multiple attribute rows in a single request. Each item must include its parent Idin the body. Returns 409 (per-item error) for any row whose parent already has an attribute.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[MemberOffsetBatchResult]
+        Returns: Optional[MemberOffsetBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -97,17 +94,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
             body, request_configuration
         )
         from .....models.error_response import ErrorResponse
-        from .....models.problem_details import ProblemDetails
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "400": ProblemDetails,
+            "400": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.member_offset_batch_result import MemberOffsetBatchResult
+        from .....models.member_offset_bulk_result import MemberOffsetBulkResult
 
-        return await self.request_adapter.send_async(request_info, MemberOffsetBatchResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, MemberOffsetBulkResult, error_mapping)
     
     def to_delete_request_information(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
@@ -126,7 +122,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: list[MemberOffsetUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> RequestInformation:
         """
-        Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a batch error if no row exists for the supplied parent.
+        Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a bulk error if no row exists for the supplied parent.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -194,7 +190,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPatchQueryParameters():
         """
-        Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a batch error if no row exists for the supplied parent.
+        Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a bulk error if no row exists for the supplied parent.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

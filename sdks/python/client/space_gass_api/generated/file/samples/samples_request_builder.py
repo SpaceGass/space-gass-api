@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
+    from ...models.error_response import ErrorResponse
     from ...models.job_file_preview_info import JobFilePreviewInfo
 
 class SamplesRequestBuilder(BaseRequestBuilder):
@@ -48,11 +49,16 @@ class SamplesRequestBuilder(BaseRequestBuilder):
         request_info = self.to_get_request_information(
             request_configuration
         )
+        from ...models.error_response import ErrorResponse
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "500": ErrorResponse,
+        }
         if not self.request_adapter:
             raise Exception("Http core is null") 
         from ...models.job_file_preview_info import JobFilePreviewInfo
 
-        return await self.request_adapter.send_collection_async(request_info, JobFilePreviewInfo, None)
+        return await self.request_adapter.send_collection_async(request_info, JobFilePreviewInfo, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """

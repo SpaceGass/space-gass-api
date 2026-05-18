@@ -11,8 +11,6 @@ class PrescribedDisplacementUpdate(Parsable):
     """
     # The load case number.
     case: Optional[int] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Load category for grouping/organization.
     load_category: Optional[int] = None
     # The node number.
@@ -48,7 +46,6 @@ class PrescribedDisplacementUpdate(Parsable):
         """
         fields: dict[str, Callable[[Any], None]] = {
             "case": lambda n : setattr(self, 'case', n.get_int_value()),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "node": lambda n : setattr(self, 'node', n.get_int_value()),
             "rx": lambda n : setattr(self, 'rx', n.get_float_value()),
@@ -69,7 +66,6 @@ class PrescribedDisplacementUpdate(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_int_value("case", self.case)
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_int_value("node", self.node)
         writer.write_float_value("rx", self.rx)

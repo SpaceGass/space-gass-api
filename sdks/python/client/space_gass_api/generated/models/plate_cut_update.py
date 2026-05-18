@@ -17,9 +17,7 @@ class PlateCutUpdate(Parsable):
     end_offset_transverse: Optional[float] = None
     # End plate number for the cut.
     end_plate: Optional[int] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
-    # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for batch updates.
+    # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for bulk updates.
     id: Optional[int] = None
     # Out-of-plane tolerance for the cut.
     out_of_plane_tolerance: Optional[float] = None
@@ -55,7 +53,6 @@ class PlateCutUpdate(Parsable):
             "endOffsetLongitudinal": lambda n : setattr(self, 'end_offset_longitudinal', n.get_float_value()),
             "endOffsetTransverse": lambda n : setattr(self, 'end_offset_transverse', n.get_float_value()),
             "endPlate": lambda n : setattr(self, 'end_plate', n.get_int_value()),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "outOfPlaneTolerance": lambda n : setattr(self, 'out_of_plane_tolerance', n.get_float_value()),
             "startNode": lambda n : setattr(self, 'start_node', n.get_int_value()),
@@ -78,7 +75,6 @@ class PlateCutUpdate(Parsable):
         writer.write_float_value("endOffsetLongitudinal", self.end_offset_longitudinal)
         writer.write_float_value("endOffsetTransverse", self.end_offset_transverse)
         writer.write_int_value("endPlate", self.end_plate)
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_float_value("outOfPlaneTolerance", self.out_of_plane_tolerance)
         writer.write_int_value("startNode", self.start_node)

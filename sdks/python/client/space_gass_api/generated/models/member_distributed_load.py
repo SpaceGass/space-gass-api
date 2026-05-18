@@ -31,8 +31,6 @@ class MemberDistributedLoad(Parsable):
     fz_finish: Optional[float] = None
     # Distributed force intensity in Z direction at the start position.
     fz_start: Optional[float] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Load category for grouping/organization.
     load_category: Optional[int] = None
     # The member number this load is applied to.
@@ -76,7 +74,6 @@ class MemberDistributedLoad(Parsable):
             "fyStart": lambda n : setattr(self, 'fy_start', n.get_float_value()),
             "fzFinish": lambda n : setattr(self, 'fz_finish', n.get_float_value()),
             "fzStart": lambda n : setattr(self, 'fz_start', n.get_float_value()),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "positionUnits": lambda n : setattr(self, 'position_units', n.get_enum_value(LoadPositionUnits)),
@@ -102,7 +99,6 @@ class MemberDistributedLoad(Parsable):
         writer.write_float_value("fyStart", self.fy_start)
         writer.write_float_value("fzFinish", self.fz_finish)
         writer.write_float_value("fzStart", self.fz_start)
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_int_value("member", self.member)
         writer.write_enum_value("positionUnits", self.position_units)
