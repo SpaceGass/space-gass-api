@@ -10,8 +10,8 @@ This is the public developer-facing repo for the SPACE GASS API. It contains the
 
 ### Branching
 
-- **Default branch:** `develop` (not `main`)
-- All CI workflows trigger on `develop`
+- **Default branch:** `main`
+- All CI workflows trigger on `main`
 
 ### Licensing
 
@@ -122,7 +122,7 @@ sdks/python/client/
 
 | Workflow | Trigger | Purpose |
 |---|---|---|
-| `deploy-docs.yml` | Push to `develop` | Build Zudoku site and deploy to GitHub Pages |
+| `deploy-docs.yml` | Push to `main` | Build Zudoku site and deploy to GitHub Pages |
 | `generate-clients.yml` | Manual (`workflow_dispatch`) | Run Kiota to regenerate SDK clients |
 | `publish-packages.yml` | GitHub Release published | Publish to NuGet and PyPI |
 

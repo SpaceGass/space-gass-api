@@ -1,6 +1,6 @@
 ---
 name: sync-sdk-after-regen
-description: Use this skill in the space-gass-api repo whenever the OpenAPI spec or the regenerated Kiota SDK clients change — typically right after the `generate-clients` workflow lands a "regenerate SDK clients" commit on `develop`, or any time `descriptions/preview/openapi.json` is updated. It brings the hand-written C# and Python examples, the Zudoku docs pages, and the dynamic code-snippet generator back in line with the new SDK surface. Trigger phrases: "regenerated SDKs", "spec updated", "fix examples after regen", "sync after kiota", "update for new build", or after a commit titled "regenerate SDK clients".
+description: Use this skill in the space-gass-api repo whenever the OpenAPI spec or the regenerated Kiota SDK clients change — typically right after the `generate-clients` workflow lands a "regenerate SDK clients" commit on `main`, or any time `descriptions/preview/openapi.json` is updated. It brings the hand-written C# and Python examples, the Zudoku docs pages, and the dynamic code-snippet generator back in line with the new SDK surface. Trigger phrases: "regenerated SDKs", "spec updated", "fix examples after regen", "sync after kiota", "update for new build", or after a commit titled "regenerate SDK clients".
 ---
 
 # sync-sdk-after-regen

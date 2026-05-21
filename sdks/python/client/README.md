@@ -118,4 +118,4 @@ registration needed.
 
 - [Getting Started](https://api.spacegass.com/docs/)
 - [API Reference](https://api.spacegass.com/docs/api)
-- [Examples](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/python/examples)
+- [Examples](https://github.com/Spacegass/space-gass-api/tree/main/sdks/python/examples)
