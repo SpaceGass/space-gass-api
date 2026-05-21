@@ -7,8 +7,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.QueryRestrainedNode
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.CreateSimpleBeam", "Example.CreateSimpleBeam\Example.CreateSimpleBeam.csproj", "{C7804F4F-E114-465E-9B1E-0F15221BAB6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceGassApi", "..\client\SpaceGassApi\SpaceGassApi.csproj", "{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.RunAnalysis", "Example.RunAnalysis\Example.RunAnalysis.csproj", "{1E37C4AF-EAD8-4471-8388-DA72FE5256D9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.AnalysisMonitor", "Example.AnalysisMonitor\Example.AnalysisMonitor.csproj", "{2FA85D2E-AFE2-495C-9035-56134877857C}"
@@ -55,19 +53,7 @@ Global
 		{C7804F4F-E114-465E-9B1E-0F15221BAB6B}.Release|x64.Build.0 = Release|Any CPU
 		{C7804F4F-E114-465E-9B1E-0F15221BAB6B}.Release|x86.ActiveCfg = Release|Any CPU
 		{C7804F4F-E114-465E-9B1E-0F15221BAB6B}.Release|x86.Build.0 = Release|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Debug|x64.Build.0 = Debug|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Debug|x86.Build.0 = Debug|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Release|Any CPU.Build.0 = Release|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Release|x64.ActiveCfg = Release|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Release|x64.Build.0 = Release|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Release|x86.ActiveCfg = Release|Any CPU
-		{18352BEB-A7D0-43C7-9F0F-B5442A3C2BDE}.Release|x86.Build.0 = Release|Any CPU
-		{1E37C4AF-EAD8-4471-8388-DA72FE5256D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+{1E37C4AF-EAD8-4471-8388-DA72FE5256D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1E37C4AF-EAD8-4471-8388-DA72FE5256D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E37C4AF-EAD8-4471-8388-DA72FE5256D9}.Debug|x64.ActiveCfg = Debug|Any CPU
 		{1E37C4AF-EAD8-4471-8388-DA72FE5256D9}.Debug|x64.Build.0 = Debug|Any CPU

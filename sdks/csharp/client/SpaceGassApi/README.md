@@ -1,6 +1,8 @@
 # SpaceGassApi
 
-Official .NET SDK for the SPACE GASS structural analysis API.
+Official .NET SDK for the SPACE GASS API.
+
+The SPACE GASS API gives you programmatic access to SPACE GASS structural analysis — open or create new job files, read or edit structural entities, run analyses, and query results.
 
 ## Quick Start
 

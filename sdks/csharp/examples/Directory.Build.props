@@ -1,0 +1,27 @@
+<Project>
+
+  <!--
+    SDK reference switch
+    ====================
+    By default, examples build against the local SDK source (ProjectReference).
+    To build against the published NuGet package instead:
+
+      dotnet build -p:UseLocalSdk=false
+
+    In your own project, just add the NuGet package:
+
+      dotnet add package SpaceGassApi
+  -->
+  <PropertyGroup>
+    <UseLocalSdk Condition="'$(UseLocalSdk)' == ''">true</UseLocalSdk>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(UseLocalSdk)' == 'true'">
+    <ProjectReference Include="$(MSBuildThisFileDirectory)..\client\SpaceGassApi\SpaceGassApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(UseLocalSdk)' != 'true'">
+    <PackageReference Include="SpaceGassApi" Version="*-*" />
+  </ItemGroup>
+
+</Project>

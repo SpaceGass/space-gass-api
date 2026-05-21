@@ -11,7 +11,7 @@
     <!-- NuGet package metadata -->
     <PackageId>SpaceGassApi</PackageId>
     <Version>14.50.84</Version>
-    <Description>Official .NET SDK for the SPACE GASS structural analysis API. Auto-generated from the OpenAPI specification with Microsoft Kiota.</Description>
+    <Description>Official .NET SDK for the SPACE GASS API. Auto-generated from the OpenAPI specification with Microsoft Kiota.</Description>
     <Authors>Space Gass Pty Ltd</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://api.spacegass.com/docs/</PackageProjectUrl>
