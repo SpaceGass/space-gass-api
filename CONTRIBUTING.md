@@ -17,17 +17,17 @@ Thank you for your interest in contributing to the SPACE GASS API ecosystem! We 
 ### Examples and Sandbox Scripts
 
 1. Fork this repository
-2. Create a feature branch from `develop`
+2. Create a feature branch from `main`
 3. Add your example in the appropriate `sdks/*/examples/` directory, or create a new folder under `sandbox/`
 4. Ensure your example includes a README explaining what it demonstrates
-5. Open a Pull Request against `develop`
+5. Open a Pull Request against `main`
 
 ### Documentation
 
 1. Fork this repository
 2. Edit or add MDX pages under `docs/pages/`
 3. Test locally with `cd docs && npm run dev`
-4. Open a Pull Request against `develop`
+4. Open a Pull Request against `main`
 
 ### Bug Reports and Feature Requests
 

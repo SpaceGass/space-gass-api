@@ -31,3 +31,6 @@ Issues = "https://github.com/Spacegass/space-gass-api/issues"
 [tool.setuptools.packages.find]
 include = ["space_gass_api*"]
 namespaces = true
+
+[tool.setuptools.package-data]
+space_gass_api = ["py.typed", "*.pyi"]

@@ -25,4 +25,4 @@ await client.Job.Close.PostAsync();
 
 - [Getting Started](https://api.spacegass.com/docs/)
 - [API Reference](https://api.spacegass.com/docs/api)
-- [Examples](https://github.com/Spacegass/space-gass-api/tree/develop/sdks/csharp/examples)
+- [Examples](https://github.com/Spacegass/space-gass-api/tree/main/sdks/csharp/examples)

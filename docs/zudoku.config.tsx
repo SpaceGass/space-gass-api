@@ -394,7 +394,7 @@ const config: ZudokuConfig = {
     publishMarkdown: true,
     defaultOptions: {
       suggestEdit: {
-        url: "https://github.com/Spacegass/space-gass-api/edit/develop/docs/pages",
+        url: "https://github.com/Spacegass/space-gass-api/edit/main/docs/pages",
       },
     },
   },

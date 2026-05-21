@@ -4,9 +4,62 @@ on:
   release:
     types: [published]
 
+permissions:
+  contents: read
+
 jobs:
-  publish-nuget:
+  prepare:
     runs-on: ubuntu-latest
+    outputs:
+      nuget-version: ${{ steps.version.outputs.nuget }}
+      pypi-version: ${{ steps.version.outputs.pypi }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Resolve versions from spec and release tag
+        id: version
+        run: |
+          BASE=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/openapi.json)
+          if [ -z "$BASE" ] || [ "$BASE" = "null" ]; then
+            echo "::error::info.x-space-gass-build is missing from descriptions/preview/openapi.json"
+            exit 1
+          fi
+
+          TAG="${{ github.event.release.tag_name }}"
+          TAG_VERSION="${TAG#v}"
+
+          if [[ "$TAG_VERSION" != "$BASE"* ]]; then
+            echo "::error::Release tag '$TAG' does not start with spec version '$BASE'"
+            exit 1
+          fi
+
+          SUFFIX="${TAG_VERSION#$BASE}"
+
+          NUGET="${BASE}${SUFFIX}"
+
+          if [ -z "$SUFFIX" ]; then
+            PYPI="$BASE"
+          else
+            PYPI=$(echo "${BASE}${SUFFIX}" | sed -E \
+              's/-alpha\.([0-9]+)/a\1/; s/-beta\.([0-9]+)/b\1/; s/-rc\.([0-9]+)/rc\1/')
+          fi
+
+          echo "nuget=$NUGET" >> "$GITHUB_OUTPUT"
+          echo "pypi=$PYPI" >> "$GITHUB_OUTPUT"
+
+          echo "### Versions" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Target | Version |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|--------|---------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Spec base | \`$BASE\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Release tag | \`$TAG\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| NuGet | \`$NUGET\` |" >> "$GITHUB_STEP_SUMMARY"
+          echo "| PyPI | \`$PYPI\` |" >> "$GITHUB_STEP_SUMMARY"
+
+  publish-nuget:
+    needs: prepare
+    runs-on: ubuntu-latest
+    environment: publish
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -16,34 +69,26 @@ jobs:
         with:
           dotnet-version: "8.0.x"
 
-      - name: Extract version from spec
-        id: version
-        run: |
-          VERSION=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/openapi.json)
-          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
-            echo "::error::info.x-space-gass-build is missing from descriptions/preview/openapi.json"
-            exit 1
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
       - name: Restore dependencies
         working-directory: sdks/csharp/client
         run: dotnet restore
 
       - name: Build
         working-directory: sdks/csharp/client
-        run: dotnet build --configuration Release --no-restore -p:Version=${{ steps.version.outputs.version }}
+        run: dotnet build --configuration Release --no-restore -p:Version=${{ needs.prepare.outputs.nuget-version }}
 
       - name: Pack
         working-directory: sdks/csharp/client
-        run: dotnet pack --configuration Release --no-build -p:PackageVersion=${{ steps.version.outputs.version }} -o ./nupkg
+        run: dotnet pack --configuration Release --no-build -p:PackageVersion=${{ needs.prepare.outputs.nuget-version }} -o ./nupkg
 
       - name: Push to NuGet
         working-directory: sdks/csharp/client
-        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
   publish-pypi:
+    needs: prepare
     runs-on: ubuntu-latest
+    environment: publish
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -53,23 +98,13 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Extract version from spec
-        id: version
-        run: |
-          VERSION=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/openapi.json)
-          if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
-            echo "::error::info.x-space-gass-build is missing from descriptions/preview/openapi.json"
-            exit 1
-          fi
-          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
-
       - name: Install build tools
         run: pip install build twine
 
       - name: Update version in pyproject.toml
         working-directory: sdks/python/client
         run: |
-          sed -i "s/^version = .*/version = \"${{ steps.version.outputs.version }}\"/" pyproject.toml
+          sed -i "s/^version = .*/version = \"${{ needs.prepare.outputs.pypi-version }}\"/" pyproject.toml
 
       - name: Build wheel
         working-directory: sdks/python/client
