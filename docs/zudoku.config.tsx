@@ -314,6 +314,7 @@ const config: ZudokuConfig = {
         "getting-started/quick-start",
         "getting-started/concepts",
         "getting-started/using-the-sdk",
+        "guides/licensing",
         "getting-started/support",
       ],
     },
@@ -360,7 +361,6 @@ const config: ZudokuConfig = {
         "guides/bulk-operations",
         "guides/error-handling",
         "guides/versioning",
-        "guides/licensing",
       ],
     },
     {
