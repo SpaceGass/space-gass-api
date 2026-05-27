@@ -33,6 +33,7 @@ import winreg
 
 from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
+from space_gass_api.utils import to_filter_string
 
 # -- Configuration ------------------------------------------------
 with winreg.OpenKey(winreg.HKEY_CURRENT_USER,
@@ -263,7 +264,7 @@ async def main() -> int:
         # == Step 15 — Query reactions =================================
         print("Querying ULS reactions...")
         reactions = await client.job.query.analysis.static.node_reactions.get(
-            cases=str(uls_case.id),
+            cases=to_filter_string([uls_case.id]),
         )
 
         if reactions.warnings and reactions.warnings.cases_not_analyzed:
@@ -279,8 +280,8 @@ async def main() -> int:
 
         # == Step 16 — Maximum ULS bending moment ======================
         uls_forces = await client.job.query.analysis.static.member_intermediate_forces.get(
-            cases=str(uls_case.id),
-            members=str(member.id),
+            cases=to_filter_string([uls_case.id]),
+            members=to_filter_string([member.id]),
         )
 
         beam_forces = uls_forces.results[0]
@@ -289,8 +290,8 @@ async def main() -> int:
 
         # == Step 17 — Maximum SLS deflection ==========================
         sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.get(
-            cases=str(sls_case.id),
-            members=str(member.id),
+            cases=to_filter_string([sls_case.id]),
+            members=to_filter_string([member.id]),
         )
 
         beam_displacements = sls_displacements.results[0]
