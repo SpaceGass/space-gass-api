@@ -1,5 +1,6 @@
 using SpaceGassApi;
 using SpaceGassApi.Models;
+using SpaceGassApi.Utils;
 
 
 // ---------------------------------------------------------------
@@ -259,7 +260,7 @@ try
     // == Step 15 — Query reactions =================================
     Console.WriteLine("Querying ULS reactions...");
     var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
-        config => config.QueryParameters.Cases = $"{ulsCase.Id}");
+        config => config.QueryParameters.Cases = new[] { ulsCase.Id!.Value }.ToFilterString());
 
     if (reactions!.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
     {
@@ -278,8 +279,8 @@ try
     var ulsForces = await client.Job.Query.Analysis.Static.MemberIntermediateForces
         .GetAsync(config =>
         {
-            config.QueryParameters.Cases   = $"{ulsCase.Id}";
-            config.QueryParameters.Members = $"{member.Id}";
+            config.QueryParameters.Cases   = new[] { ulsCase.Id!.Value }.ToFilterString();
+            config.QueryParameters.Members = new[] { member.Id!.Value }.ToFilterString();
         });
 
     var beamForces = ulsForces!.Results!.First();
@@ -290,8 +291,8 @@ try
     var slsDisplacements = await client.Job.Query.Analysis.Static.MemberIntermediateDisplacements
         .GetAsync(config =>
         {
-            config.QueryParameters.Cases   = $"{slsCase.Id}";
-            config.QueryParameters.Members = $"{member.Id}";
+            config.QueryParameters.Cases   = new[] { slsCase.Id!.Value }.ToFilterString();
+            config.QueryParameters.Members = new[] { member.Id!.Value }.ToFilterString();
         });
 
     var beamDisplacements = slsDisplacements!.Results!.First();

@@ -17,6 +17,7 @@ import sys
 
 from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
+from space_gass_api.utils import to_filter_string
 
 # -- Configuration ------------------------------------------------
 # Update this path to match your local environment.
@@ -55,8 +56,7 @@ async def main() -> int:
             print()
             print("Retrieving reactions for restrained nodes...")
 
-            # Nodes filter uses SG list format (e.g. "1,5-10") — comma-separated Ids works for an arbitrary set.
-            node_filter = ",".join(str(n.id) for n in restrained_nodes if n.id is not None)
+            node_filter = to_filter_string(n.id for n in restrained_nodes if n.id is not None)
 
             reaction_result = await client.job.query.analysis.static.node_reactions.get(
                 nodes=node_filter,

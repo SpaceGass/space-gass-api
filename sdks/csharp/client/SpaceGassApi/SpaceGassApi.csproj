@@ -1,11 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
     <RootNamespace>SpaceGassApi</RootNamespace>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
     <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
 
     <!-- NuGet package metadata -->
@@ -30,6 +29,7 @@
   <ItemGroup>
     <Compile Include="Generated\**\*.cs" />
     <Compile Include="SpaceGassApiClient.cs" />
+    <Compile Include="Utils\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>

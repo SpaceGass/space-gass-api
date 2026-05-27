@@ -1,5 +1,6 @@
 using SpaceGassApi;
 using SpaceGassApi.Models;
+using SpaceGassApi.Utils;
 
 
 // ---------------------------------------------------------------
@@ -56,8 +57,7 @@ try
         Console.WriteLine();
         Console.WriteLine("Retrieving reactions for restrained nodes...");
 
-        // Nodes filter uses SG list format (e.g. "1,5-10") — comma-separated Ids works for an arbitrary set.
-        var nodeFilter = string.Join(",", restrainedNodes.Where(n => n.Id != null).Select(n => n.Id!.Value));
+        var nodeFilter = restrainedNodes.Where(n => n.Id != null).Select(n => n.Id!.Value).ToFilterString();
 
         var reactionResult = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(config =>
             config.QueryParameters.Nodes = nodeFilter);
