@@ -20,6 +20,7 @@ if TYPE_CHECKING:
     from .close.close_request_builder import CloseRequestBuilder
     from .data.data_request_builder import DataRequestBuilder
     from .errors.errors_request_builder import ErrorsRequestBuilder
+    from .filters.filters_request_builder import FiltersRequestBuilder
     from .headings.headings_request_builder import HeadingsRequestBuilder
     from .import_.import_request_builder import ImportRequestBuilder
     from .loads.loads_request_builder import LoadsRequestBuilder
@@ -59,6 +60,7 @@ class JobRequestBuilder(BaseRequestBuilder):
         from ..models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -123,6 +125,15 @@ class JobRequestBuilder(BaseRequestBuilder):
         from .errors.errors_request_builder import ErrorsRequestBuilder
 
         return ErrorsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def filters(self) -> FiltersRequestBuilder:
+        """
+        The filters property
+        """
+        from .filters.filters_request_builder import FiltersRequestBuilder
+
+        return FiltersRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def headings(self) -> HeadingsRequestBuilder:

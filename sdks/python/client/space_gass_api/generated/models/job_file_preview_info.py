@@ -14,8 +14,6 @@ class JobFilePreviewInfo(Parsable):
     compression: Optional[str] = None
     # Computer name where the file was saved
     computer_name: Optional[str] = None
-    # Whether metadata was available in the file.Older files may not have this data appended.
-    data_available: Optional[bool] = None
     # Date and time the file was saved
     date_saved: Optional[str] = None
     # The designer name when the file was saved
@@ -66,7 +64,6 @@ class JobFilePreviewInfo(Parsable):
         fields: dict[str, Callable[[Any], None]] = {
             "compression": lambda n : setattr(self, 'compression', n.get_str_value()),
             "computerName": lambda n : setattr(self, 'computer_name', n.get_str_value()),
-            "dataAvailable": lambda n : setattr(self, 'data_available', n.get_bool_value()),
             "dateSaved": lambda n : setattr(self, 'date_saved', n.get_str_value()),
             "designer": lambda n : setattr(self, 'designer', n.get_str_value()),
             "fileName": lambda n : setattr(self, 'file_name', n.get_str_value()),
@@ -95,7 +92,6 @@ class JobFilePreviewInfo(Parsable):
             raise TypeError("writer cannot be null.")
         writer.write_str_value("compression", self.compression)
         writer.write_str_value("computerName", self.computer_name)
-        writer.write_bool_value("dataAvailable", self.data_available)
         writer.write_str_value("dateSaved", self.date_saved)
         writer.write_str_value("designer", self.designer)
         writer.write_str_value("fileName", self.file_name)

@@ -9,10 +9,10 @@ class BucklingEffectiveLength(Parsable):
     """
     Buckling effective length result (FileId 217).
     """
-    # Load case ID.
-    case: Optional[int] = None
     # Member length. Unit: Length (see GET /job/units).
     length: Optional[float] = None
+    # Load case ID.
+    load_case: Optional[int] = None
     # Effective length about Y axis. Unit: Length (see GET /job/units).
     ly: Optional[float] = None
     # Effective length about Z axis. Unit: Length (see GET /job/units).
@@ -41,8 +41,8 @@ class BucklingEffectiveLength(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "length": lambda n : setattr(self, 'length', n.get_float_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "ly": lambda n : setattr(self, 'ly', n.get_float_value()),
             "lz": lambda n : setattr(self, 'lz', n.get_float_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
@@ -59,8 +59,8 @@ class BucklingEffectiveLength(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
         writer.write_float_value("length", self.length)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_float_value("ly", self.ly)
         writer.write_float_value("lz", self.lz)
         writer.write_int_value("member", self.member)

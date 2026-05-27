@@ -170,7 +170,7 @@ try
         // Print first few reactions as a sample
         foreach (var r in reactions.Take(3))
         {
-            Console.WriteLine($"    Node {r.Node}, LC {r.Case}: " +
+            Console.WriteLine($"    Node {r.Node}, LC {r.LoadCase}: " +
                 $"FX={r.Fx:F2}, FY={r.Fy:F2}, FZ={r.Fz:F2}");
         }
         if (reactions.Count > 3)

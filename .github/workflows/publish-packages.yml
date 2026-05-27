@@ -20,9 +20,9 @@ jobs:
       - name: Resolve versions from spec and release tag
         id: version
         run: |
-          BASE=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/openapi.json)
+          BASE=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/SpaceGassApi.json)
           if [ -z "$BASE" ] || [ "$BASE" = "null" ]; then
-            echo "::error::info.x-space-gass-build is missing from descriptions/preview/openapi.json"
+            echo "::error::info.x-space-gass-build is missing from descriptions/preview/SpaceGassApi.json"
             exit 1
           fi
 
@@ -128,9 +128,9 @@ jobs:
   #     - name: Extract version from spec
   #       id: version
   #       run: |
-  #         VERSION=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/openapi.json)
+  #         VERSION=$(jq -r '.info["x-space-gass-build"]' descriptions/preview/SpaceGassApi.json)
   #         if [ -z "$VERSION" ] || [ "$VERSION" = "null" ]; then
-  #           echo "::error::info.x-space-gass-build is missing from descriptions/preview/openapi.json"
+  #           echo "::error::info.x-space-gass-build is missing from descriptions/preview/SpaceGassApi.json"
   #           exit 1
   #         fi
   #         echo "version=$VERSION" >> "$GITHUB_OUTPUT"

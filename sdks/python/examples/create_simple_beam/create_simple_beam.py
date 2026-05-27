@@ -139,7 +139,7 @@ async def main() -> int:
         print("Applying self-weight load...")
         await client.job.loads.self_weight_loads.post(
             models.SelfWeightLoadCreate(
-                case=self_weight_case.id,
+                load_case=self_weight_case.id,
                 acceleration_x=0.0,
                 acceleration_y=-1.0,    # 1 G downward
                 acceleration_z=0.0,
@@ -151,7 +151,7 @@ async def main() -> int:
         print("Applying 2 kN/m dead load across the span...")
         await client.job.loads.member_distributed_loads.post(
             models.MemberDistributedLoadCreate(
-                case=dead_case.id,
+                load_case=dead_case.id,
                 member=member.id,
                 position_units=models.LoadPositionUnits.Percent,
                 start_position=0.0,
@@ -166,7 +166,7 @@ async def main() -> int:
         print("Applying 5 kN/m live load across the span...")
         await client.job.loads.member_distributed_loads.post(
             models.MemberDistributedLoadCreate(
-                case=live_case.id,
+                load_case=live_case.id,
                 member=member.id,
                 position_units=models.LoadPositionUnits.Percent,
                 start_position=0.0,
@@ -189,9 +189,9 @@ async def main() -> int:
                 title="ULS - Strength",
                 # ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
                 combination_items=[
-                    models.CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.2),
-                    models.CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.2),
-                    models.CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=1.5),
+                    models.CombinationLoadCaseItem(load_case=self_weight_case.id, multiplying_factor=1.2),
+                    models.CombinationLoadCaseItem(load_case=dead_case.id,        multiplying_factor=1.2),
+                    models.CombinationLoadCaseItem(load_case=live_case.id,        multiplying_factor=1.5),
                 ],
             ),
         )
@@ -202,9 +202,9 @@ async def main() -> int:
                 title="SLS - Short-term Deflection",
                 # SLS short-term: 1.0 G + 0.7 Q
                 combination_items=[
-                    models.CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.0),
-                    models.CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.0),
-                    models.CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=0.7),
+                    models.CombinationLoadCaseItem(load_case=self_weight_case.id, multiplying_factor=1.0),
+                    models.CombinationLoadCaseItem(load_case=dead_case.id,        multiplying_factor=1.0),
+                    models.CombinationLoadCaseItem(load_case=live_case.id,        multiplying_factor=0.7),
                 ],
             ),
         )
@@ -264,23 +264,23 @@ async def main() -> int:
         # == Step 15 — Query reactions =================================
         print("Querying ULS reactions...")
         reactions = await client.job.query.analysis.static.node_reactions.get(
-            cases=to_filter_string([uls_case.id]),
+            load_cases=to_filter_string([uls_case.id]),
         )
 
-        if reactions.warnings and reactions.warnings.cases_not_analyzed:
+        if reactions.warnings and reactions.warnings.load_cases_not_analyzed:
             raise RuntimeError(
-                f"Cases not analysed: {reactions.warnings.cases_not_analyzed}. "
+                f"Cases not analysed: {reactions.warnings.load_cases_not_analyzed}. "
                 "Run the analysis first.")
 
         for r in reactions.results:
             print(
-                f"  Node {r.node}, LC {r.case}: "
+                f"  Node {r.node}, LC {r.load_case}: "
                 f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
         print()
 
         # == Step 16 — Maximum ULS bending moment ======================
         uls_forces = await client.job.query.analysis.static.member_intermediate_forces.get(
-            cases=to_filter_string([uls_case.id]),
+            load_cases=to_filter_string([uls_case.id]),
             members=to_filter_string([member.id]),
         )
 
@@ -290,7 +290,7 @@ async def main() -> int:
 
         # == Step 17 — Maximum SLS deflection ==========================
         sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.get(
-            cases=to_filter_string([sls_case.id]),
+            load_cases=to_filter_string([sls_case.id]),
             members=to_filter_string([member.id]),
         )
 

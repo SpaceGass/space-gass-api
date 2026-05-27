@@ -10,7 +10,7 @@ class PlateStress(Parsable):
     Plate stress result for a specific load case (FileId 208).
     """
     # Load case ID.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # Principal angle at bottom surface. Unit: Rotation (see GET /job/units).
     pa_btm: Optional[float] = None
     # Principal angle at top surface. Unit: Rotation (see GET /job/units).
@@ -67,7 +67,7 @@ class PlateStress(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "paBtm": lambda n : setattr(self, 'pa_btm', n.get_float_value()),
             "paTop": lambda n : setattr(self, 'pa_top', n.get_float_value()),
             "plate": lambda n : setattr(self, 'plate', n.get_int_value()),
@@ -98,7 +98,7 @@ class PlateStress(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_float_value("paBtm", self.pa_btm)
         writer.write_float_value("paTop", self.pa_top)
         writer.write_int_value("plate", self.plate)

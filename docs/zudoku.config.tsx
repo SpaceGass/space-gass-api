@@ -4,7 +4,7 @@ import type { ZudokuConfig } from "zudoku";
 // Build version — sourced from `info.x-space-gass-build` in the spec at
 // build time so the API reference label always tracks the current SDK
 // build (e.g. "Preview (build 14.50.75)") without manual updates.
-import openapiSpec from "../descriptions/preview/openapi.json";
+import openapiSpec from "../descriptions/preview/SpaceGassApi.json";
 const SPACE_GASS_BUILD: string =
   ((openapiSpec as { info?: { ["x-space-gass-build"]?: string } }).info?.[
     "x-space-gass-build"
@@ -39,10 +39,29 @@ function singularize(word: string): string {
 const BODY_TYPE_OVERRIDES: Record<string, string> = {
   "POST /job/structure/sections": "SectionUserCreate",
   "POST /job/structure/sections/library": "SectionLibraryCreate",
+  "PUT /job/structure/sections/{id}/library": "SectionLibraryCreate",
   "POST /job/structure/materials/library": "MaterialLibraryCreate",
+  "PUT /job/structure/materials/{id}/library": "MaterialLibraryCreate",
   "POST /job/loads/combination-load-cases": "CombinationLoadCaseCreate",
   "PATCH /job/loads/combination-load-cases/{id}": "CombinationLoadCaseUpdate",
   "POST /job/structure/node-restraints/set-general": "SetGeneralRestraintRequest",
+  "PATCH /job/structure/members/{id}/releases": "MemberReleaseUpdate",
+  "PATCH /job/headings": "JobHeadingsUpdate",
+  "POST /job/open": "OpenJobRequest",
+  "POST /job/open-sample": "OpenSampleRequest",
+  "POST /job/save": "SaveJobRequest",
+  "POST /service/mode": "ApiModeUpdate",
+  "POST /job/loads/node-displacements": "PrescribedDisplacementCreate",
+  "PATCH /job/loads/node-displacements/{caseId}/{nodeId}": "PrescribedDisplacementUpdate",
+  "PATCH /job/loads/thermal-loads/member/{caseId}/{memberId}": "ThermalLoadUpdate",
+  "PATCH /job/loads/thermal-loads/plate/{caseId}/{plateId}": "ThermalLoadUpdate",
+  "POST /job/analysis/static/run-linear": "StaticSettingsUpdate",
+  "POST /job/analysis/static/run-non-linear": "StaticSettingsUpdate",
+  "POST /job/analysis/buckling/run": "BucklingSettingsUpdate",
+  "POST /job/analysis/dynamic-frequency/run": "DynamicFrequencySettingsUpdate",
+  "PATCH /job/analysis/static/settings": "StaticSettingsUpdate",
+  "PATCH /job/analysis/buckling/settings": "BucklingSettingsUpdate",
+  "PATCH /job/analysis/dynamic-frequency/settings": "DynamicFrequencySettingsUpdate",
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -295,6 +314,7 @@ const config: ZudokuConfig = {
         "getting-started/quick-start",
         "getting-started/concepts",
         "getting-started/using-the-sdk",
+        "guides/licensing",
         "getting-started/support",
       ],
     },
@@ -323,6 +343,7 @@ const config: ZudokuConfig = {
             "guides/examples/recipes/run-linear-static-analysis",
             "guides/examples/recipes/reactions-for-restrained-nodes",
             "guides/examples/recipes/filter-results-by-case",
+            "guides/examples/recipes/switch-to-readonly",
           ],
         },
       ],
@@ -340,7 +361,6 @@ const config: ZudokuConfig = {
         "guides/bulk-operations",
         "guides/error-handling",
         "guides/versioning",
-        "guides/licensing",
       ],
     },
     {
@@ -359,7 +379,7 @@ const config: ZudokuConfig = {
   apis: [
     {
       type: "file",
-      input: "../descriptions/preview/openapi.json",
+      input: "../descriptions/preview/SpaceGassApi.json",
       path: "/api",
       label: `Preview (build ${SPACE_GASS_BUILD})`,
       options: {
@@ -380,7 +400,7 @@ const config: ZudokuConfig = {
     // Future versions:
     // {
     //   type: "file",
-    //   input: "../descriptions/archive/v14.6.0/openapi.json",
+    //   input: "../descriptions/archive/v14.6.0/SpaceGassApi.json",
     //   path: "/api",
     //   label: "14.6.0",
     //   options: { ... },

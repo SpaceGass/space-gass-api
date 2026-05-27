@@ -35,7 +35,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/load-cases{?Cases*,Expand*,Limit*,Offset*,TitleSearch*,Type*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/load-cases{?Expand*,Limit*,LoadCases*,Offset*,TitleSearch*,Type*}", path_parameters)
     
     def by_id(self,id: int) -> LoadCasesItemRequestBuilder:
         """
@@ -56,9 +56,9 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
     async def get(
         self,
         *,
-        cases: Optional[str] = None,
         expand: Optional[ExpandOption] = None,
         limit: Optional[int] = None,
+        load_cases: Optional[str] = None,
         offset: Optional[int] = None,
         title_search: Optional[str] = None,
         type: Optional[LoadCaseType] = None,
@@ -78,6 +78,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
         from ....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -102,6 +103,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
             "409": ErrorResponse,
         }
@@ -187,12 +189,12 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "cases":
-                return "Cases"
             if original_name == "expand":
                 return "Expand"
             if original_name == "limit":
                 return "Limit"
+            if original_name == "load_cases":
+                return "LoadCases"
             if original_name == "offset":
                 return "Offset"
             if original_name == "title_search":
@@ -201,14 +203,14 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
                 return "Type"
             return original_name
         
-        # Load case Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all load cases.
-        cases: Optional[str] = None
-
         # Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items on combination cases.
         expand: Optional[ExpandOption] = None
 
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
+
+        # Load case Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all load cases.
+        load_cases: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None

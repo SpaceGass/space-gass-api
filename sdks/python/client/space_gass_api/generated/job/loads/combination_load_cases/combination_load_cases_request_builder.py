@@ -35,7 +35,7 @@ class CombinationLoadCasesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/combination-load-cases{?Cases*,Expand*,Limit*,Offset*,TitleSearch*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/combination-load-cases{?Expand*,Limit*,LoadCases*,Offset*,TitleSearch*}", path_parameters)
     
     def by_combination_case_id(self,combination_case_id: int) -> CombinationCaseItemRequestBuilder:
         """
@@ -56,9 +56,9 @@ class CombinationLoadCasesRequestBuilder(BaseRequestBuilder):
     async def get(
         self,
         *,
-        cases: Optional[str] = None,
         expand: Optional[ExpandOption] = None,
         limit: Optional[int] = None,
+        load_cases: Optional[str] = None,
         offset: Optional[int] = None,
         title_search: Optional[str] = None,
     ) -> Optional[list[LoadCase]]: ...
@@ -77,6 +77,7 @@ class CombinationLoadCasesRequestBuilder(BaseRequestBuilder):
         from ....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -101,6 +102,7 @@ class CombinationLoadCasesRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
             "409": ErrorResponse,
         }
@@ -195,26 +197,26 @@ class CombinationLoadCasesRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "cases":
-                return "Cases"
             if original_name == "expand":
                 return "Expand"
             if original_name == "limit":
                 return "Limit"
+            if original_name == "load_cases":
+                return "LoadCases"
             if original_name == "offset":
                 return "Offset"
             if original_name == "title_search":
                 return "TitleSearch"
             return original_name
         
-        # Combination case Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all combination cases.
-        cases: Optional[str] = None
-
         # Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items.
         expand: Optional[ExpandOption] = None
 
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
+
+        # Combination case Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all combination cases.
+        load_cases: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None

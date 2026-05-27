@@ -9,14 +9,14 @@ class NodeReaction(Parsable):
     """
     Node reaction result for a specific load case (FileId 205).
     """
-    # Load case ID.
-    case: Optional[int] = None
     # Reaction force in X direction. Unit: Force (see GET /job/units).
     fx: Optional[float] = None
     # Reaction force in Y direction. Unit: Force (see GET /job/units).
     fy: Optional[float] = None
     # Reaction force in Z direction. Unit: Force (see GET /job/units).
     fz: Optional[float] = None
+    # Load case ID.
+    load_case: Optional[int] = None
     # Reaction moment about X axis. Unit: Moment (see GET /job/units).
     mx: Optional[float] = None
     # Reaction moment about Y axis. Unit: Moment (see GET /job/units).
@@ -43,10 +43,10 @@ class NodeReaction(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "fx": lambda n : setattr(self, 'fx', n.get_float_value()),
             "fy": lambda n : setattr(self, 'fy', n.get_float_value()),
             "fz": lambda n : setattr(self, 'fz', n.get_float_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "mx": lambda n : setattr(self, 'mx', n.get_float_value()),
             "my": lambda n : setattr(self, 'my', n.get_float_value()),
             "mz": lambda n : setattr(self, 'mz', n.get_float_value()),
@@ -62,10 +62,10 @@ class NodeReaction(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
         writer.write_float_value("fx", self.fx)
         writer.write_float_value("fy", self.fy)
         writer.write_float_value("fz", self.fz)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_float_value("mx", self.mx)
         writer.write_float_value("my", self.my)
         writer.write_float_value("mz", self.mz)

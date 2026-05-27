@@ -13,8 +13,6 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberIntermediateForce : IParsable
     {
-        /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
         /// <summary>Axial force at each station. Unit: Force (see GET /job/units).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -39,6 +37,8 @@ namespace SpaceGassApi.Models
 #else
         public List<float?> Fz { get; set; }
 #endif
+        /// <summary>Load case ID.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>Distance along member at each station. Unit: Length (see GET /job/units).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -99,10 +99,10 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "fx", n => { Fx = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "fy", n => { Fy = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "fz", n => { Fz = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "location", n => { Location = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
                 { "mx", n => { Mx = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
@@ -118,10 +118,10 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
             writer.WriteCollectionOfPrimitiveValues<float?>("fx", Fx);
             writer.WriteCollectionOfPrimitiveValues<float?>("fy", Fy);
             writer.WriteCollectionOfPrimitiveValues<float?>("fz", Fz);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteCollectionOfPrimitiveValues<float?>("location", Location);
             writer.WriteIntValue("member", Member);
             writer.WriteCollectionOfPrimitiveValues<float?>("mx", Mx);

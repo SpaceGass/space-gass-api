@@ -39,6 +39,7 @@ namespace SpaceGassApi.Job.Close
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobState"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -52,6 +53,7 @@ namespace SpaceGassApi.Job.Close
             var requestInfo = ToPostRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobState>(requestInfo, global::SpaceGassApi.Models.JobState.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);

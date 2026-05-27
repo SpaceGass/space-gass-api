@@ -1,0 +1,124 @@
+---
+title: Switch to readonly mode
+description: Release the SPACE GASS license seat so other users or instances can use it while you query results
+---
+
+The API runs in **readwrite** mode by default, holding a full SPACE GASS
+license seat. If you only need to query results, switch to **readonly**
+mode to release the seat — freeing it for the desktop application or
+another API instance.
+
+Readonly mode must be set **before** opening a job. If a job is already
+open, you must close it first — the mode switch is queued until the job
+closes.
+
+## Switch to readonly, open, query, close
+
+The snippet below switches to readonly, opens a sample project, queries
+node reactions from a previous analysis, then closes the job. Because
+the mode was set before opening, the API never acquires a SPACE GASS
+license seat.
+
+<CodeTabs>
+```csharp title="C#"
+using SpaceGassApi;
+using SpaceGassApi.Models;
+
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
+
+// Switch to readonly before opening — no SPACE GASS seat consumed
+await client.Service.Mode.PostAsync(
+    new ApiModeUpdate { Mode = "readonly" });
+
+try
+{
+    await client.Job.OpenSample.PostAsync(
+        new OpenSampleRequest { FileName = "Portal Frame.SG" });
+
+    // Query existing analysis results (read-only operations only)
+    var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync();
+
+    foreach (var r in reactions!.Results!)
+    {
+        Console.WriteLine($"Node {r.Node}, LC {r.LoadCase}: Fy={r.Fy:F2} kN");
+    }
+}
+finally
+{
+    await client.Job.Close.PostAsync();
+
+    // Restore readwrite when finished
+    await client.Service.Mode.PostAsync(
+        new ApiModeUpdate { Mode = "readwrite" });
+}
+```
+
+```python title="Python"
+from space_gass_api import SpaceGassApiClient
+import space_gass_api.models as models
+
+client = SpaceGassApiClient.create_client("http://localhost:34560")
+
+# Switch to readonly before opening — no SPACE GASS seat consumed
+await client.service.mode.post(
+    models.ApiModeUpdate(mode="readonly"))
+
+try:
+    await client.job.open_sample.post(
+        models.OpenSampleRequest(file_name="Portal Frame.SG"))
+
+    # Query existing analysis results (read-only operations only)
+    reactions = await client.job.query.analysis.static.node_reactions.get()
+
+    for r in reactions.results:
+        print(f"Node {r.node}, LC {r.load_case}: Fy={r.fy:.2f} kN")
+finally:
+    await client.job.close.post()
+
+    # Restore readwrite when finished
+    await client.service.mode.post(
+        models.ApiModeUpdate(mode="readwrite"))
+```
+
+```bash title="curl"
+# Switch to readonly
+curl -X POST http://localhost:34560/api/v1/service/mode \
+  -H "Content-Type: application/json" \
+  -d '{"mode": "readonly"}'
+
+# Open a sample (read-only — no SPACE GASS seat consumed)
+curl -X POST http://localhost:34560/api/v1/job/open-sample \
+  -H "Content-Type: application/json" \
+  -d '{"fileName": "Portal Frame.SG"}'
+
+# Query reactions
+curl http://localhost:34560/api/v1/job/query/analysis/static/node-reactions
+
+# Close and restore readwrite
+curl -X POST http://localhost:34560/api/v1/job/close
+curl -X POST http://localhost:34560/api/v1/service/mode \
+  -H "Content-Type: application/json" \
+  -d '{"mode": "readwrite"}'
+```
+</CodeTabs>
+
+### What if a job is already open?
+
+If you call `POST /service/mode` with `"readonly"` while a job is open,
+the API returns **202 Accepted** — the transition is queued and commits
+when the job closes. Close the job first if you need the mode to take
+effect immediately.
+
+If all license seats are in use when switching back to readwrite, the
+API returns **409 Conflict** and stays in readonly.
+
+### Check the current mode
+
+Use `GET /service/mode` (or the `mode` field on `GET /service/status`)
+to see the active mode and any pending transition.
+
+## See also
+
+- [Licensing](/guides/licensing) — full explanation of readwrite and
+  readonly modes
+- [Concepts — The Active Job](/getting-started/concepts#the-active-job)

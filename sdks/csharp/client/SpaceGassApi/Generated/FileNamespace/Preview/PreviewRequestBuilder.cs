@@ -34,12 +34,13 @@ namespace SpaceGassApi.FileNamespace.Preview
         {
         }
         /// <summary>
-        /// This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Check dataAvailable in response.            Example usage with curl:                curl -X GET &quot;/api/v1/file/preview?filePath=C:\path\to\job.sg&amp;includeImage=true&quot;
+        /// This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Metadata fields will be null in that case.            Example usage with curl:                curl -X GET &quot;/api/v1/file/preview?filePath=C:\path\to\job.sg&amp;includeImage=true&quot;
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobFilePreviewInfo"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -54,12 +55,13 @@ namespace SpaceGassApi.FileNamespace.Preview
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobFilePreviewInfo>(requestInfo, global::SpaceGassApi.Models.JobFilePreviewInfo.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Check dataAvailable in response.            Example usage with curl:                curl -X GET &quot;/api/v1/file/preview?filePath=C:\path\to\job.sg&amp;includeImage=true&quot;
+        /// This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Metadata fields will be null in that case.            Example usage with curl:                curl -X GET &quot;/api/v1/file/preview?filePath=C:\path\to\job.sg&amp;includeImage=true&quot;
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -87,7 +89,7 @@ namespace SpaceGassApi.FileNamespace.Preview
             return new global::SpaceGassApi.FileNamespace.Preview.PreviewRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Check dataAvailable in response.            Example usage with curl:                curl -X GET &quot;/api/v1/file/preview?filePath=C:\path\to\job.sg&amp;includeImage=true&quot;
+        /// This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Metadata fields will be null in that case.            Example usage with curl:                curl -X GET &quot;/api/v1/file/preview?filePath=C:\path\to\job.sg&amp;includeImage=true&quot;
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class PreviewRequestBuilderGetQueryParameters 

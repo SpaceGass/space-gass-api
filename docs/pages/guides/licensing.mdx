@@ -29,6 +29,67 @@ plate analysis, master-slave constraints) are consumed as needed,
 just as they would be when using SPACE GASS through the desktop
 interface.
 
+## API Modes: ReadWrite and ReadOnly
+
+The API can run in two modes that control how license seats are consumed:
+
+### ReadWrite (default)
+
+In **readwrite** mode the API holds a full SPACE GASS license seat and
+can open jobs, create/modify entities, run analyses, and save files —
+every endpoint is available.
+
+### ReadOnly
+
+In **readonly** mode the API releases the SPACE GASS license seat,
+freeing it for use by the desktop application or another API instance.
+While in readonly mode, only read operations are available — you can
+query structure, loads, and results, but you cannot create, modify,
+or delete entities, run analyses, or save files.
+
+### Switching Modes
+
+Use the `POST /service/mode` endpoint to transition between modes:
+
+<CodeTabs>
+```csharp title="C#"
+// Switch to readonly — releases the SPACE GASS license seat
+await client.Service.Mode.PostAsync(new ApiModeUpdate { Mode = "readonly" });
+
+// Switch back to readwrite — re-acquires the license seat
+await client.Service.Mode.PostAsync(new ApiModeUpdate { Mode = "readwrite" });
+```
+
+```python title="Python"
+# Switch to readonly — releases the SPACE GASS license seat
+await client.service.mode.post(models.ApiModeUpdate(mode="readonly"))
+
+# Switch back to readwrite — re-acquires the license seat
+await client.service.mode.post(models.ApiModeUpdate(mode="readwrite"))
+```
+
+```bash title="curl"
+# Switch to readonly
+curl -X POST http://localhost:34560/api/v1/service/mode \
+  -H "Content-Type: application/json" \
+  -d '{"mode": "readonly"}'
+
+# Switch back to readwrite
+curl -X POST http://localhost:34560/api/v1/service/mode \
+  -H "Content-Type: application/json" \
+  -d '{"mode": "readwrite"}'
+```
+</CodeTabs>
+
+If a job is open when you switch to readonly, the transition is
+**queued** (HTTP 202) and commits when the job closes. Check the
+current mode and any pending transition via `GET /service/mode` or
+the `mode` field on `GET /service/status`.
+
+If the license seat cannot be re-acquired when switching back to
+readwrite (e.g. all seats are in use), the API returns `409 Conflict`
+and stays in readonly.
+
 ## More Information
 
 For full details on SPACE GASS licensing and pricing, visit

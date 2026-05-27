@@ -13,8 +13,8 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class DynamicFrequencySettingsUpdate : IParsable
     {
-        /// <summary>The checkNonExistentCases property</summary>
-        public bool? CheckNonExistentCases { get; set; }
+        /// <summary>The checkNonExistentLoadCases property</summary>
+        public bool? CheckNonExistentLoadCases { get; set; }
         /// <summary>The drillingStiffness property</summary>
         public float? DrillingStiffness { get; set; }
         /// <summary>The extraIterations property</summary>
@@ -35,8 +35,8 @@ namespace SpaceGassApi.Models
         public int? Modes { get; set; }
         /// <summary>Axis used for optimization in analysis.</summary>
         public global::SpaceGassApi.Models.OptimizationAxis? OptimizationAxis { get; set; }
-        /// <summary>Optimization method for Dynamic Frequency analysis.Note: These have different integer mappings than the static/buckling OptimizationMethod enum.</summary>
-        public global::SpaceGassApi.Models.FrequencyOptimizationMethod? OptimizationMethod { get; set; }
+        /// <summary>Optimization method for analysis bandwidth/profile reduction.Integer values mirror SPACE GASS&apos;s `AnalysisOptimizationTypes` enum(NetCommon/CommonEnums.vb). Used by static, buckling, and dynamic frequency analysis.</summary>
+        public global::SpaceGassApi.Models.AnalysisOptimizationMethod? OptimizationMethod { get; set; }
         /// <summary>The optimizationX property</summary>
         public float? OptimizationX { get; set; }
         /// <summary>The optimizationY property</summary>
@@ -45,8 +45,8 @@ namespace SpaceGassApi.Models
         public float? OptimizationZ { get; set; }
         /// <summary>Plate element formulation type.</summary>
         public global::SpaceGassApi.Models.PlateType? PlateType { get; set; }
-        /// <summary>The retainCases property</summary>
-        public bool? RetainCases { get; set; }
+        /// <summary>The retainLoadCases property</summary>
+        public bool? RetainLoadCases { get; set; }
         /// <summary>Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS&apos;s `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Paradise, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).</summary>
         public global::SpaceGassApi.Models.SolverType? SolverType { get; set; }
         /// <summary>The stabilizeUnrestrainedNodes property</summary>
@@ -73,7 +73,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "checkNonExistentCases", n => { CheckNonExistentCases = n.GetBoolValue(); } },
+                { "checkNonExistentLoadCases", n => { CheckNonExistentLoadCases = n.GetBoolValue(); } },
                 { "drillingStiffness", n => { DrillingStiffness = n.GetFloatValue(); } },
                 { "extraIterations", n => { ExtraIterations = n.GetBoolValue(); } },
                 { "frequencyShift", n => { FrequencyShift = n.GetFloatValue(); } },
@@ -81,12 +81,12 @@ namespace SpaceGassApi.Models
                 { "lowerLimit", n => { LowerLimit = n.GetFloatValue(); } },
                 { "modes", n => { Modes = n.GetIntValue(); } },
                 { "optimizationAxis", n => { OptimizationAxis = n.GetEnumValue<global::SpaceGassApi.Models.OptimizationAxis>(); } },
-                { "optimizationMethod", n => { OptimizationMethod = n.GetEnumValue<global::SpaceGassApi.Models.FrequencyOptimizationMethod>(); } },
+                { "optimizationMethod", n => { OptimizationMethod = n.GetEnumValue<global::SpaceGassApi.Models.AnalysisOptimizationMethod>(); } },
                 { "optimizationX", n => { OptimizationX = n.GetFloatValue(); } },
                 { "optimizationY", n => { OptimizationY = n.GetFloatValue(); } },
                 { "optimizationZ", n => { OptimizationZ = n.GetFloatValue(); } },
                 { "plateType", n => { PlateType = n.GetEnumValue<global::SpaceGassApi.Models.PlateType>(); } },
-                { "retainCases", n => { RetainCases = n.GetBoolValue(); } },
+                { "retainLoadCases", n => { RetainLoadCases = n.GetBoolValue(); } },
                 { "solverType", n => { SolverType = n.GetEnumValue<global::SpaceGassApi.Models.SolverType>(); } },
                 { "stabilizeUnrestrainedNodes", n => { StabilizeUnrestrainedNodes = n.GetBoolValue(); } },
                 { "tolerance", n => { Tolerance = n.GetFloatValue(); } },
@@ -100,7 +100,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteBoolValue("checkNonExistentCases", CheckNonExistentCases);
+            writer.WriteBoolValue("checkNonExistentLoadCases", CheckNonExistentLoadCases);
             writer.WriteFloatValue("drillingStiffness", DrillingStiffness);
             writer.WriteBoolValue("extraIterations", ExtraIterations);
             writer.WriteFloatValue("frequencyShift", FrequencyShift);
@@ -108,12 +108,12 @@ namespace SpaceGassApi.Models
             writer.WriteFloatValue("lowerLimit", LowerLimit);
             writer.WriteIntValue("modes", Modes);
             writer.WriteEnumValue<global::SpaceGassApi.Models.OptimizationAxis>("optimizationAxis", OptimizationAxis);
-            writer.WriteEnumValue<global::SpaceGassApi.Models.FrequencyOptimizationMethod>("optimizationMethod", OptimizationMethod);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.AnalysisOptimizationMethod>("optimizationMethod", OptimizationMethod);
             writer.WriteFloatValue("optimizationX", OptimizationX);
             writer.WriteFloatValue("optimizationY", OptimizationY);
             writer.WriteFloatValue("optimizationZ", OptimizationZ);
             writer.WriteEnumValue<global::SpaceGassApi.Models.PlateType>("plateType", PlateType);
-            writer.WriteBoolValue("retainCases", RetainCases);
+            writer.WriteBoolValue("retainLoadCases", RetainLoadCases);
             writer.WriteEnumValue<global::SpaceGassApi.Models.SolverType>("solverType", SolverType);
             writer.WriteBoolValue("stabilizeUnrestrainedNodes", StabilizeUnrestrainedNodes);
             writer.WriteFloatValue("tolerance", Tolerance);

@@ -13,8 +13,6 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberEndForce : IParsable
     {
-        /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
         /// <summary>Final cable length at each node. Unit: Length (see GET /job/units).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -47,6 +45,8 @@ namespace SpaceGassApi.Models
 #else
         public List<float?> Fz { get; set; }
 #endif
+        /// <summary>Load case ID.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>Member key.</summary>
         public int? Member { get; set; }
         /// <summary>Torsion moment at each node. Unit: Moment (see GET /job/units).</summary>
@@ -99,11 +99,11 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "finalCableLength", n => { FinalCableLength = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "fx", n => { Fx = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "fy", n => { Fy = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "fz", n => { Fz = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
                 { "mx", n => { Mx = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "my", n => { My = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
@@ -118,11 +118,11 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
             writer.WriteCollectionOfPrimitiveValues<float?>("finalCableLength", FinalCableLength);
             writer.WriteCollectionOfPrimitiveValues<float?>("fx", Fx);
             writer.WriteCollectionOfPrimitiveValues<float?>("fy", Fy);
             writer.WriteCollectionOfPrimitiveValues<float?>("fz", Fz);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("member", Member);
             writer.WriteCollectionOfPrimitiveValues<float?>("mx", Mx);
             writer.WriteCollectionOfPrimitiveValues<float?>("my", My);

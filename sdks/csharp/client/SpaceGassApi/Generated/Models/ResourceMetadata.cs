@@ -15,6 +15,14 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Current count of items in this resource.Null for sub-resources whose count does not apply uniformly.</summary>
         public int? Count { get; set; }
+        /// <summary>Human-readable display name for internal use (debug/logging).Not serialised to public clients in Release builds.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? DisplayName { get; set; }
+#nullable restore
+#else
+        public string DisplayName { get; set; }
+#endif
         /// <summary>Field definitions describing the resource&apos;s wire shape. Each entry correspondsto a property on the read DTO; `jsonName` matches the JSON key clients see.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -23,6 +31,8 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.FieldMetadata> Fields { get; set; }
 #endif
+        /// <summary>Internal: whether the entity carries a GUID field. Not serialised in Release.</summary>
+        public bool? HasGuidField { get; set; }
         /// <summary>Maximum Id currently in use (single-int Id entities only).</summary>
         public int? MaxId { get; set; }
         /// <summary>Next available Id (single-int Id entities only).</summary>
@@ -48,7 +58,9 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "count", n => { Count = n.GetIntValue(); } },
+                { "displayName", n => { DisplayName = n.GetStringValue(); } },
                 { "fields", n => { Fields = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.FieldMetadata>(global::SpaceGassApi.Models.FieldMetadata.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "hasGuidField", n => { HasGuidField = n.GetBoolValue(); } },
                 { "maxId", n => { MaxId = n.GetIntValue(); } },
                 { "nextId", n => { NextId = n.GetIntValue(); } },
                 { "resourceType", n => { ResourceType = n.GetEnumValue<global::SpaceGassApi.Models.EntityId>(); } },
@@ -62,7 +74,9 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteIntValue("count", Count);
+            writer.WriteStringValue("displayName", DisplayName);
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.FieldMetadata>("fields", Fields);
+            writer.WriteBoolValue("hasGuidField", HasGuidField);
             writer.WriteIntValue("maxId", MaxId);
             writer.WriteIntValue("nextId", NextId);
             writer.WriteEnumValue<global::SpaceGassApi.Models.EntityId>("resourceType", ResourceType);

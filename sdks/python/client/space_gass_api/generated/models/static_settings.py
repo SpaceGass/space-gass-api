@@ -5,11 +5,11 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
+    from .analysis_optimization_method import AnalysisOptimizationMethod
     from .loading_type import LoadingType
     from .matrix_type import MatrixType
     from .non_linear_theory import NonLinearTheory
     from .optimization_axis import OptimizationAxis
-    from .optimization_method import OptimizationMethod
     from .plate_type import PlateType
     from .solver_type import SolverType
     from .stepping_method import SteppingMethod
@@ -21,7 +21,7 @@ class StaticSettings(Parsable):
     Settings for Static Analysis (Linear and Non-Linear).Used for GET (read current settings) and as the base for the update DTO.Fields marked as "Non-linear only" are only used during non-linear static analysis.
     """
     # Whether to check for non-existent load cases referenced in the analysis.When true, warnings are generated for missing load cases.
-    check_non_existent_cases: Optional[bool] = None
+    check_non_existent_load_cases: Optional[bool] = None
     # Convergence accuracy (%).Non-linear only.
     convergence_accuracy: Optional[float] = None
     # Cable damping factor (%).Non-linear only.
@@ -46,8 +46,8 @@ class StaticSettings(Parsable):
     matrix_type: Optional[MatrixType] = None
     # Axis used for optimization in analysis.
     optimization_axis: Optional[OptimizationAxis] = None
-    # Optimization method for analysis.
-    optimization_method: Optional[OptimizationMethod] = None
+    # Optimization method for analysis bandwidth/profile reduction.Integer values mirror SPACE GASS's `AnalysisOptimizationTypes` enum(NetCommon/CommonEnums.vb). Used by static, buckling, and dynamic frequency analysis.
+    optimization_method: Optional[AnalysisOptimizationMethod] = None
     # X coordinate or X component of the optimization vector.Only used when OptimizationAxis is Vector, or as angular coordinate for axis modes.
     optimization_x: Optional[float] = None
     # Y coordinate or Y component of the optimization vector.
@@ -63,7 +63,7 @@ class StaticSettings(Parsable):
     # Whether to include residuals in convergence check.Non-linear only.
     residuals_convergence: Optional[bool] = None
     # Whether to retain results of other load cases during analysis.When true, results from previously analysed load cases are preserved.
-    retain_cases: Optional[bool] = None
+    retain_load_cases: Optional[bool] = None
     # Number of iterations before disabling reversal of tension/compression-only members.Only relevant when TensionCompressionOnly is Activated.
     reversal_iterations: Optional[int] = None
     # Whether to rotate local loads with member chord rotation.Non-linear only.
@@ -95,28 +95,28 @@ class StaticSettings(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
+        from .analysis_optimization_method import AnalysisOptimizationMethod
         from .loading_type import LoadingType
         from .matrix_type import MatrixType
         from .non_linear_theory import NonLinearTheory
         from .optimization_axis import OptimizationAxis
-        from .optimization_method import OptimizationMethod
         from .plate_type import PlateType
         from .solver_type import SolverType
         from .stepping_method import SteppingMethod
         from .tension_compression_only_mode import TensionCompressionOnlyMode
 
+        from .analysis_optimization_method import AnalysisOptimizationMethod
         from .loading_type import LoadingType
         from .matrix_type import MatrixType
         from .non_linear_theory import NonLinearTheory
         from .optimization_axis import OptimizationAxis
-        from .optimization_method import OptimizationMethod
         from .plate_type import PlateType
         from .solver_type import SolverType
         from .stepping_method import SteppingMethod
         from .tension_compression_only_mode import TensionCompressionOnlyMode
 
         fields: dict[str, Callable[[Any], None]] = {
-            "checkNonExistentCases": lambda n : setattr(self, 'check_non_existent_cases', n.get_bool_value()),
+            "checkNonExistentLoadCases": lambda n : setattr(self, 'check_non_existent_load_cases', n.get_bool_value()),
             "convergenceAccuracy": lambda n : setattr(self, 'convergence_accuracy', n.get_float_value()),
             "dampingFactor": lambda n : setattr(self, 'damping_factor', n.get_float_value()),
             "dampingSteps": lambda n : setattr(self, 'damping_steps', n.get_int_value()),
@@ -129,7 +129,7 @@ class StaticSettings(Parsable):
             "loading": lambda n : setattr(self, 'loading', n.get_enum_value(LoadingType)),
             "matrixType": lambda n : setattr(self, 'matrix_type', n.get_enum_value(MatrixType)),
             "optimizationAxis": lambda n : setattr(self, 'optimization_axis', n.get_enum_value(OptimizationAxis)),
-            "optimizationMethod": lambda n : setattr(self, 'optimization_method', n.get_enum_value(OptimizationMethod)),
+            "optimizationMethod": lambda n : setattr(self, 'optimization_method', n.get_enum_value(AnalysisOptimizationMethod)),
             "optimizationX": lambda n : setattr(self, 'optimization_x', n.get_float_value()),
             "optimizationY": lambda n : setattr(self, 'optimization_y', n.get_float_value()),
             "optimizationZ": lambda n : setattr(self, 'optimization_z', n.get_float_value()),
@@ -137,7 +137,7 @@ class StaticSettings(Parsable):
             "pDeltaSmall": lambda n : setattr(self, 'p_delta_small', n.get_bool_value()),
             "plateType": lambda n : setattr(self, 'plate_type', n.get_enum_value(PlateType)),
             "residualsConvergence": lambda n : setattr(self, 'residuals_convergence', n.get_bool_value()),
-            "retainCases": lambda n : setattr(self, 'retain_cases', n.get_bool_value()),
+            "retainLoadCases": lambda n : setattr(self, 'retain_load_cases', n.get_bool_value()),
             "reversalIterations": lambda n : setattr(self, 'reversal_iterations', n.get_int_value()),
             "rotateLocalLoads": lambda n : setattr(self, 'rotate_local_loads', n.get_bool_value()),
             "solverType": lambda n : setattr(self, 'solver_type', n.get_enum_value(SolverType)),
@@ -156,7 +156,7 @@ class StaticSettings(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_bool_value("checkNonExistentCases", self.check_non_existent_cases)
+        writer.write_bool_value("checkNonExistentLoadCases", self.check_non_existent_load_cases)
         writer.write_float_value("convergenceAccuracy", self.convergence_accuracy)
         writer.write_float_value("dampingFactor", self.damping_factor)
         writer.write_int_value("dampingSteps", self.damping_steps)
@@ -177,7 +177,7 @@ class StaticSettings(Parsable):
         writer.write_bool_value("pDeltaSmall", self.p_delta_small)
         writer.write_enum_value("plateType", self.plate_type)
         writer.write_bool_value("residualsConvergence", self.residuals_convergence)
-        writer.write_bool_value("retainCases", self.retain_cases)
+        writer.write_bool_value("retainLoadCases", self.retain_load_cases)
         writer.write_int_value("reversalIterations", self.reversal_iterations)
         writer.write_bool_value("rotateLocalLoads", self.rotate_local_loads)
         writer.write_enum_value("solverType", self.solver_type)

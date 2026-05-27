@@ -5,10 +5,10 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
+    from .analysis_optimization_method import AnalysisOptimizationMethod
     from .axial_force_distribution import AxialForceDistribution
     from .buckling_theory import BucklingTheory
     from .optimization_axis import OptimizationAxis
-    from .optimization_method import OptimizationMethod
     from .plate_type import PlateType
     from .solver_type import SolverType
     from .tension_compression_only_mode import TensionCompressionOnlyMode
@@ -21,7 +21,7 @@ class BucklingSettings(Parsable):
     # Axial force distribution method for buckling analysis.
     axial_force_distribution: Optional[AxialForceDistribution] = None
     # Whether to check for non-existent load cases referenced in the analysis.When true, warnings are generated for missing load cases.
-    check_non_existent_cases: Optional[bool] = None
+    check_non_existent_load_cases: Optional[bool] = None
     # Drilling stiffness multiplier for plate elements.
     drilling_stiffness: Optional[float] = None
     # Whether to perform extra iterations for improved mode shape accuracy.
@@ -34,8 +34,8 @@ class BucklingSettings(Parsable):
     modes: Optional[int] = None
     # Axis used for optimization in analysis.
     optimization_axis: Optional[OptimizationAxis] = None
-    # Optimization method for analysis.
-    optimization_method: Optional[OptimizationMethod] = None
+    # Optimization method for analysis bandwidth/profile reduction.Integer values mirror SPACE GASS's `AnalysisOptimizationTypes` enum(NetCommon/CommonEnums.vb). Used by static, buckling, and dynamic frequency analysis.
+    optimization_method: Optional[AnalysisOptimizationMethod] = None
     # X coordinate or X component of the optimization vector.
     optimization_x: Optional[float] = None
     # Y coordinate or Y component of the optimization vector.
@@ -45,7 +45,7 @@ class BucklingSettings(Parsable):
     # Plate element formulation type.
     plate_type: Optional[PlateType] = None
     # Whether to retain results of other load cases during analysis.When true, results from previously analysed load cases are preserved.
-    retain_cases: Optional[bool] = None
+    retain_load_cases: Optional[bool] = None
     # Number of iterations before disabling reversal of tension/compression-only members.Only relevant when TensionCompressionOnly is Activated.
     reversal_iterations: Optional[int] = None
     # Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS's `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Paradise, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).
@@ -77,37 +77,37 @@ class BucklingSettings(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
+        from .analysis_optimization_method import AnalysisOptimizationMethod
         from .axial_force_distribution import AxialForceDistribution
         from .buckling_theory import BucklingTheory
         from .optimization_axis import OptimizationAxis
-        from .optimization_method import OptimizationMethod
         from .plate_type import PlateType
         from .solver_type import SolverType
         from .tension_compression_only_mode import TensionCompressionOnlyMode
 
+        from .analysis_optimization_method import AnalysisOptimizationMethod
         from .axial_force_distribution import AxialForceDistribution
         from .buckling_theory import BucklingTheory
         from .optimization_axis import OptimizationAxis
-        from .optimization_method import OptimizationMethod
         from .plate_type import PlateType
         from .solver_type import SolverType
         from .tension_compression_only_mode import TensionCompressionOnlyMode
 
         fields: dict[str, Callable[[Any], None]] = {
             "axialForceDistribution": lambda n : setattr(self, 'axial_force_distribution', n.get_enum_value(AxialForceDistribution)),
-            "checkNonExistentCases": lambda n : setattr(self, 'check_non_existent_cases', n.get_bool_value()),
+            "checkNonExistentLoadCases": lambda n : setattr(self, 'check_non_existent_load_cases', n.get_bool_value()),
             "drillingStiffness": lambda n : setattr(self, 'drilling_stiffness', n.get_float_value()),
             "extraIterations": lambda n : setattr(self, 'extra_iterations', n.get_bool_value()),
             "loadCases": lambda n : setattr(self, 'load_cases', n.get_str_value()),
             "lowerLimit": lambda n : setattr(self, 'lower_limit', n.get_float_value()),
             "modes": lambda n : setattr(self, 'modes', n.get_int_value()),
             "optimizationAxis": lambda n : setattr(self, 'optimization_axis', n.get_enum_value(OptimizationAxis)),
-            "optimizationMethod": lambda n : setattr(self, 'optimization_method', n.get_enum_value(OptimizationMethod)),
+            "optimizationMethod": lambda n : setattr(self, 'optimization_method', n.get_enum_value(AnalysisOptimizationMethod)),
             "optimizationX": lambda n : setattr(self, 'optimization_x', n.get_float_value()),
             "optimizationY": lambda n : setattr(self, 'optimization_y', n.get_float_value()),
             "optimizationZ": lambda n : setattr(self, 'optimization_z', n.get_float_value()),
             "plateType": lambda n : setattr(self, 'plate_type', n.get_enum_value(PlateType)),
-            "retainCases": lambda n : setattr(self, 'retain_cases', n.get_bool_value()),
+            "retainLoadCases": lambda n : setattr(self, 'retain_load_cases', n.get_bool_value()),
             "reversalIterations": lambda n : setattr(self, 'reversal_iterations', n.get_int_value()),
             "solverType": lambda n : setattr(self, 'solver_type', n.get_enum_value(SolverType)),
             "stabilizeUnrestrainedNodes": lambda n : setattr(self, 'stabilize_unrestrained_nodes', n.get_bool_value()),
@@ -127,7 +127,7 @@ class BucklingSettings(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_enum_value("axialForceDistribution", self.axial_force_distribution)
-        writer.write_bool_value("checkNonExistentCases", self.check_non_existent_cases)
+        writer.write_bool_value("checkNonExistentLoadCases", self.check_non_existent_load_cases)
         writer.write_float_value("drillingStiffness", self.drilling_stiffness)
         writer.write_bool_value("extraIterations", self.extra_iterations)
         writer.write_str_value("loadCases", self.load_cases)
@@ -139,7 +139,7 @@ class BucklingSettings(Parsable):
         writer.write_float_value("optimizationY", self.optimization_y)
         writer.write_float_value("optimizationZ", self.optimization_z)
         writer.write_enum_value("plateType", self.plate_type)
-        writer.write_bool_value("retainCases", self.retain_cases)
+        writer.write_bool_value("retainLoadCases", self.retain_load_cases)
         writer.write_int_value("reversalIterations", self.reversal_iterations)
         writer.write_enum_value("solverType", self.solver_type)
         writer.write_bool_value("stabilizeUnrestrainedNodes", self.stabilize_unrestrained_nodes)

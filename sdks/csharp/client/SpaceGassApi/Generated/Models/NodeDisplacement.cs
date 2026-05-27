@@ -14,7 +14,7 @@ namespace SpaceGassApi.Models
     public partial class NodeDisplacement : IParsable
     {
         /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
+        public int? LoadCase { get; set; }
         /// <summary>Node key.</summary>
         public int? Node { get; set; }
         /// <summary>Rotational X displacement. Unit: Rotation (see GET /job/units).</summary>
@@ -47,7 +47,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "node", n => { Node = n.GetIntValue(); } },
                 { "rx", n => { Rx = n.GetFloatValue(); } },
                 { "ry", n => { Ry = n.GetFloatValue(); } },
@@ -64,7 +64,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("node", Node);
             writer.WriteFloatValue("rx", Rx);
             writer.WriteFloatValue("ry", Ry);

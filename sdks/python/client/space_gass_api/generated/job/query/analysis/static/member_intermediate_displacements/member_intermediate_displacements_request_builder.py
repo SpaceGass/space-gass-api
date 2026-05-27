@@ -29,15 +29,15 @@ class MemberIntermediateDisplacementsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/member-intermediate-displacements{?Limit*,Offset*,cases*,members*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/member-intermediate-displacements{?Limit*,Offset*,loadCases*,members*}", path_parameters)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
     async def get(
         self,
         *,
-        cases: Optional[str] = None,
         limit: Optional[int] = None,
+        load_cases: Optional[str] = None,
         members: Optional[str] = None,
         offset: Optional[int] = None,
     ) -> Optional[MemberIntermediateDisplacementQueryResult]: ...
@@ -57,7 +57,9 @@ class MemberIntermediateDisplacementsRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
+            "409": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -110,19 +112,19 @@ class MemberIntermediateDisplacementsRequestBuilder(BaseRequestBuilder):
                 raise TypeError("original_name cannot be null.")
             if original_name == "limit":
                 return "Limit"
+            if original_name == "load_cases":
+                return "loadCases"
             if original_name == "offset":
                 return "Offset"
-            if original_name == "cases":
-                return "cases"
             if original_name == "members":
                 return "members"
             return original_name
         
-        # Load case Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
-        cases: Optional[str] = None
-
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
+
+        # Load case Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
+        load_cases: Optional[str] = None
 
         # Member Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
         members: Optional[str] = None

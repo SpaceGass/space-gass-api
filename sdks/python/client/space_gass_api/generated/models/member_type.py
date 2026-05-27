@@ -8,4 +8,6 @@ class MemberType(str, Enum):
     Gap = "Gap",
     BrittleFuse = "BrittleFuse",
     PlasticFuse = "PlasticFuse",
+    Pulley = "Pulley",
+    Truss = "Truss",
 

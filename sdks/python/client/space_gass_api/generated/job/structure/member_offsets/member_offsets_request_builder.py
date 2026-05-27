@@ -72,6 +72,7 @@ class MemberOffsetsRequestBuilder(BaseRequestBuilder):
         from ....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -96,6 +97,7 @@ class MemberOffsetsRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
             "409": ErrorResponse,
         }

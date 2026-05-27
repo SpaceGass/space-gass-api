@@ -43,7 +43,7 @@ class PreviewRequestBuilder(BaseRequestBuilder):
     # --- end overloads ---
     async def get(self,request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[JobFilePreviewInfo]:
         """
-        This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Check dataAvailable in response.            Example usage with curl:                curl -X GET "/api/v1/file/preview?filePath=C:/path/to/job.sg&includeImage=true"
+        This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Metadata fields will be null in that case.            Example usage with curl:                curl -X GET "/api/v1/file/preview?filePath=C:/path/to/job.sg&includeImage=true"
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[JobFilePreviewInfo]
         """
@@ -54,6 +54,7 @@ class PreviewRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -64,7 +65,7 @@ class PreviewRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Check dataAvailable in response.            Example usage with curl:                curl -X GET "/api/v1/file/preview?filePath=C:/path/to/job.sg&includeImage=true"
+        This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Metadata fields will be null in that case.            Example usage with curl:                curl -X GET "/api/v1/file/preview?filePath=C:/path/to/job.sg&includeImage=true"
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -86,7 +87,7 @@ class PreviewRequestBuilder(BaseRequestBuilder):
     @dataclass
     class PreviewRequestBuilderGetQueryParameters():
         """
-        This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Check dataAvailable in response.            Example usage with curl:                curl -X GET "/api/v1/file/preview?filePath=C:/path/to/job.sg&includeImage=true"
+        This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Metadata fields will be null in that case.            Example usage with curl:                curl -X GET "/api/v1/file/preview?filePath=C:/path/to/job.sg&includeImage=true"
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

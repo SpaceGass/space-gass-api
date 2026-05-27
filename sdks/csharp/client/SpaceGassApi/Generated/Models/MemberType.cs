@@ -35,5 +35,13 @@ namespace SpaceGassApi.Models
         #pragma warning disable CS1591
         PlasticFuse,
         #pragma warning restore CS1591
+        [EnumMember(Value = "Pulley")]
+        #pragma warning disable CS1591
+        Pulley,
+        #pragma warning restore CS1591
+        [EnumMember(Value = "Truss")]
+        #pragma warning disable CS1591
+        Truss,
+        #pragma warning restore CS1591
     }
 }

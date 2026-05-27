@@ -5,7 +5,7 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  SPEC_PATH: descriptions/preview/openapi.json
+  SPEC_PATH: descriptions/preview/SpaceGassApi.json
 
 jobs:
   generate:

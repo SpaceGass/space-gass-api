@@ -330,7 +330,7 @@ in the negative-Y direction.
 await client.Job.Loads.SelfWeightLoads.PostAsync(
     new SelfWeightLoadCreate
     {
-        Case = selfWeightCase.Id,
+        LoadCase = selfWeightCase.Id,
         AccelerationX = 0.0,
         AccelerationY = -1.0,    // 1 G downward
         AccelerationZ = 0.0,
@@ -340,7 +340,7 @@ await client.Job.Loads.SelfWeightLoads.PostAsync(
 ```python title="Python"
 await client.job.loads.self_weight_loads.post(
     models.SelfWeightLoadCreate(
-        case=self_weight_case.id,
+        load_case=self_weight_case.id,
         acceleration_x=0.0,
         acceleration_y=-1.0,    # 1 G downward
         acceleration_z=0.0,
@@ -351,7 +351,7 @@ await client.job.loads.self_weight_loads.post(
 ## Step 9 — Add a Member Distributed Load to the Dead Case
 
 Apply a uniform 2 kN/m downward across the full 6 m span on the dead
-case. `MemberDistributedLoadCreate` takes the target `Case` and
+case. `MemberDistributedLoadCreate` takes the target `LoadCase` and
 `Member` Ids, start / finish positions along the member (in length
 units), and start / finish force intensity per unit length on each
 axis.
@@ -361,7 +361,7 @@ axis.
 await client.Job.Loads.MemberDistributedLoads.PostAsync(
     new MemberDistributedLoadCreate
     {
-        Case = deadCase.Id,
+        LoadCase = deadCase.Id,
         Member = member.Id,
         PositionUnits = LoadPositionUnits.Percent,
         StartPosition = 0.0,
@@ -374,7 +374,7 @@ await client.Job.Loads.MemberDistributedLoads.PostAsync(
 ```python title="Python"
 await client.job.loads.member_distributed_loads.post(
     models.MemberDistributedLoadCreate(
-        case=dead_case.id,
+        load_case=dead_case.id,
         member=member.id,
         position_units=models.LoadPositionUnits.Percent,
         start_position=0.0,
@@ -387,7 +387,7 @@ await client.job.loads.member_distributed_loads.post(
 
 ## Step 10 — Add a Member Distributed Load to the Live Case
 
-Same shape as Step 9 — swap the `Case` to the live case and bump the
+Same shape as Step 9 — swap the `LoadCase` to the live case and bump the
 intensity to 5 kN/m.
 
 <CodeTabs>
@@ -395,7 +395,7 @@ intensity to 5 kN/m.
 await client.Job.Loads.MemberDistributedLoads.PostAsync(
     new MemberDistributedLoadCreate
     {
-        Case = liveCase.Id,
+        LoadCase = liveCase.Id,
         Member = member.Id,
         PositionUnits = LoadPositionUnits.Percent,
         StartPosition = 0.0,
@@ -408,7 +408,7 @@ await client.Job.Loads.MemberDistributedLoads.PostAsync(
 ```python title="Python"
 await client.job.loads.member_distributed_loads.post(
     models.MemberDistributedLoadCreate(
-        case=live_case.id,
+        load_case=live_case.id,
         member=member.id,
         position_units=models.LoadPositionUnits.Percent,
         start_position=0.0,
@@ -437,9 +437,9 @@ var ulsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
         Title = "ULS - Strength",
         CombinationItems = new List<CombinationLoadCaseItem>
         {
-            new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
-            new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
-            new() { Case = liveCase.Id,       MultiplyingFactor = 1.5 },
+            new() { LoadCase = selfWeightCase.Id, MultiplyingFactor = 1.2 },
+            new() { LoadCase = deadCase.Id,       MultiplyingFactor = 1.2 },
+            new() { LoadCase = liveCase.Id,       MultiplyingFactor = 1.5 },
         },
     });
 
@@ -451,9 +451,9 @@ var slsCase = await client.Job.Loads.CombinationLoadCases.PostAsync(
         Title = "SLS - Short-term Deflection",
         CombinationItems = new List<CombinationLoadCaseItem>
         {
-            new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
-            new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
-            new() { Case = liveCase.Id,       MultiplyingFactor = 0.7 },
+            new() { LoadCase = selfWeightCase.Id, MultiplyingFactor = 1.0 },
+            new() { LoadCase = deadCase.Id,       MultiplyingFactor = 1.0 },
+            new() { LoadCase = liveCase.Id,       MultiplyingFactor = 0.7 },
         },
     });
 ```
@@ -465,9 +465,9 @@ uls_case = await client.job.loads.combination_load_cases.post(
         id=10,
         title="ULS - Strength",
         combination_items=[
-            models.CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.2),
-            models.CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.2),
-            models.CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=1.5),
+            models.CombinationLoadCaseItem(load_case=self_weight_case.id, multiplying_factor=1.2),
+            models.CombinationLoadCaseItem(load_case=dead_case.id,        multiplying_factor=1.2),
+            models.CombinationLoadCaseItem(load_case=live_case.id,        multiplying_factor=1.5),
         ],
     ))
 
@@ -477,9 +477,9 @@ sls_case = await client.job.loads.combination_load_cases.post(
         id=20,
         title="SLS - Short-term Deflection",
         combination_items=[
-            models.CombinationLoadCaseItem(case=self_weight_case.id, multiplying_factor=1.0),
-            models.CombinationLoadCaseItem(case=dead_case.id,        multiplying_factor=1.0),
-            models.CombinationLoadCaseItem(case=live_case.id,        multiplying_factor=0.7),
+            models.CombinationLoadCaseItem(load_case=self_weight_case.id, multiplying_factor=1.0),
+            models.CombinationLoadCaseItem(load_case=dead_case.id,        multiplying_factor=1.0),
+            models.CombinationLoadCaseItem(load_case=live_case.id,        multiplying_factor=0.7),
         ],
     ))
 ```
@@ -595,21 +595,21 @@ if final_run.status != models.AnalysisRunStatus.Completed:
 ## Step 14 — Query Reactions
 
 Read the support reactions under the ULS combination. By default the
-query returns every result for every case; the `Cases` query parameter
+query returns every result for every case; the `LoadCases` query parameter
 filters to the load case(s) you want.
 
 The result also carries a `Warnings` object. If a requested case (or
 any of its constituent primaries, for combinations) has not been
-analysed, its Id appears in `Warnings.CasesNotAnalyzed` — check this
+analysed, its Id appears in `Warnings.LoadCasesNotAnalyzed` — check this
 before reading `Results` so a missing run doesn't silently return zero
 rows.
 
 <CodeTabs>
 ```csharp title="C#"
 var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
-    config => config.QueryParameters.Cases = $"{ulsCase.Id}");
+    config => config.QueryParameters.LoadCases = $"{ulsCase.Id}");
 
-if (reactions.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
+if (reactions.Warnings?.LoadCasesNotAnalyzed is { Length: > 0 } missing)
 {
     throw new Exception($"Cases not analysed: {missing}. Run the analysis first.");
 }
@@ -617,22 +617,22 @@ if (reactions.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
 foreach (var r in reactions.Results)
 {
     Console.WriteLine(
-        $"Node {r.Node}, LC {r.Case}: " +
+        $"Node {r.Node}, LC {r.LoadCase}: " +
         $"Fx={r.Fx:F2}, Fy={r.Fy:F2}, Fz={r.Fz:F2}");
 }
 ```
 
 ```python title="Python"
 reactions = await client.job.query.analysis.static.node_reactions.get(
-    cases=str(uls_case.id))
+    load_cases=str(uls_case.id))
 
-if reactions.warnings and reactions.warnings.cases_not_analyzed:
+if reactions.warnings and reactions.warnings.load_cases_not_analyzed:
     raise RuntimeError(
-        f"Cases not analysed: {reactions.warnings.cases_not_analyzed}. "
+        f"Cases not analysed: {reactions.warnings.load_cases_not_analyzed}. "
         "Run the analysis first.")
 
 for r in reactions.results:
-    print(f"Node {r.node}, LC {r.case}: "
+    print(f"Node {r.node}, LC {r.load_case}: "
           f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
 ```
 </CodeTabs>
@@ -662,8 +662,8 @@ Filter by ULS case + the member Id and take the maximum of `|Mz|`.
 var ulsForces = await client.Job.Query.Analysis.Static.MemberIntermediateForces
     .GetAsync(config =>
     {
-        config.QueryParameters.Cases   = $"{ulsCase.Id}";
-        config.QueryParameters.Members = $"{member.Id}";
+        config.QueryParameters.LoadCases = $"{ulsCase.Id}";
+        config.QueryParameters.Members   = $"{member.Id}";
     });
 
 var beamForces = ulsForces.Results.First();
@@ -674,7 +674,7 @@ Console.WriteLine($"Max ULS bending moment on Member {member.Id}: {maxMz:F2} kNm
 
 ```python title="Python"
 uls_forces = await client.job.query.analysis.static.member_intermediate_forces.get(
-    cases=str(uls_case.id),
+    load_cases=str(uls_case.id),
     members=str(member.id))
 
 beam_forces = uls_forces.results[0]
@@ -710,8 +710,8 @@ case + the member Id and take the maximum of `|TyGlobal|`.
 var slsDisplacements = await client.Job.Query.Analysis.Static.MemberIntermediateDisplacements
     .GetAsync(config =>
     {
-        config.QueryParameters.Cases   = $"{slsCase.Id}";
-        config.QueryParameters.Members = $"{member.Id}";
+        config.QueryParameters.LoadCases = $"{slsCase.Id}";
+        config.QueryParameters.Members   = $"{member.Id}";
     });
 
 var beamDisplacements = slsDisplacements.Results.First();
@@ -722,7 +722,7 @@ Console.WriteLine($"Max SLS midspan deflection on Member {member.Id}: {maxDeflec
 
 ```python title="Python"
 sls_displacements = await client.job.query.analysis.static.member_intermediate_displacements.get(
-    cases=str(sls_case.id),
+    load_cases=str(sls_case.id),
     members=str(member.id))
 
 beam_displacements = sls_displacements.results[0]

@@ -32,7 +32,7 @@ class NodeLoadsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/node-loads{?Cases*,Limit*,LoadCategory*,Nodes*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/node-loads{?Limit*,LoadCases*,LoadCategory*,Nodes*,Offset*}", path_parameters)
     
     def by_case_id(self,case_id: int) -> WithCaseItemRequestBuilder:
         """
@@ -53,8 +53,8 @@ class NodeLoadsRequestBuilder(BaseRequestBuilder):
     async def get(
         self,
         *,
-        cases: Optional[str] = None,
         limit: Optional[int] = None,
+        load_cases: Optional[str] = None,
         load_category: Optional[int] = None,
         nodes: Optional[str] = None,
         offset: Optional[int] = None,
@@ -64,7 +64,7 @@ class NodeLoadsRequestBuilder(BaseRequestBuilder):
     # --- end overloads ---
     async def get(self,request_configuration: Optional[RequestConfiguration[NodeLoadsRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[NodeLoad]]:
         """
-        Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Returns all loads with optional filtering and pagination.Use the `loadCases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by LoadCase ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[NodeLoad]]
         """
@@ -75,6 +75,7 @@ class NodeLoadsRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -99,6 +100,7 @@ class NodeLoadsRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
             "409": ErrorResponse,
         }
@@ -108,7 +110,7 @@ class NodeLoadsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[NodeLoadsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Returns all loads with optional filtering and pagination.Use the `loadCases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by LoadCase ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -163,7 +165,7 @@ class NodeLoadsRequestBuilder(BaseRequestBuilder):
     @dataclass
     class NodeLoadsRequestBuilderGetQueryParameters():
         """
-        Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        Returns all loads with optional filtering and pagination.Use the `loadCases` query parameter to filter by load cases — accepts SG list format(e.g. `"1,3-7,10"`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by LoadCase ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -173,10 +175,10 @@ class NodeLoadsRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "cases":
-                return "Cases"
             if original_name == "limit":
                 return "Limit"
+            if original_name == "load_cases":
+                return "LoadCases"
             if original_name == "load_category":
                 return "LoadCategory"
             if original_name == "nodes":
@@ -185,11 +187,11 @@ class NodeLoadsRequestBuilder(BaseRequestBuilder):
                 return "Offset"
             return original_name
         
-        # Load cases to filter by, in SG list format (e.g. `"1,3-7,10"`).Returns only loads belonging to the specified cases.Omit to return loads for all cases.
-        cases: Optional[str] = None
-
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
+
+        # Load cases to filter by, in SG list format (e.g. `"1,3-7,10"`).Returns only loads belonging to the specified load cases.Omit to return loads for all load cases.
+        load_cases: Optional[str] = None
 
         # Filter by load category number.Returns only loads assigned to the specified category.
         load_category: Optional[int] = None

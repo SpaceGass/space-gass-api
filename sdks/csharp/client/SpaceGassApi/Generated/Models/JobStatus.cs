@@ -8,11 +8,19 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Full job status response including the current job, session state, and model summary.Returned by lifecycle operations (new, open, save, status) and GET /job/status.
+    /// Full job status response including the current job, session state, structure summary, and loads summary.Returned by lifecycle operations (new, open, save, status) and GET /job/status.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class JobStatus : IParsable
     {
+        /// <summary>Summary of which analysis types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.AnalysisResultsSummary? Analysis { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.AnalysisResultsSummary Analysis { get; set; }
+#endif
         /// <summary>Read DTO for job responses.Model counts and file state are available via GET /job/status (JobStatusDto).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -21,13 +29,21 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.Job Job { get; set; }
 #endif
-        /// <summary>Summary counts of all model entities in the current job.</summary>
+        /// <summary>Summary counts of load-related entities in the current job — load casemanagement and all applied load types.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public global::SpaceGassApi.Models.ModelSummary? Model { get; set; }
+        public global::SpaceGassApi.Models.LoadsSummary? Loads { get; set; }
 #nullable restore
 #else
-        public global::SpaceGassApi.Models.ModelSummary Model { get; set; }
+        public global::SpaceGassApi.Models.LoadsSummary Loads { get; set; }
+#endif
+        /// <summary>Current API mode at the time this status was projected.`&quot;readwrite&quot;` or `&quot;readonly&quot;`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Mode { get; set; }
+#nullable restore
+#else
+        public string Mode { get; set; }
 #endif
         /// <summary>Current session/file state of the job.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -36,6 +52,22 @@ namespace SpaceGassApi.Models
 #nullable restore
 #else
         public global::SpaceGassApi.Models.JobState State { get; set; }
+#endif
+        /// <summary>Summary of which steel design types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.SteelDesignSummary? SteelDesign { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.SteelDesignSummary SteelDesign { get; set; }
+#endif
+        /// <summary>Summary counts of structural entities in the current job — geometry,boundary conditions, and section/material properties.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.StructureSummary? Structure { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.StructureSummary Structure { get; set; }
 #endif
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
@@ -55,9 +87,13 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "analysis", n => { Analysis = n.GetObjectValue<global::SpaceGassApi.Models.AnalysisResultsSummary>(global::SpaceGassApi.Models.AnalysisResultsSummary.CreateFromDiscriminatorValue); } },
                 { "job", n => { Job = n.GetObjectValue<global::SpaceGassApi.Models.Job>(global::SpaceGassApi.Models.Job.CreateFromDiscriminatorValue); } },
-                { "model", n => { Model = n.GetObjectValue<global::SpaceGassApi.Models.ModelSummary>(global::SpaceGassApi.Models.ModelSummary.CreateFromDiscriminatorValue); } },
+                { "loads", n => { Loads = n.GetObjectValue<global::SpaceGassApi.Models.LoadsSummary>(global::SpaceGassApi.Models.LoadsSummary.CreateFromDiscriminatorValue); } },
+                { "mode", n => { Mode = n.GetStringValue(); } },
                 { "state", n => { State = n.GetObjectValue<global::SpaceGassApi.Models.JobState>(global::SpaceGassApi.Models.JobState.CreateFromDiscriminatorValue); } },
+                { "steelDesign", n => { SteelDesign = n.GetObjectValue<global::SpaceGassApi.Models.SteelDesignSummary>(global::SpaceGassApi.Models.SteelDesignSummary.CreateFromDiscriminatorValue); } },
+                { "structure", n => { Structure = n.GetObjectValue<global::SpaceGassApi.Models.StructureSummary>(global::SpaceGassApi.Models.StructureSummary.CreateFromDiscriminatorValue); } },
             };
         }
         /// <summary>
@@ -67,9 +103,13 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteObjectValue<global::SpaceGassApi.Models.AnalysisResultsSummary>("analysis", Analysis);
             writer.WriteObjectValue<global::SpaceGassApi.Models.Job>("job", Job);
-            writer.WriteObjectValue<global::SpaceGassApi.Models.ModelSummary>("model", Model);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.LoadsSummary>("loads", Loads);
+            writer.WriteStringValue("mode", Mode);
             writer.WriteObjectValue<global::SpaceGassApi.Models.JobState>("state", State);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.SteelDesignSummary>("steelDesign", SteelDesign);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.StructureSummary>("structure", Structure);
         }
     }
 }

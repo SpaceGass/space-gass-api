@@ -13,14 +13,14 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeReaction : IParsable
     {
-        /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
         /// <summary>Reaction force in X direction. Unit: Force (see GET /job/units).</summary>
         public float? Fx { get; set; }
         /// <summary>Reaction force in Y direction. Unit: Force (see GET /job/units).</summary>
         public float? Fy { get; set; }
         /// <summary>Reaction force in Z direction. Unit: Force (see GET /job/units).</summary>
         public float? Fz { get; set; }
+        /// <summary>Load case ID.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>Reaction moment about X axis. Unit: Moment (see GET /job/units).</summary>
         public float? Mx { get; set; }
         /// <summary>Reaction moment about Y axis. Unit: Moment (see GET /job/units).</summary>
@@ -47,10 +47,10 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "fx", n => { Fx = n.GetFloatValue(); } },
                 { "fy", n => { Fy = n.GetFloatValue(); } },
                 { "fz", n => { Fz = n.GetFloatValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "mx", n => { Mx = n.GetFloatValue(); } },
                 { "my", n => { My = n.GetFloatValue(); } },
                 { "mz", n => { Mz = n.GetFloatValue(); } },
@@ -64,10 +64,10 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
             writer.WriteFloatValue("fx", Fx);
             writer.WriteFloatValue("fy", Fy);
             writer.WriteFloatValue("fz", Fz);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteFloatValue("mx", Mx);
             writer.WriteFloatValue("my", My);
             writer.WriteFloatValue("mz", Mz);

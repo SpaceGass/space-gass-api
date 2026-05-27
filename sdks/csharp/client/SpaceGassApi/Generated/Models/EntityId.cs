@@ -131,6 +131,10 @@ namespace SpaceGassApi.Models
         #pragma warning disable CS1591
         CombinationLoadCases,
         #pragma warning restore CS1591
+        [EnumMember(Value = "Filters")]
+        #pragma warning disable CS1591
+        Filters,
+        #pragma warning restore CS1591
         [EnumMember(Value = "LoadCombinations")]
         #pragma warning disable CS1591
         LoadCombinations,

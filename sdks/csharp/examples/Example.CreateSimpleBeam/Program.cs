@@ -130,7 +130,7 @@ try
     await client.Job.Loads.SelfWeightLoads.PostAsync(
         new SelfWeightLoadCreate
         {
-            Case = selfWeightCase.Id,
+            LoadCase = selfWeightCase.Id,
             AccelerationX = 0.0,
             AccelerationY = -1.0,    // 1 G downward
             AccelerationZ = 0.0,
@@ -142,7 +142,7 @@ try
     await client.Job.Loads.MemberDistributedLoads.PostAsync(
         new MemberDistributedLoadCreate
         {
-            Case = deadCase.Id,
+            LoadCase = deadCase.Id,
             Member = member.Id,
             PositionUnits = LoadPositionUnits.Percent,
             StartPosition = 0.0,
@@ -157,7 +157,7 @@ try
     await client.Job.Loads.MemberDistributedLoads.PostAsync(
         new MemberDistributedLoadCreate
         {
-            Case = liveCase.Id,
+            LoadCase = liveCase.Id,
             Member = member.Id,
             PositionUnits = LoadPositionUnits.Percent,
             StartPosition = 0.0,
@@ -181,9 +181,9 @@ try
             // ULS: 1.2 G + 1.5 Q (self-weight + dead are both G)
             CombinationItems = new List<CombinationLoadCaseItem>
             {
-                new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
-                new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
-                new() { Case = liveCase.Id,       MultiplyingFactor = 1.5 },
+                new() { LoadCase = selfWeightCase.Id, MultiplyingFactor = 1.2 },
+                new() { LoadCase = deadCase.Id,       MultiplyingFactor = 1.2 },
+                new() { LoadCase = liveCase.Id,       MultiplyingFactor = 1.5 },
             },
         });
 
@@ -195,9 +195,9 @@ try
             // SLS short-term: 1.0 G + 0.7 Q
             CombinationItems = new List<CombinationLoadCaseItem>
             {
-                new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
-                new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
-                new() { Case = liveCase.Id,       MultiplyingFactor = 0.7 },
+                new() { LoadCase = selfWeightCase.Id, MultiplyingFactor = 1.0 },
+                new() { LoadCase = deadCase.Id,       MultiplyingFactor = 1.0 },
+                new() { LoadCase = liveCase.Id,       MultiplyingFactor = 0.7 },
             },
         });
 
@@ -260,9 +260,9 @@ try
     // == Step 15 — Query reactions =================================
     Console.WriteLine("Querying ULS reactions...");
     var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
-        config => config.QueryParameters.Cases = new[] { ulsCase.Id!.Value }.ToFilterString());
+        config => config.QueryParameters.LoadCases = new[] { ulsCase.Id!.Value }.ToFilterString());
 
-    if (reactions!.Warnings?.CasesNotAnalyzed is { Length: > 0 } missing)
+    if (reactions!.Warnings?.LoadCasesNotAnalyzed is { Length: > 0 } missing)
     {
         throw new Exception($"Cases not analysed: {missing}. Run the analysis first.");
     }
@@ -270,7 +270,7 @@ try
     foreach (var r in reactions.Results!)
     {
         Console.WriteLine(
-            $"  Node {r.Node}, LC {r.Case}: " +
+            $"  Node {r.Node}, LC {r.LoadCase}: " +
             $"Fx={r.Fx:F2}, Fy={r.Fy:F2}, Fz={r.Fz:F2}");
     }
     Console.WriteLine();
@@ -279,7 +279,7 @@ try
     var ulsForces = await client.Job.Query.Analysis.Static.MemberIntermediateForces
         .GetAsync(config =>
         {
-            config.QueryParameters.Cases   = new[] { ulsCase.Id!.Value }.ToFilterString();
+            config.QueryParameters.LoadCases   = new[] { ulsCase.Id!.Value }.ToFilterString();
             config.QueryParameters.Members = new[] { member.Id!.Value }.ToFilterString();
         });
 
@@ -291,7 +291,7 @@ try
     var slsDisplacements = await client.Job.Query.Analysis.Static.MemberIntermediateDisplacements
         .GetAsync(config =>
         {
-            config.QueryParameters.Cases   = new[] { slsCase.Id!.Value }.ToFilterString();
+            config.QueryParameters.LoadCases   = new[] { slsCase.Id!.Value }.ToFilterString();
             config.QueryParameters.Members = new[] { member.Id!.Value }.ToFilterString();
         });
 

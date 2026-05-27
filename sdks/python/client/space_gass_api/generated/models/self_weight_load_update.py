@@ -15,8 +15,10 @@ class SelfWeightLoadUpdate(Parsable):
     acceleration_y: Optional[float] = None
     # Gravitational acceleration in the global Z direction.
     acceleration_z: Optional[float] = None
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
     # The load case number.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # Load category for grouping/organization.
     load_category: Optional[int] = None
     
@@ -40,7 +42,8 @@ class SelfWeightLoadUpdate(Parsable):
             "accelerationX": lambda n : setattr(self, 'acceleration_x', n.get_float_value()),
             "accelerationY": lambda n : setattr(self, 'acceleration_y', n.get_float_value()),
             "accelerationZ": lambda n : setattr(self, 'acceleration_z', n.get_float_value()),
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
         }
         return fields
@@ -56,7 +59,8 @@ class SelfWeightLoadUpdate(Parsable):
         writer.write_float_value("accelerationX", self.acceleration_x)
         writer.write_float_value("accelerationY", self.acceleration_y)
         writer.write_float_value("accelerationZ", self.acceleration_z)
-        writer.write_int_value("case", self.case)
+        writer.write_str_value("guid", self.guid)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("loadCategory", self.load_category)
     
 

@@ -14,7 +14,7 @@ namespace SpaceGassApi.Models
     public partial class CombinationLoadCaseItem : IParsable
     {
         /// <summary>Component load case number.</summary>
-        public int? Case { get; set; }
+        public int? LoadCase { get; set; }
         /// <summary>Multiplying factor applied to the component load case (default: 1.0).</summary>
         public double? MultiplyingFactor { get; set; }
         /// <summary>
@@ -35,7 +35,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "multiplyingFactor", n => { MultiplyingFactor = n.GetDoubleValue(); } },
             };
         }
@@ -46,7 +46,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteDoubleValue("multiplyingFactor", MultiplyingFactor);
         }
     }

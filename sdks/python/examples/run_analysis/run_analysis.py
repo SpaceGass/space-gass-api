@@ -154,7 +154,7 @@ async def main() -> int:
             # Print first few reactions as a sample
             for r in reactions[:3]:
                 print(
-                    f"    Node {r.node}, LC {r.case}: "
+                    f"    Node {r.node}, LC {r.load_case}: "
                     f"FX={r.fx:.2f}, FY={r.fy:.2f}, FZ={r.fz:.2f}"
                 )
             if len(reactions) > 3:

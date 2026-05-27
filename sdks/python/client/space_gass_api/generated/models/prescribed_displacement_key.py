@@ -10,7 +10,7 @@ class PrescribedDisplacementKey(Parsable):
     Composite Id object for bulk delete operations.
     """
     # The load case number.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # The node number.
     node: Optional[int] = None
     
@@ -31,7 +31,7 @@ class PrescribedDisplacementKey(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "node": lambda n : setattr(self, 'node', n.get_int_value()),
         }
         return fields
@@ -44,7 +44,7 @@ class PrescribedDisplacementKey(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("node", self.node)
     
 

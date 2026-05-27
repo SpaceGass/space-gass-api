@@ -34,11 +34,12 @@ namespace SpaceGassApi.Job.Status
         {
         }
         /// <summary>
-        /// Returns the current job and its file/session state.Same response shape as new, open, and save for consistency.            Use this to determine:- Whether a job is currently loaded (status.isOpen)- Whether it needs saving (status.isModified)- Whether to provide a filePath when saving (status.isNew)- What&apos;s in the model (job.modelSummary)
+        /// Returns the current job and its file/session state.Same response shape as new, open, and save for consistency.            Use this to determine:- Whether a job is currently loaded (state.isOpen)- Whether it needs saving (state.isModified)- Whether to provide a filePath when saving (state.isNew)- What&apos;s in the model (model.nodes, model.members, etc.)- Whether analysis results exist (analysis.hasStaticResults, etc.)- Whether steel design results exist (steelDesign.hasMemberDesignResults, etc.)
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobStatus"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -52,12 +53,13 @@ namespace SpaceGassApi.Job.Status
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobStatus>(requestInfo, global::SpaceGassApi.Models.JobStatus.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Returns the current job and its file/session state.Same response shape as new, open, and save for consistency.            Use this to determine:- Whether a job is currently loaded (status.isOpen)- Whether it needs saving (status.isModified)- Whether to provide a filePath when saving (status.isNew)- What&apos;s in the model (job.modelSummary)
+        /// Returns the current job and its file/session state.Same response shape as new, open, and save for consistency.            Use this to determine:- Whether a job is currently loaded (state.isOpen)- Whether it needs saving (state.isModified)- Whether to provide a filePath when saving (state.isNew)- What&apos;s in the model (model.nodes, model.members, etc.)- Whether analysis results exist (analysis.hasStaticResults, etc.)- Whether steel design results exist (steelDesign.hasMemberDesignResults, etc.)
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
