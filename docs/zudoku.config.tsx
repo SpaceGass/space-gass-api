@@ -4,7 +4,7 @@ import type { ZudokuConfig } from "zudoku";
 // Build version — sourced from `info.x-space-gass-build` in the spec at
 // build time so the API reference label always tracks the current SDK
 // build (e.g. "Preview (build 14.50.75)") without manual updates.
-import openapiSpec from "../descriptions/preview/openapi.json";
+import openapiSpec from "../descriptions/preview/SpaceGassApi.json";
 const SPACE_GASS_BUILD: string =
   ((openapiSpec as { info?: { ["x-space-gass-build"]?: string } }).info?.[
     "x-space-gass-build"
@@ -359,7 +359,7 @@ const config: ZudokuConfig = {
   apis: [
     {
       type: "file",
-      input: "../descriptions/preview/openapi.json",
+      input: "../descriptions/preview/SpaceGassApi.json",
       path: "/api",
       label: `Preview (build ${SPACE_GASS_BUILD})`,
       options: {
@@ -380,7 +380,7 @@ const config: ZudokuConfig = {
     // Future versions:
     // {
     //   type: "file",
-    //   input: "../descriptions/archive/v14.6.0/openapi.json",
+    //   input: "../descriptions/archive/v14.6.0/SpaceGassApi.json",
     //   path: "/api",
     //   label: "14.6.0",
     //   options: { ... },

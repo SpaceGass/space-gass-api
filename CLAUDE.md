@@ -22,10 +22,9 @@ This is the public developer-facing repo for the SPACE GASS API. It contains the
 
 ### OpenAPI Spec Naming
 
-- Use **generic filenames** in `preview/` and `current/`: `openapi.json`
+- Use **`SpaceGassApi.json`** in `preview/` and `current/` — matches the project output name
 - Use **versioned filenames** in `archive/`: `openapi-v14.5.0.json`
 - The version is embedded inside the spec file itself — the filename doesn't need to carry it in folders where configs need a stable path
-- No product name in the filename (repo name already provides context)
 
 ### SDK Client Naming
 
@@ -41,7 +40,7 @@ This is the public developer-facing repo for the SPACE GASS API. It contains the
 ### SDK Generation (Kiota)
 
 - `kiota.config.json` at the root defines both C# and Python targets
-- Both point to `descriptions/preview/openapi.json` (stable path)
+- Both point to `descriptions/preview/SpaceGassApi.json` (stable path)
 - The `generate-clients` workflow is **manual trigger** (`workflow_dispatch`) with `--clean-output`
 - C# output: `sdks/csharp/client/SpaceGassApi/Generated/` — never hand-edit
 - Python output: `sdks/python/client/space_gass_api/generated/` — never hand-edit. The `generate-clients` workflow runs `tools/regen_python_inits.py` automatically after Kiota; for local regens, run `python tools/regen_python_inits.py` afterwards.
@@ -108,7 +107,7 @@ sdks/python/client/
 - **`basePath: "/docs"`** is required in `zudoku.config.tsx` — the docs site is served at `https://api.spacegass.com/docs/`
 - The deploy workflow uploads `docs/dist/docs` (the inner basePath directory) as the Pages artifact to avoid double-nesting
 - A postinstall patch (`docs/patches/fix-zudoku-mjs.js`) fixes a Vite 7 SSR `.mjs` issue
-- The API reference reads from `../descriptions/preview/openapi.json` (single source of truth)
+- The API reference reads from `../descriptions/preview/SpaceGassApi.json` (single source of truth)
 - `node_modules/` is never committed — `npm ci` regenerates it
 
 ### GitHub Pages Deployment
