@@ -1,4 +1,3 @@
-using Microsoft.Kiota.Abstractions;
 using SpaceGassApi;
 using SpaceGassApi.Models;
 using SpaceGassApi.Utils;
@@ -447,15 +446,6 @@ catch (ErrorResponse err)
         Console.Error.WriteLine($"  Code: {err.ErrorCode}");
     foreach (var ve in err.Errors ?? [])
         Console.Error.WriteLine($"  [{ve.Field}] {ve.Message}");
-    Console.ResetColor();
-    return 1;
-}
-catch (ApiException apiEx)
-{
-    // HTTP-level API error that didn't deserialise as ErrorResponse
-    // (e.g. 500 Internal Server Error, unexpected content type)
-    Console.ForegroundColor = ConsoleColor.Red;
-    Console.Error.WriteLine($"API exception (HTTP {apiEx.ResponseStatusCode}): {apiEx.Message}");
     Console.ResetColor();
     return 1;
 }
