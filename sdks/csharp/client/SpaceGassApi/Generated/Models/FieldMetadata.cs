@@ -21,6 +21,8 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.AllowedValue> AllowedValues { get; set; }
 #endif
+        /// <summary>Internal: whether the underlying SPACE GASS datasheet cell may be blank —reads NETSpec `&lt;Empty&gt;1&lt;/Empty&gt;`. Set only when the field isDataSpec-backed (via `[NetspecField]`); null otherwise. Emitted inDebug builds for diagnostics; suppressed entirely in Release.</summary>
+        public bool? AllowEmpty { get; set; }
         /// <summary>Data type: &quot;Integer&quot; | &quot;Double&quot; | &quot;String&quot; | &quot;Enum&quot; | &quot;Boolean&quot; | &quot;Guid&quot;.For enums, see SpaceGassApi.Models.Dtos.Common.FieldMetadataDto.AllowedValues for the permitted values.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -71,6 +73,14 @@ namespace SpaceGassApi.Models
 #else
         public string Min { get; set; }
 #endif
+        /// <summary>Internal-only: raw NETSpec field name (e.g. &quot;Node A&quot;, &quot;Dir Angle&quot;) forcorrelation against SPACE GASS documentation. Not serialised in Release.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? SourceName { get; set; }
+#nullable restore
+#else
+        public string SourceName { get; set; }
+#endif
         /// <summary>Resolved unit label based on the current job units — e.g. &quot;mm&quot;, &quot;kN&quot;,&quot;kN/mm^2&quot;. Null when the field has no units.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -97,6 +107,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "allowEmpty", n => { AllowEmpty = n.GetBoolValue(); } },
                 { "allowedValues", n => { AllowedValues = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.AllowedValue>(global::SpaceGassApi.Models.AllowedValue.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "dataType", n => { DataType = n.GetStringValue(); } },
                 { "default", n => { Default = n.GetStringValue(); } },
@@ -105,6 +116,7 @@ namespace SpaceGassApi.Models
                 { "max", n => { Max = n.GetStringValue(); } },
                 { "maxLength", n => { MaxLength = n.GetIntValue(); } },
                 { "min", n => { Min = n.GetStringValue(); } },
+                { "sourceName", n => { SourceName = n.GetStringValue(); } },
                 { "units", n => { Units = n.GetStringValue(); } },
             };
         }
@@ -116,6 +128,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.AllowedValue>("allowedValues", AllowedValues);
+            writer.WriteBoolValue("allowEmpty", AllowEmpty);
             writer.WriteStringValue("dataType", DataType);
             writer.WriteStringValue("default", Default);
             writer.WriteStringValue("description", Description);
@@ -123,6 +136,7 @@ namespace SpaceGassApi.Models
             writer.WriteStringValue("max", Max);
             writer.WriteIntValue("maxLength", MaxLength);
             writer.WriteStringValue("min", Min);
+            writer.WriteStringValue("sourceName", SourceName);
             writer.WriteStringValue("units", Units);
         }
     }

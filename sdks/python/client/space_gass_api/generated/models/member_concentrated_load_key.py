@@ -10,7 +10,7 @@ class MemberConcentratedLoadKey(Parsable):
     Composite Id object for bulk delete operations on member concentrated loads.
     """
     # The load case number.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # The member number.
     member: Optional[int] = None
     # The sub-load number.
@@ -33,7 +33,7 @@ class MemberConcentratedLoadKey(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "subLoad": lambda n : setattr(self, 'sub_load', n.get_int_value()),
         }
@@ -47,7 +47,7 @@ class MemberConcentratedLoadKey(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("member", self.member)
         writer.write_int_value("subLoad", self.sub_load)
     

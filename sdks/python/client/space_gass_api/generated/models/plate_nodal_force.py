@@ -9,14 +9,14 @@ class PlateNodalForce(Parsable):
     """
     Plate nodal force results grouped by load case and plate.Columnar arrays hold force values at each node of the plate element.
     """
-    # Load case ID.
-    case: Optional[int] = None
     # Force in X at each node. Unit: Force (see GET /job/units).
     fx: Optional[list[float]] = None
     # Force in Y at each node. Unit: Force (see GET /job/units).
     fy: Optional[list[float]] = None
     # Force in Z at each node. Unit: Force (see GET /job/units).
     fz: Optional[list[float]] = None
+    # Load case ID.
+    load_case: Optional[int] = None
     # Moment about X at each node. Unit: Moment (see GET /job/units).
     mx: Optional[list[float]] = None
     # Moment about Y at each node. Unit: Moment (see GET /job/units).
@@ -45,10 +45,10 @@ class PlateNodalForce(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "fx": lambda n : setattr(self, 'fx', n.get_collection_of_primitive_values(float)),
             "fy": lambda n : setattr(self, 'fy', n.get_collection_of_primitive_values(float)),
             "fz": lambda n : setattr(self, 'fz', n.get_collection_of_primitive_values(float)),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "mx": lambda n : setattr(self, 'mx', n.get_collection_of_primitive_values(float)),
             "my": lambda n : setattr(self, 'my', n.get_collection_of_primitive_values(float)),
             "mz": lambda n : setattr(self, 'mz', n.get_collection_of_primitive_values(float)),
@@ -65,10 +65,10 @@ class PlateNodalForce(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
         writer.write_collection_of_primitive_values("fx", self.fx)
         writer.write_collection_of_primitive_values("fy", self.fy)
         writer.write_collection_of_primitive_values("fz", self.fz)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_collection_of_primitive_values("mx", self.mx)
         writer.write_collection_of_primitive_values("my", self.my)
         writer.write_collection_of_primitive_values("mz", self.mz)

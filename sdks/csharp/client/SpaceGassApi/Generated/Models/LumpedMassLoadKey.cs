@@ -14,7 +14,7 @@ namespace SpaceGassApi.Models
     public partial class LumpedMassLoadKey : IParsable
     {
         /// <summary>The load case number.</summary>
-        public int? Case { get; set; }
+        public int? LoadCase { get; set; }
         /// <summary>The node number.</summary>
         public int? Node { get; set; }
         /// <summary>
@@ -35,7 +35,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "node", n => { Node = n.GetIntValue(); } },
             };
         }
@@ -46,7 +46,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("node", Node);
         }
     }

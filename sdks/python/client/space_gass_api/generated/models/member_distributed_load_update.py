@@ -15,8 +15,6 @@ class MemberDistributedLoadUpdate(Parsable):
     """
     # Coordinate axes type for distributed loads and plate pressure loads.Maps to SPACE GASS lookup table "L/GI/GP Axes".
     axes: Optional[LoadAxes] = None
-    # The load case number.
-    case: Optional[int] = None
     # Finish position of the distributed load along the member.
     finish_position: Optional[float] = None
     # Distributed force intensity in X direction at the finish position.
@@ -31,6 +29,10 @@ class MemberDistributedLoadUpdate(Parsable):
     fz_finish: Optional[float] = None
     # Distributed force intensity in Z direction at the start position.
     fz_start: Optional[float] = None
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
+    # The load case number.
+    load_case: Optional[int] = None
     # Load category for grouping/organization.
     load_category: Optional[int] = None
     # The member number.
@@ -66,7 +68,6 @@ class MemberDistributedLoadUpdate(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "axes": lambda n : setattr(self, 'axes', n.get_enum_value(LoadAxes)),
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "finishPosition": lambda n : setattr(self, 'finish_position', n.get_float_value()),
             "fxFinish": lambda n : setattr(self, 'fx_finish', n.get_float_value()),
             "fxStart": lambda n : setattr(self, 'fx_start', n.get_float_value()),
@@ -74,6 +75,8 @@ class MemberDistributedLoadUpdate(Parsable):
             "fyStart": lambda n : setattr(self, 'fy_start', n.get_float_value()),
             "fzFinish": lambda n : setattr(self, 'fz_finish', n.get_float_value()),
             "fzStart": lambda n : setattr(self, 'fz_start', n.get_float_value()),
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "positionUnits": lambda n : setattr(self, 'position_units', n.get_enum_value(LoadPositionUnits)),
@@ -91,7 +94,6 @@ class MemberDistributedLoadUpdate(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_enum_value("axes", self.axes)
-        writer.write_int_value("case", self.case)
         writer.write_float_value("finishPosition", self.finish_position)
         writer.write_float_value("fxFinish", self.fx_finish)
         writer.write_float_value("fxStart", self.fx_start)
@@ -99,6 +101,8 @@ class MemberDistributedLoadUpdate(Parsable):
         writer.write_float_value("fyStart", self.fy_start)
         writer.write_float_value("fzFinish", self.fz_finish)
         writer.write_float_value("fzStart", self.fz_start)
+        writer.write_str_value("guid", self.guid)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_int_value("member", self.member)
         writer.write_enum_value("positionUnits", self.position_units)

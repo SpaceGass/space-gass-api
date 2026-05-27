@@ -32,6 +32,7 @@ class EntityId(str, Enum):
     LoadCaseGroups = "LoadCaseGroups",
     LoadCategories = "LoadCategories",
     CombinationLoadCases = "CombinationLoadCases",
+    Filters = "Filters",
     LoadCombinations = "LoadCombinations",
     AnalysisSettings = "AnalysisSettings",
     NodeDisplacements = "NodeDisplacements",

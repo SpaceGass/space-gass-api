@@ -10,16 +10,22 @@ can write:
 
 from ..generated.models.acceleration_unit import AccelerationUnit
 from ..generated.models.allowed_value import AllowedValue
+from ..generated.models.analysis_info import AnalysisInfo
+from ..generated.models.analysis_load_case_info import AnalysisLoadCaseInfo
 from ..generated.models.analysis_load_case_progress import AnalysisLoadCaseProgress
 from ..generated.models.analysis_log_level import AnalysisLogLevel
 from ..generated.models.analysis_log_message import AnalysisLogMessage
+from ..generated.models.analysis_optimization_method import AnalysisOptimizationMethod
 from ..generated.models.analysis_progress import AnalysisProgress
+from ..generated.models.analysis_results_summary import AnalysisResultsSummary
 from ..generated.models.analysis_run import AnalysisRun
 from ..generated.models.analysis_run_parameters import AnalysisRun_parameters
 from ..generated.models.analysis_run_result import AnalysisRunResult
 from ..generated.models.analysis_run_status import AnalysisRunStatus
 from ..generated.models.analysis_type import AnalysisType
 from ..generated.models.angle_type import AngleType
+from ..generated.models.api_mode import ApiMode
+from ..generated.models.api_mode_update import ApiModeUpdate
 from ..generated.models.axes_type import AxesType
 from ..generated.models.axial_force_distribution import AxialForceDistribution
 from ..generated.models.buckling_effective_length import BucklingEffectiveLength
@@ -30,7 +36,6 @@ from ..generated.models.buckling_settings import BucklingSettings
 from ..generated.models.buckling_settings_update import BucklingSettingsUpdate
 from ..generated.models.buckling_theory import BucklingTheory
 from ..generated.models.bulk_error import BulkError
-from ..generated.models.case_modes_warning import CaseModesWarning
 from ..generated.models.combination_load_case_create import CombinationLoadCaseCreate
 from ..generated.models.combination_load_case_item import CombinationLoadCaseItem
 from ..generated.models.combination_load_case_update import CombinationLoadCaseUpdate
@@ -49,8 +54,40 @@ from ..generated.models.error_source import ErrorSource
 from ..generated.models.expand_option import ExpandOption
 from ..generated.models.field_metadata import FieldMetadata
 from ..generated.models.file_opening_status import FileOpeningStatus
+from ..generated.models.filter import Filter
+from ..generated.models.filter_axis_range import FilterAxisRange
+from ..generated.models.filter_axis_range_update import FilterAxisRangeUpdate
+from ..generated.models.filter_bulk_result import FilterBulkResult
+from ..generated.models.filter_create import FilterCreate
+from ..generated.models.filter_materials import FilterMaterials
+from ..generated.models.filter_materials_update import FilterMaterialsUpdate
+from ..generated.models.filter_member_type import FilterMemberType
+from ..generated.models.filter_members import FilterMembers
+from ..generated.models.filter_members_update import FilterMembersUpdate
+from ..generated.models.filter_mode import FilterMode
+from ..generated.models.filter_node_type import FilterNodeType
+from ..generated.models.filter_nodes import FilterNodes
+from ..generated.models.filter_nodes_update import FilterNodesUpdate
+from ..generated.models.filter_plate_cut_type import FilterPlateCutType
+from ..generated.models.filter_plate_cuts import FilterPlateCuts
+from ..generated.models.filter_plate_cuts_update import FilterPlateCutsUpdate
+from ..generated.models.filter_plate_strip_type import FilterPlateStripType
+from ..generated.models.filter_plate_strips import FilterPlateStrips
+from ..generated.models.filter_plate_strips_update import FilterPlateStripsUpdate
+from ..generated.models.filter_plate_thicknesses import FilterPlateThicknesses
+from ..generated.models.filter_plate_thicknesses_update import FilterPlateThicknessesUpdate
+from ..generated.models.filter_plate_type import FilterPlateType
+from ..generated.models.filter_plates import FilterPlates
+from ..generated.models.filter_plates_update import FilterPlatesUpdate
+from ..generated.models.filter_sections import FilterSections
+from ..generated.models.filter_sections_update import FilterSectionsUpdate
+from ..generated.models.filter_steel_connections import FilterSteelConnections
+from ..generated.models.filter_steel_connections_update import FilterSteelConnectionsUpdate
+from ..generated.models.filter_steel_member_type import FilterSteelMemberType
+from ..generated.models.filter_steel_members import FilterSteelMembers
+from ..generated.models.filter_steel_members_update import FilterSteelMembersUpdate
+from ..generated.models.filter_update import FilterUpdate
 from ..generated.models.force_unit import ForceUnit
-from ..generated.models.frequency_optimization_method import FrequencyOptimizationMethod
 from ..generated.models.friction_normal_axis import FrictionNormalAxis
 from ..generated.models.friction_normal_direction import FrictionNormalDirection
 from ..generated.models.job import Job
@@ -75,6 +112,7 @@ from ..generated.models.load_case_group import LoadCaseGroup
 from ..generated.models.load_case_group_bulk_result import LoadCaseGroupBulkResult
 from ..generated.models.load_case_group_create import LoadCaseGroupCreate
 from ..generated.models.load_case_group_update import LoadCaseGroupUpdate
+from ..generated.models.load_case_modes_warning import LoadCaseModesWarning
 from ..generated.models.load_case_type import LoadCaseType
 from ..generated.models.load_case_update import LoadCaseUpdate
 from ..generated.models.load_category import LoadCategory
@@ -83,6 +121,7 @@ from ..generated.models.load_category_create import LoadCategoryCreate
 from ..generated.models.load_category_update import LoadCategoryUpdate
 from ..generated.models.load_position_units import LoadPositionUnits
 from ..generated.models.loading_type import LoadingType
+from ..generated.models.loads_summary import LoadsSummary
 from ..generated.models.lumped_mass_load import LumpedMassLoad
 from ..generated.models.lumped_mass_load_bulk_result import LumpedMassLoadBulkResult
 from ..generated.models.lumped_mass_load_create import LumpedMassLoadCreate
@@ -144,7 +183,6 @@ from ..generated.models.member_type import MemberType
 from ..generated.models.member_update import MemberUpdate
 from ..generated.models.mode_shape import ModeShape
 from ..generated.models.mode_shape_query_result import ModeShapeQueryResult
-from ..generated.models.model_summary import ModelSummary
 from ..generated.models.moment_unit import MomentUnit
 from ..generated.models.natural_frequency import NaturalFrequency
 from ..generated.models.natural_frequency_query_result import NaturalFrequencyQueryResult
@@ -176,7 +214,6 @@ from ..generated.models.object_bulk_result import ObjectBulkResult
 from ..generated.models.open_job_request import OpenJobRequest
 from ..generated.models.open_sample_request import OpenSampleRequest
 from ..generated.models.optimization_axis import OptimizationAxis
-from ..generated.models.optimization_method import OptimizationMethod
 from ..generated.models.plate import Plate
 from ..generated.models.plate_bulk_result import PlateBulkResult
 from ..generated.models.plate_create import PlateCreate
@@ -222,17 +259,20 @@ from ..generated.models.section_properties_unit import SectionPropertiesUnit
 from ..generated.models.section_update import SectionUpdate
 from ..generated.models.section_user_create import SectionUserCreate
 from ..generated.models.self_weight_load import SelfWeightLoad
+from ..generated.models.self_weight_load_bulk_result import SelfWeightLoadBulkResult
 from ..generated.models.self_weight_load_create import SelfWeightLoadCreate
 from ..generated.models.self_weight_load_update import SelfWeightLoadUpdate
-from ..generated.models.service_info import ServiceInfo
+from ..generated.models.service_status import ServiceStatus
 from ..generated.models.set_general_restraint_request import SetGeneralRestraintRequest
 from ..generated.models.solver_type import SolverType
 from ..generated.models.static_settings import StaticSettings
 from ..generated.models.static_settings_update import StaticSettingsUpdate
 from ..generated.models.steel_check_summary import SteelCheckSummary
 from ..generated.models.steel_check_summary_query_result import SteelCheckSummaryQueryResult
+from ..generated.models.steel_design_summary import SteelDesignSummary
 from ..generated.models.stepping_method import SteppingMethod
 from ..generated.models.stress_unit import StressUnit
+from ..generated.models.structure_summary import StructureSummary
 from ..generated.models.table_metadata import TableMetadata
 from ..generated.models.temperature_unit import TemperatureUnit
 from ..generated.models.tension_compression_only_mode import TensionCompressionOnlyMode
@@ -251,16 +291,22 @@ from ..generated.models.vertical_axis import VerticalAxis
 __all__ = [
     "AccelerationUnit",
     "AllowedValue",
+    "AnalysisInfo",
+    "AnalysisLoadCaseInfo",
     "AnalysisLoadCaseProgress",
     "AnalysisLogLevel",
     "AnalysisLogMessage",
+    "AnalysisOptimizationMethod",
     "AnalysisProgress",
+    "AnalysisResultsSummary",
     "AnalysisRun",
     "AnalysisRun_parameters",
     "AnalysisRunResult",
     "AnalysisRunStatus",
     "AnalysisType",
     "AngleType",
+    "ApiMode",
+    "ApiModeUpdate",
     "AxesType",
     "AxialForceDistribution",
     "BucklingEffectiveLength",
@@ -271,7 +317,6 @@ __all__ = [
     "BucklingSettingsUpdate",
     "BucklingTheory",
     "BulkError",
-    "CaseModesWarning",
     "CombinationLoadCaseCreate",
     "CombinationLoadCaseItem",
     "CombinationLoadCaseUpdate",
@@ -290,8 +335,40 @@ __all__ = [
     "ExpandOption",
     "FieldMetadata",
     "FileOpeningStatus",
+    "Filter",
+    "FilterAxisRange",
+    "FilterAxisRangeUpdate",
+    "FilterBulkResult",
+    "FilterCreate",
+    "FilterMaterials",
+    "FilterMaterialsUpdate",
+    "FilterMemberType",
+    "FilterMembers",
+    "FilterMembersUpdate",
+    "FilterMode",
+    "FilterNodeType",
+    "FilterNodes",
+    "FilterNodesUpdate",
+    "FilterPlateCutType",
+    "FilterPlateCuts",
+    "FilterPlateCutsUpdate",
+    "FilterPlateStripType",
+    "FilterPlateStrips",
+    "FilterPlateStripsUpdate",
+    "FilterPlateThicknesses",
+    "FilterPlateThicknessesUpdate",
+    "FilterPlateType",
+    "FilterPlates",
+    "FilterPlatesUpdate",
+    "FilterSections",
+    "FilterSectionsUpdate",
+    "FilterSteelConnections",
+    "FilterSteelConnectionsUpdate",
+    "FilterSteelMemberType",
+    "FilterSteelMembers",
+    "FilterSteelMembersUpdate",
+    "FilterUpdate",
     "ForceUnit",
-    "FrequencyOptimizationMethod",
     "FrictionNormalAxis",
     "FrictionNormalDirection",
     "Job",
@@ -316,6 +393,7 @@ __all__ = [
     "LoadCaseGroupBulkResult",
     "LoadCaseGroupCreate",
     "LoadCaseGroupUpdate",
+    "LoadCaseModesWarning",
     "LoadCaseType",
     "LoadCaseUpdate",
     "LoadCategory",
@@ -324,6 +402,7 @@ __all__ = [
     "LoadCategoryUpdate",
     "LoadPositionUnits",
     "LoadingType",
+    "LoadsSummary",
     "LumpedMassLoad",
     "LumpedMassLoadBulkResult",
     "LumpedMassLoadCreate",
@@ -385,7 +464,6 @@ __all__ = [
     "MemberUpdate",
     "ModeShape",
     "ModeShapeQueryResult",
-    "ModelSummary",
     "MomentUnit",
     "NaturalFrequency",
     "NaturalFrequencyQueryResult",
@@ -417,7 +495,6 @@ __all__ = [
     "OpenJobRequest",
     "OpenSampleRequest",
     "OptimizationAxis",
-    "OptimizationMethod",
     "Plate",
     "PlateBulkResult",
     "PlateCreate",
@@ -463,17 +540,20 @@ __all__ = [
     "SectionUpdate",
     "SectionUserCreate",
     "SelfWeightLoad",
+    "SelfWeightLoadBulkResult",
     "SelfWeightLoadCreate",
     "SelfWeightLoadUpdate",
-    "ServiceInfo",
+    "ServiceStatus",
     "SetGeneralRestraintRequest",
     "SolverType",
     "StaticSettings",
     "StaticSettingsUpdate",
     "SteelCheckSummary",
     "SteelCheckSummaryQueryResult",
+    "SteelDesignSummary",
     "SteppingMethod",
     "StressUnit",
+    "StructureSummary",
     "TableMetadata",
     "TemperatureUnit",
     "TensionCompressionOnlyMode",

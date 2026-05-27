@@ -10,7 +10,7 @@ class CombinationLoadCaseItem(Parsable):
     Represents a single component within a load combination — a component case Id andthe multiplying factor applied to it.
     """
     # Component load case number.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # Multiplying factor applied to the component load case (default: 1.0).
     multiplying_factor: Optional[float] = None
     
@@ -31,7 +31,7 @@ class CombinationLoadCaseItem(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "multiplyingFactor": lambda n : setattr(self, 'multiplying_factor', n.get_float_value()),
         }
         return fields
@@ -44,7 +44,7 @@ class CombinationLoadCaseItem(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_float_value("multiplyingFactor", self.multiplying_factor)
     
 

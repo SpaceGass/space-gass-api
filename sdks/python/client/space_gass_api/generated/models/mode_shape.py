@@ -10,7 +10,7 @@ class ModeShape(Parsable):
     Dynamic mode shape results grouped by load case and mode (FileId 219).Columnar arrays hold displacement values at each node.
     """
     # Load case ID.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # Mode number.
     mode: Optional[int] = None
     # Node keys.
@@ -45,7 +45,7 @@ class ModeShape(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "mode": lambda n : setattr(self, 'mode', n.get_int_value()),
             "node": lambda n : setattr(self, 'node', n.get_collection_of_primitive_values(int)),
             "rx": lambda n : setattr(self, 'rx', n.get_collection_of_primitive_values(float)),
@@ -65,7 +65,7 @@ class ModeShape(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("mode", self.mode)
         writer.write_collection_of_primitive_values("node", self.node)
         writer.write_collection_of_primitive_values("rx", self.rx)

@@ -29,8 +29,6 @@ namespace SpaceGassApi.Models
 #else
         public string ComputerName { get; set; }
 #endif
-        /// <summary>Whether metadata was available in the file.Older files may not have this data appended.</summary>
-        public bool? DataAvailable { get; set; }
         /// <summary>Date and time the file was saved</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -153,7 +151,6 @@ namespace SpaceGassApi.Models
             {
                 { "compression", n => { Compression = n.GetStringValue(); } },
                 { "computerName", n => { ComputerName = n.GetStringValue(); } },
-                { "dataAvailable", n => { DataAvailable = n.GetBoolValue(); } },
                 { "dateSaved", n => { DateSaved = n.GetStringValue(); } },
                 { "designer", n => { Designer = n.GetStringValue(); } },
                 { "fileName", n => { FileName = n.GetStringValue(); } },
@@ -180,7 +177,6 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("compression", Compression);
             writer.WriteStringValue("computerName", ComputerName);
-            writer.WriteBoolValue("dataAvailable", DataAvailable);
             writer.WriteStringValue("dateSaved", DateSaved);
             writer.WriteStringValue("designer", Designer);
             writer.WriteStringValue("fileName", FileName);

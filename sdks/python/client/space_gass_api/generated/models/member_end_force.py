@@ -9,8 +9,6 @@ class MemberEndForce(Parsable):
     """
     Member end force results grouped by load case and member.Columnar arrays hold force values at each node (start/end).
     """
-    # Load case ID.
-    case: Optional[int] = None
     # Final cable length at each node. Unit: Length (see GET /job/units).
     final_cable_length: Optional[list[float]] = None
     # Axial force at each node. Unit: Force (see GET /job/units).
@@ -19,6 +17,8 @@ class MemberEndForce(Parsable):
     fy: Optional[list[float]] = None
     # Shear force in Z at each node. Unit: Force (see GET /job/units).
     fz: Optional[list[float]] = None
+    # Load case ID.
+    load_case: Optional[int] = None
     # Member key.
     member: Optional[int] = None
     # Torsion moment at each node. Unit: Moment (see GET /job/units).
@@ -47,11 +47,11 @@ class MemberEndForce(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "finalCableLength": lambda n : setattr(self, 'final_cable_length', n.get_collection_of_primitive_values(float)),
             "fx": lambda n : setattr(self, 'fx', n.get_collection_of_primitive_values(float)),
             "fy": lambda n : setattr(self, 'fy', n.get_collection_of_primitive_values(float)),
             "fz": lambda n : setattr(self, 'fz', n.get_collection_of_primitive_values(float)),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "mx": lambda n : setattr(self, 'mx', n.get_collection_of_primitive_values(float)),
             "my": lambda n : setattr(self, 'my', n.get_collection_of_primitive_values(float)),
@@ -68,11 +68,11 @@ class MemberEndForce(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
         writer.write_collection_of_primitive_values("finalCableLength", self.final_cable_length)
         writer.write_collection_of_primitive_values("fx", self.fx)
         writer.write_collection_of_primitive_values("fy", self.fy)
         writer.write_collection_of_primitive_values("fz", self.fz)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("member", self.member)
         writer.write_collection_of_primitive_values("mx", self.mx)
         writer.write_collection_of_primitive_values("my", self.my)

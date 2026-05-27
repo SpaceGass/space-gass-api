@@ -10,7 +10,7 @@ class MemberStress(Parsable):
     Member stress results grouped by load case and member.Columnar arrays hold stress values at each station along the member.
     """
     # Load case ID.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # Member key.
     member: Optional[int] = None
     # Torsion stress at each station. Unit: Stress (see GET /job/units).
@@ -59,7 +59,7 @@ class MemberStress(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "mx": lambda n : setattr(self, 'mx', n.get_collection_of_primitive_values(float)),
             "myBtm": lambda n : setattr(self, 'my_btm', n.get_collection_of_primitive_values(float)),
@@ -86,7 +86,7 @@ class MemberStress(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("member", self.member)
         writer.write_collection_of_primitive_values("mx", self.mx)
         writer.write_collection_of_primitive_values("myBtm", self.my_btm)

@@ -66,7 +66,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public LoadCasesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-cases{?Cases*,Expand*,Limit*,Offset*,TitleSearch*,Type*}", pathParameters)
+        public LoadCasesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-cases{?Expand*,Limit*,LoadCases*,Offset*,TitleSearch*,Type*}", pathParameters)
         {
         }
         /// <summary>
@@ -74,7 +74,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public LoadCasesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-cases{?Cases*,Expand*,Limit*,Offset*,TitleSearch*,Type*}", rawUrl)
+        public LoadCasesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-cases{?Expand*,Limit*,LoadCases*,Offset*,TitleSearch*,Type*}", rawUrl)
         {
         }
         /// <summary>
@@ -83,6 +83,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
         /// <returns>A List&lt;global::SpaceGassApi.Models.LoadCase&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -96,6 +97,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.LoadCase>(requestInfo, global::SpaceGassApi.Models.LoadCase.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
@@ -109,6 +111,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -125,6 +128,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
@@ -186,14 +190,6 @@ namespace SpaceGassApi.Job.Loads.LoadCases
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class LoadCasesRequestBuilderGetQueryParameters 
         {
-            /// <summary>Load case Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all load cases.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-            public string? Cases { get; set; }
-#nullable restore
-#else
-            public string Cases { get; set; }
-#endif
             /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items on combination cases.</summary>
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -208,6 +204,14 @@ namespace SpaceGassApi.Job.Loads.LoadCases
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
+            /// <summary>Load case Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all load cases.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            public string? LoadCases { get; set; }
+#nullable restore
+#else
+            public string LoadCases { get; set; }
+#endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             public int? Offset { get; set; }
             /// <summary>Search text to filter by title (case-insensitive contains).</summary>

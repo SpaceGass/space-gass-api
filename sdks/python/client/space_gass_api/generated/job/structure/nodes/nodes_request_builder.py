@@ -36,7 +36,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes{?Expand*,Limit*,MaxX*,MaxY*,MaxZ*,MinX*,MinY*,MinZ*,NodeType*,Nodes*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes{?Expand*,Limit*,NodeType*,Nodes*,Offset*}", path_parameters)
     
     def by_id(self,id: int) -> NodesItemRequestBuilder:
         """
@@ -59,12 +59,6 @@ class NodesRequestBuilder(BaseRequestBuilder):
         *,
         expand: Optional[ExpandOption] = None,
         limit: Optional[int] = None,
-        max_x: Optional[float] = None,
-        max_y: Optional[float] = None,
-        max_z: Optional[float] = None,
-        min_x: Optional[float] = None,
-        min_y: Optional[float] = None,
-        min_z: Optional[float] = None,
         node_type: Optional[NodeTypeFilter] = None,
         nodes: Optional[str] = None,
         offset: Optional[int] = None,
@@ -74,7 +68,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
     # --- end overloads ---
     async def get(self,request_configuration: Optional[RequestConfiguration[NodesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[Node]]:
         """
-        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Sub-resource expansion isopt-in per resource type — resources that don't define sub-resources ignore the parameter.
+        Returns all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Sub-resource expansion isopt-in per resource type — resources that don't define sub-resources ignore the parameter.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[Node]]
         """
@@ -84,6 +78,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
         from ....models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -108,6 +103,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
             "409": ErrorResponse,
         }
@@ -119,7 +115,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[NodesRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Sub-resource expansion isopt-in per resource type — resources that don't define sub-resources ignore the parameter.
+        Returns all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Sub-resource expansion isopt-in per resource type — resources that don't define sub-resources ignore the parameter.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -192,7 +188,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
     @dataclass
     class NodesRequestBuilderGetQueryParameters():
         """
-        Gets all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Sub-resource expansion isopt-in per resource type — resources that don't define sub-resources ignore the parameter.
+        Returns all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Sub-resource expansion isopt-in per resource type — resources that don't define sub-resources ignore the parameter.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -206,18 +202,6 @@ class NodesRequestBuilder(BaseRequestBuilder):
                 return "Expand"
             if original_name == "limit":
                 return "Limit"
-            if original_name == "max_x":
-                return "MaxX"
-            if original_name == "max_y":
-                return "MaxY"
-            if original_name == "max_z":
-                return "MaxZ"
-            if original_name == "min_x":
-                return "MinX"
-            if original_name == "min_y":
-                return "MinY"
-            if original_name == "min_z":
-                return "MinZ"
             if original_name == "nodes":
                 return "Nodes"
             if original_name == "node_type":
@@ -231,24 +215,6 @@ class NodesRequestBuilder(BaseRequestBuilder):
 
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
-
-        # Maximum X coordinate filter. Unit: Length (see GET /job/units).
-        max_x: Optional[float] = None
-
-        # Maximum Y coordinate filter. Unit: Length (see GET /job/units).
-        max_y: Optional[float] = None
-
-        # Maximum Z coordinate filter. Unit: Length (see GET /job/units).
-        max_z: Optional[float] = None
-
-        # Minimum X coordinate filter. Unit: Length (see GET /job/units).
-        min_x: Optional[float] = None
-
-        # Minimum Y coordinate filter. Unit: Length (see GET /job/units).
-        min_y: Optional[float] = None
-
-        # Minimum Z coordinate filter. Unit: Length (see GET /job/units).
-        min_z: Optional[float] = None
 
         # Filter by node type (e.g., Restrained). Default is All_Types.
         node_type: Optional[NodeTypeFilter] = None

@@ -42,6 +42,7 @@ class NewRequestBuilder(BaseRequestBuilder):
         from ...models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": ErrorResponse,
             "409": ErrorResponse,
             "500": ErrorResponse,
         }

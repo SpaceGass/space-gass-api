@@ -13,14 +13,22 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NodeLoadUpdate : IParsable
     {
-        /// <summary>The load case number.</summary>
-        public int? Case { get; set; }
         /// <summary>Force in the global X direction.</summary>
         public double? Fx { get; set; }
         /// <summary>Force in the global Y direction.</summary>
         public double? Fy { get; set; }
         /// <summary>Force in the global Z direction.</summary>
         public double? Fz { get; set; }
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
+        /// <summary>The load case number.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>Load category for grouping/organization.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>Moment about the global X axis.</summary>
@@ -49,10 +57,11 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "fx", n => { Fx = n.GetDoubleValue(); } },
                 { "fy", n => { Fy = n.GetDoubleValue(); } },
                 { "fz", n => { Fz = n.GetDoubleValue(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
                 { "mx", n => { Mx = n.GetDoubleValue(); } },
                 { "my", n => { My = n.GetDoubleValue(); } },
@@ -67,10 +76,11 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
             writer.WriteDoubleValue("fx", Fx);
             writer.WriteDoubleValue("fy", Fy);
             writer.WriteDoubleValue("fz", Fz);
+            writer.WriteStringValue("guid", Guid);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("loadCategory", LoadCategory);
             writer.WriteDoubleValue("mx", Mx);
             writer.WriteDoubleValue("my", My);

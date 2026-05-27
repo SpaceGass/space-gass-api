@@ -13,12 +13,12 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ThermalLoadElementId : IParsable
     {
-        /// <summary>The load case number.</summary>
-        public int? Case { get; set; }
         /// <summary>The element Id (member number or plate number, depending on ElementType).</summary>
         public int? ElementId { get; set; }
         /// <summary>Element type discriminator for thermal loads.Determines whether a thermal load applies to a member or plate element.Maps to SPACE GASS lookup table &quot;Element Type&quot;.</summary>
         public global::SpaceGassApi.Models.ThermalElementType? ElementType { get; set; }
+        /// <summary>The load case number.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
@@ -37,9 +37,9 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "elementId", n => { ElementId = n.GetIntValue(); } },
                 { "elementType", n => { ElementType = n.GetEnumValue<global::SpaceGassApi.Models.ThermalElementType>(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
             };
         }
         /// <summary>
@@ -49,9 +49,9 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
             writer.WriteIntValue("elementId", ElementId);
             writer.WriteEnumValue<global::SpaceGassApi.Models.ThermalElementType>("elementType", ElementType);
+            writer.WriteIntValue("loadCase", LoadCase);
         }
     }
 }

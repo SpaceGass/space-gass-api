@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.PlateNodalForce> Results { get; set; }
 #endif
-        /// <summary>Warnings returned when some requested load cases or modes did not have analysisresults in the response. (Filter Ids that don&apos;t exist in the model are rejectedup-front with HTTP 400 by the controller — they never reach this DTO.)`casesNotAnalyzed` is an SG list-format string that can be pasted straightinto `POST /job/analysis/run`&apos;s `loadCases` field to re-run only thosecases. `modesNotAnalyzed` is a per-case list — each analysed case can computea different number of modes, so the warning is keyed by case rather than flattened.</summary>
+        /// <summary>Warnings returned when some requested load cases or modes did not have analysisresults in the response. (Filter Ids that don&apos;t exist in the model are rejectedup-front with HTTP 400 by the controller — they never reach this DTO.)`loadCasesNotAnalyzed` is an SG list-format string that can be pasted straightinto `POST /job/analysis/run`&apos;s `loadCases` field to re-run only thosecases. `modesNotAnalyzed` is a per-case list — each analysed case can computea different number of modes, so the warning is keyed by case rather than flattened.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.QueryWarnings? Warnings { get; set; }

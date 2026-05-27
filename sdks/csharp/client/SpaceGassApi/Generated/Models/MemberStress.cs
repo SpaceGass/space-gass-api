@@ -14,7 +14,7 @@ namespace SpaceGassApi.Models
     public partial class MemberStress : IParsable
     {
         /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
+        public int? LoadCase { get; set; }
         /// <summary>Member key.</summary>
         public int? Member { get; set; }
         /// <summary>Torsion stress at each station. Unit: Stress (see GET /job/units).</summary>
@@ -147,7 +147,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
                 { "mx", n => { Mx = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "myBtm", n => { MyBtm = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
@@ -172,7 +172,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("member", Member);
             writer.WriteCollectionOfPrimitiveValues<float?>("mx", Mx);
             writer.WriteCollectionOfPrimitiveValues<float?>("myBtm", MyBtm);

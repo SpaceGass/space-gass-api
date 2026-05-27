@@ -10,7 +10,7 @@ class NodeDisplacement(Parsable):
     Node displacement result for a specific load case (FileId 203).
     """
     # Load case ID.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # Node key.
     node: Optional[int] = None
     # Rotational X displacement. Unit: Rotation (see GET /job/units).
@@ -43,7 +43,7 @@ class NodeDisplacement(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "node": lambda n : setattr(self, 'node', n.get_int_value()),
             "rx": lambda n : setattr(self, 'rx', n.get_float_value()),
             "ry": lambda n : setattr(self, 'ry', n.get_float_value()),
@@ -62,7 +62,7 @@ class NodeDisplacement(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("node", self.node)
         writer.write_float_value("rx", self.rx)
         writer.write_float_value("ry", self.ry)

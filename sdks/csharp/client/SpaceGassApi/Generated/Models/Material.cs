@@ -15,6 +15,14 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Concrete compressive strength.</summary>
         public double? ConcreteStrength { get; set; }
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
         public int? Id { get; set; }
         /// <summary>Library name. Empty for user-defined materials.</summary>
@@ -62,6 +70,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "concreteStrength", n => { ConcreteStrength = n.GetDoubleValue(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "library", n => { Library = n.GetStringValue(); } },
                 { "massDensity", n => { MassDensity = n.GetDoubleValue(); } },
@@ -80,6 +89,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteDoubleValue("concreteStrength", ConcreteStrength);
+            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteStringValue("library", Library);
             writer.WriteDoubleValue("massDensity", MassDensity);

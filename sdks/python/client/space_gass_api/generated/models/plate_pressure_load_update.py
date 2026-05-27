@@ -14,8 +14,10 @@ class PlatePressureLoadUpdate(Parsable):
     """
     # Coordinate axes type for distributed loads and plate pressure loads.Maps to SPACE GASS lookup table "L/GI/GP Axes".
     axes: Optional[LoadAxes] = None
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
     # The load case number.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # Load category for grouping/organization.
     load_category: Optional[int] = None
     # The plate number.
@@ -49,7 +51,8 @@ class PlatePressureLoadUpdate(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "axes": lambda n : setattr(self, 'axes', n.get_enum_value(LoadAxes)),
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "plate": lambda n : setattr(self, 'plate', n.get_int_value()),
             "px": lambda n : setattr(self, 'px', n.get_float_value()),
@@ -67,7 +70,8 @@ class PlatePressureLoadUpdate(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_enum_value("axes", self.axes)
-        writer.write_int_value("case", self.case)
+        writer.write_str_value("guid", self.guid)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_int_value("plate", self.plate)
         writer.write_float_value("px", self.px)

@@ -14,7 +14,7 @@ namespace SpaceGassApi.Models
     public partial class ModeShape : IParsable
     {
         /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
+        public int? LoadCase { get; set; }
         /// <summary>Mode number.</summary>
         public int? Mode { get; set; }
         /// <summary>Node keys.</summary>
@@ -91,7 +91,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "mode", n => { Mode = n.GetIntValue(); } },
                 { "node", n => { Node = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
                 { "rx", n => { Rx = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
@@ -109,7 +109,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("mode", Mode);
             writer.WriteCollectionOfPrimitiveValues<int?>("node", Node);
             writer.WriteCollectionOfPrimitiveValues<float?>("rx", Rx);

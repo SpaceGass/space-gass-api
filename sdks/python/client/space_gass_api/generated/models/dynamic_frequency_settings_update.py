@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .frequency_optimization_method import FrequencyOptimizationMethod
+    from .analysis_optimization_method import AnalysisOptimizationMethod
     from .optimization_axis import OptimizationAxis
     from .plate_type import PlateType
     from .solver_type import SolverType
@@ -15,8 +15,8 @@ class DynamicFrequencySettingsUpdate(Parsable):
     """
     Update request for Dynamic Frequency Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
     """
-    # The checkNonExistentCases property
-    check_non_existent_cases: Optional[bool] = None
+    # The checkNonExistentLoadCases property
+    check_non_existent_load_cases: Optional[bool] = None
     # The drillingStiffness property
     drilling_stiffness: Optional[float] = None
     # The extraIterations property
@@ -31,8 +31,8 @@ class DynamicFrequencySettingsUpdate(Parsable):
     modes: Optional[int] = None
     # Axis used for optimization in analysis.
     optimization_axis: Optional[OptimizationAxis] = None
-    # Optimization method for Dynamic Frequency analysis.Note: These have different integer mappings than the static/buckling OptimizationMethod enum.
-    optimization_method: Optional[FrequencyOptimizationMethod] = None
+    # Optimization method for analysis bandwidth/profile reduction.Integer values mirror SPACE GASS's `AnalysisOptimizationTypes` enum(NetCommon/CommonEnums.vb). Used by static, buckling, and dynamic frequency analysis.
+    optimization_method: Optional[AnalysisOptimizationMethod] = None
     # The optimizationX property
     optimization_x: Optional[float] = None
     # The optimizationY property
@@ -41,8 +41,8 @@ class DynamicFrequencySettingsUpdate(Parsable):
     optimization_z: Optional[float] = None
     # Plate element formulation type.
     plate_type: Optional[PlateType] = None
-    # The retainCases property
-    retain_cases: Optional[bool] = None
+    # The retainLoadCases property
+    retain_load_cases: Optional[bool] = None
     # Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS's `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Paradise, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).
     solver_type: Optional[SolverType] = None
     # The stabilizeUnrestrainedNodes property
@@ -68,18 +68,18 @@ class DynamicFrequencySettingsUpdate(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .frequency_optimization_method import FrequencyOptimizationMethod
+        from .analysis_optimization_method import AnalysisOptimizationMethod
         from .optimization_axis import OptimizationAxis
         from .plate_type import PlateType
         from .solver_type import SolverType
 
-        from .frequency_optimization_method import FrequencyOptimizationMethod
+        from .analysis_optimization_method import AnalysisOptimizationMethod
         from .optimization_axis import OptimizationAxis
         from .plate_type import PlateType
         from .solver_type import SolverType
 
         fields: dict[str, Callable[[Any], None]] = {
-            "checkNonExistentCases": lambda n : setattr(self, 'check_non_existent_cases', n.get_bool_value()),
+            "checkNonExistentLoadCases": lambda n : setattr(self, 'check_non_existent_load_cases', n.get_bool_value()),
             "drillingStiffness": lambda n : setattr(self, 'drilling_stiffness', n.get_float_value()),
             "extraIterations": lambda n : setattr(self, 'extra_iterations', n.get_bool_value()),
             "frequencyShift": lambda n : setattr(self, 'frequency_shift', n.get_float_value()),
@@ -87,12 +87,12 @@ class DynamicFrequencySettingsUpdate(Parsable):
             "lowerLimit": lambda n : setattr(self, 'lower_limit', n.get_float_value()),
             "modes": lambda n : setattr(self, 'modes', n.get_int_value()),
             "optimizationAxis": lambda n : setattr(self, 'optimization_axis', n.get_enum_value(OptimizationAxis)),
-            "optimizationMethod": lambda n : setattr(self, 'optimization_method', n.get_enum_value(FrequencyOptimizationMethod)),
+            "optimizationMethod": lambda n : setattr(self, 'optimization_method', n.get_enum_value(AnalysisOptimizationMethod)),
             "optimizationX": lambda n : setattr(self, 'optimization_x', n.get_float_value()),
             "optimizationY": lambda n : setattr(self, 'optimization_y', n.get_float_value()),
             "optimizationZ": lambda n : setattr(self, 'optimization_z', n.get_float_value()),
             "plateType": lambda n : setattr(self, 'plate_type', n.get_enum_value(PlateType)),
-            "retainCases": lambda n : setattr(self, 'retain_cases', n.get_bool_value()),
+            "retainLoadCases": lambda n : setattr(self, 'retain_load_cases', n.get_bool_value()),
             "solverType": lambda n : setattr(self, 'solver_type', n.get_enum_value(SolverType)),
             "stabilizeUnrestrainedNodes": lambda n : setattr(self, 'stabilize_unrestrained_nodes', n.get_bool_value()),
             "tolerance": lambda n : setattr(self, 'tolerance', n.get_float_value()),
@@ -108,7 +108,7 @@ class DynamicFrequencySettingsUpdate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_bool_value("checkNonExistentCases", self.check_non_existent_cases)
+        writer.write_bool_value("checkNonExistentLoadCases", self.check_non_existent_load_cases)
         writer.write_float_value("drillingStiffness", self.drilling_stiffness)
         writer.write_bool_value("extraIterations", self.extra_iterations)
         writer.write_float_value("frequencyShift", self.frequency_shift)
@@ -121,7 +121,7 @@ class DynamicFrequencySettingsUpdate(Parsable):
         writer.write_float_value("optimizationY", self.optimization_y)
         writer.write_float_value("optimizationZ", self.optimization_z)
         writer.write_enum_value("plateType", self.plate_type)
-        writer.write_bool_value("retainCases", self.retain_cases)
+        writer.write_bool_value("retainLoadCases", self.retain_load_cases)
         writer.write_enum_value("solverType", self.solver_type)
         writer.write_bool_value("stabilizeUnrestrainedNodes", self.stabilize_unrestrained_nodes)
         writer.write_float_value("tolerance", self.tolerance)

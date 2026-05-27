@@ -43,6 +43,7 @@ class MetadataRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "401": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:

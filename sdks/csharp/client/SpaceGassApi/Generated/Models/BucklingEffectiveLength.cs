@@ -13,10 +13,10 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BucklingEffectiveLength : IParsable
     {
-        /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
         /// <summary>Member length. Unit: Length (see GET /job/units).</summary>
         public float? Length { get; set; }
+        /// <summary>Load case ID.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>Effective length about Y axis. Unit: Length (see GET /job/units).</summary>
         public float? Ly { get; set; }
         /// <summary>Effective length about Z axis. Unit: Length (see GET /job/units).</summary>
@@ -45,8 +45,8 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "length", n => { Length = n.GetFloatValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "ly", n => { Ly = n.GetFloatValue(); } },
                 { "lz", n => { Lz = n.GetFloatValue(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
@@ -61,8 +61,8 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
             writer.WriteFloatValue("length", Length);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteFloatValue("ly", Ly);
             writer.WriteFloatValue("lz", Lz);
             writer.WriteIntValue("member", Member);

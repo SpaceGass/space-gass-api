@@ -21,6 +21,14 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.CombinationLoadCaseItem> CombinationItems { get; set; }
 #endif
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>True when this case has at least one combination item defined.Only meaningful for cases where `Type` is `Combination`.Use `?expand=all` to include the full `combinationItems` array.</summary>
         public bool? HasCombinationItems { get; set; }
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
@@ -62,6 +70,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "combinationItems", n => { CombinationItems = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationLoadCaseItem>(global::SpaceGassApi.Models.CombinationLoadCaseItem.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "hasCombinationItems", n => { HasCombinationItems = n.GetBoolValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "notes", n => { Notes = n.GetStringValue(); } },
@@ -77,6 +86,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationLoadCaseItem>("combinationItems", CombinationItems);
+            writer.WriteStringValue("guid", Guid);
             writer.WriteBoolValue("hasCombinationItems", HasCombinationItems);
             writer.WriteIntValue("id", Id);
             writer.WriteStringValue("notes", Notes);

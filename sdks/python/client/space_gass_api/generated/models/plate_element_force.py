@@ -9,14 +9,14 @@ class PlateElementForce(Parsable):
     """
     Plate element force result for a specific load case (FileId 207).
     """
-    # Load case ID.
-    case: Optional[int] = None
     # Membrane force in X. Unit: Force/Length (see GET /job/units).
     fx: Optional[float] = None
     # Membrane shear force. Unit: Force/Length (see GET /job/units).
     fxy: Optional[float] = None
     # Membrane force in Y. Unit: Force/Length (see GET /job/units).
     fy: Optional[float] = None
+    # Load case ID.
+    load_case: Optional[int] = None
     # Bending moment about X. Unit: Moment/Length (see GET /job/units).
     mx: Optional[float] = None
     # Bending moment about X at bottom surface. Unit: Moment/Length (see GET /job/units).
@@ -55,10 +55,10 @@ class PlateElementForce(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "fx": lambda n : setattr(self, 'fx', n.get_float_value()),
             "fxy": lambda n : setattr(self, 'fxy', n.get_float_value()),
             "fy": lambda n : setattr(self, 'fy', n.get_float_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "mx": lambda n : setattr(self, 'mx', n.get_float_value()),
             "mxBtm": lambda n : setattr(self, 'mx_btm', n.get_float_value()),
             "mxTop": lambda n : setattr(self, 'mx_top', n.get_float_value()),
@@ -80,10 +80,10 @@ class PlateElementForce(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
         writer.write_float_value("fx", self.fx)
         writer.write_float_value("fxy", self.fxy)
         writer.write_float_value("fy", self.fy)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_float_value("mx", self.mx)
         writer.write_float_value("mxBtm", self.mx_btm)
         writer.write_float_value("mxTop", self.mx_top)
