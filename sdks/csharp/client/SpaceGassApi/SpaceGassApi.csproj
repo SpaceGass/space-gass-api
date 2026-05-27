@@ -29,6 +29,7 @@
   <ItemGroup>
     <Compile Include="Generated\**\*.cs" />
     <Compile Include="SpaceGassApiClient.cs" />
+    <Compile Include="Utils\**\*.cs" />
   </ItemGroup>
 
   <ItemGroup>
