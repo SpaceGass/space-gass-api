@@ -14,7 +14,7 @@ namespace SpaceGassApi.Models
     public partial class PlateStress : IParsable
     {
         /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
+        public int? LoadCase { get; set; }
         /// <summary>Principal angle at bottom surface. Unit: Rotation (see GET /job/units).</summary>
         public float? PaBtm { get; set; }
         /// <summary>Principal angle at top surface. Unit: Rotation (see GET /job/units).</summary>
@@ -71,7 +71,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "paBtm", n => { PaBtm = n.GetFloatValue(); } },
                 { "paTop", n => { PaTop = n.GetFloatValue(); } },
                 { "plate", n => { Plate = n.GetIntValue(); } },
@@ -100,7 +100,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteFloatValue("paBtm", PaBtm);
             writer.WriteFloatValue("paTop", PaTop);
             writer.WriteIntValue("plate", Plate);

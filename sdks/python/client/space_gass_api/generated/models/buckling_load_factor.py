@@ -9,10 +9,10 @@ class BucklingLoadFactor(Parsable):
     """
     Buckling load factor result (FileId 216).
     """
-    # Load case ID.
-    case: Optional[int] = None
     # Number of iterations to converge.
     iterations: Optional[int] = None
+    # Load case ID.
+    load_case: Optional[int] = None
     # Buckling load factor.
     load_factor: Optional[float] = None
     # Buckling mode number.
@@ -47,8 +47,8 @@ class BucklingLoadFactor(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "iterations": lambda n : setattr(self, 'iterations', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadFactor": lambda n : setattr(self, 'load_factor', n.get_float_value()),
             "mode": lambda n : setattr(self, 'mode', n.get_int_value()),
             "nodeAtMaxRotn": lambda n : setattr(self, 'node_at_max_rotn', n.get_float_value()),
@@ -68,8 +68,8 @@ class BucklingLoadFactor(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
         writer.write_int_value("iterations", self.iterations)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_float_value("loadFactor", self.load_factor)
         writer.write_int_value("mode", self.mode)
         writer.write_float_value("nodeAtMaxRotn", self.node_at_max_rotn)

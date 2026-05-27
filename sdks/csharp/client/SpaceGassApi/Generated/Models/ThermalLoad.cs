@@ -13,12 +13,20 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ThermalLoad : IParsable
     {
-        /// <summary>The load case number this load belongs to.</summary>
-        public int? Case { get; set; }
         /// <summary>The Id of the element this load is applied to (member number or plate number, depending on ElementType).</summary>
         public int? ElementId { get; set; }
         /// <summary>Element type discriminator for thermal loads.Determines whether a thermal load applies to a member or plate element.Maps to SPACE GASS lookup table &quot;Element Type&quot;.</summary>
         public global::SpaceGassApi.Models.ThermalElementType? ElementType { get; set; }
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
+        /// <summary>The load case number this load belongs to.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>Load category for grouping/organization.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>The uniform temperature change applied to the element.</summary>
@@ -45,9 +53,10 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "elementId", n => { ElementId = n.GetIntValue(); } },
                 { "elementType", n => { ElementType = n.GetEnumValue<global::SpaceGassApi.Models.ThermalElementType>(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
                 { "thermalLoad", n => { ThermalLoadProp = n.GetDoubleValue(); } },
                 { "yThermalGradient", n => { YThermalGradient = n.GetDoubleValue(); } },
@@ -61,9 +70,10 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
             writer.WriteIntValue("elementId", ElementId);
             writer.WriteEnumValue<global::SpaceGassApi.Models.ThermalElementType>("elementType", ElementType);
+            writer.WriteStringValue("guid", Guid);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("loadCategory", LoadCategory);
             writer.WriteDoubleValue("thermalLoad", ThermalLoadProp);
             writer.WriteDoubleValue("yThermalGradient", YThermalGradient);

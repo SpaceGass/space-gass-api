@@ -6,7 +6,8 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .info.info_request_builder import InfoRequestBuilder
+    from .mode.mode_request_builder import ModeRequestBuilder
+    from .status.status_request_builder import StatusRequestBuilder
 
 class ServiceRequestBuilder(BaseRequestBuilder):
     """
@@ -22,12 +23,21 @@ class ServiceRequestBuilder(BaseRequestBuilder):
         super().__init__(request_adapter, "{+baseurl}/service", path_parameters)
     
     @property
-    def info(self) -> InfoRequestBuilder:
+    def mode(self) -> ModeRequestBuilder:
         """
-        The info property
+        The mode property
         """
-        from .info.info_request_builder import InfoRequestBuilder
+        from .mode.mode_request_builder import ModeRequestBuilder
 
-        return InfoRequestBuilder(self.request_adapter, self.path_parameters)
+        return ModeRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def status(self) -> StatusRequestBuilder:
+        """
+        The status property
+        """
+        from .status.status_request_builder import StatusRequestBuilder
+
+        return StatusRequestBuilder(self.request_adapter, self.path_parameters)
     
 

@@ -14,7 +14,7 @@ namespace SpaceGassApi.Models
     public partial class MemberDistributedLoadKey : IParsable
     {
         /// <summary>The load case number.</summary>
-        public int? Case { get; set; }
+        public int? LoadCase { get; set; }
         /// <summary>The member number.</summary>
         public int? Member { get; set; }
         /// <summary>The sub-load number.</summary>
@@ -37,7 +37,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
                 { "subLoad", n => { SubLoad = n.GetIntValue(); } },
             };
@@ -49,7 +49,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("member", Member);
             writer.WriteIntValue("subLoad", SubLoad);
         }

@@ -13,10 +13,10 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BucklingLoadFactor : IParsable
     {
-        /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
         /// <summary>Number of iterations to converge.</summary>
         public int? Iterations { get; set; }
+        /// <summary>Load case ID.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>Buckling load factor.</summary>
         public float? LoadFactor { get; set; }
         /// <summary>Buckling mode number.</summary>
@@ -69,8 +69,8 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "iterations", n => { Iterations = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "loadFactor", n => { LoadFactor = n.GetFloatValue(); } },
                 { "mode", n => { Mode = n.GetIntValue(); } },
                 { "nodeAtMaxRotn", n => { NodeAtMaxRotn = n.GetFloatValue(); } },
@@ -88,8 +88,8 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
             writer.WriteIntValue("iterations", Iterations);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteFloatValue("loadFactor", LoadFactor);
             writer.WriteIntValue("mode", Mode);
             writer.WriteFloatValue("nodeAtMaxRotn", NodeAtMaxRotn);

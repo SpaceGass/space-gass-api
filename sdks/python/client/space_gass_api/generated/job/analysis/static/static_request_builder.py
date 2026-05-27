@@ -6,6 +6,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
+    from .info.info_request_builder import InfoRequestBuilder
     from .run_linear.run_linear_request_builder import RunLinearRequestBuilder
     from .run_non_linear.run_non_linear_request_builder import RunNonLinearRequestBuilder
     from .settings.settings_request_builder import SettingsRequestBuilder
@@ -22,6 +23,15 @@ class StaticRequestBuilder(BaseRequestBuilder):
         Returns: None
         """
         super().__init__(request_adapter, "{+baseurl}/job/analysis/static", path_parameters)
+    
+    @property
+    def info(self) -> InfoRequestBuilder:
+        """
+        The info property
+        """
+        from .info.info_request_builder import InfoRequestBuilder
+
+        return InfoRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def run_linear(self) -> RunLinearRequestBuilder:

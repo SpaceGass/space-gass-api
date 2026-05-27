@@ -2,6 +2,7 @@
 #pragma warning disable CS0618
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Analysis.DynamicFrequency.Info;
 using SpaceGassApi.Job.Analysis.DynamicFrequency.Run;
 using SpaceGassApi.Job.Analysis.DynamicFrequency.Settings;
 using System.Collections.Generic;
@@ -16,6 +17,11 @@ namespace SpaceGassApi.Job.Analysis.DynamicFrequency
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class DynamicFrequencyRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The info property</summary>
+        public global::SpaceGassApi.Job.Analysis.DynamicFrequency.Info.InfoRequestBuilder Info
+        {
+            get => new global::SpaceGassApi.Job.Analysis.DynamicFrequency.Info.InfoRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The run property</summary>
         public global::SpaceGassApi.Job.Analysis.DynamicFrequency.Run.RunRequestBuilder Run
         {

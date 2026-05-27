@@ -21,6 +21,14 @@ namespace SpaceGassApi.Models
         public double? EndOffsetTransverse { get; set; }
         /// <summary>End plate number for the cut.</summary>
         public int? EndPlate { get; set; }
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for bulk updates.</summary>
         public int? Id { get; set; }
         /// <summary>Out-of-plane tolerance for the cut.</summary>
@@ -63,6 +71,7 @@ namespace SpaceGassApi.Models
                 { "endOffsetLongitudinal", n => { EndOffsetLongitudinal = n.GetDoubleValue(); } },
                 { "endOffsetTransverse", n => { EndOffsetTransverse = n.GetDoubleValue(); } },
                 { "endPlate", n => { EndPlate = n.GetIntValue(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "outOfPlaneTolerance", n => { OutOfPlaneTolerance = n.GetDoubleValue(); } },
                 { "startNode", n => { StartNode = n.GetIntValue(); } },
@@ -83,6 +92,7 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("endOffsetLongitudinal", EndOffsetLongitudinal);
             writer.WriteDoubleValue("endOffsetTransverse", EndOffsetTransverse);
             writer.WriteIntValue("endPlate", EndPlate);
+            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("outOfPlaneTolerance", OutOfPlaneTolerance);
             writer.WriteIntValue("startNode", StartNode);

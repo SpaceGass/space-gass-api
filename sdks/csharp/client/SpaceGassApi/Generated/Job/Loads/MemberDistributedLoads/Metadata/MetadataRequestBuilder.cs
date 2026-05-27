@@ -39,6 +39,7 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedLoads.Metadata
         /// <returns>A <see cref="global::SpaceGassApi.Models.ResourceMetadata"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -52,6 +53,7 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedLoads.Metadata
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ResourceMetadata>(requestInfo, global::SpaceGassApi.Models.ResourceMetadata.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);

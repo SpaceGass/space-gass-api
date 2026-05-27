@@ -72,7 +72,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CombinationLoadCasesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/combination-load-cases{?Cases*,Expand*,Limit*,Offset*,TitleSearch*}", pathParameters)
+        public CombinationLoadCasesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/combination-load-cases{?Expand*,Limit*,LoadCases*,Offset*,TitleSearch*}", pathParameters)
         {
         }
         /// <summary>
@@ -80,7 +80,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CombinationLoadCasesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/combination-load-cases{?Cases*,Expand*,Limit*,Offset*,TitleSearch*}", rawUrl)
+        public CombinationLoadCasesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/combination-load-cases{?Expand*,Limit*,LoadCases*,Offset*,TitleSearch*}", rawUrl)
         {
         }
         /// <summary>
@@ -89,6 +89,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
         /// <returns>A List&lt;global::SpaceGassApi.Models.LoadCase&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -102,6 +103,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.LoadCase>(requestInfo, global::SpaceGassApi.Models.LoadCase.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
@@ -115,6 +117,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -131,6 +134,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
@@ -192,14 +196,6 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class CombinationLoadCasesRequestBuilderGetQueryParameters 
         {
-            /// <summary>Combination case Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all combination cases.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-            public string? Cases { get; set; }
-#nullable restore
-#else
-            public string Cases { get; set; }
-#endif
             /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items.</summary>
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -214,6 +210,14 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
+            /// <summary>Combination case Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all combination cases.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            public string? LoadCases { get; set; }
+#nullable restore
+#else
+            public string LoadCases { get; set; }
+#endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             public int? Offset { get; set; }
             /// <summary>Search text to filter by title (case-insensitive contains).</summary>

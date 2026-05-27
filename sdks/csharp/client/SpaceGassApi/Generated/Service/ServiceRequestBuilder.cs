@@ -2,7 +2,8 @@
 #pragma warning disable CS0618
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
-using SpaceGassApi.Service.Info;
+using SpaceGassApi.Service.Mode;
+using SpaceGassApi.Service.Status;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -15,10 +16,15 @@ namespace SpaceGassApi.Service
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class ServiceRequestBuilder : BaseRequestBuilder
     {
-        /// <summary>The info property</summary>
-        public global::SpaceGassApi.Service.Info.InfoRequestBuilder Info
+        /// <summary>The mode property</summary>
+        public global::SpaceGassApi.Service.Mode.ModeRequestBuilder Mode
         {
-            get => new global::SpaceGassApi.Service.Info.InfoRequestBuilder(PathParameters, RequestAdapter);
+            get => new global::SpaceGassApi.Service.Mode.ModeRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The status property</summary>
+        public global::SpaceGassApi.Service.Status.StatusRequestBuilder Status
+        {
+            get => new global::SpaceGassApi.Service.Status.StatusRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Service.ServiceRequestBuilder"/> and sets the default values.

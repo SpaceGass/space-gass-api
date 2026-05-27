@@ -9,14 +9,16 @@ class NodeLoadCreate(Parsable):
     """
     DTO for creating a new node load.
     """
-    # The load case number to create this load in.
-    case: Optional[int] = None
     # Force in the global X direction.
     fx: Optional[float] = None
     # Force in the global Y direction.
     fy: Optional[float] = None
     # Force in the global Z direction.
     fz: Optional[float] = None
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
+    # The load case number to create this load in.
+    load_case: Optional[int] = None
     # Load category for grouping/organization.
     load_category: Optional[int] = None
     # Moment about the global X axis.
@@ -45,10 +47,11 @@ class NodeLoadCreate(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "fx": lambda n : setattr(self, 'fx', n.get_float_value()),
             "fy": lambda n : setattr(self, 'fy', n.get_float_value()),
             "fz": lambda n : setattr(self, 'fz', n.get_float_value()),
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "mx": lambda n : setattr(self, 'mx', n.get_float_value()),
             "my": lambda n : setattr(self, 'my', n.get_float_value()),
@@ -65,10 +68,11 @@ class NodeLoadCreate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
         writer.write_float_value("fx", self.fx)
         writer.write_float_value("fy", self.fy)
         writer.write_float_value("fz", self.fz)
+        writer.write_str_value("guid", self.guid)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_float_value("mx", self.mx)
         writer.write_float_value("my", self.my)

@@ -39,6 +39,7 @@ namespace SpaceGassApi.Job.New
         /// <returns>A <see cref="global::SpaceGassApi.Models.JobStatus"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 409 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -53,6 +54,7 @@ namespace SpaceGassApi.Job.New
             var requestInfo = ToPostRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };

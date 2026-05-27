@@ -14,7 +14,7 @@ namespace SpaceGassApi.Models
     public partial class MemberIntermediateDisplacement : IParsable
     {
         /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
+        public int? LoadCase { get; set; }
         /// <summary>Distance along member at each station. Unit: Length (see GET /job/units).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -99,7 +99,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "location", n => { Location = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
                 { "station", n => { Station = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
@@ -118,7 +118,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteCollectionOfPrimitiveValues<float?>("location", Location);
             writer.WriteIntValue("member", Member);
             writer.WriteCollectionOfPrimitiveValues<int?>("station", Station);

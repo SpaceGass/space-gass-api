@@ -13,12 +13,12 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NaturalFrequency : IParsable
     {
-        /// <summary>Load case ID.</summary>
-        public int? Case { get; set; }
         /// <summary>Frequency convergence tolerance.</summary>
         public float? FrequencyTolerance { get; set; }
         /// <summary>Number of iterations to converge.</summary>
         public int? Iterations { get; set; }
+        /// <summary>Load case ID.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>Mass participation factor in X direction.</summary>
         public float? MassPartX { get; set; }
         /// <summary>Mass participation factor in Y direction.</summary>
@@ -57,9 +57,9 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "frequencyTolerance", n => { FrequencyTolerance = n.GetFloatValue(); } },
                 { "iterations", n => { Iterations = n.GetIntValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "massPartX", n => { MassPartX = n.GetFloatValue(); } },
                 { "massPartY", n => { MassPartY = n.GetFloatValue(); } },
                 { "massPartZ", n => { MassPartZ = n.GetFloatValue(); } },
@@ -76,9 +76,9 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("case", Case);
             writer.WriteFloatValue("frequencyTolerance", FrequencyTolerance);
             writer.WriteIntValue("iterations", Iterations);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteFloatValue("massPartX", MassPartX);
             writer.WriteFloatValue("massPartY", MassPartY);
             writer.WriteFloatValue("massPartZ", MassPartZ);

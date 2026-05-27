@@ -46,7 +46,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ThermalLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/thermal-loads{?Cases*,ElementType*,Elements*,Limit*,LoadCategory*,Offset*}", pathParameters)
+        public ThermalLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/thermal-loads{?ElementType*,Elements*,Limit*,LoadCases*,LoadCategory*,Offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -54,16 +54,17 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ThermalLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/thermal-loads{?Cases*,ElementType*,Elements*,Limit*,LoadCategory*,Offset*}", rawUrl)
+        public ThermalLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/thermal-loads{?ElementType*,Elements*,Limit*,LoadCases*,LoadCategory*,Offset*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Returns all loads with optional filtering and pagination.Use the `loadCases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by LoadCase ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.ThermalLoad&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -78,6 +79,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.ThermalLoad>(requestInfo, global::SpaceGassApi.Models.ThermalLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
@@ -91,6 +93,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -107,13 +110,14 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Returns all loads with optional filtering and pagination.Use the `loadCases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by LoadCase ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -163,19 +167,11 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
             return new global::SpaceGassApi.Job.Loads.ThermalLoads.ThermalLoadsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets all loads with optional filtering and pagination.Use the `cases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by Case ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
+        /// Returns all loads with optional filtering and pagination.Use the `loadCases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by LoadCase ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class ThermalLoadsRequestBuilderGetQueryParameters 
         {
-            /// <summary>Load cases to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only loads belonging to the specified cases.Omit to return loads for all cases.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-            public string? Cases { get; set; }
-#nullable restore
-#else
-            public string Cases { get; set; }
-#endif
             /// <summary>Element Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).The meaning depends on ElementType — member Id for members, plate Id for plates.Omit to return thermal loads for all elements.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -198,6 +194,14 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
             public global::SpaceGassApi.Models.ThermalElementType? ElementTypeAsThermalElementType { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             public int? Limit { get; set; }
+            /// <summary>Load cases to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only loads belonging to the specified load cases.Omit to return loads for all load cases.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            public string? LoadCases { get; set; }
+#nullable restore
+#else
+            public string LoadCases { get; set; }
+#endif
             /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
             public int? LoadCategory { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>

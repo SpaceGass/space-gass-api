@@ -10,7 +10,7 @@ class MemberIntermediateDisplacement(Parsable):
     Member intermediate displacement results grouped by load case and member.Columnar arrays hold displacement values at each station along the member.
     """
     # Load case ID.
-    case: Optional[int] = None
+    load_case: Optional[int] = None
     # Distance along member at each station. Unit: Length (see GET /job/units).
     location: Optional[list[float]] = None
     # Member key.
@@ -47,7 +47,7 @@ class MemberIntermediateDisplacement(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "location": lambda n : setattr(self, 'location', n.get_collection_of_primitive_values(float)),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "station": lambda n : setattr(self, 'station', n.get_collection_of_primitive_values(int)),
@@ -68,7 +68,7 @@ class MemberIntermediateDisplacement(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_collection_of_primitive_values("location", self.location)
         writer.write_int_value("member", self.member)
         writer.write_collection_of_primitive_values("station", self.station)

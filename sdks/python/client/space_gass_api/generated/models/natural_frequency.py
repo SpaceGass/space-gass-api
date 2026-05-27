@@ -9,12 +9,12 @@ class NaturalFrequency(Parsable):
     """
     Dynamic natural frequency result (FileId 218).
     """
-    # Load case ID.
-    case: Optional[int] = None
     # Frequency convergence tolerance.
     frequency_tolerance: Optional[float] = None
     # Number of iterations to converge.
     iterations: Optional[int] = None
+    # Load case ID.
+    load_case: Optional[int] = None
     # Mass participation factor in X direction.
     mass_part_x: Optional[float] = None
     # Mass participation factor in Y direction.
@@ -47,9 +47,9 @@ class NaturalFrequency(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "case": lambda n : setattr(self, 'case', n.get_int_value()),
             "frequencyTolerance": lambda n : setattr(self, 'frequency_tolerance', n.get_float_value()),
             "iterations": lambda n : setattr(self, 'iterations', n.get_int_value()),
+            "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "massPartX": lambda n : setattr(self, 'mass_part_x', n.get_float_value()),
             "massPartY": lambda n : setattr(self, 'mass_part_y', n.get_float_value()),
             "massPartZ": lambda n : setattr(self, 'mass_part_z', n.get_float_value()),
@@ -68,9 +68,9 @@ class NaturalFrequency(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_int_value("case", self.case)
         writer.write_float_value("frequencyTolerance", self.frequency_tolerance)
         writer.write_int_value("iterations", self.iterations)
+        writer.write_int_value("loadCase", self.load_case)
         writer.write_float_value("massPartX", self.mass_part_x)
         writer.write_float_value("massPartY", self.mass_part_y)
         writer.write_float_value("massPartZ", self.mass_part_z)

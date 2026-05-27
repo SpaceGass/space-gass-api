@@ -14,7 +14,7 @@ namespace SpaceGassApi.Models
     public partial class StaticSettings : IParsable
     {
         /// <summary>Whether to check for non-existent load cases referenced in the analysis.When true, warnings are generated for missing load cases.</summary>
-        public bool? CheckNonExistentCases { get; set; }
+        public bool? CheckNonExistentLoadCases { get; set; }
         /// <summary>Convergence accuracy (%).Non-linear only.</summary>
         public float? ConvergenceAccuracy { get; set; }
         /// <summary>Cable damping factor (%).Non-linear only.</summary>
@@ -45,8 +45,8 @@ namespace SpaceGassApi.Models
         public global::SpaceGassApi.Models.MatrixType? MatrixType { get; set; }
         /// <summary>Axis used for optimization in analysis.</summary>
         public global::SpaceGassApi.Models.OptimizationAxis? OptimizationAxis { get; set; }
-        /// <summary>Optimization method for analysis.</summary>
-        public global::SpaceGassApi.Models.OptimizationMethod? OptimizationMethod { get; set; }
+        /// <summary>Optimization method for analysis bandwidth/profile reduction.Integer values mirror SPACE GASS&apos;s `AnalysisOptimizationTypes` enum(NetCommon/CommonEnums.vb). Used by static, buckling, and dynamic frequency analysis.</summary>
+        public global::SpaceGassApi.Models.AnalysisOptimizationMethod? OptimizationMethod { get; set; }
         /// <summary>X coordinate or X component of the optimization vector.Only used when OptimizationAxis is Vector, or as angular coordinate for axis modes.</summary>
         public float? OptimizationX { get; set; }
         /// <summary>Y coordinate or Y component of the optimization vector.</summary>
@@ -62,7 +62,7 @@ namespace SpaceGassApi.Models
         /// <summary>Whether to include residuals in convergence check.Non-linear only.</summary>
         public bool? ResidualsConvergence { get; set; }
         /// <summary>Whether to retain results of other load cases during analysis.When true, results from previously analysed load cases are preserved.</summary>
-        public bool? RetainCases { get; set; }
+        public bool? RetainLoadCases { get; set; }
         /// <summary>Number of iterations before disabling reversal of tension/compression-only members.Only relevant when TensionCompressionOnly is Activated.</summary>
         public int? ReversalIterations { get; set; }
         /// <summary>Whether to rotate local loads with member chord rotation.Non-linear only.</summary>
@@ -95,7 +95,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "checkNonExistentCases", n => { CheckNonExistentCases = n.GetBoolValue(); } },
+                { "checkNonExistentLoadCases", n => { CheckNonExistentLoadCases = n.GetBoolValue(); } },
                 { "convergenceAccuracy", n => { ConvergenceAccuracy = n.GetFloatValue(); } },
                 { "dampingFactor", n => { DampingFactor = n.GetFloatValue(); } },
                 { "dampingSteps", n => { DampingSteps = n.GetIntValue(); } },
@@ -108,7 +108,7 @@ namespace SpaceGassApi.Models
                 { "loading", n => { Loading = n.GetEnumValue<global::SpaceGassApi.Models.LoadingType>(); } },
                 { "matrixType", n => { MatrixType = n.GetEnumValue<global::SpaceGassApi.Models.MatrixType>(); } },
                 { "optimizationAxis", n => { OptimizationAxis = n.GetEnumValue<global::SpaceGassApi.Models.OptimizationAxis>(); } },
-                { "optimizationMethod", n => { OptimizationMethod = n.GetEnumValue<global::SpaceGassApi.Models.OptimizationMethod>(); } },
+                { "optimizationMethod", n => { OptimizationMethod = n.GetEnumValue<global::SpaceGassApi.Models.AnalysisOptimizationMethod>(); } },
                 { "optimizationX", n => { OptimizationX = n.GetFloatValue(); } },
                 { "optimizationY", n => { OptimizationY = n.GetFloatValue(); } },
                 { "optimizationZ", n => { OptimizationZ = n.GetFloatValue(); } },
@@ -116,7 +116,7 @@ namespace SpaceGassApi.Models
                 { "pDeltaSmall", n => { PDeltaSmall = n.GetBoolValue(); } },
                 { "plateType", n => { PlateType = n.GetEnumValue<global::SpaceGassApi.Models.PlateType>(); } },
                 { "residualsConvergence", n => { ResidualsConvergence = n.GetBoolValue(); } },
-                { "retainCases", n => { RetainCases = n.GetBoolValue(); } },
+                { "retainLoadCases", n => { RetainLoadCases = n.GetBoolValue(); } },
                 { "reversalIterations", n => { ReversalIterations = n.GetIntValue(); } },
                 { "rotateLocalLoads", n => { RotateLocalLoads = n.GetBoolValue(); } },
                 { "solverType", n => { SolverType = n.GetEnumValue<global::SpaceGassApi.Models.SolverType>(); } },
@@ -133,7 +133,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteBoolValue("checkNonExistentCases", CheckNonExistentCases);
+            writer.WriteBoolValue("checkNonExistentLoadCases", CheckNonExistentLoadCases);
             writer.WriteFloatValue("convergenceAccuracy", ConvergenceAccuracy);
             writer.WriteFloatValue("dampingFactor", DampingFactor);
             writer.WriteIntValue("dampingSteps", DampingSteps);
@@ -146,7 +146,7 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("loadSteps", LoadSteps);
             writer.WriteEnumValue<global::SpaceGassApi.Models.MatrixType>("matrixType", MatrixType);
             writer.WriteEnumValue<global::SpaceGassApi.Models.OptimizationAxis>("optimizationAxis", OptimizationAxis);
-            writer.WriteEnumValue<global::SpaceGassApi.Models.OptimizationMethod>("optimizationMethod", OptimizationMethod);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.AnalysisOptimizationMethod>("optimizationMethod", OptimizationMethod);
             writer.WriteFloatValue("optimizationX", OptimizationX);
             writer.WriteFloatValue("optimizationY", OptimizationY);
             writer.WriteFloatValue("optimizationZ", OptimizationZ);
@@ -154,7 +154,7 @@ namespace SpaceGassApi.Models
             writer.WriteBoolValue("pDeltaSmall", PDeltaSmall);
             writer.WriteEnumValue<global::SpaceGassApi.Models.PlateType>("plateType", PlateType);
             writer.WriteBoolValue("residualsConvergence", ResidualsConvergence);
-            writer.WriteBoolValue("retainCases", RetainCases);
+            writer.WriteBoolValue("retainLoadCases", RetainLoadCases);
             writer.WriteIntValue("reversalIterations", ReversalIterations);
             writer.WriteBoolValue("rotateLocalLoads", RotateLocalLoads);
             writer.WriteEnumValue<global::SpaceGassApi.Models.SolverType>("solverType", SolverType);

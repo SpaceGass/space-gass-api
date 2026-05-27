@@ -7,6 +7,7 @@ using SpaceGassApi.Job.Analysis;
 using SpaceGassApi.Job.Close;
 using SpaceGassApi.Job.Data;
 using SpaceGassApi.Job.Errors;
+using SpaceGassApi.Job.Filters;
 using SpaceGassApi.Job.Headings;
 using SpaceGassApi.Job.Import;
 using SpaceGassApi.Job.Loads;
@@ -53,6 +54,11 @@ namespace SpaceGassApi.Job
         public global::SpaceGassApi.Job.Errors.ErrorsRequestBuilder Errors
         {
             get => new global::SpaceGassApi.Job.Errors.ErrorsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The filters property</summary>
+        public global::SpaceGassApi.Job.Filters.FiltersRequestBuilder Filters
+        {
+            get => new global::SpaceGassApi.Job.Filters.FiltersRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The headings property</summary>
         public global::SpaceGassApi.Job.Headings.HeadingsRequestBuilder Headings
@@ -141,6 +147,7 @@ namespace SpaceGassApi.Job
         /// <returns>A <see cref="global::SpaceGassApi.Models.Job"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -154,6 +161,7 @@ namespace SpaceGassApi.Job
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Job>(requestInfo, global::SpaceGassApi.Models.Job.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);

@@ -2,6 +2,7 @@
 #pragma warning disable CS0618
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Analysis.Static.Info;
 using SpaceGassApi.Job.Analysis.Static.RunLinear;
 using SpaceGassApi.Job.Analysis.Static.RunNonLinear;
 using SpaceGassApi.Job.Analysis.Static.Settings;
@@ -17,6 +18,11 @@ namespace SpaceGassApi.Job.Analysis.Static
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class StaticRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The info property</summary>
+        public global::SpaceGassApi.Job.Analysis.Static.Info.InfoRequestBuilder Info
+        {
+            get => new global::SpaceGassApi.Job.Analysis.Static.Info.InfoRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The runLinear property</summary>
         public global::SpaceGassApi.Job.Analysis.Static.RunLinear.RunLinearRequestBuilder RunLinear
         {

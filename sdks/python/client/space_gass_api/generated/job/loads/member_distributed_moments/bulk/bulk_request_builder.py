@@ -50,6 +50,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -74,6 +75,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
@@ -82,12 +84,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MemberDistributedMomentBulkResult, error_mapping)
     
-    async def post(self,body: list[MemberDistributedMomentCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[bytes]:
+    async def post(self,body: list[MemberDistributedMomentCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberDistributedMomentBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: bytes
+        Returns: Optional[MemberDistributedMomentBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -98,11 +100,14 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "400": ErrorResponse,
+            "403": ErrorResponse,
             "404": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
+        from .....models.member_distributed_moment_bulk_result import MemberDistributedMomentBulkResult
+
+        return await self.request_adapter.send_async(request_info, MemberDistributedMomentBulkResult, error_mapping)
     
     def to_delete_request_information(self,body: list[MemberDistributedMomentKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """

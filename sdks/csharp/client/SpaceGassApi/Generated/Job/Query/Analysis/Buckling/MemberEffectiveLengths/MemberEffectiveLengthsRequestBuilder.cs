@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberEffectiveLengthsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?Limit*,Offset*,cases*,members*,modes*}", pathParameters)
+        public MemberEffectiveLengthsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?Limit*,Offset*,loadCases*,members*,modes*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberEffectiveLengthsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?Limit*,Offset*,cases*,members*,modes*}", rawUrl)
+        public MemberEffectiveLengthsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?Limit*,Offset*,loadCases*,members*,modes*}", rawUrl)
         {
         }
         /// <summary>
@@ -46,7 +46,9 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 409 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.BucklingEffectiveLengthQueryResult?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths.MemberEffectiveLengthsRequestBuilder.MemberEffectiveLengthsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -60,7 +62,9 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "409", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.BucklingEffectiveLengthQueryResult>(requestInfo, global::SpaceGassApi.Models.BucklingEffectiveLengthQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -98,18 +102,18 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class MemberEffectiveLengthsRequestBuilderGetQueryParameters 
         {
+            /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            public int? Limit { get; set; }
             /// <summary>Load case Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-            [QueryParameter("cases")]
-            public string? Cases { get; set; }
+            [QueryParameter("loadCases")]
+            public string? LoadCases { get; set; }
 #nullable restore
 #else
-            [QueryParameter("cases")]
-            public string Cases { get; set; }
+            [QueryParameter("loadCases")]
+            public string LoadCases { get; set; }
 #endif
-            /// <summary>Maximum number of items to return. Default is null (return all).</summary>
-            public int? Limit { get; set; }
             /// <summary>Member Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

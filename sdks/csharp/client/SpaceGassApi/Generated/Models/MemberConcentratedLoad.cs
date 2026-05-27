@@ -15,14 +15,22 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Coordinate axes type for distributed loads and plate pressure loads.Maps to SPACE GASS lookup table &quot;L/GI/GP Axes&quot;.</summary>
         public global::SpaceGassApi.Models.LoadAxes? Axes { get; set; }
-        /// <summary>The load case number this load belongs to.</summary>
-        public int? Case { get; set; }
         /// <summary>Force in the local/global X direction.</summary>
         public double? Fx { get; set; }
         /// <summary>Force in the local/global Y direction.</summary>
         public double? Fy { get; set; }
         /// <summary>Force in the local/global Z direction.</summary>
         public double? Fz { get; set; }
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
+        /// <summary>The load case number this load belongs to.</summary>
+        public int? LoadCase { get; set; }
         /// <summary>Load category for grouping/organization.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>The member number this load is applied to.</summary>
@@ -58,10 +66,11 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "axes", n => { Axes = n.GetEnumValue<global::SpaceGassApi.Models.LoadAxes>(); } },
-                { "case", n => { Case = n.GetIntValue(); } },
                 { "fx", n => { Fx = n.GetDoubleValue(); } },
                 { "fy", n => { Fy = n.GetDoubleValue(); } },
                 { "fz", n => { Fz = n.GetDoubleValue(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
+                { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
                 { "mx", n => { Mx = n.GetDoubleValue(); } },
@@ -80,10 +89,11 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteEnumValue<global::SpaceGassApi.Models.LoadAxes>("axes", Axes);
-            writer.WriteIntValue("case", Case);
             writer.WriteDoubleValue("fx", Fx);
             writer.WriteDoubleValue("fy", Fy);
             writer.WriteDoubleValue("fz", Fz);
+            writer.WriteStringValue("guid", Guid);
+            writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("loadCategory", LoadCategory);
             writer.WriteIntValue("member", Member);
             writer.WriteDoubleValue("mx", Mx);
