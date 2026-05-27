@@ -5,14 +5,14 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "space-gass-api"
 version = "14.50.103"
-description = "Official Python SDK for the SPACE GASS API. Auto-generated from the OpenAPI specification with Microsoft Kiota."
+description = "Official Python SDK for the SPACE GASS API."
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.9"
 authors = [
     { name = "Space Gass Pty Ltd" },
 ]
-keywords = ["spacegass", "structural-analysis", "api", "sdk", "kiota"]
+keywords = ["spacegass", "structural-analysis", "api", "sdk"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
