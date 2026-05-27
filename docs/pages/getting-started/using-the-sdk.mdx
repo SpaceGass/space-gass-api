@@ -85,18 +85,18 @@ typed properties on a configuration object:
 ```csharp title="C#"
 await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(config =>
 {
-    config.QueryParameters.Cases = "1,3-7";
+    config.QueryParameters.LoadCases = "1,3-7";
     config.QueryParameters.Nodes = "10-12";
 });
 ```
 
 ```python title="Python"
 await client.job.query.analysis.static.node_reactions.get(
-    cases="1,3-7", nodes="10-12")
+    load_cases="1,3-7", nodes="10-12")
 ```
 
 ```bash title="curl"
-curl "http://localhost:34560/api/v1/job/query/analysis/static/node-reactions?cases=1,3-7&nodes=10-12"
+curl "http://localhost:34560/api/v1/job/query/analysis/static/node-reactions?loadCases=1,3-7&nodes=10-12"
 ```
 </CodeTabs>
 

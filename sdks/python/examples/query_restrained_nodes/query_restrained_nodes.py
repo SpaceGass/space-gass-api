@@ -80,7 +80,7 @@ async def main() -> int:
 
                 for r in reactions:
                     print(
-                        f"  {r.node:<8} {r.case:<8} {r.fx:>12.3f} {r.fy:>12.3f} {r.fz:>12.3f}"
+                        f"  {r.node:<8} {r.load_case:<8} {r.fx:>12.3f} {r.fy:>12.3f} {r.fz:>12.3f}"
                         f" {r.mx:>12.3f} {r.my:>12.3f} {r.mz:>12.3f}"
                     )
 

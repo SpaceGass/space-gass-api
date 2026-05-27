@@ -69,7 +69,7 @@ var result = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync();
 
 foreach (var r in result.Results)
 {
-    Console.WriteLine($"Case {r.Case}, Node {r.Node}: " +
+    Console.WriteLine($"Case {r.LoadCase}, Node {r.Node}: " +
         $"Fx={r.Fx}, Fy={r.Fy}, Fz={r.Fz}");
 }
 ```
@@ -78,7 +78,7 @@ foreach (var r in result.Results)
 result = await client.job.query.analysis.static.node_reactions.get()
 
 for r in result.results:
-    print(f"Case {r.case}, Node {r.node}: "
+    print(f"Case {r.load_case}, Node {r.node}: "
           f"Fx={r.fx}, Fy={r.fy}, Fz={r.fz}")
 ```
 
@@ -98,18 +98,18 @@ or omit the parameter to return all results.
 var result = await client.Job.Query.Analysis.Static.NodeDisplacements
     .GetAsync(config =>
     {
-        config.QueryParameters.Cases = "1,3";
+        config.QueryParameters.LoadCases = "1,3";
         config.QueryParameters.Nodes = "10-12";
     });
 ```
 
 ```python title="Python"
 result = await client.job.query.analysis.static.node_displacements.get(
-    cases="1,3", nodes="10-12")
+    load_cases="1,3", nodes="10-12")
 ```
 
 ```bash title="curl"
-curl "http://localhost:34560/api/v1/job/query/analysis/static/node-displacements?cases=1,3&nodes=10-12"
+curl "http://localhost:34560/api/v1/job/query/analysis/static/node-displacements?loadCases=1,3&nodes=10-12"
 ```
 </CodeTabs>
 
@@ -129,7 +129,7 @@ var result = await client.Job.Query.Analysis.Static.MemberIntermediateForces
 
 foreach (var m in result.Results)
 {
-    Console.WriteLine($"Case {m.Case}, Member {m.Member}:");
+    Console.WriteLine($"Case {m.LoadCase}, Member {m.Member}:");
     for (int i = 0; i < m.Station.Length; i++)
     {
         Console.WriteLine($"  Station {m.Station[i]}: " +
@@ -143,7 +143,7 @@ result = await client.job.query.analysis.static.member_intermediate_forces.get(
     members="1")
 
 for m in result.results:
-    print(f"Case {m.case}, Member {m.member}:")
+    print(f"Case {m.load_case}, Member {m.member}:")
     for i in range(len(m.station)):
         print(f"  Station {m.station[i]}: "
               f"Fx={m.fx[i]}, Fy={m.fy[i]}, Mz={m.mz[i]}")
@@ -162,7 +162,7 @@ var result = await client.Job.Query.Analysis.Buckling.LoadFactors.GetAsync();
 
 foreach (var b in result.Results)
 {
-    Console.WriteLine($"Case {b.Case}, Mode {b.Mode}: " +
+    Console.WriteLine($"Case {b.LoadCase}, Mode {b.Mode}: " +
         $"Factor={b.LoadFactor}, Tolerance={b.Tolerance}");
 }
 ```
@@ -171,7 +171,7 @@ foreach (var b in result.Results)
 result = await client.job.query.analysis.buckling.load_factors.get()
 
 for b in result.results:
-    print(f"Case {b.case}, Mode {b.mode}: "
+    print(f"Case {b.load_case}, Mode {b.mode}: "
           f"Factor={b.load_factor}, Tolerance={b.tolerance}")
 ```
 
@@ -189,7 +189,7 @@ var result = await client.Job.Query.Analysis.Dynamic.NaturalFrequencies
 
 foreach (var f in result.Results)
 {
-    Console.WriteLine($"Case {f.Case}, Mode {f.Mode}: " +
+    Console.WriteLine($"Case {f.LoadCase}, Mode {f.Mode}: " +
         $"{f.NaturalFrequency} Hz (period {f.NaturalPeriod}s)");
 }
 ```
@@ -198,7 +198,7 @@ foreach (var f in result.Results)
 result = await client.job.query.analysis.dynamic.natural_frequencies.get()
 
 for f in result.results:
-    print(f"Case {f.case}, Mode {f.mode}: "
+    print(f"Case {f.load_case}, Mode {f.mode}: "
           f"{f.natural_frequency} Hz (period {f.natural_period}s)")
 ```
 

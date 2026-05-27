@@ -300,7 +300,7 @@ try
     await client.Job.Loads.SelfWeightLoads.PostAsync(
         new SelfWeightLoadCreate
         {
-            Case = selfWeightCase.Id,
+            LoadCase = selfWeightCase.Id,
             AccelerationX = 0.0,
             AccelerationY = -1.0,
             AccelerationZ = 0.0,
@@ -318,7 +318,7 @@ try
         // Dead load — 1.0 kPa downward
         pressureLoads.Add(new PlatePressureLoadCreate
         {
-            Case = deadCase.Id,
+            LoadCase = deadCase.Id,
             Plate = plate.Id,
             Axes = LoadAxes.GlobalProjected,
             Px = 0.0,
@@ -329,7 +329,7 @@ try
         // Live load — 3.0 kPa downward
         pressureLoads.Add(new PlatePressureLoadCreate
         {
-            Case = liveCase.Id,
+            LoadCase = liveCase.Id,
             Plate = plate.Id,
             Axes = LoadAxes.GlobalProjected,
             Px = 0.0,
@@ -352,9 +352,9 @@ try
             Title = "ULS - Strength",
             CombinationItems = new List<CombinationLoadCaseItem>
             {
-                new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.2 },
-                new() { Case = deadCase.Id,       MultiplyingFactor = 1.2 },
-                new() { Case = liveCase.Id,       MultiplyingFactor = 1.5 },
+                new() { LoadCase = selfWeightCase.Id, MultiplyingFactor = 1.2 },
+                new() { LoadCase = deadCase.Id,       MultiplyingFactor = 1.2 },
+                new() { LoadCase = liveCase.Id,       MultiplyingFactor = 1.5 },
             },
         });
 
@@ -365,9 +365,9 @@ try
             Title = "SLS - Short-term Deflection",
             CombinationItems = new List<CombinationLoadCaseItem>
             {
-                new() { Case = selfWeightCase.Id, MultiplyingFactor = 1.0 },
-                new() { Case = deadCase.Id,       MultiplyingFactor = 1.0 },
-                new() { Case = liveCase.Id,       MultiplyingFactor = 0.7 },
+                new() { LoadCase = selfWeightCase.Id, MultiplyingFactor = 1.0 },
+                new() { LoadCase = deadCase.Id,       MultiplyingFactor = 1.0 },
+                new() { LoadCase = liveCase.Id,       MultiplyingFactor = 0.7 },
             },
         });
 
@@ -419,7 +419,7 @@ try
     Console.WriteLine("Querying ULS reactions...");
     var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(config =>
     {
-        config.QueryParameters.Cases = new[] { ulsCase.Id!.Value }.ToFilterString();
+        config.QueryParameters.LoadCases = new[] { ulsCase.Id!.Value }.ToFilterString();
     });
 
     Console.WriteLine($"  {"Node",-8} {"Fx",12} {"Fy",12} {"Fz",12} {"Mx",12} {"My",12} {"Mz",12}");

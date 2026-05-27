@@ -72,12 +72,12 @@ try
         {
             Console.WriteLine($"  Found {reactions.Count} reaction result(s):");
             Console.WriteLine();
-            Console.WriteLine($"  {"Node",-8} {"Case",-8} {"Fx",12} {"Fy",12} {"Fz",12} {"Mx",12} {"My",12} {"Mz",12}");
+            Console.WriteLine($"  {"Node",-8} {"LC",-8} {"Fx",12} {"Fy",12} {"Fz",12} {"Mx",12} {"My",12} {"Mz",12}");
             Console.WriteLine($"  {new string('-', 8)} {new string('-', 8)} {new string('-', 12)} {new string('-', 12)} {new string('-', 12)} {new string('-', 12)} {new string('-', 12)} {new string('-', 12)}");
 
             foreach (var r in reactions)
             {
-                Console.WriteLine($"  {r.Node,-8} {r.Case,-8} {r.Fx,12:F3} {r.Fy,12:F3} {r.Fz,12:F3} {r.Mx,12:F3} {r.My,12:F3} {r.Mz,12:F3}");
+                Console.WriteLine($"  {r.Node,-8} {r.LoadCase,-8} {r.Fx,12:F3} {r.Fy,12:F3} {r.Fz,12:F3} {r.Mx,12:F3} {r.My,12:F3} {r.Mz,12:F3}");
             }
         }
     }

@@ -113,6 +113,118 @@ blocking call — your script just waits until the analysis is done
 before moving on. This is the pattern you will use most often in
 scripts.
 
+## Pre-Check with Analysis Info
+
+Before running an analysis, you can call the **Info** endpoint to see
+which load cases already have results — and which still need to be
+analysed. This avoids re-running cases that are already complete,
+which saves time on large models.
+
+`Analysis.Static.Info` (and the equivalent `Buckling.Info` and
+`DynamicFrequency.Info`) returns:
+
+| Field | Description |
+|---|---|
+| `HasResults` | `true` if any case has stored results for this analysis type |
+| `LoadCases` | Per-case breakdown — each entry has a `LoadCase` Id and `HasResults` flag |
+| `NotAnalyzed` | SG list-format string of case Ids that have **not** been analysed — ready to pass straight into a run request |
+
+### Check which cases have been analysed
+
+<CodeTabs>
+```csharp title="C#"
+var info = await client.Job.Analysis.Static.Info.GetAsync();
+
+Console.WriteLine($"Has any results: {info.HasResults}");
+
+foreach (var c in info.LoadCases!)
+{
+    Console.WriteLine($"  LC {c.LoadCase}: {(c.HasResults == true ? "analysed" : "not analysed")}");
+}
+
+if (info.NotAnalyzed != null)
+    Console.WriteLine($"Not analysed: {info.NotAnalyzed}");
+```
+
+```python title="Python"
+info = await client.job.analysis.static.info.get()
+
+print(f"Has any results: {info.has_results}")
+
+for c in info.load_cases:
+    status = "analysed" if c.has_results else "not analysed"
+    print(f"  LC {c.load_case}: {status}")
+
+if info.not_analyzed:
+    print(f"Not analysed: {info.not_analyzed}")
+```
+
+```bash title="curl"
+curl http://localhost:34560/api/v1/job/analysis/static/info
+```
+</CodeTabs>
+
+### Filter to a specific range
+
+Pass a `loadCases` filter to check a subset. The `NotAnalyzed` field
+returns only the intersection of your filter with the not-analysed
+set — you can feed it directly into the run request.
+
+<CodeTabs>
+```csharp title="C#"
+// Check cases 1 through 10
+var info = await client.Job.Analysis.Static.Info.GetAsync(
+    config => config.QueryParameters.LoadCases = "1-10");
+
+if (info.NotAnalyzed != null)
+{
+    Console.WriteLine($"Cases 1-10 not yet analysed: {info.NotAnalyzed}");
+
+    // Run only the missing cases
+    var run = await client.Job.Analysis.Static.RunLinear.PostAsync(
+        new StaticSettingsUpdate { LoadCases = info.NotAnalyzed });
+
+    var result = await WaitForCompletion(client, run.RunId.Value);
+    Console.WriteLine($"Analysis {result.Status}");
+}
+else
+{
+    Console.WriteLine("Cases 1-10 are all analysed — nothing to run.");
+}
+```
+
+```python title="Python"
+# Check cases 1 through 10
+info = await client.job.analysis.static.info.get(load_cases="1-10")
+
+if info.not_analyzed:
+    print(f"Cases 1-10 not yet analysed: {info.not_analyzed}")
+
+    # Run only the missing cases
+    run = await client.job.analysis.static.run_linear.post(
+        models.StaticSettingsUpdate(load_cases=info.not_analyzed))
+
+    result = await wait_for_completion(client, run.run_id)
+    print(f"Analysis {result.status}")
+else:
+    print("Cases 1-10 are all analysed — nothing to run.")
+```
+
+```bash title="curl"
+# Check cases 1-10
+curl "http://localhost:34560/api/v1/job/analysis/static/info?loadCases=1-10"
+
+# If notAnalyzed is "4,7-10", run only those
+curl -X POST http://localhost:34560/api/v1/job/analysis/static/run-linear \
+  -H "Content-Type: application/json" \
+  -d '{"loadCases": "4,7-10"}'
+```
+</CodeTabs>
+
+This pattern is especially useful in automation workflows where
+a model is re-analysed incrementally — new load cases are added and
+only the missing ones need to be run, leaving existing results intact.
+
 ## Running Multiple Analyses in Sequence
 
 The API processes analysis runs in a queue. You can start multiple

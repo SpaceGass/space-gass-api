@@ -55,7 +55,7 @@ try
     foreach (var r in result!.Results!)
     {
         Console.WriteLine(
-            $"Node {r.Node}, Case {r.Case}: " +
+            $"Node {r.Node}, Case {r.LoadCase}: " +
             $"Fx={r.Fx:F2}, Fy={r.Fy:F2}, Fz={r.Fz:F2}");
     }
 }
@@ -101,7 +101,7 @@ try:
         nodes=node_filter)
 
     for r in result.results:
-        print(f"Node {r.node}, Case {r.case}: "
+        print(f"Node {r.node}, Case {r.load_case}: "
               f"Fx={r.fx:.2f}, Fy={r.fy:.2f}, Fz={r.fz:.2f}")
 finally:
     await client.job.close.post()
