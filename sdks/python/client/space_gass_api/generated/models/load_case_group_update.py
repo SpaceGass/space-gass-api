@@ -9,8 +9,6 @@ class LoadCaseGroupUpdate(Parsable):
     """
     DTO for updating an existing load case group.All fields optional for partial updates.
     """
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for bulk updates.
     id: Optional[int] = None
     # Comma-separated list of load case numbers and ranges (e.g., "1,3,5-10").
@@ -35,7 +33,6 @@ class LoadCaseGroupUpdate(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "loadCaseList": lambda n : setattr(self, 'load_case_list', n.get_str_value()),
             "title": lambda n : setattr(self, 'title', n.get_str_value()),
@@ -50,7 +47,6 @@ class LoadCaseGroupUpdate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_str_value("loadCaseList", self.load_case_list)
         writer.write_str_value("title", self.title)

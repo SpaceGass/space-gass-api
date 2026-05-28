@@ -11,7 +11,7 @@ namespace SpaceGassApi.Models
     /// Result of a bulk operation.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public partial class ObjectBulkResult : IParsable
+    public partial class BulkDeletedBulkResult : IParsable
     {
         /// <summary>Errors from failed items.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -26,20 +26,20 @@ namespace SpaceGassApi.Models
         /// <summary>Successfully processed items.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public UntypedNode? Succeeded { get; set; }
+        public List<global::SpaceGassApi.Models.BulkDeleted>? Succeeded { get; set; }
 #nullable restore
 #else
-        public UntypedNode Succeeded { get; set; }
+        public List<global::SpaceGassApi.Models.BulkDeleted> Succeeded { get; set; }
 #endif
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.ObjectBulkResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.BulkDeletedBulkResult"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static global::SpaceGassApi.Models.ObjectBulkResult CreateFromDiscriminatorValue(IParseNode parseNode)
+        public static global::SpaceGassApi.Models.BulkDeletedBulkResult CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::SpaceGassApi.Models.ObjectBulkResult();
+            return new global::SpaceGassApi.Models.BulkDeletedBulkResult();
         }
         /// <summary>
         /// The deserialization information for the current model
@@ -51,7 +51,7 @@ namespace SpaceGassApi.Models
             {
                 { "errors", n => { Errors = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.BulkError>(global::SpaceGassApi.Models.BulkError.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "errorsTruncated", n => { ErrorsTruncated = n.GetBoolValue(); } },
-                { "succeeded", n => { Succeeded = n.GetObjectValue<UntypedNode>(UntypedNode.CreateFromDiscriminatorValue); } },
+                { "succeeded", n => { Succeeded = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.BulkDeleted>(global::SpaceGassApi.Models.BulkDeleted.CreateFromDiscriminatorValue)?.AsList(); } },
             };
         }
         /// <summary>
@@ -63,7 +63,7 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.BulkError>("errors", Errors);
             writer.WriteBoolValue("errorsTruncated", ErrorsTruncated);
-            writer.WriteObjectValue<UntypedNode>("succeeded", Succeeded);
+            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.BulkDeleted>("succeeded", Succeeded);
         }
     }
 }

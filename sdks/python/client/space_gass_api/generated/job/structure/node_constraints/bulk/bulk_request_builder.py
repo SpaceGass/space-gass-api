@@ -14,11 +14,11 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
     from .....models.error_response import ErrorResponse
     from .....models.node_constraint_bulk_result import NodeConstraintBulkResult
     from .....models.node_constraint_create import NodeConstraintCreate
     from .....models.node_constraint_update import NodeConstraintUpdate
-    from .....models.object_bulk_result import ObjectBulkResult
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -33,12 +33,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/node-constraints/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBulkResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
         """
         Deletes multiple attribute rows by parent Id. The body is a JSON array of integer parent Ids.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ObjectBulkResult]
+        Returns: Optional[BulkDeletedBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -51,12 +51,13 @@ class BulkRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.object_bulk_result import ObjectBulkResult
+        from .....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
 
-        return await self.request_adapter.send_async(request_info, ObjectBulkResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
     
     async def patch(self,body: list[NodeConstraintUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[NodeConstraintBulkResult]:
         """
@@ -76,6 +77,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -101,6 +103,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -180,6 +183,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
                 return "continueOnError"
             return original_name
         
+        # If `true`, processing continues after per-item failures and partial results are returned. Defaults to `false` (stop on first error).
         continue_on_error: Optional[bool] = None
 
     
@@ -207,6 +211,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
                 return "continueOnError"
             return original_name
         
+        # If `true`, processing continues after per-item failures and partial results are returned. Defaults to `false` (stop on first error).
         continue_on_error: Optional[bool] = None
 
     
@@ -234,6 +239,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
                 return "continueOnError"
             return original_name
         
+        # If `true`, processing continues after per-item failures and partial results are returned. Defaults to `false` (stop on first error).
         continue_on_error: Optional[bool] = None
 
     

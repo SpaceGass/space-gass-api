@@ -19,8 +19,6 @@ class Plate(Parsable):
     bending_thickness: Optional[float] = None
     # DTO for reading plate direction data.Direction defines the orientation of the plate's local coordinate system.Always present on every plate — the parent PlateDto's `id` is authoritative.
     direction: Optional[PlateDirection] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
     id: Optional[int] = None
     # Material number assigned to this plate.
@@ -68,7 +66,6 @@ class Plate(Parsable):
             "actualThickness": lambda n : setattr(self, 'actual_thickness', n.get_float_value()),
             "bendingThickness": lambda n : setattr(self, 'bending_thickness', n.get_float_value()),
             "direction": lambda n : setattr(self, 'direction', n.get_object_value(PlateDirection)),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "material": lambda n : setattr(self, 'material', n.get_int_value()),
             "membraneThickness": lambda n : setattr(self, 'membrane_thickness', n.get_float_value()),
@@ -93,7 +90,6 @@ class Plate(Parsable):
         writer.write_float_value("actualThickness", self.actual_thickness)
         writer.write_float_value("bendingThickness", self.bending_thickness)
         writer.write_object_value("direction", self.direction)
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_int_value("material", self.material)
         writer.write_float_value("membraneThickness", self.membrane_thickness)

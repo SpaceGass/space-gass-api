@@ -29,14 +29,6 @@ namespace SpaceGassApi.Models
         public double? FzFinish { get; set; }
         /// <summary>Distributed force intensity in Z direction at the start position.</summary>
         public double? FzStart { get; set; }
-        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Guid { get; set; }
-#nullable restore
-#else
-        public string Guid { get; set; }
-#endif
         /// <summary>The load case number to create this load in.</summary>
         public int? LoadCase { get; set; }
         /// <summary>Load category for grouping/organization.</summary>
@@ -73,7 +65,6 @@ namespace SpaceGassApi.Models
                 { "fyStart", n => { FyStart = n.GetDoubleValue(); } },
                 { "fzFinish", n => { FzFinish = n.GetDoubleValue(); } },
                 { "fzStart", n => { FzStart = n.GetDoubleValue(); } },
-                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
@@ -96,7 +87,6 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("fyStart", FyStart);
             writer.WriteDoubleValue("fzFinish", FzFinish);
             writer.WriteDoubleValue("fzStart", FzStart);
-            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("loadCategory", LoadCategory);
             writer.WriteIntValue("member", Member);

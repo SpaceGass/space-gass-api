@@ -15,8 +15,6 @@ class LoadCase(Parsable):
     """
     # The combination items (component case + multiplying factor rows) that make up this case.Populated only when `?expand=all` is passed AND `hasCombinationItems` is true;omitted from the wire otherwise.
     combination_items: Optional[list[CombinationLoadCaseItem]] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # True when this case has at least one combination item defined.Only meaningful for cases where `Type` is `Combination`.Use `?expand=all` to include the full `combinationItems` array.
     has_combination_items: Optional[bool] = None
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
@@ -52,7 +50,6 @@ class LoadCase(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "combinationItems": lambda n : setattr(self, 'combination_items', n.get_collection_of_object_values(CombinationLoadCaseItem)),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "hasCombinationItems": lambda n : setattr(self, 'has_combination_items', n.get_bool_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "notes": lambda n : setattr(self, 'notes', n.get_str_value()),
@@ -70,7 +67,6 @@ class LoadCase(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_collection_of_object_values("combinationItems", self.combination_items)
-        writer.write_str_value("guid", self.guid)
         writer.write_bool_value("hasCombinationItems", self.has_combination_items)
         writer.write_int_value("id", self.id)
         writer.write_str_value("notes", self.notes)

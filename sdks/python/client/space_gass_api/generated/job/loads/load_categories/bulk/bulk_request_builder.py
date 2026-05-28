@@ -14,11 +14,11 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
     from .....models.error_response import ErrorResponse
     from .....models.load_category_bulk_result import LoadCategoryBulkResult
     from .....models.load_category_create import LoadCategoryCreate
     from .....models.load_category_update import LoadCategoryUpdate
-    from .....models.object_bulk_result import ObjectBulkResult
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -33,12 +33,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/load-categories/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBulkResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
         """
         Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ObjectBulkResult]
+        Returns: Optional[BulkDeletedBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -51,12 +51,13 @@ class BulkRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.object_bulk_result import ObjectBulkResult
+        from .....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
 
-        return await self.request_adapter.send_async(request_info, ObjectBulkResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
     
     async def patch(self,body: list[LoadCategoryUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCategoryBulkResult]:
         """
@@ -76,6 +77,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -101,6 +103,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
