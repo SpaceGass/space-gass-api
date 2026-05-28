@@ -244,7 +244,7 @@ const config: ZudokuConfig = {
     },
   },
   metadata: {
-    title: "SpaceGass API Documentation",
+    title: "SPACE GASS API Documentation",
     description:
       "Programmatic access to SPACE GASS structural analysis data",
     favicon: "/docs/blue-sg-256-clear-bg.ico",
