@@ -36,20 +36,21 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
         /// <summary>
         /// Deletes multiple combination load cases by Id. The body is a JSON array of integer Ids(e.g. `[10, 11, 12]`). Each deletion removes the case and its items atomically.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.ObjectBulkResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.BulkDeletedBulkResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.ObjectBulkResult?> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.BulkDeletedBulkResult?> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.ObjectBulkResult> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.BulkDeletedBulkResult> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -59,8 +60,9 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ObjectBulkResult>(requestInfo, global::SpaceGassApi.Models.ObjectBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.BulkDeletedBulkResult>(requestInfo, global::SpaceGassApi.Models.BulkDeletedBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case&apos;s items. Validation runs upfront on the wholerequest; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
@@ -72,6 +74,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.LoadCaseBulkResult?> PatchAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -88,6 +91,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCaseBulkResult>(requestInfo, global::SpaceGassApi.Models.LoadCaseBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -101,6 +105,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.LoadCaseBulkResult?> PostAsync(List<global::SpaceGassApi.Models.CombinationLoadCaseCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -117,6 +122,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Bulk
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.LoadCaseBulkResult>(requestInfo, global::SpaceGassApi.Models.LoadCaseBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }

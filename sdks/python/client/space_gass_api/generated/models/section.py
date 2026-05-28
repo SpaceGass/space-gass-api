@@ -23,8 +23,6 @@ class Section(Parsable):
     ay: Optional[float] = None
     # Shear area in the Z direction.
     az: Optional[float] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
     id: Optional[int] = None
     # Second moment of area about the principal Y axis.
@@ -82,7 +80,6 @@ class Section(Parsable):
             "areaFactor": lambda n : setattr(self, 'area_factor', n.get_float_value()),
             "ay": lambda n : setattr(self, 'ay', n.get_float_value()),
             "az": lambda n : setattr(self, 'az', n.get_float_value()),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "iy": lambda n : setattr(self, 'iy', n.get_float_value()),
             "iyFactor": lambda n : setattr(self, 'iy_factor', n.get_float_value()),
@@ -113,7 +110,6 @@ class Section(Parsable):
         writer.write_float_value("areaFactor", self.area_factor)
         writer.write_float_value("ay", self.ay)
         writer.write_float_value("az", self.az)
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_float_value("iy", self.iy)
         writer.write_float_value("iyFactor", self.iy_factor)

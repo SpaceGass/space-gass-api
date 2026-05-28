@@ -76,6 +76,7 @@ class SelfWeightLoadsRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -83,12 +84,12 @@ class SelfWeightLoadsRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_collection_async(request_info, SelfWeightLoad, error_mapping)
     
-    async def post(self,body: SelfWeightLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[bytes]:
+    async def post(self,body: SelfWeightLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SelfWeightLoad]:
         """
         Creates a new load. The load case must exist and be a Primary load case.
         param body: DTO for creating a new self-weight load.Only one self-weight load is permitted per load case (case is the entire key).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: bytes
+        Returns: Optional[SelfWeightLoad]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -102,10 +103,13 @@ class SelfWeightLoadsRequestBuilder(BaseRequestBuilder):
             "403": ErrorResponse,
             "404": ErrorResponse,
             "409": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
+        from ....models.self_weight_load import SelfWeightLoad
+
+        return await self.request_adapter.send_async(request_info, SelfWeightLoad, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[SelfWeightLoadsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """

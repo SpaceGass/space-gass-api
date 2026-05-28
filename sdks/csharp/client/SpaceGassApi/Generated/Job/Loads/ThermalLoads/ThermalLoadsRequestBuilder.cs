@@ -66,6 +66,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<List<global::SpaceGassApi.Models.ThermalLoad>?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.Job.Loads.ThermalLoads.ThermalLoadsRequestBuilder.ThermalLoadsRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -81,6 +82,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.ThermalLoad>(requestInfo, global::SpaceGassApi.Models.ThermalLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
             return collectionResult?.AsList();
@@ -88,7 +90,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
         /// <summary>
         /// Creates a new load. The load case must exist and be a Primary load case.
         /// </summary>
-        /// <returns>A <see cref="Stream"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.ThermalLoad"/></returns>
         /// <param name="body">DTO for creating a new thermal load.Specify the element type to target either a member or a plate element.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -96,13 +98,14 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 409 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<Stream?> PostAsync(global::SpaceGassApi.Models.ThermalLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ThermalLoad?> PostAsync(global::SpaceGassApi.Models.ThermalLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<Stream> PostAsync(global::SpaceGassApi.Models.ThermalLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.ThermalLoad> PostAsync(global::SpaceGassApi.Models.ThermalLoadCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -113,8 +116,9 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendPrimitiveAsync<Stream>(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ThermalLoad>(requestInfo, global::SpaceGassApi.Models.ThermalLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns all loads with optional filtering and pagination.Use the `loadCases` query parameter to filter by load cases — accepts SG list format(e.g. `&quot;1,3-7,10&quot;`). Omit any list filter to match all.Returns an empty array when no loads match the filter — never 404.Results are sorted by LoadCase ascending, then by entity Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).

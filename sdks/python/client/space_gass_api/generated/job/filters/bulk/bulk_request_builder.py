@@ -14,11 +14,11 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 from warnings import warn
 
 if TYPE_CHECKING:
+    from ....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
     from ....models.error_response import ErrorResponse
     from ....models.filter_bulk_result import FilterBulkResult
     from ....models.filter_create import FilterCreate
     from ....models.filter_update import FilterUpdate
-    from ....models.object_bulk_result import ObjectBulkResult
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -33,12 +33,12 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/filters/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ObjectBulkResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
         """
         Deletes multiple filters in a single request.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[ObjectBulkResult]
+        Returns: Optional[BulkDeletedBulkResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -51,12 +51,13 @@ class BulkRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from ....models.object_bulk_result import ObjectBulkResult
+        from ....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
 
-        return await self.request_adapter.send_async(request_info, ObjectBulkResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
     
     async def patch(self,body: list[FilterUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[FilterBulkResult]:
         """
@@ -76,6 +77,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -101,6 +103,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
