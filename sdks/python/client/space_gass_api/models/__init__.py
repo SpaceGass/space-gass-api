@@ -35,6 +35,8 @@ from ..generated.models.buckling_load_factor_query_result import BucklingLoadFac
 from ..generated.models.buckling_settings import BucklingSettings
 from ..generated.models.buckling_settings_update import BucklingSettingsUpdate
 from ..generated.models.buckling_theory import BucklingTheory
+from ..generated.models.bulk_deleted import BulkDeleted
+from ..generated.models.bulk_deleted_bulk_result import BulkDeletedBulkResult
 from ..generated.models.bulk_error import BulkError
 from ..generated.models.combination_load_case_create import CombinationLoadCaseCreate
 from ..generated.models.combination_load_case_item import CombinationLoadCaseItem
@@ -210,7 +212,6 @@ from ..generated.models.node_restraint_update import NodeRestraintUpdate
 from ..generated.models.node_type_filter import NodeTypeFilter
 from ..generated.models.node_update import NodeUpdate
 from ..generated.models.non_linear_theory import NonLinearTheory
-from ..generated.models.object_bulk_result import ObjectBulkResult
 from ..generated.models.open_job_request import OpenJobRequest
 from ..generated.models.open_sample_request import OpenSampleRequest
 from ..generated.models.optimization_axis import OptimizationAxis
@@ -316,6 +317,8 @@ __all__ = [
     "BucklingSettings",
     "BucklingSettingsUpdate",
     "BucklingTheory",
+    "BulkDeleted",
+    "BulkDeletedBulkResult",
     "BulkError",
     "CombinationLoadCaseCreate",
     "CombinationLoadCaseItem",
@@ -491,7 +494,6 @@ __all__ = [
     "NodeTypeFilter",
     "NodeUpdate",
     "NonLinearTheory",
-    "ObjectBulkResult",
     "OpenJobRequest",
     "OpenSampleRequest",
     "OptimizationAxis",

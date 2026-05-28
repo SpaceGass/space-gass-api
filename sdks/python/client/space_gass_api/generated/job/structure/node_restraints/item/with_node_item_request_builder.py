@@ -46,6 +46,7 @@ class WithNodeItemRequestBuilder(BaseRequestBuilder):
         error_mapping: dict[str, type[ParsableFactory]] = {
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -65,6 +66,7 @@ class WithNodeItemRequestBuilder(BaseRequestBuilder):
         error_mapping: dict[str, type[ParsableFactory]] = {
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -90,6 +92,7 @@ class WithNodeItemRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 

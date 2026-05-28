@@ -36,20 +36,21 @@ namespace SpaceGassApi.Job.Structure.PlateStrips.Bulk
         /// <summary>
         /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.ObjectBulkResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.BulkDeletedBulkResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.ObjectBulkResult?> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.PlateStrips.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.BulkDeletedBulkResult?> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.PlateStrips.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.ObjectBulkResult> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.PlateStrips.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.BulkDeletedBulkResult> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.PlateStrips.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -59,8 +60,9 @@ namespace SpaceGassApi.Job.Structure.PlateStrips.Bulk
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.ObjectBulkResult>(requestInfo, global::SpaceGassApi.Models.ObjectBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.BulkDeletedBulkResult>(requestInfo, global::SpaceGassApi.Models.BulkDeletedBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
@@ -72,6 +74,7 @@ namespace SpaceGassApi.Job.Structure.PlateStrips.Bulk
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.PlateStripBulkResult?> PatchAsync(List<global::SpaceGassApi.Models.PlateStripUpdate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.PlateStrips.Bulk.BulkRequestBuilder.BulkRequestBuilderPatchQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -88,6 +91,7 @@ namespace SpaceGassApi.Job.Structure.PlateStrips.Bulk
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.PlateStripBulkResult>(requestInfo, global::SpaceGassApi.Models.PlateStripBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
@@ -101,6 +105,7 @@ namespace SpaceGassApi.Job.Structure.PlateStrips.Bulk
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public async Task<global::SpaceGassApi.Models.PlateStripBulkResult?> PostAsync(List<global::SpaceGassApi.Models.PlateStripCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.PlateStrips.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
@@ -117,6 +122,7 @@ namespace SpaceGassApi.Job.Structure.PlateStrips.Bulk
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.PlateStripBulkResult>(requestInfo, global::SpaceGassApi.Models.PlateStripBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }

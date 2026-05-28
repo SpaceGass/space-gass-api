@@ -35,7 +35,7 @@ class PlatesItemRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> None:
         """
-        Delete
+        Deletes the entity with the supplied Id. Returns 204 on success, 404 if no entitywith that Id exists.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: None
         """
@@ -47,6 +47,7 @@ class PlatesItemRequestBuilder(BaseRequestBuilder):
         error_mapping: dict[str, type[ParsableFactory]] = {
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -76,6 +77,7 @@ class PlatesItemRequestBuilder(BaseRequestBuilder):
         error_mapping: dict[str, type[ParsableFactory]] = {
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -101,6 +103,7 @@ class PlatesItemRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -110,7 +113,7 @@ class PlatesItemRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Delete
+        Deletes the entity with the supplied Id. Returns 204 on success, 404 if no entitywith that Id exists.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

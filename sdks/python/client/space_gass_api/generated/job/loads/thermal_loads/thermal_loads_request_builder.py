@@ -66,6 +66,7 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -73,12 +74,12 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_collection_async(request_info, ThermalLoad, error_mapping)
     
-    async def post(self,body: ThermalLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[bytes]:
+    async def post(self,body: ThermalLoadCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[ThermalLoad]:
         """
         Creates a new load. The load case must exist and be a Primary load case.
         param body: DTO for creating a new thermal load.Specify the element type to target either a member or a plate element.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: bytes
+        Returns: Optional[ThermalLoad]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -92,10 +93,13 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
             "403": ErrorResponse,
             "404": ErrorResponse,
             "409": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        return await self.request_adapter.send_primitive_async(request_info, "bytes", error_mapping)
+        from ....models.thermal_load import ThermalLoad
+
+        return await self.request_adapter.send_async(request_info, ThermalLoad, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[ThermalLoadsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """

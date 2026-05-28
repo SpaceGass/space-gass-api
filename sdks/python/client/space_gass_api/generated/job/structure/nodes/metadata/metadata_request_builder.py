@@ -32,7 +32,7 @@ class MetadataRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[ResourceMetadata]:
         """
-        Get Metadata
+        Returns the resource metadata document — field schema, data types, units resolvedagainst current job units, allowed values for enum fields, and validation bounds.Clients use this to drive UI, form validation, and schema introspection.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[ResourceMetadata]
         """
@@ -44,6 +44,7 @@ class MetadataRequestBuilder(BaseRequestBuilder):
         error_mapping: dict[str, type[ParsableFactory]] = {
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -53,7 +54,7 @@ class MetadataRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Get Metadata
+        Returns the resource metadata document — field schema, data types, units resolvedagainst current job units, allowed values for enum fields, and validation bounds.Clients use this to drive UI, form validation, and schema introspection.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

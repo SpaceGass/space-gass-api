@@ -74,6 +74,7 @@ class MemberOffsetsRequestBuilder(BaseRequestBuilder):
         error_mapping: dict[str, type[ParsableFactory]] = {
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
@@ -100,6 +101,7 @@ class MemberOffsetsRequestBuilder(BaseRequestBuilder):
             "403": ErrorResponse,
             "404": ErrorResponse,
             "409": ErrorResponse,
+            "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
