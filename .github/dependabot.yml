@@ -1,0 +1,15 @@
+# Dependabot configuration.
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+#
+# The workflows pin actions to commit SHAs (immutable, hijack-proof). Dependabot
+# keeps those SHAs current by opening update PRs, with a 7-day cooldown so a
+# freshly published (possibly compromised) release has time to be caught and
+# yanked before we adopt it. Security/CVE updates bypass the cooldown.
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    cooldown:
+      default-days: 7
