@@ -1,6 +1,6 @@
 ---
-title: Introduction
-description: Welcome to the SpaceGass API documentation
+title: Overview
+description: "Start here — programmatic access to SPACE GASS. Machine-readable OpenAPI spec: https://api.spacegass.com/docs/api/1/schema.json"
 ---
 
 The SPACE GASS API provides programmatic access to SPACE GASS structural
@@ -27,7 +27,7 @@ HTTP requests to the local server.
 ## Prerequisites
 
 To get access to the API, follow the steps in the
-[Quick Start](/getting-started/quick-start). You will need:
+[Quick Start](/quick-start). You will need:
 
 - [SPACE GASS](https://www.spacegass.com/) installed on your machine
 - SPACE GASS has been opened at least once to initialize the required
@@ -37,13 +37,13 @@ To get access to the API, follow the steps in the
 
 API access is included with Pro and above subscriptions, or available
 as a yearly add-on for perpetual license holders. See
-[Licensing](/guides/licensing) for details or visit
+[Licensing](/licensing) for details or visit
 [spacegass.com](https://www.spacegass.com/) for pricing.
 
 ## Authentication
 
 No authentication is required. The API runs locally and is accessed
-over plain HTTP. See [Authentication](/guides/authentication) for
+over plain HTTP. See [Authentication](/authentication) for
 details.
 
 ## SDK Clients
@@ -55,11 +55,14 @@ Generated SDK clients are available for:
 
 Both are generated from the OpenAPI specification using
 [Microsoft Kiota](https://learn.microsoft.com/en-us/openapi/kiota/overview).
+The machine-readable spec is published at
+[`api/1/schema.json`](https://api.spacegass.com/docs/api/1/schema.json)
+if you want to generate a client for another language or feed it to an LLM.
 
 ## Next Steps
 
-- [Quick Start](/getting-started/quick-start) — Get up and running
+- [Quick Start](/quick-start) — Get up and running
   in 5 minutes
-- [Simple Beam Model](/guides/examples/simple-beam) — Full walkthrough
+- [Simple Beam Model](/examples/tutorials/simple-beam) — Full walkthrough
   building a model, running analysis, and querying results
 - [API Reference](/api) — Browse all endpoints interactively

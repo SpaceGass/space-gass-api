@@ -3,6 +3,12 @@ title: Using the SDK
 description: A plain-English reference for the REST verbs and async patterns used by the SPACE GASS SDK
 ---
 
+> **Want to generate your own client?** These SDKs are generated from the
+> OpenAPI spec at
+> **https://api.spacegass.com/docs/api/1/schema.json** — feed that file
+> to [Kiota](https://learn.microsoft.com/en-us/openapi/kiota/overview),
+> OpenAPI Generator, or an LLM to produce a typed client in any language.
+
 If you are new to web APIs, the SDK calls and HTTP examples in this
 documentation can feel jargon-heavy. This page is a quick reference for
 the terms you will see repeatedly — what they actually mean, and how
@@ -116,7 +122,7 @@ practice:
 | 400  | Bad Request — the body you sent was invalid; check the `detail` field         |
 | 404  | Not Found — the entity (or file) does not exist                               |
 | 409  | Conflict — the operation clashes with current state (e.g. file already open)  |
-| 500  | Server Error — the API ran into trouble; please report it via [Support](/getting-started/support) |
+| 500  | Server Error — the API ran into trouble; please report it via [Support](/support) |
 
 The SDK clients turn non-2xx responses into typed exceptions
 (`ApiException` in C#, `APIError` in Python). See

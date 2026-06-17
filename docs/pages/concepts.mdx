@@ -4,8 +4,8 @@ description: The mental model for working with the SPACE GASS API — the active
 ---
 
 This page is the conceptual map of the API. It does not show code — the
-[Quick Start](/getting-started/quick-start) and the
-[Examples](/guides/examples/simple-beam) cover that. Read this once
+[Quick Start](/quick-start) and the
+[Examples](/examples/tutorials/simple-beam) cover that. Read this once
 and the calls in those examples will make sense.
 
 ## The Active Job
@@ -30,8 +30,8 @@ You move between states with three endpoints:
 
 The recommended pattern in your code is **`open` → work → `close`** in
 a `try / finally` so the job is always cleaned up, even if a step in
-the middle throws. The [Quick Start](/getting-started/quick-start) and
-the [Simple Beam tutorial](/guides/examples/simple-beam) both follow
+the middle throws. The [Quick Start](/quick-start) and
+the [Simple Beam tutorial](/examples/tutorials/simple-beam) both follow
 this pattern.
 
 ### Why this matters
@@ -140,9 +140,9 @@ with both languages, including `WaitForCompletion` helpers.
 
 ## Next Steps
 
-- [Quick Start](/getting-started/quick-start) — open the `Portal Frame.SG`
+- [Quick Start](/quick-start) — open the `Portal Frame.SG`
   sample and read its nodes in five minutes.
-- [Using the SDK](/getting-started/using-the-sdk) — REST verbs and
+- [Using the SDK](/using-the-sdk) — REST verbs and
   async patterns translated for engineers.
-- [Simple Beam Model](/guides/examples/simple-beam) — the full
+- [Simple Beam Model](/examples/tutorials/simple-beam) — the full
   build-to-result walkthrough.

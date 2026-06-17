@@ -307,15 +307,77 @@ const config: ZudokuConfig = {
   navigation: [
     {
       type: "category",
-      label: "Getting Started",
-      icon: "book",
+      label: "Documentation",
+      icon: "book-open",
       items: [
-        "getting-started/introduction",
-        "getting-started/quick-start",
-        "getting-started/concepts",
-        "getting-started/using-the-sdk",
-        "guides/licensing",
-        "getting-started/support",
+        {
+          type: "filter",
+          placeholder: "Filter documentation",
+        },
+        {
+          type: "doc",
+          file: "overview",
+          label: "Overview",
+          icon: "house",
+        },
+        {
+          type: "category",
+          label: "Getting Started",
+          icon: "book",
+          collapsible: true,
+          collapsed: false,
+          items: [
+            "quick-start",
+            "concepts",
+            "using-the-sdk",
+            "authentication",
+          ],
+        },
+        {
+          type: "category",
+          label: "Guides",
+          icon: "compass",
+          collapsible: true,
+          collapsed: false,
+          items: [
+            "guides/service-automation",
+            "guides/file-handling",
+            "guides/running-analysis",
+            "guides/filtering-and-querying",
+            "guides/bulk-operations",
+            "guides/error-handling",
+          ],
+        },
+        {
+          type: "separator",
+        },
+        {
+          type: "doc",
+          file: "licensing",
+          label: "Licensing",
+          icon: "key",
+        },
+        {
+          type: "doc",
+          file: "versioning",
+          label: "Versioning",
+          icon: "git-branch",
+        },
+        {
+          type: "doc",
+          file: "support",
+          label: "Support",
+          icon: "life-buoy",
+        },
+        {
+          type: "separator",
+        },
+        {
+          type: "link",
+          label: "API Reference",
+          to: "/api",
+          icon: "arrow-right",
+        },
       ],
     },
     {
@@ -329,7 +391,7 @@ const config: ZudokuConfig = {
           collapsible: true,
           collapsed: false,
           items: [
-            "guides/examples/simple-beam",
+            "examples/tutorials/simple-beam",
           ],
         },
         {
@@ -338,29 +400,14 @@ const config: ZudokuConfig = {
           collapsible: true,
           collapsed: false,
           items: [
-            "guides/examples/recipes/open-your-own-file",
-            "guides/examples/recipes/save-and-close",
-            "guides/examples/recipes/run-linear-static-analysis",
-            "guides/examples/recipes/reactions-for-restrained-nodes",
-            "guides/examples/recipes/filter-results-by-case",
-            "guides/examples/recipes/switch-to-readonly",
+            "examples/recipes/open-your-own-file",
+            "examples/recipes/save-and-close",
+            "examples/recipes/run-linear-static-analysis",
+            "examples/recipes/reactions-for-restrained-nodes",
+            "examples/recipes/filter-results-by-case",
+            "examples/recipes/switch-to-readonly",
           ],
         },
-      ],
-    },
-    {
-      type: "category",
-      label: "Guides",
-      icon: "compass",
-      items: [
-        "guides/authentication",
-        "guides/service-automation",
-        "guides/file-handling",
-        "guides/running-analysis",
-        "guides/filtering-and-querying",
-        "guides/bulk-operations",
-        "guides/error-handling",
-        "guides/versioning",
       ],
     },
     {
@@ -412,13 +459,22 @@ const config: ZudokuConfig = {
   docs: {
     files: "/pages/**/*.{md,mdx}",
     publishMarkdown: true,
+    // LLM-friendly artifacts. Generated at build time alongside the site:
+    //   /docs/llms.txt      — index of all pages with links (the "sitemap for LLMs")
+    //   /docs/llms-full.txt — full markdown content of every page in one file
+    // The API is public (no auth), so protected routes are irrelevant here.
+    llms: {
+      llmsTxt: true,
+      llmsTxtFull: true,
+      includeProtected: false,
+    },
     defaultOptions: {
       suggestEdit: {
         url: "https://github.com/Spacegass/space-gass-api/edit/main/docs/pages",
       },
     },
   },
-  redirects: [{ from: "/", to: "/getting-started/introduction" }],
+  redirects: [{ from: "/", to: "/overview" }],
 };
 
 export default config;
