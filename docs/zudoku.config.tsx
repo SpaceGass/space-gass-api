@@ -391,7 +391,7 @@ const config: ZudokuConfig = {
           collapsible: true,
           collapsed: false,
           items: [
-            "examples/tutorials/simple-beam",
+            "examples/simple-beam",
           ],
         },
         {
@@ -400,12 +400,12 @@ const config: ZudokuConfig = {
           collapsible: true,
           collapsed: false,
           items: [
-            "examples/recipes/open-your-own-file",
-            "examples/recipes/save-and-close",
-            "examples/recipes/run-linear-static-analysis",
-            "examples/recipes/reactions-for-restrained-nodes",
-            "examples/recipes/filter-results-by-case",
-            "examples/recipes/switch-to-readonly",
+            "examples/open-your-own-file",
+            "examples/save-and-close",
+            "examples/run-linear-static-analysis",
+            "examples/reactions-for-restrained-nodes",
+            "examples/filter-results-by-case",
+            "examples/switch-to-readonly",
           ],
         },
       ],
