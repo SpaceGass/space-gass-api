@@ -64,21 +64,61 @@ Verify: `cd docs && npm ci && npm run build`. The Zudoku build must succeed and 
 
 ## Phase 5 — Snippet generator audit
 
-File: `docs/zudoku.config.tsx`, function `generateCodeSnippet`. The function derives builder chains and body type names heuristically — re-test it against the spec's surface:
+File: `docs/zudoku.config.tsx`, function `generateCodeSnippet`.
 
-1. **Python module path** — must use `space_gass_api.models.*`, not any historical alias.
-2. **Bulk endpoints** (`/.../bulk` POST) — these take a list of the parent entity, not a `BulkCreate`. Skip "bulk" when computing `entityName`, and emit `List<XCreate>` (C#) / `[XCreate(...)]` (Python).
-3. **Body-type overrides** — there is a `BODY_TYPE_OVERRIDES` map keyed by `"${METHOD} ${path}"` for endpoints whose request schema doesn't follow `{Entity}Create`/`{Entity}Update`. Add entries for any new mismatches (e.g. `SectionUserCreate`, `SectionLibraryCreate`).
-4. **Filter query params** — the generator does NOT currently emit query params; if a filtered query endpoint needs a snippet, that's a docs-page job, not a generator job. Don't try to inline filters here.
+**As of build `14.50.128` the generator reads the request-body type straight from the spec — it does NOT guess from the path, and there is NO `BODY_TYPE_OVERRIDES` map any more.** The helper `bodyTypeFromSpec(operation)` reads the component name from the dereferenced body schema: Zudoku keeps the original pointer on `schema.__$ref` (and `schema.items.__$ref` for bulk/array bodies — see [node_modules/zudoku/src/lib/oas/parser/dereference/index.ts](../../../docs/node_modules/zudoku/src/lib/oas/parser/dereference/index.ts)), so the exact name (`MovingLoadVehicleCreate`, `SectionUserCreate`, …) is always recovered. The old per-regen chore of adding override entries is gone. The path-based `{Entity}Create/Update/Item` derivation survives only as a fallback for inline (un-`$ref`d) bodies.
 
-Verify by spot-checking 3 endpoints in the rendered docs after `npm run build`:
-- one new endpoint (e.g. a `combination-cases` POST)
-- one renamed-parameter endpoint (e.g. a `load-cases/{id}` PATCH)
-- one bulk endpoint
+What to still check after a regen:
+
+1. **`__$ref` still resolves (Zudoku-upgrade guard).** `__$ref` is an undocumented Zudoku internal. If a Zudoku version bump renames or drops it, every snippet silently falls back to the path guess and starts emitting wrong names. After `npm run build`, grep the rendered output to confirm known-irregular types are present and the naive guesses did NOT leak:
+   ```bash
+   cd docs
+   for t in MovingLoadVehicleCreate SectionUserCreate MaterialCreate CombinationLoadCaseItem; do
+     echo "$t -> $(grep -rl "$t" dist/docs | wc -l) file(s)"; done   # all should be >0
+   for t in "VehicleCreate {" "GenerateCreate" "LoadCasCreate" "AccessModeCreate"; do
+     echo "$t -> $(grep -rl "$t" dist/docs | wc -l) file(s)"; done    # all MUST be 0
+   ```
+   If the irregular types vanish and the naive guesses appear, `__$ref` broke — check the dereference file above for the current field name and update `bodyTypeFromSpec`. (Snippets render client-side with syntax-highlight markup, so they live in `dist/docs/**/*.html` and the JS bundle, not the `.md` exports — grep for the bare type string, not a formatted line.)
+2. **Builder chain & Python module path** — the chain (`client.Job.Loads…`) and the Python import (`from space_gass_api.models.<snake> import <Type>`) are still derived mechanically. Spot-check one new endpoint's rendered C# and Python snippet.
+3. **Filter query params** — unchanged: the generator does NOT emit query params; filtered-query snippets are a docs-page job, not a generator job.
+
+### Naming-consistency sanity check (spec-smell report)
+
+Because the generator now trusts the spec, inconsistent schema naming no longer breaks snippets — but it is a real spec smell worth surfacing to the API team (e.g. sibling create endpoints `POST /sections` → `SectionUserCreate` vs `POST /materials` → `MaterialCreate`: one carries a `User` qualifier, the other doesn't). Run this to list every write endpoint whose body schema name diverges from the `{Entity}Create/Update/Item` convention its path implies:
+
+```bash
+python - <<'PY'
+import json
+P=json.load(open('descriptions/preview/openapi.json'))['paths']
+def pascal(s): return ''.join(w[:1].upper()+w[1:] for w in s.split('-'))
+def sing(w): return w[:-3]+'y' if w.endswith('ies') else (w[:-1] if w.endswith('s') else w)
+def body(op):
+    try: s=op['requestBody']['content']['application/json']['schema']
+    except Exception: return None
+    return (s.get('$ref') or s.get('items',{}).get('$ref','')).split('/')[-1] or None
+for path,ops in sorted(P.items()):
+    for m,op in ops.items():
+        if m not in ('post','patch','put'): continue
+        actual=body(op)
+        if not actual: continue
+        seg=next((s for s in reversed(path.strip('/').split('/'))
+                  if not s.startswith('{') and s not in ('bulk','items')),'')
+        implied=f"{pascal(sing(seg))}{'Item' if path.rstrip('/').endswith('items') else ('Create' if m=='post' else 'Update')}"
+        if actual!=implied:
+            print(f"{m.upper():5} /{path.strip('/'):55} {actual}  (path implies {implied})")
+PY
+```
+
+This is a **report only** — schema names are a server-side decision; this skill never renames them. Expect a large baseline (≈50 at build `14.50.128`): many flags are **legitimately off-convention by design** and are NOT problems — action bodies (`OpenJobRequest`, `SaveJobRequest`, `MovingLoadGenerateRequest`), shared settings types reused across run/settings endpoints (`BucklingSettingsUpdate`), and consistent domain prefixes (`MovingLoad*`). Don't try to "fix" those. The two signals that *are* actionable:
+
+- **Sibling disagreements** — peer endpoints that should match but don't. The canonical example: `POST /job/structure/sections` → `SectionUserCreate` but `POST /job/structure/materials` → `MaterialCreate` (one carries the `User` qualifier, the other doesn't). These read as accidental.
+- **Build-over-build deltas** — run the script against the previous spec too and diff; a *new* divergence that doesn't fit an existing pattern usually means the backend's naming drifted in this build.
+
+Put the grouped list (and any sibling disagreements / new deltas called out) in the Phase 6 report so the API team can decide whether to normalise.
 
 ## Phase 6 — Report
 
-Summarise per-track files touched, build status, and anything left unverifiable (e.g. "no Python interpreter available, py_compile skipped — relied on visual review and C# build as structural backstop"). Flag any new endpoints in the spec that have no example coverage.
+Summarise per-track files touched, build status, and anything left unverifiable (e.g. "no Python interpreter available, py_compile skipped — relied on visual review and C# build as structural backstop"). Flag any new endpoints in the spec that have no example coverage. Include the naming-consistency report from Phase 5 (the spec-smell list) so the API team can see any new schema-naming inconsistencies this build introduced.
 
 ## Out of scope for this skill
 
