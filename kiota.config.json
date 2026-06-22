@@ -2,7 +2,7 @@
   "version": "1.0",
   "clients": {
     "SpaceGassApi-csharp": {
-      "descriptionLocation": "descriptions/preview/SpaceGassApi.json",
+      "descriptionLocation": "descriptions/preview/openapi.json",
       "outputPath": "sdks/csharp/client/SpaceGassApi/Generated",
       "language": "csharp",
       "namespace": "SpaceGassApi",
@@ -11,7 +11,7 @@
       "structuredMimeTypes": ["application/json"]
     },
     "SpaceGassApi-python": {
-      "descriptionLocation": "descriptions/preview/SpaceGassApi.json",
+      "descriptionLocation": "descriptions/preview/openapi.json",
       "outputPath": "sdks/python/client/space_gass_api/generated",
       "language": "python",
       "namespace": "space_gass_api.generated",
