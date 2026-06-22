@@ -13,6 +13,14 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterUpdate : IParsable
     {
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for bulk updates.</summary>
         public int? Id { get; set; }
         /// <summary>Partial update for the Materials sub-filter.</summary>
@@ -145,6 +153,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "materials", n => { Materials = n.GetObjectValue<global::SpaceGassApi.Models.FilterMaterialsUpdate>(global::SpaceGassApi.Models.FilterMaterialsUpdate.CreateFromDiscriminatorValue); } },
                 { "members", n => { Members = n.GetObjectValue<global::SpaceGassApi.Models.FilterMembersUpdate>(global::SpaceGassApi.Models.FilterMembersUpdate.CreateFromDiscriminatorValue); } },
@@ -169,6 +178,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteObjectValue<global::SpaceGassApi.Models.FilterMaterialsUpdate>("materials", Materials);
             writer.WriteObjectValue<global::SpaceGassApi.Models.FilterMembersUpdate>("members", Members);

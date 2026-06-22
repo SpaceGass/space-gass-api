@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .....models.delete_result import DeleteResult
     from .....models.error_response import ErrorResponse
     from .....models.expand_option import ExpandOption
     from .....models.load_case import LoadCase
@@ -32,11 +33,11 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/load-cases/{id}{?Expand*}", path_parameters)
     
-    async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> None:
+    async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[DeleteResult]:
         """
         Removes the title, notes and metadata for the load case. Does not delete the actualloads assigned to the case or its combination items — the case may still appear inlistings if it has loads assigned to it.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: None
+        Returns: Optional[DeleteResult]
         """
         request_info = self.to_delete_request_information(
             request_configuration
@@ -50,7 +51,9 @@ class LoadCasesItemRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        return await self.request_adapter.send_no_response_content_async(request_info, error_mapping)
+        from .....models.delete_result import DeleteResult
+
+        return await self.request_adapter.send_async(request_info, DeleteResult, error_mapping)
     
     # --- @overload added by regen_python_inits.py ---
     @overload

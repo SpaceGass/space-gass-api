@@ -15,8 +15,12 @@ class ResourceMetadata(Parsable):
     """
     # Current count of items in this resource.Null for sub-resources whose count does not apply uniformly.
     count: Optional[int] = None
+    # Human-readable display name for internal use (debug/logging).Not serialised to public clients in Release builds.
+    display_name: Optional[str] = None
     # Field definitions describing the resource's wire shape. Each entry correspondsto a property on the read DTO; `jsonName` matches the JSON key clients see.
     fields: Optional[list[FieldMetadata]] = None
+    # Internal: whether the entity carries a GUID field. Not serialised in Release.
+    has_guid_field: Optional[bool] = None
     # Maximum Id currently in use (single-int Id entities only).
     max_id: Optional[int] = None
     # Next available Id (single-int Id entities only).
@@ -48,7 +52,9 @@ class ResourceMetadata(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "count": lambda n : setattr(self, 'count', n.get_int_value()),
+            "displayName": lambda n : setattr(self, 'display_name', n.get_str_value()),
             "fields": lambda n : setattr(self, 'fields', n.get_collection_of_object_values(FieldMetadata)),
+            "hasGuidField": lambda n : setattr(self, 'has_guid_field', n.get_bool_value()),
             "maxId": lambda n : setattr(self, 'max_id', n.get_int_value()),
             "nextId": lambda n : setattr(self, 'next_id', n.get_int_value()),
             "resourceType": lambda n : setattr(self, 'resource_type', n.get_enum_value(EntityId)),
@@ -64,7 +70,9 @@ class ResourceMetadata(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_int_value("count", self.count)
+        writer.write_str_value("displayName", self.display_name)
         writer.write_collection_of_object_values("fields", self.fields)
+        writer.write_bool_value("hasGuidField", self.has_guid_field)
         writer.write_int_value("maxId", self.max_id)
         writer.write_int_value("nextId", self.next_id)
         writer.write_enum_value("resourceType", self.resource_type)

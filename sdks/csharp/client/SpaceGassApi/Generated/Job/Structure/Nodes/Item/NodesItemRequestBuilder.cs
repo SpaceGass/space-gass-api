@@ -34,8 +34,9 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item
         {
         }
         /// <summary>
-        /// Deletes the entity with the supplied Id. Returns 204 on success, 404 if no entitywith that Id exists.
+        /// Deletes the entity with the supplied Id. Returns 404 if no entity with that Id exists.            For entities whose delete cascades (Nodes, Members, Plates), returns 200 with aSpaceGassApi.Models.Dtos.Entity.DeleteResultDto listing every row removed — the entity itself, child rowsthat referenced it (loads, restraints, offsets, plate cuts, …), and any nodes leftdisconnected by the removal. Cleanup is best-effort, not transactional across datasheets:on failure the affected datasheets are reloaded from disk and the request fails.            For all other entities, returns 204 No Content and removes only the entity&apos;s own row.
         /// </summary>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.DeleteResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
@@ -43,11 +44,11 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.DeleteResult?> DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.DeleteResult> DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToDeleteRequestInformation(requestConfiguration);
@@ -57,7 +58,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            await RequestAdapter.SendNoContentAsync(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.DeleteResult>(requestInfo, global::SpaceGassApi.Models.DeleteResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// `Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —            resources that don&apos;t define sub-resources ignore the parameter.
@@ -118,7 +119,7 @@ namespace SpaceGassApi.Job.Structure.Nodes.Item
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Node>(requestInfo, global::SpaceGassApi.Models.Node.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Deletes the entity with the supplied Id. Returns 204 on success, 404 if no entitywith that Id exists.
+        /// Deletes the entity with the supplied Id. Returns 404 if no entity with that Id exists.            For entities whose delete cascades (Nodes, Members, Plates), returns 200 with aSpaceGassApi.Models.Dtos.Entity.DeleteResultDto listing every row removed — the entity itself, child rowsthat referenced it (loads, restraints, offsets, plate cuts, …), and any nodes leftdisconnected by the removal. Cleanup is best-effort, not transactional across datasheets:on failure the affected datasheets are reloaded from disk and the request fails.            For all other entities, returns 204 No Content and removes only the entity&apos;s own row.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

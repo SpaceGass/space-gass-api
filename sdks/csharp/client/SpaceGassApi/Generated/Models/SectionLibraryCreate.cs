@@ -21,6 +21,14 @@ namespace SpaceGassApi.Models
         public double? Ay { get; set; }
         /// <summary>Shear area in the Z direction.</summary>
         public double? Az { get; set; }
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
         public int? Id { get; set; }
         /// <summary>Iy modification factor.</summary>
@@ -77,6 +85,7 @@ namespace SpaceGassApi.Models
                 { "areaFactor", n => { AreaFactor = n.GetDoubleValue(); } },
                 { "ay", n => { Ay = n.GetDoubleValue(); } },
                 { "az", n => { Az = n.GetDoubleValue(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "iyFactor", n => { IyFactor = n.GetDoubleValue(); } },
                 { "izFactor", n => { IzFactor = n.GetDoubleValue(); } },
@@ -98,6 +107,7 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("areaFactor", AreaFactor);
             writer.WriteDoubleValue("ay", Ay);
             writer.WriteDoubleValue("az", Az);
+            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("iyFactor", IyFactor);
             writer.WriteDoubleValue("izFactor", IzFactor);

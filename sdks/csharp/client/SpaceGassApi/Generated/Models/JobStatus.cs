@@ -13,6 +13,8 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class JobStatus : IParsable
     {
+        /// <summary>Current operational mode of the API.</summary>
+        public global::SpaceGassApi.Models.AccessMode? AccessMode { get; set; }
         /// <summary>Summary of which analysis types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -36,14 +38,6 @@ namespace SpaceGassApi.Models
 #nullable restore
 #else
         public global::SpaceGassApi.Models.LoadsSummary Loads { get; set; }
-#endif
-        /// <summary>Current API mode at the time this status was projected.`&quot;readwrite&quot;` or `&quot;readonly&quot;`.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Mode { get; set; }
-#nullable restore
-#else
-        public string Mode { get; set; }
 #endif
         /// <summary>Current session/file state of the job.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -87,10 +81,10 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "accessMode", n => { AccessMode = n.GetEnumValue<global::SpaceGassApi.Models.AccessMode>(); } },
                 { "analysis", n => { Analysis = n.GetObjectValue<global::SpaceGassApi.Models.AnalysisResultsSummary>(global::SpaceGassApi.Models.AnalysisResultsSummary.CreateFromDiscriminatorValue); } },
                 { "job", n => { Job = n.GetObjectValue<global::SpaceGassApi.Models.Job>(global::SpaceGassApi.Models.Job.CreateFromDiscriminatorValue); } },
                 { "loads", n => { Loads = n.GetObjectValue<global::SpaceGassApi.Models.LoadsSummary>(global::SpaceGassApi.Models.LoadsSummary.CreateFromDiscriminatorValue); } },
-                { "mode", n => { Mode = n.GetStringValue(); } },
                 { "state", n => { State = n.GetObjectValue<global::SpaceGassApi.Models.JobState>(global::SpaceGassApi.Models.JobState.CreateFromDiscriminatorValue); } },
                 { "steelDesign", n => { SteelDesign = n.GetObjectValue<global::SpaceGassApi.Models.SteelDesignSummary>(global::SpaceGassApi.Models.SteelDesignSummary.CreateFromDiscriminatorValue); } },
                 { "structure", n => { Structure = n.GetObjectValue<global::SpaceGassApi.Models.StructureSummary>(global::SpaceGassApi.Models.StructureSummary.CreateFromDiscriminatorValue); } },
@@ -103,10 +97,10 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteEnumValue<global::SpaceGassApi.Models.AccessMode>("accessMode", AccessMode);
             writer.WriteObjectValue<global::SpaceGassApi.Models.AnalysisResultsSummary>("analysis", Analysis);
             writer.WriteObjectValue<global::SpaceGassApi.Models.Job>("job", Job);
             writer.WriteObjectValue<global::SpaceGassApi.Models.LoadsSummary>("loads", Loads);
-            writer.WriteStringValue("mode", Mode);
             writer.WriteObjectValue<global::SpaceGassApi.Models.JobState>("state", State);
             writer.WriteObjectValue<global::SpaceGassApi.Models.SteelDesignSummary>("steelDesign", SteelDesign);
             writer.WriteObjectValue<global::SpaceGassApi.Models.StructureSummary>("structure", Structure);

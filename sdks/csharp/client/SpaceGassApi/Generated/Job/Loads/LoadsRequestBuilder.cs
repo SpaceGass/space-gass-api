@@ -11,6 +11,7 @@ using SpaceGassApi.Job.Loads.MemberConcentratedLoads;
 using SpaceGassApi.Job.Loads.MemberDistributedLoads;
 using SpaceGassApi.Job.Loads.MemberDistributedMoments;
 using SpaceGassApi.Job.Loads.MemberPrestressLoads;
+using SpaceGassApi.Job.Loads.MovingLoads;
 using SpaceGassApi.Job.Loads.NodeDisplacements;
 using SpaceGassApi.Job.Loads.NodeLoads;
 using SpaceGassApi.Job.Loads.PlatePressureLoads;
@@ -72,6 +73,11 @@ namespace SpaceGassApi.Job.Loads
         public global::SpaceGassApi.Job.Loads.MemberPrestressLoads.MemberPrestressLoadsRequestBuilder MemberPrestressLoads
         {
             get => new global::SpaceGassApi.Job.Loads.MemberPrestressLoads.MemberPrestressLoadsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The movingLoads property</summary>
+        public global::SpaceGassApi.Job.Loads.MovingLoads.MovingLoadsRequestBuilder MovingLoads
+        {
+            get => new global::SpaceGassApi.Job.Loads.MovingLoads.MovingLoadsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The nodeDisplacements property</summary>
         public global::SpaceGassApi.Job.Loads.NodeDisplacements.NodeDisplacementsRequestBuilder NodeDisplacements

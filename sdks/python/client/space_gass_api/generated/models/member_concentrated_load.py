@@ -21,6 +21,8 @@ class MemberConcentratedLoad(Parsable):
     fy: Optional[float] = None
     # Force in the local/global Z direction.
     fz: Optional[float] = None
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
     # The load case number this load belongs to.
     load_case: Optional[int] = None
     # Load category for grouping/organization.
@@ -67,6 +69,7 @@ class MemberConcentratedLoad(Parsable):
             "fx": lambda n : setattr(self, 'fx', n.get_float_value()),
             "fy": lambda n : setattr(self, 'fy', n.get_float_value()),
             "fz": lambda n : setattr(self, 'fz', n.get_float_value()),
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
@@ -91,6 +94,7 @@ class MemberConcentratedLoad(Parsable):
         writer.write_float_value("fx", self.fx)
         writer.write_float_value("fy", self.fy)
         writer.write_float_value("fz", self.fz)
+        writer.write_str_value("guid", self.guid)
         writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_int_value("member", self.member)

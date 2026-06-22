@@ -9,7 +9,7 @@
 
     <!-- NuGet package metadata -->
     <PackageId>SpaceGassApi</PackageId>
-    <Version>14.50.108</Version>
+    <Version>14.50.128</Version>
     <Description>Official .NET SDK for the SPACE GASS API.</Description>
     <Authors>Space Gass Pty Ltd</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
