@@ -4,9 +4,9 @@ Example: Service Automation
 Mirrors the Service Automation guide in the Zudoku docs site.
 Demonstrates the four-step service lifecycle:
 
-  1. Probe  — try Service.Status to see if the service is already running
+  1. Probe  — try Service.Info to see if the service is already running
   2. Start  — if not, launch SpaceGassApi.exe as a child process
-  3. Wait   — poll Service.Status until it responds (or fail with a timeout)
+  3. Wait   — poll Service.Info until it responds (or fail with a timeout)
   4. Stop   — terminate the child process when done, but only if we
               started it ourselves
 
@@ -30,7 +30,7 @@ SERVICE_EXE = r"C:\Program Files\SPACE GASS 14.5\SpaceGassApi.exe"
 
 async def is_service_ready(client) -> bool:
     try:
-        await client.service.status.get()
+        await client.service.info.get()
         return True
     except Exception:
         return False
@@ -75,7 +75,7 @@ async def main() -> int:
             print("Service is ready.")
 
         # == Do work against the live service ==========================
-        info = await client.service.status.get()
+        info = await client.service.info.get()
         print()
         print(f"Connected to SPACE GASS {info.space_gass_version}")
         print(f"  API path: {info.api_path}")

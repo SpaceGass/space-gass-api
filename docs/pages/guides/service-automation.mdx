@@ -18,11 +18,11 @@ copy-paste starting point for both C# and Python.
 
 A typical script does four things:
 
-1. **Probe** — try `Service.Status` to see if the service is already
+1. **Probe** — try `Service.Info` to see if the service is already
    running. If yes, reuse it (don't kill someone else's instance).
 2. **Start** — if not running, launch `SpaceGassApi.exe` as a child
    process.
-3. **Wait** — poll `Service.Status` until it responds, or fail with a
+3. **Wait** — poll `Service.Info` until it responds, or fail with a
    timeout if the service never comes up.
 4. **Stop** — when your script is finished, terminate the child
    process if (and only if) you started it. Skip cleanup if the
@@ -35,7 +35,7 @@ so the service still shuts down if your code throws.
 
 The example below probes for an existing service, starts one if
 needed, waits up to 30 seconds for it to become ready, fetches
-`Service.Status` to confirm, then shuts the service down.
+`Service.Info` to confirm, then shuts the service down.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -71,7 +71,7 @@ try
     }
 
     // Do your work here
-    var info = await client.Service.Status.GetAsync();
+    var info = await client.Service.Info.GetAsync();
     Console.WriteLine($"Connected to SPACE GASS {info?.SpaceGassVersion} at {info?.ApiPath}");
 }
 finally
@@ -89,7 +89,7 @@ static async Task<bool> IsServiceReadyAsync(SpaceGassApiClient c)
 {
     try
     {
-        await c.Service.Status.GetAsync();
+        await c.Service.Info.GetAsync();
         return true;
     }
     catch
@@ -122,7 +122,7 @@ SERVICE_EXE = r"C:\Program Files\SPACE GASS 14.5\SpaceGassApi.exe"
 
 async def is_service_ready(client) -> bool:
     try:
-        await client.service.status.get()
+        await client.service.info.get()
         return True
     except Exception:
         return False
@@ -158,7 +158,7 @@ async def main() -> None:
             print("Service was already running — reusing it.")
 
         # Do your work here
-        info = await client.service.status.get()
+        info = await client.service.info.get()
         print(f"Connected to SPACE GASS {info.space_gass_version} at {info.api_path}")
 
     finally:

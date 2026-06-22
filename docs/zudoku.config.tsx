@@ -33,36 +33,24 @@ function singularize(word: string): string {
   return word;
 }
 
-// Path-prefix → request body model name overrides for endpoints whose body
-// type doesn't follow the {Entity}Create / {Entity}Update naming convention.
-// Match by `${HTTP_METHOD} ${path}` exactly.
-const BODY_TYPE_OVERRIDES: Record<string, string> = {
-  "POST /job/structure/sections": "SectionUserCreate",
-  "POST /job/structure/sections/library": "SectionLibraryCreate",
-  "PUT /job/structure/sections/{id}/library": "SectionLibraryCreate",
-  "POST /job/structure/materials/library": "MaterialLibraryCreate",
-  "PUT /job/structure/materials/{id}/library": "MaterialLibraryCreate",
-  "POST /job/loads/combination-load-cases": "CombinationLoadCaseCreate",
-  "PATCH /job/loads/combination-load-cases/{id}": "CombinationLoadCaseUpdate",
-  "POST /job/structure/node-restraints/set-general": "SetGeneralRestraintRequest",
-  "PATCH /job/structure/members/{id}/releases": "MemberReleaseUpdate",
-  "PATCH /job/headings": "JobHeadingsUpdate",
-  "POST /job/open": "OpenJobRequest",
-  "POST /job/open-sample": "OpenSampleRequest",
-  "POST /job/save": "SaveJobRequest",
-  "POST /service/mode": "ApiModeUpdate",
-  "POST /job/loads/node-displacements": "PrescribedDisplacementCreate",
-  "PATCH /job/loads/node-displacements/{caseId}/{nodeId}": "PrescribedDisplacementUpdate",
-  "PATCH /job/loads/thermal-loads/member/{caseId}/{memberId}": "ThermalLoadUpdate",
-  "PATCH /job/loads/thermal-loads/plate/{caseId}/{plateId}": "ThermalLoadUpdate",
-  "POST /job/analysis/static/run-linear": "StaticSettingsUpdate",
-  "POST /job/analysis/static/run-non-linear": "StaticSettingsUpdate",
-  "POST /job/analysis/buckling/run": "BucklingSettingsUpdate",
-  "POST /job/analysis/dynamic-frequency/run": "DynamicFrequencySettingsUpdate",
-  "PATCH /job/analysis/static/settings": "StaticSettingsUpdate",
-  "PATCH /job/analysis/buckling/settings": "BucklingSettingsUpdate",
-  "PATCH /job/analysis/dynamic-frequency/settings": "DynamicFrequencySettingsUpdate",
-};
+// Read the request-body model name straight from the spec instead of guessing
+// it from the URL path. Zudoku dereferences `$ref`s but preserves the original
+// pointer on a `__$ref` property (see
+// node_modules/zudoku/src/lib/oas/parser/dereference/index.ts), so the exact
+// component name (e.g. "MovingLoadVehicleCreate") is recoverable at runtime —
+// including for list bodies, where the name lives on the array's `items`.
+// Returns undefined for inline bodies that have no component `$ref`, in which
+// case the caller falls back to the path-based heuristic below.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function bodyTypeFromSpec(operation: any): string | undefined {
+  const content: any[] = operation?.requestBody?.content ?? [];
+  const media =
+    content.find((c) => c?.mediaType === "application/json") ?? content[0];
+  const schema = media?.schema;
+  // Single-object body, or array body (bulk-create / items collections).
+  const ref: string | undefined = schema?.__$ref ?? schema?.items?.__$ref;
+  return ref ? ref.split("/").pop() : undefined;
+}
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generateCodeSnippet({ selectedLang, operation }: any): string | false {
@@ -95,16 +83,14 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
 
   const hasBody = ["POST", "PATCH", "PUT"].includes(httpMethod);
 
-  // Resolve the request-body type, applying overrides for endpoints whose
-  // body schema doesn't follow the {Entity}Create/{Entity}Update convention.
-  const overrideKey = `${httpMethod} /${cleanPath}`;
-  const overriddenType = BODY_TYPE_OVERRIDES[overrideKey];
-  const defaultBodyType = isItems
+  // Prefer the exact model name from the spec. Fall back to a path-based guess
+  // only for inline request bodies that carry no component `$ref`.
+  const pathGuessBodyType = isItems
     ? `${entityName}Item`
     : httpMethod === "POST"
       ? `${entityName}Create`
       : `${entityName}Update`;
-  const bodyType = overriddenType ?? defaultBodyType;
+  const bodyType = bodyTypeFromSpec(operation) ?? pathGuessBodyType;
 
   // ── C# SDK ──
   if (selectedLang === "csharp") {

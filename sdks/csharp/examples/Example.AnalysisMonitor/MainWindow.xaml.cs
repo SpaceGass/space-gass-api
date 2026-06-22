@@ -53,7 +53,7 @@ public partial class MainWindow : Window
         try
         {
             _client = SpaceGassApiClient.CreateClient(baseUrl);
-            var info = await _client.Service.Status.GetAsync();
+            var info = await _client.Service.Info.GetAsync();
 
             _isConnected = true;
             ConnDot.Fill = (SolidColorBrush)FindResource("Green");
