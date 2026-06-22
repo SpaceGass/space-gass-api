@@ -14,6 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
+    from .....models.delete_result import DeleteResult
     from .....models.error_response import ErrorResponse
     from .....models.expand_option import ExpandOption
     from .....models.load_category import LoadCategory
@@ -32,11 +33,11 @@ class LoadCategoriesItemRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/load-categories/{id}{?Expand*}", path_parameters)
     
-    async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> None:
+    async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[DeleteResult]:
         """
-        Deletes the entity with the supplied Id. Returns 204 on success, 404 if no entitywith that Id exists.
+        Deletes the entity with the supplied Id. Returns 404 if no entity with that Id exists.            For entities whose delete cascades (Nodes, Members, Plates), returns 200 with aSpaceGassApi.Models.Dtos.Entity.DeleteResultDto listing every row removed — the entity itself, child rowsthat referenced it (loads, restraints, offsets, plate cuts, …), and any nodes leftdisconnected by the removal. Cleanup is best-effort, not transactional across datasheets:on failure the affected datasheets are reloaded from disk and the request fails.            For all other entities, returns 204 No Content and removes only the entity's own row.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: None
+        Returns: Optional[DeleteResult]
         """
         request_info = self.to_delete_request_information(
             request_configuration
@@ -50,7 +51,9 @@ class LoadCategoriesItemRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        return await self.request_adapter.send_no_response_content_async(request_info, error_mapping)
+        from .....models.delete_result import DeleteResult
+
+        return await self.request_adapter.send_async(request_info, DeleteResult, error_mapping)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
@@ -112,7 +115,7 @@ class LoadCategoriesItemRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Deletes the entity with the supplied Id. Returns 204 on success, 404 if no entitywith that Id exists.
+        Deletes the entity with the supplied Id. Returns 404 if no entity with that Id exists.            For entities whose delete cascades (Nodes, Members, Plates), returns 200 with aSpaceGassApi.Models.Dtos.Entity.DeleteResultDto listing every row removed — the entity itself, child rowsthat referenced it (loads, restraints, offsets, plate cuts, …), and any nodes leftdisconnected by the removal. Cleanup is best-effort, not transactional across datasheets:on failure the affected datasheets are reloaded from disk and the request fails.            For all other entities, returns 204 No Content and removes only the entity's own row.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

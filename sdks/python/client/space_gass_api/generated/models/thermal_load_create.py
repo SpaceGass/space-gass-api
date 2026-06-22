@@ -16,6 +16,8 @@ class ThermalLoadCreate(Parsable):
     element_id: Optional[int] = None
     # Element type discriminator for thermal loads.Determines whether a thermal load applies to a member or plate element.Maps to SPACE GASS lookup table "Element Type".
     element_type: Optional[ThermalElementType] = None
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
     # The load case number to create this load in.
     load_case: Optional[int] = None
     # Load category for grouping/organization.
@@ -50,6 +52,7 @@ class ThermalLoadCreate(Parsable):
         fields: dict[str, Callable[[Any], None]] = {
             "elementId": lambda n : setattr(self, 'element_id', n.get_int_value()),
             "elementType": lambda n : setattr(self, 'element_type', n.get_enum_value(ThermalElementType)),
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "thermalLoad": lambda n : setattr(self, 'thermal_load', n.get_float_value()),
@@ -68,6 +71,7 @@ class ThermalLoadCreate(Parsable):
             raise TypeError("writer cannot be null.")
         writer.write_int_value("elementId", self.element_id)
         writer.write_enum_value("elementType", self.element_type)
+        writer.write_str_value("guid", self.guid)
         writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_float_value("thermalLoad", self.thermal_load)

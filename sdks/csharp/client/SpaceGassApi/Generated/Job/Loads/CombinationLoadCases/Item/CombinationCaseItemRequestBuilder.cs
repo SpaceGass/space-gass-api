@@ -42,6 +42,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item
         /// <summary>
         /// Deletes the combination load case and all of its component items atomically.
         /// </summary>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.DeleteResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
@@ -49,11 +50,11 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.DeleteResult?> DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.DeleteResult> DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToDeleteRequestInformation(requestConfiguration);
@@ -63,7 +64,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases.Item
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            await RequestAdapter.SendNoContentAsync(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.DeleteResult>(requestInfo, global::SpaceGassApi.Models.DeleteResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Gets a single combination load case by Id. Returns 404 if no case exists with that Idor if the case is not of type `Combination` (Primary, Step and Unused cases arenot exposed by this endpoint — use `GET /load-cases/{id}` for those).`Expand` defaults to `all`, which hydrates `combinationItems`;pass `Expand=none` to suppress.

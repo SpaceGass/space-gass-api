@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from .member_distributed_loads.member_distributed_loads_request_builder import MemberDistributedLoadsRequestBuilder
     from .member_distributed_moments.member_distributed_moments_request_builder import MemberDistributedMomentsRequestBuilder
     from .member_prestress_loads.member_prestress_loads_request_builder import MemberPrestressLoadsRequestBuilder
+    from .moving_loads.moving_loads_request_builder import MovingLoadsRequestBuilder
     from .node_displacements.node_displacements_request_builder import NodeDisplacementsRequestBuilder
     from .node_loads.node_loads_request_builder import NodeLoadsRequestBuilder
     from .plate_pressure_loads.plate_pressure_loads_request_builder import PlatePressureLoadsRequestBuilder
@@ -114,6 +115,15 @@ class LoadsRequestBuilder(BaseRequestBuilder):
         from .member_prestress_loads.member_prestress_loads_request_builder import MemberPrestressLoadsRequestBuilder
 
         return MemberPrestressLoadsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def moving_loads(self) -> MovingLoadsRequestBuilder:
+        """
+        The movingLoads property
+        """
+        from .moving_loads.moving_loads_request_builder import MovingLoadsRequestBuilder
+
+        return MovingLoadsRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def node_displacements(self) -> NodeDisplacementsRequestBuilder:

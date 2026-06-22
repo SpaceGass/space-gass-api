@@ -21,7 +21,7 @@ class LicenseStatus(Parsable):
     error_message: Optional[str] = None
     # Whether a job is currently open (Tier 2 SPACE GASS core held).
     is_job_open: Optional[bool] = None
-    # True when the API is currently licensed (Tier 1 API module is held).
+    # True when a validated licence session is active. Independent of theread/write seat — `true` even in ReadOnly / session-only mode.
     is_licensed: Optional[bool] = None
     # True when this machine has a SPACE GASS registration the API supports(TitanCloud or Titan LM). False indicates either an unsupported locktype (e.g. legacy SGREG.DAT registration) or no registration at all.Always check this before SpaceGassApi.Models.Dtos.License.LicenseStatusDto.IsLicensed: an unregisteredAPI is blocked at the registration step, before any license acquireis attempted.
     is_registered: Optional[bool] = None
@@ -31,12 +31,8 @@ class LicenseStatus(Parsable):
     job_opened_at: Optional[datetime.datetime] = None
     # License ID from the license server (the company registration number).
     license_id: Optional[int] = None
-    # Current API mode. `"readwrite"` means writes and modulecheckout are allowed; `"readonly"` means no modules are heldand only reads + job lifecycle operations are accepted.
-    mode: Optional[str] = None
     # Company or organisation name from the license server.
     organization: Optional[str] = None
-    # Pending mode transition awaiting job-close commit. `"readonly"`,`"readwrite"`, or `null` when no transition is pending.
-    pending: Optional[str] = None
     # Human-readable explanation of the registration state. Alwayspopulated. For TitanCloud / TitanLM it confirms the registrationis active; for Unsupported / Unregistered it explains what theoperator should do to fix it.
     registration_detail: Optional[str] = None
     # Outcome of probing the machine for a SPACE GASS registration.Mirrors the precedence used by desktop SPACE GASS in`NETLicenses/Licenses.vb::RegistrationSetupCheck`: legacy SGREG.DATshort-circuits before any Titan-type probing, then TitanCloud, then Titan LM.
@@ -72,9 +68,7 @@ class LicenseStatus(Parsable):
             "isRoaming": lambda n : setattr(self, 'is_roaming', n.get_bool_value()),
             "jobOpenedAt": lambda n : setattr(self, 'job_opened_at', n.get_datetime_value()),
             "licenseId": lambda n : setattr(self, 'license_id', n.get_int_value()),
-            "mode": lambda n : setattr(self, 'mode', n.get_str_value()),
             "organization": lambda n : setattr(self, 'organization', n.get_str_value()),
-            "pending": lambda n : setattr(self, 'pending', n.get_str_value()),
             "registrationDetail": lambda n : setattr(self, 'registration_detail', n.get_str_value()),
             "registrationType": lambda n : setattr(self, 'registration_type', n.get_enum_value(RegistrationStatus)),
         }
@@ -97,9 +91,7 @@ class LicenseStatus(Parsable):
         writer.write_bool_value("isRoaming", self.is_roaming)
         writer.write_datetime_value("jobOpenedAt", self.job_opened_at)
         writer.write_int_value("licenseId", self.license_id)
-        writer.write_str_value("mode", self.mode)
         writer.write_str_value("organization", self.organization)
-        writer.write_str_value("pending", self.pending)
         writer.write_str_value("registrationDetail", self.registration_detail)
         writer.write_enum_value("registrationType", self.registration_type)
     
