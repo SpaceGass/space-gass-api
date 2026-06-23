@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.6.11709.129 insiders
+VisualStudioVersion = 18.6.11709.129
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.QueryRestrainedNodes", "Example.QueryRestrainedNodes\Example.QueryRestrainedNodes.csproj", "{01B24E1B-D201-4F5C-A49C-FFE02DFD3CB9}"
 EndProject
@@ -22,6 +22,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.CreateSimplePlate", "Example.CreateSimplePlate\Example.CreateSimplePlate.csproj", "{75CE69F6-7D44-4AE6-8B68-86D75669B234}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.CreateSinglePlate", "Example.CreateSinglePlate\Example.CreateSinglePlate.csproj", "{36D1ACF4-662A-DE28-972E-F1EA40CE48F7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Example.GrillageMovingLoad", "Example.GrillageMovingLoad\Example.GrillageMovingLoad.csproj", "{9A81BED8-E435-4321-A42F-9420CB876264}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -153,6 +155,18 @@ Global
 		{36D1ACF4-662A-DE28-972E-F1EA40CE48F7}.Release|x64.Build.0 = Release|Any CPU
 		{36D1ACF4-662A-DE28-972E-F1EA40CE48F7}.Release|x86.ActiveCfg = Release|Any CPU
 		{36D1ACF4-662A-DE28-972E-F1EA40CE48F7}.Release|x86.Build.0 = Release|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Debug|x64.Build.0 = Debug|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Debug|x86.Build.0 = Debug|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Release|x64.ActiveCfg = Release|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Release|x64.Build.0 = Release|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Release|x86.ActiveCfg = Release|Any CPU
+		{9A81BED8-E435-4321-A42F-9420CB876264}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

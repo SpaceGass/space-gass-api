@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <!-- The .sgbase template carries the girder + concrete deck-slab sections
+       and their materials (which the API can't create yet). Copy it next to
+       the built exe so the example can upload it via
+       POST /job/new-from-template at runtime. The matching .SG model is kept
+       in the folder too (for opening directly in SPACE GASS), but isn't
+       needed at runtime so it isn't copied. -->
+  <ItemGroup>
+    <None Update="GrillageTemplate.sgbase" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+</Project>
