@@ -136,10 +136,10 @@ from ..generated.models.mass_density_unit import MassDensityUnit
 from ..generated.models.mass_unit import MassUnit
 from ..generated.models.material import Material
 from ..generated.models.material_bulk_result import MaterialBulkResult
-from ..generated.models.material_create import MaterialCreate
 from ..generated.models.material_library_create import MaterialLibraryCreate
 from ..generated.models.material_strength_unit import MaterialStrengthUnit
 from ..generated.models.material_update import MaterialUpdate
+from ..generated.models.material_user_create import MaterialUserCreate
 from ..generated.models.matrix_type import MatrixType
 from ..generated.models.member import Member
 from ..generated.models.member_bulk_result import MemberBulkResult
@@ -189,8 +189,8 @@ from ..generated.models.mode_shape import ModeShape
 from ..generated.models.mode_shape_query_result import ModeShapeQueryResult
 from ..generated.models.moment_unit import MomentUnit
 from ..generated.models.moving_load_combination import MovingLoadCombination
-from ..generated.models.moving_load_elements import MovingLoadElements
-from ..generated.models.moving_load_elements_update import MovingLoadElementsUpdate
+from ..generated.models.moving_load_elements_to_load import MovingLoadElementsToLoad
+from ..generated.models.moving_load_elements_to_load_update import MovingLoadElementsToLoadUpdate
 from ..generated.models.moving_load_generate_request import MovingLoadGenerateRequest
 from ..generated.models.moving_load_generation_result import MovingLoadGenerationResult
 from ..generated.models.moving_load_pressure import MovingLoadPressure
@@ -451,10 +451,10 @@ __all__ = [
     "MassUnit",
     "Material",
     "MaterialBulkResult",
-    "MaterialCreate",
     "MaterialLibraryCreate",
     "MaterialStrengthUnit",
     "MaterialUpdate",
+    "MaterialUserCreate",
     "MatrixType",
     "Member",
     "MemberBulkResult",
@@ -504,8 +504,8 @@ __all__ = [
     "ModeShapeQueryResult",
     "MomentUnit",
     "MovingLoadCombination",
-    "MovingLoadElements",
-    "MovingLoadElementsUpdate",
+    "MovingLoadElementsToLoad",
+    "MovingLoadElementsToLoadUpdate",
     "MovingLoadGenerateRequest",
     "MovingLoadGenerationResult",
     "MovingLoadPressure",

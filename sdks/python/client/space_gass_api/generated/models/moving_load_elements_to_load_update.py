@@ -5,25 +5,25 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 @dataclass
-class MovingLoadElements(Parsable):
+class MovingLoadElementsToLoadUpdate(Parsable):
     """
-    The structural elements that moving loads are applied to — the selected members andplates. Both are SG list-strings (comma-separated Ids and ranges, e.g. `"1,3-7,10"`).
+    Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadElementsToLoadDto. Omitted properties keep theircurrent value; supply a property (including an empty string to clear) to replace it.
     """
-    # The members selected to receive moving loads, in SG list-string format.
+    # Replacement member selection in SG list-string format. Omit to keep current.
     members: Optional[str] = None
-    # The plates selected to receive moving loads, in SG list-string format.
+    # Replacement plate selection in SG list-string format. Omit to keep current.
     plates: Optional[str] = None
     
     @staticmethod
-    def create_from_discriminator_value(parse_node: ParseNode) -> MovingLoadElements:
+    def create_from_discriminator_value(parse_node: ParseNode) -> MovingLoadElementsToLoadUpdate:
         """
         Creates a new instance of the appropriate class based on discriminator value
         param parse_node: The parse node to use to read the discriminator value and create the object
-        Returns: MovingLoadElements
+        Returns: MovingLoadElementsToLoadUpdate
         """
         if parse_node is None:
             raise TypeError("parse_node cannot be null.")
-        return MovingLoadElements()
+        return MovingLoadElementsToLoadUpdate()
     
     def get_field_deserializers(self,) -> dict[str, Callable[[ParseNode], None]]:
         """

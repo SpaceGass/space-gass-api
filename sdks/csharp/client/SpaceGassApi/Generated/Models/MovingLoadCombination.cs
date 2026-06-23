@@ -14,8 +14,8 @@ namespace SpaceGassApi.Models
     public partial class MovingLoadCombination : IParsable
     {
         /// <summary>The load case combined with the scenario&apos;s generated cases.</summary>
-        public int? CombineLoadCase { get; set; }
-        /// <summary>Factor applied to SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadCombinationDto.CombineLoadCase in the combination.</summary>
+        public int? CombineWithLoadCase { get; set; }
+        /// <summary>Factor applied to SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadCombinationDto.CombineWithLoadCase in the combination.</summary>
         public double? LoadCaseFactor { get; set; }
         /// <summary>Factor applied to the scenario&apos;s generated load cases in the combination.</summary>
         public double? ScenarioFactor { get; set; }
@@ -39,7 +39,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "combineLoadCase", n => { CombineLoadCase = n.GetIntValue(); } },
+                { "combineWithLoadCase", n => { CombineWithLoadCase = n.GetIntValue(); } },
                 { "loadCaseFactor", n => { LoadCaseFactor = n.GetDoubleValue(); } },
                 { "scenarioFactor", n => { ScenarioFactor = n.GetDoubleValue(); } },
                 { "startingCombinationCase", n => { StartingCombinationCase = n.GetIntValue(); } },
@@ -52,7 +52,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteIntValue("combineLoadCase", CombineLoadCase);
+            writer.WriteIntValue("combineWithLoadCase", CombineWithLoadCase);
             writer.WriteDoubleValue("loadCaseFactor", LoadCaseFactor);
             writer.WriteDoubleValue("scenarioFactor", ScenarioFactor);
             writer.WriteIntValue("startingCombinationCase", StartingCombinationCase);

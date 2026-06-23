@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 @dataclass
-class MaterialCreate(Parsable):
+class MaterialUserCreate(Parsable):
     """
     DTO for creating a new user-defined material.
     """
@@ -27,15 +27,15 @@ class MaterialCreate(Parsable):
     youngs_modulus: Optional[float] = None
     
     @staticmethod
-    def create_from_discriminator_value(parse_node: ParseNode) -> MaterialCreate:
+    def create_from_discriminator_value(parse_node: ParseNode) -> MaterialUserCreate:
         """
         Creates a new instance of the appropriate class based on discriminator value
         param parse_node: The parse node to use to read the discriminator value and create the object
-        Returns: MaterialCreate
+        Returns: MaterialUserCreate
         """
         if parse_node is None:
             raise TypeError("parse_node cannot be null.")
-        return MaterialCreate()
+        return MaterialUserCreate()
     
     def get_field_deserializers(self,) -> dict[str, Callable[[ParseNode], None]]:
         """

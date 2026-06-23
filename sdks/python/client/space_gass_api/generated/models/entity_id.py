@@ -34,7 +34,7 @@ class EntityId(str, Enum):
     CombinationLoadCases = "CombinationLoadCases",
     Filters = "Filters",
     MovingLoadSettings = "MovingLoadSettings",
-    MovingLoadElements = "MovingLoadElements",
+    MovingLoadElementsToLoad = "MovingLoadElementsToLoad",
     MovingLoadScenarios = "MovingLoadScenarios",
     MovingLoadVehicles = "MovingLoadVehicles",
     MovingLoadPressures = "MovingLoadPressures",

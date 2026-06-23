@@ -17,7 +17,7 @@ if TYPE_CHECKING:
     from ....models.error_response import ErrorResponse
     from ....models.expand_option import ExpandOption
     from ....models.material import Material
-    from ....models.material_create import MaterialCreate
+    from ....models.material_user_create import MaterialUserCreate
     from .bulk.bulk_request_builder import BulkRequestBuilder
     from .item.materials_item_request_builder import MaterialsItemRequestBuilder
     from .library.library_request_builder import LibraryRequestBuilder
@@ -86,7 +86,7 @@ class MaterialsRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_collection_async(request_info, Material, error_mapping)
     
-    async def post(self,body: MaterialCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Material]:
+    async def post(self,body: MaterialUserCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Material]:
         """
         Creates a new item. If a validator is registered, the item is validated before creation.
         param body: DTO for creating a new user-defined material.
@@ -124,7 +124,7 @@ class MaterialsRequestBuilder(BaseRequestBuilder):
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def to_post_request_information(self,body: MaterialCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+    def to_post_request_information(self,body: MaterialUserCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Creates a new item. If a validator is registered, the item is validated before creation.
         param body: DTO for creating a new user-defined material.

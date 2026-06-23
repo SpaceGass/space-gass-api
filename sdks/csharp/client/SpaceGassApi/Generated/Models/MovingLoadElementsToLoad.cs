@@ -8,12 +8,12 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadElementsDto. Omitted properties keep theircurrent value; supply a property (including an empty string to clear) to replace it.
+    /// The structural elements that moving loads are applied to — the selected members andplates. Both are SG list-strings (comma-separated Ids and ranges, e.g. `&quot;1,3-7,10&quot;`).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public partial class MovingLoadElementsUpdate : IParsable
+    public partial class MovingLoadElementsToLoad : IParsable
     {
-        /// <summary>Replacement member selection in SG list-string format. Omit to keep current.</summary>
+        /// <summary>The members selected to receive moving loads, in SG list-string format.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Members { get; set; }
@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
 #else
         public string Members { get; set; }
 #endif
-        /// <summary>Replacement plate selection in SG list-string format. Omit to keep current.</summary>
+        /// <summary>The plates selected to receive moving loads, in SG list-string format.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Plates { get; set; }
@@ -32,12 +32,12 @@ namespace SpaceGassApi.Models
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadElementsUpdate"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadElementsToLoad"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static global::SpaceGassApi.Models.MovingLoadElementsUpdate CreateFromDiscriminatorValue(IParseNode parseNode)
+        public static global::SpaceGassApi.Models.MovingLoadElementsToLoad CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::SpaceGassApi.Models.MovingLoadElementsUpdate();
+            return new global::SpaceGassApi.Models.MovingLoadElementsToLoad();
         }
         /// <summary>
         /// The deserialization information for the current model
