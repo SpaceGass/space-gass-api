@@ -54,6 +54,9 @@ sdks/csharp/client/
 └── SpaceGassApi/
     ├── SpaceGassApi.csproj              ← hand-maintained (safe from Kiota regen)
     ├── SpaceGassApiClient.cs            ← hand-maintained — SpaceGassApiClient : BaseSpaceGassApiClient
+    ├── Utils/                           ← hand-maintained helpers (safe from regen)
+    │   ├── ListUtilsExtensions.cs       ← SG list-string helpers (ToFilterString, ToIdArray)
+    │   └── UploadRequests.cs            ← NewFromTemplateRequest / ImportTxtRequest (multipart uploads)
     └── Generated/                       ← Kiota output (wiped on --clean-output)
         ├── BaseSpaceGassApiClient.cs    ← Kiota-generated base client
         ├── Models/
@@ -61,7 +64,16 @@ sdks/csharp/client/
 ```
 
 - Kiota generates `BaseSpaceGassApiClient` (set via `--class-name` in the workflow). The hand-maintained `SpaceGassApiClient.cs` defines `SpaceGassApiClient : BaseSpaceGassApiClient` which adds `CreateClient()`. Same pattern as the [Microsoft Graph .NET SDK](https://github.com/microsoftgraph/msgraph-sdk-dotnet).
-- `.csproj` uses `EnableDefaultCompileItems=false` and explicit `<Compile Include>` for `Generated\**\*.cs` and `SpaceGassApiClient.cs`
+- `.csproj` uses `EnableDefaultCompileItems=false` and explicit `<Compile Include>` for `Generated\**\*.cs`, `SpaceGassApiClient.cs`, and `Utils\**\*.cs`.
+
+#### Hand-maintained additions on top of Kiota
+
+Anything that smooths over awkward raw Kiota output lives **outside `Generated/`** so it survives `--clean-output` — the wrapper `SpaceGassApiClient.cs` and the `Utils/` folder (globbed into the csproj). Add a helper here when the generated surface is clumsy to call by hand:
+
+- **`Utils/ListUtilsExtensions.cs`** — converts between `int[]` and the SG list-string filter format used by query parameters (`ToFilterString()`, `ToIdArray()`, `ToIdList()`).
+- **`Utils/UploadRequests.cs`** — `NewFromTemplateRequest` / `ImportTxtRequest` subclass Kiota's `MultipartBody` for the multipart file-upload endpoints (`POST /job/new-from-template`, `POST /job/import/txt`). Kiota types those `PostAsync` parameters as a bare `MultipartBody`; these subclasses let callers write `PostAsync(new NewFromTemplateRequest(path))` — they take a file path, read the bytes, and add the single form part with its filename. No request adapter is set: the request builder attaches it at send time (Kiota's `SetContentFromParsable`).
+
+When a new endpoint is similarly awkward (multipart uploads, list-string filters, etc.), prefer adding a small hand-maintained type/extension here over documenting the raw Kiota boilerplate.
 
 ### Python Client Structure
 
@@ -72,6 +84,7 @@ sdks/python/client/
     ├── __init__.py                 ← AUTO-WRITTEN post-Kiota by tools/regen_python_inits.py
     ├── __init__.pyi                ← AUTO-WRITTEN post-Kiota (type stub for IDE support)
     ├── space_gass_api_client.py    ← hand-maintained (SpaceGassApiClient, create_client, _enhance_get_methods)
+    ├── upload_requests.py          ← hand-maintained (NewFromTemplateRequest, ImportTxtRequest)
     ├── models/
     │   └── __init__.py             ← AUTO-WRITTEN post-Kiota (re-exports from generated/)
     └── generated/                  ← Kiota output (wiped on --clean-output)
@@ -84,6 +97,7 @@ sdks/python/client/
 - The `generated/` subfolder is the Kiota `--clean-output` target. Hand-maintained files (`__init__.py`, `__init__.pyi`, `space_gass_api_client.py`, `models/__init__.py`) live outside it and survive regeneration.
 - The post-regen script `tools/regen_python_inits.py` writes `__init__.py` at the package root and `models/__init__.py` as a re-export shim so callers can write `from space_gass_api import SpaceGassApiClient` and `import space_gass_api.models as models`.
 - `space_gass_api/__init__.py` imports `SpaceGassApiClient` from the hand-maintained `space_gass_api_client` module and calls `_enhance_get_methods()` to enable `.get(**kwargs)` on builders.
+- **Hand-maintained additions on top of Kiota** (Python mirror of the C# `Utils/` layer) live at the package root, outside `generated/`: `upload_requests.py` defines `NewFromTemplateRequest` / `ImportTxtRequest`, which subclass Kiota's `MultipartBody` so the multipart file-upload endpoints can be called by file path — `await client.job.new_from_template.post(NewFromTemplateRequest(path))`. They are re-exported from the package root by `tools/regen_python_inits.py` (so `from space_gass_api import NewFromTemplateRequest` works); update that script's `PKG_INIT_*` constants when adding more.
 
 ### Authentication
 

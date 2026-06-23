@@ -125,28 +125,23 @@ Upload a `.sgbase` template file to seed a new job. The template data
 is loaded but the new job has no file path — use `Job.Save` with a
 `FilePath` (see [Saving](#saving)) to write it to disk.
 
-The body is a `multipart/form-data` upload. Both SDKs expose this via
-the Kiota `MultipartBody` abstraction with one part named `template`.
+The body is a `multipart/form-data` upload with one part named
+`template`. Both SDKs expose a `NewFromTemplateRequest` you construct
+from a file path.
 
 <CodeTabs>
 ```csharp title="C#"
-using Microsoft.Kiota.Abstractions;
+using SpaceGassApi;
 
-var multipart = new MultipartBody { RequestAdapter = client.RequestAdapter };
-using var stream = File.OpenRead(@"C:\Templates\my-template.sgbase");
-multipart.AddOrReplacePart("template", "application/octet-stream", stream);
-
-await client.Job.NewFromTemplate.PostAsync(multipart);
+await client.Job.NewFromTemplate.PostAsync(
+    new NewFromTemplateRequest(@"C:\Templates\my-template.sgbase"));
 ```
 
 ```python title="Python"
-from kiota_abstractions.multipart_body import MultipartBody
+from space_gass_api import NewFromTemplateRequest
 
-multipart = MultipartBody()
-multipart.request_adapter = client.request_adapter
-with open(r"C:\Templates\my-template.sgbase", "rb") as f:
-    multipart.add_or_replace_part("template", "application/octet-stream", f)
-    await client.job.new_from_template.post(multipart)
+await client.job.new_from_template.post(
+    NewFromTemplateRequest(r"C:\Templates\my-template.sgbase"))
 ```
 
 ```bash title="curl"
