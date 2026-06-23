@@ -9,7 +9,7 @@ class MovingLoadVehicleLibraryCreate(Parsable):
     """
     Imports a vehicle from a vehicle library by name. The imported wheel loads are convertedto the current job units.
     """
-    # The vehicle Id to assign.
+    # The Id to assign to the new item.
     id: Optional[int] = None
     # The library name to import from.
     library: Optional[str] = None

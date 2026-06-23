@@ -13,6 +13,8 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MovingLoadVehicleCreate : IParsable
     {
+        /// <summary>The Id to assign to the new item.</summary>
+        public int? Id { get; set; }
         /// <summary>The vehicle&apos;s wheel loads. Must contain at least one wheel.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -55,6 +57,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "loadUnits", n => { LoadUnits = n.GetObjectValue<global::SpaceGassApi.Models.VehicleLoadUnits>(global::SpaceGassApi.Models.VehicleLoadUnits.CreateFromDiscriminatorValue); } },
                 { "loads", n => { Loads = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.VehicleWheelLoad>(global::SpaceGassApi.Models.VehicleWheelLoad.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
@@ -67,6 +70,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteIntValue("id", Id);
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.VehicleWheelLoad>("loads", Loads);
             writer.WriteObjectValue<global::SpaceGassApi.Models.VehicleLoadUnits>("loadUnits", LoadUnits);
             writer.WriteStringValue("name", Name);

@@ -13,6 +13,8 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MovingLoadTravelPathCreate : IParsable
     {
+        /// <summary>The Id to assign to the new item.</summary>
+        public int? Id { get; set; }
         /// <summary>The travel-path name. Must be unique across all travel paths.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -39,6 +41,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
             };
         }
@@ -49,6 +52,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteIntValue("id", Id);
             writer.WriteStringValue("name", Name);
         }
     }

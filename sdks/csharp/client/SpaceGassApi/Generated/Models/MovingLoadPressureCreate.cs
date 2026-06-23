@@ -13,6 +13,8 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MovingLoadPressureCreate : IParsable
     {
+        /// <summary>The Id to assign to the new item.</summary>
+        public int? Id { get; set; }
         /// <summary>Patch length, along the travel path. 0 means stationary, full-length.</summary>
         public double? Length { get; set; }
         /// <summary>Spacing between discretised load points within the patch.</summary>
@@ -51,6 +53,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "length", n => { Length = n.GetDoubleValue(); } },
                 { "loadSpacing", n => { LoadSpacing = n.GetDoubleValue(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
@@ -67,6 +70,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("length", Length);
             writer.WriteDoubleValue("loadSpacing", LoadSpacing);
             writer.WriteStringValue("name", Name);

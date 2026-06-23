@@ -9,6 +9,8 @@ class MovingLoadPressureCreate(Parsable):
     """
     Creates a new moving-load pressure.
     """
+    # The Id to assign to the new item.
+    id: Optional[int] = None
     # Patch length, along the travel path. 0 means stationary, full-length.
     length: Optional[float] = None
     # Spacing between discretised load points within the patch.
@@ -41,6 +43,7 @@ class MovingLoadPressureCreate(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "length": lambda n : setattr(self, 'length', n.get_float_value()),
             "loadSpacing": lambda n : setattr(self, 'load_spacing', n.get_float_value()),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
@@ -59,6 +62,7 @@ class MovingLoadPressureCreate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_int_value("id", self.id)
         writer.write_float_value("length", self.length)
         writer.write_float_value("loadSpacing", self.load_spacing)
         writer.write_str_value("name", self.name)

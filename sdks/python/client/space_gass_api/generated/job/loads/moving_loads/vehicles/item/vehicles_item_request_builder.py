@@ -89,7 +89,7 @@ class VehiclesItemRequestBuilder(BaseRequestBuilder):
     async def patch(self,body: MovingLoadVehicleUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[MovingLoadVehicle]:
         """
         Partially updates a catalog item; omitted fields keep their current value.
-        param body: Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle's source and library cannot be changed here.
+        param body: Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle's source and library cannot be changed here, andload units are fixed at create and intentionally not updatable.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[MovingLoadVehicle]
         """
@@ -137,7 +137,7 @@ class VehiclesItemRequestBuilder(BaseRequestBuilder):
     def to_patch_request_information(self,body: MovingLoadVehicleUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Partially updates a catalog item; omitted fields keep their current value.
-        param body: Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle's source and library cannot be changed here.
+        param body: Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle's source and library cannot be changed here, andload units are fixed at create and intentionally not updatable.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

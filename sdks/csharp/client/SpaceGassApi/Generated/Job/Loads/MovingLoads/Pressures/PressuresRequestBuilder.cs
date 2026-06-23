@@ -6,6 +6,7 @@ using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Loads.MovingLoads.Pressures.Bulk;
 using SpaceGassApi.Job.Loads.MovingLoads.Pressures.Item;
 using SpaceGassApi.Job.Loads.MovingLoads.Pressures.Metadata;
+using SpaceGassApi.Job.Loads.MovingLoads.Pressures.Next;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -29,6 +30,11 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
         public global::SpaceGassApi.Job.Loads.MovingLoads.Pressures.Metadata.MetadataRequestBuilder Metadata
         {
             get => new global::SpaceGassApi.Job.Loads.MovingLoads.Pressures.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The next property</summary>
+        public global::SpaceGassApi.Job.Loads.MovingLoads.Pressures.Next.NextRequestBuilder Next
+        {
+            get => new global::SpaceGassApi.Job.Loads.MovingLoads.Pressures.Next.NextRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the SpaceGassApi.job.loads.movingLoads.pressures.item collection</summary>
         /// <param name="position">The item Id</param>
@@ -60,7 +66,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public PressuresRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/pressures{?Expand*}", pathParameters)
+        public PressuresRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/pressures{?Expand*,Limit*,Offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -68,11 +74,11 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public PressuresRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/pressures{?Expand*}", rawUrl)
+        public PressuresRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/pressures{?Expand*,Limit*,Offset*}", rawUrl)
         {
         }
         /// <summary>
-        /// Lists all items in this catalog for the current job, ordered by Id.
+        /// Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.MovingLoadPressure&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -100,7 +106,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Creates a new catalog item.
+        /// Creates a new catalog item. Supply `id` to choose the Id, or omit it to have the nextavailable Id auto-assigned.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadPressure"/></returns>
         /// <param name="body">Creates a new moving-load pressure.</param>
@@ -109,6 +115,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 409 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -126,12 +133,13 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "409", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MovingLoadPressure>(requestInfo, global::SpaceGassApi.Models.MovingLoadPressure.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Lists all items in this catalog for the current job, ordered by Id.
+        /// Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -150,7 +158,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
             return requestInfo;
         }
         /// <summary>
-        /// Creates a new catalog item.
+        /// Creates a new catalog item. Supply `id` to choose the Id, or omit it to have the nextavailable Id auto-assigned.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Creates a new moving-load pressure.</param>
@@ -181,7 +189,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
             return new global::SpaceGassApi.Job.Loads.MovingLoads.Pressures.PressuresRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Lists all items in this catalog for the current job, ordered by Id.
+        /// Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class PressuresRequestBuilderGetQueryParameters 
@@ -198,6 +206,10 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
             /// <summary>Whether to hydrate each item&apos;s sub-resources inline. Defaults to None for the list.</summary>
             [QueryParameter("Expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
+            /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            public int? Limit { get; set; }
+            /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            public int? Offset { get; set; }
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

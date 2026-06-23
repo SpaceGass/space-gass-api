@@ -9,6 +9,8 @@ class MovingLoadTravelPathCreate(Parsable):
     """
     Creates a new travel-path header. Stations are set via `PUT moving-loads/travel-paths/{id}/stations`.
     """
+    # The Id to assign to the new item.
+    id: Optional[int] = None
     # The travel-path name. Must be unique across all travel paths.
     name: Optional[str] = None
     
@@ -29,6 +31,7 @@ class MovingLoadTravelPathCreate(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
         }
         return fields
@@ -41,6 +44,7 @@ class MovingLoadTravelPathCreate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_int_value("id", self.id)
         writer.write_str_value("name", self.name)
     
 

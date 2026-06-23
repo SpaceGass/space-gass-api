@@ -15,6 +15,8 @@ class MovingLoadScenarioCreate(Parsable):
     """
     # The scenario's combination rows. Optional — supply inline, or omit and set them later via `PUT .../{id}/combinations`.
     combinations: Optional[list[MovingLoadCombination]] = None
+    # The Id to assign to the new item.
+    id: Optional[int] = None
     # Whether this scenario is included when load cases are generated.
     include: Optional[bool] = None
     # The scenario's load rows, in order. Optional — supply to create the scenario and its loads in one call; omit to set them later via `PUT .../{id}/loads`.
@@ -50,6 +52,7 @@ class MovingLoadScenarioCreate(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "combinations": lambda n : setattr(self, 'combinations', n.get_collection_of_object_values(MovingLoadCombination)),
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "include": lambda n : setattr(self, 'include', n.get_bool_value()),
             "loads": lambda n : setattr(self, 'loads', n.get_collection_of_object_values(MovingLoadScenarioLoad)),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
@@ -67,6 +70,7 @@ class MovingLoadScenarioCreate(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_collection_of_object_values("combinations", self.combinations)
+        writer.write_int_value("id", self.id)
         writer.write_bool_value("include", self.include)
         writer.write_collection_of_object_values("loads", self.loads)
         writer.write_str_value("name", self.name)

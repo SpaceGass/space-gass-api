@@ -21,6 +21,8 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.MovingLoadCombination> Combinations { get; set; }
 #endif
+        /// <summary>The Id to assign to the new item.</summary>
+        public int? Id { get; set; }
         /// <summary>Whether this scenario is included when load cases are generated.</summary>
         public bool? Include { get; set; }
         /// <summary>The scenario&apos;s load rows, in order. Optional — supply to create the scenario and its loads in one call; omit to set them later via `PUT .../{id}/loads`.</summary>
@@ -62,6 +64,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "combinations", n => { Combinations = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.MovingLoadCombination>(global::SpaceGassApi.Models.MovingLoadCombination.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "id", n => { Id = n.GetIntValue(); } },
                 { "include", n => { Include = n.GetBoolValue(); } },
                 { "loads", n => { Loads = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.MovingLoadScenarioLoad>(global::SpaceGassApi.Models.MovingLoadScenarioLoad.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
@@ -77,6 +80,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.MovingLoadCombination>("combinations", Combinations);
+            writer.WriteIntValue("id", Id);
             writer.WriteBoolValue("include", Include);
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.MovingLoadScenarioLoad>("loads", Loads);
             writer.WriteStringValue("name", Name);

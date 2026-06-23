@@ -13,6 +13,8 @@ class MovingLoadVehicleCreate(Parsable):
     """
     Creates a user-defined vehicle from supplied wheel loads. To import a vehicle from alibrary instead, use `POST moving-loads/vehicles/library`.
     """
+    # The Id to assign to the new item.
+    id: Optional[int] = None
     # The units a vehicle's wheel loads are stored in. Independent of the job-level units.
     load_units: Optional[VehicleLoadUnits] = None
     # The vehicle's wheel loads. Must contain at least one wheel.
@@ -43,6 +45,7 @@ class MovingLoadVehicleCreate(Parsable):
         from .vehicle_wheel_load import VehicleWheelLoad
 
         fields: dict[str, Callable[[Any], None]] = {
+            "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "loadUnits": lambda n : setattr(self, 'load_units', n.get_object_value(VehicleLoadUnits)),
             "loads": lambda n : setattr(self, 'loads', n.get_collection_of_object_values(VehicleWheelLoad)),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
@@ -57,6 +60,7 @@ class MovingLoadVehicleCreate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_int_value("id", self.id)
         writer.write_object_value("loadUnits", self.load_units)
         writer.write_collection_of_object_values("loads", self.loads)
         writer.write_str_value("name", self.name)

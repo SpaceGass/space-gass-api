@@ -7,6 +7,7 @@ using SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Bulk;
 using SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Item;
 using SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Library;
 using SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Metadata;
+using SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Next;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -35,6 +36,11 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles
         public global::SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Metadata.MetadataRequestBuilder Metadata
         {
             get => new global::SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The next property</summary>
+        public global::SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Next.NextRequestBuilder Next
+        {
+            get => new global::SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Next.NextRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the SpaceGassApi.job.loads.movingLoads.vehicles.item collection</summary>
         /// <param name="position">The item Id</param>
@@ -66,7 +72,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public VehiclesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/vehicles{?Expand*}", pathParameters)
+        public VehiclesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/vehicles{?Expand*,Limit*,Offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -74,11 +80,11 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public VehiclesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/vehicles{?Expand*}", rawUrl)
+        public VehiclesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/vehicles{?Expand*,Limit*,Offset*}", rawUrl)
         {
         }
         /// <summary>
-        /// Lists all items in this catalog for the current job, ordered by Id.
+        /// Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.MovingLoadVehicle&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -106,7 +112,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Creates a new catalog item.
+        /// Creates a new catalog item. Supply `id` to choose the Id, or omit it to have the nextavailable Id auto-assigned.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadVehicle"/></returns>
         /// <param name="body">Creates a user-defined vehicle from supplied wheel loads. To import a vehicle from alibrary instead, use `POST moving-loads/vehicles/library`.</param>
@@ -115,6 +121,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 409 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -132,12 +139,13 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles
                 { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "409", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MovingLoadVehicle>(requestInfo, global::SpaceGassApi.Models.MovingLoadVehicle.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Lists all items in this catalog for the current job, ordered by Id.
+        /// Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -156,7 +164,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles
             return requestInfo;
         }
         /// <summary>
-        /// Creates a new catalog item.
+        /// Creates a new catalog item. Supply `id` to choose the Id, or omit it to have the nextavailable Id auto-assigned.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Creates a user-defined vehicle from supplied wheel loads. To import a vehicle from alibrary instead, use `POST moving-loads/vehicles/library`.</param>
@@ -187,7 +195,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles
             return new global::SpaceGassApi.Job.Loads.MovingLoads.Vehicles.VehiclesRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Lists all items in this catalog for the current job, ordered by Id.
+        /// Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class VehiclesRequestBuilderGetQueryParameters 
@@ -204,6 +212,10 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles
             /// <summary>Whether to hydrate each item&apos;s sub-resources inline. Defaults to None for the list.</summary>
             [QueryParameter("Expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
+            /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            public int? Limit { get; set; }
+            /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            public int? Offset { get; set; }
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.
