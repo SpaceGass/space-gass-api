@@ -37,7 +37,7 @@ async def main() -> int:
         print("Creating materials...")
 
         steel = await client.job.structure.materials.post(
-            models.MaterialCreate(
+            models.MaterialUserCreate(
                 name="350 Grade Steel",
                 youngs_modulus=200000.0,    # MPa
                 poissons_ratio=0.3,
@@ -55,7 +55,7 @@ async def main() -> int:
 
         # -- Create a concrete material --------------------------------
         concrete = await client.job.structure.materials.post(
-            models.MaterialCreate(
+            models.MaterialUserCreate(
                 name="40 MPa Concrete",
                 youngs_modulus=32800.0,     # MPa
                 poissons_ratio=0.2,

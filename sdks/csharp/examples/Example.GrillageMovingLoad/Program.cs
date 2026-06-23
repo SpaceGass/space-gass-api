@@ -333,7 +333,7 @@ try
                 new()
                 {
                     ScenarioFactor = 1.5,
-                    CombineLoadCase = totalDeadLoad.Id,
+                    CombineWithLoadCase = totalDeadLoad.Id,
                     LoadCaseFactor = 1.2,
                     StartingCombinationCase = 201,
                 },
@@ -345,7 +345,7 @@ try
     // come after the scenario block — the vehicle/path/scenario setup resets
     // the selection, so an earlier call is silently cleared by generation time.
     var elements = await client.Job.Loads.MovingLoads.ElementsToLoad.PatchAsync(
-        new MovingLoadElementsUpdate { Members = Enumerable.Range(1, totalMembers).ToFilterString() });
+        new MovingLoadElementsToLoadUpdate { Members = Enumerable.Range(1, totalMembers).ToFilterString() });
     Console.WriteLine($"  Elements to load: members='{elements?.Members}'.");
 
     var generation = await client.Job.Loads.MovingLoads.Generate.PostAsync(

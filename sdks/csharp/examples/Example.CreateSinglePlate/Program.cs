@@ -52,7 +52,7 @@ try
     // == Material =================================================
     Console.WriteLine("Adding material...");
     var mat = await client.Job.Structure.Materials.PostAsync(
-        new MaterialCreate
+        new MaterialUserCreate
         {
             Name = "Concrete 25 MPa",
             YoungsModulus = 26700.0,
