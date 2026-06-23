@@ -98,7 +98,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Item
         /// Partially updates a catalog item; omitted fields keep their current value.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadVehicle"/></returns>
-        /// <param name="body">Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle&apos;s source and library cannot be changed here.</param>
+        /// <param name="body">Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle&apos;s source and library cannot be changed here, andload units are fixed at create and intentionally not updatable.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
@@ -167,7 +167,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Vehicles.Item
         /// Partially updates a catalog item; omitted fields keep their current value.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle&apos;s source and library cannot be changed here.</param>
+        /// <param name="body">Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle&apos;s source and library cannot be changed here, andload units are fixed at create and intentionally not updatable.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

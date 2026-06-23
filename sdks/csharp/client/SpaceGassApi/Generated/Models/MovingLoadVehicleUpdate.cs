@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle&apos;s source and library cannot be changed here.
+    /// Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle&apos;s source and library cannot be changed here, andload units are fixed at create and intentionally not updatable.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MovingLoadVehicleUpdate : IParsable

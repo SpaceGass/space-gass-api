@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MovingLoadVehicleLibraryCreate : IParsable
     {
-        /// <summary>The vehicle Id to assign.</summary>
+        /// <summary>The Id to assign to the new item.</summary>
         public int? Id { get; set; }
         /// <summary>The library name to import from.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER

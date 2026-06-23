@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from .bulk.bulk_request_builder import BulkRequestBuilder
     from .item.pressures_item_request_builder import PressuresItemRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
+    from .next.next_request_builder import NextRequestBuilder
 
 class PressuresRequestBuilder(BaseRequestBuilder):
     """
@@ -33,7 +34,7 @@ class PressuresRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/moving-loads/pressures{?Expand*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/moving-loads/pressures{?Expand*,Limit*,Offset*}", path_parameters)
     
     def by_id(self,id: int) -> PressuresItemRequestBuilder:
         """
@@ -55,13 +56,15 @@ class PressuresRequestBuilder(BaseRequestBuilder):
         self,
         *,
         expand: Optional[ExpandOption] = None,
+        limit: Optional[int] = None,
+        offset: Optional[int] = None,
     ) -> Optional[list[MovingLoadPressure]]: ...
     @overload
     async def get(self, request_configuration: Optional[RequestConfiguration[PressuresRequestBuilderGetQueryParameters]] = None) -> Optional[list[MovingLoadPressure]]: ...
     # --- end overloads ---
     async def get(self,request_configuration: Optional[RequestConfiguration[PressuresRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[MovingLoadPressure]]:
         """
-        Lists all items in this catalog for the current job, ordered by Id.
+        Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[MovingLoadPressure]]
         """
@@ -83,7 +86,7 @@ class PressuresRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: MovingLoadPressureCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[MovingLoadPressure]:
         """
-        Creates a new catalog item.
+        Creates a new catalog item. Supply `id` to choose the Id, or omit it to have the nextavailable Id auto-assigned.
         param body: Creates a new moving-load pressure.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[MovingLoadPressure]
@@ -99,6 +102,7 @@ class PressuresRequestBuilder(BaseRequestBuilder):
             "400": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
+            "409": ErrorResponse,
             "500": ErrorResponse,
         }
         if not self.request_adapter:
@@ -109,7 +113,7 @@ class PressuresRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[PressuresRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Lists all items in this catalog for the current job, ordered by Id.
+        Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -120,7 +124,7 @@ class PressuresRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: MovingLoadPressureCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Creates a new catalog item.
+        Creates a new catalog item. Supply `id` to choose the Id, or omit it to have the nextavailable Id auto-assigned.
         param body: Creates a new moving-load pressure.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -161,10 +165,19 @@ class PressuresRequestBuilder(BaseRequestBuilder):
 
         return MetadataRequestBuilder(self.request_adapter, self.path_parameters)
     
+    @property
+    def next(self) -> NextRequestBuilder:
+        """
+        The next property
+        """
+        from .next.next_request_builder import NextRequestBuilder
+
+        return NextRequestBuilder(self.request_adapter, self.path_parameters)
+    
     @dataclass
     class PressuresRequestBuilderGetQueryParameters():
         """
-        Lists all items in this catalog for the current job, ordered by Id.
+        Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -176,10 +189,20 @@ class PressuresRequestBuilder(BaseRequestBuilder):
                 raise TypeError("original_name cannot be null.")
             if original_name == "expand":
                 return "Expand"
+            if original_name == "limit":
+                return "Limit"
+            if original_name == "offset":
+                return "Offset"
             return original_name
         
         # Whether to hydrate each item's sub-resources inline. Defaults to None for the list.
         expand: Optional[ExpandOption] = None
+
+        # Maximum number of items to return. Default is null (return all).
+        limit: Optional[int] = None
+
+        # Number of items to skip from the start of the result set. Default is 0.
+        offset: Optional[int] = None
 
     
     @dataclass

@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class MovingLoadVehicleUpdate(Parsable):
     """
-    Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle's source and library cannot be changed here.
+    Partial update for a user-defined vehicle. All properties are optional; omitted propertieskeep their current value. A library vehicle's source and library cannot be changed here, andload units are fixed at create and intentionally not updatable.
     """
     # The Id of the item to update.
     id: Optional[int] = None
