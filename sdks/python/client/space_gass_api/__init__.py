@@ -27,5 +27,6 @@ from .space_gass_api_client import _enhance_get_methods
 _enhance_get_methods()
 
 from .space_gass_api_client import SpaceGassApiClient
+from .upload_requests import ImportTxtRequest, NewFromTemplateRequest
 
-__all__ = ["SpaceGassApiClient"]
+__all__ = ["ImportTxtRequest", "NewFromTemplateRequest", "SpaceGassApiClient"]
