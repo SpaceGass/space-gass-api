@@ -108,11 +108,11 @@ namespace SpaceGassApi.Job.Structure.Materials.Bulk
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.MaterialBulkResult?> PostAsync(List<global::SpaceGassApi.Models.MaterialCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Materials.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.MaterialBulkResult?> PostAsync(List<global::SpaceGassApi.Models.MaterialUserCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Materials.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.MaterialBulkResult> PostAsync(List<global::SpaceGassApi.Models.MaterialCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Materials.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.MaterialBulkResult> PostAsync(List<global::SpaceGassApi.Models.MaterialUserCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Materials.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -178,11 +178,11 @@ namespace SpaceGassApi.Job.Structure.Materials.Bulk
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToPostRequestInformation(List<global::SpaceGassApi.Models.MaterialCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Materials.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(List<global::SpaceGassApi.Models.MaterialUserCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Materials.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToPostRequestInformation(List<global::SpaceGassApi.Models.MaterialCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Materials.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(List<global::SpaceGassApi.Models.MaterialUserCreate> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Materials.Bulk.BulkRequestBuilder.BulkRequestBuilderPostQueryParameters>> requestConfiguration = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));

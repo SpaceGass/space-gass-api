@@ -17,8 +17,8 @@ if TYPE_CHECKING:
     from .....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
     from .....models.error_response import ErrorResponse
     from .....models.material_bulk_result import MaterialBulkResult
-    from .....models.material_create import MaterialCreate
     from .....models.material_update import MaterialUpdate
+    from .....models.material_user_create import MaterialUserCreate
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -85,7 +85,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MaterialBulkResult, error_mapping)
     
-    async def post(self,body: list[MaterialCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBulkResult]:
+    async def post(self,body: list[MaterialUserCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBulkResult]:
         """
         Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
         param body: The request body
@@ -141,7 +141,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info.set_content_from_parsable(self.request_adapter, "application/json", body)
         return request_info
     
-    def to_post_request_information(self,body: list[MaterialCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
+    def to_post_request_information(self,body: list[MaterialUserCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """
         Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
         param body: The request body

@@ -11,7 +11,7 @@ namespace SpaceGassApi.Models
     /// DTO for creating a new user-defined material.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public partial class MaterialCreate : IParsable
+    public partial class MaterialUserCreate : IParsable
     {
         /// <summary>Concrete compressive strength.</summary>
         public double? ConcreteStrength { get; set; }
@@ -44,12 +44,12 @@ namespace SpaceGassApi.Models
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.MaterialCreate"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.MaterialUserCreate"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static global::SpaceGassApi.Models.MaterialCreate CreateFromDiscriminatorValue(IParseNode parseNode)
+        public static global::SpaceGassApi.Models.MaterialUserCreate CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::SpaceGassApi.Models.MaterialCreate();
+            return new global::SpaceGassApi.Models.MaterialUserCreate();
         }
         /// <summary>
         /// The deserialization information for the current model

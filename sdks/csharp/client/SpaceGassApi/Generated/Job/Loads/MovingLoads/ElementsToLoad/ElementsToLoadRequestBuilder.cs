@@ -42,7 +42,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.ElementsToLoad
         /// <summary>
         /// Gets the members and plates currently selected to receive moving loads, as SGlist-strings (e.g. `&quot;1,3-7,10&quot;`).
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadElements"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadElementsToLoad"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
@@ -50,11 +50,11 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.ElementsToLoad
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.MovingLoadElements?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.MovingLoadElementsToLoad?> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.MovingLoadElements> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.MovingLoadElementsToLoad> GetAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
@@ -64,13 +64,13 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.ElementsToLoad
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MovingLoadElements>(requestInfo, global::SpaceGassApi.Models.MovingLoadElements.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MovingLoadElementsToLoad>(requestInfo, global::SpaceGassApi.Models.MovingLoadElementsToLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Partially updates the selected members/plates (SG list-strings, e.g. `&quot;1,3-7,10&quot;`);omit a field to keep it, or supply an empty string to clear that selection.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadElements"/></returns>
-        /// <param name="body">Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadElementsDto. Omitted properties keep theircurrent value; supply a property (including an empty string to clear) to replace it.</param>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadElementsToLoad"/></returns>
+        /// <param name="body">Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadElementsToLoadDto. Omitted properties keep theircurrent value; supply a property (including an empty string to clear) to replace it.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
@@ -79,11 +79,11 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.ElementsToLoad
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.MovingLoadElements?> PatchAsync(global::SpaceGassApi.Models.MovingLoadElementsUpdate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.MovingLoadElementsToLoad?> PatchAsync(global::SpaceGassApi.Models.MovingLoadElementsToLoadUpdate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.MovingLoadElements> PatchAsync(global::SpaceGassApi.Models.MovingLoadElementsUpdate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.MovingLoadElementsToLoad> PatchAsync(global::SpaceGassApi.Models.MovingLoadElementsToLoadUpdate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -95,7 +95,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.ElementsToLoad
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MovingLoadElements>(requestInfo, global::SpaceGassApi.Models.MovingLoadElements.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MovingLoadElementsToLoad>(requestInfo, global::SpaceGassApi.Models.MovingLoadElementsToLoad.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Gets the members and plates currently selected to receive moving loads, as SGlist-strings (e.g. `&quot;1,3-7,10&quot;`).
@@ -120,15 +120,15 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.ElementsToLoad
         /// Partially updates the selected members/plates (SG list-strings, e.g. `&quot;1,3-7,10&quot;`);omit a field to keep it, or supply an empty string to clear that selection.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadElementsDto. Omitted properties keep theircurrent value; supply a property (including an empty string to clear) to replace it.</param>
+        /// <param name="body">Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadElementsToLoadDto. Omitted properties keep theircurrent value; supply a property (including an empty string to clear) to replace it.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToPatchRequestInformation(global::SpaceGassApi.Models.MovingLoadElementsUpdate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToPatchRequestInformation(global::SpaceGassApi.Models.MovingLoadElementsToLoadUpdate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToPatchRequestInformation(global::SpaceGassApi.Models.MovingLoadElementsUpdate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToPatchRequestInformation(global::SpaceGassApi.Models.MovingLoadElementsToLoadUpdate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));

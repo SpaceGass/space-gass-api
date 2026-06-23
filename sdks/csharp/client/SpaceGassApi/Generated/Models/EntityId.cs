@@ -139,9 +139,9 @@ namespace SpaceGassApi.Models
         #pragma warning disable CS1591
         MovingLoadSettings,
         #pragma warning restore CS1591
-        [EnumMember(Value = "MovingLoadElements")]
+        [EnumMember(Value = "MovingLoadElementsToLoad")]
         #pragma warning disable CS1591
-        MovingLoadElements,
+        MovingLoadElementsToLoad,
         #pragma warning restore CS1591
         [EnumMember(Value = "MovingLoadScenarios")]
         #pragma warning disable CS1591
