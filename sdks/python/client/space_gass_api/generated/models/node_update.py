@@ -9,8 +9,6 @@ class NodeUpdate(Parsable):
     """
     DTO for updating an existing node.All coordinate fields are optional to support partial updates.Id is inherited from EntityUpdateBaseDto - nullable because single updatesreceive the Id from the route, while bulk updates include it in the body.
     """
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for bulk updates.
     id: Optional[int] = None
     # X coordinate. Unit: Length (see GET /job/units).
@@ -37,7 +35,6 @@ class NodeUpdate(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "x": lambda n : setattr(self, 'x', n.get_float_value()),
             "y": lambda n : setattr(self, 'y', n.get_float_value()),
@@ -53,7 +50,6 @@ class NodeUpdate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_float_value("x", self.x)
         writer.write_float_value("y", self.y)

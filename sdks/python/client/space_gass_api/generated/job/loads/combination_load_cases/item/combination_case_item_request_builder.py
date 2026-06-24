@@ -32,7 +32,7 @@ class CombinationCaseItemRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/combination-load-cases/{combinationCase%2Did}{?Expand*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/combination-load-cases/{combinationCase%2Did}{?expand*}", path_parameters)
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[DeleteResult]:
         """
@@ -182,18 +182,6 @@ class CombinationCaseItemRequestBuilder(BaseRequestBuilder):
         """
         Gets a single combination load case by Id. Returns 404 if no case exists with that Idor if the case is not of type `Combination` (Primary, Step and Unused cases arenot exposed by this endpoint — use `GET /load-cases/{id}` for those).`Expand` defaults to `all`, which hydrates `combinationItems`;pass `Expand=none` to suppress.
         """
-        def get_query_parameter(self,original_name: str) -> str:
-            """
-            Maps the query parameters names to their encoded names for the URI template parsing.
-            param original_name: The original query parameter name in the class.
-            Returns: str
-            """
-            if original_name is None:
-                raise TypeError("original_name cannot be null.")
-            if original_name == "expand":
-                return "Expand"
-            return original_name
-        
         # Sub-resource expansion. Defaults to `all`.
         expand: Optional[ExpandOption] = None
 

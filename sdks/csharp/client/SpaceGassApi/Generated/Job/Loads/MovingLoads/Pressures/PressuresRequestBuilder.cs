@@ -66,7 +66,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public PressuresRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/pressures{?Expand*,Limit*,Offset*}", pathParameters)
+        public PressuresRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/pressures{?expand*,limit*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -74,7 +74,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public PressuresRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/pressures{?Expand*,Limit*,Offset*}", rawUrl)
+        public PressuresRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/pressures{?expand*,limit*,offset*}", rawUrl)
         {
         }
         /// <summary>
@@ -198,17 +198,21 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Pressures
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("expand")]
             public string? Expand { get; set; }
 #nullable restore
 #else
+            [QueryParameter("expand")]
             public string Expand { get; set; }
 #endif
             /// <summary>Whether to hydrate each item&apos;s sub-resources inline. Defaults to None for the list.</summary>
-            [QueryParameter("Expand")]
+            [QueryParameter("expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
         }
         /// <summary>

@@ -9,8 +9,6 @@ class PrescribedDisplacementCreate(Parsable):
     """
     DTO for creating a new prescribed displacement.
     """
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # The load case number to create this load in.
     load_case: Optional[int] = None
     # Load category for grouping/organization.
@@ -47,7 +45,6 @@ class PrescribedDisplacementCreate(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "node": lambda n : setattr(self, 'node', n.get_int_value()),
@@ -68,7 +65,6 @@ class PrescribedDisplacementCreate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_int_value("node", self.node)

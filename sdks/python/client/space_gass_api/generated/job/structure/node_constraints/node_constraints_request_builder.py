@@ -32,7 +32,7 @@ class NodeConstraintsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/node-constraints{?Limit*,MasterNode*,Offset*,Slaves*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/node-constraints{?limit*,masterNode*,offset*,slaves*}", path_parameters)
     
     def by_node_id(self,node_id: int) -> WithNodeItemRequestBuilder:
         """
@@ -177,14 +177,14 @@ class NodeConstraintsRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "limit":
-                return "Limit"
             if original_name == "master_node":
-                return "MasterNode"
+                return "masterNode"
+            if original_name == "limit":
+                return "limit"
             if original_name == "offset":
-                return "Offset"
+                return "offset"
             if original_name == "slaves":
-                return "Slaves"
+                return "slaves"
             return original_name
         
         # Maximum number of items to return. Default is null (return all).

@@ -35,7 +35,7 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/load-cases{?Expand*,Limit*,LoadCases*,Offset*,TitleSearch*,Type*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/load-cases{?expand*,limit*,loadCases*,offset*,titleSearch*,type*}", path_parameters)
     
     def by_id(self,id: int) -> LoadCasesItemRequestBuilder:
         """
@@ -191,18 +191,18 @@ class LoadCasesRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "expand":
-                return "Expand"
-            if original_name == "limit":
-                return "Limit"
             if original_name == "load_cases":
-                return "LoadCases"
-            if original_name == "offset":
-                return "Offset"
+                return "loadCases"
             if original_name == "title_search":
-                return "TitleSearch"
+                return "titleSearch"
+            if original_name == "expand":
+                return "expand"
+            if original_name == "limit":
+                return "limit"
+            if original_name == "offset":
+                return "offset"
             if original_name == "type":
-                return "Type"
+                return "type"
             return original_name
         
         # Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items on combination cases.

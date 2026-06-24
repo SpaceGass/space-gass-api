@@ -34,7 +34,7 @@ class LoadCategoriesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/load-categories{?Categories*,Expand*,Limit*,Offset*,TitleSearch*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/load-categories{?categories*,expand*,limit*,offset*,titleSearch*}", path_parameters)
     
     def by_id(self,id: int) -> LoadCategoriesItemRequestBuilder:
         """
@@ -189,16 +189,16 @@ class LoadCategoriesRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "categories":
-                return "Categories"
-            if original_name == "expand":
-                return "Expand"
-            if original_name == "limit":
-                return "Limit"
-            if original_name == "offset":
-                return "Offset"
             if original_name == "title_search":
-                return "TitleSearch"
+                return "titleSearch"
+            if original_name == "categories":
+                return "categories"
+            if original_name == "expand":
+                return "expand"
+            if original_name == "limit":
+                return "limit"
+            if original_name == "offset":
+                return "offset"
             return original_name
         
         # Category Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all categories.

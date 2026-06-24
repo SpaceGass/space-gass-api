@@ -35,7 +35,7 @@ class TravelPathsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/moving-loads/travel-paths{?Expand*,Limit*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/moving-loads/travel-paths{?expand*,limit*,offset*}", path_parameters)
     
     def by_id(self,id: int) -> TravelPathsItemRequestBuilder:
         """
@@ -189,22 +189,6 @@ class TravelPathsRequestBuilder(BaseRequestBuilder):
         """
         Lists the items in this catalog for the current job, ordered by Id. Supports offset/limitpagination; the response carries `Total-Count`, `Offset`, and `Limit` headers.
         """
-        def get_query_parameter(self,original_name: str) -> str:
-            """
-            Maps the query parameters names to their encoded names for the URI template parsing.
-            param original_name: The original query parameter name in the class.
-            Returns: str
-            """
-            if original_name is None:
-                raise TypeError("original_name cannot be null.")
-            if original_name == "expand":
-                return "Expand"
-            if original_name == "limit":
-                return "Limit"
-            if original_name == "offset":
-                return "Offset"
-            return original_name
-        
         # Whether to hydrate each item's sub-resources inline. Defaults to None for the list.
         expand: Optional[ExpandOption] = None
 

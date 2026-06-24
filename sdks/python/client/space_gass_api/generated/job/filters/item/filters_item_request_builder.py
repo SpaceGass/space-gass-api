@@ -31,7 +31,7 @@ class FiltersItemRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/filters/{id}{?Expand*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/filters/{id}{?expand*}", path_parameters)
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[DeleteResult]:
         """
@@ -172,18 +172,6 @@ class FiltersItemRequestBuilder(BaseRequestBuilder):
         """
         Returns a single named filter by Id. The response includes everysub-filter (active or not) — inactive blocks have `isActive = false`and default criterion fields.
         """
-        def get_query_parameter(self,original_name: str) -> str:
-            """
-            Maps the query parameters names to their encoded names for the URI template parsing.
-            param original_name: The original query parameter name in the class.
-            Returns: str
-            """
-            if original_name is None:
-                raise TypeError("original_name cannot be null.")
-            if original_name == "expand":
-                return "Expand"
-            return original_name
-        
         # Sub-resource expansion. No expandable sub-resources in v1.
         expand: Optional[ExpandOption] = None
 

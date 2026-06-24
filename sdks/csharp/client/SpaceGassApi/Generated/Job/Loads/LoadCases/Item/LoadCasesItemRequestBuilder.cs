@@ -22,7 +22,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public LoadCasesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-cases/{id}{?Expand*}", pathParameters)
+        public LoadCasesItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-cases/{id}{?expand*}", pathParameters)
         {
         }
         /// <summary>
@@ -30,7 +30,7 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public LoadCasesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-cases/{id}{?Expand*}", rawUrl)
+        public LoadCasesItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-cases/{id}{?expand*}", rawUrl)
         {
         }
         /// <summary>
@@ -205,13 +205,15 @@ namespace SpaceGassApi.Job.Loads.LoadCases.Item
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("expand")]
             public string? Expand { get; set; }
 #nullable restore
 #else
+            [QueryParameter("expand")]
             public string Expand { get; set; }
 #endif
             /// <summary>Sub-resource expansion. Defaults to `all`.</summary>
-            [QueryParameter("Expand")]
+            [QueryParameter("expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
         }
         /// <summary>

@@ -29,7 +29,7 @@ class CheckSummaryRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/design/steel-member/check-summary{?Limit*,Offset*,members*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/design/steel-member/check-summary{?limit*,members*,offset*}", path_parameters)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
@@ -102,22 +102,6 @@ class CheckSummaryRequestBuilder(BaseRequestBuilder):
         """
         Gets steel member design check summary results, optionally filtered by member Ids.
         """
-        def get_query_parameter(self,original_name: str) -> str:
-            """
-            Maps the query parameters names to their encoded names for the URI template parsing.
-            param original_name: The original query parameter name in the class.
-            Returns: str
-            """
-            if original_name is None:
-                raise TypeError("original_name cannot be null.")
-            if original_name == "limit":
-                return "Limit"
-            if original_name == "offset":
-                return "Offset"
-            if original_name == "members":
-                return "members"
-            return original_name
-        
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 

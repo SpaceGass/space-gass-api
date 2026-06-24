@@ -27,8 +27,6 @@ class Member(Parsable):
     gap_compression_limit: Optional[float] = None
     # Gap tension limit (for Gap type members). Unit: Force (see GET /job/units).
     gap_tension_limit: Optional[float] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # True when this member has an explicit offsets row defined (rigid end zones at A/B).False means the member has no offsets (end rigid zones zero).Use `?expand=all` to include the full `offsets` object.
     has_offsets: Optional[bool] = None
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
@@ -81,7 +79,6 @@ class Member(Parsable):
             "fuseTensionLimit": lambda n : setattr(self, 'fuse_tension_limit', n.get_float_value()),
             "gapCompressionLimit": lambda n : setattr(self, 'gap_compression_limit', n.get_float_value()),
             "gapTensionLimit": lambda n : setattr(self, 'gap_tension_limit', n.get_float_value()),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "hasOffsets": lambda n : setattr(self, 'has_offsets', n.get_bool_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "material": lambda n : setattr(self, 'material', n.get_int_value()),
@@ -108,7 +105,6 @@ class Member(Parsable):
         writer.write_float_value("fuseTensionLimit", self.fuse_tension_limit)
         writer.write_float_value("gapCompressionLimit", self.gap_compression_limit)
         writer.write_float_value("gapTensionLimit", self.gap_tension_limit)
-        writer.write_str_value("guid", self.guid)
         writer.write_bool_value("hasOffsets", self.has_offsets)
         writer.write_int_value("id", self.id)
         writer.write_int_value("material", self.material)

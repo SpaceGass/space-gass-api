@@ -15,6 +15,7 @@ if TYPE_CHECKING:
     from .plate_element_forces.plate_element_forces_request_builder import PlateElementForcesRequestBuilder
     from .plate_element_stresses.plate_element_stresses_request_builder import PlateElementStressesRequestBuilder
     from .plate_nodal_forces.plate_nodal_forces_request_builder import PlateNodalForcesRequestBuilder
+    from .reaction_summary.reaction_summary_request_builder import ReactionSummaryRequestBuilder
 
 class StaticRequestBuilder(BaseRequestBuilder):
     """
@@ -109,5 +110,14 @@ class StaticRequestBuilder(BaseRequestBuilder):
         from .plate_nodal_forces.plate_nodal_forces_request_builder import PlateNodalForcesRequestBuilder
 
         return PlateNodalForcesRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def reaction_summary(self) -> ReactionSummaryRequestBuilder:
+        """
+        The reactionSummary property
+        """
+        from .reaction_summary.reaction_summary_request_builder import ReactionSummaryRequestBuilder
+
+        return ReactionSummaryRequestBuilder(self.request_adapter, self.path_parameters)
     
 

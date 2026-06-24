@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Scenarios.Item
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ScenariosItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/scenarios/{id}{?Expand*}", pathParameters)
+        public ScenariosItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/scenarios/{id}{?expand*}", pathParameters)
         {
         }
         /// <summary>
@@ -42,7 +42,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Scenarios.Item
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ScenariosItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/scenarios/{id}{?Expand*}", rawUrl)
+        public ScenariosItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/moving-loads/scenarios/{id}{?expand*}", rawUrl)
         {
         }
         /// <summary>
@@ -218,13 +218,15 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Scenarios.Item
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("expand")]
             public string? Expand { get; set; }
 #nullable restore
 #else
+            [QueryParameter("expand")]
             public string Expand { get; set; }
 #endif
             /// <summary>Whether to hydrate the item&apos;s sub-resources inline. Defaults to All for a single fetch.</summary>
-            [QueryParameter("Expand")]
+            [QueryParameter("expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
         }
         /// <summary>
