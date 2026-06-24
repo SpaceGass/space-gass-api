@@ -60,7 +60,7 @@ namespace SpaceGassApi.Job.Loads.MemberPrestressLoads
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberPrestressLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/member-prestress-loads{?Limit*,LoadCases*,LoadCategory*,Members*,Offset*}", pathParameters)
+        public MemberPrestressLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/member-prestress-loads{?limit*,loadCases*,loadCategory*,members*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -68,7 +68,7 @@ namespace SpaceGassApi.Job.Loads.MemberPrestressLoads
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberPrestressLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/member-prestress-loads{?Limit*,LoadCases*,LoadCategory*,Members*,Offset*}", rawUrl)
+        public MemberPrestressLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/member-prestress-loads{?limit*,loadCases*,loadCategory*,members*,offset*}", rawUrl)
         {
         }
         /// <summary>
@@ -191,26 +191,33 @@ namespace SpaceGassApi.Job.Loads.MemberPrestressLoads
         public partial class MemberPrestressLoadsRequestBuilderGetQueryParameters 
         {
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Load cases to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only loads belonging to the specified load cases.Omit to return loads for all load cases.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("loadCases")]
             public string? LoadCases { get; set; }
 #nullable restore
 #else
+            [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
             /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
+            [QueryParameter("loadCategory")]
             public int? LoadCategory { get; set; }
             /// <summary>Member Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only prestress loads applied to the specified members.Omit to return prestress loads for all members.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("members")]
             public string? Members { get; set; }
 #nullable restore
 #else
+            [QueryParameter("members")]
             public string Members { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
         }
         /// <summary>

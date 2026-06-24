@@ -35,7 +35,7 @@ class FiltersRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/filters{?Expand*,Filters*,Limit*,Offset*,Search*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/filters{?expand*,filters*,limit*,offset*,search*}", path_parameters)
     
     def by_id(self,id: int) -> FiltersItemRequestBuilder:
         """
@@ -191,26 +191,6 @@ class FiltersRequestBuilder(BaseRequestBuilder):
         """
         Returns all named filters in the open job. Filter by Id list or byname substring (`search`). Results are sorted by Id ascending.Pagination metadata is returned in response headers(`Total-Count`, `Offset`, `Limit`).
         """
-        def get_query_parameter(self,original_name: str) -> str:
-            """
-            Maps the query parameters names to their encoded names for the URI template parsing.
-            param original_name: The original query parameter name in the class.
-            Returns: str
-            """
-            if original_name is None:
-                raise TypeError("original_name cannot be null.")
-            if original_name == "expand":
-                return "Expand"
-            if original_name == "filters":
-                return "Filters"
-            if original_name == "limit":
-                return "Limit"
-            if original_name == "offset":
-                return "Offset"
-            if original_name == "search":
-                return "Search"
-            return original_name
-        
         # Sub-resource expansion. Filters have no expandable sub-resources in v1; the parameter is accepted for API consistency.
         expand: Optional[ExpandOption] = None
 

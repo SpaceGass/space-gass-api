@@ -29,7 +29,7 @@ class NodeReactionsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/node-reactions{?Limit*,Offset*,loadCases*,nodes*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/node-reactions{?limit*,loadCases*,nodes*,offset*}", path_parameters)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
@@ -46,7 +46,7 @@ class NodeReactionsRequestBuilder(BaseRequestBuilder):
     # --- end overloads ---
     async def get(self,request_configuration: Optional[RequestConfiguration[NodeReactionsRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[NodeReactionQueryResult]:
         """
-        Gets reaction results for nodes, optionally filtered by load cases and node Ids.
+        Gets reaction results at restrained nodes, optionally filtered by load cases and node Ids.Returns per-node reactions only — the per-load-case equilibrium totals (sum of loads,sum of reactions, maximum residuals) are available from `GET reaction-summary`.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[NodeReactionQueryResult]
         """
@@ -70,7 +70,7 @@ class NodeReactionsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[NodeReactionsRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Gets reaction results for nodes, optionally filtered by load cases and node Ids.
+        Gets reaction results at restrained nodes, optionally filtered by load cases and node Ids.Returns per-node reactions only — the per-load-case equilibrium totals (sum of loads,sum of reactions, maximum residuals) are available from `GET reaction-summary`.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -101,7 +101,7 @@ class NodeReactionsRequestBuilder(BaseRequestBuilder):
     @dataclass
     class NodeReactionsRequestBuilderGetQueryParameters():
         """
-        Gets reaction results for nodes, optionally filtered by load cases and node Ids.
+        Gets reaction results at restrained nodes, optionally filtered by load cases and node Ids.Returns per-node reactions only — the per-load-case equilibrium totals (sum of loads,sum of reactions, maximum residuals) are available from `GET reaction-summary`.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -111,14 +111,14 @@ class NodeReactionsRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "limit":
-                return "Limit"
             if original_name == "load_cases":
                 return "loadCases"
-            if original_name == "offset":
-                return "Offset"
+            if original_name == "limit":
+                return "limit"
             if original_name == "nodes":
                 return "nodes"
+            if original_name == "offset":
+                return "offset"
             return original_name
         
         # Maximum number of items to return. Default is null (return all).

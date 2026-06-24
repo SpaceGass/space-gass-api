@@ -34,7 +34,7 @@ class PlateCutsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/plate-cuts{?Cuts*,Expand*,Limit*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/plate-cuts{?cuts*,expand*,limit*,offset*}", path_parameters)
     
     def by_id(self,id: int) -> PlateCutsItemRequestBuilder:
         """
@@ -180,24 +180,6 @@ class PlateCutsRequestBuilder(BaseRequestBuilder):
         """
         Returns all items with optional filtering, pagination and sub-resource expansion.Results are always sorted by Id ascending.Pagination metadata is returned in response headers (Total-Count, Offset, Limit).`Expand` defaults to `none` on list endpoints so payloads stay lean;pass `Expand=all` to hydrate sub-resources. Sub-resource expansion isopt-in per resource type — resources that don't define sub-resources ignore the parameter.
         """
-        def get_query_parameter(self,original_name: str) -> str:
-            """
-            Maps the query parameters names to their encoded names for the URI template parsing.
-            param original_name: The original query parameter name in the class.
-            Returns: str
-            """
-            if original_name is None:
-                raise TypeError("original_name cannot be null.")
-            if original_name == "cuts":
-                return "Cuts"
-            if original_name == "expand":
-                return "Expand"
-            if original_name == "limit":
-                return "Limit"
-            if original_name == "offset":
-                return "Offset"
-            return original_name
-        
         # Cut Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all cuts.
         cuts: Optional[str] = None
 

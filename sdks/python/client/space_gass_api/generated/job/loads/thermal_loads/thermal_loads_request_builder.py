@@ -34,7 +34,7 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/thermal-loads{?ElementType*,Elements*,Limit*,LoadCases*,LoadCategory*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/thermal-loads{?elementType*,elements*,limit*,loadCases*,loadCategory*,offset*}", path_parameters)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
@@ -186,18 +186,18 @@ class ThermalLoadsRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "elements":
-                return "Elements"
             if original_name == "element_type":
-                return "ElementType"
-            if original_name == "limit":
-                return "Limit"
+                return "elementType"
             if original_name == "load_cases":
-                return "LoadCases"
+                return "loadCases"
             if original_name == "load_category":
-                return "LoadCategory"
+                return "loadCategory"
+            if original_name == "elements":
+                return "elements"
+            if original_name == "limit":
+                return "limit"
             if original_name == "offset":
-                return "Offset"
+                return "offset"
             return original_name
         
         # Filter by element type (member or plate).Returns only thermal loads for the specified element type.Omit to return both member and plate thermal loads.

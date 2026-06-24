@@ -60,7 +60,7 @@ namespace SpaceGassApi.Job.Loads.PlatePressureLoads
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public PlatePressureLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/plate-pressure-loads{?Limit*,LoadCases*,LoadCategory*,Offset*,Plates*}", pathParameters)
+        public PlatePressureLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/plate-pressure-loads{?limit*,loadCases*,loadCategory*,offset*,plates*}", pathParameters)
         {
         }
         /// <summary>
@@ -68,7 +68,7 @@ namespace SpaceGassApi.Job.Loads.PlatePressureLoads
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public PlatePressureLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/plate-pressure-loads{?Limit*,LoadCases*,LoadCategory*,Offset*,Plates*}", rawUrl)
+        public PlatePressureLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/plate-pressure-loads{?limit*,loadCases*,loadCategory*,offset*,plates*}", rawUrl)
         {
         }
         /// <summary>
@@ -191,25 +191,32 @@ namespace SpaceGassApi.Job.Loads.PlatePressureLoads
         public partial class PlatePressureLoadsRequestBuilderGetQueryParameters 
         {
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Load cases to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only loads belonging to the specified load cases.Omit to return loads for all load cases.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("loadCases")]
             public string? LoadCases { get; set; }
 #nullable restore
 #else
+            [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
             /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
+            [QueryParameter("loadCategory")]
             public int? LoadCategory { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
             /// <summary>Plate Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only pressure loads applied to the specified plates.Omit to return pressure loads for all plates.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("plates")]
             public string? Plates { get; set; }
 #nullable restore
 #else
+            [QueryParameter("plates")]
             public string Plates { get; set; }
 #endif
         }

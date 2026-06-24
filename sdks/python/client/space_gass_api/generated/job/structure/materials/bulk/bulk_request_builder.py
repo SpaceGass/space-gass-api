@@ -17,8 +17,8 @@ if TYPE_CHECKING:
     from .....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
     from .....models.error_response import ErrorResponse
     from .....models.material_bulk_result import MaterialBulkResult
-    from .....models.material_create import MaterialCreate
     from .....models.material_update import MaterialUpdate
+    from .....models.material_user_create import MaterialUserCreate
 
 class BulkRequestBuilder(BaseRequestBuilder):
     """
@@ -35,7 +35,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
         """
-        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
+        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[BulkDeletedBulkResult]
@@ -85,7 +85,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MaterialBulkResult, error_mapping)
     
-    async def post(self,body: list[MaterialCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBulkResult]:
+    async def post(self,body: list[MaterialUserCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBulkResult]:
         """
         Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
         param body: The request body
@@ -113,7 +113,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
-        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
+        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -141,7 +141,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
         request_info.set_content_from_parsable(self.request_adapter, "application/json", body)
         return request_info
     
-    def to_post_request_information(self,body: list[MaterialCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
+    def to_post_request_information(self,body: list[MaterialUserCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """
         Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
         param body: The request body
@@ -169,7 +169,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderDeleteQueryParameters():
         """
-        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").
+        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

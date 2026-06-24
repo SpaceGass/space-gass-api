@@ -8,9 +8,9 @@ using SpaceGassApi;
 // Mirrors the Service Automation guide in the Zudoku docs site.
 // Demonstrates the four-step service lifecycle:
 //
-//   1. Probe  — try Service.Status to see if the service is already running
+//   1. Probe  — try Service.Info to see if the service is already running
 //   2. Start  — if not, launch SpaceGassApi.exe as a child process
-//   3. Wait   — poll Service.Status until it responds (or fail with a timeout)
+//   3. Wait   — poll Service.Info until it responds (or fail with a timeout)
 //   4. Stop   — terminate the child process when done, but only if we
 //               started it ourselves
 //
@@ -66,7 +66,7 @@ try
     }
 
     // == Do work against the live service ==========================
-    var info = await client.Service.Status.GetAsync();
+    var info = await client.Service.Info.GetAsync();
     Console.WriteLine();
     Console.WriteLine($"Connected to SPACE GASS {info?.SpaceGassVersion}");
     Console.WriteLine($"  API path: {info?.ApiPath}");
@@ -100,7 +100,7 @@ static async Task<bool> IsServiceReadyAsync(SpaceGassApiClient c)
 {
     try
     {
-        await c.Service.Status.GetAsync();
+        await c.Service.Info.GetAsync();
         return true;
     }
     catch

@@ -5,6 +5,7 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
+    from .access_mode import AccessMode
     from .analysis_results_summary import AnalysisResultsSummary
     from .job import Job
     from .job_state import JobState
@@ -17,14 +18,14 @@ class JobStatus(Parsable):
     """
     Full job status response including the current job, session state, structure summary, and loads summary.Returned by lifecycle operations (new, open, save, status) and GET /job/status.
     """
+    # Current operational mode of the API.
+    access_mode: Optional[AccessMode] = None
     # Summary of which analysis types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
     analysis: Optional[AnalysisResultsSummary] = None
     # Read DTO for job responses.Model counts and file state are available via GET /job/status (JobStatusDto).
     job: Optional[Job] = None
     # Summary counts of load-related entities in the current job — load casemanagement and all applied load types.
     loads: Optional[LoadsSummary] = None
-    # Current API mode at the time this status was projected.`"readwrite"` or `"readonly"`.
-    mode: Optional[str] = None
     # Current session/file state of the job.
     state: Optional[JobState] = None
     # Summary of which steel design types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
@@ -48,6 +49,7 @@ class JobStatus(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
+        from .access_mode import AccessMode
         from .analysis_results_summary import AnalysisResultsSummary
         from .job import Job
         from .job_state import JobState
@@ -55,6 +57,7 @@ class JobStatus(Parsable):
         from .steel_design_summary import SteelDesignSummary
         from .structure_summary import StructureSummary
 
+        from .access_mode import AccessMode
         from .analysis_results_summary import AnalysisResultsSummary
         from .job import Job
         from .job_state import JobState
@@ -63,10 +66,10 @@ class JobStatus(Parsable):
         from .structure_summary import StructureSummary
 
         fields: dict[str, Callable[[Any], None]] = {
+            "accessMode": lambda n : setattr(self, 'access_mode', n.get_enum_value(AccessMode)),
             "analysis": lambda n : setattr(self, 'analysis', n.get_object_value(AnalysisResultsSummary)),
             "job": lambda n : setattr(self, 'job', n.get_object_value(Job)),
             "loads": lambda n : setattr(self, 'loads', n.get_object_value(LoadsSummary)),
-            "mode": lambda n : setattr(self, 'mode', n.get_str_value()),
             "state": lambda n : setattr(self, 'state', n.get_object_value(JobState)),
             "steelDesign": lambda n : setattr(self, 'steel_design', n.get_object_value(SteelDesignSummary)),
             "structure": lambda n : setattr(self, 'structure', n.get_object_value(StructureSummary)),
@@ -81,10 +84,10 @@ class JobStatus(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_enum_value("accessMode", self.access_mode)
         writer.write_object_value("analysis", self.analysis)
         writer.write_object_value("job", self.job)
         writer.write_object_value("loads", self.loads)
-        writer.write_str_value("mode", self.mode)
         writer.write_object_value("state", self.state)
         writer.write_object_value("steelDesign", self.steel_design)
         writer.write_object_value("structure", self.structure)

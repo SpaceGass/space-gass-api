@@ -39,7 +39,7 @@ namespace SpaceGassApi.Models
 #endif
         /// <summary>Whether a job is currently open (Tier 2 SPACE GASS core held).</summary>
         public bool? IsJobOpen { get; set; }
-        /// <summary>True when the API is currently licensed (Tier 1 API module is held).</summary>
+        /// <summary>True when a validated licence session is active. Independent of theread/write seat — `true` even in ReadOnly / session-only mode.</summary>
         public bool? IsLicensed { get; set; }
         /// <summary>True when this machine has a SPACE GASS registration the API supports(TitanCloud or Titan LM). False indicates either an unsupported locktype (e.g. legacy SGREG.DAT registration) or no registration at all.Always check this before SpaceGassApi.Models.Dtos.License.LicenseStatusDto.IsLicensed: an unregisteredAPI is blocked at the registration step, before any license acquireis attempted.</summary>
         public bool? IsRegistered { get; set; }
@@ -49,14 +49,6 @@ namespace SpaceGassApi.Models
         public DateTimeOffset? JobOpenedAt { get; set; }
         /// <summary>License ID from the license server (the company registration number).</summary>
         public int? LicenseId { get; set; }
-        /// <summary>Current API mode. `&quot;readwrite&quot;` means writes and modulecheckout are allowed; `&quot;readonly&quot;` means no modules are heldand only reads + job lifecycle operations are accepted.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Mode { get; set; }
-#nullable restore
-#else
-        public string Mode { get; set; }
-#endif
         /// <summary>Company or organisation name from the license server.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -64,14 +56,6 @@ namespace SpaceGassApi.Models
 #nullable restore
 #else
         public string Organization { get; set; }
-#endif
-        /// <summary>Pending mode transition awaiting job-close commit. `&quot;readonly&quot;`,`&quot;readwrite&quot;`, or `null` when no transition is pending.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Pending { get; set; }
-#nullable restore
-#else
-        public string Pending { get; set; }
 #endif
         /// <summary>Human-readable explanation of the registration state. Alwayspopulated. For TitanCloud / TitanLM it confirms the registrationis active; for Unsupported / Unregistered it explains what theoperator should do to fix it.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -110,9 +94,7 @@ namespace SpaceGassApi.Models
                 { "isRoaming", n => { IsRoaming = n.GetBoolValue(); } },
                 { "jobOpenedAt", n => { JobOpenedAt = n.GetDateTimeOffsetValue(); } },
                 { "licenseId", n => { LicenseId = n.GetIntValue(); } },
-                { "mode", n => { Mode = n.GetStringValue(); } },
                 { "organization", n => { Organization = n.GetStringValue(); } },
-                { "pending", n => { Pending = n.GetStringValue(); } },
                 { "registrationDetail", n => { RegistrationDetail = n.GetStringValue(); } },
                 { "registrationType", n => { RegistrationType = n.GetEnumValue<global::SpaceGassApi.Models.RegistrationStatus>(); } },
             };
@@ -133,9 +115,7 @@ namespace SpaceGassApi.Models
             writer.WriteBoolValue("isRoaming", IsRoaming);
             writer.WriteDateTimeOffsetValue("jobOpenedAt", JobOpenedAt);
             writer.WriteIntValue("licenseId", LicenseId);
-            writer.WriteStringValue("mode", Mode);
             writer.WriteStringValue("organization", Organization);
-            writer.WriteStringValue("pending", Pending);
             writer.WriteStringValue("registrationDetail", RegistrationDetail);
             writer.WriteEnumValue<global::SpaceGassApi.Models.RegistrationStatus>("registrationType", RegistrationType);
         }

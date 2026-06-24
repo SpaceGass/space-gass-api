@@ -60,7 +60,7 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SelfWeightLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/self-weight-loads{?Limit*,LoadCases*,LoadCategory*,Offset*}", pathParameters)
+        public SelfWeightLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/self-weight-loads{?limit*,loadCases*,loadCategory*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -68,7 +68,7 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public SelfWeightLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/self-weight-loads{?Limit*,LoadCases*,LoadCategory*,Offset*}", rawUrl)
+        public SelfWeightLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/self-weight-loads{?limit*,loadCases*,loadCategory*,offset*}", rawUrl)
         {
         }
         /// <summary>
@@ -191,18 +191,23 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
         public partial class SelfWeightLoadsRequestBuilderGetQueryParameters 
         {
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Load cases to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only loads belonging to the specified load cases.Omit to return loads for all load cases.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("loadCases")]
             public string? LoadCases { get; set; }
 #nullable restore
 #else
+            [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
             /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
+            [QueryParameter("loadCategory")]
             public int? LoadCategory { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
         }
         /// <summary>

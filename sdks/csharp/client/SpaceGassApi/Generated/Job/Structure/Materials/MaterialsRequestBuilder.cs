@@ -72,7 +72,7 @@ namespace SpaceGassApi.Job.Structure.Materials
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MaterialsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/materials{?Expand*,Limit*,Materials*,Offset*}", pathParameters)
+        public MaterialsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/materials{?expand*,limit*,materials*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -80,7 +80,7 @@ namespace SpaceGassApi.Job.Structure.Materials
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MaterialsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/materials{?Expand*,Limit*,Materials*,Offset*}", rawUrl)
+        public MaterialsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/materials{?expand*,limit*,materials*,offset*}", rawUrl)
         {
         }
         /// <summary>
@@ -125,11 +125,11 @@ namespace SpaceGassApi.Job.Structure.Materials
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.Material?> PostAsync(global::SpaceGassApi.Models.MaterialCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.Material?> PostAsync(global::SpaceGassApi.Models.MaterialUserCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.Material> PostAsync(global::SpaceGassApi.Models.MaterialCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.Material> PostAsync(global::SpaceGassApi.Models.MaterialUserCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -171,11 +171,11 @@ namespace SpaceGassApi.Job.Structure.Materials
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.MaterialCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.MaterialUserCreate body, Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default)
         {
 #nullable restore
 #else
-        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.MaterialCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
+        public RequestInformation ToPostRequestInformation(global::SpaceGassApi.Models.MaterialUserCreate body, Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -204,25 +204,31 @@ namespace SpaceGassApi.Job.Structure.Materials
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("expand")]
             public string? Expand { get; set; }
 #nullable restore
 #else
+            [QueryParameter("expand")]
             public string Expand { get; set; }
 #endif
             /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
-            [QueryParameter("Expand")]
+            [QueryParameter("expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Material Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all materials.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("materials")]
             public string? Materials { get; set; }
 #nullable restore
 #else
+            [QueryParameter("materials")]
             public string Materials { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
         }
         /// <summary>

@@ -36,7 +36,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes{?Expand*,Limit*,NodeType*,Nodes*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/structure/nodes{?expand*,limit*,nodeType*,nodes*,offset*}", path_parameters)
     
     def by_id(self,id: int) -> NodesItemRequestBuilder:
         """
@@ -200,16 +200,16 @@ class NodesRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "expand":
-                return "Expand"
-            if original_name == "limit":
-                return "Limit"
-            if original_name == "nodes":
-                return "Nodes"
             if original_name == "node_type":
-                return "NodeType"
+                return "nodeType"
+            if original_name == "expand":
+                return "expand"
+            if original_name == "limit":
+                return "limit"
+            if original_name == "nodes":
+                return "nodes"
             if original_name == "offset":
-                return "Offset"
+                return "offset"
             return original_name
         
         # Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.

@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateDisplacements
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberIntermediateDisplacementsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member-intermediate-displacements{?Limit*,Offset*,loadCases*,members*}", pathParameters)
+        public MemberIntermediateDisplacementsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member-intermediate-displacements{?limit*,loadCases*,members*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateDisplacements
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberIntermediateDisplacementsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member-intermediate-displacements{?Limit*,Offset*,loadCases*,members*}", rawUrl)
+        public MemberIntermediateDisplacementsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member-intermediate-displacements{?limit*,loadCases*,members*,offset*}", rawUrl)
         {
         }
         /// <summary>
@@ -105,6 +105,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateDisplacements
         public partial class MemberIntermediateDisplacementsRequestBuilderGetQueryParameters 
         {
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Load case Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -127,6 +128,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.MemberIntermediateDisplacements
             public string Members { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
         }
         /// <summary>

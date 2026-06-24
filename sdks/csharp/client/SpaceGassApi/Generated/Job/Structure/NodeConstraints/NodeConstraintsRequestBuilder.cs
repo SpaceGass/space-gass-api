@@ -60,7 +60,7 @@ namespace SpaceGassApi.Job.Structure.NodeConstraints
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodeConstraintsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/node-constraints{?Limit*,MasterNode*,Offset*,Slaves*}", pathParameters)
+        public NodeConstraintsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/node-constraints{?limit*,masterNode*,offset*,slaves*}", pathParameters)
         {
         }
         /// <summary>
@@ -68,7 +68,7 @@ namespace SpaceGassApi.Job.Structure.NodeConstraints
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodeConstraintsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/node-constraints{?Limit*,MasterNode*,Offset*,Slaves*}", rawUrl)
+        public NodeConstraintsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/node-constraints{?limit*,masterNode*,offset*,slaves*}", rawUrl)
         {
         }
         /// <summary>
@@ -189,17 +189,22 @@ namespace SpaceGassApi.Job.Structure.NodeConstraints
         public partial class NodeConstraintsRequestBuilderGetQueryParameters 
         {
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Filter by master node number — returns only constraints whose master node matches.Omit to return constraints regardless of master.</summary>
+            [QueryParameter("masterNode")]
             public int? MasterNode { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
             /// <summary>Slave node Ids to filter by, in SG list format (e.g. `&quot;1,5-10,15&quot;`).Omit to return all constraints.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("slaves")]
             public string? Slaves { get; set; }
 #nullable restore
 #else
+            [QueryParameter("slaves")]
             public string Slaves { get; set; }
 #endif
         }

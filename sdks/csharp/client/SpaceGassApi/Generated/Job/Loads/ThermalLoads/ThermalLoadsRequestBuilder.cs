@@ -46,7 +46,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ThermalLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/thermal-loads{?ElementType*,Elements*,Limit*,LoadCases*,LoadCategory*,Offset*}", pathParameters)
+        public ThermalLoadsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/thermal-loads{?elementType*,elements*,limit*,loadCases*,loadCategory*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -54,7 +54,7 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ThermalLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/thermal-loads{?ElementType*,Elements*,Limit*,LoadCases*,LoadCategory*,Offset*}", rawUrl)
+        public ThermalLoadsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/thermal-loads{?elementType*,elements*,limit*,loadCases*,loadCategory*,offset*}", rawUrl)
         {
         }
         /// <summary>
@@ -179,36 +179,45 @@ namespace SpaceGassApi.Job.Loads.ThermalLoads
             /// <summary>Element Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).The meaning depends on ElementType — member Id for members, plate Id for plates.Omit to return thermal loads for all elements.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("elements")]
             public string? Elements { get; set; }
 #nullable restore
 #else
+            [QueryParameter("elements")]
             public string Elements { get; set; }
 #endif
             /// <summary>Filter by element type (member or plate).Returns only thermal loads for the specified element type.Omit to return both member and plate thermal loads.</summary>
             [Obsolete("This property is deprecated, use ElementTypeAsThermalElementType instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("elementType")]
             public string? ElementType { get; set; }
 #nullable restore
 #else
+            [QueryParameter("elementType")]
             public string ElementType { get; set; }
 #endif
             /// <summary>Filter by element type (member or plate).Returns only thermal loads for the specified element type.Omit to return both member and plate thermal loads.</summary>
-            [QueryParameter("ElementType")]
+            [QueryParameter("elementType")]
             public global::SpaceGassApi.Models.ThermalElementType? ElementTypeAsThermalElementType { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Load cases to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only loads belonging to the specified load cases.Omit to return loads for all load cases.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("loadCases")]
             public string? LoadCases { get; set; }
 #nullable restore
 #else
+            [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
             /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
+            [QueryParameter("loadCategory")]
             public int? LoadCategory { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
         }
         /// <summary>

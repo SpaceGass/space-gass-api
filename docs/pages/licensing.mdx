@@ -48,42 +48,42 @@ or delete entities, run analyses, or save files.
 
 ### Switching Modes
 
-Use the `POST /service/mode` endpoint to transition between modes:
+Use the `POST /service/access-mode` endpoint to transition between modes:
 
 <CodeTabs>
 ```csharp title="C#"
 // Switch to readonly — releases the SPACE GASS license seat
-await client.Service.Mode.PostAsync(new ApiModeUpdate { Mode = "readonly" });
+await client.Service.AccessMode.PostAsync(new AccessModeUpdate { AccessMode = AccessMode.ReadOnly });
 
 // Switch back to readwrite — re-acquires the license seat
-await client.Service.Mode.PostAsync(new ApiModeUpdate { Mode = "readwrite" });
+await client.Service.AccessMode.PostAsync(new AccessModeUpdate { AccessMode = AccessMode.ReadWrite });
 ```
 
 ```python title="Python"
 # Switch to readonly — releases the SPACE GASS license seat
-await client.service.mode.post(models.ApiModeUpdate(mode="readonly"))
+await client.service.access_mode.post(models.AccessModeUpdate(access_mode=models.AccessMode.ReadOnly))
 
 # Switch back to readwrite — re-acquires the license seat
-await client.service.mode.post(models.ApiModeUpdate(mode="readwrite"))
+await client.service.access_mode.post(models.AccessModeUpdate(access_mode=models.AccessMode.ReadWrite))
 ```
 
 ```bash title="curl"
 # Switch to readonly
-curl -X POST http://localhost:34560/api/v1/service/mode \
+curl -X POST http://localhost:34560/api/v1/service/access-mode \
   -H "Content-Type: application/json" \
-  -d '{"mode": "readonly"}'
+  -d '{"accessMode": "ReadOnly"}'
 
 # Switch back to readwrite
-curl -X POST http://localhost:34560/api/v1/service/mode \
+curl -X POST http://localhost:34560/api/v1/service/access-mode \
   -H "Content-Type: application/json" \
-  -d '{"mode": "readwrite"}'
+  -d '{"accessMode": "ReadWrite"}'
 ```
 </CodeTabs>
 
 If a job is open when you switch to readonly, the transition is
 **queued** (HTTP 202) and commits when the job closes. Check the
-current mode and any pending transition via `GET /service/mode` or
-the `mode` field on `GET /service/status`.
+current mode and any pending transition via `GET /service/access-mode`
+(the `accessMode` and `pendingAccessMode` fields).
 
 If the license seat cannot be re-acquired when switching back to
 readwrite (e.g. all seats are in use), the API returns `409 Conflict`

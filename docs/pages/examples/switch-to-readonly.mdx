@@ -27,8 +27,8 @@ using SpaceGassApi.Models;
 var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
 // Switch to readonly before opening — no SPACE GASS seat consumed
-await client.Service.Mode.PostAsync(
-    new ApiModeUpdate { Mode = "readonly" });
+await client.Service.AccessMode.PostAsync(
+    new AccessModeUpdate { AccessMode = AccessMode.ReadOnly });
 
 try
 {
@@ -48,8 +48,8 @@ finally
     await client.Job.Close.PostAsync();
 
     // Restore readwrite when finished
-    await client.Service.Mode.PostAsync(
-        new ApiModeUpdate { Mode = "readwrite" });
+    await client.Service.AccessMode.PostAsync(
+        new AccessModeUpdate { AccessMode = AccessMode.ReadWrite });
 }
 ```
 
@@ -60,8 +60,8 @@ import space_gass_api.models as models
 client = SpaceGassApiClient.create_client("http://localhost:34560")
 
 # Switch to readonly before opening — no SPACE GASS seat consumed
-await client.service.mode.post(
-    models.ApiModeUpdate(mode="readonly"))
+await client.service.access_mode.post(
+    models.AccessModeUpdate(access_mode=models.AccessMode.ReadOnly))
 
 try:
     await client.job.open_sample.post(
@@ -76,15 +76,15 @@ finally:
     await client.job.close.post()
 
     # Restore readwrite when finished
-    await client.service.mode.post(
-        models.ApiModeUpdate(mode="readwrite"))
+    await client.service.access_mode.post(
+        models.AccessModeUpdate(access_mode=models.AccessMode.ReadWrite))
 ```
 
 ```bash title="curl"
 # Switch to readonly
-curl -X POST http://localhost:34560/api/v1/service/mode \
+curl -X POST http://localhost:34560/api/v1/service/access-mode \
   -H "Content-Type: application/json" \
-  -d '{"mode": "readonly"}'
+  -d '{"accessMode": "ReadOnly"}'
 
 # Open a sample (read-only — no SPACE GASS seat consumed)
 curl -X POST http://localhost:34560/api/v1/job/open-sample \
@@ -96,15 +96,15 @@ curl http://localhost:34560/api/v1/job/query/analysis/static/node-reactions
 
 # Close and restore readwrite
 curl -X POST http://localhost:34560/api/v1/job/close
-curl -X POST http://localhost:34560/api/v1/service/mode \
+curl -X POST http://localhost:34560/api/v1/service/access-mode \
   -H "Content-Type: application/json" \
-  -d '{"mode": "readwrite"}'
+  -d '{"accessMode": "ReadWrite"}'
 ```
 </CodeTabs>
 
 ### What if a job is already open?
 
-If you call `POST /service/mode` with `"readonly"` while a job is open,
+If you call `POST /service/access-mode` with `"ReadOnly"` while a job is open,
 the API returns **202 Accepted** — the transition is queued and commits
 when the job closes. Close the job first if you need the mode to take
 effect immediately.
@@ -114,8 +114,8 @@ API returns **409 Conflict** and stays in readonly.
 
 ### Check the current mode
 
-Use `GET /service/mode` (or the `mode` field on `GET /service/status`)
-to see the active mode and any pending transition.
+Use `GET /service/access-mode` (the `accessMode` and `pendingAccessMode`
+fields) to see the active mode and any pending transition.
 
 ## See also
 

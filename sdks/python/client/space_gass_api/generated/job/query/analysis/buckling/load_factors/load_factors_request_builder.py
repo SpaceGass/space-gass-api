@@ -29,7 +29,7 @@ class LoadFactorsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/buckling/load-factors{?Limit*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/buckling/load-factors{?limit*,offset*}", path_parameters)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
@@ -100,20 +100,6 @@ class LoadFactorsRequestBuilder(BaseRequestBuilder):
         """
         Gets buckling load factor results for all load cases and modes.
         """
-        def get_query_parameter(self,original_name: str) -> str:
-            """
-            Maps the query parameters names to their encoded names for the URI template parsing.
-            param original_name: The original query parameter name in the class.
-            Returns: str
-            """
-            if original_name is None:
-                raise TypeError("original_name cannot be null.")
-            if original_name == "limit":
-                return "Limit"
-            if original_name == "offset":
-                return "Offset"
-            return original_name
-        
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 

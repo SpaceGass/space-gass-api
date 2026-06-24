@@ -72,7 +72,7 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodeRestraintsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/node-restraints{?Limit*,Nodes*,Offset*}", pathParameters)
+        public NodeRestraintsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/node-restraints{?limit*,nodes*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -80,7 +80,7 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodeRestraintsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/node-restraints{?Limit*,Nodes*,Offset*}", rawUrl)
+        public NodeRestraintsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/node-restraints{?limit*,nodes*,offset*}", rawUrl)
         {
         }
         /// <summary>
@@ -201,16 +201,20 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints
         public partial class NodeRestraintsRequestBuilderGetQueryParameters 
         {
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Node Ids to filter restraints by, in SG list format (e.g. `&quot;1,5-10,15&quot;`).Omit to return all restraints.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("nodes")]
             public string? Nodes { get; set; }
 #nullable restore
 #else
+            [QueryParameter("nodes")]
             public string Nodes { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
         }
         /// <summary>

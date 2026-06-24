@@ -22,7 +22,7 @@ namespace SpaceGassApi.Job.Filters.Item
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public FiltersItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/filters/{id}{?Expand*}", pathParameters)
+        public FiltersItemRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/filters/{id}{?expand*}", pathParameters)
         {
         }
         /// <summary>
@@ -30,12 +30,13 @@ namespace SpaceGassApi.Job.Filters.Item
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public FiltersItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/filters/{id}{?Expand*}", rawUrl)
+        public FiltersItemRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/filters/{id}{?expand*}", rawUrl)
         {
         }
         /// <summary>
         /// Deletes a filter and all its sub-filter rows from the datasheet.
         /// </summary>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.DeleteResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
@@ -43,11 +44,11 @@ namespace SpaceGassApi.Job.Filters.Item
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.DeleteResult?> DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.DeleteResult> DeleteAsync(Action<RequestConfiguration<DefaultQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToDeleteRequestInformation(requestConfiguration);
@@ -57,7 +58,7 @@ namespace SpaceGassApi.Job.Filters.Item
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            await RequestAdapter.SendNoContentAsync(requestInfo, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.DeleteResult>(requestInfo, global::SpaceGassApi.Models.DeleteResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Returns a single named filter by Id. The response includes everysub-filter (active or not) — inactive blocks have `isActive = false`and default criterion fields.
@@ -204,13 +205,15 @@ namespace SpaceGassApi.Job.Filters.Item
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("expand")]
             public string? Expand { get; set; }
 #nullable restore
 #else
+            [QueryParameter("expand")]
             public string Expand { get; set; }
 #endif
             /// <summary>Sub-resource expansion. No expandable sub-resources in v1.</summary>
-            [QueryParameter("Expand")]
+            [QueryParameter("expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
         }
         /// <summary>

@@ -34,7 +34,7 @@ try
     Console.WriteLine("Creating materials...");
 
     var steel = await client.Job.Structure.Materials.PostAsync(
-        new MaterialCreate
+        new MaterialUserCreate
         {
             Name = "350 Grade Steel",
             YoungsModulus = 200000.0,    // MPa
@@ -52,7 +52,7 @@ try
 
     // -- Create a concrete material --------------------------------
     var concrete = await client.Job.Structure.Materials.PostAsync(
-        new MaterialCreate
+        new MaterialUserCreate
         {
             Name = "40 MPa Concrete",
             YoungsModulus = 32800.0,     // MPa

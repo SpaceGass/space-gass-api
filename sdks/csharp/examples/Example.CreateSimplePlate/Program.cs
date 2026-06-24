@@ -51,7 +51,7 @@ try
     // == Step 2 — Add a user-defined material =====================
     Console.WriteLine("Adding 25 MPa concrete material...");
     var concrete = await client.Job.Structure.Materials.PostAsync(
-        new MaterialCreate
+        new MaterialUserCreate
         {
             Name = "25 MPa Concrete",
             YoungsModulus = 26700.0,       // MPa
