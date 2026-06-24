@@ -72,7 +72,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CombinationLoadCasesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/combination-load-cases{?Expand*,Limit*,LoadCases*,Offset*,TitleSearch*}", pathParameters)
+        public CombinationLoadCasesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/combination-load-cases{?expand*,limit*,loadCases*,offset*,titleSearch*}", pathParameters)
         {
         }
         /// <summary>
@@ -80,7 +80,7 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CombinationLoadCasesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/combination-load-cases{?Expand*,Limit*,LoadCases*,Offset*,TitleSearch*}", rawUrl)
+        public CombinationLoadCasesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/combination-load-cases{?expand*,limit*,loadCases*,offset*,titleSearch*}", rawUrl)
         {
         }
         /// <summary>
@@ -204,32 +204,40 @@ namespace SpaceGassApi.Job.Loads.CombinationLoadCases
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("expand")]
             public string? Expand { get; set; }
 #nullable restore
 #else
+            [QueryParameter("expand")]
             public string Expand { get; set; }
 #endif
             /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate combination items.</summary>
-            [QueryParameter("Expand")]
+            [QueryParameter("expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Combination case Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all combination cases.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("loadCases")]
             public string? LoadCases { get; set; }
 #nullable restore
 #else
+            [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
             /// <summary>Search text to filter by title (case-insensitive contains).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("titleSearch")]
             public string? TitleSearch { get; set; }
 #nullable restore
 #else
+            [QueryParameter("titleSearch")]
             public string TitleSearch { get; set; }
 #endif
         }

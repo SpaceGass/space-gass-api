@@ -281,6 +281,9 @@ from ..generated.models.prescribed_displacement_key_bulk_result import Prescribe
 from ..generated.models.prescribed_displacement_update import PrescribedDisplacementUpdate
 from ..generated.models.property_source import PropertySource
 from ..generated.models.query_warnings import QueryWarnings
+from ..generated.models.reaction_summary import ReactionSummary
+from ..generated.models.reaction_summary_query_result import ReactionSummaryQueryResult
+from ..generated.models.reaction_summary_type import ReactionSummaryType
 from ..generated.models.registration_status import RegistrationStatus
 from ..generated.models.resource_metadata import ResourceMetadata
 from ..generated.models.save_job_request import SaveJobRequest
@@ -596,6 +599,9 @@ __all__ = [
     "PrescribedDisplacementUpdate",
     "PropertySource",
     "QueryWarnings",
+    "ReactionSummary",
+    "ReactionSummaryQueryResult",
+    "ReactionSummaryType",
     "RegistrationStatus",
     "ResourceMetadata",
     "SaveJobRequest",

@@ -25,14 +25,6 @@ namespace SpaceGassApi.Models
         public double? EndWidthLeft { get; set; }
         /// <summary>Right width at the end of the strip.</summary>
         public double? EndWidthRight { get; set; }
-        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Guid { get; set; }
-#nullable restore
-#else
-        public string Guid { get; set; }
-#endif
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
         public int? Id { get; set; }
         /// <summary>Out-of-plane tolerance for the strip.</summary>
@@ -87,7 +79,6 @@ namespace SpaceGassApi.Models
                 { "endPlate", n => { EndPlate = n.GetIntValue(); } },
                 { "endWidthLeft", n => { EndWidthLeft = n.GetDoubleValue(); } },
                 { "endWidthRight", n => { EndWidthRight = n.GetDoubleValue(); } },
-                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "outOfPlaneTolerance", n => { OutOfPlaneTolerance = n.GetDoubleValue(); } },
                 { "startNode", n => { StartNode = n.GetIntValue(); } },
@@ -115,7 +106,6 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("endPlate", EndPlate);
             writer.WriteDoubleValue("endWidthLeft", EndWidthLeft);
             writer.WriteDoubleValue("endWidthRight", EndWidthRight);
-            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("outOfPlaneTolerance", OutOfPlaneTolerance);
             writer.WriteIntValue("startNode", StartNode);

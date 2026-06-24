@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeReactions
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodeReactionsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node-reactions{?Limit*,Offset*,loadCases*,nodes*}", pathParameters)
+        public NodeReactionsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node-reactions{?limit*,loadCases*,nodes*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,11 +36,11 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeReactions
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodeReactionsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node-reactions{?Limit*,Offset*,loadCases*,nodes*}", rawUrl)
+        public NodeReactionsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node-reactions{?limit*,loadCases*,nodes*,offset*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets reaction results for nodes, optionally filtered by load cases and node Ids.
+        /// Gets reaction results at restrained nodes, optionally filtered by load cases and node Ids.Returns per-node reactions only — the per-load-case equilibrium totals (sum of loads,sum of reactions, maximum residuals) are available from `GET reaction-summary`.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.NodeReactionQueryResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -71,7 +71,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeReactions
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.NodeReactionQueryResult>(requestInfo, global::SpaceGassApi.Models.NodeReactionQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets reaction results for nodes, optionally filtered by load cases and node Ids.
+        /// Gets reaction results at restrained nodes, optionally filtered by load cases and node Ids.Returns per-node reactions only — the per-load-case equilibrium totals (sum of loads,sum of reactions, maximum residuals) are available from `GET reaction-summary`.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -99,12 +99,13 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeReactions
             return new global::SpaceGassApi.Job.Query.Analysis.Static.NodeReactions.NodeReactionsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets reaction results for nodes, optionally filtered by load cases and node Ids.
+        /// Gets reaction results at restrained nodes, optionally filtered by load cases and node Ids.Returns per-node reactions only — the per-load-case equilibrium totals (sum of loads,sum of reactions, maximum residuals) are available from `GET reaction-summary`.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class NodeReactionsRequestBuilderGetQueryParameters 
         {
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Load case Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -127,6 +128,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeReactions
             public string Nodes { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
         }
         /// <summary>

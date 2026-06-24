@@ -66,7 +66,7 @@ namespace SpaceGassApi.Job.Loads.LoadCategories
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public LoadCategoriesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-categories{?Categories*,Expand*,Limit*,Offset*,TitleSearch*}", pathParameters)
+        public LoadCategoriesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-categories{?categories*,expand*,limit*,offset*,titleSearch*}", pathParameters)
         {
         }
         /// <summary>
@@ -74,7 +74,7 @@ namespace SpaceGassApi.Job.Loads.LoadCategories
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public LoadCategoriesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-categories{?Categories*,Expand*,Limit*,Offset*,TitleSearch*}", rawUrl)
+        public LoadCategoriesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/loads/load-categories{?categories*,expand*,limit*,offset*,titleSearch*}", rawUrl)
         {
         }
         /// <summary>
@@ -197,33 +197,41 @@ namespace SpaceGassApi.Job.Loads.LoadCategories
             /// <summary>Category Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all categories.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("categories")]
             public string? Categories { get; set; }
 #nullable restore
 #else
+            [QueryParameter("categories")]
             public string Categories { get; set; }
 #endif
             /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("expand")]
             public string? Expand { get; set; }
 #nullable restore
 #else
+            [QueryParameter("expand")]
             public string Expand { get; set; }
 #endif
             /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
-            [QueryParameter("Expand")]
+            [QueryParameter("expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
             /// <summary>Search text to filter by title (case-insensitive contains).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("titleSearch")]
             public string? TitleSearch { get; set; }
 #nullable restore
 #else
+            [QueryParameter("titleSearch")]
             public string TitleSearch { get; set; }
 #endif
         }

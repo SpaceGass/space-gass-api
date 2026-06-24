@@ -9,8 +9,6 @@ class MemberPrestressLoad(Parsable):
     """
     DTO for reading a member prestress load entity.Represents a prestress force applied to a member.
     """
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # The load case number this load belongs to.
     load_case: Optional[int] = None
     # Load category for grouping/organization.
@@ -37,7 +35,6 @@ class MemberPrestressLoad(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
@@ -53,7 +50,6 @@ class MemberPrestressLoad(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_int_value("member", self.member)

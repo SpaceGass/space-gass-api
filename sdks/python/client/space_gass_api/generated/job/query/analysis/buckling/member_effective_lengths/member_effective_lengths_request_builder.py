@@ -29,7 +29,7 @@ class MemberEffectiveLengthsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?Limit*,Offset*,loadCases*,members*,modes*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?limit*,loadCases*,members*,modes*,offset*}", path_parameters)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
@@ -112,16 +112,16 @@ class MemberEffectiveLengthsRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "limit":
-                return "Limit"
             if original_name == "load_cases":
                 return "loadCases"
-            if original_name == "offset":
-                return "Offset"
+            if original_name == "limit":
+                return "limit"
             if original_name == "members":
                 return "members"
             if original_name == "modes":
                 return "modes"
+            if original_name == "offset":
+                return "offset"
             return original_name
         
         # Maximum number of items to return. Default is null (return all).

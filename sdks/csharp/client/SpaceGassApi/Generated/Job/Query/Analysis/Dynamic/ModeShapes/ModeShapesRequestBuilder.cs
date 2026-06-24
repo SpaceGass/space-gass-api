@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ModeShapesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?Limit*,Offset*,loadCases*,modes*,nodes*}", pathParameters)
+        public ModeShapesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?limit*,loadCases*,modes*,nodes*,offset*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ModeShapesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?Limit*,Offset*,loadCases*,modes*,nodes*}", rawUrl)
+        public ModeShapesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?limit*,loadCases*,modes*,nodes*,offset*}", rawUrl)
         {
         }
         /// <summary>
@@ -105,6 +105,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
         public partial class ModeShapesRequestBuilderGetQueryParameters 
         {
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Load case Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -137,6 +138,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
             public string Nodes { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
         }
         /// <summary>

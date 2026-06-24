@@ -175,6 +175,10 @@ namespace SpaceGassApi.Models
         #pragma warning disable CS1591
         NodeReactions,
         #pragma warning restore CS1591
+        [EnumMember(Value = "ReactionSummary")]
+        #pragma warning disable CS1591
+        ReactionSummary,
+        #pragma warning restore CS1591
         [EnumMember(Value = "MemberEndForces")]
         #pragma warning disable CS1591
         MemberEndForces,

@@ -72,7 +72,7 @@ namespace SpaceGassApi.Job.Filters
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public FiltersRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/filters{?Expand*,Filters*,Limit*,Offset*,Search*}", pathParameters)
+        public FiltersRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/filters{?expand*,filters*,limit*,offset*,search*}", pathParameters)
         {
         }
         /// <summary>
@@ -80,7 +80,7 @@ namespace SpaceGassApi.Job.Filters
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public FiltersRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/filters{?Expand*,Filters*,Limit*,Offset*,Search*}", rawUrl)
+        public FiltersRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/filters{?expand*,filters*,limit*,offset*,search*}", rawUrl)
         {
         }
         /// <summary>
@@ -204,32 +204,40 @@ namespace SpaceGassApi.Job.Filters
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("expand")]
             public string? Expand { get; set; }
 #nullable restore
 #else
+            [QueryParameter("expand")]
             public string Expand { get; set; }
 #endif
             /// <summary>Sub-resource expansion. Filters have no expandable sub-resources in v1; the parameter is accepted for API consistency.</summary>
-            [QueryParameter("Expand")]
+            [QueryParameter("expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Filter Ids to return, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all filters.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("filters")]
             public string? Filters { get; set; }
 #nullable restore
 #else
+            [QueryParameter("filters")]
             public string Filters { get; set; }
 #endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
             /// <summary>Search text matched case-insensitively against the filter `name`.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("search")]
             public string? Search { get; set; }
 #nullable restore
 #else
+            [QueryParameter("search")]
             public string Search { get; set; }
 #endif
         }

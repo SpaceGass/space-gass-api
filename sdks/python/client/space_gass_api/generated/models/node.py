@@ -15,8 +15,6 @@ class Node(Parsable):
     """
     # DTO for reading a node constraint (master-slave constraint).Defines a kinematic relationship between a slave node and a master node.The slave node's degrees of freedom are tied to the master node according to the constraint code.Top-level entity attribute keyed on the slave node — each node can be a slave in at most one constraint.
     constraint: Optional[NodeConstraint] = None
-    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
-    guid: Optional[str] = None
     # True when this node is the slave side of a master-slave constraint.A node can be the slave of at most one constraint.Use `?expand=all` to include the full `constraint` object.
     has_constraint: Optional[bool] = None
     # True when this node has an explicit restraint row defined.False means the node uses default restraints (all DOFs free, no spring stiffness).
@@ -56,7 +54,6 @@ class Node(Parsable):
 
         fields: dict[str, Callable[[Any], None]] = {
             "constraint": lambda n : setattr(self, 'constraint', n.get_object_value(NodeConstraint)),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "hasConstraint": lambda n : setattr(self, 'has_constraint', n.get_bool_value()),
             "hasRestraint": lambda n : setattr(self, 'has_restraint', n.get_bool_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
@@ -76,7 +73,6 @@ class Node(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_object_value("constraint", self.constraint)
-        writer.write_str_value("guid", self.guid)
         writer.write_bool_value("hasConstraint", self.has_constraint)
         writer.write_bool_value("hasRestraint", self.has_restraint)
         writer.write_int_value("id", self.id)

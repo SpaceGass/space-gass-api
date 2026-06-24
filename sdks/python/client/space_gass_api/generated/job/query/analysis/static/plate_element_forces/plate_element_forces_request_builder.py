@@ -29,7 +29,7 @@ class PlateElementForcesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/plate-element-forces{?Limit*,Offset*,loadCases*,plates*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/static/plate-element-forces{?limit*,loadCases*,offset*,plates*}", path_parameters)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
@@ -111,12 +111,12 @@ class PlateElementForcesRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "limit":
-                return "Limit"
             if original_name == "load_cases":
                 return "loadCases"
+            if original_name == "limit":
+                return "limit"
             if original_name == "offset":
-                return "Offset"
+                return "offset"
             if original_name == "plates":
                 return "plates"
             return original_name

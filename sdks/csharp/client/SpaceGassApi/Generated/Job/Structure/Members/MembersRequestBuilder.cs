@@ -78,7 +78,7 @@ namespace SpaceGassApi.Job.Structure.Members
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MembersRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members{?Expand*,Limit*,Material*,Members*,Offset*,Section*,Type*}", pathParameters)
+        public MembersRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members{?expand*,limit*,material*,members*,offset*,section*,type*}", pathParameters)
         {
         }
         /// <summary>
@@ -86,7 +86,7 @@ namespace SpaceGassApi.Job.Structure.Members
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MembersRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members{?Expand*,Limit*,Material*,Members*,Offset*,Section*,Type*}", rawUrl)
+        public MembersRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/structure/members{?expand*,limit*,material*,members*,offset*,section*,type*}", rawUrl)
         {
         }
         /// <summary>
@@ -210,41 +210,51 @@ namespace SpaceGassApi.Job.Structure.Members
             [Obsolete("This property is deprecated, use ExpandAsExpandOption instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("expand")]
             public string? Expand { get; set; }
 #nullable restore
 #else
+            [QueryParameter("expand")]
             public string Expand { get; set; }
 #endif
             /// <summary>Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.</summary>
-            [QueryParameter("Expand")]
+            [QueryParameter("expand")]
             public global::SpaceGassApi.Models.ExpandOption? ExpandAsExpandOption { get; set; }
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
+            [QueryParameter("limit")]
             public int? Limit { get; set; }
             /// <summary>Filter by material number.</summary>
+            [QueryParameter("material")]
             public int? Material { get; set; }
             /// <summary>Member Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to return all members.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("members")]
             public string? Members { get; set; }
 #nullable restore
 #else
+            [QueryParameter("members")]
             public string Members { get; set; }
 #endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
+            [QueryParameter("offset")]
             public int? Offset { get; set; }
             /// <summary>Filter by section number.</summary>
+            [QueryParameter("section")]
             public int? Section { get; set; }
             /// <summary>Filter by member type (Normal, TensionOnly, CompressionOnly, Cable, Gap, BrittleFuse, PlasticFuse).</summary>
             [Obsolete("This property is deprecated, use TypeAsMemberType instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
+            [QueryParameter("type")]
             public string? Type { get; set; }
 #nullable restore
 #else
+            [QueryParameter("type")]
             public string Type { get; set; }
 #endif
             /// <summary>Filter by member type (Normal, TensionOnly, CompressionOnly, Cable, Gap, BrittleFuse, PlasticFuse).</summary>
-            [QueryParameter("Type")]
+            [QueryParameter("type")]
             public global::SpaceGassApi.Models.MemberType? TypeAsMemberType { get; set; }
         }
         /// <summary>

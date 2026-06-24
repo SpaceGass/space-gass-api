@@ -32,7 +32,7 @@ class LumpedMassLoadsRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/loads/lumped-mass-loads{?Limit*,LoadCases*,LoadCategory*,Nodes*,Offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/loads/lumped-mass-loads{?limit*,loadCases*,loadCategory*,nodes*,offset*}", path_parameters)
     
     def by_case_id(self,case_id: int) -> WithCaseItemRequestBuilder:
         """
@@ -179,16 +179,16 @@ class LumpedMassLoadsRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
-            if original_name == "limit":
-                return "Limit"
             if original_name == "load_cases":
-                return "LoadCases"
+                return "loadCases"
             if original_name == "load_category":
-                return "LoadCategory"
+                return "loadCategory"
+            if original_name == "limit":
+                return "limit"
             if original_name == "nodes":
-                return "Nodes"
+                return "nodes"
             if original_name == "offset":
-                return "Offset"
+                return "offset"
             return original_name
         
         # Maximum number of items to return. Default is null (return all).

@@ -43,6 +43,7 @@ class EntityId(str, Enum):
     AnalysisSettings = "AnalysisSettings",
     NodeDisplacements = "NodeDisplacements",
     NodeReactions = "NodeReactions",
+    ReactionSummary = "ReactionSummary",
     MemberEndForces = "MemberEndForces",
     MemberIntermediateForces = "MemberIntermediateForces",
     MemberIntermediateDisplacements = "MemberIntermediateDisplacements",

@@ -11,6 +11,7 @@ using SpaceGassApi.Job.Query.Analysis.Static.NodeReactions;
 using SpaceGassApi.Job.Query.Analysis.Static.PlateElementForces;
 using SpaceGassApi.Job.Query.Analysis.Static.PlateElementStresses;
 using SpaceGassApi.Job.Query.Analysis.Static.PlateNodalForces;
+using SpaceGassApi.Job.Query.Analysis.Static.ReactionSummary;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -67,6 +68,11 @@ namespace SpaceGassApi.Job.Query.Analysis.Static
         public global::SpaceGassApi.Job.Query.Analysis.Static.PlateNodalForces.PlateNodalForcesRequestBuilder PlateNodalForces
         {
             get => new global::SpaceGassApi.Job.Query.Analysis.Static.PlateNodalForces.PlateNodalForcesRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The reactionSummary property</summary>
+        public global::SpaceGassApi.Job.Query.Analysis.Static.ReactionSummary.ReactionSummaryRequestBuilder ReactionSummary
+        {
+            get => new global::SpaceGassApi.Job.Query.Analysis.Static.ReactionSummary.ReactionSummaryRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Analysis.Static.StaticRequestBuilder"/> and sets the default values.
