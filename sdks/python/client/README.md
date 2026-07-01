@@ -11,7 +11,7 @@ pip install space-gass-api
 ```
 
 - Python 3.9+
-- [SPACE GASS](https://www.spacegass.com) installed with an active licence
+- [SPACE GASS](https://www.spacegass.com) **14.5 or later** installed with an active licence
 - The SPACE GASS API service running locally (default: `http://localhost:34560`)
 
 ## Quick start
