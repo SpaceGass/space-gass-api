@@ -183,7 +183,7 @@ const config: ZudokuConfig = {
     "head-navigation-end": (
       <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
         <a
-          href="https://github.com/Spacegass/space-gass-api"
+          href="https://github.com/SpaceGass/space-gass-api"
           target="_blank"
           rel="noopener noreferrer"
           title="GitHub"
@@ -464,7 +464,7 @@ const config: ZudokuConfig = {
     },
     defaultOptions: {
       suggestEdit: {
-        url: "https://github.com/Spacegass/space-gass-api/edit/main/docs/pages",
+        url: "https://github.com/SpaceGass/space-gass-api/edit/main/docs/pages",
       },
     },
   },
