@@ -439,6 +439,14 @@ const config: ZudokuConfig = {
     //   options: { ... },
     // },
   ],
+  // Generates sitemap.xml at build time into the deploy artifact (dist/docs/sitemap.xml,
+  // served at /docs/sitemap.xml). Azure Front Door rewrites the apex /sitemap.xml to it.
+  // Entries are absolute: siteUrl + basePath + page (e.g. https://api.spacegass.com/docs/quick-start).
+  sitemap: {
+    siteUrl: "https://api.spacegass.com",
+    changefreq: "weekly",
+    priority: 0.7,
+  },
   search: {
     type: "pagefind",
   },

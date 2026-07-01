@@ -6,6 +6,12 @@ Project context and decisions for the `space-gass-api` repository.
 
 This is the public developer-facing repo for the SPACE GASS API. It contains the OpenAPI spec, auto-generated Kiota SDKs, hand-crafted examples, and a Zudoku documentation site deployed to GitHub Pages.
 
+### Agent-facing SDK usage
+
+Cross-tool agent instructions (install, `CreateClient()`, base URL, async/analysis rules, key resources) live in `AGENTS.md` at the repo root — imported below so Claude Code loads it too. Keep SDK *usage* guidance in `AGENTS.md`; keep repo *maintenance* decisions in this file.
+
+@AGENTS.md
+
 ## Key Decisions
 
 ### Branching

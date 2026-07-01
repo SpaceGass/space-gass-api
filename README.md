@@ -80,6 +80,32 @@ finally:
 
 For the full walk-through see the [Quick Start](https://api.spacegass.com/docs/getting-started/quick-start). More examples are in `sdks/csharp/examples/` and `sdks/python/examples/`, or clone the repo and browse.
 
+## Using with AI coding agents
+
+Writing scripts against this API with an AI assistant (Claude Code, Cursor, Copilot, ChatGPT, etc.)? Point the agent at the resources below rather than letting it crawl this repo — the docs bundle and OpenAPI spec are single, clean, machine-readable fetches.
+
+- **Full docs bundle for LLMs:** <https://api.spacegass.com/docs/llms-full.txt>
+- **Docs index:** <https://api.spacegass.com/docs/llms.txt>
+- **OpenAPI spec (JSON):** <https://api.spacegass.com/docs/api/1/schema.json>
+- **This repo as an MCP server** (lets an agent search the docs, examples, and code with zero setup): <https://gitmcp.io/SpaceGass/space-gass-api>
+- **Repo-root agent instructions:** [`AGENTS.md`](AGENTS.md)
+
+Paste this to prime an agent:
+
+```
+You have access to the SPACE GASS structural-analysis API — a LOCAL, no-auth
+service at http://localhost:34560 (base path /api/v1). Load these first:
+- Full docs bundle:  https://api.spacegass.com/docs/llms-full.txt
+- OpenAPI spec:      https://api.spacegass.com/docs/api/1/schema.json
+- Repo via GitMCP:   https://gitmcp.io/SpaceGass/space-gass-api
+
+SDKs (Kiota, fluent builder chains, async):
+- Python:  pip install space-gass-api    ->  from space_gass_api import SpaceGassApiClient
+- C#:      dotnet add package SpaceGassApi
+Both expose SpaceGassApiClient.CreateClient() (no auth, base URL auto-set).
+Use raw.githubusercontent.com for repo files, never /blob/ URLs.
+```
+
 ## Descriptions & Client Generation
 
 The C# and Python SDKs are auto-generated using [Kiota](https://learn.microsoft.com/en-us/openapi/kiota/) from the current spec (`descriptions/current/`). Previously released specs are kept in `descriptions/archive/` for reference.
