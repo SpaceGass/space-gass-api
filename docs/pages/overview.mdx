@@ -70,6 +70,23 @@ letting it crawl the source repo:
 - **Repo as an MCP server** (search docs, examples, and code with zero setup):
   [`gitmcp.io/SpaceGass/space-gass-api`](https://gitmcp.io/SpaceGass/space-gass-api)
 
+Or paste this primer straight into your AI assistant to point it at everything
+in one step:
+
+```text
+You have access to the SPACE GASS structural-analysis API — a LOCAL, no-auth
+service at http://localhost:34560 (base path /api/v1). Load these first:
+- Full docs bundle:  https://api.spacegass.com/docs/llms-full.txt
+- OpenAPI spec:      https://api.spacegass.com/docs/api/1/schema.json
+- Repo via GitMCP:   https://gitmcp.io/SpaceGass/space-gass-api
+
+SDKs (Kiota, fluent builder chains, async):
+- Python:  pip install space-gass-api    ->  from space_gass_api import SpaceGassApiClient
+- C#:      dotnet add package SpaceGassApi
+Both expose SpaceGassApiClient.CreateClient() (no auth, base URL auto-set).
+Use raw.githubusercontent.com for repo files, never /blob/ URLs.
+```
+
 ## Next Steps
 
 - [Quick Start](/quick-start) — Get up and running
