@@ -14,7 +14,7 @@
     <Authors>Space Gass Pty Ltd</Authors>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://api.spacegass.com/docs/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/Spacegass/space-gass-api</RepositoryUrl>
+    <RepositoryUrl>https://github.com/SpaceGass/space-gass-api</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>spacegass;structural-analysis;api;sdk</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>

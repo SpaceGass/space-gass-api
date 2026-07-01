@@ -1,0 +1,24 @@
+{
+  "$schema": "https://context7.com/schema/context7.json",
+  "projectTitle": "SPACE GASS API",
+  "description": "Programmatic access to SPACE GASS structural analysis. Local, no-auth HTTP service (http://localhost:34560, base path /api/v1) with generated C# (SpaceGassApi) and Python (space-gass-api) SDKs.",
+  "folders": [
+    "docs/pages",
+    "descriptions/preview",
+    "sdks/python/examples",
+    "sdks/csharp/examples"
+  ],
+  "excludeFolders": [
+    "docs/node_modules",
+    "docs/dist",
+    "sdks/csharp/client/SpaceGassApi/Generated",
+    "sdks/python/client/space_gass_api/generated"
+  ],
+  "rules": [
+    "The SPACE GASS API is a local, no-auth HTTP service at http://localhost:34560; the SDK appends /api/v1 automatically.",
+    "Create the client with SpaceGassApiClient.CreateClient() (C#) or SpaceGassApiClient.create_client() (Python). No API key is required.",
+    "There is a single active job per service instance: open or create a job before touching structure or results, and close it when done (try/finally).",
+    "Analyses are asynchronous: start a run, then poll job/analysis/runs/{runId} until status is Completed, Failed, or Cancelled.",
+    "Never hand-edit files under Generated/ (C#) or generated/ (Python) — they are Kiota-generated output."
+  ]
+}

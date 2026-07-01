@@ -25,8 +25,8 @@ dependencies = [
 
 [project.urls]
 Documentation = "https://api.spacegass.com/docs/"
-Repository = "https://github.com/Spacegass/space-gass-api"
-Issues = "https://github.com/Spacegass/space-gass-api/issues"
+Repository = "https://github.com/SpaceGass/space-gass-api"
+Issues = "https://github.com/SpaceGass/space-gass-api/issues"
 
 [tool.setuptools.packages.find]
 include = ["space_gass_api*"]

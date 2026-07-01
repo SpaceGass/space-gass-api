@@ -183,7 +183,7 @@ const config: ZudokuConfig = {
     "head-navigation-end": (
       <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
         <a
-          href="https://github.com/Spacegass/space-gass-api"
+          href="https://github.com/SpaceGass/space-gass-api"
           target="_blank"
           rel="noopener noreferrer"
           title="GitHub"
@@ -439,6 +439,14 @@ const config: ZudokuConfig = {
     //   options: { ... },
     // },
   ],
+  // Generates sitemap.xml at build time into the deploy artifact (dist/docs/sitemap.xml,
+  // served at /docs/sitemap.xml). Azure Front Door rewrites the apex /sitemap.xml to it.
+  // Entries are absolute: siteUrl + basePath + page (e.g. https://api.spacegass.com/docs/quick-start).
+  sitemap: {
+    siteUrl: "https://api.spacegass.com",
+    changefreq: "weekly",
+    priority: 0.7,
+  },
   search: {
     type: "pagefind",
   },
@@ -456,7 +464,7 @@ const config: ZudokuConfig = {
     },
     defaultOptions: {
       suggestEdit: {
-        url: "https://github.com/Spacegass/space-gass-api/edit/main/docs/pages",
+        url: "https://github.com/SpaceGass/space-gass-api/edit/main/docs/pages",
       },
     },
   },

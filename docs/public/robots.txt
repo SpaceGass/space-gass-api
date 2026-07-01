@@ -1,0 +1,37 @@
+# SPACE GASS API — robots.txt
+# Served at https://api.spacegass.com/robots.txt (see Azure Front Door routing).
+# AI crawlers and documentation agents are explicitly welcome.
+
+User-agent: *
+Allow: /
+
+# Named AI / agent crawlers (explicit allow so access is unambiguous)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+# LLM-friendly entry points:
+#   https://api.spacegass.com/llms.txt
+#   https://api.spacegass.com/llms-full.txt
+
+Sitemap: https://api.spacegass.com/sitemap.xml
