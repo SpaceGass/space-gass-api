@@ -222,7 +222,7 @@ const config: ZudokuConfig = {
     banner: {
       message: (
         <div className="text-center">
-          🚀 Engineer the Future with the new SPACE GASS API (COMING SOON!)
+          🚀 The SPACE GASS API is here — available in SPACE GASS 14.5
         </div>
       ),
       color: "#f97316",
