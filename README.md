@@ -2,7 +2,8 @@
 
 Official SPACE GASS API specifications, developer SDKs, and automation examples.
 
-**Developer docs:** [api.spacegass.com/docs](https://api.spacegass.com/docs/)
+**Developer docs:** [api.spacegass.com/docs](https://api.spacegass.com/docs/)\
+**Developer docs (for AI agents):** [api.spacegass.com/docs/llms-full.txt](https://api.spacegass.com/docs/llms-full.txt)
 
 ## Overview
 
