@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -34,7 +34,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/member-concentrated-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[MemberConcentratedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberConcentratedLoadKeyBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[MemberConcentratedLoadKey],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MemberConcentratedLoadKeyBulkResult]: ...
+    @overload
+    async def delete(self, body: list[MemberConcentratedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberConcentratedLoadKeyBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[MemberConcentratedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[MemberConcentratedLoadKeyBulkResult]:
         """
         Deletes multiple member concentrated loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
@@ -60,7 +71,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MemberConcentratedLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[MemberConcentratedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberConcentratedLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[MemberConcentratedLoadUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MemberConcentratedLoadBulkResult]: ...
+    @overload
+    async def patch(self, body: list[MemberConcentratedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberConcentratedLoadBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[MemberConcentratedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[MemberConcentratedLoadBulkResult]:
         """
         Updates multiple member concentrated loads. Each item must include case, member, and subLoad in the body.All load cases referenced must be Primary.
         param body: The request body
@@ -86,7 +108,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MemberConcentratedLoadBulkResult, error_mapping)
     
-    async def post(self,body: list[MemberConcentratedLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberConcentratedLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[MemberConcentratedLoadCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MemberConcentratedLoadBulkResult]: ...
+    @overload
+    async def post(self, body: list[MemberConcentratedLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberConcentratedLoadBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[MemberConcentratedLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[MemberConcentratedLoadBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body

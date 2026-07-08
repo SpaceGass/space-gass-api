@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -33,7 +33,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/node-restraints/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[int],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[BulkDeletedBulkResult]: ...
+    @overload
+    async def delete(self, body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[BulkDeletedBulkResult]:
         """
         Deletes multiple attribute rows by parent Id. The body is a JSON array of integer parent Ids.
         param body: The request body
@@ -59,7 +70,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
     
-    async def patch(self,body: list[NodeRestraintUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[NodeRestraintBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[NodeRestraintUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[NodeRestraintBulkResult]: ...
+    @overload
+    async def patch(self, body: list[NodeRestraintUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[NodeRestraintBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[NodeRestraintUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[NodeRestraintBulkResult]:
         """
         Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
         param body: The request body
@@ -85,7 +107,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, NodeRestraintBulkResult, error_mapping)
     
-    async def post(self,body: list[NodeRestraintCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[NodeRestraintBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[NodeRestraintCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[NodeRestraintBulkResult]: ...
+    @overload
+    async def post(self, body: list[NodeRestraintCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[NodeRestraintBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[NodeRestraintCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[NodeRestraintBulkResult]:
         """
         Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
         param body: The request body

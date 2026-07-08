@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -34,7 +34,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/node-displacements/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[PrescribedDisplacementKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[PrescribedDisplacementKeyBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[PrescribedDisplacementKey],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[PrescribedDisplacementKeyBulkResult]: ...
+    @overload
+    async def delete(self, body: list[PrescribedDisplacementKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[PrescribedDisplacementKeyBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[PrescribedDisplacementKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[PrescribedDisplacementKeyBulkResult]:
         """
         Deletes multiple prescribed displacements. Both case and node are required for each entry —providing only a case does not delete all displacements for that case.The succeeded array echoes back the Ids of each successfully deleted displacement.
         param body: The request body
@@ -60,7 +71,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, PrescribedDisplacementKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[PrescribedDisplacementUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PrescribedDisplacementBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[PrescribedDisplacementUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[PrescribedDisplacementBulkResult]: ...
+    @overload
+    async def patch(self, body: list[PrescribedDisplacementUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PrescribedDisplacementBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[PrescribedDisplacementUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[PrescribedDisplacementBulkResult]:
         """
         Updates multiple prescribed displacements. Each item must include case and node in the body.All load cases referenced must be Primary.
         param body: The request body
@@ -86,7 +108,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, PrescribedDisplacementBulkResult, error_mapping)
     
-    async def post(self,body: list[PrescribedDisplacementCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[PrescribedDisplacementBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[PrescribedDisplacementCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[PrescribedDisplacementBulkResult]: ...
+    @overload
+    async def post(self, body: list[PrescribedDisplacementCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[PrescribedDisplacementBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[PrescribedDisplacementCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[PrescribedDisplacementBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body

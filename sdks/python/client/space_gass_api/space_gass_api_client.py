@@ -2,7 +2,8 @@
 Hand-maintained client for the SPACE GASS API.
 
 Extends the Kiota-generated ``BaseSpaceGassApiClient`` with a
-``create_client()`` factory and the ``.get(**kwargs)`` enhancement.
+``create_client()`` factory and the keyword-query-parameter enhancement
+on ``get``/``post``/``patch``/``put``/``delete``.
 
 Lives inside the ``space_gass_api`` package but outside the
 ``generated/`` folder, so Kiota's ``--clean-output`` never touches it.
@@ -20,6 +21,10 @@ Usage:
 
     reactions = await client.job.query.analysis.static.node_reactions.get(
         cases="1,3-7", nodes="10-12")
+
+    # POST/PATCH/DELETE with keyword query parameters
+    result = await client.job.structure.nodes.bulk.post(
+        bodies, continue_on_error=True)
 """
 
 from __future__ import annotations
@@ -90,10 +95,11 @@ class SpaceGassApiClient(BaseSpaceGassApiClient):
         return SpaceGassApiClient(adapter)
 
 
-def _enhance_get_methods():
+def _enhance_request_methods():
     """Patch ``BaseRequestBuilder.__init_subclass__`` so every Kiota builder
-    whose class body contains a ``{ClassName}GetQueryParameters`` dataclass
-    gets its ``.get()`` wrapped to accept keyword arguments directly.
+    whose class body contains a ``{ClassName}{Verb}QueryParameters`` dataclass
+    gets that verb method (``get``/``post``/``patch``/``put``/``delete``)
+    wrapped to accept keyword query parameters directly.
 
     Must be called **once**, before any builder module is imported.  The
     auto-generated ``space_gass_api/__init__.py`` takes care of this.
@@ -101,35 +107,61 @@ def _enhance_get_methods():
     from kiota_abstractions.base_request_builder import BaseRequestBuilder
     from kiota_abstractions.base_request_configuration import RequestConfiguration
     import functools
+    import inspect
 
-    if getattr(BaseRequestBuilder, "_get_enhanced", False):
+    if getattr(BaseRequestBuilder, "_request_methods_enhanced", False):
         return
 
-    def _init_subclass(cls, **kwargs):
-        qp_name = f"{cls.__name__}GetQueryParameters"
-        qp_class = cls.__dict__.get(qp_name)
+    def _wrap(original, qp_class, label):
+        # Kiota emits `post(self, body, request_configuration=None)` when the
+        # endpoint has a request body and drops `body` when it doesn't, so the
+        # wrapper has to mirror whichever shape it is given.
+        has_body = "body" in inspect.signature(original).parameters
 
-        if qp_class is not None and "get" in cls.__dict__:
-            original_get = cls.__dict__["get"]
+        def _config_from(params, request_configuration):
+            if not params:
+                return request_configuration
+            if request_configuration is not None:
+                raise TypeError(
+                    f"Cannot pass both request_configuration and "
+                    f"keyword query parameters to {label}."
+                )
+            return RequestConfiguration(query_parameters=qp_class(**params))
 
-            @functools.wraps(original_get)
-            async def enhanced_get(self, request_configuration=None, **params):
-                if params:
-                    if request_configuration is not None:
-                        raise TypeError(
-                            f"Cannot pass both request_configuration and "
-                            f"keyword query parameters to "
-                            f"{type(self).__name__}.get()."
-                        )
-                    qp = qp_class(**params)
-                    request_configuration = RequestConfiguration(
-                        query_parameters=qp
-                    )
-                return await original_get(
-                    self, request_configuration=request_configuration
+        if has_body:
+
+            @functools.wraps(original)
+            async def enhanced(self, body, request_configuration=None, **params):
+                return await original(
+                    self,
+                    body,
+                    request_configuration=_config_from(params, request_configuration),
                 )
 
-            cls.get = enhanced_get
+        else:
+
+            @functools.wraps(original)
+            async def enhanced(self, request_configuration=None, **params):
+                return await original(
+                    self,
+                    request_configuration=_config_from(params, request_configuration),
+                )
+
+        return enhanced
+
+    def _init_subclass(cls, **kwargs):
+        for verb in ("get", "post", "patch", "put", "delete"):
+            qp_class = cls.__dict__.get(
+                f"{cls.__name__}{verb.capitalize()}QueryParameters"
+            )
+            original = cls.__dict__.get(verb)
+            if qp_class is None or original is None:
+                continue
+            setattr(
+                cls,
+                verb,
+                _wrap(original, qp_class, f"{cls.__name__}.{verb}()"),
+            )
 
     BaseRequestBuilder.__init_subclass__ = classmethod(_init_subclass)
-    BaseRequestBuilder._get_enhanced = True
+    BaseRequestBuilder._request_methods_enhanced = True

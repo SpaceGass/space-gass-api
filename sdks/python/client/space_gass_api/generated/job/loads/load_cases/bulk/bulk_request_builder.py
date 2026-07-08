@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -33,7 +33,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/load-cases/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[int],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[BulkDeletedBulkResult]: ...
+    @overload
+    async def delete(self, body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[BulkDeletedBulkResult]:
         """
         Deletes multiple load cases by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`). As with `DELETE /{id}`, this removes thetitle/notes/metadata only — assigned loads and combination items are preserved.
         param body: The request body
@@ -59,7 +70,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
     
-    async def patch(self,body: list[LoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[LoadCaseUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[LoadCaseBulkResult]: ...
+    @overload
+    async def patch(self, body: list[LoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[LoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[LoadCaseBulkResult]:
         """
         Partially updates multiple load cases. Each item must include its `id`.Validation runs upfront; with `continueOnError=false` (default) any failurerejects the whole request. With `continueOnError=true`, valid items are updatedand failures are reported per-item.
         param body: The request body
@@ -85,7 +107,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, LoadCaseBulkResult, error_mapping)
     
-    async def post(self,body: list[LoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LoadCaseBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[LoadCaseCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[LoadCaseBulkResult]: ...
+    @overload
+    async def post(self, body: list[LoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LoadCaseBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[LoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[LoadCaseBulkResult]:
         """
         Creates multiple load cases in a single request. Validation runs upfront on the wholerequest; if any item fails and `continueOnError` is false (default), the entirerequest is rejected. With `continueOnError=true`, valid items are created andfailures are reported per-item in the response.
         param body: The request body

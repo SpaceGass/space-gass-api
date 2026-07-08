@@ -72,7 +72,7 @@ finally { await client.Job.Close.PostAsync(); }
    or `Cancelled`. Do not assume results exist immediately after starting a run.
 3. **Never hand-edit generated code.** Files under `sdks/csharp/client/SpaceGassApi/Generated/`
    and `sdks/python/client/space_gass_api/generated/` are Kiota output and are overwritten.
-4. **Python `.get()` takes keyword query params** — e.g. `client.job.structure.nodes.get(node_type=models.NodeTypeFilter.Restrained)`. Names are the snake_case query-parameter fields.
+4. **Python query params are keyword args on the verb call** — e.g. `client.job.structure.nodes.get(node_type=models.NodeTypeFilter.Restrained)` or `client.job.structure.nodes.bulk.post(bodies, continue_on_error=True)`. Works on `get`/`post`/`patch`/`delete` wherever the endpoint defines query parameters; names are the snake_case query-parameter fields.
 5. **Filtering by ID lists** uses the SG list-string format (e.g. `"1-5,8,10"`). C# helpers in
    `Utils/ListUtilsExtensions.cs` (`ToFilterString`, `ToIdArray`) convert to/from `int[]`.
 6. **File uploads** (`job/new-from-template`, `job/import/txt`) use the multipart helpers

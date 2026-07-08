@@ -20,7 +20,7 @@ await client.Job.Open.PostAsync(
 ```
 
 ```python title="Python"
-from space_gass_api.models.open_job_request import OpenJobRequest
+from space_gass_api.models import OpenJobRequest
 
 await client.job.open.post(
     OpenJobRequest(file_path="C:\\Projects\\MyStructure.sg"))
@@ -47,13 +47,9 @@ var status = await client.File.Status.GetAsync(config =>
 ```
 
 ```python title="Python"
-from kiota_abstractions.base_request_configuration import RequestConfiguration
-from space_gass_api.file.status.status_request_builder import StatusRequestBuilder
+status = await client.file.status.get(file_path=r"C:\Projects\MyStructure.sg")
 
-query_params = StatusRequestBuilder.StatusRequestBuilderGetQueryParameters(
-    file_path=r"C:\Projects\MyStructure.sg")
-status = await client.file.status.get(
-    request_configuration=RequestConfiguration(query_parameters=query_params))
+# status contains can_open_safely, description, recommended_action
 ```
 
 ```bash title="curl"
@@ -81,7 +77,7 @@ await client.Job.Save.PostAsync(
 ```
 
 ```python title="Python"
-from space_gass_api.models.save_job_request import SaveJobRequest
+from space_gass_api.models import SaveJobRequest
 
 # Save to current file
 await client.job.save.post(SaveJobRequest())
