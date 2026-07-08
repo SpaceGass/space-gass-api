@@ -123,10 +123,10 @@ sdks/python/client/
 
 ### Documentation Site (Zudoku)
 
-- Built with [Zudoku](https://zudoku.dev) v0.69.3
+- Built with [Zudoku](https://zudoku.dev) v0.82.x
 - **`basePath: "/docs"`** is required in `zudoku.config.tsx` — the docs site is served at `https://api.spacegass.com/docs/`
 - The deploy workflow uploads `docs/dist/docs` (the inner basePath directory) as the Pages artifact to avoid double-nesting
-- A postinstall patch (`docs/patches/fix-zudoku-mjs.js`) fixes a Vite 7 SSR `.mjs` issue
+- A postinstall patch (`docs/patches/fix-zudoku-mjs.js`) fixes a Vite SSR `.mjs` issue (still required as of zudoku 0.82.2)
 - The API reference reads from `../descriptions/preview/openapi.json` (single source of truth)
 - `node_modules/` is never committed — `npm ci` regenerates it
 

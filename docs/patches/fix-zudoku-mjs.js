@@ -1,8 +1,10 @@
 /**
- * Patches Zudoku to fix Vite 7 SSR build on Windows.
+ * Patches Zudoku to fix the Vite SSR build on Windows.
  *
- * Vite 7 outputs .mjs files for SSR builds, but Zudoku expects .js files.
+ * Vite 7+ outputs .mjs files for SSR builds, but Zudoku expects .js files.
  * This patch makes Zudoku accept both .js and .mjs extensions.
+ * Still required as of zudoku 0.82.2 (Vite 8) — without it the build fails
+ * with "Could not find zudoku.config entry in server build output".
  *
  * Supports both the old multi-file layout (<=0.69.x) and the new
  * single-bundle layout (>=0.70.x).
