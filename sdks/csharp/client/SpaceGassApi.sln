@@ -5,6 +5,8 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceGassApi", "SpaceGassApi\SpaceGassApi.csproj", "{77C42EA6-B543-442D-8F97-A11FAE3E9515}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpaceGassApi.Tests", "SpaceGassApi.Tests\SpaceGassApi.Tests.csproj", "{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,18 @@ Global
 		{77C42EA6-B543-442D-8F97-A11FAE3E9515}.Release|x64.Build.0 = Release|Any CPU
 		{77C42EA6-B543-442D-8F97-A11FAE3E9515}.Release|x86.ActiveCfg = Release|Any CPU
 		{77C42EA6-B543-442D-8F97-A11FAE3E9515}.Release|x86.Build.0 = Release|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Debug|x64.Build.0 = Debug|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Debug|x86.Build.0 = Debug|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Release|x64.ActiveCfg = Release|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Release|x64.Build.0 = Release|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Release|x86.ActiveCfg = Release|Any CPU
+		{2048FF68-F97E-4804-BBA2-C7E5F075A9DC}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
