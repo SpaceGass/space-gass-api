@@ -23,10 +23,26 @@ dependencies = [
     "microsoft-kiota-bundle>=1.9.8",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pytest-asyncio>=0.24",
+]
+
 [project.urls]
 Documentation = "https://api.spacegass.com/docs/"
 Repository = "https://github.com/SpaceGass/space-gass-api"
 Issues = "https://github.com/SpaceGass/space-gass-api/issues"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+filterwarnings = [
+    # Kiota's generated code and abstractions carry their own deprecation
+    # notices for legacy request-configuration classes — not actionable here.
+    "ignore:This class is deprecated:DeprecationWarning",
+    "ignore:GetQueryParameters is deprecated:DeprecationWarning",
+]
 
 [tool.setuptools.packages.find]
 include = ["space_gass_api*"]
