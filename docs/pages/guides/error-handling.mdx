@@ -74,7 +74,7 @@ catch (ErrorResponse err)
 ```
 
 ```python title="Python"
-from space_gass_api.models.error_response import ErrorResponse
+from space_gass_api.models import ErrorResponse
 
 try:
     node = await client.job.structure.nodes.by_id(999).get()
