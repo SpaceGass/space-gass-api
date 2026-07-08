@@ -10,6 +10,9 @@
     "postinstall": "node patches/fix-zudoku-mjs.js"
   },
   "dependencies": {
-    "zudoku": "^0.71.10"
+    "zudoku": "^0.82.2"
+  },
+  "overrides": {
+    "@opentelemetry/core": "^2.8.0"
   }
 }
