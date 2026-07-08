@@ -56,7 +56,8 @@ Cross-tool agent instructions (install, `CreateClient()`, base URL, async/analys
 
 ```
 sdks/csharp/client/
-├── SpaceGassApi.sln                     ← client solution (+ future tests)
+├── SpaceGassApi.sln                     ← client solution (SDK + tests)
+├── SpaceGassApi.Tests/                  ← xUnit tests; wire-level via in-process CapturingHandler (`dotnet test`)
 └── SpaceGassApi/
     ├── SpaceGassApi.csproj              ← hand-maintained (safe from Kiota regen)
     ├── SpaceGassApiClient.cs            ← hand-maintained — SpaceGassApiClient : BaseSpaceGassApiClient
@@ -86,6 +87,7 @@ When a new endpoint is similarly awkward (multipart uploads, list-string filters
 ```
 sdks/python/client/
 ├── pyproject.toml
+├── tests/                          ← pytest suite; wire-level via httpx.MockTransport (`python -m pytest`, deps: `pip install -e ".[dev]"`)
 └── space_gass_api/
     ├── __init__.py                 ← AUTO-WRITTEN post-Kiota by tools/regen_python_inits.py
     ├── __init__.pyi                ← AUTO-WRITTEN post-Kiota (type stub for IDE support)
@@ -144,6 +146,7 @@ sdks/python/client/
 | `deploy-docs.yml` | Push to `main` | Build Zudoku site and deploy to GitHub Pages |
 | `generate-clients.yml` | Manual (`workflow_dispatch`) | Run Kiota to regenerate SDK clients |
 | `publish-packages.yml` | GitHub Release published | Publish to NuGet and PyPI |
+| `test-clients.yml` | Push to `main`, PRs | Run C# (xUnit) and Python (pytest) client test suites |
 
 ### Versioning
 
