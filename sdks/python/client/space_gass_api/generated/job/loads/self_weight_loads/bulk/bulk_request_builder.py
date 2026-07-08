@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -31,7 +31,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/self-weight-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def post(self,body: list[SelfWeightLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[SelfWeightLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[SelfWeightLoadCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[SelfWeightLoadBulkResult]: ...
+    @overload
+    async def post(self, body: list[SelfWeightLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[SelfWeightLoadBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[SelfWeightLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[SelfWeightLoadBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body

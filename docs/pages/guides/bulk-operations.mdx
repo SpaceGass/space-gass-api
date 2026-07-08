@@ -84,13 +84,7 @@ Console.WriteLine($"Failed:    {result.Errors!.Count}");
 ```
 
 ```python title="Python"
-from kiota_abstractions.base_request_configuration import RequestConfiguration
-from space_gass_api.job.structure.nodes.bulk.bulk_request_builder import BulkRequestBuilder
-
-params = BulkRequestBuilder.BulkRequestBuilderPostQueryParameters(continue_on_error=True)
-result = await client.job.structure.nodes.bulk.post(
-    bodies,
-    request_configuration=RequestConfiguration(query_parameters=params))
+result = await client.job.structure.nodes.bulk.post(bodies, continue_on_error=True)
 
 print(f"Succeeded: {len(result.succeeded or [])}")
 print(f"Failed:    {len(result.errors or [])}")

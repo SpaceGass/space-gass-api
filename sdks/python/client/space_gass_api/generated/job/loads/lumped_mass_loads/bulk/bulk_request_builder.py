@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -34,7 +34,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/lumped-mass-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[LumpedMassLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[LumpedMassLoadKeyBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[LumpedMassLoadKey],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[LumpedMassLoadKeyBulkResult]: ...
+    @overload
+    async def delete(self, body: list[LumpedMassLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[LumpedMassLoadKeyBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[LumpedMassLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[LumpedMassLoadKeyBulkResult]:
         """
         Deletes multiple lumped mass loads. Both case and node are required for each entry —providing only a case does not delete all lumped masses for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
@@ -60,7 +71,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, LumpedMassLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[LumpedMassLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LumpedMassLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[LumpedMassLoadUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[LumpedMassLoadBulkResult]: ...
+    @overload
+    async def patch(self, body: list[LumpedMassLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LumpedMassLoadBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[LumpedMassLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[LumpedMassLoadBulkResult]:
         """
         Updates multiple lumped mass loads. Each item must include case and node in the body.All load cases referenced must be Primary.
         param body: The request body
@@ -86,7 +108,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, LumpedMassLoadBulkResult, error_mapping)
     
-    async def post(self,body: list[LumpedMassLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LumpedMassLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[LumpedMassLoadCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[LumpedMassLoadBulkResult]: ...
+    @overload
+    async def post(self, body: list[LumpedMassLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LumpedMassLoadBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[LumpedMassLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[LumpedMassLoadBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body

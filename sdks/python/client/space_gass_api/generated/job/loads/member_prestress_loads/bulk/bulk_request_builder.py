@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -34,7 +34,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/member-prestress-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[MemberPrestressLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberPrestressLoadKeyBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[MemberPrestressLoadKey],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MemberPrestressLoadKeyBulkResult]: ...
+    @overload
+    async def delete(self, body: list[MemberPrestressLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberPrestressLoadKeyBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[MemberPrestressLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[MemberPrestressLoadKeyBulkResult]:
         """
         Deletes multiple member prestress loads. Both case and member are required for each entry —providing only a case does not delete all prestress loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
@@ -60,7 +71,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MemberPrestressLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[MemberPrestressLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberPrestressLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[MemberPrestressLoadUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MemberPrestressLoadBulkResult]: ...
+    @overload
+    async def patch(self, body: list[MemberPrestressLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberPrestressLoadBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[MemberPrestressLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[MemberPrestressLoadBulkResult]:
         """
         Updates multiple member prestress loads. Each item must include case and member in the body.All load cases referenced must be Primary.
         param body: The request body
@@ -86,7 +108,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MemberPrestressLoadBulkResult, error_mapping)
     
-    async def post(self,body: list[MemberPrestressLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberPrestressLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[MemberPrestressLoadCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MemberPrestressLoadBulkResult]: ...
+    @overload
+    async def post(self, body: list[MemberPrestressLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberPrestressLoadBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[MemberPrestressLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[MemberPrestressLoadBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body

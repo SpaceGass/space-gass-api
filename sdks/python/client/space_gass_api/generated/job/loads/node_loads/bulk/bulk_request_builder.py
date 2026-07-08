@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -34,7 +34,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/node-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[NodeLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[NodeLoadKeyBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[NodeLoadKey],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[NodeLoadKeyBulkResult]: ...
+    @overload
+    async def delete(self, body: list[NodeLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[NodeLoadKeyBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[NodeLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[NodeLoadKeyBulkResult]:
         """
         Deletes multiple node loads. Both case and node are required for each entry —providing only a case does not delete all loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
@@ -60,7 +71,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, NodeLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[NodeLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[NodeLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[NodeLoadUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[NodeLoadBulkResult]: ...
+    @overload
+    async def patch(self, body: list[NodeLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[NodeLoadBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[NodeLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[NodeLoadBulkResult]:
         """
         Updates multiple node loads. Each item must include case and node in the body.All load cases referenced must be Primary.
         param body: The request body
@@ -86,7 +108,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, NodeLoadBulkResult, error_mapping)
     
-    async def post(self,body: list[NodeLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[NodeLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[NodeLoadCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[NodeLoadBulkResult]: ...
+    @overload
+    async def post(self, body: list[NodeLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[NodeLoadBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[NodeLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[NodeLoadBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body

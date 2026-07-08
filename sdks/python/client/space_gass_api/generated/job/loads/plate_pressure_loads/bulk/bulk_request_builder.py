@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -34,7 +34,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/plate-pressure-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[PlatePressureLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[PlatePressureLoadKeyBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[PlatePressureLoadKey],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[PlatePressureLoadKeyBulkResult]: ...
+    @overload
+    async def delete(self, body: list[PlatePressureLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[PlatePressureLoadKeyBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[PlatePressureLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[PlatePressureLoadKeyBulkResult]:
         """
         Deletes multiple plate pressure loads. Both case and plate are required for each entry —providing only a case does not delete all pressure loads for that case.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
@@ -60,7 +71,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, PlatePressureLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[PlatePressureLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PlatePressureLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[PlatePressureLoadUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[PlatePressureLoadBulkResult]: ...
+    @overload
+    async def patch(self, body: list[PlatePressureLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PlatePressureLoadBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[PlatePressureLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[PlatePressureLoadBulkResult]:
         """
         Updates multiple plate pressure loads. Each item must include case and plate in the body.All load cases referenced must be Primary.
         param body: The request body
@@ -86,7 +108,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, PlatePressureLoadBulkResult, error_mapping)
     
-    async def post(self,body: list[PlatePressureLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[PlatePressureLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[PlatePressureLoadCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[PlatePressureLoadBulkResult]: ...
+    @overload
+    async def post(self, body: list[PlatePressureLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[PlatePressureLoadBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[PlatePressureLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[PlatePressureLoadBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body

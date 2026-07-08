@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -31,7 +31,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/materials/library/bulk{?continueOnError*}", path_parameters)
     
-    async def post(self,body: list[MaterialLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[MaterialLibraryCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MaterialBulkResult]: ...
+    @overload
+    async def post(self, body: list[MaterialLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MaterialBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[MaterialLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[MaterialBulkResult]:
         """
         Creates multiple library-sourced materials in a single request. Each material isresolved from the SPACE GASS material library by (name, library).
         param body: The request body

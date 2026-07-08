@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -31,7 +31,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/sections/library/bulk{?continueOnError*}", path_parameters)
     
-    async def post(self,body: list[SectionLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[SectionBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[SectionLibraryCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[SectionBulkResult]: ...
+    @overload
+    async def post(self, body: list[SectionLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[SectionBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[SectionLibraryCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[SectionBulkResult]:
         """
         Creates multiple library-sourced sections in a single request. Each section isresolved from the SPACE GASS section library by (name, library).
         param body: The request body

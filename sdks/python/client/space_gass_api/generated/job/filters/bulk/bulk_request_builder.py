@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -33,7 +33,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/filters/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[int],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[BulkDeletedBulkResult]: ...
+    @overload
+    async def delete(self, body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[BulkDeletedBulkResult]:
         """
         Deletes multiple filters in a single request.
         param body: The request body
@@ -59,7 +70,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
     
-    async def patch(self,body: list[FilterUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[FilterBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[FilterUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[FilterBulkResult]: ...
+    @overload
+    async def patch(self, body: list[FilterUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[FilterBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[FilterUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[FilterBulkResult]:
         """
         Partially updates multiple filters in a single request.
         param body: The request body
@@ -85,7 +107,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, FilterBulkResult, error_mapping)
     
-    async def post(self,body: list[FilterCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[FilterBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[FilterCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[FilterBulkResult]: ...
+    @overload
+    async def post(self, body: list[FilterCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[FilterBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[FilterCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[FilterBulkResult]:
         """
         Creates multiple filters in a single request.
         param body: The request body

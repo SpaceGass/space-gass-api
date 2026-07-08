@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -34,7 +34,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/thermal-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[ThermalLoadElementId], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ThermalLoadElementIdBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[ThermalLoadElementId],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[ThermalLoadElementIdBulkResult]: ...
+    @overload
+    async def delete(self, body: list[ThermalLoadElementId], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[ThermalLoadElementIdBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[ThermalLoadElementId], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[ThermalLoadElementIdBulkResult]:
         """
         Deletes multiple thermal loads. Case, element, and elementType are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
@@ -60,7 +71,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, ThermalLoadElementIdBulkResult, error_mapping)
     
-    async def patch(self,body: list[ThermalLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[ThermalLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[ThermalLoadUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[ThermalLoadBulkResult]: ...
+    @overload
+    async def patch(self, body: list[ThermalLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[ThermalLoadBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[ThermalLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[ThermalLoadBulkResult]:
         """
         Updates multiple thermal loads. Each item must include case, element, and elementType in the body.All load cases referenced must be Primary.
         param body: The request body
@@ -86,7 +108,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, ThermalLoadBulkResult, error_mapping)
     
-    async def post(self,body: list[ThermalLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[ThermalLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[ThermalLoadCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[ThermalLoadBulkResult]: ...
+    @overload
+    async def post(self, body: list[ThermalLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[ThermalLoadBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[ThermalLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[ThermalLoadBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body

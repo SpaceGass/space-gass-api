@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -33,7 +33,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/moving-loads/vehicles/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[int],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[BulkDeletedBulkResult]: ...
+    @overload
+    async def delete(self, body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[BulkDeletedBulkResult]:
         """
         Deletes multiple catalog items by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`). An item referenced by a scenario load fails with an in-use errorrather than being deleted.
         param body: The request body
@@ -59,7 +70,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
     
-    async def patch(self,body: list[MovingLoadVehicleUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MovingLoadVehicleBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[MovingLoadVehicleUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MovingLoadVehicleBulkResult]: ...
+    @overload
+    async def patch(self, body: list[MovingLoadVehicleUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MovingLoadVehicleBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[MovingLoadVehicleUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[MovingLoadVehicleBulkResult]:
         """
         Partially updates multiple catalog items in one call; each body item carries the `id`of the item to update. They persist with a single save.
         param body: The request body
@@ -85,7 +107,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MovingLoadVehicleBulkResult, error_mapping)
     
-    async def post(self,body: list[MovingLoadVehicleCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MovingLoadVehicleBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[MovingLoadVehicleCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MovingLoadVehicleBulkResult]: ...
+    @overload
+    async def post(self, body: list[MovingLoadVehicleCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MovingLoadVehicleBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[MovingLoadVehicleCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[MovingLoadVehicleBulkResult]:
         """
         Creates multiple catalog items in one call; they persist with a single save.
         param body: The request body

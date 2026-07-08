@@ -9,7 +9,8 @@ fail to resolve.
 This script does four things after Kiota regeneration:
 
   1. Writes ``space_gass_api/__init__.py``
-       - calls ``_enhance_get_methods()`` to enable ``.get(**kwargs)``
+       - calls ``_enhance_request_methods()`` to enable keyword query
+         parameters on ``get``/``post``/``patch``/``put``/``delete``
        - imports and re-exports ``SpaceGassApiClient``
 
   2. Writes ``space_gass_api/__init__.pyi``
@@ -20,9 +21,10 @@ This script does four things after Kiota regeneration:
          so callers can write ``models.NodeCreate`` etc.
 
   4. Injects ``@overload`` stubs into every ``*_request_builder.py``
-       whose class body contains a ``GetQueryParameters`` dataclass,
+       whose class body contains a ``{Verb}QueryParameters`` dataclass,
        so Pyright / Pylance shows the keyword arguments in IntelliSense
-       when users call ``.get(node_type=..., limit=...)``.
+       when users call ``.get(node_type=..., limit=...)`` or
+       ``.bulk.post(bodies, continue_on_error=True)``.
 
 Idempotent — rerunning produces byte-identical output.
 
@@ -60,9 +62,10 @@ client:
 - ``SpaceGassApiClient`` extends the generated ``BaseApiClient``
   with the ``create_client()`` factory method.
 
-- ``.get(**kwargs)`` is auto-enhanced on every builder that has GET
-  query parameters, so callers can pass filters as keyword arguments
-  directly instead of constructing ``RequestConfiguration`` objects.
+- Request methods (``get``/``post``/``patch``/``put``/``delete``) are
+  auto-enhanced on every builder that defines query parameters for that
+  verb, so callers can pass them as keyword arguments directly instead
+  of constructing ``RequestConfiguration`` objects.
 
 Usage:
 
@@ -73,11 +76,13 @@ Usage:
     node = await client.job.structure.nodes.post(models.NodeCreate(x=0, y=0, z=0))
     restrained = await client.job.structure.nodes.get(
         node_type=models.NodeTypeFilter.Restrained)
+    created = await client.job.structure.nodes.bulk.post(
+        bodies, continue_on_error=True)
 """
 
-from .space_gass_api_client import _enhance_get_methods
+from .space_gass_api_client import _enhance_request_methods
 
-_enhance_get_methods()
+_enhance_request_methods()
 
 from .space_gass_api_client import SpaceGassApiClient
 from .upload_requests import ImportTxtRequest, NewFromTemplateRequest
@@ -132,11 +137,18 @@ OVERLOAD_BANNER = "    # --- @overload added by regen_python_inits.py ---"
 OVERLOAD_FENCE = "    # --- end overloads ---"
 
 
-def _parse_builder(source: str) -> tuple[str, list[tuple[str, str]], str] | None:
+VERBS = ("get", "post", "patch", "put", "delete")
+
+
+def _parse_builder(
+    source: str,
+) -> list[tuple[str, str, list[tuple[str, str]], str | None, str]]:
     """Extract overload info from a builder module.
 
-    Returns ``(qp_class_name, [(field, type_str), ...], return_type_str)``
-    or ``None`` if the builder has no ``GetQueryParameters``.
+    Returns one ``(verb, qp_class_name, [(field, type_str), ...],
+    body_type_str | None, return_type_str)`` entry per verb method whose
+    class body contains a matching ``{Builder}{Verb}QueryParameters``
+    dataclass. ``body_type_str`` is ``None`` for body-less methods.
     """
     tree = ast.parse(source)
 
@@ -146,35 +158,44 @@ def _parse_builder(source: str) -> tuple[str, list[tuple[str, str]], str] | None
         None,
     )
     if builder is None:
-        return None
+        return []
 
-    qp_name = f"{builder.name}GetQueryParameters"
-    qp_cls = next(
-        (n for n in ast.iter_child_nodes(builder)
-         if isinstance(n, ast.ClassDef) and n.name == qp_name),
-        None,
-    )
-    if qp_cls is None:
-        return None
+    specs: list[tuple[str, str, list[tuple[str, str]], str | None, str]] = []
+    for verb in VERBS:
+        qp_name = f"{builder.name}{verb.capitalize()}QueryParameters"
+        qp_cls = next(
+            (n for n in ast.iter_child_nodes(builder)
+             if isinstance(n, ast.ClassDef) and n.name == qp_name),
+            None,
+        )
+        if qp_cls is None:
+            continue
 
-    fields = [
-        (n.target.id, ast.unparse(n.annotation))
-        for n in ast.iter_child_nodes(qp_cls)
-        if isinstance(n, ast.AnnAssign) and isinstance(n.target, ast.Name)
-    ]
-    if not fields:
-        return None
+        fields = [
+            (n.target.id, ast.unparse(n.annotation))
+            for n in ast.iter_child_nodes(qp_cls)
+            if isinstance(n, ast.AnnAssign) and isinstance(n.target, ast.Name)
+        ]
+        if not fields:
+            continue
 
-    get_m = next(
-        (n for n in ast.iter_child_nodes(builder)
-         if isinstance(n, (ast.AsyncFunctionDef, ast.FunctionDef))
-         and n.name == "get"),
-        None,
-    )
-    if get_m is None or get_m.returns is None:
-        return None
+        method = next(
+            (n for n in ast.iter_child_nodes(builder)
+             if isinstance(n, (ast.AsyncFunctionDef, ast.FunctionDef))
+             and n.name == verb),
+            None,
+        )
+        if method is None or method.returns is None:
+            continue
 
-    return qp_name, fields, ast.unparse(get_m.returns)
+        body_arg = next((a for a in method.args.args if a.arg == "body"), None)
+        if body_arg is not None and body_arg.annotation is None:
+            continue
+        body_type = ast.unparse(body_arg.annotation) if body_arg is not None else None
+
+        specs.append((verb, qp_name, fields, body_type, ast.unparse(method.returns)))
+
+    return specs
 
 
 def _strip_overloads(source: str) -> str:
@@ -193,11 +214,13 @@ def _strip_overloads(source: str) -> str:
 
 def _inject_overloads(
     source: str,
+    verb: str,
     qp_name: str,
     fields: list[tuple[str, str]],
+    body_type: str | None,
     ret_type: str,
 ) -> str:
-    """Inject ``@overload`` stubs and ``**kwargs`` into a builder source."""
+    """Inject ``@overload`` stubs and ``**kwargs`` for one verb method."""
     lines = source.splitlines(keepends=True)
 
     # Ensure 'overload' is in the typing imports
@@ -206,46 +229,50 @@ def _inject_overloads(
             lines[i] = line.rstrip("\n").rstrip() + ", overload\n"
             break
 
-    # Find the `async def get(self,` line
-    get_idx = next(
+    # Find the `async def {verb}(self` line
+    m_idx = next(
         (i for i, ln in enumerate(lines)
-         if ln.strip().startswith("async def get(self")),
+         if ln.strip().startswith(f"async def {verb}(self")),
         None,
     )
-    if get_idx is None:
+    if m_idx is None:
         return source
 
     # Add **kwargs to the implementation signature
-    lines[get_idx] = lines[get_idx].replace(") ->", ", **kwargs) ->")
+    lines[m_idx] = lines[m_idx].replace(") ->", ", **kwargs) ->")
 
     # Build the overload block
     ind = "    "
     block: list[str] = []
     block.append(f"{OVERLOAD_BANNER}\n")
     block.append(f"{ind}@overload\n")
-    block.append(f"{ind}async def get(\n")
+    block.append(f"{ind}async def {verb}(\n")
     block.append(f"{ind}    self,\n")
+    if body_type is not None:
+        block.append(f"{ind}    body: {body_type},\n")
     block.append(f"{ind}    *,\n")
     for fname, ftype in fields:
         block.append(f"{ind}    {fname}: {ftype} = None,\n")
     block.append(f"{ind}) -> {ret_type}: ...\n")
     block.append(f"{ind}@overload\n")
     rc = f"Optional[RequestConfiguration[{qp_name}]]"
+    body_param = f"body: {body_type}, " if body_type is not None else ""
     block.append(
-        f"{ind}async def get(self, request_configuration: "
+        f"{ind}async def {verb}(self, {body_param}request_configuration: "
         f"{rc} = None) -> {ret_type}: ...\n"
     )
     block.append(f"{OVERLOAD_FENCE}\n")
 
-    # Insert block right before the get method
+    # Insert block right before the verb method
     for j, bl in enumerate(block):
-        lines.insert(get_idx + j, bl)
+        lines.insert(m_idx + j, bl)
 
     return "".join(lines)
 
 
-def enhance_builder_get_methods() -> int:
-    """Inject ``@overload`` stubs into every builder with GetQueryParameters.
+def enhance_builder_methods() -> int:
+    """Inject ``@overload`` stubs into every builder whose verb methods
+    have matching ``QueryParameters`` dataclasses.
 
     This gives Pyright / Pylance the typed kwargs signature so
     IntelliSense shows the available query parameters.
@@ -257,14 +284,17 @@ def enhance_builder_get_methods() -> int:
         source = path.read_text(encoding="utf-8")
         clean = _strip_overloads(source)
 
-        info = _parse_builder(clean)
-        if info is None:
+        specs = _parse_builder(clean)
+        if not specs:
             if clean != source:
                 path.write_text(clean, encoding="utf-8")
             continue
 
-        qp_name, fields, ret_type = info
-        modified = _inject_overloads(clean, qp_name, fields, ret_type)
+        modified = clean
+        for verb, qp_name, fields, body_type, ret_type in specs:
+            modified = _inject_overloads(
+                modified, verb, qp_name, fields, body_type, ret_type
+            )
 
         if modified != source:
             path.write_text(modified, encoding="utf-8")
@@ -294,7 +324,7 @@ def main() -> None:
     PKG_INIT_PYI.write_text(PKG_INIT_STUB, encoding="utf-8")
     MODELS_INIT.write_text(render_models_init(entries), encoding="utf-8")
 
-    enhanced = enhance_builder_get_methods()
+    enhanced = enhance_builder_methods()
 
     print(f"wrote {PKG_INIT.relative_to(REPO_ROOT)}")
     print(f"wrote {PKG_INIT_PYI.relative_to(REPO_ROOT)}")

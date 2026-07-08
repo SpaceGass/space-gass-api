@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -30,7 +30,17 @@ class DataRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/data{?force*}", path_parameters)
     
-    async def delete(self,request_configuration: Optional[RequestConfiguration[DataRequestBuilderDeleteQueryParameters]] = None) -> Optional[Job]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        *,
+        force: Optional[bool] = None,
+    ) -> Optional[Job]: ...
+    @overload
+    async def delete(self, request_configuration: Optional[RequestConfiguration[DataRequestBuilderDeleteQueryParameters]] = None) -> Optional[Job]: ...
+    # --- end overloads ---
+    async def delete(self,request_configuration: Optional[RequestConfiguration[DataRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[Job]:
         """
         Clears all model data while keeping current configuration (units, settings).Deletes ATS data files but preserves the job configuration.Returns the job object with zeroed model summary counts.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.

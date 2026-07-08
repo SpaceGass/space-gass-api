@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -33,7 +33,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/structure/plates/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[int],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[BulkDeletedBulkResult]: ...
+    @overload
+    async def delete(self, body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[BulkDeletedBulkResult]:
         """
         Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
         param body: The request body
@@ -59,7 +70,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
     
-    async def patch(self,body: list[PlateUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PlateBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[PlateUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[PlateBulkResult]: ...
+    @overload
+    async def patch(self, body: list[PlateUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[PlateBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[PlateUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[PlateBulkResult]:
         """
         Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
         param body: The request body
@@ -85,7 +107,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, PlateBulkResult, error_mapping)
     
-    async def post(self,body: list[PlateCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[PlateBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[PlateCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[PlateBulkResult]: ...
+    @overload
+    async def post(self, body: list[PlateCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[PlateBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[PlateCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[PlateBulkResult]:
         """
         Creates multiple items in a bulk operation.If a validator is registered, all items are validated upfront before any are created.
         param body: The request body

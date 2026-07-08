@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -33,7 +33,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/combination-load-cases/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[int],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[BulkDeletedBulkResult]: ...
+    @overload
+    async def delete(self, body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[BulkDeletedBulkResult]:
         """
         Deletes multiple combination load cases by Id. The body is a JSON array of integer Ids(e.g. `[10, 11, 12]`). Each deletion removes the case and its items atomically.
         param body: The request body
@@ -59,7 +70,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
     
-    async def patch(self,body: list[CombinationLoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[CombinationLoadCaseUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[LoadCaseBulkResult]: ...
+    @overload
+    async def patch(self, body: list[CombinationLoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[LoadCaseBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[CombinationLoadCaseUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[LoadCaseBulkResult]:
         """
         Partially updates multiple combination load cases. Each item must include its `id`.As with the single-item PATCH, an optional `combinationItems` list on a rowperforms a full-replace of that case's items. Validation runs upfront on the wholerequest; with `continueOnError=true`, valid rows are applied and failures are reported per-item.
         param body: The request body
@@ -85,7 +107,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, LoadCaseBulkResult, error_mapping)
     
-    async def post(self,body: list[CombinationLoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LoadCaseBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[CombinationLoadCaseCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[LoadCaseBulkResult]: ...
+    @overload
+    async def post(self, body: list[CombinationLoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[LoadCaseBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[CombinationLoadCaseCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[LoadCaseBulkResult]:
         """
         Creates multiple combination load cases in a single request. Each item is a fullcase + items payload; validation runs upfront on the whole request. With`continueOnError=false` (default) any failure rejects the whole request; with`continueOnError=true`, valid items are created and failures are reported per-item.Each created case is atomic individually (case + items, with rollback on failure).
         param body: The request body

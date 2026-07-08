@@ -7,9 +7,10 @@ client:
 - ``SpaceGassApiClient`` extends the generated ``BaseApiClient``
   with the ``create_client()`` factory method.
 
-- ``.get(**kwargs)`` is auto-enhanced on every builder that has GET
-  query parameters, so callers can pass filters as keyword arguments
-  directly instead of constructing ``RequestConfiguration`` objects.
+- Request methods (``get``/``post``/``patch``/``put``/``delete``) are
+  auto-enhanced on every builder that defines query parameters for that
+  verb, so callers can pass them as keyword arguments directly instead
+  of constructing ``RequestConfiguration`` objects.
 
 Usage:
 
@@ -20,11 +21,13 @@ Usage:
     node = await client.job.structure.nodes.post(models.NodeCreate(x=0, y=0, z=0))
     restrained = await client.job.structure.nodes.get(
         node_type=models.NodeTypeFilter.Restrained)
+    created = await client.job.structure.nodes.bulk.post(
+        bodies, continue_on_error=True)
 """
 
-from .space_gass_api_client import _enhance_get_methods
+from .space_gass_api_client import _enhance_request_methods
 
-_enhance_get_methods()
+_enhance_request_methods()
 
 from .space_gass_api_client import SpaceGassApiClient
 from .upload_requests import ImportTxtRequest, NewFromTemplateRequest

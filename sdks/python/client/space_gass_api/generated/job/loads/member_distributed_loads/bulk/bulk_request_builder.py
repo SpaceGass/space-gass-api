@@ -10,7 +10,7 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from kiota_abstractions.request_information import RequestInformation
 from kiota_abstractions.request_option import RequestOption
 from kiota_abstractions.serialization import Parsable, ParsableFactory
-from typing import Any, Optional, TYPE_CHECKING, Union
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
@@ -34,7 +34,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/loads/member-distributed-loads/bulk{?continueOnError*}", path_parameters)
     
-    async def delete(self,body: list[MemberDistributedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberDistributedLoadKeyBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def delete(
+        self,
+        body: list[MemberDistributedLoadKey],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MemberDistributedLoadKeyBulkResult]: ...
+    @overload
+    async def delete(self, body: list[MemberDistributedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[MemberDistributedLoadKeyBulkResult]: ...
+    # --- end overloads ---
+    async def delete(self,body: list[MemberDistributedLoadKey], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[MemberDistributedLoadKeyBulkResult]:
         """
         Deletes multiple member distributed loads. Case, member, and subLoad are all required for each entry.The succeeded array echoes back the Ids of each successfully deleted load.
         param body: The request body
@@ -60,7 +71,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MemberDistributedLoadKeyBulkResult, error_mapping)
     
-    async def patch(self,body: list[MemberDistributedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberDistributedLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def patch(
+        self,
+        body: list[MemberDistributedLoadUpdate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MemberDistributedLoadBulkResult]: ...
+    @overload
+    async def patch(self, body: list[MemberDistributedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> Optional[MemberDistributedLoadBulkResult]: ...
+    # --- end overloads ---
+    async def patch(self,body: list[MemberDistributedLoadUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[MemberDistributedLoadBulkResult]:
         """
         Updates multiple member distributed loads. Each item must include case, member, and subLoad in the body.All load cases referenced must be Primary.
         param body: The request body
@@ -86,7 +108,18 @@ class BulkRequestBuilder(BaseRequestBuilder):
 
         return await self.request_adapter.send_async(request_info, MemberDistributedLoadBulkResult, error_mapping)
     
-    async def post(self,body: list[MemberDistributedLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberDistributedLoadBulkResult]:
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def post(
+        self,
+        body: list[MemberDistributedLoadCreate],
+        *,
+        continue_on_error: Optional[bool] = None,
+    ) -> Optional[MemberDistributedLoadBulkResult]: ...
+    @overload
+    async def post(self, body: list[MemberDistributedLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> Optional[MemberDistributedLoadBulkResult]: ...
+    # --- end overloads ---
+    async def post(self,body: list[MemberDistributedLoadCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[MemberDistributedLoadBulkResult]:
         """
         Creates multiple loads in a bulk operation.All load cases referenced must exist and be Primary load cases.
         param body: The request body
