@@ -1,5 +1,11 @@
 # SPACE GASS API
 
+[![Tests](https://github.com/SpaceGass/space-gass-api/actions/workflows/test-clients.yml/badge.svg)](https://github.com/SpaceGass/space-gass-api/actions/workflows/test-clients.yml)
+[![NuGet](https://img.shields.io/nuget/v/SpaceGassApi?logo=nuget&label=NuGet)](https://www.nuget.org/packages/SpaceGassApi)
+[![PyPI](https://img.shields.io/pypi/v/space-gass-api?logo=pypi&logoColor=white&label=PyPI)](https://pypi.org/project/space-gass-api/)
+[![Docs](https://img.shields.io/badge/docs-api.spacegass.com-blue)](https://api.spacegass.com/docs/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 Official SPACE GASS API specifications, developer SDKs, and automation examples.
 
 **Developer docs:** [api.spacegass.com/docs](https://api.spacegass.com/docs/)\
