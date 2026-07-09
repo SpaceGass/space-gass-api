@@ -2,7 +2,7 @@
   "openapi": "3.0.4",
   "info": {
     "title": "SPACE GASS API",
-    "description": "REST API for SPACE GASS — structural analysis and design software.\n\n## Usage\n\nEach running instance controls a single SPACE GASS session and works on **ONE** open job at a time.\n\n## Authentication & Licensing\n\nAuth is enforced server-side by the licensing module; no per-request credential is required. Licensing failures surface as a `403` with one of the following `errorCode` values:\n\n- `REGISTRATION_REQUIRED`\n- `REGISTRATION_UNSUPPORTED`\n- `LICENSE_LOST`\n- `CORE_LICENSE_UNAVAILABLE`\n- `MODULE_LICENSE_UNAVAILABLE`\n\nTo allow license-free access to unrestricted `GET` endpoints, set the access mode to `ReadOnly` (before opening a job).\n\n## Client SDKs\n\nTo get started quickly, use our official client SDKs:\n\n* **.NET Client:** Available on [NuGet](https://www.nuget.org/packages/SpaceGassApi) (`dotnet add package SpaceGassApi`) · [Source](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/csharp/client/SpaceGassApi) · [Examples](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/csharp/examples)\n* **Python Client:** Available on [PyPI](https://pypi.org/project/space-gass-api/) (`pip install space-gass-api`) · [Source](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/python/client/space_gass_api) · [Examples](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/python/examples)\n\nSDKs are generated with [Kiota](https://learn.microsoft.com/openapi/kiota/) and follow its fluent request-builder convention, so client calls mirror the URL path of each endpoint.",
+    "description": "REST API for SPACE GASS — structural analysis and design software.\n\n## Usage\n\nEach running instance controls a single SPACE GASS session and works on **ONE** open job at a time.\n\n## Authentication & Licensing\n\nAuth is enforced server-side by the licensing module; no per-request credential is required. Licensing failures surface as a `403` whose `errorCode` is one of: `REGISTRATION_REQUIRED`, `REGISTRATION_UNSUPPORTED`, `LICENSE_LOST`, `CORE_LICENSE_UNAVAILABLE`, `MODULE_LICENSE_UNAVAILABLE`.\n\nTo allow license-free access to unrestricted `GET` endpoints, set the access mode to `ReadOnly` (before opening a job).\n\nFor a full breakdown of which SPACE GASS license and modules each endpoint requires, see the [Licensing guide](https://api.spacegass.com/docs/licensing).\n\n## Client SDKs\n\nTo get started quickly, use our official client SDKs:\n\n* **.NET Client:** Available on [NuGet](https://www.nuget.org/packages/SpaceGassApi) (`dotnet add package SpaceGassApi`) · [Source](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/csharp/client/SpaceGassApi) · [Examples](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/csharp/examples)\n* **Python Client:** Available on [PyPI](https://pypi.org/project/space-gass-api/) (`pip install space-gass-api`) · [Source](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/python/client) · [Examples](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/python/examples)\n\nSDKs are generated with [Kiota](https://learn.microsoft.com/openapi/kiota/) and follow its fluent request-builder convention, so client calls mirror the URL path of each endpoint.\n\n## For AI Agents\n\nLoad the full docs bundle first — [llms-full.txt](https://api.spacegass.com/docs/llms-full.txt) — or connect this repo as an MCP server: [gitmcp.io/SpaceGass/space-gass-api](https://gitmcp.io/SpaceGass/space-gass-api).",
     "contact": {
       "name": "SPACE GASS Support",
       "email": "support@spacegass.com"
@@ -12,7 +12,7 @@
       "url": "https://www.spacegass.com/manual/Introduction/End_User_Licence_Agreement.htm"
     },
     "version": "1",
-    "x-space-gass-build": "14.50.134"
+    "x-space-gass-build": "14.50.139"
   },
   "servers": [
     {
@@ -32,7 +32,7 @@
           {
             "name": "loadCases",
             "in": "query",
-            "description": "Optional load case filter in SG list format. Omit for all model cases.",
+            "description": "Optional load case filter in SG list format. Omit for all model cases.\r\nIds that do not exist in the model are dropped — only real load cases are reported.",
             "schema": {
               "type": "string"
             },
@@ -51,7 +51,7 @@
             }
           },
           "400": {
-            "description": "The `loadCases` filter is malformed.",
+            "description": "The `loadCases` filter is malformed, or matched no load cases in the model.",
             "content": {
               "application/json": {
                 "schema": {
@@ -238,7 +238,7 @@
           {
             "name": "loadCases",
             "in": "query",
-            "description": "Optional load case filter in SG list format. Omit for all model cases.",
+            "description": "Optional load case filter in SG list format. Omit for all model cases.\r\nIds that do not exist in the model are dropped — only real load cases are reported.",
             "schema": {
               "type": "string"
             },
@@ -257,7 +257,7 @@
             }
           },
           "400": {
-            "description": "The `loadCases` filter is malformed.",
+            "description": "The `loadCases` filter is malformed, or matched no load cases in the model.",
             "content": {
               "application/json": {
                 "schema": {
@@ -692,7 +692,7 @@
           {
             "name": "loadCases",
             "in": "query",
-            "description": "Optional load case filter in SG list format (e.g. `\"1,3-7,10\"`).\r\nOmit to query against every load case in the model.",
+            "description": "Optional load case filter in SG list format (e.g. `\"1,3-7,10\"`).\r\nOmit to query against every load case in the model. Ids that do not exist in\r\nthe model are dropped — only real load cases are reported.",
             "schema": {
               "type": "string"
             },
@@ -711,7 +711,7 @@
             }
           },
           "400": {
-            "description": "The `loadCases` filter is malformed.",
+            "description": "The `loadCases` filter is malformed, or matched no load cases in the model.",
             "content": {
               "application/json": {
                 "schema": {
@@ -33851,13 +33851,20 @@
           },
           "ly": {
             "type": "number",
-            "description": "Effective length about Y axis. Unit: Length (see GET /job/units).",
-            "format": "float"
+            "description": "Effective length about Y axis. Unit: Length (see GET /job/units). Null when the member has no effective length for this case and mode (see SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.ExclusionReason).",
+            "format": "float",
+            "nullable": true
           },
           "lz": {
             "type": "number",
-            "description": "Effective length about Z axis. Unit: Length (see GET /job/units).",
-            "format": "float"
+            "description": "Effective length about Z axis. Unit: Length (see GET /job/units). Null when the member has no effective length for this case and mode (see SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.ExclusionReason).",
+            "format": "float",
+            "nullable": true
+          },
+          "exclusionReason": {
+            "type": "string",
+            "description": "Why the member is excluded from the effective length calculation (SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.Ly/SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.Lz are null). Empty when the effective lengths are available. One of (currently): \"Not in compression\", \"Cable member\", \"Tension-only member\", \"Pulley member\", \"Truss member\", \"Disabled compression-only member\", \"Inactive gap member\", \"Inactive fuse member\", \"Disabled buckled member\".",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -39680,10 +39687,23 @@
             },
             "description": "Rotational Z displacement at each node. Unit: Rotation (see GET /job/units).",
             "nullable": true
+          },
+          "normalization": {
+            "$ref": "#/components/schemas/ModeShapeNormalization"
           }
         },
         "additionalProperties": false,
         "description": "Dynamic mode shape results grouped by load case and mode (FileId 219).\r\nColumnar arrays hold displacement values at each node."
+      },
+      "ModeShapeNormalization": {
+        "enum": [
+          "Unknown",
+          "Mass",
+          "Unit",
+          "None"
+        ],
+        "type": "string",
+        "description": "Normalization applied to the dynamic mode-shape displacement values.\r\nDetermined by the dynamic frequency analysis settings and reported alongside\r\neach mode shape so consumers know how to interpret the magnitudes."
       },
       "ModeShapeQueryResult": {
         "type": "object",
@@ -43108,8 +43128,9 @@
           },
           "svmTop": {
             "type": "number",
-            "description": "Von Mises stress at top surface. Unit: Stress (see GET /job/units).",
-            "format": "float"
+            "description": "Von Mises stress at top surface. Unit: Stress (see GET /job/units). Null when the load case was analysed with the SG-X solver using non-linear plate material (use SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmMax instead).",
+            "format": "float",
+            "nullable": true
           },
           "paTop": {
             "type": "number",
@@ -43148,8 +43169,9 @@
           },
           "svmBtm": {
             "type": "number",
-            "description": "Von Mises stress at bottom surface. Unit: Stress (see GET /job/units).",
-            "format": "float"
+            "description": "Von Mises stress at bottom surface. Unit: Stress (see GET /job/units). Null when the load case was analysed with the SG-X solver using non-linear plate material (use SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmMax instead).",
+            "format": "float",
+            "nullable": true
           },
           "paBtm": {
             "type": "number",
@@ -43165,6 +43187,18 @@
             "type": "number",
             "description": "Transverse shear stress in YZ. Unit: Stress (see GET /job/units).",
             "format": "float"
+          },
+          "svmMax": {
+            "type": "number",
+            "description": "Maximum von Mises stress through the plate thickness. Unit: Stress (see GET /job/units). Only populated when the load case was analysed with the SG-X solver using non-linear plate material; null otherwise (use SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmTop/SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmBtm instead).",
+            "format": "float",
+            "nullable": true
+          },
+          "plasticStrain": {
+            "type": "number",
+            "description": "Plastic strain. Unitless. Only populated when the load case was analysed with the SG-X solver using non-linear plate material; null otherwise.",
+            "format": "float",
+            "nullable": true
           }
         },
         "additionalProperties": false,

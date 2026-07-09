@@ -9,13 +9,15 @@ class BucklingEffectiveLength(Parsable):
     """
     Buckling effective length result (FileId 217).
     """
+    # Why the member is excluded from the effective length calculation (SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.Ly/SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.Lz are null). Empty when the effective lengths are available. One of (currently): "Not in compression", "Cable member", "Tension-only member", "Pulley member", "Truss member", "Disabled compression-only member", "Inactive gap member", "Inactive fuse member", "Disabled buckled member".
+    exclusion_reason: Optional[str] = None
     # Member length. Unit: Length (see GET /job/units).
     length: Optional[float] = None
     # Load case ID.
     load_case: Optional[int] = None
-    # Effective length about Y axis. Unit: Length (see GET /job/units).
+    # Effective length about Y axis. Unit: Length (see GET /job/units). Null when the member has no effective length for this case and mode (see SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.ExclusionReason).
     ly: Optional[float] = None
-    # Effective length about Z axis. Unit: Length (see GET /job/units).
+    # Effective length about Z axis. Unit: Length (see GET /job/units). Null when the member has no effective length for this case and mode (see SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.ExclusionReason).
     lz: Optional[float] = None
     # Member key.
     member: Optional[int] = None
@@ -41,6 +43,7 @@ class BucklingEffectiveLength(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
+            "exclusionReason": lambda n : setattr(self, 'exclusion_reason', n.get_str_value()),
             "length": lambda n : setattr(self, 'length', n.get_float_value()),
             "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "ly": lambda n : setattr(self, 'ly', n.get_float_value()),
@@ -59,6 +62,7 @@ class BucklingEffectiveLength(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_str_value("exclusionReason", self.exclusion_reason)
         writer.write_float_value("length", self.length)
         writer.write_int_value("loadCase", self.load_case)
         writer.write_float_value("ly", self.ly)

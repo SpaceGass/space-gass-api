@@ -15,11 +15,15 @@ class PlateStress(Parsable):
     pa_btm: Optional[float] = None
     # Principal angle at top surface. Unit: Rotation (see GET /job/units).
     pa_top: Optional[float] = None
+    # Plastic strain. Unitless. Only populated when the load case was analysed with the SG-X solver using non-linear plate material; null otherwise.
+    plastic_strain: Optional[float] = None
     # Plate key.
     plate: Optional[int] = None
-    # Von Mises stress at bottom surface. Unit: Stress (see GET /job/units).
+    # Von Mises stress at bottom surface. Unit: Stress (see GET /job/units). Null when the load case was analysed with the SG-X solver using non-linear plate material (use SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmMax instead).
     svm_btm: Optional[float] = None
-    # Von Mises stress at top surface. Unit: Stress (see GET /job/units).
+    # Maximum von Mises stress through the plate thickness. Unit: Stress (see GET /job/units). Only populated when the load case was analysed with the SG-X solver using non-linear plate material; null otherwise (use SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmTop/SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmBtm instead).
+    svm_max: Optional[float] = None
+    # Von Mises stress at top surface. Unit: Stress (see GET /job/units). Null when the load case was analysed with the SG-X solver using non-linear plate material (use SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmMax instead).
     svm_top: Optional[float] = None
     # Normal stress in X at bottom surface. Unit: Stress (see GET /job/units).
     sx_btm: Optional[float] = None
@@ -70,8 +74,10 @@ class PlateStress(Parsable):
             "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "paBtm": lambda n : setattr(self, 'pa_btm', n.get_float_value()),
             "paTop": lambda n : setattr(self, 'pa_top', n.get_float_value()),
+            "plasticStrain": lambda n : setattr(self, 'plastic_strain', n.get_float_value()),
             "plate": lambda n : setattr(self, 'plate', n.get_int_value()),
             "svmBtm": lambda n : setattr(self, 'svm_btm', n.get_float_value()),
+            "svmMax": lambda n : setattr(self, 'svm_max', n.get_float_value()),
             "svmTop": lambda n : setattr(self, 'svm_top', n.get_float_value()),
             "sxBtm": lambda n : setattr(self, 'sx_btm', n.get_float_value()),
             "sxTop": lambda n : setattr(self, 'sx_top', n.get_float_value()),
@@ -101,8 +107,10 @@ class PlateStress(Parsable):
         writer.write_int_value("loadCase", self.load_case)
         writer.write_float_value("paBtm", self.pa_btm)
         writer.write_float_value("paTop", self.pa_top)
+        writer.write_float_value("plasticStrain", self.plastic_strain)
         writer.write_int_value("plate", self.plate)
         writer.write_float_value("svmBtm", self.svm_btm)
+        writer.write_float_value("svmMax", self.svm_max)
         writer.write_float_value("svmTop", self.svm_top)
         writer.write_float_value("sxBtm", self.sx_btm)
         writer.write_float_value("sxTop", self.sx_top)

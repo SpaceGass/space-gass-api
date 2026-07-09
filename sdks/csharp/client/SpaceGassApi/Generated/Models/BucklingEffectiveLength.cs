@@ -13,13 +13,21 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BucklingEffectiveLength : IParsable
     {
+        /// <summary>Why the member is excluded from the effective length calculation (SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.Ly/SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.Lz are null). Empty when the effective lengths are available. One of (currently): &quot;Not in compression&quot;, &quot;Cable member&quot;, &quot;Tension-only member&quot;, &quot;Pulley member&quot;, &quot;Truss member&quot;, &quot;Disabled compression-only member&quot;, &quot;Inactive gap member&quot;, &quot;Inactive fuse member&quot;, &quot;Disabled buckled member&quot;.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? ExclusionReason { get; set; }
+#nullable restore
+#else
+        public string ExclusionReason { get; set; }
+#endif
         /// <summary>Member length. Unit: Length (see GET /job/units).</summary>
         public float? Length { get; set; }
         /// <summary>Load case ID.</summary>
         public int? LoadCase { get; set; }
-        /// <summary>Effective length about Y axis. Unit: Length (see GET /job/units).</summary>
+        /// <summary>Effective length about Y axis. Unit: Length (see GET /job/units). Null when the member has no effective length for this case and mode (see SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.ExclusionReason).</summary>
         public float? Ly { get; set; }
-        /// <summary>Effective length about Z axis. Unit: Length (see GET /job/units).</summary>
+        /// <summary>Effective length about Z axis. Unit: Length (see GET /job/units). Null when the member has no effective length for this case and mode (see SpaceGassApi.Models.Dtos.Query.Analysis.BucklingEffectiveLengthDto.ExclusionReason).</summary>
         public float? Lz { get; set; }
         /// <summary>Member key.</summary>
         public int? Member { get; set; }
@@ -45,6 +53,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "exclusionReason", n => { ExclusionReason = n.GetStringValue(); } },
                 { "length", n => { Length = n.GetFloatValue(); } },
                 { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "ly", n => { Ly = n.GetFloatValue(); } },
@@ -61,6 +70,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteStringValue("exclusionReason", ExclusionReason);
             writer.WriteFloatValue("length", Length);
             writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteFloatValue("ly", Ly);

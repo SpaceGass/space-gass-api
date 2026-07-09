@@ -70,21 +70,21 @@ File: `docs/zudoku.config.tsx`, function `generateCodeSnippet`.
 
 What to still check after a regen:
 
-1. **`__$ref` still resolves (Zudoku-upgrade guard).** `__$ref` is an undocumented Zudoku internal. If a Zudoku version bump renames or drops it, every snippet silently falls back to the path guess and starts emitting wrong names. After `npm run build`, grep the rendered output to confirm known-irregular types are present and the naive guesses did NOT leak:
+1. **`__$ref` still resolves (Zudoku-upgrade guard).** `__$ref` is an undocumented Zudoku internal. If a Zudoku version bump renames or drops it, every snippet silently falls back to the path guess and starts emitting wrong names. Two checks:
+   - **Mechanism:** the dereferencer must still write it — `grep -n '__\$ref' docs/node_modules/zudoku/src/lib/oas/parser/dereference/index.ts` must show the assignment (`current.__$ref = $ref`; confirmed present at 0.82.2), and `bodyTypeFromSpec` in `zudoku.config.tsx` still reads `schema.__$ref ?? schema.items.__$ref`.
+   - **Schema names still reach the client:** after `npm run build`, grep the built output. Important caveat (verified at zudoku 0.82.2): generated snippet text is **never prerendered into `dist/`** — snippets render client-side only. These greps match the schema names embedded in each API page's route data and the served spec copy, so they catch schema renames/disappearances but can NOT catch a broken `__$ref`:
    ```bash
    cd docs
-   for t in MovingLoadVehicleCreate SectionUserCreate MaterialCreate CombinationLoadCaseItem; do
+   for t in MovingLoadVehicleCreate SectionUserCreate MaterialUserCreate CombinationLoadCaseItem; do
      echo "$t -> $(grep -rl "$t" dist/docs | wc -l) file(s)"; done   # all should be >0
-   for t in "VehicleCreate {" "GenerateCreate" "LoadCasCreate" "AccessModeCreate"; do
-     echo "$t -> $(grep -rl "$t" dist/docs | wc -l) file(s)"; done    # all MUST be 0
    ```
-   If the irregular types vanish and the naive guesses appear, `__$ref` broke — check the dereference file above for the current field name and update `bodyTypeFromSpec`. (Snippets render client-side with syntax-highlight markup, so they live in `dist/docs/**/*.html` and the JS bundle, not the `.md` exports — grep for the bare type string, not a formatted line.)
+   (`MaterialCreate` was renamed `MaterialUserCreate` server-side between builds 14.50.128 and 14.50.134 — update this list when schemas rename.) If the mechanism check is in doubt (e.g. after a Zudoku upgrade), the only real verification is in a browser: `npm run preview` (serves at `http://localhost:4000/docs`), open an irregular write endpoint (e.g. Moving Load Vehicles → Create) and confirm the C#/Python snippet shows `MovingLoadVehicleCreate`, not the naive path guess `VehicleCreate`.
 2. **Builder chain & Python module path** — the chain (`client.Job.Loads…`) and the Python import (`from space_gass_api.models.<snake> import <Type>`) are still derived mechanically. Spot-check one new endpoint's rendered C# and Python snippet.
 3. **Filter query params** — unchanged: the generator does NOT emit query params; filtered-query snippets are a docs-page job, not a generator job.
 
 ### Naming-consistency sanity check (spec-smell report)
 
-Because the generator now trusts the spec, inconsistent schema naming no longer breaks snippets — but it is a real spec smell worth surfacing to the API team (e.g. sibling create endpoints `POST /sections` → `SectionUserCreate` vs `POST /materials` → `MaterialCreate`: one carries a `User` qualifier, the other doesn't). Run this to list every write endpoint whose body schema name diverges from the `{Entity}Create/Update/Item` convention its path implies:
+Because the generator now trusts the spec, inconsistent schema naming no longer breaks snippets — but it is a real spec smell worth surfacing to the API team (e.g. a `User` qualifier on one sibling create endpoint but not its peer). Run this to list every write endpoint whose body schema name diverges from the `{Entity}Create/Update/Item` convention its path implies:
 
 ```bash
 python - <<'PY'
@@ -109,9 +109,9 @@ for path,ops in sorted(P.items()):
 PY
 ```
 
-This is a **report only** — schema names are a server-side decision; this skill never renames them. Expect a large baseline (≈50 at build `14.50.128`): many flags are **legitimately off-convention by design** and are NOT problems — action bodies (`OpenJobRequest`, `SaveJobRequest`, `MovingLoadGenerateRequest`), shared settings types reused across run/settings endpoints (`BucklingSettingsUpdate`), and consistent domain prefixes (`MovingLoad*`). Don't try to "fix" those. The two signals that *are* actionable:
+This is a **report only** — schema names are a server-side decision; this skill never renames them. Expect a large baseline (54 at builds `14.50.134` and `14.50.139`, unchanged between the two): many flags are **legitimately off-convention by design** and are NOT problems — action bodies (`OpenJobRequest`, `SaveJobRequest`, `MovingLoadGenerateRequest`), shared settings types reused across run/settings endpoints (`BucklingSettingsUpdate`), and consistent domain prefixes (`MovingLoad*`). Don't try to "fix" those. The two signals that *are* actionable:
 
-- **Sibling disagreements** — peer endpoints that should match but don't. The canonical example: `POST /job/structure/sections` → `SectionUserCreate` but `POST /job/structure/materials` → `MaterialCreate` (one carries the `User` qualifier, the other doesn't). These read as accidental.
+- **Sibling disagreements** — peer endpoints that should match but don't. The historical example (since resolved server-side): `POST /job/structure/sections` → `SectionUserCreate` but `POST /job/structure/materials` → `MaterialCreate`; by build `14.50.134` materials was renamed `MaterialUserCreate` to match its sibling. New disagreements of this shape read as accidental.
 - **Build-over-build deltas** — run the script against the previous spec too and diff; a *new* divergence that doesn't fit an existing pattern usually means the backend's naming drifted in this build.
 
 Put the grouped list (and any sibling disagreements / new deltas called out) in the Phase 6 report so the API team can decide whether to normalise.
@@ -138,4 +138,5 @@ Keep this short — the diff in Phase 1 is the source of truth. These are confir
 | `case`/`member`/`mode`/`node` query params (array) | `cases`/`members`/`modes`/`nodes` (string, SG list format `"1,3-7,10"`) |
 | Python `r.case_` (NodeReaction etc.) | `r.case` |
 | `SectionCreate` | `SectionUserCreate` |
+| `MaterialCreate` | `MaterialUserCreate` (between `14.50.128` and `14.50.134`) |
 | `client.File.Status.PostAsync(new FileStatusRequest {...})` | `client.File.Status.GetAsync(config => config.QueryParameters.FilePath = ...)` |

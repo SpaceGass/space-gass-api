@@ -101,7 +101,7 @@ class InfoRequestBuilder(BaseRequestBuilder):
                 return "loadCases"
             return original_name
         
-        # Optional load case filter in SG list format (e.g. `"1,3-7,10"`).Omit to query against every load case in the model.
+        # Optional load case filter in SG list format (e.g. `"1,3-7,10"`).Omit to query against every load case in the model. Ids that do not exist inthe model are dropped — only real load cases are reported.
         load_cases: Optional[str] = None
 
     
