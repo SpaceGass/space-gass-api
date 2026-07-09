@@ -19,11 +19,15 @@ namespace SpaceGassApi.Models
         public float? PaBtm { get; set; }
         /// <summary>Principal angle at top surface. Unit: Rotation (see GET /job/units).</summary>
         public float? PaTop { get; set; }
+        /// <summary>Plastic strain. Unitless. Only populated when the load case was analysed with the SG-X solver using non-linear plate material; null otherwise.</summary>
+        public float? PlasticStrain { get; set; }
         /// <summary>Plate key.</summary>
         public int? Plate { get; set; }
-        /// <summary>Von Mises stress at bottom surface. Unit: Stress (see GET /job/units).</summary>
+        /// <summary>Von Mises stress at bottom surface. Unit: Stress (see GET /job/units). Null when the load case was analysed with the SG-X solver using non-linear plate material (use SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmMax instead).</summary>
         public float? SvmBtm { get; set; }
-        /// <summary>Von Mises stress at top surface. Unit: Stress (see GET /job/units).</summary>
+        /// <summary>Maximum von Mises stress through the plate thickness. Unit: Stress (see GET /job/units). Only populated when the load case was analysed with the SG-X solver using non-linear plate material; null otherwise (use SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmTop/SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmBtm instead).</summary>
+        public float? SvmMax { get; set; }
+        /// <summary>Von Mises stress at top surface. Unit: Stress (see GET /job/units). Null when the load case was analysed with the SG-X solver using non-linear plate material (use SpaceGassApi.Models.Dtos.Query.Analysis.PlateStressDto.SvmMax instead).</summary>
         public float? SvmTop { get; set; }
         /// <summary>Normal stress in X at bottom surface. Unit: Stress (see GET /job/units).</summary>
         public float? SxBtm { get; set; }
@@ -74,8 +78,10 @@ namespace SpaceGassApi.Models
                 { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "paBtm", n => { PaBtm = n.GetFloatValue(); } },
                 { "paTop", n => { PaTop = n.GetFloatValue(); } },
+                { "plasticStrain", n => { PlasticStrain = n.GetFloatValue(); } },
                 { "plate", n => { Plate = n.GetIntValue(); } },
                 { "svmBtm", n => { SvmBtm = n.GetFloatValue(); } },
+                { "svmMax", n => { SvmMax = n.GetFloatValue(); } },
                 { "svmTop", n => { SvmTop = n.GetFloatValue(); } },
                 { "sxBtm", n => { SxBtm = n.GetFloatValue(); } },
                 { "sxTop", n => { SxTop = n.GetFloatValue(); } },
@@ -103,8 +109,10 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteFloatValue("paBtm", PaBtm);
             writer.WriteFloatValue("paTop", PaTop);
+            writer.WriteFloatValue("plasticStrain", PlasticStrain);
             writer.WriteIntValue("plate", Plate);
             writer.WriteFloatValue("svmBtm", SvmBtm);
+            writer.WriteFloatValue("svmMax", SvmMax);
             writer.WriteFloatValue("svmTop", SvmTop);
             writer.WriteFloatValue("sxBtm", SxBtm);
             writer.WriteFloatValue("sxpBtm", SxpBtm);

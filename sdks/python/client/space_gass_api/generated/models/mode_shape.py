@@ -4,6 +4,9 @@ from dataclasses import dataclass, field
 from kiota_abstractions.serialization import Parsable, ParseNode, SerializationWriter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
+if TYPE_CHECKING:
+    from .mode_shape_normalization import ModeShapeNormalization
+
 @dataclass
 class ModeShape(Parsable):
     """
@@ -15,6 +18,8 @@ class ModeShape(Parsable):
     mode: Optional[int] = None
     # Node keys.
     node: Optional[list[int]] = None
+    # Normalization applied to the dynamic mode-shape displacement values.Determined by the dynamic frequency analysis settings and reported alongsideeach mode shape so consumers know how to interpret the magnitudes.
+    normalization: Optional[ModeShapeNormalization] = None
     # Rotational X displacement at each node. Unit: Rotation (see GET /job/units).
     rx: Optional[list[float]] = None
     # Rotational Y displacement at each node. Unit: Rotation (see GET /job/units).
@@ -44,10 +49,15 @@ class ModeShape(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
+        from .mode_shape_normalization import ModeShapeNormalization
+
+        from .mode_shape_normalization import ModeShapeNormalization
+
         fields: dict[str, Callable[[Any], None]] = {
             "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "mode": lambda n : setattr(self, 'mode', n.get_int_value()),
             "node": lambda n : setattr(self, 'node', n.get_collection_of_primitive_values(int)),
+            "normalization": lambda n : setattr(self, 'normalization', n.get_enum_value(ModeShapeNormalization)),
             "rx": lambda n : setattr(self, 'rx', n.get_collection_of_primitive_values(float)),
             "ry": lambda n : setattr(self, 'ry', n.get_collection_of_primitive_values(float)),
             "rz": lambda n : setattr(self, 'rz', n.get_collection_of_primitive_values(float)),
@@ -68,6 +78,7 @@ class ModeShape(Parsable):
         writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("mode", self.mode)
         writer.write_collection_of_primitive_values("node", self.node)
+        writer.write_enum_value("normalization", self.normalization)
         writer.write_collection_of_primitive_values("rx", self.rx)
         writer.write_collection_of_primitive_values("ry", self.ry)
         writer.write_collection_of_primitive_values("rz", self.rz)
