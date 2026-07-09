@@ -96,7 +96,7 @@ namespace SpaceGassApi.Job.Analysis.Static.Info
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class InfoRequestBuilderGetQueryParameters 
         {
-            /// <summary>Optional load case filter in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to query against every load case in the model.</summary>
+            /// <summary>Optional load case filter in SG list format (e.g. `&quot;1,3-7,10&quot;`).Omit to query against every load case in the model. Ids that do not exist inthe model are dropped — only real load cases are reported.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
             [QueryParameter("loadCases")]

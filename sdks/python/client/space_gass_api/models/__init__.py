@@ -186,6 +186,7 @@ from ..generated.models.member_stress_query_result import MemberStressQueryResul
 from ..generated.models.member_type import MemberType
 from ..generated.models.member_update import MemberUpdate
 from ..generated.models.mode_shape import ModeShape
+from ..generated.models.mode_shape_normalization import ModeShapeNormalization
 from ..generated.models.mode_shape_query_result import ModeShapeQueryResult
 from ..generated.models.moment_unit import MomentUnit
 from ..generated.models.moving_load_combination import MovingLoadCombination
@@ -504,6 +505,7 @@ __all__ = [
     "MemberType",
     "MemberUpdate",
     "ModeShape",
+    "ModeShapeNormalization",
     "ModeShapeQueryResult",
     "MomentUnit",
     "MovingLoadCombination",

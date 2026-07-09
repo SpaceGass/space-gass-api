@@ -1,8 +1,8 @@
 {
-  "descriptionHash": "8DD9CF75AD7158E12A8E7F99919A90C0DB4BECD0BD0FDFC6FA13B2677E48C174EAA5BF50FD76D2BF66C5C7929CA0C9250570EDC2E2D48DE8BEF3A2A668AA2E2D",
+  "descriptionHash": "1198B132018AF3B27DE62AAF4E17D14A9F2265192F839D8F4025D88401B7ABBA70A9CBC52890B5883011E36BD35BCE0E794D6A23982A454890356718A8B691BA",
   "descriptionLocation": "../../../../../descriptions/preview/openapi.json",
   "lockFileVersion": "1.0.0",
-  "kiotaVersion": "1.32.2",
+  "kiotaVersion": "1.34.0",
   "clientClassName": "BaseSpaceGassApiClient",
   "typeAccessModifier": "Public",
   "clientNamespaceName": "SpaceGassApi",
@@ -30,5 +30,6 @@
   ],
   "includePatterns": [],
   "excludePatterns": [],
-  "disabledValidationRules": []
+  "disabledValidationRules": [],
+  "allowedExternalOrigins": []
 }

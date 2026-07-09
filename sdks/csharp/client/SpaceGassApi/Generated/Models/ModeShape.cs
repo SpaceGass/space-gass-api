@@ -25,6 +25,8 @@ namespace SpaceGassApi.Models
 #else
         public List<int?> Node { get; set; }
 #endif
+        /// <summary>Normalization applied to the dynamic mode-shape displacement values.Determined by the dynamic frequency analysis settings and reported alongsideeach mode shape so consumers know how to interpret the magnitudes.</summary>
+        public global::SpaceGassApi.Models.ModeShapeNormalization? Normalization { get; set; }
         /// <summary>Rotational X displacement at each node. Unit: Rotation (see GET /job/units).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -94,6 +96,7 @@ namespace SpaceGassApi.Models
                 { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "mode", n => { Mode = n.GetIntValue(); } },
                 { "node", n => { Node = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
+                { "normalization", n => { Normalization = n.GetEnumValue<global::SpaceGassApi.Models.ModeShapeNormalization>(); } },
                 { "rx", n => { Rx = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "ry", n => { Ry = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
                 { "rz", n => { Rz = n.GetCollectionOfPrimitiveValues<float?>()?.AsList(); } },
@@ -112,6 +115,7 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("mode", Mode);
             writer.WriteCollectionOfPrimitiveValues<int?>("node", Node);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.ModeShapeNormalization>("normalization", Normalization);
             writer.WriteCollectionOfPrimitiveValues<float?>("rx", Rx);
             writer.WriteCollectionOfPrimitiveValues<float?>("ry", Ry);
             writer.WriteCollectionOfPrimitiveValues<float?>("rz", Rz);
