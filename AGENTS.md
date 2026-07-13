@@ -21,7 +21,7 @@ import in [CLAUDE.md](CLAUDE.md).
 
 ```bash
 pip install space-gass-api          # Python 3.9+
-dotnet add package SpaceGassApi     # C# / .NET Standard 2.0+
+dotnet add package SpaceGassApi     # C# / .NET 10 or .NET Standard 2.0+
 ```
 
 ## Minimal usage
