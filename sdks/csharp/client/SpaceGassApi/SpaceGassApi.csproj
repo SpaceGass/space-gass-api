@@ -1,12 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;netstandard2.1</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;netstandard2.1;net10.0</TargetFrameworks>
     <RootNamespace>SpaceGassApi</RootNamespace>
-    <!-- SpaceGassApi.Client.dll: SPACE GASS itself ships a server-side
-         SpaceGassAPI.dll, which would collide with this assembly's default
-         name on a case-insensitive filesystem. Namespaces and the package id
-         stay SpaceGassApi. -->
     <AssemblyName>SpaceGassApi.Client</AssemblyName>
     <LangVersion>latest</LangVersion>
     <Nullable>enable</Nullable>
