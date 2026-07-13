@@ -24,6 +24,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Kiota.Bundle" Version="2.0.0" />
+    <!-- lifts Kiota.Bundle's vulnerable System.Text.Json 8.0.0 (NU1903) -->
+    <PackageReference Include="System.Text.Json" Version="8.0.6" />
   </ItemGroup>
 
   <!-- Include generated source files and the hand-maintained client -->
