@@ -1,5 +1,10 @@
 name: Publish Packages
 
+# Publishes the Python SDK to PyPI when a vX.Y.Z release is published.
+#
+# The NuGet package is not published here - it is built, code signed and
+# pushed by a separate release pipeline.
+
 on:
   release:
     types: [published]
@@ -11,7 +16,6 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      nuget-version: ${{ steps.version.outputs.nuget }}
       pypi-version: ${{ steps.version.outputs.pypi }}
     steps:
       - name: Checkout repository
@@ -36,8 +40,6 @@ jobs:
 
           SUFFIX="${TAG_VERSION#$BASE}"
 
-          NUGET="${BASE}${SUFFIX}"
-
           if [ -z "$SUFFIX" ]; then
             PYPI="$BASE"
           else
@@ -45,7 +47,6 @@ jobs:
               's/-alpha\.([0-9]+)/a\1/; s/-beta\.([0-9]+)/b\1/; s/-rc\.([0-9]+)/rc\1/')
           fi
 
-          echo "nuget=$NUGET" >> "$GITHUB_OUTPUT"
           echo "pypi=$PYPI" >> "$GITHUB_OUTPUT"
 
           echo "### Versions" >> "$GITHUB_STEP_SUMMARY"
@@ -53,37 +54,7 @@ jobs:
           echo "|--------|---------|" >> "$GITHUB_STEP_SUMMARY"
           echo "| Spec base | \`$BASE\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| Release tag | \`$TAG\` |" >> "$GITHUB_STEP_SUMMARY"
-          echo "| NuGet | \`$NUGET\` |" >> "$GITHUB_STEP_SUMMARY"
           echo "| PyPI | \`$PYPI\` |" >> "$GITHUB_STEP_SUMMARY"
-
-  publish-nuget:
-    needs: prepare
-    runs-on: ubuntu-latest
-    environment: publish
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
-
-      - name: Setup .NET
-        uses: actions/setup-dotnet@67a3573c9a986a3f9c594539f4ab511d57bb3ce9 # v4.3.1
-        with:
-          dotnet-version: "8.0.x"
-
-      - name: Restore dependencies
-        working-directory: sdks/csharp/client
-        run: dotnet restore
-
-      - name: Build
-        working-directory: sdks/csharp/client
-        run: dotnet build --configuration Release --no-restore -p:Version=${{ needs.prepare.outputs.nuget-version }}
-
-      - name: Pack
-        working-directory: sdks/csharp/client
-        run: dotnet pack --configuration Release --no-build -p:PackageVersion=${{ needs.prepare.outputs.nuget-version }} -o ./nupkg
-
-      - name: Push to NuGet
-        working-directory: sdks/csharp/client
-        run: dotnet nuget push ./nupkg/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
 
   publish-pypi:
     needs: prepare
@@ -120,7 +91,7 @@ jobs:
   # TODO: Re-enable test-examples job once NuGet/PyPI publishing is verified end-to-end.
   # test-examples:
   #   runs-on: ubuntu-latest
-  #   needs: [publish-nuget, publish-pypi]
+  #   needs: [publish-pypi]
   #   steps:
   #     - name: Checkout repository
   #       uses: actions/checkout@v4
