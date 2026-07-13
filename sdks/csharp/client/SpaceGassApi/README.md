@@ -10,7 +10,7 @@ The SPACE GASS API gives you programmatic access to SPACE GASS structural analys
 dotnet add package SpaceGassApi
 ```
 
-- Targets **.NET Standard 2.0** and **2.1** (.NET Framework 4.6.1+, .NET Core 2.0+, .NET 5/6/8+)
+- Targets **.NET 10** and **.NET Standard 2.0/2.1** (.NET Framework 4.6.1+, .NET Core 2.0+, .NET 5/6/8+)
 - [SPACE GASS](https://www.spacegass.com) **14.5 or later** installed with an active licence
 - The SPACE GASS API service running locally (default: `http://localhost:34560`)
 

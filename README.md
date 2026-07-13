@@ -20,7 +20,7 @@ This repository contains:
 
 ### Install the SDK
 
-**C# (.NET Standard 2.0+)**
+**C# (.NET 10 / .NET Standard 2.0+)**
 
 ```bash
 dotnet new console -n MyApp && cd MyApp
