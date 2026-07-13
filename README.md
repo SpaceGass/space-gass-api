@@ -3,7 +3,7 @@
 [![NuGet](https://img.shields.io/nuget/v/SpaceGassApi?label=NuGet&logo=nuget)](https://www.nuget.org/packages/SpaceGassApi)
 [![PyPI](https://img.shields.io/pypi/v/space-gass-api?label=PyPI&logo=pypi)](https://pypi.org/project/space-gass-api/)
 [![GitHub release](https://img.shields.io/github/v/release/SpaceGass/space-gass-api?label=Release&logo=github)](https://github.com/SpaceGass/space-gass-api/releases)
-[![GitHub pre-release](https://img.shields.io/github/v/release/SpaceGass/space-gass-api?include_prereleases&label=Release&logo=github)](https://github.com/SpaceGass/space-gass-api/releases)
+[![GitHub pre-release](https://img.shields.io/github/v/release/SpaceGass/space-gass-api?include_prereleases&label=Pre-Release&logo=github)](https://github.com/SpaceGass/space-gass-api/releases)
 
 Official SPACE GASS API specifications, developer SDKs, and automation examples.
 
