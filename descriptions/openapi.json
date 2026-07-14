@@ -12,7 +12,7 @@
       "url": "https://www.spacegass.com/manual/Introduction/End_User_Licence_Agreement.htm"
     },
     "version": "1",
-    "x-space-gass-build": "14.50.147"
+    "x-space-gass-build": "14.50.149"
   },
   "servers": [
     {
@@ -3137,7 +3137,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/JobFilePreviewInfo"
+                  "$ref": "#/components/schemas/JobFilePreview"
                 }
               }
             }
@@ -3212,7 +3212,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/JobFilePreviewInfo"
+                    "$ref": "#/components/schemas/JobFilePreview"
                   }
                 }
               }
@@ -3247,7 +3247,7 @@
           "File"
         ],
         "summary": "Get File Opening Status",
-        "description": "Status values from SPACE GASS library (SGJobStatus):\r\n- 0 (NoSGandNoATS): File does not exist\r\n- 1 (SGandNoATS): Ready to open safely\r\n- 3: File is locked (another user has it open)\r\n- 4 (NoSGbutATS): Only temporary files exist, .sg file missing\r\n- 5 (SGandATS): Abnormal shutdown detected, unsaved changes exist\r\n- 7: File is locked with unsaved changes\r\n- -1 (UnknownStatus): Cannot write to file or temporary files",
+        "description": "Checks whether a SPACE GASS job file can be opened, without opening it.\r\n\"Recovery files\" below are the temporary working files SPACE GASS keeps while a job\r\nis open; when a session ends abnormally they are left behind and contain that\r\nsession's unsaved changes.\r\n            \r\nStatus values:\r\n- NotFound: no job file exists at the specified path\r\n- ReadyToOpen: can be opened normally — not locked, no unsaved changes\r\n- Locked: another user or process currently has the file open\r\n- RecoveryFilesOnly: only recovery files exist — the .sg file itself is missing (restore it to open the job)\r\n- UnsavedChanges: recovery files with unsaved changes from an abnormal shutdown exist alongside the file\r\n- LockedWithUnsavedChanges: locked and recovery files with unsaved changes also exist\r\n- Unknown: the status could not be determined — the file or the temporary folder may be inaccessible\r\n            \r\nOnly ReadyToOpen can be opened without a forceOption. Locked, UnsavedChanges and\r\nLockedWithUnsavedChanges require a forceOption on POST job/open; NotFound and\r\nRecoveryFilesOnly cannot be opened at the checked path. canOpenSafely is true only\r\nfor ReadyToOpen; availableRecoveryOptions lists the forceOption values that will\r\nsucceed (empty when none will).",
         "operationId": "File_GetFileOpeningStatus",
         "parameters": [
           {
@@ -34933,6 +34933,18 @@
           "canOpenSafely": {
             "type": "boolean",
             "description": "Whether the file can be opened safely without force options"
+          },
+          "availableRecoveryOptions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/JobForceAccessOption"
+            },
+            "description": "The recovery options that can be supplied as `forceOption` on `POST job/open`\r\nfor this file's current status.",
+            "nullable": true,
+            "example": [
+              "OpenUnsavedMostRecent",
+              "OpenPreviousSaved"
+            ]
           }
         },
         "additionalProperties": false,
@@ -35874,18 +35886,18 @@
       },
       "JobFileOpeningStatus": {
         "enum": [
-          "NoSGandNoATS",
-          "SGNotOpenAndNoAts",
-          "SGOpenAndNoAts",
-          "NoSGButAts",
-          "SGNotOpenButAts",
-          "SGOpenAndAts",
-          "UnknownStatus"
+          "NotFound",
+          "ReadyToOpen",
+          "Locked",
+          "RecoveryFilesOnly",
+          "UnsavedChanges",
+          "LockedWithUnsavedChanges",
+          "Unknown"
         ],
         "type": "string",
-        "description": "Status of a job file for opening, based on .sg file and ATS file states"
+        "description": "Openability of a SPACE GASS job file, as returned by `GET file/status`.\r\nOnly `ReadyToOpen` opens without a `forceOption`; `Locked`,\r\n`UnsavedChanges` and `LockedWithUnsavedChanges` require one on\r\n`POST job/open`. `NotFound` and `RecoveryFilesOnly` cannot be\r\nopened at the checked path — no .sg file exists there."
       },
-      "JobFilePreviewInfo": {
+      "JobFilePreview": {
         "type": "object",
         "properties": {
           "filePath": {
