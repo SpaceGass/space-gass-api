@@ -4,7 +4,7 @@
   "description": "Programmatic access to SPACE GASS structural analysis. Local, no-auth HTTP service (http://localhost:34560, base path /api/v1) with generated C# (SpaceGassApi) and Python (space-gass-api) SDKs.",
   "folders": [
     "docs/pages",
-    "descriptions/preview",
+    "descriptions",
     "sdks/python/examples",
     "sdks/csharp/examples"
   ],
