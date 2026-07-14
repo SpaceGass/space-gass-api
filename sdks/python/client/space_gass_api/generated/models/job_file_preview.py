@@ -6,7 +6,7 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 @dataclass
-class JobFilePreviewInfo(Parsable):
+class JobFilePreview(Parsable):
     """
     Information extracted from a SPACE GASS job file (.sg or .sgbase).Contains metadata appended to the file when saved.
     """
@@ -46,15 +46,15 @@ class JobFilePreviewInfo(Parsable):
     version: Optional[str] = None
     
     @staticmethod
-    def create_from_discriminator_value(parse_node: ParseNode) -> JobFilePreviewInfo:
+    def create_from_discriminator_value(parse_node: ParseNode) -> JobFilePreview:
         """
         Creates a new instance of the appropriate class based on discriminator value
         param parse_node: The parse node to use to read the discriminator value and create the object
-        Returns: JobFilePreviewInfo
+        Returns: JobFilePreview
         """
         if parse_node is None:
             raise TypeError("parse_node cannot be null.")
-        return JobFilePreviewInfo()
+        return JobFilePreview()
     
     def get_field_deserializers(self,) -> dict[str, Callable[[ParseNode], None]]:
         """
