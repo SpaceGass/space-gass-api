@@ -96,7 +96,7 @@ from ..generated.models.friction_normal_direction import FrictionNormalDirection
 from ..generated.models.job import Job
 from ..generated.models.job_file import JobFile
 from ..generated.models.job_file_opening_status import JobFileOpeningStatus
-from ..generated.models.job_file_preview_info import JobFilePreviewInfo
+from ..generated.models.job_file_preview import JobFilePreview
 from ..generated.models.job_file_source import JobFileSource
 from ..generated.models.job_force_access_option import JobForceAccessOption
 from ..generated.models.job_headings import JobHeadings
@@ -414,7 +414,7 @@ __all__ = [
     "Job",
     "JobFile",
     "JobFileOpeningStatus",
-    "JobFilePreviewInfo",
+    "JobFilePreview",
     "JobFileSource",
     "JobForceAccessOption",
     "JobHeadings",

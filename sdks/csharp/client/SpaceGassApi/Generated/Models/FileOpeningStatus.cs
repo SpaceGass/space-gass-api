@@ -13,6 +13,14 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FileOpeningStatus : IParsable
     {
+        /// <summary>The recovery options that can be supplied as `forceOption` on `POST job/open`for this file&apos;s current status.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<global::SpaceGassApi.Models.JobForceAccessOption?>? AvailableRecoveryOptions { get; set; }
+#nullable restore
+#else
+        public List<global::SpaceGassApi.Models.JobForceAccessOption?> AvailableRecoveryOptions { get; set; }
+#endif
         /// <summary>Whether the file can be opened safely without force options</summary>
         public bool? CanOpenSafely { get; set; }
         /// <summary>Human-readable description of the status</summary>
@@ -39,7 +47,7 @@ namespace SpaceGassApi.Models
 #else
         public string RecommendedAction { get; set; }
 #endif
-        /// <summary>Status of a job file for opening, based on .sg file and ATS file states</summary>
+        /// <summary>Openability of a SPACE GASS job file, as returned by `GET file/status`.Only `ReadyToOpen` opens without a `forceOption`; `Locked`,`UnsavedChanges` and `LockedWithUnsavedChanges` require one on`POST job/open`. `NotFound` and `RecoveryFilesOnly` cannot beopened at the checked path — no .sg file exists there.</summary>
         public global::SpaceGassApi.Models.JobFileOpeningStatus? Status { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
@@ -59,6 +67,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "availableRecoveryOptions", n => { AvailableRecoveryOptions = n.GetCollectionOfEnumValues<global::SpaceGassApi.Models.JobForceAccessOption>()?.AsList(); } },
                 { "canOpenSafely", n => { CanOpenSafely = n.GetBoolValue(); } },
                 { "description", n => { Description = n.GetStringValue(); } },
                 { "filePath", n => { FilePath = n.GetStringValue(); } },
@@ -73,6 +82,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteCollectionOfEnumValues<global::SpaceGassApi.Models.JobForceAccessOption>("availableRecoveryOptions", AvailableRecoveryOptions);
             writer.WriteBoolValue("canOpenSafely", CanOpenSafely);
             writer.WriteStringValue("description", Description);
             writer.WriteStringValue("filePath", FilePath);

@@ -3,37 +3,37 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Status of a job file for opening, based on .sg file and ATS file states</summary>
+    /// <summary>Openability of a SPACE GASS job file, as returned by `GET file/status`.Only `ReadyToOpen` opens without a `forceOption`; `Locked`,`UnsavedChanges` and `LockedWithUnsavedChanges` require one on`POST job/open`. `NotFound` and `RecoveryFilesOnly` cannot beopened at the checked path — no .sg file exists there.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum JobFileOpeningStatus
     {
-        [EnumMember(Value = "NoSGandNoATS")]
+        [EnumMember(Value = "NotFound")]
         #pragma warning disable CS1591
-        NoSGandNoATS,
+        NotFound,
         #pragma warning restore CS1591
-        [EnumMember(Value = "SGNotOpenAndNoAts")]
+        [EnumMember(Value = "ReadyToOpen")]
         #pragma warning disable CS1591
-        SGNotOpenAndNoAts,
+        ReadyToOpen,
         #pragma warning restore CS1591
-        [EnumMember(Value = "SGOpenAndNoAts")]
+        [EnumMember(Value = "Locked")]
         #pragma warning disable CS1591
-        SGOpenAndNoAts,
+        Locked,
         #pragma warning restore CS1591
-        [EnumMember(Value = "NoSGButAts")]
+        [EnumMember(Value = "RecoveryFilesOnly")]
         #pragma warning disable CS1591
-        NoSGButAts,
+        RecoveryFilesOnly,
         #pragma warning restore CS1591
-        [EnumMember(Value = "SGNotOpenButAts")]
+        [EnumMember(Value = "UnsavedChanges")]
         #pragma warning disable CS1591
-        SGNotOpenButAts,
+        UnsavedChanges,
         #pragma warning restore CS1591
-        [EnumMember(Value = "SGOpenAndAts")]
+        [EnumMember(Value = "LockedWithUnsavedChanges")]
         #pragma warning disable CS1591
-        SGOpenAndAts,
+        LockedWithUnsavedChanges,
         #pragma warning restore CS1591
-        [EnumMember(Value = "UnknownStatus")]
+        [EnumMember(Value = "Unknown")]
         #pragma warning disable CS1591
-        UnknownStatus,
+        Unknown,
         #pragma warning restore CS1591
     }
 }
