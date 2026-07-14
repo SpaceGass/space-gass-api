@@ -15,7 +15,7 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ...models.error_response import ErrorResponse
-    from ...models.job_file_preview_info import JobFilePreviewInfo
+    from ...models.job_file_preview import JobFilePreview
 
 class SamplesRequestBuilder(BaseRequestBuilder):
     """
@@ -36,15 +36,15 @@ class SamplesRequestBuilder(BaseRequestBuilder):
         self,
         *,
         include_images: Optional[bool] = None,
-    ) -> Optional[list[JobFilePreviewInfo]]: ...
+    ) -> Optional[list[JobFilePreview]]: ...
     @overload
-    async def get(self, request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None) -> Optional[list[JobFilePreviewInfo]]: ...
+    async def get(self, request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None) -> Optional[list[JobFilePreview]]: ...
     # --- end overloads ---
-    async def get(self,request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[JobFilePreviewInfo]]:
+    async def get(self,request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[JobFilePreview]]:
         """
         Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.The file paths use virtual `samples://` scheme (e.g. "samples://Portal Frame.SG")which can be used with the preview and open endpoints.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET "/api/v1/file/samples?includeImages=true"
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[list[JobFilePreviewInfo]]
+        Returns: Optional[list[JobFilePreview]]
         """
         request_info = self.to_get_request_information(
             request_configuration
@@ -53,13 +53,14 @@ class SamplesRequestBuilder(BaseRequestBuilder):
 
         error_mapping: dict[str, type[ParsableFactory]] = {
             "403": ErrorResponse,
+            "404": ErrorResponse,
             "500": ErrorResponse,
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from ...models.job_file_preview_info import JobFilePreviewInfo
+        from ...models.job_file_preview import JobFilePreview
 
-        return await self.request_adapter.send_collection_async(request_info, JobFilePreviewInfo, error_mapping)
+        return await self.request_adapter.send_collection_async(request_info, JobFilePreview, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
