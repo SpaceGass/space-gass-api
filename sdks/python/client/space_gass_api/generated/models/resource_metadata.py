@@ -5,7 +5,6 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .entity_id import EntityId
     from .field_metadata import FieldMetadata
 
 @dataclass
@@ -21,8 +20,8 @@ class ResourceMetadata(Parsable):
     max_id: Optional[int] = None
     # Next available Id (single-int Id entities only).
     next_id: Optional[int] = None
-    # Identifies entity types managed by the API.Kept separate from SGFileID to allow for future API-only entitiesthat may not have a formal SPACE GASS FileID.
-    resource_type: Optional[EntityId] = None
+    # Resource type identifier — e.g. "Members", "NodeLoads", "StaticResults".
+    resource_type: Optional[str] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> ResourceMetadata:
@@ -40,10 +39,8 @@ class ResourceMetadata(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .entity_id import EntityId
         from .field_metadata import FieldMetadata
 
-        from .entity_id import EntityId
         from .field_metadata import FieldMetadata
 
         fields: dict[str, Callable[[Any], None]] = {
@@ -51,7 +48,7 @@ class ResourceMetadata(Parsable):
             "fields": lambda n : setattr(self, 'fields', n.get_collection_of_object_values(FieldMetadata)),
             "maxId": lambda n : setattr(self, 'max_id', n.get_int_value()),
             "nextId": lambda n : setattr(self, 'next_id', n.get_int_value()),
-            "resourceType": lambda n : setattr(self, 'resource_type', n.get_enum_value(EntityId)),
+            "resourceType": lambda n : setattr(self, 'resource_type', n.get_str_value()),
         }
         return fields
     
@@ -67,6 +64,6 @@ class ResourceMetadata(Parsable):
         writer.write_collection_of_object_values("fields", self.fields)
         writer.write_int_value("maxId", self.max_id)
         writer.write_int_value("nextId", self.next_id)
-        writer.write_enum_value("resourceType", self.resource_type)
+        writer.write_str_value("resourceType", self.resource_type)
     
 

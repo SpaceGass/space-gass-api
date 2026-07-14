@@ -12,7 +12,7 @@
       "url": "https://www.spacegass.com/manual/Introduction/End_User_Licence_Agreement.htm"
     },
     "version": "1",
-    "x-space-gass-build": "14.50.146"
+    "x-space-gass-build": "14.50.147"
   },
   "servers": [
     {
@@ -34760,67 +34760,6 @@
         "additionalProperties": false,
         "description": "Update request for Dynamic Frequency Analysis settings.\r\nOnly fields included in the request are updated; omit a field to keep its current value."
       },
-      "EntityId": {
-        "enum": [
-          "Nodes",
-          "Members",
-          "Plates",
-          "PlateCuts",
-          "PlateStrips",
-          "Solids",
-          "NodeLoads",
-          "MemberConcentratedLoads",
-          "MemberDistributedLoads",
-          "MemberTorsionLoads",
-          "MemberPrestressLoads",
-          "PlateLoads",
-          "AreaLoads",
-          "PrescribedDisplacements",
-          "SelfWeightLoads",
-          "ThermalLoads",
-          "LumpedMassLoads",
-          "Sections",
-          "Materials",
-          "NodeRestraints",
-          "NodeConstraints",
-          "MemberOffsets",
-          "MemberReleases",
-          "MemberDirection",
-          "PlateDirection",
-          "Units",
-          "JobSettings",
-          "LoadCases",
-          "LoadCaseGroups",
-          "LoadCategories",
-          "CombinationLoadCases",
-          "Filters",
-          "MovingLoadSettings",
-          "MovingLoadElementsToLoad",
-          "MovingLoadScenarios",
-          "MovingLoadVehicles",
-          "MovingLoadPressures",
-          "MovingLoadTravelPaths",
-          "LoadCombinations",
-          "AnalysisSettings",
-          "NodeDisplacements",
-          "NodeReactions",
-          "ReactionSummary",
-          "MemberEndForces",
-          "MemberIntermediateForces",
-          "MemberIntermediateDisplacements",
-          "MemberStresses",
-          "PlateNodalForces",
-          "PlateElementForces",
-          "PlateElementStresses",
-          "BucklingLoadFactors",
-          "BucklingEffectiveLengths",
-          "NaturalFrequencies",
-          "ModeShapes",
-          "SteelCheckSummary"
-        ],
-        "type": "string",
-        "description": "Identifies entity types managed by the API.\r\nKept separate from SGFileID to allow for future API-only entities\r\nthat may not have a formal SPACE GASS FileID."
-      },
       "ErrorList": {
         "type": "object",
         "properties": {
@@ -44065,7 +44004,10 @@
         "type": "object",
         "properties": {
           "resourceType": {
-            "$ref": "#/components/schemas/EntityId"
+            "type": "string",
+            "description": "Resource type identifier — e.g. \"Members\", \"NodeLoads\", \"StaticResults\".",
+            "nullable": true,
+            "example": "Members"
           },
           "count": {
             "type": "integer",

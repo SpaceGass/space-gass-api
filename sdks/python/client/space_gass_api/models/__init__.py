@@ -50,7 +50,6 @@ from ..generated.models.direction_source import DirectionSource
 from ..generated.models.direction_update import DirectionUpdate
 from ..generated.models.dynamic_frequency_settings import DynamicFrequencySettings
 from ..generated.models.dynamic_frequency_settings_update import DynamicFrequencySettingsUpdate
-from ..generated.models.entity_id import EntityId
 from ..generated.models.error_list import ErrorList
 from ..generated.models.error_response import ErrorResponse
 from ..generated.models.error_response_extensions import ErrorResponse_extensions
@@ -369,7 +368,6 @@ __all__ = [
     "DirectionUpdate",
     "DynamicFrequencySettings",
     "DynamicFrequencySettingsUpdate",
-    "EntityId",
     "ErrorList",
     "ErrorResponse",
     "ErrorResponse_extensions",

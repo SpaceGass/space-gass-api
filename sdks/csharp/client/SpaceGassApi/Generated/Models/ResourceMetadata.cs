@@ -27,8 +27,14 @@ namespace SpaceGassApi.Models
         public int? MaxId { get; set; }
         /// <summary>Next available Id (single-int Id entities only).</summary>
         public int? NextId { get; set; }
-        /// <summary>Identifies entity types managed by the API.Kept separate from SGFileID to allow for future API-only entitiesthat may not have a formal SPACE GASS FileID.</summary>
-        public global::SpaceGassApi.Models.EntityId? ResourceType { get; set; }
+        /// <summary>Resource type identifier — e.g. &quot;Members&quot;, &quot;NodeLoads&quot;, &quot;StaticResults&quot;.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? ResourceType { get; set; }
+#nullable restore
+#else
+        public string ResourceType { get; set; }
+#endif
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
@@ -51,7 +57,7 @@ namespace SpaceGassApi.Models
                 { "fields", n => { Fields = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.FieldMetadata>(global::SpaceGassApi.Models.FieldMetadata.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "maxId", n => { MaxId = n.GetIntValue(); } },
                 { "nextId", n => { NextId = n.GetIntValue(); } },
-                { "resourceType", n => { ResourceType = n.GetEnumValue<global::SpaceGassApi.Models.EntityId>(); } },
+                { "resourceType", n => { ResourceType = n.GetStringValue(); } },
             };
         }
         /// <summary>
@@ -65,7 +71,7 @@ namespace SpaceGassApi.Models
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.FieldMetadata>("fields", Fields);
             writer.WriteIntValue("maxId", MaxId);
             writer.WriteIntValue("nextId", NextId);
-            writer.WriteEnumValue<global::SpaceGassApi.Models.EntityId>("resourceType", ResourceType);
+            writer.WriteStringValue("resourceType", ResourceType);
         }
     }
 }
