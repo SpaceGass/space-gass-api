@@ -69,11 +69,11 @@ try
     //   N = Friction (limit proportional to the normal-axis reaction)
     Console.WriteLine("Applying restraints...");
 
-    await client.Job.Structure.NodeRestraint.PostAsync(
+    await client.Job.Structure.NodeRestraints.PostAsync(
         new NodeRestraintCreate { Node = node1.Id, RestraintCode = "FFFFFF" });
     Console.WriteLine($"  Node {node1.Id}: Fixed (FFFFFF)");
 
-    await client.Job.Structure.NodeRestraint.PostAsync(
+    await client.Job.Structure.NodeRestraints.PostAsync(
         new NodeRestraintCreate { Node = node2.Id, RestraintCode = "FFFRRR" });
     Console.WriteLine($"  Node {node2.Id}: Pinned (FFFRRR)");
     Console.WriteLine();
@@ -81,7 +81,7 @@ try
     // == Step 4 — Add a library material ===========================
     Console.WriteLine("Adding library material...");
     var steel = await client.Job.Structure.Materials.Library.PostAsync(
-        new MaterialCreate
+        new MaterialLibraryCreate
         {
             Library = "Aust",
             Name = "STEEL",
