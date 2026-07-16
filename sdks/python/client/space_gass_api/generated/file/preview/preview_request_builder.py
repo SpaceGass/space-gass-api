@@ -15,7 +15,7 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ...models.error_response import ErrorResponse
-    from ...models.job_file_preview_info import JobFilePreviewInfo
+    from ...models.job_file_preview import JobFilePreview
 
 class PreviewRequestBuilder(BaseRequestBuilder):
     """
@@ -37,15 +37,15 @@ class PreviewRequestBuilder(BaseRequestBuilder):
         *,
         file_path: Optional[str] = None,
         include_image: Optional[bool] = None,
-    ) -> Optional[JobFilePreviewInfo]: ...
+    ) -> Optional[JobFilePreview]: ...
     @overload
-    async def get(self, request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None) -> Optional[JobFilePreviewInfo]: ...
+    async def get(self, request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None) -> Optional[JobFilePreview]: ...
     # --- end overloads ---
-    async def get(self,request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[JobFilePreviewInfo]:
+    async def get(self,request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[JobFilePreview]:
         """
         This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Metadata fields will be null in that case.            Example usage with curl:                curl -X GET "/api/v1/file/preview?filePath=C:/path/to/job.sg&includeImage=true"
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[JobFilePreviewInfo]
+        Returns: Optional[JobFilePreview]
         """
         request_info = self.to_get_request_information(
             request_configuration
@@ -60,9 +60,9 @@ class PreviewRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from ...models.job_file_preview_info import JobFilePreviewInfo
+        from ...models.job_file_preview import JobFilePreview
 
-        return await self.request_adapter.send_async(request_info, JobFilePreviewInfo, error_mapping)
+        return await self.request_adapter.send_async(request_info, JobFilePreview, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[PreviewRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """

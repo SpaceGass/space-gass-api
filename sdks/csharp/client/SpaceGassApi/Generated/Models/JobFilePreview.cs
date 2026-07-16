@@ -11,7 +11,7 @@ namespace SpaceGassApi.Models
     /// Information extracted from a SPACE GASS job file (.sg or .sgbase).Contains metadata appended to the file when saved.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
-    public partial class JobFilePreviewInfo : IParsable
+    public partial class JobFilePreview : IParsable
     {
         /// <summary>Compression type used when saving the file</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -134,12 +134,12 @@ namespace SpaceGassApi.Models
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.JobFilePreviewInfo"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.JobFilePreview"/></returns>
         /// <param name="parseNode">The parse node to use to read the discriminator value and create the object</param>
-        public static global::SpaceGassApi.Models.JobFilePreviewInfo CreateFromDiscriminatorValue(IParseNode parseNode)
+        public static global::SpaceGassApi.Models.JobFilePreview CreateFromDiscriminatorValue(IParseNode parseNode)
         {
             if(ReferenceEquals(parseNode, null)) throw new ArgumentNullException(nameof(parseNode));
-            return new global::SpaceGassApi.Models.JobFilePreviewInfo();
+            return new global::SpaceGassApi.Models.JobFilePreview();
         }
         /// <summary>
         /// The deserialization information for the current model
