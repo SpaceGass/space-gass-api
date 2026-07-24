@@ -6,12 +6,15 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from .job_file_opening_status import JobFileOpeningStatus
+    from .job_force_access_option import JobForceAccessOption
 
 @dataclass
 class FileOpeningStatus(Parsable):
     """
     Status information about a SPACE GASS file's readiness for opening.
     """
+    # The recovery options that can be supplied as `forceOption` on `POST job/open`for this file's current status.
+    available_recovery_options: Optional[list[JobForceAccessOption]] = None
     # Whether the file can be opened safely without force options
     can_open_safely: Optional[bool] = None
     # Human-readable description of the status
@@ -20,7 +23,7 @@ class FileOpeningStatus(Parsable):
     file_path: Optional[str] = None
     # Recommended action to take based on the status
     recommended_action: Optional[str] = None
-    # Status of a job file for opening, based on .sg file and ATS file states
+    # Openability of a SPACE GASS job file, as returned by `GET file/status`.Only `ReadyToOpen` opens without a `forceOption`; `Locked`,`UnsavedChanges` and `LockedWithUnsavedChanges` require one on`POST job/open`. `NotFound` and `RecoveryFilesOnly` cannot beopened at the checked path — no .sg file exists there.
     status: Optional[JobFileOpeningStatus] = None
     
     @staticmethod
@@ -40,10 +43,13 @@ class FileOpeningStatus(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         from .job_file_opening_status import JobFileOpeningStatus
+        from .job_force_access_option import JobForceAccessOption
 
         from .job_file_opening_status import JobFileOpeningStatus
+        from .job_force_access_option import JobForceAccessOption
 
         fields: dict[str, Callable[[Any], None]] = {
+            "availableRecoveryOptions": lambda n : setattr(self, 'available_recovery_options', n.get_collection_of_enum_values(JobForceAccessOption)),
             "canOpenSafely": lambda n : setattr(self, 'can_open_safely', n.get_bool_value()),
             "description": lambda n : setattr(self, 'description', n.get_str_value()),
             "filePath": lambda n : setattr(self, 'file_path', n.get_str_value()),
@@ -60,6 +66,7 @@ class FileOpeningStatus(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_collection_of_enum_values("availableRecoveryOptions", self.available_recovery_options)
         writer.write_bool_value("canOpenSafely", self.can_open_safely)
         writer.write_str_value("description", self.description)
         writer.write_str_value("filePath", self.file_path)

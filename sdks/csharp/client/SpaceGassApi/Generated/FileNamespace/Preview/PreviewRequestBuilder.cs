@@ -36,7 +36,7 @@ namespace SpaceGassApi.FileNamespace.Preview
         /// <summary>
         /// This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Metadata fields will be null in that case.            Example usage with curl:                curl -X GET &quot;/api/v1/file/preview?filePath=C:\path\to\job.sg&amp;includeImage=true&quot;
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.JobFilePreviewInfo"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.JobFilePreview"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
@@ -45,11 +45,11 @@ namespace SpaceGassApi.FileNamespace.Preview
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.JobFilePreviewInfo?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.FileNamespace.Preview.PreviewRequestBuilder.PreviewRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.JobFilePreview?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.FileNamespace.Preview.PreviewRequestBuilder.PreviewRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.JobFilePreviewInfo> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.FileNamespace.Preview.PreviewRequestBuilder.PreviewRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.JobFilePreview> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.FileNamespace.Preview.PreviewRequestBuilder.PreviewRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
@@ -60,7 +60,7 @@ namespace SpaceGassApi.FileNamespace.Preview
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobFilePreviewInfo>(requestInfo, global::SpaceGassApi.Models.JobFilePreviewInfo.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.JobFilePreview>(requestInfo, global::SpaceGassApi.Models.JobFilePreview.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// This endpoint extracts metadata appended to SPACE GASS job files:- Version: SPACE GASS version used to save the file- Licensee: Licensed user name when file was saved- Designer: Computer name where file was saved- Preview image: Screenshot of the model when saved (if available)            Note: Older files may not have this metadata. Metadata fields will be null in that case.            Example usage with curl:                curl -X GET &quot;/api/v1/file/preview?filePath=C:\path\to\job.sg&amp;includeImage=true&quot;

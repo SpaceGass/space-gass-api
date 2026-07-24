@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Releases
         {
         }
         /// <summary>
-        /// Resets the releases for a specific member to defaults.Removes any custom release configuration.
+        /// Resets the releases for a specific member to defaults (fully fixed, FFFFFF at both ends).Releases are intrinsic to the member — they always exist — so this DELETE acts as areset to the default state rather than removing a resource; it never returns 404 fora missing sub-resource, only for a missing member.
         /// </summary>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -118,7 +118,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Releases
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MemberRelease>(requestInfo, global::SpaceGassApi.Models.MemberRelease.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Resets the releases for a specific member to defaults.Removes any custom release configuration.
+        /// Resets the releases for a specific member to defaults (fully fixed, FFFFFF at both ends).Releases are intrinsic to the member — they always exist — so this DELETE acts as areset to the default state rather than removing a resource; it never returns 404 fora missing sub-resource, only for a missing member.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

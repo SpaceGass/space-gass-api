@@ -7,9 +7,9 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum NodeTypeFilter
     {
-        [EnumMember(Value = "All_Types")]
+        [EnumMember(Value = "All")]
         #pragma warning disable CS1591
-        All_Types,
+        All,
         #pragma warning restore CS1591
         [EnumMember(Value = "Restrained")]
         #pragma warning disable CS1591

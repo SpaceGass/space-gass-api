@@ -218,7 +218,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 
-        # Filter by node type (e.g., Restrained). Default is All_Types.
+        # Filter by node type (e.g., Restrained). Default is All.
         node_type: Optional[NodeTypeFilter] = None
 
         # Node Ids to filter by, in SG list format (e.g. `"1,5-10,15"`).Omit to return all nodes.

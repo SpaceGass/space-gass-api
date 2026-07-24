@@ -33,7 +33,7 @@ class ReleasesRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> None:
         """
-        Resets the releases for a specific member to defaults.Removes any custom release configuration.
+        Resets the releases for a specific member to defaults (fully fixed, FFFFFF at both ends).Releases are intrinsic to the member — they always exist — so this DELETE acts as areset to the default state rather than removing a resource; it never returns 404 fora missing sub-resource, only for a missing member.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: None
         """
@@ -101,7 +101,7 @@ class ReleasesRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Resets the releases for a specific member to defaults.Removes any custom release configuration.
+        Resets the releases for a specific member to defaults (fully fixed, FFFFFF at both ends).Releases are intrinsic to the member — they always exist — so this DELETE acts as areset to the default state rather than removing a resource; it never returns 404 fora missing sub-resource, only for a missing member.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

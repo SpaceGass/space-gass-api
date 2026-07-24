@@ -42,7 +42,6 @@ class MetadataRequestBuilder(BaseRequestBuilder):
         from ......models.error_response import ErrorResponse
 
         error_mapping: dict[str, type[ParsableFactory]] = {
-            "401": ErrorResponse,
             "403": ErrorResponse,
             "404": ErrorResponse,
             "500": ErrorResponse,

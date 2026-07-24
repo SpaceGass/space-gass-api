@@ -1,6 +1,6 @@
 from enum import Enum
 
 class NodeTypeFilter(str, Enum):
-    All_Types = "All_Types",
+    All = "All",
     Restrained = "Restrained",
 

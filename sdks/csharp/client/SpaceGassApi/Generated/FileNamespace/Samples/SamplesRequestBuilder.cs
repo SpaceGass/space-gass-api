@@ -36,27 +36,29 @@ namespace SpaceGassApi.FileNamespace.Samples
         /// <summary>
         /// Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.The file paths use virtual `samples://` scheme (e.g. &quot;samples://Portal Frame.SG&quot;)which can be used with the preview and open endpoints.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET &quot;/api/v1/file/samples?includeImages=true&quot;
         /// </summary>
-        /// <returns>A List&lt;global::SpaceGassApi.Models.JobFilePreviewInfo&gt;</returns>
+        /// <returns>A List&lt;global::SpaceGassApi.Models.JobFilePreview&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<List<global::SpaceGassApi.Models.JobFilePreviewInfo>?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.FileNamespace.Samples.SamplesRequestBuilder.SamplesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<List<global::SpaceGassApi.Models.JobFilePreview>?> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.FileNamespace.Samples.SamplesRequestBuilder.SamplesRequestBuilderGetQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<List<global::SpaceGassApi.Models.JobFilePreviewInfo>> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.FileNamespace.Samples.SamplesRequestBuilder.SamplesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<List<global::SpaceGassApi.Models.JobFilePreview>> GetAsync(Action<RequestConfiguration<global::SpaceGassApi.FileNamespace.Samples.SamplesRequestBuilder.SamplesRequestBuilderGetQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
+                { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.JobFilePreviewInfo>(requestInfo, global::SpaceGassApi.Models.JobFilePreviewInfo.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            var collectionResult = await RequestAdapter.SendCollectionAsync<global::SpaceGassApi.Models.JobFilePreview>(requestInfo, global::SpaceGassApi.Models.JobFilePreview.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
             return collectionResult?.AsList();
         }
         /// <summary>
