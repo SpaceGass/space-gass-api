@@ -16,8 +16,6 @@ class NodeConstraint(Parsable):
     axes: Optional[ConstraintAxes] = None
     # A 6-character string defining which degrees of freedom are constrained.Each character position maps to a DOF: UX, UY, UZ, RX, RY, RZ (left to right).'F' = Fixed (slave DOF is tied to master), 'R' = Released (slave DOF is free).Example: "FFFRRR" constrains translations only; "FFFFFF" constrains all 6 DOFs.
     constraint_code: Optional[str] = None
-    # The unique identifier for this constraint record.
-    guid: Optional[str] = None
     # The master node number. The slave node's constrained DOFs follow this node's motion.
     master_node: Optional[int] = None
     # The slave node number. This is the node whose DOFs are constrained to the master.
@@ -52,7 +50,6 @@ class NodeConstraint(Parsable):
         fields: dict[str, Callable[[Any], None]] = {
             "axes": lambda n : setattr(self, 'axes', n.get_enum_value(ConstraintAxes)),
             "constraintCode": lambda n : setattr(self, 'constraint_code', n.get_str_value()),
-            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "masterNode": lambda n : setattr(self, 'master_node', n.get_int_value()),
             "slaveNode": lambda n : setattr(self, 'slave_node', n.get_int_value()),
             "xVector": lambda n : setattr(self, 'x_vector', n.get_float_value()),
@@ -71,7 +68,6 @@ class NodeConstraint(Parsable):
             raise TypeError("writer cannot be null.")
         writer.write_enum_value("axes", self.axes)
         writer.write_str_value("constraintCode", self.constraint_code)
-        writer.write_str_value("guid", self.guid)
         writer.write_int_value("masterNode", self.master_node)
         writer.write_int_value("slaveNode", self.slave_node)
         writer.write_float_value("xVector", self.x_vector)

@@ -1,6 +1,6 @@
 {
-  "descriptionHash": "CE05C8F66BB702D09E23B94FD668FC649C50F066C1737975AACABD829D4A8F014CCA2EF903EF73F9E0D5FD8805D53FBF69D30A322224C1F89C40F887B7EB31CE",
-  "descriptionLocation": "../../../../../descriptions/preview/openapi.json",
+  "descriptionHash": "BBE8056554D3F3B4FB7ACD5805BE16B2BE00B534AE463BF8C9DE7587C635609D15712DDABCAE576D1EC3D7D2C45C1ED3DCEEACC4FDAE0BE444A6924E82A707A6",
+  "descriptionLocation": "../../../../../descriptions/openapi.json",
   "lockFileVersion": "1.0.0",
   "kiotaVersion": "1.34.1",
   "clientClassName": "BaseSpaceGassApiClient",

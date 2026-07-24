@@ -21,13 +21,13 @@ namespace SpaceGassApi.Models
 #else
         public string Error { get; set; }
 #endif
-        /// <summary>Detailed SPACE GASS validation messages for this item, when available.Populated from `SpaceGassException.SpaceGassErrors` so callers seethe exact field-level diagnostic (&quot;Restraint Code: Valid characters are FRSVPN&quot;)without needing a follow-up call to `GET /job/errors/last`.</summary>
+        /// <summary>Structured per-entry validation errors for this item, when available — each with`field`, `message`, and a taxonomy `code` (e.g. `DUPLICATE_ID`,`REFERENCE_NOT_FOUND`, `FIELD_VALIDATION_ERROR`), mirroring the single-item`errors[]` array. Populated from `SpaceGassException.Entries` so callers getthe exact diagnostics without a follow-up call to `GET /job/errors/last`.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public List<string>? Errors { get; set; }
+        public List<global::SpaceGassApi.Models.ValidationError>? Errors { get; set; }
 #nullable restore
 #else
-        public List<string> Errors { get; set; }
+        public List<global::SpaceGassApi.Models.ValidationError> Errors { get; set; }
 #endif
         /// <summary>Entity Id of the failed item (for single-Id entities).</summary>
         public int? Id { get; set; }
@@ -60,7 +60,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "error", n => { Error = n.GetStringValue(); } },
-                { "errors", n => { Errors = n.GetCollectionOfPrimitiveValues<string>()?.AsList(); } },
+                { "errors", n => { Errors = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.ValidationError>(global::SpaceGassApi.Models.ValidationError.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "ids", n => { Ids = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
                 { "index", n => { Index = n.GetIntValue(); } },
@@ -74,7 +74,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteStringValue("error", Error);
-            writer.WriteCollectionOfPrimitiveValues<string>("errors", Errors);
+            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.ValidationError>("errors", Errors);
             writer.WriteIntValue("id", Id);
             writer.WriteCollectionOfPrimitiveValues<int?>("ids", Ids);
             writer.WriteIntValue("index", Index);

@@ -23,14 +23,6 @@ namespace SpaceGassApi.Models
 #else
         public string ConstraintCode { get; set; }
 #endif
-        /// <summary>The unique identifier for this constraint record.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Guid { get; set; }
-#nullable restore
-#else
-        public string Guid { get; set; }
-#endif
         /// <summary>The master node number. The slave node&apos;s constrained DOFs follow this node&apos;s motion.</summary>
         public int? MasterNode { get; set; }
         /// <summary>The slave node number. This is the node whose DOFs are constrained to the master.</summary>
@@ -61,7 +53,6 @@ namespace SpaceGassApi.Models
             {
                 { "axes", n => { Axes = n.GetEnumValue<global::SpaceGassApi.Models.ConstraintAxes>(); } },
                 { "constraintCode", n => { ConstraintCode = n.GetStringValue(); } },
-                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "masterNode", n => { MasterNode = n.GetIntValue(); } },
                 { "slaveNode", n => { SlaveNode = n.GetIntValue(); } },
                 { "xVector", n => { XVector = n.GetDoubleValue(); } },
@@ -78,7 +69,6 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteEnumValue<global::SpaceGassApi.Models.ConstraintAxes>("axes", Axes);
             writer.WriteStringValue("constraintCode", ConstraintCode);
-            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("masterNode", MasterNode);
             writer.WriteIntValue("slaveNode", SlaveNode);
             writer.WriteDoubleValue("xVector", XVector);

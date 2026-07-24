@@ -11,9 +11,9 @@ namespace SpaceGassApi.Models
         #pragma warning disable CS1591
         NotApplicable,
         #pragma warning restore CS1591
-        [EnumMember(Value = "SingleType")]
+        [EnumMember(Value = "Single")]
         #pragma warning disable CS1591
-        SingleType,
+        Single,
         #pragma warning restore CS1591
         [EnumMember(Value = "ShortShort")]
         #pragma warning disable CS1591

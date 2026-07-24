@@ -227,7 +227,7 @@ namespace SpaceGassApi.Job.Structure.Nodes
             [QueryParameter("nodes")]
             public string Nodes { get; set; }
 #endif
-            /// <summary>Filter by node type (e.g., Restrained). Default is All_Types.</summary>
+            /// <summary>Filter by node type (e.g., Restrained). Default is All.</summary>
             [Obsolete("This property is deprecated, use NodeTypeAsNodeTypeFilter instead")]
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -238,7 +238,7 @@ namespace SpaceGassApi.Job.Structure.Nodes
             [QueryParameter("nodeType")]
             public string NodeType { get; set; }
 #endif
-            /// <summary>Filter by node type (e.g., Restrained). Default is All_Types.</summary>
+            /// <summary>Filter by node type (e.g., Restrained). Default is All.</summary>
             [QueryParameter("nodeType")]
             public global::SpaceGassApi.Models.NodeTypeFilter? NodeTypeAsNodeTypeFilter { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
