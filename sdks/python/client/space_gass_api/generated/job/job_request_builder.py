@@ -19,6 +19,7 @@ if TYPE_CHECKING:
     from .analysis.analysis_request_builder import AnalysisRequestBuilder
     from .close.close_request_builder import CloseRequestBuilder
     from .data.data_request_builder import DataRequestBuilder
+    from .design.design_request_builder import DesignRequestBuilder
     from .errors.errors_request_builder import ErrorsRequestBuilder
     from .filters.filters_request_builder import FiltersRequestBuilder
     from .headings.headings_request_builder import HeadingsRequestBuilder
@@ -117,6 +118,15 @@ class JobRequestBuilder(BaseRequestBuilder):
         from .data.data_request_builder import DataRequestBuilder
 
         return DataRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def design(self) -> DesignRequestBuilder:
+        """
+        The design property
+        """
+        from .design.design_request_builder import DesignRequestBuilder
+
+        return DesignRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def errors(self) -> ErrorsRequestBuilder:

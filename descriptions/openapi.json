@@ -12,7 +12,7 @@
       "url": "https://www.spacegass.com/manual/Introduction/End_User_Licence_Agreement.htm"
     },
     "version": "1",
-    "x-space-gass-build": "14.50.154"
+    "x-space-gass-build": "14.50.155"
   },
   "servers": [
     {
@@ -32137,6 +32137,849 @@
         }
       }
     },
+    "/job/design/steel-members": {
+      "get": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Get List",
+        "description": "Returns all items with optional filtering, pagination and sub-resource expansion.\r\nResults are always sorted by Id ascending.\r\nPagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\n`Expand` defaults to `none` on list endpoints so payloads stay lean;\r\npass `Expand=all` to hydrate sub-resources. Sub-resource expansion is\r\nopt-in per resource type — resources that don't define sub-resources ignore the parameter.",
+        "operationId": "SteelMembers_GetList",
+        "parameters": [
+          {
+            "name": "steelMembers",
+            "in": "query",
+            "description": "Steel member design group Ids to filter by, in SG list format (e.g. `\"1,3-7,10\"`).\r\nOmit to return all design groups.",
+            "schema": {
+              "type": "string",
+              "example": "1,3-7,10"
+            },
+            "example": "1,3-7,10"
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of items to skip from the start of the result set. Default is 0.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of items to return. Default is null (return all).",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "description": "Sub-resource expansion. Defaults to `none`; pass `all` to hydrate sub-resources.",
+            "schema": {
+              "$ref": "#/components/schemas/ExpandOption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SteelMember"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Create",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "operationId": "SteelMembers_Create",
+        "requestBody": {
+          "description": "The data for the new item",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SteelMemberCreate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SteelMemberCreate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SteelMemberCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SteelMember"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Conflict",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/design/steel-members/{id}": {
+      "get": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Get by Id",
+        "description": "`Expand` defaults to `all` on the single-item endpoint; pass `Expand=none`\r\n            to suppress sub-resource hydration. Sub-resource expansion is opt-in per resource type —\r\n            resources that don't define sub-resources ignore the parameter.",
+        "operationId": "SteelMembers_GetById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The entity Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "expand",
+            "in": "query",
+            "description": "Sub-resource expansion. Defaults to `all`; pass `none` to suppress sub-resource hydration.",
+            "schema": {
+              "$ref": "#/components/schemas/ExpandOption"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SteelMember"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Update",
+        "description": "Updates an existing item. If a validator is registered, the update is validated first.",
+        "operationId": "SteelMembers_Update",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The entity Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "The partial update data",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SteelMemberUpdate"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SteelMemberUpdate"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/SteelMemberUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SteelMember"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Delete",
+        "description": "Deletes the entity with the supplied Id. Returns 404 if no entity with that Id exists.\r\n            \r\nFor entities whose delete cascades (Nodes, Members, Plates), returns 200 with a\r\nSpaceGassApi.Models.Dtos.Entity.DeleteResultDto listing every row removed — the entity itself, child rows\r\nthat referenced it (loads, restraints, offsets, plate cuts, …), and any nodes left\r\ndisconnected by the removal. Cleanup is best-effort, not transactional across datasheets:\r\non failure the affected datasheets are reloaded from disk and the request fails.\r\n            \r\nFor all other entities, returns 204 No Content and removes only the entity's own row.",
+        "operationId": "SteelMembers_Delete",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The entity Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteResult"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/design/steel-members/metadata": {
+      "get": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Get Metadata",
+        "description": "Returns the resource metadata document — field schema, data types, units resolved\r\nagainst current job units, allowed values for enum fields, and validation bounds.\r\nClients use this to drive UI, form validation, and schema introspection.",
+        "operationId": "SteelMembers_GetMetadata",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResourceMetadata"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/design/steel-members/next": {
+      "get": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Next Id",
+        "description": "Gets the next available (unused) Id for this entity type.",
+        "operationId": "SteelMembers_GetNextId",
+        "parameters": [
+          {
+            "name": "start",
+            "in": "query",
+            "description": "The Id value to start searching from (inclusive). Defaults to 1.",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/design/steel-members/bulk": {
+      "post": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Create Bulk",
+        "description": "Creates multiple items in a bulk operation.\r\nIf a validator is registered, all items are validated upfront before any are created.",
+        "operationId": "SteelMembers_CreateBulk",
+        "parameters": [
+          {
+            "name": "continueOnError",
+            "in": "query",
+            "description": "Whether to continue processing after individual failures",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Array of items to create",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SteelMemberCreate"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SteelMemberCreate"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SteelMemberCreate"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SteelMemberBulkResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Update Bulk",
+        "description": "Updates multiple items in a bulk operation.\r\nEach item must include its Id in the request body.\r\nIf a validator is registered, all items are validated upfront before any are updated.",
+        "operationId": "SteelMembers_UpdateBulk",
+        "parameters": [
+          {
+            "name": "continueOnError",
+            "in": "query",
+            "description": "Whether to continue processing after individual failures",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Array of update objects (each must include Id)",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SteelMemberUpdate"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SteelMemberUpdate"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/SteelMemberUpdate"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SteelMemberBulkResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Steel Members"
+        ],
+        "summary": "Delete Bulk",
+        "description": "Deletes multiple entities by Id. The body is a JSON array of integer Ids\r\n(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpoint\r\nin the API (see CLAUDE.md \"Query Parameter Conventions\").\r\n            \r\nFor cascading entities (Nodes, Members, Plates), `continueOnError` governs only the\r\nper-Id existence pre-check: a missing Id is reported and, when `false`, aborts the\r\nbatch. The cascade itself is planned and executed as a single unit — if cleanup fails\r\nmid-execution the entire batch is rolled back (affected datasheets are reloaded), so no\r\npartial cascade is persisted.",
+        "operationId": "SteelMembers_DeleteBulk",
+        "parameters": [
+          {
+            "name": "continueOnError",
+            "in": "query",
+            "description": "Whether to continue on error",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "JSON array of entity Ids to delete",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Returns a bulk result whose `succeeded` entries each carry the deleted Id.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BulkDeletedBulkResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Request body is missing or empty.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/job/loads/thermal-loads": {
       "get": {
         "tags": [
@@ -35798,6 +36641,17 @@
         "type": "string",
         "description": "Friction normal direction for restraint friction definitions.\r\nMaps to SPACE GASS lookup table \"Normal Direction\"."
       },
+      "Is800SeismicClassification": {
+        "enum": [
+          "NonSeismic",
+          "OrdinaryConcentricallyBracedFrame",
+          "SpecialConcentricallyBracedFrame",
+          "OrdinaryMomentFrame",
+          "SpecialMomentFrame"
+        ],
+        "type": "string",
+        "description": "IS800 seismic frame classification for a steel member design group.\r\nSetting a braced or moment frame type activates the seismic checks when the IS800 design code is used.\r\nMaps to SPACE GASS lookup table \"IS Seismic Class\"."
+      },
       "Job": {
         "type": "object",
         "properties": {
@@ -36112,6 +36966,14 @@
         ],
         "type": "string",
         "description": "Length unit. Members mirror SPACE GASS `SGLength`\r\n(`NetCommon/CommonEnums.vb`); integer values and identifiers must stay in\r\nlock-step with it. The System.ComponentModel.DescriptionAttribute carries the display\r\nlabel (mirrors `gcUNITS_LABEL_*`)."
+      },
+      "LengthUnitBasis": {
+        "enum": [
+          "Actual",
+          "Ratio"
+        ],
+        "type": "string",
+        "description": "Whether a length-style value is given as an actual length (in the job's length unit)\r\nor as a dimensionless ratio of a reference length."
       },
       "LicenseStatus": {
         "type": "object",
@@ -36623,6 +37485,14 @@
         },
         "additionalProperties": false,
         "description": "DTO for updating an existing load category.\r\nAll fields optional for partial updates. Read-only fields excluded."
+      },
+      "LoadHeightPosition": {
+        "enum": [
+          "Centre",
+          "Top"
+        ],
+        "type": "string",
+        "description": "Position on the cross-section at which transverse loads are applied,\r\nused in lateral-torsional buckling checks.\r\nMaps to SPACE GASS lookup table \"Load Height\"."
       },
       "LoadPositionUnits": {
         "enum": [
@@ -42050,6 +42920,17 @@
         "type": "string",
         "description": "Non-linear static analysis theory type.\r\nOnly used for non-linear static analysis."
       },
+      "Nzs3404SeismicClassification": {
+        "enum": [
+          "NonSeismic",
+          "Category1",
+          "Category2",
+          "Category3",
+          "Category4"
+        ],
+        "type": "string",
+        "description": "NZS3404 seismic member category for a steel member design group.\r\nSetting category 1 to 4 activates the seismic checks when the NZS3404 design code is used.\r\nMaps to SPACE GASS lookup table \"NZ Seismic Class\"."
+      },
       "OpenJobRequest": {
         "required": [
           "filePath"
@@ -45008,9 +45889,23 @@
         "additionalProperties": false,
         "description": "Wrapper for analysis query results.\r\nContains the result data plus optional warnings about requested cases or modes\r\nthat produced no results (i.e. were not analysed)."
       },
+      "SteelDesignCriteria": {
+        "enum": [
+          "Weight",
+          "Depth"
+        ],
+        "type": "string",
+        "description": "Optimisation criteria used when a steel member design run selects a new section\r\nfor a design group.\r\nMaps to SPACE GASS lookup table \"Design Criteria\"."
+      },
       "SteelDesignSummary": {
         "type": "object",
         "properties": {
+          "steelMembers": {
+            "type": "integer",
+            "description": "Number of steel member design groups defined.",
+            "format": "int32",
+            "example": 0
+          },
           "hasMemberDesignResults": {
             "type": "boolean",
             "description": "Whether steel member design results exist (check or design).",
@@ -45023,7 +45918,581 @@
           }
         },
         "additionalProperties": false,
-        "description": "Summary of which steel design types have stored results for the current job.\r\nValues are read from Fortran result-file headers on disk — a lightweight\r\nheader-only read that does not load result datasheets."
+        "description": "Summary of steel design data and results for the current job — the number of\r\nsteel member design groups, and which steel design types have stored results.\r\nResult flags are read from Fortran result-file headers on disk — a lightweight\r\nheader-only read that does not load result datasheets."
+      },
+      "SteelMember": {
+        "required": [
+          "id",
+          "members"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Primary identifier - must be unique, no duplicates allowed.\r\nRange: 1 to int.MaxValue",
+            "format": "int32",
+            "example": 1
+          },
+          "description": {
+            "type": "string",
+            "description": "Optional description of the design group.",
+            "nullable": true,
+            "example": "Roof beams grid A-B"
+          },
+          "members": {
+            "minLength": 1,
+            "type": "string",
+            "description": "Members that make up the design group, as a plain comma-separated list of member Ids — e.g. `\"1,2,3\"` (ranges are not supported).",
+            "example": "1,2,3"
+          },
+          "strengthGrade": {
+            "$ref": "#/components/schemas/SteelStrengthGrade"
+          },
+          "lengthUnitBasis": {
+            "$ref": "#/components/schemas/LengthUnitBasis"
+          },
+          "loadHeightPosition": {
+            "$ref": "#/components/schemas/LoadHeightPosition"
+          },
+          "scanCode": {
+            "type": "string",
+            "description": "Scan code letters that group compatible sections for member selection during a design run.",
+            "nullable": true,
+            "example": "AG"
+          },
+          "calculateLcMajorFromBuckling": {
+            "type": "boolean",
+            "description": "Whether the major axis effective length (Lc-Major) is calculated from a buckling analysis.",
+            "example": true
+          },
+          "lcMajor": {
+            "type": "number",
+            "description": "Effective length for major axis buckling (Lc-Major).",
+            "format": "double",
+            "example": 1
+          },
+          "majorAxisBracedAtEnds": {
+            "type": "boolean",
+            "description": "Whether the group ends are braced in position for major axis buckling.",
+            "example": false
+          },
+          "calculateLcMinorFromBuckling": {
+            "type": "boolean",
+            "description": "Whether the minor axis effective length (Lc-Minor) is calculated from a buckling analysis.",
+            "example": true
+          },
+          "lcMinor": {
+            "type": "number",
+            "description": "Effective length for minor axis buckling (Lc-Minor).",
+            "format": "double",
+            "example": 1
+          },
+          "minorAxisBracedAtEnds": {
+            "type": "boolean",
+            "description": "Whether the group ends are braced in position for minor axis buckling.",
+            "example": false
+          },
+          "calculateLbFromFlangeRestraints": {
+            "type": "boolean",
+            "description": "Whether the lateral-torsional buckling length (Lb) is calculated from the flange restraints.",
+            "example": true
+          },
+          "lbPositiveBending": {
+            "type": "number",
+            "description": "Lateral-torsional buckling length (Lb) for positive bending.",
+            "format": "double",
+            "example": 1
+          },
+          "lbNegativeBending": {
+            "type": "number",
+            "description": "Lateral-torsional buckling length (Lb) for negative bending.",
+            "format": "double",
+            "example": 1
+          },
+          "topFlangeIntermediateRestraintPositions": {
+            "type": "string",
+            "description": "Positions of intermediate top flange restraints along the design group, in SG list format.",
+            "nullable": true,
+            "example": "2.5,5.0,7.5"
+          },
+          "topFlangeRestraintTypes": {
+            "type": "string",
+            "description": "Top flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
+            "nullable": true,
+            "example": "FLLF"
+          },
+          "btmFlangeIntermediateRestraintPositions": {
+            "type": "string",
+            "description": "Positions of intermediate bottom flange restraints along the design group, in SG list format.",
+            "nullable": true,
+            "example": "2.5,5.0,7.5"
+          },
+          "btmFlangeRestraintTypes": {
+            "type": "string",
+            "description": "Bottom flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
+            "nullable": true,
+            "example": "FF"
+          },
+          "is800SeismicClassification": {
+            "$ref": "#/components/schemas/Is800SeismicClassification"
+          },
+          "nzs3404SeismicClassification": {
+            "$ref": "#/components/schemas/Nzs3404SeismicClassification"
+          },
+          "memberType": {
+            "$ref": "#/components/schemas/SteelMemberType"
+          },
+          "angleType": {
+            "$ref": "#/components/schemas/AngleType"
+          },
+          "endConnection": {
+            "$ref": "#/components/schemas/SteelMemberEndConnection"
+          },
+          "considerEccentricEffects": {
+            "type": "boolean",
+            "description": "Whether eccentric connection effects are considered.",
+            "example": true
+          },
+          "designCriteria": {
+            "$ref": "#/components/schemas/SteelDesignCriteria"
+          },
+          "maxBoltsInCrossSection": {
+            "type": "integer",
+            "description": "Maximum number of bolts in the cross-section, used in net-section checks.",
+            "format": "int32",
+            "example": 0
+          },
+          "boltDiameter": {
+            "type": "number",
+            "description": "Bolt diameter, used in net-section checks.",
+            "format": "double",
+            "example": 20
+          }
+        },
+        "additionalProperties": false,
+        "description": "DTO for reading a steel member design group (SPACE GASS \"Design - Steel Members\", FileID 40).\r\nThe Id is the design group number; one group spans one or more analytical members\r\nvia its `members` list."
+      },
+      "SteelMemberBulkResult": {
+        "type": "object",
+        "properties": {
+          "succeeded": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SteelMember"
+            },
+            "description": "Successfully processed items.",
+            "nullable": true
+          },
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BulkError"
+            },
+            "description": "Errors from failed items.",
+            "nullable": true
+          },
+          "errorsTruncated": {
+            "type": "boolean",
+            "description": "True when the bulk operation stopped accumulating errors after reaching\r\nSpaceGassApi.Models.Dtos.Entity.BulkResultDto`1.ErrorMessageCap. Further failures may exist beyond what is reported."
+          }
+        },
+        "additionalProperties": false,
+        "description": "Result of a bulk operation."
+      },
+      "SteelMemberCreate": {
+        "required": [
+          "members"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Primary identifier - must be unique, no duplicates allowed.\r\nOptional - will be auto-assigned to next available number if not provided.\r\nIf provided, must not already exist in the model.",
+            "format": "int32",
+            "nullable": true,
+            "example": 1
+          },
+          "description": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Optional description of the design group.",
+            "nullable": true,
+            "example": "Roof beams grid A-B"
+          },
+          "members": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "description": "Members that make up the design group, as a plain comma-separated list of member Ids — e.g. `\"1,2,3\"` (ranges are not supported).",
+            "example": "1,2,3"
+          },
+          "strengthGrade": {
+            "$ref": "#/components/schemas/SteelStrengthGrade"
+          },
+          "lengthUnitBasis": {
+            "$ref": "#/components/schemas/LengthUnitBasis"
+          },
+          "loadHeightPosition": {
+            "$ref": "#/components/schemas/LoadHeightPosition"
+          },
+          "scanCode": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "Scan code letters that group compatible sections for member selection during a design run.",
+            "nullable": true,
+            "example": "AG"
+          },
+          "calculateLcMajorFromBuckling": {
+            "type": "boolean",
+            "description": "Whether the major axis effective length (Lc-Major) is calculated from a buckling analysis.",
+            "nullable": true,
+            "example": true
+          },
+          "lcMajor": {
+            "type": "number",
+            "description": "Effective length for major axis buckling (Lc-Major).",
+            "format": "double",
+            "nullable": true,
+            "example": 1
+          },
+          "majorAxisBracedAtEnds": {
+            "type": "boolean",
+            "description": "Whether the group ends are braced in position for major axis buckling.",
+            "nullable": true,
+            "example": false
+          },
+          "calculateLcMinorFromBuckling": {
+            "type": "boolean",
+            "description": "Whether the minor axis effective length (Lc-Minor) is calculated from a buckling analysis.",
+            "nullable": true,
+            "example": true
+          },
+          "lcMinor": {
+            "type": "number",
+            "description": "Effective length for minor axis buckling (Lc-Minor).",
+            "format": "double",
+            "nullable": true,
+            "example": 1
+          },
+          "minorAxisBracedAtEnds": {
+            "type": "boolean",
+            "description": "Whether the group ends are braced in position for minor axis buckling.",
+            "nullable": true,
+            "example": false
+          },
+          "calculateLbFromFlangeRestraints": {
+            "type": "boolean",
+            "description": "Whether the lateral-torsional buckling length (Lb) is calculated from the flange restraints.",
+            "nullable": true,
+            "example": true
+          },
+          "lbPositiveBending": {
+            "type": "number",
+            "description": "Lateral-torsional buckling length (Lb) for positive bending.",
+            "format": "double",
+            "nullable": true,
+            "example": 1
+          },
+          "lbNegativeBending": {
+            "type": "number",
+            "description": "Lateral-torsional buckling length (Lb) for negative bending.",
+            "format": "double",
+            "nullable": true,
+            "example": 1
+          },
+          "topFlangeIntermediateRestraintPositions": {
+            "maxLength": 768,
+            "minLength": 0,
+            "type": "string",
+            "description": "Positions of intermediate top flange restraints along the design group, in SG list format.",
+            "nullable": true,
+            "example": "2.5,5.0,7.5"
+          },
+          "topFlangeRestraintTypes": {
+            "maxLength": 52,
+            "minLength": 0,
+            "type": "string",
+            "description": "Top flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
+            "nullable": true,
+            "example": "FLLF"
+          },
+          "btmFlangeIntermediateRestraintPositions": {
+            "maxLength": 768,
+            "minLength": 0,
+            "type": "string",
+            "description": "Positions of intermediate bottom flange restraints along the design group, in SG list format.",
+            "nullable": true,
+            "example": "2.5,5.0,7.5"
+          },
+          "btmFlangeRestraintTypes": {
+            "maxLength": 52,
+            "minLength": 0,
+            "type": "string",
+            "description": "Bottom flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
+            "nullable": true,
+            "example": "FF"
+          },
+          "is800SeismicClassification": {
+            "$ref": "#/components/schemas/Is800SeismicClassification"
+          },
+          "nzs3404SeismicClassification": {
+            "$ref": "#/components/schemas/Nzs3404SeismicClassification"
+          },
+          "memberType": {
+            "$ref": "#/components/schemas/SteelMemberType"
+          },
+          "angleType": {
+            "$ref": "#/components/schemas/AngleType"
+          },
+          "endConnection": {
+            "$ref": "#/components/schemas/SteelMemberEndConnection"
+          },
+          "considerEccentricEffects": {
+            "type": "boolean",
+            "description": "Whether eccentric connection effects are considered.",
+            "nullable": true,
+            "example": true
+          },
+          "designCriteria": {
+            "$ref": "#/components/schemas/SteelDesignCriteria"
+          },
+          "maxBoltsInCrossSection": {
+            "maximum": 50,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Maximum number of bolts in the cross-section, used in net-section checks.",
+            "format": "int32",
+            "nullable": true,
+            "example": 0
+          },
+          "boltDiameter": {
+            "maximum": 999,
+            "minimum": 0,
+            "type": "number",
+            "description": "Bolt diameter, used in net-section checks.",
+            "format": "double",
+            "nullable": true,
+            "example": 20
+          }
+        },
+        "additionalProperties": false,
+        "description": "DTO for creating a new steel member design data entity (design group).\r\nThe Id is the design group number (auto-assigned if omitted).\r\n`members` is required; all other fields are optional and take the row defaults when omitted."
+      },
+      "SteelMemberEndConnection": {
+        "enum": [
+          "Concentric",
+          "AngleShort",
+          "AngleLong",
+          "Flanges",
+          "Web"
+        ],
+        "type": "string",
+        "description": "End connection configuration for a steel member design group,\r\nused in eccentric connection and net-section checks.\r\nMaps to SPACE GASS lookup table \"End Connection\"."
+      },
+      "SteelMemberType": {
+        "enum": [
+          "NonSpecific",
+          "Beam",
+          "Column",
+          "Brace"
+        ],
+        "type": "string",
+        "description": "Member classification for a steel member design group.\r\nDetermines which IS800 or NZS3404 seismic checks are done for the various member types.\r\nMaps to SPACE GASS lookup table \"Member Class\"."
+      },
+      "SteelMemberUpdate": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "maximum": 2147483647,
+            "minimum": 1,
+            "type": "integer",
+            "description": "Primary identifier of the entity to update.\r\nOptional for single updates (Id comes from route), required for bulk updates.",
+            "format": "int32",
+            "nullable": true,
+            "example": 1
+          },
+          "description": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "description": "Optional description of the design group.",
+            "nullable": true,
+            "example": "Roof beams grid A-B"
+          },
+          "members": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "description": "Members that make up the design group, as a plain comma-separated list of member Ids — e.g. `\"1,2,3\"` (ranges are not supported).",
+            "nullable": true,
+            "example": "1,2,3"
+          },
+          "strengthGrade": {
+            "$ref": "#/components/schemas/SteelStrengthGrade"
+          },
+          "lengthUnitBasis": {
+            "$ref": "#/components/schemas/LengthUnitBasis"
+          },
+          "loadHeightPosition": {
+            "$ref": "#/components/schemas/LoadHeightPosition"
+          },
+          "scanCode": {
+            "maxLength": 4,
+            "minLength": 0,
+            "type": "string",
+            "description": "Scan code letters that group compatible sections for member selection during a design run.",
+            "nullable": true,
+            "example": "AG"
+          },
+          "calculateLcMajorFromBuckling": {
+            "type": "boolean",
+            "description": "Whether the major axis effective length (Lc-Major) is calculated from a buckling analysis.",
+            "nullable": true,
+            "example": true
+          },
+          "lcMajor": {
+            "type": "number",
+            "description": "Effective length for major axis buckling (Lc-Major).",
+            "format": "double",
+            "nullable": true,
+            "example": 1
+          },
+          "majorAxisBracedAtEnds": {
+            "type": "boolean",
+            "description": "Whether the group ends are braced in position for major axis buckling.",
+            "nullable": true,
+            "example": false
+          },
+          "calculateLcMinorFromBuckling": {
+            "type": "boolean",
+            "description": "Whether the minor axis effective length (Lc-Minor) is calculated from a buckling analysis.",
+            "nullable": true,
+            "example": true
+          },
+          "lcMinor": {
+            "type": "number",
+            "description": "Effective length for minor axis buckling (Lc-Minor).",
+            "format": "double",
+            "nullable": true,
+            "example": 1
+          },
+          "minorAxisBracedAtEnds": {
+            "type": "boolean",
+            "description": "Whether the group ends are braced in position for minor axis buckling.",
+            "nullable": true,
+            "example": false
+          },
+          "calculateLbFromFlangeRestraints": {
+            "type": "boolean",
+            "description": "Whether the lateral-torsional buckling length (Lb) is calculated from the flange restraints.",
+            "nullable": true,
+            "example": true
+          },
+          "lbPositiveBending": {
+            "type": "number",
+            "description": "Lateral-torsional buckling length (Lb) for positive bending.",
+            "format": "double",
+            "nullable": true,
+            "example": 1
+          },
+          "lbNegativeBending": {
+            "type": "number",
+            "description": "Lateral-torsional buckling length (Lb) for negative bending.",
+            "format": "double",
+            "nullable": true,
+            "example": 1
+          },
+          "topFlangeIntermediateRestraintPositions": {
+            "maxLength": 768,
+            "minLength": 0,
+            "type": "string",
+            "description": "Positions of intermediate top flange restraints along the design group, in SG list format.",
+            "nullable": true,
+            "example": "2.5,5.0,7.5"
+          },
+          "topFlangeRestraintTypes": {
+            "maxLength": 52,
+            "minLength": 0,
+            "type": "string",
+            "description": "Top flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
+            "nullable": true,
+            "example": "FLLF"
+          },
+          "btmFlangeIntermediateRestraintPositions": {
+            "maxLength": 768,
+            "minLength": 0,
+            "type": "string",
+            "description": "Positions of intermediate bottom flange restraints along the design group, in SG list format.",
+            "nullable": true,
+            "example": "2.5,5.0,7.5"
+          },
+          "btmFlangeRestraintTypes": {
+            "maxLength": 52,
+            "minLength": 0,
+            "type": "string",
+            "description": "Bottom flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
+            "nullable": true,
+            "example": "FF"
+          },
+          "is800SeismicClassification": {
+            "$ref": "#/components/schemas/Is800SeismicClassification"
+          },
+          "nzs3404SeismicClassification": {
+            "$ref": "#/components/schemas/Nzs3404SeismicClassification"
+          },
+          "memberType": {
+            "$ref": "#/components/schemas/SteelMemberType"
+          },
+          "angleType": {
+            "$ref": "#/components/schemas/AngleType"
+          },
+          "endConnection": {
+            "$ref": "#/components/schemas/SteelMemberEndConnection"
+          },
+          "considerEccentricEffects": {
+            "type": "boolean",
+            "description": "Whether eccentric connection effects are considered.",
+            "nullable": true,
+            "example": true
+          },
+          "designCriteria": {
+            "$ref": "#/components/schemas/SteelDesignCriteria"
+          },
+          "maxBoltsInCrossSection": {
+            "maximum": 50,
+            "minimum": 0,
+            "type": "integer",
+            "description": "Maximum number of bolts in the cross-section, used in net-section checks.",
+            "format": "int32",
+            "nullable": true,
+            "example": 0
+          },
+          "boltDiameter": {
+            "maximum": 999,
+            "minimum": 0,
+            "type": "number",
+            "description": "Bolt diameter, used in net-section checks.",
+            "format": "double",
+            "nullable": true,
+            "example": 20
+          }
+        },
+        "additionalProperties": false,
+        "description": "DTO for updating an existing steel member design data entity (design group).\r\nAll fields are nullable to support partial updates — omit a field to keep its current value."
+      },
+      "SteelStrengthGrade": {
+        "enum": [
+          "Normal",
+          "High"
+        ],
+        "type": "string",
+        "description": "Steel strength grade for a steel member design group.\r\nMaps to SPACE GASS lookup table \"Strength Grade\"."
       },
       "SteppingMethod": {
         "enum": [
@@ -45682,6 +47151,10 @@
       "description": "Analysis runs and settings"
     },
     {
+      "name": "Steel Members",
+      "description": "Manage steel member design data (design groups)."
+    },
+    {
       "name": "Static Results",
       "description": "Static analysis results (nodes, members, plates)"
     },
@@ -45815,6 +47288,12 @@
       "name": "Analysis",
       "tags": [
         "Analysis"
+      ]
+    },
+    {
+      "name": "Design",
+      "tags": [
+        "Steel Members"
       ]
     },
     {

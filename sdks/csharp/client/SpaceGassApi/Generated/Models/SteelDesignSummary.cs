@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Summary of which steel design types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
+    /// Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.Result flags are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SteelDesignSummary : IParsable
@@ -17,6 +17,8 @@ namespace SpaceGassApi.Models
         public bool? HasConnectionDesignResults { get; set; }
         /// <summary>Whether steel member design results exist (check or design).</summary>
         public bool? HasMemberDesignResults { get; set; }
+        /// <summary>Number of steel member design groups defined.</summary>
+        public int? SteelMembers { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
@@ -37,6 +39,7 @@ namespace SpaceGassApi.Models
             {
                 { "hasConnectionDesignResults", n => { HasConnectionDesignResults = n.GetBoolValue(); } },
                 { "hasMemberDesignResults", n => { HasMemberDesignResults = n.GetBoolValue(); } },
+                { "steelMembers", n => { SteelMembers = n.GetIntValue(); } },
             };
         }
         /// <summary>
@@ -48,6 +51,7 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteBoolValue("hasConnectionDesignResults", HasConnectionDesignResults);
             writer.WriteBoolValue("hasMemberDesignResults", HasMemberDesignResults);
+            writer.WriteIntValue("steelMembers", SteelMembers);
         }
     }
 }

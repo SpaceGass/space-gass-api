@@ -93,6 +93,7 @@ from ..generated.models.filter_update import FilterUpdate
 from ..generated.models.force_unit import ForceUnit
 from ..generated.models.friction_normal_axis import FrictionNormalAxis
 from ..generated.models.friction_normal_direction import FrictionNormalDirection
+from ..generated.models.is800_seismic_classification import Is800SeismicClassification
 from ..generated.models.job import Job
 from ..generated.models.job_file import JobFile
 from ..generated.models.job_file_opening_status import JobFileOpeningStatus
@@ -106,6 +107,7 @@ from ..generated.models.job_state import JobState
 from ..generated.models.job_status import JobStatus
 from ..generated.models.last_error import LastError
 from ..generated.models.length_unit import LengthUnit
+from ..generated.models.length_unit_basis import LengthUnitBasis
 from ..generated.models.license_status import LicenseStatus
 from ..generated.models.load_axes import LoadAxes
 from ..generated.models.load_case import LoadCase
@@ -122,6 +124,7 @@ from ..generated.models.load_category import LoadCategory
 from ..generated.models.load_category_bulk_result import LoadCategoryBulkResult
 from ..generated.models.load_category_create import LoadCategoryCreate
 from ..generated.models.load_category_update import LoadCategoryUpdate
+from ..generated.models.load_height_position import LoadHeightPosition
 from ..generated.models.load_position_units import LoadPositionUnits
 from ..generated.models.loading_type import LoadingType
 from ..generated.models.loads_summary import LoadsSummary
@@ -243,6 +246,7 @@ from ..generated.models.node_restraint_update import NodeRestraintUpdate
 from ..generated.models.node_type_filter import NodeTypeFilter
 from ..generated.models.node_update import NodeUpdate
 from ..generated.models.non_linear_theory import NonLinearTheory
+from ..generated.models.nzs3404_seismic_classification import Nzs3404SeismicClassification
 from ..generated.models.open_job_request import OpenJobRequest
 from ..generated.models.open_sample_request import OpenSampleRequest
 from ..generated.models.optimization_axis import OptimizationAxis
@@ -304,7 +308,15 @@ from ..generated.models.static_settings import StaticSettings
 from ..generated.models.static_settings_update import StaticSettingsUpdate
 from ..generated.models.steel_check_summary import SteelCheckSummary
 from ..generated.models.steel_check_summary_query_result import SteelCheckSummaryQueryResult
+from ..generated.models.steel_design_criteria import SteelDesignCriteria
 from ..generated.models.steel_design_summary import SteelDesignSummary
+from ..generated.models.steel_member import SteelMember
+from ..generated.models.steel_member_bulk_result import SteelMemberBulkResult
+from ..generated.models.steel_member_create import SteelMemberCreate
+from ..generated.models.steel_member_end_connection import SteelMemberEndConnection
+from ..generated.models.steel_member_type import SteelMemberType
+from ..generated.models.steel_member_update import SteelMemberUpdate
+from ..generated.models.steel_strength_grade import SteelStrengthGrade
 from ..generated.models.stepping_method import SteppingMethod
 from ..generated.models.stress_unit import StressUnit
 from ..generated.models.structure_summary import StructureSummary
@@ -411,6 +423,7 @@ __all__ = [
     "ForceUnit",
     "FrictionNormalAxis",
     "FrictionNormalDirection",
+    "Is800SeismicClassification",
     "Job",
     "JobFile",
     "JobFileOpeningStatus",
@@ -424,6 +437,7 @@ __all__ = [
     "JobStatus",
     "LastError",
     "LengthUnit",
+    "LengthUnitBasis",
     "LicenseStatus",
     "LoadAxes",
     "LoadCase",
@@ -440,6 +454,7 @@ __all__ = [
     "LoadCategoryBulkResult",
     "LoadCategoryCreate",
     "LoadCategoryUpdate",
+    "LoadHeightPosition",
     "LoadPositionUnits",
     "LoadingType",
     "LoadsSummary",
@@ -561,6 +576,7 @@ __all__ = [
     "NodeTypeFilter",
     "NodeUpdate",
     "NonLinearTheory",
+    "Nzs3404SeismicClassification",
     "OpenJobRequest",
     "OpenSampleRequest",
     "OptimizationAxis",
@@ -622,7 +638,15 @@ __all__ = [
     "StaticSettingsUpdate",
     "SteelCheckSummary",
     "SteelCheckSummaryQueryResult",
+    "SteelDesignCriteria",
     "SteelDesignSummary",
+    "SteelMember",
+    "SteelMemberBulkResult",
+    "SteelMemberCreate",
+    "SteelMemberEndConnection",
+    "SteelMemberType",
+    "SteelMemberUpdate",
+    "SteelStrengthGrade",
     "SteppingMethod",
     "StressUnit",
     "StructureSummary",

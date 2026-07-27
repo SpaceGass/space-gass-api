@@ -6,6 +6,7 @@ using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Analysis;
 using SpaceGassApi.Job.Close;
 using SpaceGassApi.Job.Data;
+using SpaceGassApi.Job.Design;
 using SpaceGassApi.Job.Errors;
 using SpaceGassApi.Job.Filters;
 using SpaceGassApi.Job.Headings;
@@ -49,6 +50,11 @@ namespace SpaceGassApi.Job
         public global::SpaceGassApi.Job.Data.DataRequestBuilder Data
         {
             get => new global::SpaceGassApi.Job.Data.DataRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The design property</summary>
+        public global::SpaceGassApi.Job.Design.DesignRequestBuilder Design
+        {
+            get => new global::SpaceGassApi.Job.Design.DesignRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The errors property</summary>
         public global::SpaceGassApi.Job.Errors.ErrorsRequestBuilder Errors

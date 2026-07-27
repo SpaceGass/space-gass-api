@@ -28,7 +28,7 @@ class JobStatus(Parsable):
     loads: Optional[LoadsSummary] = None
     # Current session/file state of the job.
     state: Optional[JobState] = None
-    # Summary of which steel design types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
+    # Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.Result flags are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
     steel_design: Optional[SteelDesignSummary] = None
     # Summary counts of structural entities in the current job — geometry,boundary conditions, and section/material properties.
     structure: Optional[StructureSummary] = None
