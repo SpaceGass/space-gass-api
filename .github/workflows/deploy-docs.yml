@@ -3,6 +3,18 @@ name: Deploy Documentation
 on:
   push:
     branches: [main]
+    # Only redeploy when something the site is built from changes. The build
+    # reads docs/** and descriptions/preview/openapi.json (imported by
+    # zudoku.config.tsx) and nothing else — sdks/** appears in the pages only
+    # as GitHub hyperlinks. descriptions/** must stay in this list: the
+    # BuildMachine SDK-regen pipeline (SPACEGASS generate-api-clients.yml)
+    # pushes the fresh spec to main and relies on this workflow to publish it.
+    paths:
+      - "docs/**"
+      - "descriptions/**"
+      - ".github/workflows/deploy-docs.yml"
+  # Manual escape hatch in case a deploy is ever needed without a matching push.
+  workflow_dispatch:
 
 permissions:
   contents: read
