@@ -8,6 +8,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from .analysis.analysis_request_builder import AnalysisRequestBuilder
     from .design.design_request_builder import DesignRequestBuilder
+    from .geometry.geometry_request_builder import GeometryRequestBuilder
 
 class QueryRequestBuilder(BaseRequestBuilder):
     """
@@ -39,5 +40,14 @@ class QueryRequestBuilder(BaseRequestBuilder):
         from .design.design_request_builder import DesignRequestBuilder
 
         return DesignRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def geometry(self) -> GeometryRequestBuilder:
+        """
+        The geometry property
+        """
+        from .geometry.geometry_request_builder import GeometryRequestBuilder
+
+        return GeometryRequestBuilder(self.request_adapter, self.path_parameters)
     
 

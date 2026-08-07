@@ -13,8 +13,8 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberConcentratedLoad : IParsable
     {
-        /// <summary>Coordinate axes type for distributed loads and plate pressure loads.Maps to SPACE GASS lookup table &quot;L/GI/GP Axes&quot;.</summary>
-        public global::SpaceGassApi.Models.LoadAxes? Axes { get; set; }
+        /// <summary>Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table &quot;L/G Axes&quot;.</summary>
+        public global::SpaceGassApi.Models.AxesType? Axes { get; set; }
         /// <summary>Force in the local/global X direction.</summary>
         public double? Fx { get; set; }
         /// <summary>Force in the local/global Y direction.</summary>
@@ -57,7 +57,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
-                { "axes", n => { Axes = n.GetEnumValue<global::SpaceGassApi.Models.LoadAxes>(); } },
+                { "axes", n => { Axes = n.GetEnumValue<global::SpaceGassApi.Models.AxesType>(); } },
                 { "fx", n => { Fx = n.GetDoubleValue(); } },
                 { "fy", n => { Fy = n.GetDoubleValue(); } },
                 { "fz", n => { Fz = n.GetDoubleValue(); } },
@@ -79,7 +79,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
-            writer.WriteEnumValue<global::SpaceGassApi.Models.LoadAxes>("axes", Axes);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.AxesType>("axes", Axes);
             writer.WriteDoubleValue("fx", Fx);
             writer.WriteDoubleValue("fy", Fy);
             writer.WriteDoubleValue("fz", Fz);

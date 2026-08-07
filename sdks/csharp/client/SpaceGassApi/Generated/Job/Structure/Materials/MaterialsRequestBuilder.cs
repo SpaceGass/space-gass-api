@@ -112,7 +112,7 @@ namespace SpaceGassApi.Job.Structure.Materials
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Creates a new item. If a validator is registered, the item is validated before creation.
+        /// Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Material"/></returns>
         /// <param name="body">DTO for creating a new user-defined material.</param>
@@ -164,7 +164,7 @@ namespace SpaceGassApi.Job.Structure.Materials
             return requestInfo;
         }
         /// <summary>
-        /// Creates a new item. If a validator is registered, the item is validated before creation.
+        /// Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">DTO for creating a new user-defined material.</param>

@@ -118,7 +118,7 @@ namespace SpaceGassApi.Job.Structure.Members
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Creates a new item. If a validator is registered, the item is validated before creation.
+        /// Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Member"/></returns>
         /// <param name="body">DTO for creating a new member.NodeA and NodeB are required; all other fields are optional.</param>
@@ -170,7 +170,7 @@ namespace SpaceGassApi.Job.Structure.Members
             return requestInfo;
         }
         /// <summary>
-        /// Creates a new item. If a validator is registered, the item is validated before creation.
+        /// Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">DTO for creating a new member.NodeA and NodeB are required; all other fields are optional.</param>

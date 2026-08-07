@@ -90,7 +90,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: NodeCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Node]:
         """
-        Creates a new item. If a validator is registered, the item is validated before creation.
+        Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         param body: DTO for creating a new nodeNode number may be auto-assigned if not provided
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Node]
@@ -128,7 +128,7 @@ class NodesRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: NodeCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Creates a new item. If a validator is registered, the item is validated before creation.
+        Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         param body: DTO for creating a new nodeNode number may be auto-assigned if not provided
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
