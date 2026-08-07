@@ -36,19 +36,20 @@ if (fs.existsSync(cliPath)) {
     patched = true;
   }
 
-  // Patch 2: Accept entry.server.mjs in prerender
-  const oldEntry =
-    'path21.join(distDir, "server", serverConfigFilename)';
-  if (content.includes(oldEntry) && !content.includes("entry.server.mjs")) {
-    // Find and patch the entry.server.js reference near the prerender function
-    const oldEntryServer = '"server/entry.server.js"';
-    const newEntryServer =
-      '(existsSync(path21.join(distDir, "server/entry.server.js")) ? "server/entry.server.js" : "server/entry.server.mjs")';
-    if (content.includes(oldEntryServer)) {
-      content = content.replace(oldEntryServer, newEntryServer);
-      console.log("[patch] cli.js: accept entry.server.mjs");
-      patched = true;
-    }
+  // Patch 2: Accept entry.server.mjs in prerender.
+  // The SSR build emits entry.server.mjs (Vite 7+), but cli.js hardcodes the
+  // .js name in the prerender step. Replace that string literal with an
+  // existsSync() fallback. Keyed off the literal itself — NOT the minified
+  // path-module variable (path21/path22/…), which Zudoku renames on every
+  // build (that rename silently broke this patch on the 0.82.2 → 0.82.3 bump).
+  // `distDir` and `existsSync` are both in scope where the literal is used.
+  const oldEntryServer = '"server/entry.server.js"';
+  const newEntryServer =
+    '(existsSync(distDir + "/server/entry.server.js") ? "server/entry.server.js" : "server/entry.server.mjs")';
+  if (content.includes(oldEntryServer) && !content.includes(newEntryServer)) {
+    content = content.replace(oldEntryServer, newEntryServer);
+    console.log("[patch] cli.js: accept entry.server.mjs");
+    patched = true;
   }
 
   // Patch 3: Fix external entry references in build config
