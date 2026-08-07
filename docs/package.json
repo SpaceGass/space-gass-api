@@ -17,5 +17,8 @@
     "@opentelemetry/core": "^2.8.0",
     "brace-expansion": "5.0.8",
     "react-router": "8.3.0"
+  },
+  "devDependencies": {
+    "js-yaml": "^3.15.1"
   }
 }
