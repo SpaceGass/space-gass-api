@@ -87,7 +87,7 @@ class SteelMembersRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: SteelMemberCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SteelMember]:
         """
-        Creates a new item. If a validator is registered, the item is validated before creation.
+        Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         param body: DTO for creating a new steel member design data entity (design group).The Id is the design group number (auto-assigned if omitted).`members` is required; all other fields are optional and take the row defaults when omitted.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[SteelMember]
@@ -125,7 +125,7 @@ class SteelMembersRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: SteelMemberCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Creates a new item. If a validator is registered, the item is validated before creation.
+        Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         param body: DTO for creating a new steel member design data entity (design group).The Id is the design group number (auto-assigned if omitted).`members` is required; all other fields are optional and take the row defaults when omitted.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

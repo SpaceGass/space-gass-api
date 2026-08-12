@@ -87,7 +87,7 @@ class PlateStripsRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: PlateStripCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[PlateStrip]:
         """
-        Creates a new item. If a validator is registered, the item is validated before creation.
+        Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         param body: DTO for creating a new plate strip.StartPlate, EndPlate, StartNode, EndNode, and UniformWidth are required; all other fields are optional.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[PlateStrip]
@@ -125,7 +125,7 @@ class PlateStripsRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: PlateStripCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Creates a new item. If a validator is registered, the item is validated before creation.
+        Creates a new item. If a validator is registered, the item is validated before creation.The response is fully hydrated — indicators, sub-resources and computed fields arepopulated the same way as a single-item GET with its default `expand=all`.
         param body: DTO for creating a new plate strip.StartPlate, EndPlate, StartNode, EndNode, and UniformWidth are required; all other fields are optional.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

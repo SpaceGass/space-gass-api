@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .load_axes import LoadAxes
+    from .axes_type import AxesType
     from .load_position_units import LoadPositionUnits
 
 @dataclass
@@ -13,8 +13,8 @@ class MemberConcentratedLoadCreate(Parsable):
     """
     DTO for creating a new member concentrated load.The sub-load number is auto-assigned — do not include it in the request.
     """
-    # Coordinate axes type for distributed loads and plate pressure loads.Maps to SPACE GASS lookup table "L/GI/GP Axes".
-    axes: Optional[LoadAxes] = None
+    # Coordinate axes type (Local or Global).Maps to SPACE GASS lookup table "L/G Axes".
+    axes: Optional[AxesType] = None
     # Force in the local/global X direction.
     fx: Optional[float] = None
     # Force in the local/global Y direction.
@@ -54,14 +54,14 @@ class MemberConcentratedLoadCreate(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .load_axes import LoadAxes
+        from .axes_type import AxesType
         from .load_position_units import LoadPositionUnits
 
-        from .load_axes import LoadAxes
+        from .axes_type import AxesType
         from .load_position_units import LoadPositionUnits
 
         fields: dict[str, Callable[[Any], None]] = {
-            "axes": lambda n : setattr(self, 'axes', n.get_enum_value(LoadAxes)),
+            "axes": lambda n : setattr(self, 'axes', n.get_enum_value(AxesType)),
             "fx": lambda n : setattr(self, 'fx', n.get_float_value()),
             "fy": lambda n : setattr(self, 'fy', n.get_float_value()),
             "fz": lambda n : setattr(self, 'fz', n.get_float_value()),

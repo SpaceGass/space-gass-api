@@ -41,9 +41,9 @@ namespace SpaceGassApi.Models
         public bool? IsJobOpen { get; set; }
         /// <summary>True when a validated licence session is active. Independent of theread/write seat — `true` even in ReadOnly / session-only mode.</summary>
         public bool? IsLicensed { get; set; }
-        /// <summary>True when this machine has a SPACE GASS registration the API supports(TitanCloud or Titan LM). False indicates either an unsupported locktype (e.g. legacy SGREG.DAT registration) or no registration at all.Always check this before SpaceGassApi.Models.Dtos.License.LicenseStatusDto.IsLicensed: an unregisteredAPI is blocked at the registration step, before any license acquireis attempted.</summary>
+        /// <summary>True when this machine has a SPACE GASS registration the API supports(Cloud licence or Titan Softlock). False indicates either an unsupportedlock type (e.g. legacy SGREG.DAT registration) or no registration at all.Always check this before SpaceGassApi.Models.Dtos.License.LicenseStatusDto.IsLicensed: an unregisteredAPI is blocked at the registration step, before any license acquireis attempted.</summary>
         public bool? IsRegistered { get; set; }
-        /// <summary>True when the active Titan LM session is backed by an offlineroaming licence file (no live LM server connection). Always falsefor TitanCloud and for non-roaming Titan LM. Operator-facingsignal so dashboards can tell which path is in use.</summary>
+        /// <summary>True when the active Titan Softlock session is backed by an offlineroaming licence file (no live licence-server connection). Always falsefor the Cloud licence and for non-roaming Titan Softlock. Operator-facingsignal so dashboards can tell which path is in use.</summary>
         public bool? IsRoaming { get; set; }
         /// <summary>UTC timestamp when the current job was opened (and the SPACE GASSlicence seat became active), or `null` when no job is open.</summary>
         public DateTimeOffset? JobOpenedAt { get; set; }
@@ -57,7 +57,7 @@ namespace SpaceGassApi.Models
 #else
         public string Organization { get; set; }
 #endif
-        /// <summary>Human-readable explanation of the registration state. Alwayspopulated. For TitanCloud / TitanLM it confirms the registrationis active; for Unsupported / Unregistered it explains what theoperator should do to fix it.</summary>
+        /// <summary>Human-readable explanation of the registration state. Alwayspopulated. For `TitanCloud` / `TitanLM` it reports whether theregistration is usable; for `Unsupported` / `Unregistered` itexplains what the operator should do to fix it. A Cloud licenceregistration whose login file holds no usable credentials stays`TitanCloud` here but says so in this field.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? RegistrationDetail { get; set; }
@@ -65,7 +65,7 @@ namespace SpaceGassApi.Models
 #else
         public string RegistrationDetail { get; set; }
 #endif
-        /// <summary>Outcome of probing the machine for a SPACE GASS registration.Mirrors the precedence used by desktop SPACE GASS in`NETLicenses\Licenses.vb::RegistrationSetupCheck`: legacy SGREG.DATshort-circuits before any Titan-type probing, then TitanCloud, then Titan LM.</summary>
+        /// <summary>Outcome of probing the machine for a SPACE GASS registration, in the sameprecedence desktop SPACE GASS uses: a legacy SGREG.DAT lock short-circuitsfirst, then the Cloud licence, then Titan Softlock.</summary>
         public global::SpaceGassApi.Models.RegistrationStatus? RegistrationType { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

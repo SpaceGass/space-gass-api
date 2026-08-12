@@ -4,6 +4,7 @@ using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Query.Analysis;
 using SpaceGassApi.Job.Query.Design;
+using SpaceGassApi.Job.Query.Geometry;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -25,6 +26,11 @@ namespace SpaceGassApi.Job.Query
         public global::SpaceGassApi.Job.Query.Design.DesignRequestBuilder Design
         {
             get => new global::SpaceGassApi.Job.Query.Design.DesignRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The geometry property</summary>
+        public global::SpaceGassApi.Job.Query.Geometry.GeometryRequestBuilder Geometry
+        {
+            get => new global::SpaceGassApi.Job.Query.Geometry.GeometryRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.QueryRequestBuilder"/> and sets the default values.

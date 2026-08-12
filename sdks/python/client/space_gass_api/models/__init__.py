@@ -44,6 +44,7 @@ from ..generated.models.combination_load_case_item import CombinationLoadCaseIte
 from ..generated.models.combination_load_case_update import CombinationLoadCaseUpdate
 from ..generated.models.constraint_axes import ConstraintAxes
 from ..generated.models.convergence_entry import ConvergenceEntry
+from ..generated.models.coordinate_system import CoordinateSystem
 from ..generated.models.delete_result import DeleteResult
 from ..generated.models.direction_axis import DirectionAxis
 from ..generated.models.direction_source import DirectionSource
@@ -167,6 +168,7 @@ from ..generated.models.member_distributed_moment_key_bulk_result import MemberD
 from ..generated.models.member_distributed_moment_update import MemberDistributedMomentUpdate
 from ..generated.models.member_end_force import MemberEndForce
 from ..generated.models.member_end_force_query_result import MemberEndForceQueryResult
+from ..generated.models.member_geometry import MemberGeometry
 from ..generated.models.member_intermediate_displacement import MemberIntermediateDisplacement
 from ..generated.models.member_intermediate_displacement_query_result import MemberIntermediateDisplacementQueryResult
 from ..generated.models.member_intermediate_force import MemberIntermediateForce
@@ -239,6 +241,7 @@ from ..generated.models.node_load_key_bulk_result import NodeLoadKeyBulkResult
 from ..generated.models.node_load_update import NodeLoadUpdate
 from ..generated.models.node_reaction import NodeReaction
 from ..generated.models.node_reaction_query_result import NodeReactionQueryResult
+from ..generated.models.node_ref import NodeRef
 from ..generated.models.node_restraint import NodeRestraint
 from ..generated.models.node_restraint_bulk_result import NodeRestraintBulkResult
 from ..generated.models.node_restraint_create import NodeRestraintCreate
@@ -260,6 +263,7 @@ from ..generated.models.plate_cut_update import PlateCutUpdate
 from ..generated.models.plate_direction import PlateDirection
 from ..generated.models.plate_element_force import PlateElementForce
 from ..generated.models.plate_element_force_query_result import PlateElementForceQueryResult
+from ..generated.models.plate_geometry import PlateGeometry
 from ..generated.models.plate_nodal_force import PlateNodalForce
 from ..generated.models.plate_nodal_force_query_result import PlateNodalForceQueryResult
 from ..generated.models.plate_pressure_load import PlatePressureLoad
@@ -277,6 +281,7 @@ from ..generated.models.plate_strip_update import PlateStripUpdate
 from ..generated.models.plate_theory import PlateTheory
 from ..generated.models.plate_type import PlateType
 from ..generated.models.plate_update import PlateUpdate
+from ..generated.models.point3_d import Point3D
 from ..generated.models.prescribed_displacement import PrescribedDisplacement
 from ..generated.models.prescribed_displacement_bulk_result import PrescribedDisplacementBulkResult
 from ..generated.models.prescribed_displacement_create import PrescribedDisplacementCreate
@@ -333,6 +338,7 @@ from ..generated.models.thermal_load_update import ThermalLoadUpdate
 from ..generated.models.translation_unit import TranslationUnit
 from ..generated.models.units import Units
 from ..generated.models.validation_error import ValidationError
+from ..generated.models.vector3_d import Vector3D
 from ..generated.models.vehicle_load_units import VehicleLoadUnits
 from ..generated.models.vehicle_wheel_load import VehicleWheelLoad
 from ..generated.models.vertical_axis import VerticalAxis
@@ -374,6 +380,7 @@ __all__ = [
     "CombinationLoadCaseUpdate",
     "ConstraintAxes",
     "ConvergenceEntry",
+    "CoordinateSystem",
     "DeleteResult",
     "DirectionAxis",
     "DirectionSource",
@@ -497,6 +504,7 @@ __all__ = [
     "MemberDistributedMomentUpdate",
     "MemberEndForce",
     "MemberEndForceQueryResult",
+    "MemberGeometry",
     "MemberIntermediateDisplacement",
     "MemberIntermediateDisplacementQueryResult",
     "MemberIntermediateForce",
@@ -569,6 +577,7 @@ __all__ = [
     "NodeLoadUpdate",
     "NodeReaction",
     "NodeReactionQueryResult",
+    "NodeRef",
     "NodeRestraint",
     "NodeRestraintBulkResult",
     "NodeRestraintCreate",
@@ -590,6 +599,7 @@ __all__ = [
     "PlateDirection",
     "PlateElementForce",
     "PlateElementForceQueryResult",
+    "PlateGeometry",
     "PlateNodalForce",
     "PlateNodalForceQueryResult",
     "PlatePressureLoad",
@@ -607,6 +617,7 @@ __all__ = [
     "PlateTheory",
     "PlateType",
     "PlateUpdate",
+    "Point3D",
     "PrescribedDisplacement",
     "PrescribedDisplacementBulkResult",
     "PrescribedDisplacementCreate",
@@ -663,6 +674,7 @@ __all__ = [
     "TranslationUnit",
     "Units",
     "ValidationError",
+    "Vector3D",
     "VehicleLoadUnits",
     "VehicleWheelLoad",
     "VerticalAxis",
