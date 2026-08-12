@@ -36,16 +36,23 @@ if (fs.existsSync(cliPath)) {
     patched = true;
   }
 
-  // Patch 2: Accept entry.server.mjs in prerender
-  const oldEntry =
-    'path21.join(distDir, "server", serverConfigFilename)';
-  if (content.includes(oldEntry) && !content.includes("entry.server.mjs")) {
-    // Find and patch the entry.server.js reference near the prerender function
-    const oldEntryServer = '"server/entry.server.js"';
-    const newEntryServer =
-      '(existsSync(path21.join(distDir, "server/entry.server.js")) ? "server/entry.server.js" : "server/entry.server.mjs")';
-    if (content.includes(oldEntryServer)) {
-      content = content.replace(oldEntryServer, newEntryServer);
+  // Patch 2: Accept entry.server.mjs in prerender.
+  // The prerender imports `<pathVar>.join(distDir, "server/entry.server.js")`,
+  // but Vite 7+/8 emits `entry.server.mjs`. Capture whatever the minified path
+  // helper is currently named (path21/path22/… drifts between Zudoku builds) and
+  // wrap the filename in an existsSync fallback so both extensions resolve.
+  if (
+    content.includes('"server/entry.server.js"') &&
+    !content.includes("entry.server.mjs")
+  ) {
+    const entryRe =
+      /(\w+)\.join\(distDir, "server\/entry\.server\.js"\)/;
+    if (entryRe.test(content)) {
+      content = content.replace(
+        entryRe,
+        (_m, p) =>
+          `${p}.join(distDir, existsSync(${p}.join(distDir, "server/entry.server.js")) ? "server/entry.server.js" : "server/entry.server.mjs")`,
+      );
       console.log("[patch] cli.js: accept entry.server.mjs");
       patched = true;
     }
