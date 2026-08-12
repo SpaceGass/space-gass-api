@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a member entity.Releases (fixity/stiffness at each end) are intrinsic member data and are always populated.Offsets (rigid end zones) are a linked sub-resource and are hydrated only when `?expand=all`.
+    /// DTO for reading a member entity.Releases (fixity/stiffness at each end) are intrinsic member data and are always populated.Offsets (rigid end zones) are a linked sub-resource, hydrated only when `?expand=all`(the default on single reads). Derived geometry (local axes, physical length) is served by`GET job/query/geometry/members`, not on this DTO.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class Member : IParsable

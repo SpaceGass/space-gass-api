@@ -1,0 +1,138 @@
+from __future__ import annotations
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from kiota_abstractions.base_request_builder import BaseRequestBuilder
+from kiota_abstractions.base_request_configuration import RequestConfiguration
+from kiota_abstractions.default_query_parameters import QueryParameters
+from kiota_abstractions.get_path_parameters import get_path_parameters
+from kiota_abstractions.method import Method
+from kiota_abstractions.request_adapter import RequestAdapter
+from kiota_abstractions.request_information import RequestInformation
+from kiota_abstractions.request_option import RequestOption
+from kiota_abstractions.serialization import Parsable, ParsableFactory
+from typing import Any, Optional, TYPE_CHECKING, Union, overload
+from warnings import warn
+
+if TYPE_CHECKING:
+    from .....models.error_response import ErrorResponse
+    from .....models.member_geometry import MemberGeometry
+    from .....models.member_type import MemberType
+    from .item.members_item_request_builder import MembersItemRequestBuilder
+
+class MembersRequestBuilder(BaseRequestBuilder):
+    """
+    Builds and executes requests for operations under /job/query/geometry/members
+    """
+    def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
+        """
+        Instantiates a new MembersRequestBuilder and sets the default values.
+        param path_parameters: The raw url or the url-template parameters for the request.
+        param request_adapter: The request adapter to use to execute the requests.
+        Returns: None
+        """
+        super().__init__(request_adapter, "{+baseurl}/job/query/geometry/members{?limit*,material*,members*,offset*,section*,type*}", path_parameters)
+    
+    def by_id(self,id: int) -> MembersItemRequestBuilder:
+        """
+        Gets an item from the space_gass_api.generated.job.query.geometry.members.item collection
+        param id: The member Id
+        Returns: MembersItemRequestBuilder
+        """
+        if id is None:
+            raise TypeError("id cannot be null.")
+        from .item.members_item_request_builder import MembersItemRequestBuilder
+
+        url_tpl_params = get_path_parameters(self.path_parameters)
+        url_tpl_params["id"] = id
+        return MembersItemRequestBuilder(self.request_adapter, url_tpl_params)
+    
+    # --- @overload added by regen_python_inits.py ---
+    @overload
+    async def get(
+        self,
+        *,
+        limit: Optional[int] = None,
+        material: Optional[int] = None,
+        members: Optional[str] = None,
+        offset: Optional[int] = None,
+        section: Optional[int] = None,
+        type: Optional[MemberType] = None,
+    ) -> Optional[list[MemberGeometry]]: ...
+    @overload
+    async def get(self, request_configuration: Optional[RequestConfiguration[MembersRequestBuilderGetQueryParameters]] = None) -> Optional[list[MemberGeometry]]: ...
+    # --- end overloads ---
+    async def get(self,request_configuration: Optional[RequestConfiguration[MembersRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[MemberGeometry]]:
+        """
+        Lists derived geometry for members: node ends (analytical), physical (offset-adjusted)point ends, physical length and the local coordinate system. Supports the standardmember filters and offset/limit pagination; results are sorted by member Id ascendingand pagination metadata is returned in response headers (Total-Count, Offset, Limit).Members whose end nodes are missing, or whose frame cannot be computed (degenerategeometry), are omitted from the response.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: Optional[list[MemberGeometry]]
+        """
+        request_info = self.to_get_request_information(
+            request_configuration
+        )
+        from .....models.error_response import ErrorResponse
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": ErrorResponse,
+            "404": ErrorResponse,
+            "500": ErrorResponse,
+        }
+        if not self.request_adapter:
+            raise Exception("Http core is null") 
+        from .....models.member_geometry import MemberGeometry
+
+        return await self.request_adapter.send_collection_async(request_info, MemberGeometry, error_mapping)
+    
+    def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[MembersRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
+        """
+        Lists derived geometry for members: node ends (analytical), physical (offset-adjusted)point ends, physical length and the local coordinate system. Supports the standardmember filters and offset/limit pagination; results are sorted by member Id ascendingand pagination metadata is returned in response headers (Total-Count, Offset, Limit).Members whose end nodes are missing, or whose frame cannot be computed (degenerategeometry), are omitted from the response.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: RequestInformation
+        """
+        request_info = RequestInformation(Method.GET, self.url_template, self.path_parameters)
+        request_info.configure(request_configuration)
+        request_info.headers.try_add("Accept", "application/json")
+        return request_info
+    
+    def with_url(self,raw_url: str) -> MembersRequestBuilder:
+        """
+        Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
+        param raw_url: The raw URL to use for the request builder.
+        Returns: MembersRequestBuilder
+        """
+        if raw_url is None:
+            raise TypeError("raw_url cannot be null.")
+        return MembersRequestBuilder(self.request_adapter, raw_url)
+    
+    @dataclass
+    class MembersRequestBuilderGetQueryParameters():
+        """
+        Lists derived geometry for members: node ends (analytical), physical (offset-adjusted)point ends, physical length and the local coordinate system. Supports the standardmember filters and offset/limit pagination; results are sorted by member Id ascendingand pagination metadata is returned in response headers (Total-Count, Offset, Limit).Members whose end nodes are missing, or whose frame cannot be computed (degenerategeometry), are omitted from the response.
+        """
+        # Maximum number of items to return. Default is null (return all).
+        limit: Optional[int] = None
+
+        # Filter by material number.
+        material: Optional[int] = None
+
+        # Member Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Omit to return all members.
+        members: Optional[str] = None
+
+        # Number of items to skip from the start of the result set. Default is 0.
+        offset: Optional[int] = None
+
+        # Filter by section number.
+        section: Optional[int] = None
+
+        # Filter by member type (Normal, TensionOnly, CompressionOnly, Cable, Gap, BrittleFuse, PlasticFuse).
+        type: Optional[MemberType] = None
+
+    
+    @dataclass
+    class MembersRequestBuilderGetRequestConfiguration(RequestConfiguration[MembersRequestBuilderGetQueryParameters]):
+        """
+        Configuration for the request such as headers, query parameters, and middleware options.
+        """
+        warn("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.", DeprecationWarning)
+    
+

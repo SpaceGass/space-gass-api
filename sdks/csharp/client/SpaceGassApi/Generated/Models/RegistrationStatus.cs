@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Outcome of probing the machine for a SPACE GASS registration.Mirrors the precedence used by desktop SPACE GASS in`NETLicenses\Licenses.vb::RegistrationSetupCheck`: legacy SGREG.DATshort-circuits before any Titan-type probing, then TitanCloud, then Titan LM.</summary>
+    /// <summary>Outcome of probing the machine for a SPACE GASS registration, in the sameprecedence desktop SPACE GASS uses: a legacy SGREG.DAT lock short-circuitsfirst, then the Cloud licence, then Titan Softlock.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum RegistrationStatus
     {
