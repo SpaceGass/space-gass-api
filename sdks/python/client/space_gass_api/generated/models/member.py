@@ -13,7 +13,7 @@ if TYPE_CHECKING:
 @dataclass
 class Member(Parsable):
     """
-    DTO for reading a member entity.Releases (fixity/stiffness at each end) are intrinsic member data and are always populated.Offsets (rigid end zones) are a linked sub-resource and are hydrated only when `?expand=all`.
+    DTO for reading a member entity.Releases (fixity/stiffness at each end) are intrinsic member data and are always populated.Offsets (rigid end zones) are a linked sub-resource, hydrated only when `?expand=all`(the default on single reads). Derived geometry (local axes, physical length) is served by`GET job/query/geometry/members`, not on this DTO.
     """
     # Cable length (for Cable type members). Unit: Length (see GET /job/units).
     cable_length: Optional[float] = None

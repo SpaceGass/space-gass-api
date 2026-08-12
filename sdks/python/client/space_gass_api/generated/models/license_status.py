@@ -23,9 +23,9 @@ class LicenseStatus(Parsable):
     is_job_open: Optional[bool] = None
     # True when a validated licence session is active. Independent of theread/write seat — `true` even in ReadOnly / session-only mode.
     is_licensed: Optional[bool] = None
-    # True when this machine has a SPACE GASS registration the API supports(TitanCloud or Titan LM). False indicates either an unsupported locktype (e.g. legacy SGREG.DAT registration) or no registration at all.Always check this before SpaceGassApi.Models.Dtos.License.LicenseStatusDto.IsLicensed: an unregisteredAPI is blocked at the registration step, before any license acquireis attempted.
+    # True when this machine has a SPACE GASS registration the API supports(Cloud licence or Titan Softlock). False indicates either an unsupportedlock type (e.g. legacy SGREG.DAT registration) or no registration at all.Always check this before SpaceGassApi.Models.Dtos.License.LicenseStatusDto.IsLicensed: an unregisteredAPI is blocked at the registration step, before any license acquireis attempted.
     is_registered: Optional[bool] = None
-    # True when the active Titan LM session is backed by an offlineroaming licence file (no live LM server connection). Always falsefor TitanCloud and for non-roaming Titan LM. Operator-facingsignal so dashboards can tell which path is in use.
+    # True when the active Titan Softlock session is backed by an offlineroaming licence file (no live licence-server connection). Always falsefor the Cloud licence and for non-roaming Titan Softlock. Operator-facingsignal so dashboards can tell which path is in use.
     is_roaming: Optional[bool] = None
     # UTC timestamp when the current job was opened (and the SPACE GASSlicence seat became active), or `null` when no job is open.
     job_opened_at: Optional[datetime.datetime] = None
@@ -33,9 +33,9 @@ class LicenseStatus(Parsable):
     license_id: Optional[int] = None
     # Company or organisation name from the license server.
     organization: Optional[str] = None
-    # Human-readable explanation of the registration state. Alwayspopulated. For TitanCloud / TitanLM it confirms the registrationis active; for Unsupported / Unregistered it explains what theoperator should do to fix it.
+    # Human-readable explanation of the registration state. Alwayspopulated. For `TitanCloud` / `TitanLM` it reports whether theregistration is usable; for `Unsupported` / `Unregistered` itexplains what the operator should do to fix it. A Cloud licenceregistration whose login file holds no usable credentials stays`TitanCloud` here but says so in this field.
     registration_detail: Optional[str] = None
-    # Outcome of probing the machine for a SPACE GASS registration.Mirrors the precedence used by desktop SPACE GASS in`NETLicenses/Licenses.vb::RegistrationSetupCheck`: legacy SGREG.DATshort-circuits before any Titan-type probing, then TitanCloud, then Titan LM.
+    # Outcome of probing the machine for a SPACE GASS registration, in the sameprecedence desktop SPACE GASS uses: a legacy SGREG.DAT lock short-circuitsfirst, then the Cloud licence, then Titan Softlock.
     registration_type: Optional[RegistrationStatus] = None
     
     @staticmethod

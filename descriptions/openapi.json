@@ -12,7 +12,7 @@
       "url": "https://www.spacegass.com/manual/Introduction/End_User_Licence_Agreement.htm"
     },
     "version": "1",
-    "x-space-gass-build": "14.50.155"
+    "x-space-gass-build": "14.50.159"
   },
   "servers": [
     {
@@ -4738,6 +4738,355 @@
         }
       }
     },
+    "/job/query/geometry/members": {
+      "get": {
+        "tags": [
+          "Geometry"
+        ],
+        "summary": "List Member Geometry",
+        "description": "Lists derived geometry for members: node ends (analytical), physical (offset-adjusted)\r\npoint ends, physical length and the local coordinate system. Supports the standard\r\nmember filters and offset/limit pagination; results are sorted by member Id ascending\r\nand pagination metadata is returned in response headers (Total-Count, Offset, Limit).\r\nMembers whose end nodes are missing, or whose frame cannot be computed (degenerate\r\ngeometry), are omitted from the response.",
+        "operationId": "Geometry_ListMemberGeometry",
+        "parameters": [
+          {
+            "name": "members",
+            "in": "query",
+            "description": "Member Ids to filter by, in SG list format (e.g. `\"1,3-7,10\"`).\r\nOmit to return all members.",
+            "schema": {
+              "type": "string",
+              "example": "1,3-7,10"
+            },
+            "example": "1,3-7,10"
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filter by member type (Normal, TensionOnly, CompressionOnly, Cable, Gap, BrittleFuse, PlasticFuse).",
+            "schema": {
+              "$ref": "#/components/schemas/MemberType"
+            }
+          },
+          {
+            "name": "section",
+            "in": "query",
+            "description": "Filter by section number.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "material",
+            "in": "query",
+            "description": "Filter by material number.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of items to skip from the start of the result set. Default is 0.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of items to return. Default is null (return all).",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the list of member geometry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MemberGeometry"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/query/geometry/members/{id}": {
+      "get": {
+        "tags": [
+          "Geometry"
+        ],
+        "summary": "Get Member Geometry",
+        "description": "Gets the derived geometry for a single member: `nodeA`/`nodeB` (the analytical\r\nend nodes — identity and position), `pointA`/`pointB` (the physical,\r\noffset-adjusted ends), the physical `length` and the physical `localAxes`\r\nframe. `nodeA`/`nodeB` equal `pointA`/`pointB` when the member has\r\nno offsets.",
+        "operationId": "Geometry_GetMemberGeometry",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The member Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the member geometry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MemberGeometry"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Member not found, a referenced end node is missing, or the geometry cannot be computed (degenerate geometry)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/query/geometry/plates": {
+      "get": {
+        "tags": [
+          "Geometry"
+        ],
+        "summary": "List Plate Geometry",
+        "description": "Lists derived geometry for plates: corner nodes (analytical), physical (offset-shifted)\r\ncorner points, area, perimeter, centroid and the local coordinate system. Supports the\r\nstandard plate filters and offset/limit pagination; results are sorted by plate Id\r\nascending and pagination metadata is returned in response headers (Total-Count, Offset,\r\nLimit). Plates whose corner nodes are missing, or whose frame cannot be computed\r\n(degenerate geometry), are omitted from the response.",
+        "operationId": "Geometry_ListPlateGeometry",
+        "parameters": [
+          {
+            "name": "plates",
+            "in": "query",
+            "description": "Plate Ids to filter by, in SG list format (e.g. `\"1,3-7,10\"`).\r\nOmit to return all plates.",
+            "schema": {
+              "type": "string",
+              "example": "1,3-7,10"
+            },
+            "example": "1,3-7,10"
+          },
+          {
+            "name": "theory",
+            "in": "query",
+            "description": "Filter by plate theory (Kirchoff or Mindlin).",
+            "schema": {
+              "$ref": "#/components/schemas/PlateTheory"
+            }
+          },
+          {
+            "name": "material",
+            "in": "query",
+            "description": "Filter by material number.",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "description": "Number of items to skip from the start of the result set. Default is 0.",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 0,
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Maximum number of items to return. Default is null (return all).",
+            "schema": {
+              "maximum": 2147483647,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the list of plate geometry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PlateGeometry"
+                  }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Resource not found.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/job/query/geometry/plates/{id}": {
+      "get": {
+        "tags": [
+          "Geometry"
+        ],
+        "summary": "Get Plate Geometry",
+        "description": "Gets the derived geometry for a single plate: `nodeCorners` (the analytical corner\r\nnodes), `pointCorners` (the physical, offset-shifted corners), `area`,\r\n`perimeter`, `centroid` and the `localAxes` frame (local Z is the plate\r\nnormal). Corner and centroid positions are shifted along the normal by the plate offset.",
+        "operationId": "Geometry_GetPlateGeometry",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The plate Id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Returns the plate geometry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PlateGeometry"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "License required or unavailable.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Plate not found, a referenced corner node is missing, or the geometry cannot be computed (degenerate geometry)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/job/import/txt": {
       "post": {
         "tags": [
@@ -5765,7 +6114,7 @@
           "Load Case Groups"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "LoadCaseGroups_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -7542,7 +7891,7 @@
           "Load Categories"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "LoadCategories_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -9192,7 +9541,7 @@
           "Materials"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "Materials_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -14421,7 +14770,7 @@
           "Members"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "Members_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -22740,9 +23089,9 @@
                 "xFrictionNormalAxis": "None",
                 "yFrictionNormalAxis": "None",
                 "zFrictionNormalAxis": "None",
-                "xFrictionNormalDirection": "Either",
-                "yFrictionNormalDirection": "Either",
-                "zFrictionNormalDirection": "Either",
+                "xFrictionNormalDirection": "PositiveOnly",
+                "yFrictionNormalDirection": "PositiveOnly",
+                "zFrictionNormalDirection": "PositiveOnly",
                 "xFrictionFactor": 0,
                 "yFrictionFactor": 0,
                 "zFrictionFactor": 0,
@@ -23947,7 +24296,7 @@
           "Nodes"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "Nodes_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -24890,7 +25239,7 @@
           "Plate Cuts"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "PlateCuts_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -26540,7 +26889,7 @@
           "Plate Strips"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "PlateStrips_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -27400,7 +27749,7 @@
           "Plates"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "Plates_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -28452,7 +28801,7 @@
           "Sections"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "Sections_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -32238,7 +32587,7 @@
           "Steel Members"
         ],
         "summary": "Create",
-        "description": "Creates a new item. If a validator is registered, the item is validated before creation.",
+        "description": "Creates a new item. If a validator is registered, the item is validated before creation.\r\nThe response is fully hydrated — indicators, sub-resources and computed fields are\r\npopulated the same way as a single-item GET with its default `expand=all`.",
         "operationId": "SteelMembers_Create",
         "requestBody": {
           "description": "The data for the new item",
@@ -35165,6 +35514,25 @@
         "additionalProperties": false,
         "description": "A convergence result from a non-linear analysis iteration."
       },
+      "CoordinateSystem": {
+        "type": "object",
+        "properties": {
+          "origin": {
+            "$ref": "#/components/schemas/Point3D"
+          },
+          "xVector": {
+            "$ref": "#/components/schemas/Vector3D"
+          },
+          "yVector": {
+            "$ref": "#/components/schemas/Vector3D"
+          },
+          "zVector": {
+            "$ref": "#/components/schemas/Vector3D"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A local coordinate system (LCS): an origin plus three local axis unit vectors\r\nexpressed in global coordinates. The axes form a right-handed orthonormal basis —\r\nthe columns of the element's local-to-global transformation matrix."
+      },
       "DeleteResult": {
         "type": "object",
         "properties": {
@@ -36980,16 +37348,16 @@
         "properties": {
           "isRegistered": {
             "type": "boolean",
-            "description": "True when this machine has a SPACE GASS registration the API supports\r\n(TitanCloud or Titan LM). False indicates either an unsupported lock\r\ntype (e.g. legacy SGREG.DAT registration) or no registration at all.\r\nAlways check this before SpaceGassApi.Models.Dtos.License.LicenseStatusDto.IsLicensed: an unregistered\r\nAPI is blocked at the registration step, before any license acquire\r\nis attempted."
+            "description": "True when this machine has a SPACE GASS registration the API supports\r\n(Cloud licence or Titan Softlock). False indicates either an unsupported\r\nlock type (e.g. legacy SGREG.DAT registration) or no registration at all.\r\nAlways check this before SpaceGassApi.Models.Dtos.License.LicenseStatusDto.IsLicensed: an unregistered\r\nAPI is blocked at the registration step, before any license acquire\r\nis attempted."
           },
           "registrationType": {
             "$ref": "#/components/schemas/RegistrationStatus"
           },
           "registrationDetail": {
             "type": "string",
-            "description": "Human-readable explanation of the registration state. Always\r\npopulated. For TitanCloud / TitanLM it confirms the registration\r\nis active; for Unsupported / Unregistered it explains what the\r\noperator should do to fix it.",
+            "description": "Human-readable explanation of the registration state. Always\r\npopulated. For `TitanCloud` / `TitanLM` it reports whether the\r\nregistration is usable; for `Unsupported` / `Unregistered` it\r\nexplains what the operator should do to fix it. A Cloud licence\r\nregistration whose login file holds no usable credentials stays\r\n`TitanCloud` here but says so in this field.",
             "nullable": true,
-            "example": "TitanCloud registration is active. No action required."
+            "example": "Cloud licence registration is active. No action required."
           },
           "isLicensed": {
             "type": "boolean",
@@ -36997,7 +37365,7 @@
           },
           "isRoaming": {
             "type": "boolean",
-            "description": "True when the active Titan LM session is backed by an offline\r\nroaming licence file (no live LM server connection). Always false\r\nfor TitanCloud and for non-roaming Titan LM. Operator-facing\r\nsignal so dashboards can tell which path is in use."
+            "description": "True when the active Titan Softlock session is backed by an offline\r\nroaming licence file (no live licence-server connection). Always false\r\nfor the Cloud licence and for non-roaming Titan Softlock. Operator-facing\r\nsignal so dashboards can tell which path is in use."
           },
           "organization": {
             "type": "string",
@@ -38199,7 +38567,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "DTO for reading a member entity.\r\nReleases (fixity/stiffness at each end) are intrinsic member data and are always populated.\r\nOffsets (rigid end zones) are a linked sub-resource and are hydrated only when `?expand=all`."
+        "description": "DTO for reading a member entity.\r\nReleases (fixity/stiffness at each end) are intrinsic member data and are always populated.\r\nOffsets (rigid end zones) are a linked sub-resource, hydrated only when `?expand=all`\r\n(the default on single reads). Derived geometry (local axes, physical length) is served by\r\n`GET job/query/geometry/members`, not on this DTO."
       },
       "MemberBulkResult": {
         "type": "object",
@@ -38257,7 +38625,7 @@
             "format": "int32"
           },
           "axes": {
-            "$ref": "#/components/schemas/LoadAxes"
+            "$ref": "#/components/schemas/AxesType"
           },
           "positionUnits": {
             "$ref": "#/components/schemas/LoadPositionUnits"
@@ -38356,7 +38724,7 @@
             "format": "int32"
           },
           "axes": {
-            "$ref": "#/components/schemas/LoadAxes"
+            "$ref": "#/components/schemas/AxesType"
           },
           "positionUnits": {
             "$ref": "#/components/schemas/LoadPositionUnits"
@@ -38486,7 +38854,7 @@
             "nullable": true
           },
           "axes": {
-            "$ref": "#/components/schemas/LoadAxes"
+            "$ref": "#/components/schemas/AxesType"
           },
           "positionUnits": {
             "$ref": "#/components/schemas/LoadPositionUnits"
@@ -39400,6 +39768,38 @@
         "additionalProperties": false,
         "description": "Wrapper for analysis query results.\r\nContains the result data plus optional warnings about requested cases or modes\r\nthat produced no results (i.e. were not analysed)."
       },
+      "MemberGeometry": {
+        "type": "object",
+        "properties": {
+          "member": {
+            "type": "integer",
+            "description": "The member this geometry belongs to.",
+            "format": "int32"
+          },
+          "nodeA": {
+            "$ref": "#/components/schemas/NodeRef"
+          },
+          "nodeB": {
+            "$ref": "#/components/schemas/NodeRef"
+          },
+          "pointA": {
+            "$ref": "#/components/schemas/Point3D"
+          },
+          "pointB": {
+            "$ref": "#/components/schemas/Point3D"
+          },
+          "length": {
+            "type": "number",
+            "description": "Physical (offset-adjusted) member length — the distance between `pointA` and\r\n`pointB`. The analytical node-line length is the distance between `nodeA`\r\nand `nodeB`.",
+            "format": "double"
+          },
+          "localAxes": {
+            "$ref": "#/components/schemas/CoordinateSystem"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Derived geometry of a member — computed from the stored model, no analysis run required.\r\nThe end positions come in two forms: `nodeA`/`nodeB` are the analytical (node-line)\r\nends — the member's actual nodes — and `pointA`/`pointB` are the physical\r\n(offset-adjusted) ends as free points in space. They coincide when the member has no offsets."
+      },
       "MemberIntermediateDisplacement": {
         "type": "object",
         "properties": {
@@ -39705,32 +40105,38 @@
           "xOffsetAtA": {
             "type": "number",
             "description": "X offset at end A. Unit: Length (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "yOffsetAtA": {
             "type": "number",
             "description": "Y offset at end A. Unit: Length (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "zOffsetAtA": {
             "type": "number",
             "description": "Z offset at end A. Unit: Length (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "xOffsetAtB": {
             "type": "number",
             "description": "X offset at end B. Unit: Length (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "yOffsetAtB": {
             "type": "number",
             "description": "Y offset at end B. Unit: Length (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "zOffsetAtB": {
             "type": "number",
             "description": "Z offset at end B. Unit: Length (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           }
         },
         "additionalProperties": false,
@@ -42253,6 +42659,33 @@
         "additionalProperties": false,
         "description": "Wrapper for analysis query results.\r\nContains the result data plus optional warnings about requested cases or modes\r\nthat produced no results (i.e. were not analysed)."
       },
+      "NodeRef": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "The node Id.",
+            "format": "int32"
+          },
+          "x": {
+            "type": "number",
+            "description": "X coordinate. Unit: Length (see GET /job/units).",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "description": "Y coordinate. Unit: Length (see GET /job/units).",
+            "format": "double"
+          },
+          "z": {
+            "type": "number",
+            "description": "Z coordinate. Unit: Length (see GET /job/units).",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A lean reference to a node — its Id and coordinates only. Used to embed a node's identity\r\nand position in derived-geometry responses without dragging in the node's sub-resource\r\nindicators (restraints/constraints). The `id` matches the node's Id in\r\n`GET /job/structure/nodes`."
+      },
       "NodeRestraint": {
         "type": "object",
         "properties": {
@@ -42500,32 +42933,38 @@
           "txStiffness": {
             "type": "number",
             "description": "Translational X spring stiffness. Unit: Force/Length (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "tyStiffness": {
             "type": "number",
             "description": "Translational Y spring stiffness. Unit: Force/Length (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "tzStiffness": {
             "type": "number",
             "description": "Translational Z spring stiffness. Unit: Force/Length (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "rxStiffness": {
             "type": "number",
             "description": "Rotational X spring stiffness. Unit: Moment/Radian (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "ryStiffness": {
             "type": "number",
             "description": "Rotational Y spring stiffness. Unit: Moment/Radian (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "rzStiffness": {
             "type": "number",
             "description": "Rotational Z spring stiffness. Unit: Moment/Radian (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "xFrictionNormalAxis": {
             "$ref": "#/components/schemas/FrictionNormalAxis"
@@ -42548,47 +42987,56 @@
           "xFrictionFactor": {
             "type": "number",
             "description": "X-axis friction factor.",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "yFrictionFactor": {
             "type": "number",
             "description": "Y-axis friction factor.",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "zFrictionFactor": {
             "type": "number",
             "description": "Z-axis friction factor.",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "txPlasticLimit": {
             "type": "number",
             "description": "Translational X plastic limit. Unit: Force (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "tyPlasticLimit": {
             "type": "number",
             "description": "Translational Y plastic limit. Unit: Force (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "tzPlasticLimit": {
             "type": "number",
             "description": "Translational Z plastic limit. Unit: Force (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "rxPlasticLimit": {
             "type": "number",
             "description": "Rotational X plastic limit. Unit: Moment (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "ryPlasticLimit": {
             "type": "number",
             "description": "Rotational Y plastic limit. Unit: Moment (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "rzPlasticLimit": {
             "type": "number",
             "description": "Rotational Z plastic limit. Unit: Moment (see GET /job/units).",
-            "format": "double"
+            "format": "double",
+            "nullable": true
           },
           "txVariableTable": {
             "type": "array",
@@ -43535,6 +43983,50 @@
         "additionalProperties": false,
         "description": "Wrapper for analysis query results.\r\nContains the result data plus optional warnings about requested cases or modes\r\nthat produced no results (i.e. were not analysed)."
       },
+      "PlateGeometry": {
+        "type": "object",
+        "properties": {
+          "plate": {
+            "type": "integer",
+            "description": "The plate this geometry belongs to.",
+            "format": "int32"
+          },
+          "nodeCorners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/NodeRef"
+            },
+            "description": "The plate's corner nodes in order (A, B, C[, D]) — identity and position. Three\r\nentries for a triangular plate, four for a quadrilateral.",
+            "nullable": true
+          },
+          "pointCorners": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Point3D"
+            },
+            "description": "Physical (offset-adjusted) corner positions in order (A, B, C[, D]), in global\r\ncoordinates — each corner shifted along the plate normal by the offset.",
+            "nullable": true
+          },
+          "area": {
+            "type": "number",
+            "description": "Plate surface area.",
+            "format": "double"
+          },
+          "perimeter": {
+            "type": "number",
+            "description": "Plate perimeter — the sum of the edge lengths.",
+            "format": "double"
+          },
+          "centroid": {
+            "$ref": "#/components/schemas/Point3D"
+          },
+          "localAxes": {
+            "$ref": "#/components/schemas/CoordinateSystem"
+          }
+        },
+        "additionalProperties": false,
+        "description": "Derived geometry of a plate — computed from the stored model, no analysis run required.\r\nCorners come in two forms: `nodeCorners` are the analytical corners — the plate's\r\nactual nodes — and `pointCorners` are the physical corners, shifted along the plate\r\nnormal by the plate offset. They coincide when the plate has no offset. Area and perimeter\r\nare invariant to that normal shift, so a single value serves both."
+      },
       "PlateNodalForce": {
         "type": "object",
         "properties": {
@@ -44458,6 +44950,28 @@
         "additionalProperties": false,
         "description": "DTO for updating an existing plate.\r\nOnly fields included in the request are updated; omit a field to keep its current value."
       },
+      "Point3D": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "description": "X coordinate. Unit: Length (see GET /job/units).",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "description": "Y coordinate. Unit: Length (see GET /job/units).",
+            "format": "double"
+          },
+          "z": {
+            "type": "number",
+            "description": "Z coordinate. Unit: Length (see GET /job/units).",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A 3D point with X, Y, Z coordinates."
+      },
       "PrescribedDisplacement": {
         "required": [
           "node"
@@ -44826,7 +45340,7 @@
           "Unregistered"
         ],
         "type": "string",
-        "description": "Outcome of probing the machine for a SPACE GASS registration.\r\nMirrors the precedence used by desktop SPACE GASS in\r\n`NETLicenses\\Licenses.vb::RegistrationSetupCheck`: legacy SGREG.DAT\r\nshort-circuits before any Titan-type probing, then TitanCloud, then Titan LM."
+        "description": "Outcome of probing the machine for a SPACE GASS registration, in the same\r\nprecedence desktop SPACE GASS uses: a legacy SGREG.DAT lock short-circuits\r\nfirst, then the Cloud licence, then Titan Softlock."
       },
       "ResourceMetadata": {
         "type": "object",
@@ -46924,6 +47438,28 @@
         "additionalProperties": false,
         "description": "Individual validation error"
       },
+      "Vector3D": {
+        "type": "object",
+        "properties": {
+          "x": {
+            "type": "number",
+            "description": "X component (unitless direction).",
+            "format": "double"
+          },
+          "y": {
+            "type": "number",
+            "description": "Y component (unitless direction).",
+            "format": "double"
+          },
+          "z": {
+            "type": "number",
+            "description": "Z component (unitless direction).",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false,
+        "description": "A 3D vector with X, Y, Z components."
+      },
       "VehicleLoadUnits": {
         "type": "object",
         "properties": {
@@ -47155,6 +47691,10 @@
       "description": "Manage steel member design data (design groups)."
     },
     {
+      "name": "Geometry",
+      "description": "Derived model geometry — member and plate positions, lengths, areas, centroids and local axes (no analysis run required)"
+    },
+    {
       "name": "Static Results",
       "description": "Static analysis results (nodes, members, plates)"
     },
@@ -47299,6 +47839,7 @@
     {
       "name": "Query",
       "tags": [
+        "Geometry",
         "Static Results",
         "Buckling Results",
         "Dynamic Results",
