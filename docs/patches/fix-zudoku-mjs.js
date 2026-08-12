@@ -36,19 +36,21 @@ if (fs.existsSync(cliPath)) {
     patched = true;
   }
 
-  // Patch 2: Accept entry.server.mjs in prerender
-  const oldEntry =
-    'path21.join(distDir, "server", serverConfigFilename)';
-  if (content.includes(oldEntry) && !content.includes("entry.server.mjs")) {
-    // Find and patch the entry.server.js reference near the prerender function
-    const oldEntryServer = '"server/entry.server.js"';
+  // Patch 2: Accept entry.server.mjs in prerender.
+  // The prerender step hardcodes `<path>.join(distDir, "server/entry.server.js")`,
+  // but Vite 7+ emits `entry.server.mjs`. The minified `path` import alias drifts
+  // between Zudoku releases (path21 @ 0.82.2 → path22 @ 0.82.3), so match it with
+  // a regex and reuse the captured name in the existence-checked replacement.
+  const entryJoinRe =
+    /(\w+)\.join\(distDir,\s*"server\/entry\.server\.js"\)/;
+  const entryJoinMatch = content.match(entryJoinRe);
+  if (entryJoinMatch && !content.includes("entry.server.mjs")) {
+    const pathVar = entryJoinMatch[1];
     const newEntryServer =
-      '(existsSync(path21.join(distDir, "server/entry.server.js")) ? "server/entry.server.js" : "server/entry.server.mjs")';
-    if (content.includes(oldEntryServer)) {
-      content = content.replace(oldEntryServer, newEntryServer);
-      console.log("[patch] cli.js: accept entry.server.mjs");
-      patched = true;
-    }
+      `${pathVar}.join(distDir, existsSync(${pathVar}.join(distDir, "server/entry.server.js")) ? "server/entry.server.js" : "server/entry.server.mjs")`;
+    content = content.replace(entryJoinRe, newEntryServer);
+    console.log("[patch] cli.js: accept entry.server.mjs");
+    patched = true;
   }
 
   // Patch 3: Fix external entry references in build config
