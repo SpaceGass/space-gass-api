@@ -148,8 +148,12 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
 
     let code = "# Python SDK Client\n";
     if (hasBody) {
-      const bodyModule = pascalToSnake(bodyType);
-      code += `from space_gass_api.models.${bodyModule} import ${bodyType}\n\n`;
+      // Import the model from the package-root `models` shim, which re-exports
+      // every class flat. The per-model submodule path
+      // (`space_gass_api.models.<snake>`) does NOT resolve — those files live
+      // under `space_gass_api.generated.models` — so the flat form is the one
+      // that actually runs, and it matches the examples/docs convention.
+      code += `from space_gass_api.models import ${bodyType}\n\n`;
       if (isList) {
         code += `bodies = [\n`;
         code += `    ${bodyType}(\n`;
