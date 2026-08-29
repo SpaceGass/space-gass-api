@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "space-gass-api"
-version = "14.50.164"
+version = "14.50.165"
 description = "Official Python SDK for the SPACE GASS API."
 readme = "README.md"
 license = "MIT"
