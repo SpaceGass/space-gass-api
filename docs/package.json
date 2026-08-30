@@ -13,6 +13,7 @@
     "zudoku": "^0.82.3"
   },
   "overrides": {
+    "hono": "4.12.34",
     "@hono/node-server": "2.0.10",
     "@opentelemetry/core": "^2.8.0",
     "brace-expansion": "5.0.8",
