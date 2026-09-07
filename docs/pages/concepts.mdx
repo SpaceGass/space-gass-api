@@ -94,8 +94,9 @@ you supply a meaningful integer key directly:
 ## Units
 
 The API is unit-agnostic. Numeric values are interpreted according to
-whatever unit set the active job is configured with. Read or change the
-active set via `GET /job/units` and `PATCH /job/units`. Most model
+whatever unit set the active job is configured with. Units come from
+the job file and are read-only through the API — read the active set
+via `GET /job/units`. Most model
 field descriptions in the [API Reference](/api) tell you which
 unit family applies (Length, Force, Section Properties, etc.).
 
@@ -136,7 +137,7 @@ with both languages, including `WaitForCompletion` helpers.
 | `404 Not Found` on a node / member you just created | Wrong Id, or the entity was created in a previous job that has since been closed. | The Id is returned on POST — capture and reuse it within the same active job. |
 | Result `Warnings.LoadCasesNotAnalyzed` is non-empty | The combination's primary cases (or the case itself) haven't been analysed. | Run the relevant analysis before querying, or filter to only analysed cases. |
 | `409 Conflict` on creating a restraint / constraint / offset | One already exists for that node / member. They are entity-style: at most one per parent. | `DELETE` the existing one first, or `PATCH` to update it. |
-| Numbers come back wrong by a factor of 1000 | Unit mismatch — your code assumed kN, model is in N (or vice versa). | Check / set `GET /job/units` before sending or interpreting numeric data. |
+| Numbers come back wrong by a factor of 1000 | Unit mismatch — your code assumed kN, model is in N (or vice versa). | Check `GET /job/units` before sending or interpreting numeric data. |
 
 ## Next Steps
 
