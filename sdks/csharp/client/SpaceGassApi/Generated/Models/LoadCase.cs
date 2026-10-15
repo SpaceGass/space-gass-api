@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for a load case (from Loads - Titles table, FileID=28).Returns all load cases including primary, combination, and step types.When `Type` is `Combination`, the case owns a list of combination items(hydrated inline via `?expand=all`).
+    /// A load case.Returns all load cases including primary, combination, and step types.When `Type` is `Combination`, the case owns a list of combination items(hydrated inline via `?expand=all`).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class LoadCase : IParsable
@@ -20,6 +20,14 @@ namespace SpaceGassApi.Models
 #nullable restore
 #else
         public List<global::SpaceGassApi.Models.CombinationLoadCaseItem> CombinationItems { get; set; }
+#endif
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
 #endif
         /// <summary>True when this case has at least one combination item defined.Only meaningful for cases where `Type` is `Combination`.Use `?expand=all` to include the full `combinationItems` array.</summary>
         public bool? HasCombinationItems { get; set; }
@@ -62,6 +70,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "combinationItems", n => { CombinationItems = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationLoadCaseItem>(global::SpaceGassApi.Models.CombinationLoadCaseItem.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "hasCombinationItems", n => { HasCombinationItems = n.GetBoolValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "notes", n => { Notes = n.GetStringValue(); } },
@@ -77,6 +86,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.CombinationLoadCaseItem>("combinationItems", CombinationItems);
+            writer.WriteStringValue("guid", Guid);
             writer.WriteBoolValue("hasCombinationItems", HasCombinationItems);
             writer.WriteIntValue("id", Id);
             writer.WriteStringValue("notes", Notes);

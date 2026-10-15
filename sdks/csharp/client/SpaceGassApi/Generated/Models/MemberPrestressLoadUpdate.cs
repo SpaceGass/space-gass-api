@@ -13,6 +13,14 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberPrestressLoadUpdate : IParsable
     {
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>The load case number.</summary>
         public int? LoadCase { get; set; }
         /// <summary>Load category for grouping/organization.</summary>
@@ -39,6 +47,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
                 { "member", n => { Member = n.GetIntValue(); } },
@@ -52,6 +61,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("loadCategory", LoadCategory);
             writer.WriteIntValue("member", Member);

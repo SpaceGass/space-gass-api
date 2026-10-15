@@ -26,6 +26,8 @@ class MemberUpdate(Parsable):
     gap_compression_limit: Optional[float] = None
     # Gap tension limit (for Gap type members). Unit: Force (see GET /job/units).
     gap_tension_limit: Optional[float] = None
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
     # Primary identifier of the entity to update.Optional for single updates (Id comes from route), required for bulk updates.
     id: Optional[int] = None
     # Material number assigned to this member.
@@ -72,6 +74,7 @@ class MemberUpdate(Parsable):
             "fuseTensionLimit": lambda n : setattr(self, 'fuse_tension_limit', n.get_float_value()),
             "gapCompressionLimit": lambda n : setattr(self, 'gap_compression_limit', n.get_float_value()),
             "gapTensionLimit": lambda n : setattr(self, 'gap_tension_limit', n.get_float_value()),
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "material": lambda n : setattr(self, 'material', n.get_int_value()),
             "nodeA": lambda n : setattr(self, 'node_a', n.get_int_value()),
@@ -96,6 +99,7 @@ class MemberUpdate(Parsable):
         writer.write_float_value("fuseTensionLimit", self.fuse_tension_limit)
         writer.write_float_value("gapCompressionLimit", self.gap_compression_limit)
         writer.write_float_value("gapTensionLimit", self.gap_tension_limit)
+        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_int_value("material", self.material)
         writer.write_int_value("nodeA", self.node_a)

@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Steel-member design-state categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_SteelMemberTypes` verbatim — note SG&apos;s enumname is plural; the API name is singular for consistency with the other`Filter*Type` enums.</summary>
+    /// <summary>Steel-member design-state categories available as a Filter resource criterion.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum FilterSteelMemberType
     {

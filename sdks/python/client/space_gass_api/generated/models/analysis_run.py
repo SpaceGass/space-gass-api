@@ -18,7 +18,7 @@ class AnalysisRun(Parsable):
     """
     Response DTO representing an analysis run and its current state.Used for both the initial 202 response and subsequent status polling.
     """
-    # SPACEGASS analysis types. Values map to the SPACEGASS internal SGAnalysisType IDs.
+    # SPACE GASS analysis types.
     analysis_type: Optional[AnalysisType] = None
     # When the run finished. Null if still running.
     completed_at: Optional[datetime.datetime] = None
@@ -32,7 +32,7 @@ class AnalysisRun(Parsable):
     header: Optional[str] = None
     # Static analysis parameters as label→value pairs.Set during analysis initialisation and do not change during execution.e.g., { "Input data:": "4.6 Mb (Mem)", "Degrees of freedom:": "26244", "Load cases:": "55" }Available while running (from live progress) and after completion (persisted on run).
     parameters: Optional[AnalysisRun_parameters] = None
-    # Live progress data from the analysis solver.Captured via Windows messages from SGSolver.EXE to the display proxy window.
+    # Live progress data from the analysis solver.
     progress: Optional[AnalysisProgress] = None
     # Unique identifier for this run
     run_id: Optional[UUID] = None

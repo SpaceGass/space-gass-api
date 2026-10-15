@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class FilterSections(Parsable):
     """
-    Sub-filter carrying a list of section Ids. No sub-type — sectionsare filtered by Id alone.Maps to SG `SGFilterType.Sections`.
+    Sub-filter carrying a list of section Ids. No sub-type — sectionsare filtered by Id alone.
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None

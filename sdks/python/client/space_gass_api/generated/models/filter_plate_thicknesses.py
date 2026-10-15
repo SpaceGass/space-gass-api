@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class FilterPlateThicknesses(Parsable):
     """
-    Sub-filter carrying a list of plate-thickness values (not Ids).Maps to SG `SGFilterType.Thicknesses`.
+    Sub-filter carrying a list of plate-thickness values (not Ids).
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None

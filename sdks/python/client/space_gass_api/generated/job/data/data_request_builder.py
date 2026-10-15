@@ -42,7 +42,7 @@ class DataRequestBuilder(BaseRequestBuilder):
     # --- end overloads ---
     async def delete(self,request_configuration: Optional[RequestConfiguration[DataRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[Job]:
         """
-        Clears all model data while keeping current configuration (units, settings).Deletes ATS data files but preserves the job configuration.Returns the job object with zeroed model summary counts.
+        Clears all model data while keeping current configuration (units, settings).Returns the job object with zeroed model summary counts.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Job]
         """
@@ -65,7 +65,7 @@ class DataRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[DataRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
-        Clears all model data while keeping current configuration (units, settings).Deletes ATS data files but preserves the job configuration.Returns the job object with zeroed model summary counts.
+        Clears all model data while keeping current configuration (units, settings).Returns the job object with zeroed model summary counts.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -87,7 +87,7 @@ class DataRequestBuilder(BaseRequestBuilder):
     @dataclass
     class DataRequestBuilderDeleteQueryParameters():
         """
-        Clears all model data while keeping current configuration (units, settings).Deletes ATS data files but preserves the job configuration.Returns the job object with zeroed model summary counts.
+        Clears all model data while keeping current configuration (units, settings).Returns the job object with zeroed model summary counts.
         """
         # Must be true to confirm clearing. If false or omitted, operation is rejected for safety.
         force: Optional[bool] = None

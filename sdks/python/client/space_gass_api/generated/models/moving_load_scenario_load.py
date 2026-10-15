@@ -17,13 +17,13 @@ class MovingLoadScenarioLoad(Parsable):
     delay: Optional[float] = None
     # Dynamic amplification factor applied to the load.
     dynamic_factor: Optional[float] = None
-    # Controls which load cases a scenario load's stationary loads are generated into.Mirrors SPACE GASS `MLGenerateStationary` (`NETSpaceGass/Loads/Moving/MLCommon.vb`).
+    # Controls which load cases a scenario load's stationary loads are generated into.
     generate_stationary_lc: Optional[MovingLoadStationaryOption] = None
     # Lane factor applied to the load.
     lane_factor: Optional[float] = None
     # Multiplier applied to the load magnitudes.
     load_factor: Optional[float] = None
-    # Discriminates a moving-load scenario load between a vehicle run and a pressure run.Mirrors SPACE GASS `MLScenarioLoadType` (`NETSpaceGass/Loads/Moving/MLCommon.vb`).
+    # Discriminates a moving-load scenario load between a vehicle run and a pressure run.
     load_type: Optional[MovingLoadType] = None
     # The pressure Id this load uses.
     pressure_id: Optional[int] = None

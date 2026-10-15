@@ -37,7 +37,7 @@ class MembersItemRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[DeleteResult]:
         """
-        Deletes the entity with the supplied Id. Returns 404 if no entity with that Id exists.            For entities whose delete cascades (Nodes, Members, Plates), returns 200 with aSpaceGassApi.Models.Dtos.Entity.DeleteResultDto listing every row removed — the entity itself, child rowsthat referenced it (loads, restraints, offsets, plate cuts, …), and any nodes leftdisconnected by the removal. Cleanup is best-effort, not transactional across datasheets:on failure the affected datasheets are reloaded from disk and the request fails.            For all other entities, returns 204 No Content and removes only the entity's own row.
+        Deletes the entity with the supplied Id. Returns 404 if no entity with that Id exists.            For entities whose delete cascades (Nodes, Members, Plates), returns 200 with aSpaceGassApi.Models.Dtos.Entity.DeleteResultDto listing every row removed — the entity itself, child rowsthat referenced it (loads, restraints, offsets, plate cuts, …), and any nodes leftdisconnected by the removal. Cleanup is best-effort and not atomic: if it fails part-way,the request fails and some of the removals may already have been made.            For all other entities, returns 204 No Content and removes only the entity's own row.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[DeleteResult]
         """
@@ -117,7 +117,7 @@ class MembersItemRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Deletes the entity with the supplied Id. Returns 404 if no entity with that Id exists.            For entities whose delete cascades (Nodes, Members, Plates), returns 200 with aSpaceGassApi.Models.Dtos.Entity.DeleteResultDto listing every row removed — the entity itself, child rowsthat referenced it (loads, restraints, offsets, plate cuts, …), and any nodes leftdisconnected by the removal. Cleanup is best-effort, not transactional across datasheets:on failure the affected datasheets are reloaded from disk and the request fails.            For all other entities, returns 204 No Content and removes only the entity's own row.
+        Deletes the entity with the supplied Id. Returns 404 if no entity with that Id exists.            For entities whose delete cascades (Nodes, Members, Plates), returns 200 with aSpaceGassApi.Models.Dtos.Entity.DeleteResultDto listing every row removed — the entity itself, child rowsthat referenced it (loads, restraints, offsets, plate cuts, …), and any nodes leftdisconnected by the removal. Cleanup is best-effort and not atomic: if it fails part-way,the request fails and some of the removals may already have been made.            For all other entities, returns 204 No Content and removes only the entity's own row.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Unit for section properties (area, moment of inertia, etc.). Members mirrorSPACE GASS `SgSectionProperties` (`NetCommon/CommonEnums.vb`).</summary>
+    /// <summary>Unit for section properties (area, moment of inertia, etc.).</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum SectionPropertiesUnit
     {
