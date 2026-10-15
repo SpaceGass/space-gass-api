@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 @dataclass
 class FilterPlateStrips(Parsable):
     """
-    Sub-filter carrying a list of plate-strip Ids and a strip-typecategorical filter.Maps to SG `SGFilterType.PlateStrip`.
+    Sub-filter carrying a list of plate-strip Ids and a strip-typecategorical filter.
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Plate-strip categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_PlateStripType` verbatim.
+    # Plate-strip categories available as a Filter resource criterion.
     plate_strip_type: Optional[FilterPlateStripType] = None
     # Plate-strip Ids in SG list format. Empty string means no Id criterion.
     plate_strips: Optional[str] = None

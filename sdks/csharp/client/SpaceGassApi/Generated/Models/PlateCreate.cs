@@ -25,6 +25,14 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.DirectionUpdate Direction { get; set; }
 #endif
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.</summary>
         public int? Id { get; set; }
         /// <summary>Material number assigned to this plate.</summary>
@@ -66,6 +74,7 @@ namespace SpaceGassApi.Models
                 { "actualThickness", n => { ActualThickness = n.GetDoubleValue(); } },
                 { "bendingThickness", n => { BendingThickness = n.GetDoubleValue(); } },
                 { "direction", n => { Direction = n.GetObjectValue<global::SpaceGassApi.Models.DirectionUpdate>(global::SpaceGassApi.Models.DirectionUpdate.CreateFromDiscriminatorValue); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "material", n => { Material = n.GetIntValue(); } },
                 { "membraneThickness", n => { MembraneThickness = n.GetDoubleValue(); } },
@@ -88,6 +97,7 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("actualThickness", ActualThickness);
             writer.WriteDoubleValue("bendingThickness", BendingThickness);
             writer.WriteObjectValue<global::SpaceGassApi.Models.DirectionUpdate>("direction", Direction);
+            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteIntValue("material", Material);
             writer.WriteDoubleValue("membraneThickness", MembraneThickness);

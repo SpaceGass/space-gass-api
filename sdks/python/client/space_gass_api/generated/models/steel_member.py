@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 @dataclass
 class SteelMember(Parsable):
     """
-    DTO for reading a steel member design group (SPACE GASS "Design - Steel Members", FileID 40).The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
+    A steel member design group (SPACE GASS "Design - Steel Members").The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
     """
     # Angle section type for structural sections.Maps to SPACE GASS lookup table "Angle Type".
     angle_type: Optional[AngleType] = None
@@ -42,6 +42,8 @@ class SteelMember(Parsable):
     design_criteria: Optional[SteelDesignCriteria] = None
     # End connection configuration for a steel member design group,used in eccentric connection and net-section checks.Maps to SPACE GASS lookup table "End Connection".
     end_connection: Optional[SteelMemberEndConnection] = None
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
     id: Optional[int] = None
     # IS800 seismic frame classification for a steel member design group.Setting a braced or moment frame type activates the seismic checks when the IS800 design code is used.Maps to SPACE GASS lookup table "IS Seismic Class".
@@ -127,6 +129,7 @@ class SteelMember(Parsable):
             "description": lambda n : setattr(self, 'description', n.get_str_value()),
             "designCriteria": lambda n : setattr(self, 'design_criteria', n.get_enum_value(SteelDesignCriteria)),
             "endConnection": lambda n : setattr(self, 'end_connection', n.get_enum_value(SteelMemberEndConnection)),
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "is800SeismicClassification": lambda n : setattr(self, 'is800_seismic_classification', n.get_enum_value(Is800SeismicClassification)),
             "lbNegativeBending": lambda n : setattr(self, 'lb_negative_bending', n.get_float_value()),
@@ -167,6 +170,7 @@ class SteelMember(Parsable):
         writer.write_str_value("description", self.description)
         writer.write_enum_value("designCriteria", self.design_criteria)
         writer.write_enum_value("endConnection", self.end_connection)
+        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_enum_value("is800SeismicClassification", self.is800_seismic_classification)
         writer.write_float_value("lbNegativeBending", self.lb_negative_bending)

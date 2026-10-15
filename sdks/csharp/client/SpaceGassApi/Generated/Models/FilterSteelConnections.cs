@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a list of steel-connection Ids. No sub-type(the SG-side enum slot is unused; `UpdateFromDatasheetItem` neverreads it back).Maps to SG `SGFilterType.SteelConnections`.
+    /// Sub-filter carrying a list of steel-connection Ids. No sub-type.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterSteelConnections : IParsable

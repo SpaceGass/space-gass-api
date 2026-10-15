@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a steel member design group (SPACE GASS &quot;Design - Steel Members&quot;, FileID 40).The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
+    /// A steel member design group (SPACE GASS &quot;Design - Steel Members&quot;).The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SteelMember : IParsable
@@ -53,6 +53,14 @@ namespace SpaceGassApi.Models
         public global::SpaceGassApi.Models.SteelDesignCriteria? DesignCriteria { get; set; }
         /// <summary>End connection configuration for a steel member design group,used in eccentric connection and net-section checks.Maps to SPACE GASS lookup table &quot;End Connection&quot;.</summary>
         public global::SpaceGassApi.Models.SteelMemberEndConnection? EndConnection { get; set; }
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
         public int? Id { get; set; }
         /// <summary>IS800 seismic frame classification for a steel member design group.Setting a braced or moment frame type activates the seismic checks when the IS800 design code is used.Maps to SPACE GASS lookup table &quot;IS Seismic Class&quot;.</summary>
@@ -142,6 +150,7 @@ namespace SpaceGassApi.Models
                 { "description", n => { Description = n.GetStringValue(); } },
                 { "designCriteria", n => { DesignCriteria = n.GetEnumValue<global::SpaceGassApi.Models.SteelDesignCriteria>(); } },
                 { "endConnection", n => { EndConnection = n.GetEnumValue<global::SpaceGassApi.Models.SteelMemberEndConnection>(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "is800SeismicClassification", n => { Is800SeismicClassification = n.GetEnumValue<global::SpaceGassApi.Models.Is800SeismicClassification>(); } },
                 { "lbNegativeBending", n => { LbNegativeBending = n.GetDoubleValue(); } },
@@ -180,6 +189,7 @@ namespace SpaceGassApi.Models
             writer.WriteStringValue("description", Description);
             writer.WriteEnumValue<global::SpaceGassApi.Models.SteelDesignCriteria>("designCriteria", DesignCriteria);
             writer.WriteEnumValue<global::SpaceGassApi.Models.SteelMemberEndConnection>("endConnection", EndConnection);
+            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteEnumValue<global::SpaceGassApi.Models.Is800SeismicClassification>("is800SeismicClassification", Is800SeismicClassification);
             writer.WriteDoubleValue("lbNegativeBending", LbNegativeBending);

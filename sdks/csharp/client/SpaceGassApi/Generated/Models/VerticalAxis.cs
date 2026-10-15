@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Vertical (gravity) axis direction for the job.Determines which global axis is treated as the vertical/gravity direction.Maps to SPACE GASS CommonEnums.SGVerticalAxis (YAxis=2, ZAxis=3).Only YAxis and ZAxis are valid choices in SPACE GASS.</summary>
+    /// <summary>Vertical (gravity) axis direction for the job.Determines which global axis is treated as the vertical/gravity direction.Only YAxis and ZAxis are valid choices in SPACE GASS.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum VerticalAxis
     {

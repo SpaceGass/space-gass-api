@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class AnalysisRun : IParsable
     {
-        /// <summary>SPACEGASS analysis types. Values map to the SPACEGASS internal SGAnalysisType IDs.</summary>
+        /// <summary>SPACE GASS analysis types.</summary>
         public global::SpaceGassApi.Models.AnalysisType? AnalysisType { get; set; }
         /// <summary>When the run finished. Null if still running.</summary>
         public DateTimeOffset? CompletedAt { get; set; }
@@ -57,7 +57,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.AnalysisRun_parameters Parameters { get; set; }
 #endif
-        /// <summary>Live progress data from the analysis solver.Captured via Windows messages from SGSolver.EXE to the display proxy window.</summary>
+        /// <summary>Live progress data from the analysis solver.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.AnalysisProgress? Progress { get; set; }

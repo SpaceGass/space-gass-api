@@ -21,6 +21,14 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.NodeConstraint Constraint { get; set; }
 #endif
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>True when this node is the slave side of a master-slave constraint.A node can be the slave of at most one constraint.Use `?expand=all` to include the full `constraint` object.</summary>
         public bool? HasConstraint { get; set; }
         /// <summary>True when this node has an explicit restraint row defined.False means the node uses default restraints (all DOFs free, no spring stiffness).</summary>
@@ -60,6 +68,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "constraint", n => { Constraint = n.GetObjectValue<global::SpaceGassApi.Models.NodeConstraint>(global::SpaceGassApi.Models.NodeConstraint.CreateFromDiscriminatorValue); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "hasConstraint", n => { HasConstraint = n.GetBoolValue(); } },
                 { "hasRestraint", n => { HasRestraint = n.GetBoolValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
@@ -77,6 +86,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteObjectValue<global::SpaceGassApi.Models.NodeConstraint>("constraint", Constraint);
+            writer.WriteStringValue("guid", Guid);
             writer.WriteBoolValue("hasConstraint", HasConstraint);
             writer.WriteBoolValue("hasRestraint", HasRestraint);
             writer.WriteIntValue("id", Id);

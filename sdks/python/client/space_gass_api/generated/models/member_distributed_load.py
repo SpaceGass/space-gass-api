@@ -29,6 +29,8 @@ class MemberDistributedLoad(Parsable):
     fz_finish: Optional[float] = None
     # Distributed force intensity in Z direction at the start position.
     fz_start: Optional[float] = None
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
     # The load case number this load belongs to.
     load_case: Optional[int] = None
     # Load category for grouping/organization.
@@ -73,6 +75,7 @@ class MemberDistributedLoad(Parsable):
             "fyStart": lambda n : setattr(self, 'fy_start', n.get_float_value()),
             "fzFinish": lambda n : setattr(self, 'fz_finish', n.get_float_value()),
             "fzStart": lambda n : setattr(self, 'fz_start', n.get_float_value()),
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "loadCase": lambda n : setattr(self, 'load_case', n.get_int_value()),
             "loadCategory": lambda n : setattr(self, 'load_category', n.get_int_value()),
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
@@ -98,6 +101,7 @@ class MemberDistributedLoad(Parsable):
         writer.write_float_value("fyStart", self.fy_start)
         writer.write_float_value("fzFinish", self.fz_finish)
         writer.write_float_value("fzStart", self.fz_start)
+        writer.write_str_value("guid", self.guid)
         writer.write_int_value("loadCase", self.load_case)
         writer.write_int_value("loadCategory", self.load_category)
         writer.write_int_value("member", self.member)

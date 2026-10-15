@@ -13,6 +13,14 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class LoadCategory : IParsable
     {
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
         public int? Id { get; set; }
         /// <summary>Notes (supports multi-line text).</summary>
@@ -73,6 +81,7 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "notes", n => { Notes = n.GetStringValue(); } },
                 { "source", n => { Source = n.GetStringValue(); } },
@@ -88,6 +97,7 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("id", Id);
             writer.WriteStringValue("notes", Notes);
             writer.WriteStringValue("source", Source);

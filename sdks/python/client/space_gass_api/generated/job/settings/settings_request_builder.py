@@ -16,6 +16,7 @@ from warnings import warn
 if TYPE_CHECKING:
     from ...models.error_response import ErrorResponse
     from ...models.job_settings import JobSettings
+    from .default_libraries.default_libraries_request_builder import DefaultLibrariesRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class SettingsRequestBuilder(BaseRequestBuilder):
@@ -73,6 +74,15 @@ class SettingsRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return SettingsRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def default_libraries(self) -> DefaultLibrariesRequestBuilder:
+        """
+        The defaultLibraries property
+        """
+        from .default_libraries.default_libraries_request_builder import DefaultLibrariesRequestBuilder
+
+        return DefaultLibrariesRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def metadata(self) -> MetadataRequestBuilder:

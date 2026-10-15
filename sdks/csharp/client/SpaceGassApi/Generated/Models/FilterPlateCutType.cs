@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Plate-cut categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_PlateCutType` verbatim (identicalmembers to SpaceGassApi.Models.Enums.Filters.FilterPlateStripType at the SG layer, butkept as a distinct type so future SG additions don&apos;t require anAPI refactor).</summary>
+    /// <summary>Plate-cut categories available as a Filter resource criterion.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum FilterPlateCutType
     {

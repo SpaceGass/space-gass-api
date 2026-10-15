@@ -19,6 +19,14 @@ namespace SpaceGassApi.Models
         public double? Fy { get; set; }
         /// <summary>Force in the global Z direction.</summary>
         public double? Fz { get; set; }
+        /// <summary>Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? Guid { get; set; }
+#nullable restore
+#else
+        public string Guid { get; set; }
+#endif
         /// <summary>The load case number this load belongs to.</summary>
         public int? LoadCase { get; set; }
         /// <summary>Load category for grouping/organization.</summary>
@@ -52,6 +60,7 @@ namespace SpaceGassApi.Models
                 { "fx", n => { Fx = n.GetDoubleValue(); } },
                 { "fy", n => { Fy = n.GetDoubleValue(); } },
                 { "fz", n => { Fz = n.GetDoubleValue(); } },
+                { "guid", n => { Guid = n.GetStringValue(); } },
                 { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "loadCategory", n => { LoadCategory = n.GetIntValue(); } },
                 { "mx", n => { Mx = n.GetDoubleValue(); } },
@@ -70,6 +79,7 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("fx", Fx);
             writer.WriteDoubleValue("fy", Fy);
             writer.WriteDoubleValue("fz", Fz);
+            writer.WriteStringValue("guid", Guid);
             writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteIntValue("loadCategory", LoadCategory);
             writer.WriteDoubleValue("mx", Mx);

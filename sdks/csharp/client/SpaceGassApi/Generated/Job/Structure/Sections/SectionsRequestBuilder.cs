@@ -8,6 +8,7 @@ using SpaceGassApi.Job.Structure.Sections.Item;
 using SpaceGassApi.Job.Structure.Sections.Library;
 using SpaceGassApi.Job.Structure.Sections.Metadata;
 using SpaceGassApi.Job.Structure.Sections.Next;
+using SpaceGassApi.Job.Structure.Sections.ShapeBuilder;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -41,6 +42,11 @@ namespace SpaceGassApi.Job.Structure.Sections
         public global::SpaceGassApi.Job.Structure.Sections.Next.NextRequestBuilder Next
         {
             get => new global::SpaceGassApi.Job.Structure.Sections.Next.NextRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The shapeBuilder property</summary>
+        public global::SpaceGassApi.Job.Structure.Sections.ShapeBuilder.ShapeBuilderRequestBuilder ShapeBuilder
+        {
+            get => new global::SpaceGassApi.Job.Structure.Sections.ShapeBuilder.ShapeBuilderRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>Gets an item from the SpaceGassApi.job.structure.sections.item collection</summary>
         /// <param name="position">The entity Id</param>

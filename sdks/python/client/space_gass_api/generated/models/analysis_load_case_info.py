@@ -20,7 +20,7 @@ class AnalysisLoadCaseInfo(Parsable):
     load_case: Optional[int] = None
     # Number of buckling or dynamic modes computed for this case.Populated for buckling/dynamic analysis cases that have results;omitted otherwise.
     modes: Optional[int] = None
-    # Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS's `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Paradise, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).
+    # Matrix solver type used by the analysis engine.
     solver: Optional[SolverType] = None
     
     @staticmethod

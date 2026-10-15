@@ -15,7 +15,7 @@ class AnalysisRunResult(Parsable):
     """
     Result summary DTO returned once an analysis run completes.For actual analysis result data, use the query endpoints(e.g., /api/v1/job/query/analysis/static/node-reactions).
     """
-    # SPACEGASS analysis types. Values map to the SPACEGASS internal SGAnalysisType IDs.
+    # SPACE GASS analysis types.
     analysis_type: Optional[AnalysisType] = None
     # Convergence history from non-linear analysis iterations.Null for linear analyses or if no convergence was recorded.
     convergence_history: Optional[list[ConvergenceEntry]] = None

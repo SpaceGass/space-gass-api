@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Acceleration unit. Members mirror SPACE GASS `SgAcceleration`.</summary>
+    /// <summary>Acceleration unit.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum AccelerationUnit
     {

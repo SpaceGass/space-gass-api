@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Translation (displacement) unit. Members mirror SPACE GASS `SgTranslation`.SG uses `inch` here (not `in`) to dodge the VB reserved word; we mirrorthat so the wire token stays `&quot;inch&quot;`.</summary>
+    /// <summary>Translation (displacement) unit. Inches are `inch`, not `in`.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum TranslationUnit
     {

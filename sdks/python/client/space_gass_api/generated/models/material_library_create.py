@@ -9,6 +9,8 @@ class MaterialLibraryCreate(Parsable):
     """
     DTO for creating a new library-sourced material.All material properties (Young's modulus, Poisson's ratio, etc.) are resolved from thelibrary — the caller provides only the material name and library.
     """
+    # Optional GUID (hidden field in SPACEGASS)Some API users find this handy for tracking entities across systems
+    guid: Optional[str] = None
     # Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.
     id: Optional[int] = None
     # Library name.
@@ -33,6 +35,7 @@ class MaterialLibraryCreate(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         fields: dict[str, Callable[[Any], None]] = {
+            "guid": lambda n : setattr(self, 'guid', n.get_str_value()),
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "library": lambda n : setattr(self, 'library', n.get_str_value()),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
@@ -47,6 +50,7 @@ class MaterialLibraryCreate(Parsable):
         """
         if writer is None:
             raise TypeError("writer cannot be null.")
+        writer.write_str_value("guid", self.guid)
         writer.write_int_value("id", self.id)
         writer.write_str_value("library", self.library)
         writer.write_str_value("name", self.name)
