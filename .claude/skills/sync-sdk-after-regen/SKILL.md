@@ -1,6 +1,6 @@
 ---
 name: sync-sdk-after-regen
-description: Use this skill in the space-gass-api repo whenever the OpenAPI spec or the regenerated Kiota SDK clients change — typically right after the `generate-clients` workflow lands a "regenerate SDK clients" commit on `main`, or any time `descriptions/preview/openapi.json` is updated. It brings the hand-written C# and Python examples, the Zudoku docs pages, and the dynamic code-snippet generator back in line with the new SDK surface. Trigger phrases: "regenerated SDKs", "spec updated", "fix examples after regen", "sync after kiota", "update for new build", or after a commit titled "regenerate SDK clients".
+description: Use this skill in the space-gass-api repo whenever the OpenAPI spec or the regenerated Kiota SDK clients change — typically right after the `generate-clients` workflow lands a "regenerate SDK clients" commit on `main`, or any time `descriptions/openapi.json` is updated. It brings the hand-written C# and Python examples, the Zudoku docs pages, and the dynamic code-snippet generator back in line with the new SDK surface. Trigger phrases: "regenerated SDKs", "spec updated", "fix examples after regen", "sync after kiota", "update for new build", or after a commit titled "regenerate SDK clients".
 ---
 
 # sync-sdk-after-regen
@@ -13,7 +13,7 @@ Goal: every example compiles, every doc page references current endpoints/models
 
 Build the change matrix that drives every later edit:
 
-1. **Spec history** — `git log --oneline -- descriptions/preview/openapi.json` then diff the latest two commits (or against `origin/develop` if working on a feature branch). Note: removed/added paths, renamed query parameters (esp. plural→string SG-list filters like `case`→`cases`), renamed path parameters (`{key}`→`{id}`), and any change to `info.x-space-gass-build`.
+1. **Spec history** — `git log --oneline -- descriptions/openapi.json` then diff the latest two commits (or against `origin/develop` if working on a feature branch). Note: removed/added paths, renamed query parameters (esp. plural→string SG-list filters like `case`→`cases`), renamed path parameters (`{key}`→`{id}`), and any change to `info.x-space-gass-build`.
 2. **C# Generated diff** — `git diff <prev>..HEAD -- sdks/csharp/client/SpaceGassApi/Generated`. Look at:
    - `SpaceGassApiClient.cs` for new/removed top-level builders
    - `Models/` folder additions/removals (typical breaking change: `XCreate` renamed to `XUserCreate`, etc.)
@@ -89,7 +89,7 @@ Because the generator now trusts the spec, inconsistent schema naming no longer 
 ```bash
 python - <<'PY'
 import json
-P=json.load(open('descriptions/preview/openapi.json'))['paths']
+P=json.load(open('descriptions/openapi.json'))['paths']
 def pascal(s): return ''.join(w[:1].upper()+w[1:] for w in s.split('-'))
 def sing(w): return w[:-3]+'y' if w.endswith('ies') else (w[:-1] if w.endswith('s') else w)
 def body(op):

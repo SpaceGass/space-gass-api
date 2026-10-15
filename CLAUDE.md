@@ -28,9 +28,8 @@ Cross-tool agent instructions (install, `CreateClient()`, base URL, async/analys
 
 ### OpenAPI Spec Naming
 
-- Use **`openapi.json`** in `preview/` and `current/` — standard OpenAPI filename convention (tooling and consumers expect it)
-- Use **versioned filenames** in `archive/`: `openapi-v14.5.0.json`
-- The version is embedded inside the spec file itself — the filename doesn't need to carry it in folders where configs need a stable path
+- The single live spec is **`descriptions/openapi.json`** — standard OpenAPI filename convention (tooling and consumers expect it), and a stable path for configs
+- The version is embedded inside the spec file itself (`info.x-space-gass-build`) — the filename doesn't carry it
 
 ### SDK Client Naming
 
@@ -46,7 +45,7 @@ Cross-tool agent instructions (install, `CreateClient()`, base URL, async/analys
 ### SDK Generation (Kiota)
 
 - `kiota.config.json` at the root defines both C# and Python targets
-- Both point to `descriptions/preview/openapi.json` (stable path)
+- Both point to `descriptions/openapi.json` (stable path)
 - The `generate-clients` workflow is **manual trigger** (`workflow_dispatch`) with `--clean-output`
 - C# output: `sdks/csharp/client/SpaceGassApi/Generated/` — never hand-edit
 - Python output: `sdks/python/client/space_gass_api/generated/` — never hand-edit. The `generate-clients` workflow runs `tools/regen_python_inits.py` automatically after Kiota; for local regens, run `python tools/regen_python_inits.py` afterwards.
@@ -127,7 +126,7 @@ sdks/python/client/
 - **`basePath: "/docs"`** is required in `zudoku.config.tsx` — the docs site is served at `https://api.spacegass.com/docs/`
 - The deploy workflow uploads `docs/dist/docs` (the inner basePath directory) as the Pages artifact to avoid double-nesting
 - A postinstall patch (`docs/patches/fix-zudoku-mjs.js`) fixes a Vite SSR `.mjs` issue (still required as of zudoku 0.82.2)
-- The API reference reads from `../descriptions/preview/openapi.json` (single source of truth)
+- The API reference reads from `../descriptions/openapi.json` (single source of truth)
 - `node_modules/` is never committed — `npm ci` regenerates it
 
 ### GitHub Pages Deployment
@@ -148,5 +147,4 @@ sdks/python/client/
 ### Versioning
 
 - SDK versions mirror the SPACE GASS Desktop version (e.g., Desktop v15.0.2 = NuGet `SpaceGassApi 15.0.2`)
-- The `descriptions/current/` folder won't exist until the first formal release
-- The repo starts in **preview state** with specs in `descriptions/preview/`
+- The spec lives at `descriptions/openapi.json` (no `preview/`/`current/` split); the SDK version is taken from `info.x-space-gass-build`

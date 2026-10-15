@@ -4,7 +4,7 @@ on:
   push:
     branches: [main]
     # Only redeploy when something the site is built from changes. The build
-    # reads docs/** and descriptions/preview/openapi.json (imported by
+    # reads docs/** and descriptions/openapi.json (imported by
     # zudoku.config.tsx) and nothing else — sdks/** appears in the pages only
     # as GitHub hyperlinks. descriptions/** must stay in this list: the
     # BuildMachine SDK-regen pipeline (SPACEGASS generate-api-clients.yml)
