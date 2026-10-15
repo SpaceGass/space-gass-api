@@ -52,6 +52,49 @@ function bodyTypeFromSpec(operation: any): string | undefined {
   return ref ? ref.split("/").pop() : undefined;
 }
 
+// Multipart upload endpoints take the hand-maintained helpers from
+// sdks/*/client (Utils/UploadRequests.cs, upload_requests.py), which accept a
+// file path, instead of a raw Kiota `MultipartBody`.
+const UPLOAD_HELPERS: Record<string, string> = {
+  "job/new-from-template": "NewFromTemplateRequest",
+  "job/import/txt": "ImportTxtRequest",
+};
+
+// Kiota appends "_" to Python builder properties that collide with keywords
+// (e.g. `client.job.import_`).
+const PYTHON_KEYWORDS = new Set([
+  "and", "as", "assert", "async", "await", "break", "class", "continue",
+  "def", "del", "elif", "else", "except", "finally", "for", "from", "global",
+  "if", "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass",
+  "raise", "return", "try", "while", "with", "yield",
+]);
+
+const SPEC_PATH_SEGMENTS: string[][] = Object.keys(
+  (openapiSpec as { paths: Record<string, unknown> }).paths,
+).map((p) => p.split("/").filter(Boolean));
+
+// Kiota merges sibling path parameters that use different names at the same
+// level (e.g. `combination-load-cases/{combinationCase}/items` and
+// `combination-load-cases/{id}`) into one indexer: it takes the first name
+// (case-insensitive order) and suffixes "-id", giving Python
+// `by_combination_case_id(...)`. Mirror that so Python chains resolve.
+function kiotaParamName(segments: string[], index: number): string {
+  const norm = (s: string) => (s.startsWith("{") ? "{}" : s);
+  const prefix = segments.slice(0, index).map(norm).join("/");
+  const names = new Set<string>();
+  for (const segs of SPEC_PATH_SEGMENTS) {
+    const seg = segs[index];
+    if (seg?.startsWith("{") && segs.slice(0, index).map(norm).join("/") === prefix)
+      names.add(seg.slice(1, -1));
+  }
+  const param = segments[index].slice(1, -1);
+  if (names.size <= 1) return param;
+  const [first] = [...names].sort((a, b) =>
+    a.toLowerCase().localeCompare(b.toLowerCase()),
+  );
+  return first.toLowerCase().endsWith("-id") ? first : `${first}-id`;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   if (selectedLang === "shell") return false; // fall back to default cURL generator
@@ -63,13 +106,22 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   const cleanPath = path.replace(/^\//, "");
   const segments = cleanPath.split("/").filter(Boolean);
 
-  // Endpoints that take a list body rather than a single object:
-  //   .../bulk      → List<{Parent}Create> (bulk-create the parent entity)
-  //   .../items     → List<{Parent}Item>   (set the item collection of a parent)
+  // The request body as Zudoku hands it over (JSON media type preferred;
+  // multipart uploads only have `multipart/form-data`).
+  const media: any = (operation?.requestBody?.content ?? []).find(
+    (c: any) => c?.mediaType === "application/json",
+  ) ?? operation?.requestBody?.content?.[0];
+  const schema: any = media?.schema;
+
+  // Driven by the spec, not the HTTP verb: some POSTs have no body
+  // (`job/close`) and bulk DELETEs do (a list of IDs/keys).
+  const hasBody = !!media;
+
+  // Endpoints that take a list body rather than a single object — bulk
+  // create/update/delete, `.../items`, `.../stations`, etc.
   const lastSegment = segments[segments.length - 1];
-  const isBulk = lastSegment === "bulk";
   const isItems = lastSegment === "items";
-  const isList = isBulk || isItems;
+  const isList = schema?.type === "array";
 
   // Find the last non-parameter segment for deriving body type names. For
   // list endpoints, skip the literal "bulk"/"items" segment so we land on
@@ -81,8 +133,6 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
     ? toPascalCase(singularize(entitySegment))
     : "Item";
 
-  const hasBody = ["POST", "PATCH", "PUT"].includes(httpMethod);
-
   // Prefer the exact model name from the spec. Fall back to a path-based guess
   // only for inline request bodies that carry no component `$ref`.
   const pathGuessBodyType = isItems
@@ -90,7 +140,33 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
     : httpMethod === "POST"
       ? `${entityName}Create`
       : `${entityName}Update`;
-  const bodyType = bodyTypeFromSpec(operation) ?? pathGuessBodyType;
+  const specBodyType = bodyTypeFromSpec(operation);
+  const bodyType = specBodyType ?? pathGuessBodyType;
+
+  // Request bodies that have no single component `$ref`, where the path guess
+  // would name a model that doesn't exist:
+  //   uploadHelper   — multipart file upload (hand-maintained helper class)
+  //   composedRef    — inline `oneOf` of component schemas; Kiota wraps it in
+  //                    a `{Segment}{Verb}RequestBody` class next to the builder
+  //   primitiveItems — list of plain values, e.g. bulk delete by ID
+  //   untyped        — any other inline JSON (Kiota uses UntypedNode / bytes)
+  const uploadHelper = hasBody ? UPLOAD_HELPERS[cleanPath] : undefined;
+  const composedRef: string | undefined = (
+    schema?.oneOf ?? schema?.anyOf
+  )?.[0]?.__$ref?.split("/").pop();
+  const primitiveItems: string | undefined =
+    isList && !specBodyType ? schema?.items?.type : undefined;
+  const csPrimitive: Record<string, string> = {
+    integer: "int?",
+    number: "double?",
+    string: "string",
+  };
+  const untyped =
+    hasBody && !uploadHelper && !composedRef && !specBodyType &&
+    !(primitiveItems && primitiveItems in csPrimitive);
+  const composedWrapper = `${toPascalCase(entitySegment ?? "")}${
+    httpMethod.charAt(0) + httpMethod.slice(1).toLowerCase()
+  }RequestBody`;
 
   // ── C# SDK ──
   if (selectedLang === "csharp") {
@@ -108,7 +184,31 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
       httpMethod.charAt(0) + httpMethod.slice(1).toLowerCase() + "Async";
 
     let code = "// C# SDK Client\n";
-    if (hasBody) {
+    if (hasBody && uploadHelper) {
+      code += `var result = await ${chain}.${asyncMethod}(new ${uploadHelper}(@"C:\\path\\to\\file"));`;
+    } else if (hasBody && composedRef) {
+      // Wrapper is nested in the builder class, in the builder's namespace
+      // (path parameters map to an `Item` folder).
+      const ns = segments
+        .map((s: string) => (s.startsWith("{") ? "Item" : toPascalCase(s)))
+        .join(".");
+      const builder = `${toPascalCase(entitySegment ?? "")}RequestBuilder`;
+      code += `var body = new SpaceGassApi.${ns}.${builder}.${composedWrapper}\n`;
+      code += `{\n`;
+      code += `    ${composedRef} = new ${composedRef}\n`;
+      code += `    {\n`;
+      code += `        // Set properties\n`;
+      code += `    },\n`;
+      code += `};\n\n`;
+      code += `var result = await ${chain}.${asyncMethod}(body);`;
+    } else if (primitiveItems && primitiveItems in csPrimitive) {
+      code += `var bodies = new List<${csPrimitive[primitiveItems]}> { /* values */ };\n\n`;
+      code += `var result = await ${chain}.${asyncMethod}(bodies);`;
+    } else if (untyped) {
+      code += `// Untyped JSON body — see the request schema\n`;
+      code += `UntypedNode body = new UntypedArray(new List<UntypedNode>());\n\n`;
+      code += `var result = await ${chain}.${asyncMethod}(body);`;
+    } else if (hasBody) {
       if (isList) {
         code += `var bodies = new List<${bodyType}>\n`;
         code += `{\n`;
@@ -134,22 +234,47 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   // ── Python SDK ──
   if (selectedLang === "python") {
     let chain = "client";
-    for (const seg of segments) {
+    segments.forEach((seg: string, i: number) => {
       if (seg.startsWith("{") && seg.endsWith("}")) {
-        const param = seg.slice(1, -1);
-        const snakeParam = pascalToSnake(param);
-        chain += `.by_${snakeParam}(${snakeParam})`;
+        const snakeParam = pascalToSnake(seg.slice(1, -1));
+        const builderParam = pascalToSnake(kiotaParamName(segments, i)).replace(/-/g, "_");
+        chain += `.by_${builderParam}(${snakeParam})`;
       } else {
-        chain += `.${seg.replace(/-/g, "_").toLowerCase()}`;
+        const prop = seg.replace(/-/g, "_").toLowerCase();
+        chain += `.${PYTHON_KEYWORDS.has(prop) ? `${prop}_` : prop}`;
       }
-    }
+    });
 
     const pyMethod = httpMethod.toLowerCase();
 
     let code = "# Python SDK Client\n";
-    if (hasBody) {
-      const bodyModule = pascalToSnake(bodyType);
-      code += `from space_gass_api.models.${bodyModule} import ${bodyType}\n\n`;
+    if (hasBody && uploadHelper) {
+      code += `from space_gass_api import ${uploadHelper}\n\n`;
+      code += `result = await ${chain}.${pyMethod}(${uploadHelper}(r"C:\\path\\to\\file"))`;
+    } else if (hasBody && composedRef) {
+      const module = segments
+        .map((s: string) =>
+          s.startsWith("{") ? "item" : s.replace(/-/g, "_").toLowerCase(),
+        )
+        .join(".");
+      code += `from space_gass_api.generated.${module}.${pascalToSnake(composedWrapper)} import ${composedWrapper}\n`;
+      code += `from space_gass_api.models import ${composedRef}\n\n`;
+      code += `body = ${composedWrapper}(\n`;
+      code += `    ${pascalToSnake(composedRef)}=${composedRef}(\n`;
+      code += `        # Set properties\n`;
+      code += `    ),\n`;
+      code += `)\n\n`;
+      code += `result = await ${chain}.${pyMethod}(body)`;
+    } else if (primitiveItems && primitiveItems in csPrimitive) {
+      code += `bodies = []  # list of ${primitiveItems} values\n\n`;
+      code += `result = await ${chain}.${pyMethod}(bodies)`;
+    } else if (untyped) {
+      code += `body = b"[]"  # raw JSON body — see the request schema\n\n`;
+      code += `result = await ${chain}.${pyMethod}(body)`;
+    } else if (hasBody) {
+      // models/__init__.py re-exports every generated model (there are no
+      // per-model submodules under space_gass_api.models).
+      code += `from space_gass_api.models import ${bodyType}\n\n`;
       if (isList) {
         code += `bodies = [\n`;
         code += `    ${bodyType}(\n`;
