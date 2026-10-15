@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a coordinate-range criterion (one axis).Maps to SG `SGFilterType.XAxis` / `YAxis` / `ZAxis` — three siblingproperties at the parent level use this shape.
+    /// Sub-filter carrying a coordinate-range criterion (one axis).The filter&apos;s X, Y and Z axis ranges each use this shape.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterAxisRange : IParsable

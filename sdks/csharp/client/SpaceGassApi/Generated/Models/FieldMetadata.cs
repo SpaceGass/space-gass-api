@@ -45,7 +45,7 @@ namespace SpaceGassApi.Models
 #else
         public string Description { get; set; }
 #endif
-        /// <summary>Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.</summary>
+        /// <summary>Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.A field nested inside an object or a list is named by its path from the top ofthe item: `.` steps into an object and `[]` marks each list level(e.g. `pointA.x`, `outlines[].outer[].y`).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? JsonName { get; set; }

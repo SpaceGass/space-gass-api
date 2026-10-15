@@ -19,7 +19,7 @@ namespace SpaceGassApi.Models
         public global::SpaceGassApi.Models.DirectionAxis? DirAxis { get; set; }
         /// <summary>Direction node for member orientation.</summary>
         public int? DirNode { get; set; }
-        /// <summary>Indicates which field defines a member or plate&apos;s direction.Setting one source zeros the other two direction fields.Values align with SG&apos;s `SGLookupAxisDirection` enum in CommonEnums.vb.</summary>
+        /// <summary>Indicates which field defines a member or plate&apos;s direction.Setting one source zeros the other two direction fields.</summary>
         public global::SpaceGassApi.Models.DirectionSource? Source { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

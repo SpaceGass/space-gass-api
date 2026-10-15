@@ -90,7 +90,7 @@ class FiltersRequestBuilder(BaseRequestBuilder):
     async def post(self,body: FilterCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Filter]:
         """
         Creates a new named filter. At least one sub-filter must beactive (or carry a non-default value) for the filter to be persisted.If `id` is omitted, the next available slot (1..200) is assigned.
-        param body: DTO for creating a new filter.At least one sub-filter must be active — a filter with no rows in thedatasheet has no persisted state and cannot be retrieved by Id.
+        param body: DTO for creating a new filter.At least one sub-filter must be active; a filter with none is not stored and cannot beretrieved by Id.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Filter]
         """
@@ -128,7 +128,7 @@ class FiltersRequestBuilder(BaseRequestBuilder):
     def to_post_request_information(self,body: FilterCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Creates a new named filter. At least one sub-filter must beactive (or carry a non-default value) for the filter to be persisted.If `id` is omitted, the next available slot (1..200) is assigned.
-        param body: DTO for creating a new filter.At least one sub-filter must be active — a filter with no rows in thedatasheet has no persisted state and cannot be retrieved by Id.
+        param body: DTO for creating a new filter.At least one sub-filter must be active; a filter with none is not stored and cannot beretrieved by Id.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

@@ -6,6 +6,7 @@ using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Structure.Nodes.Bulk;
 using SpaceGassApi.Job.Structure.Nodes.Exists;
 using SpaceGassApi.Job.Structure.Nodes.Item;
+using SpaceGassApi.Job.Structure.Nodes.Match;
 using SpaceGassApi.Job.Structure.Nodes.Metadata;
 using SpaceGassApi.Job.Structure.Nodes.Next;
 using SpaceGassApi.Models;
@@ -31,6 +32,11 @@ namespace SpaceGassApi.Job.Structure.Nodes
         public global::SpaceGassApi.Job.Structure.Nodes.Exists.ExistsRequestBuilder Exists
         {
             get => new global::SpaceGassApi.Job.Structure.Nodes.Exists.ExistsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The match property</summary>
+        public global::SpaceGassApi.Job.Structure.Nodes.Match.MatchRequestBuilder Match
+        {
+            get => new global::SpaceGassApi.Job.Structure.Nodes.Match.MatchRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The metadata property</summary>
         public global::SpaceGassApi.Job.Structure.Nodes.Metadata.MetadataRequestBuilder Metadata

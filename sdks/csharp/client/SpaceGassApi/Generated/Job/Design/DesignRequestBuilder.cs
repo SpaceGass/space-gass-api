@@ -2,6 +2,8 @@
 #pragma warning disable CS0618
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Design.Runs;
+using SpaceGassApi.Job.Design.SteelDesign;
 using SpaceGassApi.Job.Design.SteelMembers;
 using System.Collections.Generic;
 using System.IO;
@@ -15,6 +17,16 @@ namespace SpaceGassApi.Job.Design
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class DesignRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The runs property</summary>
+        public global::SpaceGassApi.Job.Design.Runs.RunsRequestBuilder Runs
+        {
+            get => new global::SpaceGassApi.Job.Design.Runs.RunsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The steelDesign property</summary>
+        public global::SpaceGassApi.Job.Design.SteelDesign.SteelDesignRequestBuilder SteelDesign
+        {
+            get => new global::SpaceGassApi.Job.Design.SteelDesign.SteelDesignRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The steelMembers property</summary>
         public global::SpaceGassApi.Job.Design.SteelMembers.SteelMembersRequestBuilder SteelMembers
         {

@@ -17,7 +17,7 @@ class FilterPlatesUpdate(Parsable):
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Plate type categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_PlateType` verbatim. Richer thanthe entity-property SpaceGassApi.Models.Enums.PlateType / SpaceGassApi.Models.Enums.PlateTheorybecause the filter surface includes validity / orientation states.
+    # Plate type categories available as a Filter resource criterion.Wider than SpaceGassApi.Models.Enums.PlateType / SpaceGassApi.Models.Enums.PlateTheory: it includes validity andorientation states.
     plate_type: Optional[FilterPlateType] = None
     # The plates property
     plates: Optional[str] = None

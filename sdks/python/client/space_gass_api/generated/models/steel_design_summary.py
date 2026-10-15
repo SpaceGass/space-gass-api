@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class SteelDesignSummary(Parsable):
     """
-    Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.Result flags are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
+    Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.
     """
     # Whether steel connection design results exist.
     has_connection_design_results: Optional[bool] = None

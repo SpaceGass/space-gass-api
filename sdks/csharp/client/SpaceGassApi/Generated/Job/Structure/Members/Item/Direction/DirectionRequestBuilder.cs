@@ -61,7 +61,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Direction
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MemberDirection>(requestInfo, global::SpaceGassApi.Models.MemberDirection.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Sets the direction for a specific member. Exactly one of `dirAngle`,`dirNode`, or `dirAxis` must be supplied — the underlying datasheet rowenforces mutual exclusion, so the supplied field is written and SG&apos;s per-fieldhelper zeros the other two for the row.A missing or empty body is rejected with 400 (PUT expects a meaningful payload).            Uses PUT because today every write replaces the full direction state (the mutexinvariant zeros the other two fields). When SG stores a discriminator on therow, a sibling PATCH endpoint will be added that supports true single-fieldpartial updates without touching the others.
+        /// Sets the direction for a specific member. Exactly one of `dirAngle`,`dirNode` or `dirAxis` must be supplied; the other two are set to zero.A missing or empty body is rejected with 400.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MemberDirection"/></returns>
         /// <param name="body">DTO for updating the direction on a member or plate (partial-update semantics).</param>
@@ -111,7 +111,7 @@ namespace SpaceGassApi.Job.Structure.Members.Item.Direction
             return requestInfo;
         }
         /// <summary>
-        /// Sets the direction for a specific member. Exactly one of `dirAngle`,`dirNode`, or `dirAxis` must be supplied — the underlying datasheet rowenforces mutual exclusion, so the supplied field is written and SG&apos;s per-fieldhelper zeros the other two for the row.A missing or empty body is rejected with 400 (PUT expects a meaningful payload).            Uses PUT because today every write replaces the full direction state (the mutexinvariant zeros the other two fields). When SG stores a discriminator on therow, a sibling PATCH endpoint will be added that supports true single-fieldpartial updates without touching the others.
+        /// Sets the direction for a specific member. Exactly one of `dirAngle`,`dirNode` or `dirAxis` must be supplied; the other two are set to zero.A missing or empty body is rejected with 400.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">DTO for updating the direction on a member or plate (partial-update semantics).</param>

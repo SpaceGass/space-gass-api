@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a list of section Ids. No sub-type — sectionsare filtered by Id alone.Maps to SG `SGFilterType.Sections`.
+    /// Sub-filter carrying a list of section Ids. No sub-type — sectionsare filtered by Id alone.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterSections : IParsable

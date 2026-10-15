@@ -17,7 +17,7 @@ class FilterSteelMembersUpdate(Parsable):
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Steel-member design-state categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_SteelMemberTypes` verbatim — note SG's enumname is plural; the API name is singular for consistency with the other`Filter*Type` enums.
+    # Steel-member design-state categories available as a Filter resource criterion.
     steel_member_type: Optional[FilterSteelMemberType] = None
     # The steelMembers property
     steel_members: Optional[str] = None

@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Indicates which field defines a member or plate&apos;s direction.Setting one source zeros the other two direction fields.Values align with SG&apos;s `SGLookupAxisDirection` enum in CommonEnums.vb.</summary>
+    /// <summary>Indicates which field defines a member or plate&apos;s direction.Setting one source zeros the other two direction fields.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum DirectionSource
     {

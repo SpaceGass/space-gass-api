@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class FilterMaterials(Parsable):
     """
-    Sub-filter carrying a list of material Ids. No sub-type.Maps to SG `SGFilterType.Materials`.
+    Sub-filter carrying a list of material Ids. No sub-type.
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None
