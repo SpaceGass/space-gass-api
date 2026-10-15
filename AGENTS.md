@@ -77,6 +77,17 @@ finally { await client.Job.Close.PostAsync(); }
    `Utils/ListUtilsExtensions.cs` (`ToFilterString`, `ToIdArray`) convert to/from `int[]`.
 6. **File uploads** (`job/new-from-template`, `job/import/txt`) use the multipart helpers
    `NewFromTemplateRequest` / `ImportTxtRequest`, which take a file path.
+7. **Steel member design** (`job/design/steel-design/{code}/run-check|run-design`, `{code}/settings`)
+   takes per-code settings that the spec models as a oneOf. Don't build Kiota's composed wrappers by
+   hand: in C# assign the code's settings object directly (`CodeSettings = new SteelMemberDesignSettingsAS4100Update {...}`,
+   `Settings.PatchAs4100Async(...)`); in Python use `steel_design.run_check_request(code_settings=...)` /
+   `run_design_request(...)` / `patch_as4100(...)`. Design runs are async like analyses — poll
+   `job/design/runs/{runId}`. A run needs static results first, and a design group whose compression
+   effective lengths are explicit (or a buckling analysis).
+8. **Built-up (shape-builder) sections** (`job/structure/sections/shape-builder`, `/preview`) take a
+   polymorphic `shapes` list. In C# list `SectionShape` objects directly in `Shapes`; in Python pass
+   `shapes=shape_builder.shapes(...)` and read back with `shape_builder.shapes_of(section)`. Use
+   `/preview` to get each shape's numbered reference points for `anchorPosition`.
 
 ## Authoritative resources (fetch these; don't crawl the repo)
 
