@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 @dataclass
 class FilterPlateCuts(Parsable):
     """
-    Sub-filter carrying a list of plate-cut Ids and a cut-typecategorical filter.Maps to SG `SGFilterType.PlateCut`.
+    Sub-filter carrying a list of plate-cut Ids and a cut-typecategorical filter.
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Plate-cut categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_PlateCutType` verbatim (identicalmembers to SpaceGassApi.Models.Enums.Filters.FilterPlateStripType at the SG layer, butkept as a distinct type so future SG additions don't require anAPI refactor).
+    # Plate-cut categories available as a Filter resource criterion.
     plate_cut_type: Optional[FilterPlateCutType] = None
     # Plate-cut Ids in SG list format. Empty string means no Id criterion.
     plate_cuts: Optional[str] = None

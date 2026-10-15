@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class AnalysisRunResult : IParsable
     {
-        /// <summary>SPACEGASS analysis types. Values map to the SPACEGASS internal SGAnalysisType IDs.</summary>
+        /// <summary>SPACE GASS analysis types.</summary>
         public global::SpaceGassApi.Models.AnalysisType? AnalysisType { get; set; }
         /// <summary>Convergence history from non-linear analysis iterations.Null for linear analyses or if no convergence was recorded.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER

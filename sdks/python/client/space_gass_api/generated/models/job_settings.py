@@ -12,7 +12,7 @@ class JobSettings(Parsable):
     """
     Read DTO for job-level settings.Groups configuration properties that apply to the job as a whole.
     """
-    # Vertical (gravity) axis direction for the job.Determines which global axis is treated as the vertical/gravity direction.Maps to SPACE GASS CommonEnums.SGVerticalAxis (YAxis=2, ZAxis=3).Only YAxis and ZAxis are valid choices in SPACE GASS.
+    # Vertical (gravity) axis direction for the job.Determines which global axis is treated as the vertical/gravity direction.Only YAxis and ZAxis are valid choices in SPACE GASS.
     vertical_axis: Optional[VerticalAxis] = None
     
     @staticmethod

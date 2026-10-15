@@ -45,7 +45,7 @@ namespace SpaceGassApi.Models
         public global::SpaceGassApi.Models.MatrixType? MatrixType { get; set; }
         /// <summary>Axis used for optimization in analysis.</summary>
         public global::SpaceGassApi.Models.OptimizationAxis? OptimizationAxis { get; set; }
-        /// <summary>Optimization method for analysis bandwidth/profile reduction.Integer values mirror SPACE GASS&apos;s `AnalysisOptimizationTypes` enum(NetCommon/CommonEnums.vb). Used by static, buckling, and dynamic frequency analysis.</summary>
+        /// <summary>Optimization method for analysis bandwidth/profile reduction.Used by static, buckling, and dynamic frequency analysis.</summary>
         public global::SpaceGassApi.Models.AnalysisOptimizationMethod? OptimizationMethod { get; set; }
         /// <summary>X coordinate or X component of the optimization vector.Only used when OptimizationAxis is Vector, or as angular coordinate for axis modes.</summary>
         public float? OptimizationX { get; set; }
@@ -67,7 +67,7 @@ namespace SpaceGassApi.Models
         public int? ReversalIterations { get; set; }
         /// <summary>Whether to rotate local loads with member chord rotation.Non-linear only.</summary>
         public bool? RotateLocalLoads { get; set; }
-        /// <summary>Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS&apos;s `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Paradise, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).</summary>
+        /// <summary>Matrix solver type used by the analysis engine.</summary>
         public global::SpaceGassApi.Models.SolverType? SolverType { get; set; }
         /// <summary>Whether to stabilize unrestrained nodes during analysis.When true, temporary restraints are added to prevent instability.</summary>
         public bool? StabilizeUnrestrainedNodes { get; set; }

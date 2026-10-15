@@ -6,6 +6,8 @@ from kiota_abstractions.request_adapter import RequestAdapter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
+    from .runs.runs_request_builder import RunsRequestBuilder
+    from .steel_design.steel_design_request_builder import SteelDesignRequestBuilder
     from .steel_members.steel_members_request_builder import SteelMembersRequestBuilder
 
 class DesignRequestBuilder(BaseRequestBuilder):
@@ -20,6 +22,24 @@ class DesignRequestBuilder(BaseRequestBuilder):
         Returns: None
         """
         super().__init__(request_adapter, "{+baseurl}/job/design", path_parameters)
+    
+    @property
+    def runs(self) -> RunsRequestBuilder:
+        """
+        The runs property
+        """
+        from .runs.runs_request_builder import RunsRequestBuilder
+
+        return RunsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def steel_design(self) -> SteelDesignRequestBuilder:
+        """
+        The steelDesign property
+        """
+        from .steel_design.steel_design_request_builder import SteelDesignRequestBuilder
+
+        return SteelDesignRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def steel_members(self) -> SteelMembersRequestBuilder:

@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Data
         {
         }
         /// <summary>
-        /// Clears all model data while keeping current configuration (units, settings).Deletes ATS data files but preserves the job configuration.Returns the job object with zeroed model summary counts.
+        /// Clears all model data while keeping current configuration (units, settings).Returns the job object with zeroed model summary counts.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Job"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -63,7 +63,7 @@ namespace SpaceGassApi.Job.Data
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Job>(requestInfo, global::SpaceGassApi.Models.Job.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Clears all model data while keeping current configuration (units, settings).Deletes ATS data files but preserves the job configuration.Returns the job object with zeroed model summary counts.
+        /// Clears all model data while keeping current configuration (units, settings).Returns the job object with zeroed model summary counts.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -91,7 +91,7 @@ namespace SpaceGassApi.Job.Data
             return new global::SpaceGassApi.Job.Data.DataRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Clears all model data while keeping current configuration (units, settings).Deletes ATS data files but preserves the job configuration.Returns the job object with zeroed model summary counts.
+        /// Clears all model data while keeping current configuration (units, settings).Returns the job object with zeroed model summary counts.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class DataRequestBuilderDeleteQueryParameters 

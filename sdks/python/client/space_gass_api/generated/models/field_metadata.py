@@ -20,7 +20,7 @@ class FieldMetadata(Parsable):
     default: Optional[str] = None
     # Optional hint text for this field, useful for UI labels and tooltips. Null when not available.
     description: Optional[str] = None
-    # Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.
+    # Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.A field nested inside an object or a list is named by its path from the top ofthe item: `.` steps into an object and `[]` marks each list level(e.g. `pointA.x`, `outlines[].outer[].y`).
     json_name: Optional[str] = None
     # Maximum allowed value for this field (as a string; use `dataType` to determine how to parse it).Null if no maximum constraint applies.
     max: Optional[str] = None

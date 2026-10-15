@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for creating a new filter.At least one sub-filter must be active — a filter with no rows in thedatasheet has no persisted state and cannot be retrieved by Id.
+    /// DTO for creating a new filter.At least one sub-filter must be active; a filter with none is not stored and cannot beretrieved by Id.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterCreate : IParsable
