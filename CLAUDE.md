@@ -61,7 +61,9 @@ sdks/csharp/client/
     ├── SpaceGassApiClient.cs            ← hand-maintained — SpaceGassApiClient : BaseSpaceGassApiClient
     ├── Utils/                           ← hand-maintained helpers (safe from regen)
     │   ├── ListUtilsExtensions.cs       ← SG list-string helpers (ToFilterString, ToIdArray)
-    │   └── UploadRequests.cs            ← NewFromTemplateRequest / ImportTxtRequest (multipart uploads)
+    │   ├── UploadRequests.cs            ← NewFromTemplateRequest / ImportTxtRequest (multipart uploads)
+    │   ├── SteelDesignExtensions.cs     ← per-code design settings: implicit oneOf wrapping + typed Get/Patch
+    │   └── SectionShapeExtensions.cs    ← shape-builder: implicit shape wrapping + GetShapes() unwrap
     └── Generated/                       ← Kiota output (wiped on --clean-output)
         ├── BaseSpaceGassApiClient.cs    ← Kiota-generated base client
         ├── Models/
@@ -77,6 +79,10 @@ Anything that smooths over awkward raw Kiota output lives **outside `Generated/`
 
 - **`Utils/ListUtilsExtensions.cs`** — converts between `int[]` and the SG list-string filter format used by query parameters (`ToFilterString()`, `ToIdArray()`, `ToIdList()`).
 - **`Utils/UploadRequests.cs`** — `NewFromTemplateRequest` / `ImportTxtRequest` subclass Kiota's `MultipartBody` for the multipart file-upload endpoints (`POST /job/new-from-template`, `POST /job/import/txt`). Kiota types those `PostAsync` parameters as a bare `MultipartBody`; these subclasses let callers write `PostAsync(new NewFromTemplateRequest(path))` — they take a file path, read the bytes, and add the single form part with its filename. No request adapter is set: the request builder attaches it at send time (Kiota's `SetContentFromParsable`).
+- **`Utils/SteelDesignExtensions.cs`** — the per-design-code settings (`SteelMemberDesignSettingsAS4100Update` / `...NZS3404Update`) are a spec `oneOf`, which Kiota wraps in a composed type everywhere it appears (`SteelDesignRunCheckRequest_codeSettings`, `SteelDesignRunDesignRequest_codeSettings`, `SettingsRequestBuilder.SettingsPatchRequestBody`). Partial-class **implicit conversions** let callers assign the code's own settings object directly (`CodeSettings = new SteelMemberDesignSettingsAS4100Update { ... }`) and fill the `Code` discriminator; `GetAs4100Async` / `PatchAs4100Async` (and NZS 3404 twins) on `SteelDesign[code].Settings` return the typed settings instead of the wrapper.
+- **`Utils/SectionShapeExtensions.cs`** — a shape-builder section's `Shapes` are a polymorphic `oneOf` (`shapeType` discriminator), wrapped per element in `SectionShapeBuilderCreate_shapes` / `Section_shapes`. An **implicit conversion** from `SectionShape` lets callers write `Shapes = [new LibraryShape {...}, new RectangularBarShape {...}]` (discriminator filled from a class→`shapeType` map mirroring the spec); `section.GetShapes()` unwraps a response to typed `SectionShape`s.
+
+**Pattern for oneOf/composed types:** Kiota's wrappers are `partial`, so add implicit operators in a partial class under `Utils/` rather than asking callers to construct the wrapper. When a new oneOf appears in the spec, mirror this.
 
 When a new endpoint is similarly awkward (multipart uploads, list-string filters, etc.), prefer adding a small hand-maintained type/extension here over documenting the raw Kiota boilerplate.
 
@@ -90,6 +96,8 @@ sdks/python/client/
     ├── __init__.pyi                ← AUTO-WRITTEN post-Kiota (type stub for IDE support)
     ├── space_gass_api_client.py    ← hand-maintained (SpaceGassApiClient, create_client, _enhance_request_methods)
     ├── upload_requests.py          ← hand-maintained (NewFromTemplateRequest, ImportTxtRequest)
+    ├── steel_design.py             ← hand-maintained (run_check_request, run_design_request, get/patch_as4100 …)
+    ├── shape_builder.py            ← hand-maintained (shapes(), shapes_of() — shape-builder oneOf wrap/unwrap)
     ├── models/
     │   └── __init__.py             ← AUTO-WRITTEN post-Kiota (re-exports from generated/)
     └── generated/                  ← Kiota output (wiped on --clean-output)
@@ -102,7 +110,7 @@ sdks/python/client/
 - The `generated/` subfolder is the Kiota `--clean-output` target. Hand-maintained files (`__init__.py`, `__init__.pyi`, `space_gass_api_client.py`, `models/__init__.py`) live outside it and survive regeneration.
 - The post-regen script `tools/regen_python_inits.py` writes `__init__.py` at the package root and `models/__init__.py` as a re-export shim so callers can write `from space_gass_api import SpaceGassApiClient` and `import space_gass_api.models as models`.
 - `space_gass_api/__init__.py` imports `SpaceGassApiClient` from the hand-maintained `space_gass_api_client` module and calls `_enhance_request_methods()` to enable keyword query parameters on builder `get`/`post`/`patch`/`put`/`delete` methods (each verb is enhanced only where a matching `{Verb}QueryParameters` dataclass exists).
-- **Hand-maintained additions on top of Kiota** (Python mirror of the C# `Utils/` layer) live at the package root, outside `generated/`: `upload_requests.py` defines `NewFromTemplateRequest` / `ImportTxtRequest`, which subclass Kiota's `MultipartBody` so the multipart file-upload endpoints can be called by file path — `await client.job.new_from_template.post(NewFromTemplateRequest(path))`. They are re-exported from the package root by `tools/regen_python_inits.py` (so `from space_gass_api import NewFromTemplateRequest` works); update that script's `PKG_INIT_*` constants when adding more.
+- **Hand-maintained additions on top of Kiota** (Python mirror of the C# `Utils/` layer) live at the package root, outside `generated/`: `upload_requests.py` defines `NewFromTemplateRequest` / `ImportTxtRequest`, which subclass Kiota's `MultipartBody` so the multipart file-upload endpoints can be called by file path — `await client.job.new_from_template.post(NewFromTemplateRequest(path))`. They are re-exported from the package root by `tools/regen_python_inits.py` (so `from space_gass_api import NewFromTemplateRequest` works); update that script's `PKG_INIT_*` constants when adding more. Two further modules mirror the C# `Utils/` oneOf helpers: `steel_design.py` (`run_check_request(code_settings=...)`, `run_design_request(...)`, `code_settings_body(...)`, `get_as4100` / `patch_as4100` and NZS 3404 twins — takes the code's own settings object and fills the `code` discriminator) and `shape_builder.py` (`shapes(*shapes)` builds the wrapped list for `SectionShapeBuilderCreate`, `shapes_of(section)` unwraps a response; the class→`shapeType` map mirrors the spec discriminator mapping). Both are importable as `from space_gass_api import steel_design, shape_builder`.
 
 ### Authentication
 

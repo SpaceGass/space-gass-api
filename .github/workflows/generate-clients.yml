@@ -73,6 +73,17 @@ jobs:
           # `space_gass_api_extensions.py` at the client root.
           python3 tools/regen_python_inits.py
 
+      - name: Check hand-maintained helpers against the regen
+        run: |
+          # The oneOf helpers (Utils/SteelDesignExtensions.cs, Utils/SectionShapeExtensions.cs,
+          # steel_design.py, shape_builder.py) carry discriminator maps and wrapper property
+          # names Kiota doesn't emit. Fail the regen if the spec or generated wrappers drifted.
+          pip install --quiet "microsoft-kiota-bundle>=1.9.8"   # same dependency as sdks/python/client/pyproject.toml
+          python3 tools/check_helpers.py
+
+      - name: Build C# client
+        run: dotnet build sdks/csharp/client/SpaceGassApi/SpaceGassApi.csproj --nologo -v q
+
       - name: Sync SDK source versions to spec
         id: sync_version
         run: |
