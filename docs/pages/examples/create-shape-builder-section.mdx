@@ -1,0 +1,266 @@
+---
+title: Create a shape builder section
+description: Build a compound (built-up) section from shapes, preview it, create it, and apply it to a member
+---
+
+A **shape builder** section is composed from up to 20 shapes — standard
+profiles drawn from dimensions (`IShape`, `RectangularBar`, `Channel`,
+…) or items pulled from a section library (`Library`). SPACE GASS
+computes the section properties (A, J, Iy, Iz) from the shapes; you
+never supply them.
+
+This recipe builds a 360 UB 44.7 with a 250 × 16 cover plate welded to
+its top flange, then puts a member on it. Dimensions and translations
+are in the job's section-properties unit (mm by default — see
+`GET /job/units`).
+
+## 1. Preview the base shape to find its reference points
+
+Shapes are positioned relative to each other with an `anchorPosition`:
+"snap *my* point N onto *your* point M". The numbered reference points
+come from `POST /sections/shape-builder/preview`, which computes the
+geometry without writing anything. Point 1 is the centroid; 2–5 are the
+top, right, bottom and left mid-edges.
+
+Both SDKs let you list shape objects directly — the SDK fills in the
+`shapeType` discriminator and Kiota's per-shape wrapper for you.
+
+<CodeTabs>
+```csharp title="C#"
+using SpaceGassApi;
+using SpaceGassApi.Models;
+
+var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
+await client.Job.New.PostAsync();
+
+var ub = new LibraryShape { Library = "Aust300", Name = "360 UB 44.7" };
+
+var ubPreview = await client.Job.Structure.Sections.ShapeBuilder.Preview.PostAsync(
+    new SectionShapeBuilderCreate { Name = "UB only", Shapes = [ub] });
+
+// Top-centre of the UB: z == 0, highest y
+var ubTopCentre = ubPreview!.Shapes!.First().ReferencePoints!
+    .Where(p => p.Z == 0)
+    .OrderByDescending(p => p.Y)
+    .First();
+```
+
+```python title="Python"
+from space_gass_api import SpaceGassApiClient, shape_builder
+import space_gass_api.models as models
+
+client = SpaceGassApiClient.create_client("http://localhost:34560")
+await client.job.new.post()
+
+ub = models.LibraryShape(library="Aust300", name="360 UB 44.7")
+
+ub_preview = await client.job.structure.sections.shape_builder.preview.post(
+    models.SectionShapeBuilderCreate(name="UB only", shapes=shape_builder.shapes(ub)))
+
+# Top-centre of the UB: z == 0, highest y
+ub_top_centre = max(
+    (p for p in ub_preview.shapes[0].reference_points if p.z == 0),
+    key=lambda p: p.y)
+```
+
+```bash title="curl"
+curl -X POST http://localhost:34560/api/v1/job/new
+
+curl -X POST http://localhost:34560/api/v1/job/structure/sections/shape-builder/preview \
+  -H "Content-Type: application/json" \
+  -d '{"name": "UB only",
+       "shapes": [{"shapeType": "Library", "library": "Aust300", "name": "360 UB 44.7"}]}'
+# -> shapes[0].referencePoints: [{"point":1,"y":0,"z":0}, {"point":2,"y":176,"z":0}, ...]
+```
+</CodeTabs>
+
+## 2. Define the plate and anchor it onto the UB
+
+The plate's bottom-centre point (4) lands on the UB's top-centre point.
+`anchorShape` is the one-based position of the UB in the `shapes` list.
+`anchorPosition` is input-only: the API converts it to `translateY` /
+`translateZ`, which is what you read back.
+
+<CodeTabs>
+```csharp title="C#"
+var plate = new RectangularBarShape
+{
+    D = 16.0,
+    B = 250.0,
+    Fabrication = ShapeFabrication.Heavily_Welded,
+    AnchorPosition = new ShapeAnchorPosition
+    {
+        AnchorShape = 1,                    // the UB
+        AnchorPoint = ubTopCentre.Point,    // its top-centre point
+        ShapePoint = 4,                     // the plate's bottom-centre point
+    },
+};
+```
+
+```python title="Python"
+plate = models.RectangularBarShape(
+    d=16.0,
+    b=250.0,
+    fabrication=models.ShapeFabrication.Heavily_Welded,
+    anchor_position=models.ShapeAnchorPosition(
+        anchor_shape=1,                   # the UB
+        anchor_point=ub_top_centre.point, # its top-centre point
+        shape_point=4,                    # the plate's bottom-centre point
+    ),
+)
+```
+</CodeTabs>
+
+## 3. Create the section
+
+Preview the full body first if you want to check the overall extent;
+then POST the same body to `/sections/shape-builder`. The response is a
+normal `Section` with the computed properties and `shapeCount`.
+
+<CodeTabs>
+```csharp title="C#"
+var request = new SectionShapeBuilderCreate
+{
+    Name = "360 UB 44.7 + 250x16 plate",
+    Mark = "B1",
+    Shapes = [ub, plate],
+};
+
+var preview = await client.Job.Structure.Sections.ShapeBuilder.Preview.PostAsync(request);
+Console.WriteLine($"Depth {preview!.Bounds!.MaxY - preview.Bounds.MinY}");   // 368
+
+var section = await client.Job.Structure.Sections.ShapeBuilder.PostAsync(request);
+Console.WriteLine($"Section {section!.Id}: A={section.A}, Iz={section.Iz:E3}");
+```
+
+```python title="Python"
+request = models.SectionShapeBuilderCreate(
+    name="360 UB 44.7 + 250x16 plate",
+    mark="B1",
+    shapes=shape_builder.shapes(ub, plate),
+)
+
+preview = await client.job.structure.sections.shape_builder.preview.post(request)
+print(f"Depth {preview.bounds.max_y - preview.bounds.min_y}")   # 368
+
+section = await client.job.structure.sections.shape_builder.post(request)
+print(f"Section {section.id}: A={section.a}, Iz={section.iz:.3e}")
+```
+
+```bash title="curl"
+curl -X POST http://localhost:34560/api/v1/job/structure/sections/shape-builder \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "360 UB 44.7 + 250x16 plate",
+    "mark": "B1",
+    "shapes": [
+      {"shapeType": "Library", "library": "Aust300", "name": "360 UB 44.7"},
+      {"shapeType": "RectangularBar", "d": 16, "b": 250,
+       "fabrication": "Heavily_Welded",
+       "anchorPosition": {"anchorShape": 1, "anchorPoint": 2, "shapePoint": 4}}
+    ]
+  }'
+```
+</CodeTabs>
+
+## 4. Apply it to a member
+
+The section is referenced by Id like any other.
+
+<CodeTabs>
+```csharp title="C#"
+var member = await client.Job.Structure.Members.PostAsync(
+    new MemberCreate
+    {
+        NodeA = node1.Id,
+        NodeB = node2.Id,
+        Section = section.Id,
+        Material = steel.Id,
+    });
+```
+
+```python title="Python"
+member = await client.job.structure.members.post(
+    models.MemberCreate(
+        node_a=node1.id,
+        node_b=node2.id,
+        section=section.id,
+        material=steel.id,
+    ))
+```
+
+```bash title="curl"
+curl -X POST http://localhost:34560/api/v1/job/structure/members \
+  -H "Content-Type: application/json" \
+  -d '{"nodeA": 1, "nodeB": 2, "section": 1, "material": 1}'
+```
+</CodeTabs>
+
+## 5. Read the shapes back
+
+`GET /sections/{id}` expands the shapes by default. A `Library` shape is
+resolved on create, so it comes back as the concrete profile (here an
+`IShape`) with the library item's name in `shapeName`. The SDK helpers
+unwrap the list to typed shape objects.
+
+<CodeTabs>
+```csharp title="C#"
+var saved = await client.Job.Structure.Sections[section.Id!.Value].GetAsync();
+foreach (var shape in saved!.GetShapes())
+{
+    Console.WriteLine($"{shape.Id}: {shape.ShapeType} {shape.ShapeName} " +
+                      $"translateY={shape.TranslateY}");
+}
+// 1: IShape 360 UB 44.7 translateY=0
+// 2: RectangularBar  translateY=184
+```
+
+```python title="Python"
+saved = await client.job.structure.sections.by_id(section.id).get()
+for shape in shape_builder.shapes_of(saved):
+    print(f"{shape.id}: {shape.shape_type} {shape.shape_name} "
+          f"translate_y={shape.translate_y}")
+# 1: IShape 360 UB 44.7 translate_y=0.0
+# 2: RectangularBar None translate_y=184.0
+```
+
+```bash title="curl"
+curl "http://localhost:34560/api/v1/job/structure/sections/1?expand=all"
+```
+</CodeTabs>
+
+To replace an existing section's shapes in place (keeping its Id and
+modification factors), PUT the same body to
+`/sections/{id}/shape-builder`.
+
+## Run this example locally
+
+The complete version — nodes, restraints, material, a comparison of the
+computed properties against the plain UB, and save — is in the repo as
+[`Example.BuiltUpSection`](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/csharp/examples/Example.BuiltUpSection) (C#) and
+[`built_up_section`](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/python/examples/built_up_section) (Python).
+Clone and run:
+
+<CodeTabs>
+```bash title="C#"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/csharp/examples/Example.BuiltUpSection
+dotnet run
+```
+
+```bash title="Python"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/python/examples/built_up_section
+pip install space-gass-api    # once per environment
+python built_up_section.py
+```
+</CodeTabs>
+
+## See also
+
+- [Simple Beam Model](/examples/simple-beam) — the beam this recipe's
+  nodes, restraints and material come from.
+- API reference: `POST /job/structure/sections/shape-builder`,
+  `POST /job/structure/sections/shape-builder/preview`,
+  `PUT /job/structure/sections/{id}/shape-builder`,
+  `GET /job/query/geometry/sections/{id}`.

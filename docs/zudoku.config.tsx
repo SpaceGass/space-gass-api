@@ -392,6 +392,7 @@ const config: ZudokuConfig = {
             "examples/reactions-for-restrained-nodes",
             "examples/filter-results-by-case",
             "examples/switch-to-readonly",
+            "examples/create-shape-builder-section",
           ],
         },
       ],
