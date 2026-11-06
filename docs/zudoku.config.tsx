@@ -52,6 +52,60 @@ function bodyTypeFromSpec(operation: any): string | undefined {
   return ref ? ref.split("/").pop() : undefined;
 }
 
+// Inline `oneOf` bodies (e.g. PATCH /job/design/steel-member/{code}/settings,
+// one variant per design code) have no single component name. Kiota wraps them
+// in a composed type nested in the request builder —
+// `{Segment}RequestBuilder.{Segment}{Method}RequestBody` — with one property
+// per variant, named after the variant's model. Returns the variant model names,
+// or undefined when the body is not a `oneOf` of `$ref`s.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function oneOfVariantsFromSpec(operation: any): string[] | undefined {
+  const content: any[] = operation?.requestBody?.content ?? [];
+  const media =
+    content.find((c) => c?.mediaType === "application/json") ?? content[0];
+  const variants: any[] | undefined = media?.schema?.oneOf;
+  if (!variants?.length || variants.some((v) => !v?.__$ref)) return undefined;
+  return variants.map((v) => v.__$ref.split("/").pop());
+}
+
+const PY_KEYWORDS = new Set([
+  "and", "as", "assert", "async", "await", "break", "class", "continue",
+  "def", "del", "elif", "else", "except", "finally", "for", "from", "global",
+  "if", "import", "in", "is", "lambda", "nonlocal", "not", "or", "pass",
+  "raise", "return", "try", "while", "with", "yield",
+]);
+
+// Multipart file-upload endpoints are called through the hand-maintained
+// helpers (C# Utils/UploadRequests.cs, Python upload_requests.py), which take a
+// file path — Kiota itself only types these bodies as a bare MultipartBody.
+const UPLOAD_HELPERS: Record<string, string> = {
+  "/job/new-from-template": "NewFromTemplateRequest",
+  "/job/import/txt": "ImportTxtRequest",
+};
+
+// Kiota merges sibling path parameters at the same level into one indexer
+// (e.g. `/combination-load-cases/{combinationCase}/items` and
+// `/combination-load-cases/{id}` → Python `by_combination_case_id`). Return the
+// merged parameter name for the parameter at `segments[index]`.
+const specPaths: string[] = Object.keys(
+  (openapiSpec as { paths?: Record<string, unknown> }).paths ?? {},
+);
+function kiotaIndexParam(segments: string[], index: number): string {
+  const prefix = segments.slice(0, index).join("/");
+  const names = new Set<string>();
+  for (const p of specPaths) {
+    const segs = p.replace(/^\//, "").split("/");
+    const seg = segs[index];
+    if (seg?.startsWith("{") && segs.slice(0, index).join("/") === prefix) {
+      names.add(seg.slice(1, -1));
+    }
+  }
+  if (names.size <= 1) return segments[index].slice(1, -1);
+  return [...names]
+    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+    .join("-");
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   if (selectedLang === "shell") return false; // fall back to default cURL generator
@@ -81,7 +135,10 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
     ? toPascalCase(singularize(entitySegment))
     : "Item";
 
-  const hasBody = ["POST", "PATCH", "PUT"].includes(httpMethod);
+  // Bodyless writes (e.g. POST /job/close) take no argument in either SDK.
+  const hasBody =
+    ["POST", "PATCH", "PUT"].includes(httpMethod) &&
+    (operation.requestBody?.content?.length ?? 0) > 0;
 
   // Prefer the exact model name from the spec. Fall back to a path-based guess
   // only for inline request bodies that carry no component `$ref`.
@@ -91,6 +148,21 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
       ? `${entityName}Create`
       : `${entityName}Update`;
   const bodyType = bodyTypeFromSpec(operation) ?? pathGuessBodyType;
+  const uploadHelper: string | undefined = hasBody
+    ? UPLOAD_HELPERS[path]
+    : undefined;
+
+  // Composed-type (`oneOf`) body: the wrapper lives next to the request
+  // builder, so its namespace/module follows the path (`{param}` → Item).
+  const oneOfVariants =
+    hasBody && !lastSegment.startsWith("{")
+      ? oneOfVariantsFromSpec(operation)
+      : undefined;
+  const builderName = `${toPascalCase(lastSegment)}RequestBuilder`;
+  const wrapperName = `${toPascalCase(lastSegment)}${httpMethod.charAt(0)}${httpMethod.slice(1).toLowerCase()}RequestBody`;
+  const builderPath = segments.map((s: string) =>
+    s.startsWith("{") ? "item" : s.replace(/-/g, "_").toLowerCase(),
+  );
 
   // ── C# SDK ──
   if (selectedLang === "csharp") {
@@ -108,7 +180,22 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
       httpMethod.charAt(0) + httpMethod.slice(1).toLowerCase() + "Async";
 
     let code = "// C# SDK Client\n";
-    if (hasBody) {
+    if (uploadHelper) {
+      code += `var result = await ${chain}.${asyncMethod}(\n`;
+      code += `    new ${uploadHelper}(@"C:\\path\\to\\file"));`;
+    } else if (oneOfVariants) {
+      const ns = segments
+        .map((s: string) => (s.startsWith("{") ? "Item" : toPascalCase(s)))
+        .join(".");
+      const variant = oneOfVariants[0];
+      code += `using SpaceGassApi.${ns};\n\n`;
+      code += `// One of: ${oneOfVariants.join(", ")}\n`;
+      code += `var body = new ${builderName}.${wrapperName}\n`;
+      code += `{\n`;
+      code += `    ${variant} = new ${variant} { /* Set properties */ },\n`;
+      code += `};\n\n`;
+      code += `var result = await ${chain}.${asyncMethod}(body);`;
+    } else if (hasBody) {
       if (isList) {
         code += `var bodies = new List<${bodyType}>\n`;
         code += `{\n`;
@@ -134,22 +221,43 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   // ── Python SDK ──
   if (selectedLang === "python") {
     let chain = "client";
-    for (const seg of segments) {
+    for (const [i, seg] of segments.entries()) {
       if (seg.startsWith("{") && seg.endsWith("}")) {
-        const param = seg.slice(1, -1);
-        const snakeParam = pascalToSnake(param);
+        const snakeParam = pascalToSnake(kiotaIndexParam(segments, i)).replace(
+          /-/g,
+          "_",
+        );
         chain += `.by_${snakeParam}(${snakeParam})`;
       } else {
-        chain += `.${seg.replace(/-/g, "_").toLowerCase()}`;
+        const prop = seg.replace(/-/g, "_").toLowerCase();
+        // Kiota suffixes Python keywords with "_" (e.g. `import_`).
+        chain += `.${PY_KEYWORDS.has(prop) ? `${prop}_` : prop}`;
       }
     }
 
     const pyMethod = httpMethod.toLowerCase();
 
     let code = "# Python SDK Client\n";
-    if (hasBody) {
-      const bodyModule = pascalToSnake(bodyType);
-      code += `from space_gass_api.models.${bodyModule} import ${bodyType}\n\n`;
+    if (uploadHelper) {
+      code += `from space_gass_api import ${uploadHelper}\n\n`;
+      code += `result = await ${chain}.${pyMethod}(\n`;
+      code += `    ${uploadHelper}(r"C:\\path\\to\\file"))`;
+    } else if (oneOfVariants) {
+      const variant = oneOfVariants[0];
+      const variantProperty = pascalToSnake(variant);
+      code += `from space_gass_api.generated.${builderPath.join(".")}.${pascalToSnake(wrapperName)} import ${wrapperName}\n`;
+      code += `from space_gass_api.models import ${variant}\n\n`;
+      code += `# One of: ${oneOfVariants.join(", ")}\n`;
+      code += `body = ${wrapperName}(\n`;
+      code += `    ${variantProperty}=${variant}(\n`;
+      code += `        # Set properties\n`;
+      code += `    ),\n`;
+      code += `)\n\n`;
+      code += `result = await ${chain}.${pyMethod}(body)`;
+    } else if (hasBody) {
+      // `space_gass_api.models` is a flat re-export shim (no per-model
+      // submodules), so import from the package, not `models.<snake>`.
+      code += `from space_gass_api.models import ${bodyType}\n\n`;
       if (isList) {
         code += `bodies = [\n`;
         code += `    ${bodyType}(\n`;
