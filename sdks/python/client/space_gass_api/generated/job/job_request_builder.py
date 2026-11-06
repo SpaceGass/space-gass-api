@@ -21,6 +21,7 @@ if TYPE_CHECKING:
     from .data.data_request_builder import DataRequestBuilder
     from .design.design_request_builder import DesignRequestBuilder
     from .errors.errors_request_builder import ErrorsRequestBuilder
+    from .export.export_request_builder import ExportRequestBuilder
     from .filters.filters_request_builder import FiltersRequestBuilder
     from .headings.headings_request_builder import HeadingsRequestBuilder
     from .import_.import_request_builder import ImportRequestBuilder
@@ -51,7 +52,7 @@ class JobRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Job]:
         """
-        Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
+        Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET /job/units (read-only)- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Job]
         """
@@ -73,7 +74,7 @@ class JobRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
+        Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET /job/units (read-only)- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -136,6 +137,15 @@ class JobRequestBuilder(BaseRequestBuilder):
         from .errors.errors_request_builder import ErrorsRequestBuilder
 
         return ErrorsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def export(self) -> ExportRequestBuilder:
+        """
+        The export property
+        """
+        from .export.export_request_builder import ExportRequestBuilder
+
+        return ExportRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def filters(self) -> FiltersRequestBuilder:

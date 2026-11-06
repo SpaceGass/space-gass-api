@@ -35,7 +35,7 @@ class RunsRequestBuilder(BaseRequestBuilder):
     def by_run_id(self,run_id: UUID) -> WithRunItemRequestBuilder:
         """
         Gets an item from the space_gass_api.generated.job.analysis.runs.item collection
-        param run_id: The unique run ID returned when the analysis was started
+        param run_id: The unique run Id returned when the analysis was started
         Returns: WithRunItemRequestBuilder
         """
         if run_id is None:
@@ -48,7 +48,7 @@ class RunsRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[list[AnalysisRun]]:
         """
-        Lists the current analysis run (if any) and recent run history.History is capped at the 10 most recent runs.
+        Lists the executing and queued analysis runs and recent run history.History is capped at the 10 most recent runs.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[AnalysisRun]]
         """
@@ -70,7 +70,7 @@ class RunsRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Lists the current analysis run (if any) and recent run history.History is capped at the 10 most recent runs.
+        Lists the executing and queued analysis runs and recent run history.History is capped at the 10 most recent runs.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

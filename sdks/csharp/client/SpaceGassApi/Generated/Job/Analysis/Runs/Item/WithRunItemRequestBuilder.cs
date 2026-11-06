@@ -3,7 +3,6 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
-using SpaceGassApi.Job.Analysis.Runs.Item.Result;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -18,11 +17,6 @@ namespace SpaceGassApi.Job.Analysis.Runs.Item
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class WithRunItemRequestBuilder : BaseRequestBuilder
     {
-        /// <summary>The result property</summary>
-        public global::SpaceGassApi.Job.Analysis.Runs.Item.Result.ResultRequestBuilder Result
-        {
-            get => new global::SpaceGassApi.Job.Analysis.Runs.Item.Result.ResultRequestBuilder(PathParameters, RequestAdapter);
-        }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Analysis.Runs.Item.WithRunItemRequestBuilder"/> and sets the default values.
         /// </summary>

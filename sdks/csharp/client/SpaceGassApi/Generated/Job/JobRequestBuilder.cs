@@ -8,6 +8,7 @@ using SpaceGassApi.Job.Close;
 using SpaceGassApi.Job.Data;
 using SpaceGassApi.Job.Design;
 using SpaceGassApi.Job.Errors;
+using SpaceGassApi.Job.Export;
 using SpaceGassApi.Job.Filters;
 using SpaceGassApi.Job.Headings;
 using SpaceGassApi.Job.Import;
@@ -60,6 +61,11 @@ namespace SpaceGassApi.Job
         public global::SpaceGassApi.Job.Errors.ErrorsRequestBuilder Errors
         {
             get => new global::SpaceGassApi.Job.Errors.ErrorsRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The export property</summary>
+        public global::SpaceGassApi.Job.Export.ExportRequestBuilder Export
+        {
+            get => new global::SpaceGassApi.Job.Export.ExportRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The filters property</summary>
         public global::SpaceGassApi.Job.Filters.FiltersRequestBuilder Filters
@@ -148,7 +154,7 @@ namespace SpaceGassApi.Job
         {
         }
         /// <summary>
-        /// Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
+        /// Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET /job/units (read-only)- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Job"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -175,7 +181,7 @@ namespace SpaceGassApi.Job
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Job>(requestInfo, global::SpaceGassApi.Models.Job.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET/PATCH /job/units- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
+        /// Gets the current job (there is only one).            Sub-resources are managed via their own endpoints:- Headings: GET/PATCH /job/headings- Settings: GET /job/settings- Units: GET /job/units (read-only)- Errors: GET/DELETE /job/errors- Model summary: GET /job/status
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

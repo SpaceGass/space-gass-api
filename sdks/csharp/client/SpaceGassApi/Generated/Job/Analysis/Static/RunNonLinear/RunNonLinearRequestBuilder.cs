@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Analysis.Static.RunNonLinear
         {
         }
         /// <summary>
-        /// Starts a Non-Linear Static Analysis run. The analysis executes asynchronously in the background.Uses the same settings as Linear Static (shared via GET/PATCH /static/settings).            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.
+        /// Starts a Non-Linear Static Analysis run. The analysis executes asynchronously in the background.Uses the same settings as Linear Static (shared via GET/PATCH /static/settings).            The request body is optional. If provided, the fields included are written to the job&apos;sanalysis settings before the run starts and stay in effect afterwards; omitted fields keeptheir stored values.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.AnalysisRun"/></returns>
         /// <param name="body">Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.</param>
@@ -67,7 +67,7 @@ namespace SpaceGassApi.Job.Analysis.Static.RunNonLinear
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.AnalysisRun>(requestInfo, global::SpaceGassApi.Models.AnalysisRun.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Starts a Non-Linear Static Analysis run. The analysis executes asynchronously in the background.Uses the same settings as Linear Static (shared via GET/PATCH /static/settings).            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.
+        /// Starts a Non-Linear Static Analysis run. The analysis executes asynchronously in the background.Uses the same settings as Linear Static (shared via GET/PATCH /static/settings).            The request body is optional. If provided, the fields included are written to the job&apos;sanalysis settings before the run starts and stay in effect afterwards; omitted fields keeptheir stored values.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Update request for Static Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /static/settings and the POST run endpoints.</param>

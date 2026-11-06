@@ -33,7 +33,7 @@ class AccessModeRequestBuilder(BaseRequestBuilder):
     
     async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[AccessModeStatus]:
         """
-        Returns the current access mode, the modes available to switch to,and any pending transition. Always reachable — works whileunregistered, unlicensed, or in ReadOnly.
+        Returns the current access mode, the modes available to switch to,and any pending transition. Always reachable — works whileunregistered, unlicensed, or in ReadOnly.When licensed, `readWriteAvailability` says whether a ReadWriteseat can be had (`Available`, `AllSeatsInUse`, `NotLicensed`,`Expired` or `Unknown`); omitted when the API is unlicensed.The explanation in words comes only with a refusal: the 409 from afailed switch (`detail`) or from a write in ReadOnly(`extensions.readWriteAvailabilityReason`).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[AccessModeStatus]
         """
@@ -54,7 +54,7 @@ class AccessModeRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: AccessModeUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[AccessModeStatus]:
         """
-        Transitions the API between `ReadWrite` and `ReadOnly`.When switching to `ReadOnly` with a job open, the transitionis queued and returns 202 — the switch commits when the jobcloses. When switching to `ReadWrite` the API attempts tore-acquire MODULE_API_ID; a failure returns 409 and leaves theaccess mode unchanged.
+        Transitions the API between `ReadWrite` and `ReadOnly`.When switching to `ReadOnly` with a job open, the transitionis queued and returns 202 — the switch commits when the jobcloses. When switching to `ReadWrite` the API attempts tore-acquire MODULE_API_ID; a failure returns 409 and leaves theaccess mode unchanged. The 409 `errorCode` says why:`API_MODULE_NOT_LICENSED` (the API module is not in the licence),`API_SEAT_UNAVAILABLE` (every API seat is in use),`MAINTENANCE_EXPIRED` or `VERSION_OUT_OF_DATE` (the APIlicence has expired or does not cover this version), or`READONLY_MODE` when the cause could not be determined. For thefirst four, `extensions` carries the current access status(`accessMode`, `availableAccessModes`,`readWriteAvailability`); `detail` is the explanation.
         param body: Request body for `POST /service/access-mode`.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[AccessModeStatus]
@@ -80,7 +80,7 @@ class AccessModeRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Returns the current access mode, the modes available to switch to,and any pending transition. Always reachable — works whileunregistered, unlicensed, or in ReadOnly.
+        Returns the current access mode, the modes available to switch to,and any pending transition. Always reachable — works whileunregistered, unlicensed, or in ReadOnly.When licensed, `readWriteAvailability` says whether a ReadWriteseat can be had (`Available`, `AllSeatsInUse`, `NotLicensed`,`Expired` or `Unknown`); omitted when the API is unlicensed.The explanation in words comes only with a refusal: the 409 from afailed switch (`detail`) or from a write in ReadOnly(`extensions.readWriteAvailabilityReason`).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -91,7 +91,7 @@ class AccessModeRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: AccessModeUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Transitions the API between `ReadWrite` and `ReadOnly`.When switching to `ReadOnly` with a job open, the transitionis queued and returns 202 — the switch commits when the jobcloses. When switching to `ReadWrite` the API attempts tore-acquire MODULE_API_ID; a failure returns 409 and leaves theaccess mode unchanged.
+        Transitions the API between `ReadWrite` and `ReadOnly`.When switching to `ReadOnly` with a job open, the transitionis queued and returns 202 — the switch commits when the jobcloses. When switching to `ReadWrite` the API attempts tore-acquire MODULE_API_ID; a failure returns 409 and leaves theaccess mode unchanged. The 409 `errorCode` says why:`API_MODULE_NOT_LICENSED` (the API module is not in the licence),`API_SEAT_UNAVAILABLE` (every API seat is in use),`MAINTENANCE_EXPIRED` or `VERSION_OUT_OF_DATE` (the APIlicence has expired or does not cover this version), or`READONLY_MODE` when the cause could not be determined. For thefirst four, `extensions` carries the current access status(`accessMode`, `availableAccessModes`,`readWriteAvailability`); `detail` is the explanation.
         param body: Request body for `POST /service/access-mode`.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

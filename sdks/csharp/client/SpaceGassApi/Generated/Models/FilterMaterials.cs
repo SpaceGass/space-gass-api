@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a list of material Ids. No sub-type.Maps to SG `SGFilterType.Materials`.
+    /// Sub-filter carrying a list of material Ids. No sub-type.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterMaterials : IParsable

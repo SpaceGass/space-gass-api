@@ -17,7 +17,7 @@ class FilterPlateCutsUpdate(Parsable):
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Plate-cut categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_PlateCutType` verbatim (identicalmembers to SpaceGassApi.Models.Enums.Filters.FilterPlateStripType at the SG layer, butkept as a distinct type so future SG additions don't require anAPI refactor).
+    # Plate-cut categories available as a Filter resource criterion.
     plate_cut_type: Optional[FilterPlateCutType] = None
     # The plateCuts property
     plate_cuts: Optional[str] = None

@@ -23,6 +23,7 @@ if TYPE_CHECKING:
     from .library.library_request_builder import LibraryRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
     from .next.next_request_builder import NextRequestBuilder
+    from .shape_builder.shape_builder_request_builder import ShapeBuilderRequestBuilder
 
 class SectionsRequestBuilder(BaseRequestBuilder):
     """
@@ -184,6 +185,15 @@ class SectionsRequestBuilder(BaseRequestBuilder):
         from .next.next_request_builder import NextRequestBuilder
 
         return NextRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def shape_builder(self) -> ShapeBuilderRequestBuilder:
+        """
+        The shapeBuilder property
+        """
+        from .shape_builder.shape_builder_request_builder import ShapeBuilderRequestBuilder
+
+        return ShapeBuilderRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class SectionsRequestBuilderGetQueryParameters():

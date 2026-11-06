@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class AnalysisInfo : IParsable
     {
-        /// <summary>True when any analysis of this type has been run and at least one casehas stored results. Determined from the file header — does not requireloading the full result datasheet.</summary>
+        /// <summary>True when any analysis of this type has been run and at least one casehas stored results.</summary>
         public bool? HasResults { get; set; }
         /// <summary>Per-case result status, optionally restricted to the caller-supplied`loadCases` filter. Every requested case appears in the array; eachentry&apos;s SpaceGassApi.Models.Dtos.Analysis.AnalysisLoadCaseInfoDto.HasResults indicates whetherresult data is available.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER

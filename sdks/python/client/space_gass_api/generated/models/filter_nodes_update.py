@@ -17,7 +17,7 @@ class FilterNodesUpdate(Parsable):
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Node type categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_NodeType` enum verbatim — integer valuesand labels match SG so the filter datasheet round-trips cleanly.Richer than the entity-property `NodeType` (which only has`All` / `Restrained`) because the filter UI surfaces everyfine-grained boundary-condition flavour.
+    # Node type categories available as a Filter resource criterion.Wider than the node type on nodes: it covers every boundary-condition category.
     node_type: Optional[FilterNodeType] = None
     # The nodes property
     nodes: Optional[str] = None

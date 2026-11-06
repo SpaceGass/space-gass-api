@@ -22,27 +22,27 @@ class Units(Parsable):
     """
     Unit settings for the current job.
     """
-    # Acceleration unit. Members mirror SPACE GASS `SgAcceleration`.
+    # Acceleration unit.
     acceleration: Optional[AccelerationUnit] = None
-    # Force unit. Members mirror SPACE GASS `SgForce`.
+    # Force unit.
     force: Optional[ForceUnit] = None
-    # Length unit. Members mirror SPACE GASS `SGLength`(`NetCommon/CommonEnums.vb`); integer values and identifiers must stay inlock-step with it. The System.ComponentModel.DescriptionAttribute carries the displaylabel (mirrors `gcUNITS_LABEL_*`).
+    # Length unit.
     length: Optional[LengthUnit] = None
-    # Mass unit. Members mirror SPACE GASS `SgMass`.
+    # Mass unit.
     mass: Optional[MassUnit] = None
-    # Mass density unit. Members mirror SPACE GASS `SgMassDensity`.
+    # Mass density unit.
     mass_density: Optional[MassDensityUnit] = None
-    # Material strength unit (yield stress, ultimate stress, etc.). Members mirrorSPACE GASS `SgMaterialStrength`.
+    # Material strength unit (yield stress, ultimate stress, etc.).
     material_strength: Optional[MaterialStrengthUnit] = None
-    # Moment unit. Members mirror SPACE GASS `SgMoment`.
+    # Moment unit.
     moment: Optional[MomentUnit] = None
-    # Unit for section properties (area, moment of inertia, etc.). Members mirrorSPACE GASS `SgSectionProperties` (`NetCommon/CommonEnums.vb`).
+    # Unit for section properties (area, moment of inertia, etc.).
     section_properties: Optional[SectionPropertiesUnit] = None
-    # Stress unit. Members mirror SPACE GASS `SgStress`.
+    # Stress unit.
     stress: Optional[StressUnit] = None
-    # Temperature unit. Members mirror SPACE GASS `SgTemperature`.
+    # Temperature unit.
     temperature: Optional[TemperatureUnit] = None
-    # Translation (displacement) unit. Members mirror SPACE GASS `SgTranslation`.SG uses `inch` here (not `in`) to dodge the VB reserved word; we mirrorthat so the wire token stays `"inch"`.
+    # Translation (displacement) unit. Inches are `inch`, not `in`.
     translation: Optional[TranslationUnit] = None
     
     @staticmethod
