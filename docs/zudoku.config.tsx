@@ -288,7 +288,7 @@ const config: ZudokuConfig = {
       dark: "material-theme-ocean",
       light: "github-light",
     },
-    languages: ["csharp", "python", "bash", "json"],
+    languages: ["csharp", "python", "bash", "json", "toml"],
   },
   navigation: [
     {
@@ -394,6 +394,70 @@ const config: ZudokuConfig = {
             "examples/switch-to-readonly",
             "examples/create-shape-builder-section",
           ],
+        },
+      ],
+    },
+    {
+      // MCP tab — the SPACE GASS MCP server shipped with SPACE GASS 14.5+.
+      // Pages live under pages/mcp/. The server is a local stdio exe, so only
+      // desktop clients get install steps; web assistants get a "not available"
+      // page. Keep client pages on the shared template (status → prerequisites
+      // → steps → verify → update/remove → troubleshooting).
+      type: "category",
+      label: "MCP",
+      icon: "bot",
+      items: [
+        {
+          // Landing page, served at /mcp (explicit path — Zudoku warns that
+          // index.mdx default paths don't resolve on static hosts).
+          type: "doc",
+          file: "mcp/overview",
+          path: "/mcp",
+          label: "Overview",
+          icon: "house",
+        },
+        {
+          type: "category",
+          label: "Connect your client",
+          icon: "plug",
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: "doc",
+              file: "mcp/claude-desktop",
+              badge: { label: "Recommended", color: "green" },
+            },
+            "mcp/other-clients",
+            "mcp/web-clients",
+          ],
+        },
+        {
+          type: "separator",
+        },
+        {
+          type: "doc",
+          file: "mcp/first-session",
+          icon: "message-square",
+        },
+        {
+          type: "doc",
+          file: "mcp/tools",
+          icon: "wrench",
+        },
+        {
+          type: "doc",
+          file: "mcp/troubleshooting",
+          icon: "life-buoy",
+        },
+        {
+          type: "separator",
+        },
+        {
+          type: "link",
+          label: "REST API docs",
+          to: "/overview",
+          icon: "arrow-right",
         },
       ],
     },

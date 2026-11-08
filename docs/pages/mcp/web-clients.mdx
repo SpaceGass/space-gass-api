@@ -1,0 +1,39 @@
+---
+title: Web Clients (ChatGPT)
+description: The SPACE GASS MCP server does not work with web clients — ChatGPT, Gemini, Grok or Claude in the browser. It runs on your PC and only desktop apps can launch it.
+---
+
+<Callout type="caution" title="Web clients will not work">
+
+The SPACE GASS MCP server is a program that runs on your PC, and only desktop
+apps that can launch it can use it. **ChatGPT, Gemini, Grok and Claude in the
+browser (claude.ai) will not work** — they connect only to MCP servers hosted
+on the internet, and cannot reach a program on your machine.
+
+</Callout>
+
+## Why
+
+The server talks to the SPACE GASS API on your own machine over
+`localhost`, and your AI client starts it as a local process (the MCP
+**stdio** transport). Web assistants have no way to start a program on your
+PC, and they can only connect to servers with a public internet address —
+which the SPACE GASS API, by design, does not have.
+
+| Web client | Use instead |
+|---|---|
+| ChatGPT (web and the ChatGPT desktop app) | [Claude Desktop](/mcp/claude-desktop) for chat; [Codex CLI](/mcp/other-clients) for coding |
+| Gemini (web and the Gemini app) | [Claude Desktop](/mcp/claude-desktop) |
+| Grok | [Claude Desktop](/mcp/claude-desktop) |
+| Claude in the browser (claude.ai) | [Claude Desktop](/mcp/claude-desktop) — same account, same chats |
+
+**Codex CLI** — OpenAI's coding agent — runs on your PC and does work with
+the server; see [Other desktop clients](/mcp/other-clients).
+
+## Writing code against the API instead?
+
+ChatGPT, Gemini and Grok are still useful for *writing scripts* that use the
+SPACE GASS REST API or SDKs. Point them at the machine-readable resources in
+[Using with AI assistants](/overview#using-with-ai-assistants) — the docs
+bundle, the OpenAPI spec and the GitMCP documentation-search server — and run
+the resulting script yourself.
