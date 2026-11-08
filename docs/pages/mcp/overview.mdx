@@ -1,0 +1,118 @@
+---
+title: SPACE GASS MCP
+description: Let an AI assistant open, edit, analyse and design your SPACE GASS models. Installed with SPACE GASS 14.5; runs entirely on your PC.
+---
+
+The SPACE GASS MCP server lets an AI assistant such as **Claude Desktop** or
+**GitHub Copilot** work on your structural models directly: open a job, build
+or edit the structure, apply loads, run analyses and steel design, and read
+the results back — all by talking to SPACE GASS on your own PC.
+
+## What you can do
+
+- **Build and edit models** — nodes, members, plates, supports, sections and
+  materials, in plain language ("add a 6 m 310UB40 beam between nodes 3 and 4")
+- **Load them** — load cases and combinations, node and member loads, plate
+  pressures, self weight, moving loads
+- **Analyse and design** — linear, non-linear, buckling and dynamic analyses;
+  AS 4100 and NZS 3404 steel member checks and designs
+- **Read results** — displacements, reactions, member and plate forces,
+  buckling load factors, natural frequencies, design utilisations
+- **See it** — an interactive 3D viewer and section shape builder (Claude
+  Desktop); select nodes, members and plates in the viewer and the assistant
+  knows what you mean by "these"
+- **Go further** — fall back to any of the 430+ REST API operations through `call_api`
+
+## How it works
+
+The MCP server is installed with SPACE GASS 14.5 and later and needs
+[API access](/licensing). Your model never leaves your machine: the
+assistant talks to a small program on your PC, which talks to the SPACE GASS
+API on `localhost`.
+
+```text
+AI desktop app    (Claude Desktop, VS Code, Claude Code, Cursor, ...)
+     │  MCP over stdio — a local child process, no network
+     ▼
+SpaceGassApi.Mcp.exe        installed with SPACE GASS, in MCP\server\
+     │  HTTP — http://localhost:34560
+     ▼
+SpaceGassApi.exe            the SPACE GASS API service — must be running
+     │
+     ▼
+SPACE GASS engine and your .sg files
+```
+
+<Callout type="caution" title="Desktop apps only — web clients will not work">
+
+The MCP server is a program on your PC, so only a **desktop app** that can
+launch it can use it. **Web clients will not work:** ChatGPT, Gemini, Grok,
+or Claude in the browser (claude.ai) cannot connect to it. Use Claude Desktop
+for chat, or a desktop coding tool such as VS Code, Claude Code or Cursor.
+See [Web Clients (ChatGPT)](/mcp/web-clients).
+
+</Callout>
+
+## Prerequisites
+
+- [SPACE GASS](https://www.spacegass.com/) **14.5 or later** on a Windows
+  PC, with [API access](/licensing), opened at least once so it initialises
+  its data files.
+- **The SPACE GASS API service running.** Double-click the **SPACE GASS API**
+  shortcut in the Start menu (or run `SpaceGassApi.exe` from the SPACE GASS
+  installation folder) and leave it running. The MCP server does **not** start
+  it for you; while it is stopped every tool call fails with
+  *"Cannot connect to the SPACE GASS API"*. To start it from a script, see
+  [Service Automation](/guides/service-automation).
+- **A desktop AI client** from the table below.
+
+Everything the clients need is installed with SPACE GASS under
+`C:\Program Files\SPACE GASS 14.5\MCP\`: the Claude Desktop bundle
+`spacegass.mcpb`, and the server itself at `server\SpaceGassApi.Mcp.exe`,
+which every other client launches directly. The installer replaces this
+folder on every upgrade, so the server always matches your SPACE GASS.
+
+## Pick your client
+
+| Desktop client | How it connects |
+|---|---|
+| [Claude Desktop](/mcp/claude-desktop#claude-desktop) (Windows) — recommended | Open the bundled `.mcpb` extension — two clicks |
+| [Claude Code](/mcp/claude-desktop#claude-code) | `claude mcp add` |
+| [VS Code with GitHub Copilot](/mcp/other-clients#vs-code) | `mcp.json`, or the **Install in VS Code** link |
+| [Visual Studio 2022](/mcp/other-clients#visual-studio-2022) | `.mcp.json` |
+| [GitHub Copilot CLI](/mcp/other-clients#copilot-cli) | `copilot mcp add` |
+| [Codex CLI](/mcp/other-clients#codex-cli) | `codex mcp add` |
+| [Cursor](/mcp/other-clients#cursor) | `mcp.json`, or the **Add to Cursor** link |
+| [Windsurf and other desktop clients](/mcp/other-clients#windsurf-and-any-other-stdio-client) | Generic `mcpServers` config |
+
+Every client launches the same `SpaceGassApi.Mcp.exe`; only where you paste
+the configuration differs. Once connected, try
+[your first session](/mcp/first-session).
+
+## Privacy and security
+
+- The server runs on your PC, talks only to `localhost`, and sends nothing
+  anywhere else. What leaves your machine is whatever your AI client sends
+  to its own model — your prompts and the tool results it reads.
+- There is no authentication; the API is reachable only on your machine, and
+  access is gated by your SPACE GASS licence.
+- The assistant can **change, delete and save** models. Deletions are
+  previewed first and nothing reaches disk until a save, but keep backups of
+  important jobs, and ask the assistant to switch the API to read-only when
+  you only want to explore.
+
+<Callout type="note" title="Not the GitMCP server">
+
+The developer pages also mention `gitmcp.io/SpaceGass/space-gass-api`. That
+is a *documentation search* server for people writing code against the REST
+API — it reads this site and the SDK source, and it does not control
+SPACE GASS. The SPACE GASS MCP server on this page is the one that opens
+models and runs analyses. See [Using with AI assistants](/overview#using-with-ai-assistants).
+
+</Callout>
+
+## Next steps
+
+- [Your first session](/mcp/first-session) — check the connection and try some prompts
+- [What the assistant can do](/mcp/tools) — tasks, example prompts and the tools behind them
+- [Troubleshooting](/mcp/troubleshooting) — tools missing, can't connect, changing the port, updating or removing

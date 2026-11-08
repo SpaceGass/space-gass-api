@@ -1,0 +1,99 @@
+---
+title: Troubleshooting
+description: Fix the SPACE GASS MCP server when tools don't appear or can't connect, change the API port, and update or remove the server
+---
+
+Find your symptom in the first column. Client-specific notes are at the end
+of each client's page.
+
+| Symptom | Cause | Fix |
+|---|---|---|
+| Every tool call fails with *"Cannot connect to the SPACE GASS API at http://localhost:…"* | The API service isn't running, or runs on another port | Start the **SPACE GASS API** shortcut from the Start menu and ask the assistant to retry. If you changed the port, see [Changing the API port](#changing-the-api-port). |
+| The assistant says it has no SPACE GASS tools | The client hasn't started the server | Check the client's MCP server list (Claude Desktop: **Settings › Extensions**). Fix the path if it's wrong, then restart the client. |
+| Claude Desktop: tools missing, or the first tool call spins forever | Extensions only start with the app, and a server that died is never restarted | Fully quit Claude Desktop from the system tray — not just the window — and reopen it. |
+| Double-clicking `spacegass.mcpb` does nothing, or the install window closes by itself | The Microsoft Store (MSIX) build of Claude Desktop has a known issue with `.mcpb` installs | Install Claude Desktop from [claude.ai/download](https://claude.ai/download), or use **Settings › Extensions › Advanced settings › Install Extension…**. |
+| Claude Desktop refuses to install the extension | A Team/Enterprise administrator has turned on the extension allowlist | Ask your Claude administrator to add the SPACE GASS bundle. |
+| The client reports the server failed to start | Wrong path, or backslashes not doubled in JSON | Check the exe exists at `C:\Program Files\SPACE GASS 14.5\MCP\server\SpaceGassApi.Mcp.exe` (the folder name changes with the SPACE GASS version). In JSON every `\` must be `\\`. |
+| Tool calls fail with `JOB_NOT_OPEN` | No job is open | Ask the assistant to open or create a job first. |
+| Writes are refused as read-only | The API is in ReadOnly mode | Ask the assistant to switch the API to read/write (`set_access_mode`). |
+| The API refuses to start, or reports a licence error | API access isn't on your licence, or every seat is in use | See [Licensing](/licensing). Read-only mode releases a seat. |
+| Steel design won't run | No static results, or the design group lacks effective lengths | Run a static analysis first; give the group explicit compression effective lengths, or run a buckling analysis. |
+| "Show me in 3D" returns text instead of a viewer | The client doesn't support MCP Apps | The 3D viewer and shape builder render in Claude Desktop. Other clients get a description. |
+| After upgrading SPACE GASS the server stopped working | The installation folder name changed, or Claude Desktop still has the old extension | See [After upgrading SPACE GASS](#after-upgrading-space-gass). |
+
+## Changing the API port
+
+By default the server connects to `http://localhost:34560`. If you changed
+the API port in SPACE GASS, tell the server where to look. In order of
+precedence it uses:
+
+1. the `SPACEGASS_API_URL` environment variable;
+2. the first command-line argument;
+3. the default.
+
+In Claude Desktop, set **SPACE GASS API URL** in the extension's settings
+(**Settings › Extensions › SPACE GASS**). In other clients, add the
+environment variable to the server entry — the `mcpServers` shape takes the
+same `env` block:
+
+```json
+{
+  "servers": {
+    "spacegass": {
+      "type": "stdio",
+      "command": "C:\\Program Files\\SPACE GASS 14.5\\MCP\\server\\SpaceGassApi.Mcp.exe",
+      "env": {
+        "SPACEGASS_API_URL": "http://localhost:34561"
+      }
+    }
+  }
+}
+```
+
+## After upgrading SPACE GASS
+
+The installer replaces the whole `MCP\` folder, so the server always matches
+the SPACE GASS beside it; its version is the SPACE GASS build (for example
+`14.51.1`).
+
+- **Clients that launch the exe** (Claude Code, VS Code, Visual Studio,
+  Copilot CLI, Codex, Cursor, …) pick the update up automatically — unless a
+  major version changed the folder name (`SPACE GASS 14.5` → `SPACE GASS 15`),
+  in which case update the path in your configuration.
+- **Claude Desktop** keeps its own copy of the bundle. Open the new
+  `spacegass.mcpb` again to update the extension.
+
+## Removing the server
+
+| Client | How |
+|---|---|
+| Claude Desktop | **Settings › Extensions**, select **SPACE GASS**, remove |
+| Claude Code | `claude mcp remove spacegass` |
+| VS Code / Visual Studio | Delete the `spacegass` entry from `mcp.json` / `.mcp.json` |
+| Copilot CLI | `copilot mcp remove spacegass` |
+| Codex CLI | `codex mcp remove spacegass` |
+| Cursor, Windsurf, others | Delete the `spacegass` entry from the client's config file |
+
+Uninstalling SPACE GASS removes the server itself; client entries that point
+at it then fail to start until you remove them too.
+
+## Logs
+
+The server writes its log to standard error, which the client captures:
+
+| Client | Where |
+|---|---|
+| Claude Desktop | `%AppData%\Claude\logs\mcp.log` (how the client launched the server) and `%AppData%\Claude\logs\mcp-server-spacegass.log` (the server's own output) |
+| Claude Code | `claude mcp get spacegass`, or `/mcp` inside Claude Code |
+| VS Code | **MCP: List Servers › spacegass › Show Output** |
+| Other clients | The client's MCP server output panel |
+
+The API service has its own window; errors from the SPACE GASS engine are
+also available to the assistant through `get_errors`.
+
+## Still stuck?
+
+Email [support@spacegass.com](mailto:support@spacegass.com) with your
+SPACE GASS version, the client and its version, what you asked the
+assistant, the error text, and whether the API service was running. See
+[Support](/support).

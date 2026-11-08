@@ -84,7 +84,13 @@ finally { await client.Job.Close.PostAsync(); }
 - **Docs index:** <https://api.spacegass.com/docs/llms.txt>
 - **OpenAPI spec (JSON):** <https://api.spacegass.com/docs/api/1/schema.json>
 - **Docs site:** <https://api.spacegass.com/docs/>
-- **Repo as an MCP server (search docs/examples/code):** <https://gitmcp.io/SpaceGass/space-gass-api>
+- **Repo as a documentation-search MCP server (search docs/examples/code):** <https://gitmcp.io/SpaceGass/space-gass-api>
+- **SPACE GASS MCP server (drives SPACE GASS itself from a desktop MCP client; not this repo):** <https://api.spacegass.com/docs/mcp>
 - **Runnable examples:** [`sdks/python/examples/`](sdks/python/examples/) · [`sdks/csharp/examples/`](sdks/csharp/examples/)
 
 When fetching individual repo files, use `raw.githubusercontent.com/...` URLs, **never** `github.com/.../blob/...` (those return an HTML page, not the file), and prefer the bundle URLs above so you never need to crawl the repo tree.
+
+## Maintaining the docs site (`docs/pages/`)
+
+- The pages under `docs/pages/mcp/` document the SPACE GASS MCP server (a local stdio exe shipped by the SPACE GASS installer, source in the private `v15_Trunk` repo). They hard-code the install path `C:\Program Files\SPACE GASS 14.5\...`, as do `quick-start.mdx` and `guides/service-automation.mdx`. When the SPACE GASS major version changes, `grep -r "SPACE GASS 14.5" docs/pages` and update every hit, and regenerate the VS Code / Cursor install links in `mcp/other-clients.mdx` (they embed the path, URL-encoded / base64). Those links must stay `https://` (`vscode.dev/redirect/mcp/install`, `cursor.com/install-mcp`): Zudoku rewrites any non-http markdown link as a relative route, so raw `vscode:` / `cursor://` schemes break.
+- Client pages under `docs/pages/mcp/` share one template: status callout → prerequisites → steps → verify → update or remove → troubleshooting. Keep new client pages on it.

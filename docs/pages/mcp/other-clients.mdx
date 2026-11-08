@@ -1,0 +1,227 @@
+---
+title: Other desktop clients
+description: Connect the SPACE GASS MCP server to GitHub Copilot (VS Code, Visual Studio, Copilot CLI), Codex CLI, Cursor, Windsurf or any other desktop MCP client
+---
+
+<Callout type="tip" title="Supported">
+
+Any desktop MCP client that can launch a local program on Windows (the
+**stdio** transport) can use the SPACE GASS server: GitHub Copilot in VS Code
+or Visual Studio, the Copilot and Codex CLIs, Cursor, Windsurf and others.
+Web clients cannot — see [Web Clients (ChatGPT)](/mcp/web-clients).
+
+</Callout>
+
+## Prerequisites
+
+The [general prerequisites](/mcp#prerequisites) — SPACE GASS 14.5 or later
+with API access, and the SPACE GASS API service running — plus a Windows
+desktop MCP client. For GitHub Copilot that means a Copilot subscription (on
+Copilot Business and Enterprise an administrator must enable the **MCP
+servers in Copilot** policy) and VS Code 1.99 or later, Visual Studio 2022
+17.14 or later, or the Copilot CLI.
+
+## The command every client needs
+
+Every client is configured with the same single fact — the program to launch:
+
+```text
+C:\Program Files\SPACE GASS 14.5\MCP\server\SpaceGassApi.Mcp.exe
+```
+
+No arguments and no environment variables are needed unless you changed the
+API port — see [Changing the API port](/mcp/troubleshooting#changing-the-api-port). Where you
+paste it is the only thing that differs between clients.
+
+## GitHub Copilot
+
+### VS Code
+
+<Stepper>
+1. **Start the SPACE GASS API service**
+
+   Double-click the **SPACE GASS API** shortcut in the Start menu and leave
+   it running.
+
+1. **Add the server**
+
+   The quickest way is the install link — it opens VS Code and asks you to
+   confirm the server:
+
+   [Install in VS Code](https://vscode.dev/redirect/mcp/install?name=spacegass&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22C%3A%5C%5CProgram%20Files%5C%5CSPACE%20GASS%2014.5%5C%5CMCP%5C%5Cserver%5C%5CSpaceGassApi.Mcp.exe%22%7D)
+   · [Install in VS Code Insiders](https://insiders.vscode.dev/redirect/mcp/install?name=spacegass&config=%7B%22type%22%3A%22stdio%22%2C%22command%22%3A%22C%3A%5C%5CProgram%20Files%5C%5CSPACE%20GASS%2014.5%5C%5CMCP%5C%5Cserver%5C%5CSpaceGassApi.Mcp.exe%22%7D&quality=insiders)
+
+   Or add it by hand. For one project, create `.vscode/mcp.json` in the
+   workspace; for every project, run **MCP: Add Server** from the Command
+   Palette and choose **Command (stdio)**, or open your user `mcp.json`.
+   Either way the entry is:
+
+   ```json
+   {
+     "servers": {
+       "spacegass": {
+         "type": "stdio",
+         "command": "C:\\Program Files\\SPACE GASS 14.5\\MCP\\server\\SpaceGassApi.Mcp.exe"
+       }
+     }
+   }
+   ```
+
+1. **Start it and trust it**
+
+   VS Code shows a **Start** action above the entry in `mcp.json` (or use
+   **MCP: List Servers**). Accept the trust prompt the first time.
+
+1. **Use it in Agent mode**
+
+   Open Copilot Chat, switch the mode to **Agent**, and check the
+   SPACE GASS tools are ticked in the tools picker.
+</Stepper>
+
+### Visual Studio 2022
+
+Visual Studio 17.14 and later reads the same `servers` format from
+`%USERPROFILE%\.mcp.json` (every solution) or `<solution folder>\.mcp.json`
+(shared with the solution — add it to **Solution Items** to commit it):
+
+```json
+{
+  "servers": {
+    "spacegass": {
+      "type": "stdio",
+      "command": "C:\\Program Files\\SPACE GASS 14.5\\MCP\\server\\SpaceGassApi.Mcp.exe"
+    }
+  }
+}
+```
+
+Or in Copilot Chat switch to **Agent** mode, open **Tools**, click **+** and
+enter the name `spacegass` and the command above. MCP tools are off by
+default in Visual Studio: tick the SPACE GASS tools in the **Tools** picker.
+
+### Copilot CLI
+
+```bash
+copilot mcp add spacegass -- "C:\Program Files\SPACE GASS 14.5\MCP\server\SpaceGassApi.Mcp.exe"
+```
+
+This writes to `~/.copilot/mcp-config.json`; `copilot mcp list` confirms it.
+The equivalent entry, if you prefer to edit the file:
+
+```json
+{
+  "mcpServers": {
+    "spacegass": {
+      "type": "local",
+      "command": "C:\\Program Files\\SPACE GASS 14.5\\MCP\\server\\SpaceGassApi.Mcp.exe",
+      "args": [],
+      "tools": ["*"]
+    }
+  }
+}
+```
+
+### JetBrains and Eclipse
+
+Copilot in JetBrains IDEs and Eclipse also supports MCP: open Copilot Chat in
+**Agent** mode, click the tools icon and choose **Add MCP Tools** (JetBrains)
+or **Configure Tools…** (Eclipse), then paste the
+[generic entry](#windsurf-and-any-other-stdio-client) below. Copilot for
+Xcode is macOS-only, and the SPACE GASS server runs on Windows.
+
+## Codex CLI
+
+```bash
+codex mcp add spacegass -- "C:\Program Files\SPACE GASS 14.5\MCP\server\SpaceGassApi.Mcp.exe"
+```
+
+Or add it to `~/.codex/config.toml` (TOML single-quoted strings need no
+backslash escaping):
+
+```toml
+[mcp_servers.spacegass]
+command = 'C:\Program Files\SPACE GASS 14.5\MCP\server\SpaceGassApi.Mcp.exe'
+```
+
+## Cursor
+
+Click
+[Add to Cursor](https://cursor.com/install-mcp?name=spacegass&config=eyJjb21tYW5kIjoiQzpcXFByb2dyYW0gRmlsZXNcXFNQQUNFIEdBU1MgMTQuNVxcTUNQXFxzZXJ2ZXJcXFNwYWNlR2Fzc0FwaS5NY3AuZXhlIn0=),
+which opens Cursor with the server ready to confirm, or add it to
+`~/.cursor/mcp.json` (all projects) or `.cursor/mcp.json` (this project):
+
+```json
+{
+  "mcpServers": {
+    "spacegass": {
+      "command": "C:\\Program Files\\SPACE GASS 14.5\\MCP\\server\\SpaceGassApi.Mcp.exe"
+    }
+  }
+}
+```
+
+## Windsurf and any other stdio client
+
+<CodeTabs syncKey="mcp-client">
+```json title="Windsurf"
+// ~/.codeium/windsurf/mcp_config.json
+{
+  "mcpServers": {
+    "spacegass": {
+      "command": "C:\\Program Files\\SPACE GASS 14.5\\MCP\\server\\SpaceGassApi.Mcp.exe"
+    }
+  }
+}
+```
+
+```json title="Any stdio client"
+// The common "mcpServers" shape most clients accept
+{
+  "mcpServers": {
+    "spacegass": {
+      "command": "C:\\Program Files\\SPACE GASS 14.5\\MCP\\server\\SpaceGassApi.Mcp.exe",
+      "args": [],
+      "env": {}
+    }
+  }
+}
+```
+</CodeTabs>
+
+After adding the entry, start the SPACE GASS API service (the **SPACE GASS
+API** shortcut in the Start menu), restart the client or reload its MCP
+servers, and check that `spacegass` is listed as connected.
+
+## Verify
+
+Ask the assistant (in Copilot, use **Agent** mode):
+
+```text
+Is a SPACE GASS job open?
+```
+
+It should call the `get_job_status` tool and answer from the result. Then
+try [your first session](/mcp/first-session).
+
+## Update or remove
+
+These clients launch the exe from the SPACE GASS installation folder, so a
+SPACE GASS update is picked up automatically — unless the folder name changes
+with a major version, in which case update the path. To remove the server,
+delete its entry from the config file, or run `copilot mcp remove spacegass`
+/ `codex mcp remove spacegass`.
+
+## Troubleshooting
+
+- **The client can't start the server** — check the path exists and that
+  backslashes are doubled in JSON (TOML single-quoted strings need no
+  escaping). VS Code: **MCP: List Servers › spacegass › Show Output**.
+- **Tools are missing from Copilot's picker** — in VS Code make sure the mode
+  is **Agent**, not Ask; in Visual Studio enable them in **Tools**.
+- **Tools appear but every call fails with "Cannot connect"** — the API
+  service isn't running, or runs on a different port.
+- **The 3D viewer shows as text** — the viewer and shape builder need a
+  client that supports MCP Apps (Claude Desktop). Other clients get a text
+  description instead.
+
+Everything else: [Troubleshooting](/mcp/troubleshooting).
