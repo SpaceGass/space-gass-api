@@ -13,3 +13,12 @@ When reporting an issue, please include:
 - The endpoint you were calling and the request body, if applicable
 - The full error response (status code, `title`, `detail`, and `traceId`)
 - A short description of what you expected to happen
+
+If the problem is with the [MCP server](/mcp), also include:
+
+- The AI client and its version (Claude Desktop, VS Code, Claude Code, …)
+- What you asked the assistant, and the error it reported
+- Whether the SPACE GASS API service was running at the time
+- For Claude Desktop, the relevant lines from
+  `%AppData%\Claude\logs\mcp-server-spacegass.log` — see
+  [MCP Troubleshooting](/mcp/troubleshooting)

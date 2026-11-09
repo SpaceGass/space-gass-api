@@ -1,5 +1,6 @@
 import React from "react";
 import type { ZudokuConfig } from "zudoku";
+import "./styles.css";
 
 // Build version — sourced from `info.x-space-gass-build` in the spec at
 // build time so the API reference label always tracks the current SDK
@@ -222,7 +223,11 @@ const config: ZudokuConfig = {
     banner: {
       message: (
         <div className="text-center">
-          🚀 The SPACE GASS API is here — available in SPACE GASS 14.5
+          🤖 New in SPACE GASS 14.51 — the MCP server lets your AI agent
+          build, analyse and design your models.{" "}
+          <a href="/docs/mcp" className="font-semibold underline">
+            Get started →
+          </a>
         </div>
       ),
       color: "#f97316",
@@ -288,7 +293,7 @@ const config: ZudokuConfig = {
       dark: "material-theme-ocean",
       light: "github-light",
     },
-    languages: ["csharp", "python", "bash", "json"],
+    languages: ["csharp", "python", "bash", "json", "toml"],
   },
   navigation: [
     {
@@ -393,6 +398,70 @@ const config: ZudokuConfig = {
             "examples/filter-results-by-case",
             "examples/switch-to-readonly",
           ],
+        },
+      ],
+    },
+    {
+      // MCP tab — the SPACE GASS MCP server shipped with SPACE GASS 14.51+.
+      // Pages live under pages/mcp/. The server is a local stdio exe, so only
+      // desktop clients get install steps; web assistants get a "not available"
+      // page. Keep client pages on the shared template (status → prerequisites
+      // → steps → verify → update/remove → troubleshooting).
+      type: "category",
+      label: "MCP",
+      icon: "bot",
+      items: [
+        {
+          // Landing page, served at /mcp (explicit path — Zudoku warns that
+          // index.mdx default paths don't resolve on static hosts).
+          type: "doc",
+          file: "mcp/overview",
+          path: "/mcp",
+          label: "Overview",
+          icon: "house",
+        },
+        {
+          type: "category",
+          label: "Connect your client",
+          icon: "plug",
+          collapsible: true,
+          collapsed: false,
+          items: [
+            {
+              type: "doc",
+              file: "mcp/claude-desktop",
+              badge: { label: "Recommended", color: "green" },
+            },
+            "mcp/other-clients",
+            "mcp/web-clients",
+          ],
+        },
+        {
+          type: "separator",
+        },
+        {
+          type: "doc",
+          file: "mcp/first-session",
+          icon: "message-square",
+        },
+        {
+          type: "doc",
+          file: "mcp/tools",
+          icon: "wrench",
+        },
+        {
+          type: "doc",
+          file: "mcp/troubleshooting",
+          icon: "life-buoy",
+        },
+        {
+          type: "separator",
+        },
+        {
+          type: "link",
+          label: "REST API docs",
+          to: "/overview",
+          icon: "arrow-right",
         },
       ],
     },

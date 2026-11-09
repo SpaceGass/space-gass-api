@@ -1,0 +1,111 @@
+---
+title: Your first session
+description: Check the SPACE GASS MCP server is connected, then open a model, edit it, run an analysis and read results through your AI assistant
+---
+
+You have installed the server in your client and the SPACE GASS API service
+is running. This page is the same whichever client you use.
+
+## Check the connection
+
+Start a new chat and ask:
+
+```text
+Is a SPACE GASS job open?
+```
+
+The assistant should call the `get_job_status` tool and reply that no job is
+open (or name the one that is). If it says it has no SPACE GASS tools, or the
+tool call fails, see [Troubleshooting](/mcp/troubleshooting).
+
+## A typical session
+
+<Stepper>
+1. **Open a model**
+
+   ```text
+   Open the Portal Frame sample job.
+   ```
+
+   Or your own file: *"Open C:\Jobs\Warehouse.sg"*. Only one job is open at
+   a time; the assistant closes the current one first, and refuses to
+   discard unsaved changes unless you tell it to.
+
+1. **Look around**
+
+   ```text
+   Summarise the model: nodes, members, plates, load cases, units.
+   ```
+
+   *"Show me the model in 3D"* opens an interactive viewer of the model in
+   any client that supports MCP Apps, such as Claude Desktop.
+
+1. **Edit it**
+
+   ```text
+   Add a 5 kN/m downward UDL to members 1 to 4 in load case 2.
+   ```
+
+   In the 3D viewer you can select nodes, members and plates by clicking
+   them. The selection is passed to the assistant as context, so you can
+   point instead of listing Ids: select a few members and say *"change
+   these to a 250UC73"* or *"what's the maximum moment in these?"*
+
+   Edits apply to the open job immediately. Deletions are previewed first:
+   the assistant lists what would go and asks before deleting.
+
+1. **Run an analysis**
+
+   ```text
+   Run a linear static analysis for load cases 1 to 3.
+   ```
+
+   The assistant starts the run, waits for it, and reports warnings or
+   errors.
+
+1. **Read results**
+
+   ```text
+   What are the maximum support reactions, and which load case governs?
+   ```
+
+   Results tools sort and page, so "the five members with the largest
+   bending moment" is one call.
+
+1. **Save**
+
+   ```text
+   Save the job.
+   ```
+
+   Nothing is written to disk until you ask to save (or save as a new file).
+</Stepper>
+
+## More prompts to try
+
+- *"Add a pinned support at every node at ground level."*
+- *"Change member 7 to a 250UC73 and re-run the analysis."*
+- *"Which load combinations are defined, and what factors do they use?"*
+- *"Run a buckling analysis for combination 10 and report the first three load factors."*
+- *"Set up a steel design group for members 12 to 15 and check it to AS 4100."*
+- *"Export the model to IFC in C:\Exports."*
+- *"Set up a T44 vehicle travelling along nodes 1 to 6 and generate the moving-load cases."*
+
+## Good to know
+
+- **Units** are the job's own units; the assistant reads them from
+  `get_job_status` before writing values.
+- **Read-only exploring** — ask to *"switch the API to read-only"* and the
+  assistant calls `set_access_mode`. Writes are then refused until you
+  switch back, and the API's licence seat is released for someone else.
+- **Steel design** needs static results first, and a design group with
+  explicit effective lengths (or a buckling analysis) — the assistant will
+  tell you what is missing.
+- **3D viewer and shape builder** render in any client that supports MCP
+  Apps, such as Claude Desktop. Other clients get a text description.
+- **Anything the named tools don't cover** — job headings, settings,
+  imports — the assistant reaches through `call_api`, after looking the
+  endpoint up with `search_api` and `describe_endpoint`.
+
+See [What the assistant can do](/mcp/tools) for every kind of task, with
+prompts to try.

@@ -1,0 +1,276 @@
+---
+title: Troubleshooting
+description: Fix the SPACE GASS MCP server when tools don't appear or can't connect, change the API port, and update or remove the server
+---
+
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "zudoku/ui/Accordion";
+
+Click the symptom that matches what you see. Client-specific notes are also
+at the end of each client's page.
+
+## Connecting
+
+<Accordion type="single" collapsible className="[&_h3]:my-0 [&_h3]:text-base [&_h3]:font-medium">
+<AccordionItem value="cannot-connect">
+<AccordionTrigger className="text-left">Every tool call fails with "Cannot connect to the SPACE GASS API"</AccordionTrigger>
+<AccordionContent>
+
+**Why:** The SPACE GASS API service isn't running — it was never started, it
+was closed, or (in the unlikely event) it crashed — or it is listening on a
+different port from the one the server expects.
+
+**Fix:** Start the **SPACE GASS API** shortcut from the Start menu and ask
+the assistant to retry; the server reconnects on the next call. If you
+changed the port in SPACE GASS, see [Changing the API port](#changing-the-api-port).
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="no-tools">
+<AccordionTrigger className="text-left">The assistant says it has no SPACE GASS tools</AccordionTrigger>
+<AccordionContent>
+
+**Why:** Your AI client hasn't started the server — the entry is missing,
+disabled, or points at the wrong path.
+
+**Fix:** Check the client's MCP server list (Claude Desktop:
+**Settings › Extensions**; VS Code: **MCP: List Servers**; Claude Code:
+`/mcp`). Fix or re-add the entry, then restart the client. The exe is at
+`C:\Program Files\SPACE GASS 14.5\MCP\server\SpaceGassApi.Mcp.exe` — the
+folder name changes with the SPACE GASS version.
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="failed-to-start">
+<AccordionTrigger className="text-left">The client reports the server failed to start</AccordionTrigger>
+<AccordionContent>
+
+**Why:** Usually the path: the exe isn't where the entry says, or the
+backslashes in a JSON config weren't doubled.
+
+**Fix:** Confirm the exe exists at
+`C:\Program Files\SPACE GASS 14.5\MCP\server\SpaceGassApi.Mcp.exe`. In JSON
+every `\` must be written `\\`. Open the server's output (VS Code:
+**MCP: List Servers › spacegass › Show Output**) for the exact error.
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="after-upgrade">
+<AccordionTrigger className="text-left">After upgrading SPACE GASS the server stopped working</AccordionTrigger>
+<AccordionContent>
+
+**Why:** A major version changed the installation folder name, so configured
+paths no longer resolve — or Claude Desktop still has the old copy of the
+extension.
+
+**Fix:** See [After upgrading SPACE GASS](#after-upgrading-space-gass).
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="gitmcp">
+<AccordionTrigger className="text-left">The assistant can search the SPACE GASS docs but can't open or edit a model</AccordionTrigger>
+<AccordionContent>
+
+**Why:** You connected `gitmcp.io/SpaceGass/space-gass-api`, a
+*documentation search* server for developers writing code against the REST
+API. It isn't the SPACE GASS MCP server and can't control SPACE GASS.
+
+**Fix:** Install the SPACE GASS MCP server from your SPACE GASS installation
+folder: [Get started](/mcp#get-started).
+
+</AccordionContent>
+</AccordionItem>
+</Accordion>
+
+## Claude Desktop
+
+<Accordion type="single" collapsible className="[&_h3]:my-0 [&_h3]:text-base [&_h3]:font-medium">
+<AccordionItem value="claude-spins">
+<AccordionTrigger className="text-left">Tools are missing, or the first tool call spins forever</AccordionTrigger>
+<AccordionContent>
+
+**Why:** Claude Desktop only starts extensions when the app launches, and it
+never restarts a server that has died.
+
+**Fix:** Fully quit Claude Desktop from the system tray — closing the window
+isn't enough — and reopen it.
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="mcpb-closes">
+<AccordionTrigger className="text-left">Double-clicking spacegass.mcpb does nothing, or the install window closes by itself</AccordionTrigger>
+<AccordionContent>
+
+**Why:** The Microsoft Store (MSIX) build of Claude Desktop has a known issue
+with `.mcpb` installs.
+
+**Fix:** Install Claude Desktop from
+[claude.ai/download](https://claude.ai/download) instead, or use
+**Settings › Extensions › Advanced settings › Install Extension…** and pick
+the file.
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="allowlist">
+<AccordionTrigger className="text-left">Claude Desktop refuses to install the extension</AccordionTrigger>
+<AccordionContent>
+
+**Why:** On Claude Team and Enterprise plans an administrator can turn on an
+extension allowlist, which blocks anything not on it.
+
+**Fix:** Ask your Claude administrator to add the SPACE GASS bundle to the
+allowlist.
+
+</AccordionContent>
+</AccordionItem>
+</Accordion>
+
+## Using the tools
+
+<Accordion type="single" collapsible className="[&_h3]:my-0 [&_h3]:text-base [&_h3]:font-medium">
+<AccordionItem value="job-not-open">
+<AccordionTrigger className="text-left">Tool calls fail with JOB_NOT_OPEN</AccordionTrigger>
+<AccordionContent>
+
+**Why:** No job is open. Everything except opening or creating a job needs
+one.
+
+**Fix:** Ask the assistant to open a file or sample, or create a new job.
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="read-only">
+<AccordionTrigger className="text-left">Edits are refused as read-only</AccordionTrigger>
+<AccordionContent>
+
+**Why:** The API is in ReadOnly mode — you (or someone) asked for it, or
+every licence seat was in use.
+
+**Fix:** Ask the assistant to switch the API back to read/write.
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="licence">
+<AccordionTrigger className="text-left">The API won't start, or reports a licence error</AccordionTrigger>
+<AccordionContent>
+
+**Why:** API access isn't on your SPACE GASS licence, or every seat is in
+use.
+
+**Fix:** See [Licensing](/licensing). Switching the API to read-only
+releases a seat for someone else.
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="steel-design">
+<AccordionTrigger className="text-left">Steel design won't run</AccordionTrigger>
+<AccordionContent>
+
+**Why:** A design run needs static analysis results, and a design group whose
+compression effective lengths are known.
+
+**Fix:** Run a static analysis first. Give the group explicit effective
+lengths, or run a buckling analysis so they can be derived. The assistant
+will tell you which is missing.
+
+</AccordionContent>
+</AccordionItem>
+
+<AccordionItem value="viewer-text">
+<AccordionTrigger className="text-left">"Show me in 3D" returns text instead of a viewer</AccordionTrigger>
+<AccordionContent>
+
+**Why:** Your client doesn't support MCP Apps, which is how the 3D viewer and
+shape builder render.
+
+**Fix:** Use a client that does (Claude Desktop, for example). Other clients
+get a text description instead.
+
+</AccordionContent>
+</AccordionItem>
+</Accordion>
+
+## Changing the API port
+
+By default the server connects to `http://localhost:34560`. If you changed
+the API port in SPACE GASS, tell the server where to look. In order of
+precedence it uses:
+
+1. the `SPACEGASS_API_URL` environment variable;
+2. the first command-line argument;
+3. the default.
+
+In Claude Desktop, set **SPACE GASS API URL** in the extension's settings
+(**Settings › Extensions › SPACE GASS**). In other clients, add the
+environment variable to the server entry — the `mcpServers` shape takes the
+same `env` block:
+
+```json
+{
+  "servers": {
+    "spacegass": {
+      "type": "stdio",
+      "command": "C:\\Program Files\\SPACE GASS 14.5\\MCP\\server\\SpaceGassApi.Mcp.exe",
+      "env": {
+        "SPACEGASS_API_URL": "http://localhost:34561"
+      }
+    }
+  }
+}
+```
+
+## After upgrading SPACE GASS
+
+The installer replaces the whole `MCP\` folder, so the server always matches
+the SPACE GASS beside it; its version is the SPACE GASS build (for example
+`14.51.1`).
+
+- **Clients that launch the exe** (Claude Code, VS Code, Visual Studio,
+  Copilot CLI, Codex, Cursor, …) pick the update up automatically — unless a
+  major version changed the folder name (`SPACE GASS 14.5` → `SPACE GASS 15`),
+  in which case update the path in your configuration.
+- **Claude Desktop** keeps its own copy of the bundle. Open the new
+  `spacegass.mcpb` again to update the extension.
+
+## Removing the server
+
+| Client | How |
+|---|---|
+| Claude Desktop | **Settings › Extensions**, select **SPACE GASS**, remove |
+| Claude Code | `claude mcp remove spacegass` |
+| VS Code / Visual Studio | Delete the `spacegass` entry from `mcp.json` / `.mcp.json` |
+| Copilot CLI | `copilot mcp remove spacegass` |
+| Codex CLI | `codex mcp remove spacegass` |
+| Cursor, Windsurf, others | Delete the `spacegass` entry from the client's config file |
+
+Uninstalling SPACE GASS removes the server itself; client entries that point
+at it then fail to start until you remove them too.
+
+## Logs
+
+The server writes its log to standard error, which the client captures:
+
+| Client | Where |
+|---|---|
+| Claude Desktop | `%AppData%\Claude\logs\mcp.log` (how the client launched the server) and `%AppData%\Claude\logs\mcp-server-spacegass.log` (the server's own output) |
+| Claude Code | `claude mcp get spacegass`, or `/mcp` inside Claude Code |
+| VS Code | **MCP: List Servers › spacegass › Show Output** |
+| Other clients | The client's MCP server output panel |
+
+The API service has its own window; errors from the SPACE GASS engine are
+also available to the assistant through `get_errors`.
+
+## Still stuck?
+
+Email [support@spacegass.com](mailto:support@spacegass.com) with your
+SPACE GASS version, the client and its version, what you asked the
+assistant, the error text, and whether the API service was running. See
+[Support](/support).

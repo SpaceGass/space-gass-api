@@ -1,0 +1,154 @@
+---
+title: What the assistant can do
+description: The SPACE GASS tasks an AI assistant can carry out through the MCP server, with example prompts and the tools it uses for each
+---
+
+You never call tools yourself — you describe what you want and the assistant
+picks the tool. This page lists the kinds of task it can carry out, with
+prompts to try, and names the tools behind each so you recognise them when
+your client asks you to approve a call.
+
+A few things hold everywhere:
+
+- **Reads never change anything.** Tools under *Reads* only return what the
+  job stores or has computed.
+- **Writes change the open job in memory**, not on disk — nothing is saved
+  until you ask. Deletions are previewed first. Every write can also be run
+  as a preview that reports what would change without changing it.
+- **Values are in the job's units**, and lists of Ids use SPACE GASS list
+  form, so "members 1-7, 10" means what it says in SPACE GASS.
+
+## Jobs
+
+Open, create, save and close `.sg` files. One job is open at a time; the
+assistant always checks the job before doing anything else.
+
+> *"Open the Portal Frame sample."* · *"Open C:\Jobs\Warehouse.sg."* ·
+> *"Start a new job from C:\Templates\Office.sgbase."* · *"Save as
+> Warehouse-v2.sg."*
+
+**Reads:** `get_job_status` · **Writes:** `new_job` · `open_job` · `save_job` · `close_job`
+
+Ask to *"switch the API to read-only"* and the assistant calls
+`set_access_mode`: writes are refused until you switch back, and your
+licence seat is released. It only changes this when you ask.
+
+## Structure
+
+Nodes, members, plates, member offsets, supports and master–slave
+constraints — built by position, one call for a whole frame.
+
+> *"Add a 6 m 310UB40 beam between nodes 3 and 4."* · *"Pin every node at
+> ground level."* · *"Delete members 12 to 15 and anything left hanging."* ·
+> *"Tell me everything about member 7."*
+
+**Reads:** `read_structure` · `get_node_detail` · `get_member_detail` · `get_plate_detail`
+**Writes:** `edit_structure` · `edit_restraints` · `edit_constraints` · `delete_structure`
+
+## Sections and materials
+
+Library sections and materials by name (the assistant tolerates "310 UB 40.4"
+and "310ub40.4" alike), custom sections by their properties, and built-up
+sections assembled from library parts and plain shapes.
+
+> *"Change member 7 to a 250UC73."* · *"Add grade 350 steel."* ·
+> *"Build a section from two 150x90x10 angles under the flange of a 310UB40
+> with a 10 mm plate beneath, and show me."*
+
+**Reads:** `read_properties` · `resolve_section` · `resolve_material` · `view_section`
+**Writes:** `edit_properties` · `build_section`
+
+## Loads
+
+Load cases, combinations, groups and categories; node loads, prescribed
+displacements, lumped masses, member point and distributed loads, prestress,
+plate pressures, thermal loads and self weight.
+
+> *"Add a 5 kN/m downward UDL to members 1 to 4 in load case 2."* ·
+> *"Create combination 10 as 1.2 × case 1 + 1.5 × case 2."* · *"What loads
+> are on member 3?"*
+
+**Reads:** `read_load_cases` · `read_loads` · **Writes:** `edit_load_cases` · `edit_loads`
+
+## Moving loads
+
+Standard design vehicles (T44, M1600, HL-93 and others), moving patch loads,
+travel paths and scenarios, then generation of the moving-load cases.
+
+> *"Set up a T44 vehicle travelling along nodes 1 to 6 and generate the load
+> cases."*
+
+**Reads:** `read_moving_loads` · `resolve_vehicle` · **Writes:** `edit_moving_loads` · `generate_moving_loads`
+
+## Filters and plate layers
+
+Named filters (saved selections SPACE GASS can apply), plate cuts along
+which forces are reported, and plate strips for slab design.
+
+> *"Save a filter called Level 2 beams with members 20 to 45."* · *"Add a
+> cut across plates 1 to 6 between nodes 30 and 36."*
+
+**Reads:** `read_filters` · **Writes:** `edit_filters` · `edit_plate_cuts` · `edit_plate_strips`
+
+## Analysis
+
+Linear and non-linear static, buckling and dynamic (natural frequency)
+analyses. The assistant starts the run, waits for it and reports warnings and
+errors. Settings you pass are saved to the job.
+
+> *"Run a linear static analysis for load cases 1 to 3."* · *"Run a
+> buckling analysis for combination 10."* · *"Which load cases have results?"*
+
+**Reads:** `read_analysis_settings` · `get_analysis_info` · `get_run_status`
+**Writes:** `run_analysis` · `cancel_run`
+
+## Steel member design
+
+Design groups (chains of members with their effective lengths and flange
+restraints), then checks and designs to AS 4100 or NZS 3404. A design can
+replace the members' sections with the designed sizes and re-run the
+analysis. Needs static results first.
+
+> *"Set up a design group for members 12 to 15 with effective lengths of 1.0
+> and check it to AS 4100."* · *"Design the roof beams and update the
+> model."* · *"Which groups failed, and on what check?"*
+
+**Reads:** `read_steel_members` · `read_steel_design_settings` · `get_steel_design_results`
+**Writes:** `edit_steel_members` · `run_steel_member_check` · `run_steel_member_design`
+
+## Results
+
+Node displacements and reactions, the equilibrium check, member end and
+intermediate forces, plate forces and stresses, buckling load factors,
+natural frequencies and mass participation. Results are sorted and paged, so
+"the governing rows" is one call.
+
+> *"What are the maximum reactions, and which case governs?"* · *"The five
+> members with the largest bending moment in combination 10."* · *"Is case 2
+> in equilibrium?"* · *"First three buckling load factors."*
+
+**Reads:** `get_node_results` · `get_reaction_summary` · `get_member_results` ·
+`get_plate_results` · `get_buckling_results` · `get_dynamic_results`
+
+## Inspect and export
+
+The interactive 3D viewer (in any client that supports MCP Apps, such as
+Claude Desktop) — click to select nodes, members and plates so the assistant
+knows what "these" means — the engine's recent errors and warnings, and IFC
+export.
+
+> *"Show me the model in 3D."* · *"Any errors from that last run?"* ·
+> *"Export the model to IFC in C:\Exports."*
+
+**Reads:** `view_model` · `get_errors` · **Writes:** `export_model`
+
+## Everything else
+
+For what the tools above don't cover — job headings, settings, imports, any
+of the 430+ operations in the [API Reference](/api) — the assistant looks
+the endpoint up and calls it directly.
+
+> *"Set the job title to Warehouse B and the engineer to J. Smith."* ·
+> *"Import C:\Models\frame.txt."*
+
+**Reads:** `list_api` · `search_api` · `describe_endpoint` · **Writes:** `call_api`

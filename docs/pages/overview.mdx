@@ -59,16 +59,26 @@ The machine-readable spec is published at
 [`api/1/schema.json`](https://api.spacegass.com/docs/api/1/schema.json)
 if you want to generate a client for another language or feed it to an LLM.
 
-## Using with AI coding agents
+## Using with AI assistants
 
-Building scripts with an AI assistant (Claude Code, Cursor, Copilot, ChatGPT)?
-Point it at these single, clean, machine-readable entry points instead of
-letting it crawl the source repo:
+There are two different ways to bring an AI assistant to SPACE GASS:
+
+**Drive SPACE GASS from an assistant.** Open models, edit them, run analyses
+and read results by talking to Claude Desktop, GitHub Copilot or another
+desktop MCP client — no code. Install the
+[SPACE GASS MCP server](/mcp), which ships with SPACE GASS 14.5.
+
+**Write code against the API.** Building scripts with an AI coding assistant
+(Claude Code, Cursor, Copilot, ChatGPT)? Point it at these single, clean,
+machine-readable entry points instead of letting it crawl the source repo:
 
 - **Full docs bundle for LLMs:** [`llms-full.txt`](https://api.spacegass.com/docs/llms-full.txt)
 - **OpenAPI spec (JSON):** [`api/1/schema.json`](https://api.spacegass.com/docs/api/1/schema.json)
-- **Repo as an MCP server** (search docs, examples, and code with zero setup):
-  [`gitmcp.io/SpaceGass/space-gass-api`](https://gitmcp.io/SpaceGass/space-gass-api)
+- **Repo as a documentation-search MCP server** (search docs, examples, and
+  code with zero setup):
+  [`gitmcp.io/SpaceGass/space-gass-api`](https://gitmcp.io/SpaceGass/space-gass-api).
+  This is not the SPACE GASS MCP server above — it reads this site and the
+  SDK source; it does not control SPACE GASS.
 
 Or paste this primer straight into your AI assistant to point it at everything
 in one step:
@@ -79,6 +89,7 @@ service at http://localhost:34560 (base path /api/v1). Load these first:
 - Full docs bundle:  https://api.spacegass.com/docs/llms-full.txt
 - OpenAPI spec:      https://api.spacegass.com/docs/api/1/schema.json
 - Repo via GitMCP:   https://gitmcp.io/SpaceGass/space-gass-api
+- MCP server that drives SPACE GASS directly (desktop clients): https://api.spacegass.com/docs/mcp
 
 SDKs (Kiota, fluent builder chains, async):
 - Python:  pip install space-gass-api    ->  from space_gass_api import SpaceGassApiClient
@@ -94,3 +105,5 @@ Use raw.githubusercontent.com for repo files, never /blob/ URLs.
 - [Simple Beam Model](/examples/simple-beam) — Full walkthrough
   building a model, running analysis, and querying results
 - [API Reference](/api) — Browse all endpoints interactively
+- [MCP Server](/mcp) — Drive SPACE GASS from Claude Desktop, GitHub Copilot
+  and other AI desktop apps, no code required

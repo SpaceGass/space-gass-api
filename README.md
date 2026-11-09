@@ -85,14 +85,16 @@ finally:
 
 For the full walk-through see the [Quick Start](https://api.spacegass.com/docs/getting-started/quick-start). More examples are in `sdks/csharp/examples/` and `sdks/python/examples/`, or clone the repo and browse.
 
-## Using with AI coding agents
+## Using with AI assistants
 
-Writing scripts against this API with an AI assistant (Claude Code, Cursor, Copilot, ChatGPT, etc.)? Point the agent at the resources below rather than letting it crawl this repo — the docs bundle and OpenAPI spec are single, clean, machine-readable fetches.
+**Drive SPACE GASS from an assistant, no code:** SPACE GASS 14.51+ ships an MCP server that lets Claude Desktop, GitHub Copilot and other desktop MCP clients open models, run analyses and read results. Install steps: <https://api.spacegass.com/docs/mcp>.
+
+**Writing scripts against this API** with an AI coding assistant (Claude Code, Cursor, Copilot, ChatGPT, etc.)? Point the agent at the resources below rather than letting it crawl this repo — the docs bundle and OpenAPI spec are single, clean, machine-readable fetches.
 
 - **Full docs bundle for LLMs:** <https://api.spacegass.com/docs/llms-full.txt>
 - **Docs index:** <https://api.spacegass.com/docs/llms.txt>
 - **OpenAPI spec (JSON):** <https://api.spacegass.com/docs/api/1/schema.json>
-- **This repo as an MCP server** (lets an agent search the docs, examples, and code with zero setup): <https://gitmcp.io/SpaceGass/space-gass-api>
+- **This repo as a documentation-search MCP server** (lets an agent search the docs, examples, and code with zero setup; it does not control SPACE GASS — that is the MCP server above): <https://gitmcp.io/SpaceGass/space-gass-api>
 - **Repo-root agent instructions:** [`AGENTS.md`](AGENTS.md)
 
 Paste this to prime an agent:
@@ -103,6 +105,7 @@ service at http://localhost:34560 (base path /api/v1). Load these first:
 - Full docs bundle:  https://api.spacegass.com/docs/llms-full.txt
 - OpenAPI spec:      https://api.spacegass.com/docs/api/1/schema.json
 - Repo via GitMCP:   https://gitmcp.io/SpaceGass/space-gass-api
+- MCP server that drives SPACE GASS directly (desktop clients): https://api.spacegass.com/docs/mcp
 
 SDKs (Kiota, fluent builder chains, async):
 - Python:  pip install space-gass-api    ->  from space_gass_api import SpaceGassApiClient

@@ -1,0 +1,167 @@
+---
+title: Claude Desktop
+description: Install the SPACE GASS MCP server in Claude Desktop from the bundled .mcpb extension, or add it to Claude Code with one command
+---
+
+<Callout type="tip" title="Supported">
+
+Claude Desktop for Windows installs the SPACE GASS server as an extension from
+the `.mcpb` bundle that ships with SPACE GASS. Claude Code adds it with one
+command. claude.ai in the browser can't use it — see
+[below](#claudeai-in-the-browser).
+
+</Callout>
+
+## Prerequisites
+
+The [general prerequisites](/mcp#get-started) — SPACE GASS 14.51 or later
+with API access, and the SPACE GASS API service running — plus **Claude
+Desktop** for Windows (the direct installer from
+[claude.ai/download](https://claude.ai/download); see
+[Troubleshooting](#troubleshooting) about the Microsoft Store build) or
+**Claude Code**.
+
+## Claude Desktop
+
+<Stepper>
+1. **Start the SPACE GASS API service**
+
+   Double-click the **SPACE GASS API** shortcut in the Start menu and leave
+   it running.
+
+1. **Open the extension bundle**
+
+   Double-click the bundle in your SPACE GASS installation folder:
+
+   ```text
+   C:\Program Files\SPACE GASS 14.5\MCP\spacegass.mcpb
+   ```
+
+   Claude Desktop opens a preview of the extension. If double-clicking does
+   nothing, drag the file onto the Claude Desktop window, or in Claude go to
+   **Settings › Extensions › Advanced settings › Install Extension…** and
+   pick the file.
+
+1. **Install**
+
+   Review the details and click **Install**. Leave **SPACE GASS API URL** at
+   its default (`http://localhost:34560`) unless you have changed the API
+   port — see [Changing the API port](/mcp/troubleshooting#changing-the-api-port).
+
+1. **Check it is enabled**
+
+   **Settings › Extensions** now lists **SPACE GASS**. If it is not switched
+   on, switch it on. If the tools still don't appear in a new chat, fully
+   quit Claude Desktop from the system tray and reopen it — extensions only
+   start with the app.
+</Stepper>
+
+The extension is installed for your Windows user only. On Claude Team and
+Enterprise plans an administrator may have turned on the desktop extension
+allowlist, in which case they need to add the bundle before you can
+install it.
+
+### Verify
+
+In a new chat, ask:
+
+```text
+Is a SPACE GASS job open?
+```
+
+The assistant should call the `get_job_status` tool and tell you that no job
+is open (or which one is). Then try [your first session](/mcp/first-session).
+
+### Update or remove
+
+Claude Desktop keeps its own copy of the extension, so after upgrading
+SPACE GASS open the new `spacegass.mcpb` again to update it. To remove it,
+open **Settings › Extensions**, select **SPACE GASS** and remove it.
+
+### Troubleshooting
+
+- **Tools don't appear, or the first tool call spins forever** — fully quit
+  Claude Desktop from the system tray (not just the window) and reopen it.
+  Claude Desktop only starts extensions at launch and never reconnects a
+  server that has died.
+- **The install window closes by itself** — this is a known issue with the
+  Microsoft Store (MSIX) build of Claude Desktop. Install Claude Desktop from
+  [claude.ai/download](https://claude.ai/download) instead.
+- **"Cannot connect to the SPACE GASS API"** — the API service isn't running,
+  or runs on a different port. Start it, or set the URL in the extension's
+  settings.
+- Logs are in `%AppData%\Claude\logs\mcp.log` and
+  `%AppData%\Claude\logs\mcp-server-spacegass.log`.
+
+Everything else: [Troubleshooting](/mcp/troubleshooting).
+
+## Claude Code
+
+Claude Code launches the server exe directly — no bundle needed.
+
+<Stepper>
+1. **Start the SPACE GASS API service**
+
+   Double-click the **SPACE GASS API** shortcut in the Start menu and leave
+   it running.
+
+1. **Add the server**
+
+   In a terminal (any folder — `--scope user` makes it available in every
+   project):
+
+   ```bash
+   claude mcp add --scope user spacegass -- "C:\Program Files\SPACE GASS 14.5\MCP\server\SpaceGassApi.Mcp.exe"
+   ```
+
+   To share it with a team instead, commit a `.mcp.json` in the project root:
+
+   ```json
+   {
+     "mcpServers": {
+       "spacegass": {
+         "command": "C:\\Program Files\\SPACE GASS 14.5\\MCP\\server\\SpaceGassApi.Mcp.exe"
+       }
+     }
+   }
+   ```
+
+1. **Check the connection**
+
+   Run `claude mcp list`, or type `/mcp` inside Claude Code. `spacegass`
+   should show as connected.
+</Stepper>
+
+### Verify
+
+Ask Claude Code:
+
+```text
+Is a SPACE GASS job open?
+```
+
+It should call `get_job_status` and answer from the result. Then try
+[your first session](/mcp/first-session).
+
+### Update or remove
+
+Claude Code launches the exe from the install folder, so a SPACE GASS update
+is picked up automatically — unless the folder name changes with a major
+version, in which case run the `claude mcp add` command again with the new
+path. To remove it: `claude mcp remove spacegass`.
+
+### Troubleshooting
+
+- **`spacegass` shows as failed in `/mcp`** — check the path exists and the
+  API service is running, then `claude mcp get spacegass` to see the stored
+  command.
+- **The server's tools are not found** — Claude Code loads tool names lazily;
+  ask for a SPACE GASS task and it searches the server's tools.
+
+Everything else: [Troubleshooting](/mcp/troubleshooting).
+
+## claude.ai in the browser
+
+Not available. claude.ai connects only to MCP servers hosted on the internet,
+and the SPACE GASS server is a program on your PC. Use Claude Desktop for
+chat or Claude Code for coding — both talk to the same server.
