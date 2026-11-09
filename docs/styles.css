@@ -1,0 +1,24 @@
+/* Site-specific styles, imported by zudoku.config.tsx. */
+
+/*
+ * "New" chip on the MCP tab in the top navigation. Zudoku's nav config only
+ * allows badges on doc items, not on top-level categories, so the chip is
+ * drawn with CSS on the tab link instead. Scoped to `header nav` so the
+ * sidebar "Overview" link and the banner link (same href) are not affected.
+ * Uses ::before (the active-tab underline owns ::after) and flex `order` to
+ * sit after the label. Remove this rule once the MCP server is no longer new.
+ */
+header nav a[href="/docs/mcp"]::before {
+  content: "New";
+  order: 99;
+  padding: 0.1rem 0.45rem;
+  border-radius: 9999px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 0.1em;
+  background: var(--accent, #f97316);
+  color: var(--accent-foreground, #ffffff);
+}
