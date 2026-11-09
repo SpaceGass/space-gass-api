@@ -223,7 +223,7 @@ const config: ZudokuConfig = {
     banner: {
       message: (
         <div className="text-center">
-          🤖 New in SPACE GASS 14.51 — the MCP server lets Claude Desktop
+          🤖 New in SPACE GASS 14.51 — the MCP server lets your AI agent
           build, analyse and design your models.{" "}
           <a href="/docs/mcp" className="font-semibold underline">
             Get started →
