@@ -85,7 +85,7 @@ function svg(p) {
   <text x="66" y="47" ${font} font-size="14" font-weight="600" letter-spacing="0.08em" fill="${p.muted}">YOUR PC</text>
   ${card(p, 52, "Your AI app", ["Claude Desktop, Claude Code,", "VS Code, Cursor and more"], iconChat)}
   ${arrow(p, 296)}
-  ${card(p, 322, "SPACE GASS MCP", "installed with SPACE GASS 14.5", iconPlug)}
+  ${card(p, 322, "SPACE GASS MCP", "installed with SPACE GASS 14.51", iconPlug)}
   ${arrow(p, 566)}
   ${card(p, 592, "SPACE GASS", "the API service, running", iconFrame)}
   <text x="440" y="262" text-anchor="middle" ${font} font-size="14" fill="${p.muted}">Everything runs here. Your model never leaves your machine.</text>

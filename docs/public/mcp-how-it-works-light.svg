@@ -31,7 +31,7 @@
   <path d="M10 14h24v6a12 12 0 0 1-24 0z"/>
   <path d="M22 32v8"/></g>
     <text x="118" y="100" text-anchor="middle" font-family="'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="19" font-weight="700" fill="#024f6e">SPACE GASS MCP</text>
-    <text x="118" y="128" text-anchor="middle" font-family="'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#64748b">installed with SPACE GASS 14.5</text>
+    <text x="118" y="128" text-anchor="middle" font-family="'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif" font-size="13" fill="#64748b">installed with SPACE GASS 14.51</text>
   </g>
   
   <g stroke="#f97316" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
