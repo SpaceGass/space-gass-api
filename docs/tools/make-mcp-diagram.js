@@ -33,13 +33,19 @@ const palettes = {
 
 const font = `font-family="'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"`;
 
+// `subtitle` is one line or an array of up to two lines (each must fit ~200px at 13px).
 function card(p, x, title, subtitle, icon) {
+  const lines = Array.isArray(subtitle) ? subtitle : [subtitle];
+  const firstY = lines.length > 1 ? 120 : 128;
+  const sub = lines
+    .map((line, i) => `<text x="118" y="${firstY + i * 18}" text-anchor="middle" ${font} font-size="13" fill="${p.muted}">${line}</text>`)
+    .join("\n    ");
   return `
   <g transform="translate(${x} 78)">
     <rect width="236" height="150" rx="14" fill="${p.card}" stroke="${p.cardStroke}" stroke-width="1.5"/>
-    <g transform="translate(96 22)" fill="none" stroke="${p.icon}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${icon}</g>
-    <text x="118" y="104" text-anchor="middle" ${font} font-size="19" font-weight="700" fill="${p.fg}">${title}</text>
-    <text x="118" y="128" text-anchor="middle" ${font} font-size="13" fill="${p.muted}">${subtitle}</text>
+    <g transform="translate(96 20)" fill="none" stroke="${p.icon}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${icon}</g>
+    <text x="118" y="100" text-anchor="middle" ${font} font-size="19" font-weight="700" fill="${p.fg}">${title}</text>
+    ${sub}
   </g>`;
 }
 
@@ -77,7 +83,7 @@ function svg(p) {
     <path d="M7 20h8M11 15v5"/>
   </g>
   <text x="66" y="47" ${font} font-size="14" font-weight="600" letter-spacing="0.08em" fill="${p.muted}">YOUR PC</text>
-  ${card(p, 52, "Your AI app", "Claude Desktop, VS Code, Claude Code…", iconChat)}
+  ${card(p, 52, "Your AI app", ["Claude Desktop, Claude Code,", "VS Code, Cursor and more"], iconChat)}
   ${arrow(p, 296)}
   ${card(p, 322, "SPACE GASS MCP", "installed with SPACE GASS 14.5", iconPlug)}
   ${arrow(p, 566)}
