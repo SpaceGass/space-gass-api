@@ -37,8 +37,8 @@ tool call fails, see [Troubleshooting](/mcp/troubleshooting).
    Summarise the model: nodes, members, plates, load cases, units.
    ```
 
-   In Claude Desktop, *"Show me the model in 3D"* opens an interactive
-   viewer of the model.
+   *"Show me the model in 3D"* opens an interactive viewer of the model in
+   any client that supports MCP Apps, such as Claude Desktop.
 
 1. **Edit it**
 
@@ -101,8 +101,8 @@ tool call fails, see [Troubleshooting](/mcp/troubleshooting).
 - **Steel design** needs static results first, and a design group with
   explicit effective lengths (or a buckling analysis) — the assistant will
   tell you what is missing.
-- **3D viewer and shape builder** render inside Claude Desktop. Other clients
-  get a text description.
+- **3D viewer and shape builder** render in any client that supports MCP
+  Apps, such as Claude Desktop. Other clients get a text description.
 - **Anything the named tools don't cover** — job headings, settings,
   imports — the assistant reaches through `call_api`, after looking the
   endpoint up with `search_api` and `describe_endpoint`.

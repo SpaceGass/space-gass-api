@@ -18,7 +18,7 @@ of each client's page.
 | Writes are refused as read-only | The API is in ReadOnly mode | Ask the assistant to switch the API to read/write (`set_access_mode`). |
 | The API refuses to start, or reports a licence error | API access isn't on your licence, or every seat is in use | See [Licensing](/licensing). Read-only mode releases a seat. |
 | Steel design won't run | No static results, or the design group lacks effective lengths | Run a static analysis first; give the group explicit compression effective lengths, or run a buckling analysis. |
-| "Show me in 3D" returns text instead of a viewer | The client doesn't support MCP Apps | The 3D viewer and shape builder render in Claude Desktop. Other clients get a description. |
+| "Show me in 3D" returns text instead of a viewer | The client doesn't support MCP Apps | The 3D viewer and shape builder render in any client that supports MCP Apps (Claude Desktop does). Other clients get a text description. |
 | After upgrading SPACE GASS the server stopped working | The installation folder name changed, or Claude Desktop still has the old extension | See [After upgrading SPACE GASS](#after-upgrading-space-gass). |
 | The assistant can search the SPACE GASS docs but can't open or edit a model | You connected `gitmcp.io/SpaceGass/space-gass-api`, a *documentation search* server for developers — not the SPACE GASS MCP server | Install the SPACE GASS MCP server from your SPACE GASS installation folder: [Get started](/mcp#get-started). |
 
