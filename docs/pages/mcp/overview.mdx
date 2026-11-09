@@ -8,6 +8,11 @@ The SPACE GASS MCP server lets an AI assistant such as **Claude Desktop** or
 or edit the structure, apply loads, run analyses and steel design, and read
 the results back — all by talking to SPACE GASS on your own PC.
 
+It is installed with SPACE GASS 14.5 and later and needs
+[API access](/licensing). Your model never leaves your machine: the
+assistant talks to a small program on your PC, which talks to the SPACE GASS
+API on `localhost`.
+
 ## What you can do
 
 - **Build and edit models** — nodes, members, plates, supports, sections and
@@ -21,36 +26,6 @@ the results back — all by talking to SPACE GASS on your own PC.
 - **See it** — an interactive 3D viewer and section shape builder (Claude
   Desktop); select nodes, members and plates in the viewer and the assistant
   knows what you mean by "these"
-
-## How it works
-
-The MCP server is installed with SPACE GASS 14.5 and later and needs
-[API access](/licensing). Your model never leaves your machine: the
-assistant talks to a small program on your PC, which talks to the SPACE GASS
-API on `localhost`.
-
-```text
-AI desktop app    (Claude Desktop, VS Code, Claude Code, Cursor, ...)
-     │  MCP over stdio — a local child process, no network
-     ▼
-SpaceGassApi.Mcp.exe        installed with SPACE GASS, in MCP\server\
-     │  HTTP — http://localhost:34560
-     ▼
-SpaceGassApi.exe            the SPACE GASS API service — must be running
-     │
-     ▼
-SPACE GASS engine and your .sg files
-```
-
-<Callout type="caution" title="Desktop apps only — web clients will not work">
-
-The MCP server is a program on your PC, so only a **desktop app** that can
-launch it can use it. **Web clients will not work:** ChatGPT, Gemini, Grok,
-or Claude in the browser (claude.ai) cannot connect to it. Use Claude Desktop
-for chat, or a desktop coding tool such as VS Code, Claude Code or Cursor.
-See [Web Clients (ChatGPT)](/mcp/web-clients).
-
-</Callout>
 
 ## Prerequisites
 
@@ -72,6 +47,16 @@ which every other client launches directly. The installer replaces this
 folder on every upgrade, so the server always matches your SPACE GASS.
 
 ## Pick your client
+
+<Callout type="caution" title="Desktop apps only — web clients will not work">
+
+The MCP server is a program on your PC, so only a **desktop app** that can
+launch it can use it. **Web clients will not work:** ChatGPT, Gemini, Grok,
+or Claude in the browser (claude.ai) cannot connect to it. Use Claude Desktop
+for chat, or a desktop coding tool such as VS Code, Claude Code or Cursor.
+See [Web Clients (ChatGPT)](/mcp/web-clients).
+
+</Callout>
 
 | Desktop client | How it connects |
 |---|---|
