@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class AnalysisRun : IParsable
     {
-        /// <summary>SPACEGASS analysis types. Values map to the SPACEGASS internal SGAnalysisType IDs.</summary>
+        /// <summary>SPACE GASS analysis types.</summary>
         public global::SpaceGassApi.Models.AnalysisType? AnalysisType { get; set; }
         /// <summary>When the run finished. Null if still running.</summary>
         public DateTimeOffset? CompletedAt { get; set; }
@@ -25,7 +25,7 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.ConvergenceEntry> ConvergenceHistory { get; set; }
 #endif
-        /// <summary>Total elapsed time as a formatted string (e.g., &quot;00:01:23.456&quot;).Live-computed while Running or Cancelling, stored after completion. Null while Queued.</summary>
+        /// <summary>Execution time as a formatted string (e.g., &quot;00:01:23.456&quot;), from startedAt;the queue wait is not included. Live-computed while Running or Cancelling,stored after completion. Absent while Queued, and for a run cancelled whileit was still queued.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? ElapsedTime { get; set; }
@@ -33,7 +33,7 @@ namespace SpaceGassApi.Models
 #else
         public string ElapsedTime { get; set; }
 #endif
-        /// <summary>Error message if the run failed</summary>
+        /// <summary>Why the run failed, or why a queued run was cancelled before it started (forexample the job was closed or replaced first).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? ErrorMessage { get; set; }
@@ -57,7 +57,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.AnalysisRun_parameters Parameters { get; set; }
 #endif
-        /// <summary>Live progress data from the analysis solver.Captured via Windows messages from SGSolver.EXE to the display proxy window.</summary>
+        /// <summary>Live progress data from the analysis solver.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.AnalysisProgress? Progress { get; set; }
@@ -65,13 +65,17 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.AnalysisProgress Progress { get; set; }
 #endif
+        /// <summary>1-based position among the queued engine operations (analysis and designruns share one queue). Only present while the run is Queued.</summary>
+        public int? QueuePosition { get; set; }
         /// <summary>Unique identifier for this run</summary>
         public Guid? RunId { get; set; }
-        /// <summary>When the run was initiated</summary>
+        /// <summary>When the run started executing. Absent while Queued, and for a run cancelledwhile it was still queued.</summary>
         public DateTimeOffset? StartedAt { get; set; }
-        /// <summary>Status of an analysis run through its lifecycle.</summary>
-        public global::SpaceGassApi.Models.AnalysisRunStatus? Status { get; set; }
-        /// <summary>Warning messages generated during the analysis</summary>
+        /// <summary>Status of an engine run (analysis or design) through its lifecycle.</summary>
+        public global::SpaceGassApi.Models.RunStatus? Status { get; set; }
+        /// <summary>When the run was submitted (and queued)</summary>
+        public DateTimeOffset? SubmittedAt { get; set; }
+        /// <summary>Warning messages generated during the run</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<string>? Warnings { get; set; }
@@ -105,9 +109,11 @@ namespace SpaceGassApi.Models
                 { "header", n => { Header = n.GetStringValue(); } },
                 { "parameters", n => { Parameters = n.GetObjectValue<global::SpaceGassApi.Models.AnalysisRun_parameters>(global::SpaceGassApi.Models.AnalysisRun_parameters.CreateFromDiscriminatorValue); } },
                 { "progress", n => { Progress = n.GetObjectValue<global::SpaceGassApi.Models.AnalysisProgress>(global::SpaceGassApi.Models.AnalysisProgress.CreateFromDiscriminatorValue); } },
+                { "queuePosition", n => { QueuePosition = n.GetIntValue(); } },
                 { "runId", n => { RunId = n.GetGuidValue(); } },
                 { "startedAt", n => { StartedAt = n.GetDateTimeOffsetValue(); } },
-                { "status", n => { Status = n.GetEnumValue<global::SpaceGassApi.Models.AnalysisRunStatus>(); } },
+                { "status", n => { Status = n.GetEnumValue<global::SpaceGassApi.Models.RunStatus>(); } },
+                { "submittedAt", n => { SubmittedAt = n.GetDateTimeOffsetValue(); } },
                 { "warnings", n => { Warnings = n.GetCollectionOfPrimitiveValues<string>()?.AsList(); } },
             };
         }
@@ -126,9 +132,11 @@ namespace SpaceGassApi.Models
             writer.WriteStringValue("header", Header);
             writer.WriteObjectValue<global::SpaceGassApi.Models.AnalysisRun_parameters>("parameters", Parameters);
             writer.WriteObjectValue<global::SpaceGassApi.Models.AnalysisProgress>("progress", Progress);
+            writer.WriteIntValue("queuePosition", QueuePosition);
             writer.WriteGuidValue("runId", RunId);
             writer.WriteDateTimeOffsetValue("startedAt", StartedAt);
-            writer.WriteEnumValue<global::SpaceGassApi.Models.AnalysisRunStatus>("status", Status);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.RunStatus>("status", Status);
+            writer.WriteDateTimeOffsetValue("submittedAt", SubmittedAt);
             writer.WriteCollectionOfPrimitiveValues<string>("warnings", Warnings);
         }
     }

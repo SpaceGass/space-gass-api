@@ -4,6 +4,7 @@ using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Query.Geometry.Members;
 using SpaceGassApi.Job.Query.Geometry.Plates;
+using SpaceGassApi.Job.Query.Geometry.Sections;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -25,6 +26,11 @@ namespace SpaceGassApi.Job.Query.Geometry
         public global::SpaceGassApi.Job.Query.Geometry.Plates.PlatesRequestBuilder Plates
         {
             get => new global::SpaceGassApi.Job.Query.Geometry.Plates.PlatesRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The sections property</summary>
+        public global::SpaceGassApi.Job.Query.Geometry.Sections.SectionsRequestBuilder Sections
+        {
+            get => new global::SpaceGassApi.Job.Query.Geometry.Sections.SectionsRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>
         /// Instantiates a new <see cref="global::SpaceGassApi.Job.Query.Geometry.GeometryRequestBuilder"/> and sets the default values.

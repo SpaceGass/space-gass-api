@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.PlateElementStresses
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public PlateElementStressesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/plate-element-stresses{?limit*,loadCases*,offset*,plates*}", pathParameters)
+        public PlateElementStressesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/plate-element-stresses{?distinctBy*,limit*,loadCases*,maxAbsPaBtm*,maxAbsPaTop*,maxAbsPlasticStrain*,maxAbsSvmBtm*,maxAbsSvmMax*,maxAbsSvmTop*,maxAbsSxBtm*,maxAbsSxTop*,maxAbsSxpBtm*,maxAbsSxpTop*,maxAbsSyBtm*,maxAbsSyTop*,maxAbsSypBtm*,maxAbsSypTop*,maxAbsTmaxBtm*,maxAbsTmaxTop*,maxAbsTxyBtm*,maxAbsTxyTop*,maxAbsTxz*,maxAbsTyz*,maxPaBtm*,maxPaTop*,maxPlasticStrain*,maxSvmBtm*,maxSvmMax*,maxSvmTop*,maxSxBtm*,maxSxTop*,maxSxpBtm*,maxSxpTop*,maxSyBtm*,maxSyTop*,maxSypBtm*,maxSypTop*,maxTmaxBtm*,maxTmaxTop*,maxTxyBtm*,maxTxyTop*,maxTxz*,maxTyz*,minAbsPaBtm*,minAbsPaTop*,minAbsPlasticStrain*,minAbsSvmBtm*,minAbsSvmMax*,minAbsSvmTop*,minAbsSxBtm*,minAbsSxTop*,minAbsSxpBtm*,minAbsSxpTop*,minAbsSyBtm*,minAbsSyTop*,minAbsSypBtm*,minAbsSypTop*,minAbsTmaxBtm*,minAbsTmaxTop*,minAbsTxyBtm*,minAbsTxyTop*,minAbsTxz*,minAbsTyz*,minPaBtm*,minPaTop*,minPlasticStrain*,minSvmBtm*,minSvmMax*,minSvmTop*,minSxBtm*,minSxTop*,minSxpBtm*,minSxpTop*,minSyBtm*,minSyTop*,minSypBtm*,minSypTop*,minTmaxBtm*,minTmaxTop*,minTxyBtm*,minTxyTop*,minTxz*,minTyz*,offset*,order*,plates*,sort*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.PlateElementStresses
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public PlateElementStressesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/plate-element-stresses{?limit*,loadCases*,offset*,plates*}", rawUrl)
+        public PlateElementStressesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/plate-element-stresses{?distinctBy*,limit*,loadCases*,maxAbsPaBtm*,maxAbsPaTop*,maxAbsPlasticStrain*,maxAbsSvmBtm*,maxAbsSvmMax*,maxAbsSvmTop*,maxAbsSxBtm*,maxAbsSxTop*,maxAbsSxpBtm*,maxAbsSxpTop*,maxAbsSyBtm*,maxAbsSyTop*,maxAbsSypBtm*,maxAbsSypTop*,maxAbsTmaxBtm*,maxAbsTmaxTop*,maxAbsTxyBtm*,maxAbsTxyTop*,maxAbsTxz*,maxAbsTyz*,maxPaBtm*,maxPaTop*,maxPlasticStrain*,maxSvmBtm*,maxSvmMax*,maxSvmTop*,maxSxBtm*,maxSxTop*,maxSxpBtm*,maxSxpTop*,maxSyBtm*,maxSyTop*,maxSypBtm*,maxSypTop*,maxTmaxBtm*,maxTmaxTop*,maxTxyBtm*,maxTxyTop*,maxTxz*,maxTyz*,minAbsPaBtm*,minAbsPaTop*,minAbsPlasticStrain*,minAbsSvmBtm*,minAbsSvmMax*,minAbsSvmTop*,minAbsSxBtm*,minAbsSxTop*,minAbsSxpBtm*,minAbsSxpTop*,minAbsSyBtm*,minAbsSyTop*,minAbsSypBtm*,minAbsSypTop*,minAbsTmaxBtm*,minAbsTmaxTop*,minAbsTxyBtm*,minAbsTxyTop*,minAbsTxz*,minAbsTyz*,minPaBtm*,minPaTop*,minPlasticStrain*,minSvmBtm*,minSvmMax*,minSvmTop*,minSxBtm*,minSxTop*,minSxpBtm*,minSxpTop*,minSyBtm*,minSyTop*,minSypBtm*,minSypTop*,minTmaxBtm*,minTmaxTop*,minTxyBtm*,minTxyTop*,minTxz*,minTyz*,offset*,order*,plates*,sort*}", rawUrl)
         {
         }
         /// <summary>
@@ -104,6 +104,16 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.PlateElementStresses
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class PlateElementStressesRequestBuilderGetQueryParameters 
         {
+            /// <summary>Identity fields: loadCase, plate. One row per value of this identity field: the first row in sort order, i.e. the governingone. `sort=fy&amp;order=AbsDesc&amp;distinctBy=node` returns each node&apos;s governingreaction with its load case; `distinctBy=loadCase` each case&apos;s governing row. Theidentity fields are the row&apos;s Ids (load case, node, member, plate, mode, steel member) orthe reaction summary&apos;s `summaryType`, named as in the response and flagged`distinctBy: true` in `GET …/metadata`. Rows come back whole; the count headeris the number of distinct values. Requires `sort`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("distinctBy")]
+            public string? DistinctBy { get; set; }
+#nullable restore
+#else
+            [QueryParameter("distinctBy")]
+            public string DistinctBy { get; set; }
+#endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             [QueryParameter("limit")]
             public int? Limit { get; set; }
@@ -117,9 +127,263 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.PlateElementStresses
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
+            /// <summary>Keep rows whose paBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsPaBtm")]
+            public double? MaxAbsPaBtm { get; set; }
+            /// <summary>Keep rows whose paTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsPaTop")]
+            public double? MaxAbsPaTop { get; set; }
+            /// <summary>Keep rows whose plasticStrain has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsPlasticStrain")]
+            public double? MaxAbsPlasticStrain { get; set; }
+            /// <summary>Keep rows whose svmBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSvmBtm")]
+            public double? MaxAbsSvmBtm { get; set; }
+            /// <summary>Keep rows whose svmMax has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSvmMax")]
+            public double? MaxAbsSvmMax { get; set; }
+            /// <summary>Keep rows whose svmTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSvmTop")]
+            public double? MaxAbsSvmTop { get; set; }
+            /// <summary>Keep rows whose sxBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSxBtm")]
+            public double? MaxAbsSxBtm { get; set; }
+            /// <summary>Keep rows whose sxpBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSxpBtm")]
+            public double? MaxAbsSxpBtm { get; set; }
+            /// <summary>Keep rows whose sxpTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSxpTop")]
+            public double? MaxAbsSxpTop { get; set; }
+            /// <summary>Keep rows whose sxTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSxTop")]
+            public double? MaxAbsSxTop { get; set; }
+            /// <summary>Keep rows whose syBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSyBtm")]
+            public double? MaxAbsSyBtm { get; set; }
+            /// <summary>Keep rows whose sypBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSypBtm")]
+            public double? MaxAbsSypBtm { get; set; }
+            /// <summary>Keep rows whose sypTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSypTop")]
+            public double? MaxAbsSypTop { get; set; }
+            /// <summary>Keep rows whose syTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSyTop")]
+            public double? MaxAbsSyTop { get; set; }
+            /// <summary>Keep rows whose tmaxBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTmaxBtm")]
+            public double? MaxAbsTmaxBtm { get; set; }
+            /// <summary>Keep rows whose tmaxTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTmaxTop")]
+            public double? MaxAbsTmaxTop { get; set; }
+            /// <summary>Keep rows whose txyBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTxyBtm")]
+            public double? MaxAbsTxyBtm { get; set; }
+            /// <summary>Keep rows whose txyTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTxyTop")]
+            public double? MaxAbsTxyTop { get; set; }
+            /// <summary>Keep rows whose txz has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTxz")]
+            public double? MaxAbsTxz { get; set; }
+            /// <summary>Keep rows whose tyz has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTyz")]
+            public double? MaxAbsTyz { get; set; }
+            /// <summary>Keep rows whose paBtm is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxPaBtm")]
+            public double? MaxPaBtm { get; set; }
+            /// <summary>Keep rows whose paTop is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxPaTop")]
+            public double? MaxPaTop { get; set; }
+            /// <summary>Keep rows whose plasticStrain is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxPlasticStrain")]
+            public double? MaxPlasticStrain { get; set; }
+            /// <summary>Keep rows whose svmBtm is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSvmBtm")]
+            public double? MaxSvmBtm { get; set; }
+            /// <summary>Keep rows whose svmMax is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSvmMax")]
+            public double? MaxSvmMax { get; set; }
+            /// <summary>Keep rows whose svmTop is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSvmTop")]
+            public double? MaxSvmTop { get; set; }
+            /// <summary>Keep rows whose sxBtm is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSxBtm")]
+            public double? MaxSxBtm { get; set; }
+            /// <summary>Keep rows whose sxpBtm is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSxpBtm")]
+            public double? MaxSxpBtm { get; set; }
+            /// <summary>Keep rows whose sxpTop is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSxpTop")]
+            public double? MaxSxpTop { get; set; }
+            /// <summary>Keep rows whose sxTop is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSxTop")]
+            public double? MaxSxTop { get; set; }
+            /// <summary>Keep rows whose syBtm is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSyBtm")]
+            public double? MaxSyBtm { get; set; }
+            /// <summary>Keep rows whose sypBtm is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSypBtm")]
+            public double? MaxSypBtm { get; set; }
+            /// <summary>Keep rows whose sypTop is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSypTop")]
+            public double? MaxSypTop { get; set; }
+            /// <summary>Keep rows whose syTop is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSyTop")]
+            public double? MaxSyTop { get; set; }
+            /// <summary>Keep rows whose tmaxBtm is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTmaxBtm")]
+            public double? MaxTmaxBtm { get; set; }
+            /// <summary>Keep rows whose tmaxTop is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTmaxTop")]
+            public double? MaxTmaxTop { get; set; }
+            /// <summary>Keep rows whose txyBtm is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTxyBtm")]
+            public double? MaxTxyBtm { get; set; }
+            /// <summary>Keep rows whose txyTop is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTxyTop")]
+            public double? MaxTxyTop { get; set; }
+            /// <summary>Keep rows whose txz is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTxz")]
+            public double? MaxTxz { get; set; }
+            /// <summary>Keep rows whose tyz is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTyz")]
+            public double? MaxTyz { get; set; }
+            /// <summary>Keep rows whose paBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsPaBtm")]
+            public double? MinAbsPaBtm { get; set; }
+            /// <summary>Keep rows whose paTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsPaTop")]
+            public double? MinAbsPaTop { get; set; }
+            /// <summary>Keep rows whose plasticStrain has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsPlasticStrain")]
+            public double? MinAbsPlasticStrain { get; set; }
+            /// <summary>Keep rows whose svmBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSvmBtm")]
+            public double? MinAbsSvmBtm { get; set; }
+            /// <summary>Keep rows whose svmMax has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSvmMax")]
+            public double? MinAbsSvmMax { get; set; }
+            /// <summary>Keep rows whose svmTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSvmTop")]
+            public double? MinAbsSvmTop { get; set; }
+            /// <summary>Keep rows whose sxBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSxBtm")]
+            public double? MinAbsSxBtm { get; set; }
+            /// <summary>Keep rows whose sxpBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSxpBtm")]
+            public double? MinAbsSxpBtm { get; set; }
+            /// <summary>Keep rows whose sxpTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSxpTop")]
+            public double? MinAbsSxpTop { get; set; }
+            /// <summary>Keep rows whose sxTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSxTop")]
+            public double? MinAbsSxTop { get; set; }
+            /// <summary>Keep rows whose syBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSyBtm")]
+            public double? MinAbsSyBtm { get; set; }
+            /// <summary>Keep rows whose sypBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSypBtm")]
+            public double? MinAbsSypBtm { get; set; }
+            /// <summary>Keep rows whose sypTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSypTop")]
+            public double? MinAbsSypTop { get; set; }
+            /// <summary>Keep rows whose syTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSyTop")]
+            public double? MinAbsSyTop { get; set; }
+            /// <summary>Keep rows whose tmaxBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTmaxBtm")]
+            public double? MinAbsTmaxBtm { get; set; }
+            /// <summary>Keep rows whose tmaxTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTmaxTop")]
+            public double? MinAbsTmaxTop { get; set; }
+            /// <summary>Keep rows whose txyBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTxyBtm")]
+            public double? MinAbsTxyBtm { get; set; }
+            /// <summary>Keep rows whose txyTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTxyTop")]
+            public double? MinAbsTxyTop { get; set; }
+            /// <summary>Keep rows whose txz has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTxz")]
+            public double? MinAbsTxz { get; set; }
+            /// <summary>Keep rows whose tyz has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTyz")]
+            public double? MinAbsTyz { get; set; }
+            /// <summary>Keep rows whose paBtm is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minPaBtm")]
+            public double? MinPaBtm { get; set; }
+            /// <summary>Keep rows whose paTop is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minPaTop")]
+            public double? MinPaTop { get; set; }
+            /// <summary>Keep rows whose plasticStrain is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minPlasticStrain")]
+            public double? MinPlasticStrain { get; set; }
+            /// <summary>Keep rows whose svmBtm is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSvmBtm")]
+            public double? MinSvmBtm { get; set; }
+            /// <summary>Keep rows whose svmMax is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSvmMax")]
+            public double? MinSvmMax { get; set; }
+            /// <summary>Keep rows whose svmTop is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSvmTop")]
+            public double? MinSvmTop { get; set; }
+            /// <summary>Keep rows whose sxBtm is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSxBtm")]
+            public double? MinSxBtm { get; set; }
+            /// <summary>Keep rows whose sxpBtm is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSxpBtm")]
+            public double? MinSxpBtm { get; set; }
+            /// <summary>Keep rows whose sxpTop is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSxpTop")]
+            public double? MinSxpTop { get; set; }
+            /// <summary>Keep rows whose sxTop is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSxTop")]
+            public double? MinSxTop { get; set; }
+            /// <summary>Keep rows whose syBtm is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSyBtm")]
+            public double? MinSyBtm { get; set; }
+            /// <summary>Keep rows whose sypBtm is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSypBtm")]
+            public double? MinSypBtm { get; set; }
+            /// <summary>Keep rows whose sypTop is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSypTop")]
+            public double? MinSypTop { get; set; }
+            /// <summary>Keep rows whose syTop is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSyTop")]
+            public double? MinSyTop { get; set; }
+            /// <summary>Keep rows whose tmaxBtm is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTmaxBtm")]
+            public double? MinTmaxBtm { get; set; }
+            /// <summary>Keep rows whose tmaxTop is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTmaxTop")]
+            public double? MinTmaxTop { get; set; }
+            /// <summary>Keep rows whose txyBtm is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTxyBtm")]
+            public double? MinTxyBtm { get; set; }
+            /// <summary>Keep rows whose txyTop is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTxyTop")]
+            public double? MinTxyTop { get; set; }
+            /// <summary>Keep rows whose txz is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTxz")]
+            public double? MinTxz { get; set; }
+            /// <summary>Keep rows whose tyz is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTyz")]
+            public double? MinTyz { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             [QueryParameter("offset")]
             public int? Offset { get; set; }
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [Obsolete("This property is deprecated, use OrderAsResultSortOrder instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("order")]
+            public string? Order { get; set; }
+#nullable restore
+#else
+            [QueryParameter("order")]
+            public string Order { get; set; }
+#endif
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [QueryParameter("order")]
+            public global::SpaceGassApi.Models.ResultSortOrder? OrderAsResultSortOrder { get; set; }
             /// <summary>Plate Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -129,6 +393,16 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.PlateElementStresses
 #else
             [QueryParameter("plates")]
             public string Plates { get; set; }
+#endif
+            /// <summary>Sortable fields: loadCase, plate, sxTop, syTop, txyTop, sxpTop, sypTop, tmaxTop, svmTop, paTop, sxBtm, syBtm, txyBtm, sxpBtm, sypBtm, tmaxBtm, svmBtm, paBtm, txz, tyz, svmMax, plasticStrain. Field to sort the rows by, named as in the response (case-insensitive). Any numeric fieldof the endpoint&apos;s rows can be used. An array field (values at member stations, member ends,plate corners or nodes) ranks each row by its extreme value in the requested direction, andthe row is returned whole. Rows with no value for the field sort last. Omit to return rows inthe endpoint&apos;s default order: its identity fields in order — the fields `GET …/metadata`flags `distinctBy: true`, e.g. load case then node for node results.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("sort")]
+            public string? Sort { get; set; }
+#nullable restore
+#else
+            [QueryParameter("sort")]
+            public string Sort { get; set; }
 #endif
         }
         /// <summary>

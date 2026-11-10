@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 @dataclass
 class FilterCreate(Parsable):
     """
-    DTO for creating a new filter.At least one sub-filter must be active — a filter with no rows in thedatasheet has no persisted state and cannot be retrieved by Id.
+    DTO for creating a new filter.At least one sub-filter must be active; a filter with none is not stored and cannot beretrieved by Id.
     """
     # Primary identifier - must be unique, no duplicates allowed.Optional - will be auto-assigned to next available number if not provided.If provided, must not already exist in the model.
     id: Optional[int] = None

@@ -13,27 +13,27 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class Units : IParsable
     {
-        /// <summary>Acceleration unit. Members mirror SPACE GASS `SgAcceleration`.</summary>
+        /// <summary>Acceleration unit.</summary>
         public global::SpaceGassApi.Models.AccelerationUnit? Acceleration { get; set; }
-        /// <summary>Force unit. Members mirror SPACE GASS `SgForce`.</summary>
+        /// <summary>Force unit.</summary>
         public global::SpaceGassApi.Models.ForceUnit? Force { get; set; }
-        /// <summary>Length unit. Members mirror SPACE GASS `SGLength`(`NetCommon/CommonEnums.vb`); integer values and identifiers must stay inlock-step with it. The System.ComponentModel.DescriptionAttribute carries the displaylabel (mirrors `gcUNITS_LABEL_*`).</summary>
+        /// <summary>Length unit.</summary>
         public global::SpaceGassApi.Models.LengthUnit? Length { get; set; }
-        /// <summary>Mass unit. Members mirror SPACE GASS `SgMass`.</summary>
+        /// <summary>Mass unit.</summary>
         public global::SpaceGassApi.Models.MassUnit? Mass { get; set; }
-        /// <summary>Mass density unit. Members mirror SPACE GASS `SgMassDensity`.</summary>
+        /// <summary>Mass density unit.</summary>
         public global::SpaceGassApi.Models.MassDensityUnit? MassDensity { get; set; }
-        /// <summary>Material strength unit (yield stress, ultimate stress, etc.). Members mirrorSPACE GASS `SgMaterialStrength`.</summary>
+        /// <summary>Material strength unit (yield stress, ultimate stress, etc.).</summary>
         public global::SpaceGassApi.Models.MaterialStrengthUnit? MaterialStrength { get; set; }
-        /// <summary>Moment unit. Members mirror SPACE GASS `SgMoment`.</summary>
+        /// <summary>Moment unit.</summary>
         public global::SpaceGassApi.Models.MomentUnit? Moment { get; set; }
-        /// <summary>Unit for section properties (area, moment of inertia, etc.). Members mirrorSPACE GASS `SgSectionProperties` (`NetCommon/CommonEnums.vb`).</summary>
+        /// <summary>Unit for section properties (area, moment of inertia, etc.).</summary>
         public global::SpaceGassApi.Models.SectionPropertiesUnit? SectionProperties { get; set; }
-        /// <summary>Stress unit. Members mirror SPACE GASS `SgStress`.</summary>
+        /// <summary>Stress unit.</summary>
         public global::SpaceGassApi.Models.StressUnit? Stress { get; set; }
-        /// <summary>Temperature unit. Members mirror SPACE GASS `SgTemperature`.</summary>
+        /// <summary>Temperature unit.</summary>
         public global::SpaceGassApi.Models.TemperatureUnit? Temperature { get; set; }
-        /// <summary>Translation (displacement) unit. Members mirror SPACE GASS `SgTranslation`.SG uses `inch` here (not `in`) to dodge the VB reserved word; we mirrorthat so the wire token stays `&quot;inch&quot;`.</summary>
+        /// <summary>Translation (displacement) unit. Inches are `inch`, not `in`.</summary>
         public global::SpaceGassApi.Models.TranslationUnit? Translation { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

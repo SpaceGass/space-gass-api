@@ -35,7 +35,7 @@ class FiltersItemRequestBuilder(BaseRequestBuilder):
     
     async def delete(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[DeleteResult]:
         """
-        Deletes a filter and all its sub-filter rows from the datasheet.
+        Deletes a filter and all of its sub-filters.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[DeleteResult]
         """
@@ -115,7 +115,7 @@ class FiltersItemRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Deletes a filter and all its sub-filter rows from the datasheet.
+        Deletes a filter and all of its sub-filters.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

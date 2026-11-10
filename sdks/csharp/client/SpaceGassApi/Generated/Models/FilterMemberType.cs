@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Member type categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_MemberType` verbatim — richer than theentity-property SpaceGassApi.Models.Enums.MemberType because the filter UI surfacesmember-state categories (Duplicated, Rotated, Along axis, FreeEnd, ...)that are not member-create options.</summary>
+    /// <summary>Member type categories available as a Filter resource criterion.Wider than SpaceGassApi.Models.Enums.MemberType: it includes member-state categories (Duplicated,Rotated, Along axis, FreeEnd, ...) that are not member types.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum FilterMemberType
     {

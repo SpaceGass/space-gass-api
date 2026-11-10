@@ -21,6 +21,14 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.PlateElementForce> Results { get; set; }
 #endif
+        /// <summary>The sort applied to a results page and, for each returned row, the value that ranked it.Arrays are parallel to `results`: entry `i` describes `results[i]`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.SortKey? SortKey { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.SortKey SortKey { get; set; }
+#endif
         /// <summary>Warnings returned when some requested load cases or modes did not have analysisresults in the response. (Filter Ids that don&apos;t exist in the model are rejectedup-front with HTTP 400 by the controller — they never reach this DTO.)`loadCasesNotAnalyzed` is an SG list-format string that can be pasted straightinto `POST /job/analysis/run`&apos;s `loadCases` field to re-run only thosecases. `modesNotAnalyzed` is a per-case list — each analysed case can computea different number of modes, so the warning is keyed by case rather than flattened.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -48,6 +56,7 @@ namespace SpaceGassApi.Models
             return new Dictionary<string, Action<IParseNode>>
             {
                 { "results", n => { Results = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.PlateElementForce>(global::SpaceGassApi.Models.PlateElementForce.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "sortKey", n => { SortKey = n.GetObjectValue<global::SpaceGassApi.Models.SortKey>(global::SpaceGassApi.Models.SortKey.CreateFromDiscriminatorValue); } },
                 { "warnings", n => { Warnings = n.GetObjectValue<global::SpaceGassApi.Models.QueryWarnings>(global::SpaceGassApi.Models.QueryWarnings.CreateFromDiscriminatorValue); } },
             };
         }
@@ -59,6 +68,7 @@ namespace SpaceGassApi.Models
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.PlateElementForce>("results", Results);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.SortKey>("sortKey", SortKey);
             writer.WriteObjectValue<global::SpaceGassApi.Models.QueryWarnings>("warnings", Warnings);
         }
     }

@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 @dataclass
 class FilterNodes(Parsable):
     """
-    Sub-filter carrying a list of node Ids and a node-type categorical filter.Maps to SG `SGFilterType.Nodes`.
+    Sub-filter carrying a list of node Ids and a node-type categorical filter.
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Node type categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_NodeType` enum verbatim — integer valuesand labels match SG so the filter datasheet round-trips cleanly.Richer than the entity-property `NodeType` (which only has`All` / `Restrained`) because the filter UI surfaces everyfine-grained boundary-condition flavour.
+    # Node type categories available as a Filter resource criterion.Wider than the node type on nodes: it covers every boundary-condition category.
     node_type: Optional[FilterNodeType] = None
     # Node Ids in SG list format (e.g. `"1,5-10,15"`). Empty string means no Id criterion.
     nodes: Optional[str] = None

@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Origin of a moving-load vehicle. Mirrors SPACE GASS `MLVehicleSource`(`NETSpaceGass/Loads/Moving/MLCommon.vb`).</summary>
+    /// <summary>Origin of a moving-load vehicle.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MovingLoadVehicleSource
     {

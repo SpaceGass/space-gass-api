@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Mass unit. Members mirror SPACE GASS `SgMass`.</summary>
+    /// <summary>Mass unit.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MassUnit
     {

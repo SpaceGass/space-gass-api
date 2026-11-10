@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a steel member design group (SPACE GASS &quot;Design - Steel Members&quot;, FileID 40).The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
+    /// A steel member design group (SPACE GASS &quot;Design - Steel Members&quot;).The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SteelMember : IParsable

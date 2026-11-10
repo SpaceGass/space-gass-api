@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.Result flags are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
+    /// Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SteelDesignSummary : IParsable
