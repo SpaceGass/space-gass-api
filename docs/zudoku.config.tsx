@@ -34,6 +34,14 @@ function singularize(word: string): string {
   return word;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function requestBodySchema(operation: any): any {
+  const content: any[] = operation?.requestBody?.content ?? [];
+  const media =
+    content.find((c) => c?.mediaType === "application/json") ?? content[0];
+  return media?.schema;
+}
+
 // Read the request-body model name straight from the spec instead of guessing
 // it from the URL path. Zudoku dereferences `$ref`s but preserves the original
 // pointer on a `__$ref` property (see
@@ -44,14 +52,41 @@ function singularize(word: string): string {
 // case the caller falls back to the path-based heuristic below.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function bodyTypeFromSpec(operation: any): string | undefined {
-  const content: any[] = operation?.requestBody?.content ?? [];
-  const media =
-    content.find((c) => c?.mediaType === "application/json") ?? content[0];
-  const schema = media?.schema;
+  const schema = requestBodySchema(operation);
   // Single-object body, or array body (bulk-create / items collections).
   const ref: string | undefined = schema?.__$ref ?? schema?.items?.__$ref;
   return ref ? ref.split("/").pop() : undefined;
 }
+
+// Bodies that are a bare `oneOf`/`anyOf` of component schemas (e.g. PATCH
+// /job/design/steel-member/{code}/settings) have no single model: Kiota
+// generates a composed-type wrapper named `{LastSegment}{Verb}RequestBody`,
+// nested in the C# request builder and as its own module in Python, with one
+// property per member schema. Returns the member schema names, or undefined
+// when the body is not composed.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function composedBodyMembersFromSpec(operation: any): string[] | undefined {
+  const schema = requestBodySchema(operation);
+  if (!schema || schema.__$ref) return undefined;
+  const members: any[] | undefined = schema.oneOf ?? schema.anyOf;
+  const names = (members ?? [])
+    .map((m) => m?.__$ref?.split("/").pop())
+    .filter(Boolean) as string[];
+  return names.length ? names : undefined;
+}
+
+// Multipart file-upload endpoints: Kiota types their body as a bare
+// MultipartBody, so snippets use the hand-maintained helpers instead
+// (sdks/csharp/client/SpaceGassApi/Utils/UploadRequests.cs and
+// sdks/python/client/space_gass_api/upload_requests.py).
+const UPLOAD_HELPERS: Record<string, string> = {
+  "job/new-from-template": "NewFromTemplateRequest",
+  "job/import/txt": "ImportTxtRequest",
+};
+
+// Kiota appends `_` to Python builder properties that collide with keywords
+// (e.g. /job/import → client.job.import_).
+const PYTHON_KEYWORDS = new Set(["import", "from", "class", "def", "global", "with", "async", "await", "pass", "return", "lambda", "in", "is", "not", "and", "or", "del", "try", "raise", "yield", "while", "for", "if", "else", "elif", "except", "finally", "assert", "break", "continue", "nonlocal", "as"]);
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generateCodeSnippet({ selectedLang, operation }: any): string | false {
@@ -70,7 +105,15 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   const lastSegment = segments[segments.length - 1];
   const isBulk = lastSegment === "bulk";
   const isItems = lastSegment === "items";
-  const isList = isBulk || isItems;
+  const bodySchema = requestBodySchema(operation);
+  // Array bodies outside .../bulk and .../items exist too (e.g. PUT
+  // .../moving-loads/.../stations), so trust the spec's `type: array`.
+  const isList = isBulk || isItems || bodySchema?.type === "array";
+  // Primitive-item lists (bulk DELETE takes a plain list of Ids).
+  const primitiveItem: string | undefined =
+    bodySchema?.type === "array" && !bodySchema.items?.__$ref
+      ? bodySchema.items?.type
+      : undefined;
 
   // Find the last non-parameter segment for deriving body type names. For
   // list endpoints, skip the literal "bulk"/"items" segment so we land on
@@ -82,7 +125,9 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
     ? toPascalCase(singularize(entitySegment))
     : "Item";
 
-  const hasBody = ["POST", "PATCH", "PUT"].includes(httpMethod);
+  // Driven by the spec: a few POSTs (e.g. /job/close, /job/new) take no body,
+  // while bulk DELETEs do.
+  const hasBody = !!operation?.requestBody;
 
   // Prefer the exact model name from the spec. Fall back to a path-based guess
   // only for inline request bodies that carry no component `$ref`.
@@ -92,6 +137,22 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
       ? `${entityName}Create`
       : `${entityName}Update`;
   const bodyType = bodyTypeFromSpec(operation) ?? pathGuessBodyType;
+
+  // Composed (oneOf/anyOf) body → Kiota wrapper type. Only handled when the
+  // path ends in a literal segment, which is where Kiota names the wrapper.
+  const composedMembers =
+    hasBody && !isList && !lastSegment.startsWith("{")
+      ? composedBodyMembersFromSpec(operation)
+      : undefined;
+  const uploadHelper = hasBody ? UPLOAD_HELPERS[cleanPath] : undefined;
+  const wrapperType = `${toPascalCase(lastSegment)}${
+    httpMethod.charAt(0) + httpMethod.slice(1).toLowerCase()
+  }RequestBody`;
+  // Generated namespace/module path of the request builder: path params
+  // become an `Item` folder.
+  const builderPath = segments.map((s: string) =>
+    s.startsWith("{") ? "Item" : toPascalCase(s),
+  );
 
   // ── C# SDK ──
   if (selectedLang === "csharp") {
@@ -109,7 +170,22 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
       httpMethod.charAt(0) + httpMethod.slice(1).toLowerCase() + "Async";
 
     let code = "// C# SDK Client\n";
-    if (hasBody) {
+    if (uploadHelper) {
+      code += `var result = await ${chain}.${asyncMethod}(new ${uploadHelper}(@"C:\\path\\to\\file"));`;
+    } else if (composedMembers) {
+      const builder = `${toPascalCase(lastSegment)}RequestBuilder`;
+      code += `using SpaceGassApi.${builderPath.join(".")};\n\n`;
+      code += `// Set exactly one of: ${composedMembers.join(", ")}\n`;
+      code += `var body = new ${builder}.${wrapperType}\n`;
+      code += `{\n`;
+      code += `    ${composedMembers[0]} = new ${composedMembers[0]} { /* Set properties */ },\n`;
+      code += `};\n\n`;
+      code += `var result = await ${chain}.${asyncMethod}(body);`;
+    } else if (hasBody && primitiveItem === "integer") {
+      code += `var ids = new List<int?> { 1, 2, 3 };\n\n`;
+      code += httpMethod === "DELETE" ? "await " : "var result = await ";
+      code += `${chain}.${asyncMethod}(ids);`;
+    } else if (hasBody) {
       if (isList) {
         code += `var bodies = new List<${bodyType}>\n`;
         code += `{\n`;
@@ -141,16 +217,35 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
         const snakeParam = pascalToSnake(param);
         chain += `.by_${snakeParam}(${snakeParam})`;
       } else {
-        chain += `.${seg.replace(/-/g, "_").toLowerCase()}`;
+        const prop = seg.replace(/-/g, "_").toLowerCase();
+        chain += `.${PYTHON_KEYWORDS.has(prop) ? `${prop}_` : prop}`;
       }
     }
 
     const pyMethod = httpMethod.toLowerCase();
 
     let code = "# Python SDK Client\n";
-    if (hasBody) {
-      const bodyModule = pascalToSnake(bodyType);
-      code += `from space_gass_api.models.${bodyModule} import ${bodyType}\n\n`;
+    if (uploadHelper) {
+      code += `from space_gass_api import ${uploadHelper}\n\n`;
+      code += `result = await ${chain}.${pyMethod}(${uploadHelper}(r"C:\\path\\to\\file"))`;
+    } else if (composedMembers) {
+      const wrapperModule = [...builderPath.map(pascalToSnake), pascalToSnake(wrapperType)].join(".");
+      code += `from space_gass_api.generated.${wrapperModule} import ${wrapperType}\n`;
+      code += `from space_gass_api.models import ${composedMembers[0]}\n\n`;
+      code += `# Set exactly one of: ${composedMembers.map(pascalToSnake).join(", ")}\n`;
+      code += `body = ${wrapperType}(\n`;
+      code += `    ${pascalToSnake(composedMembers[0])}=${composedMembers[0]}(\n`;
+      code += `        # Set properties\n`;
+      code += `    ),\n`;
+      code += `)\n\n`;
+      code += `result = await ${chain}.${pyMethod}(body)`;
+    } else if (hasBody && primitiveItem === "integer") {
+      code += httpMethod === "DELETE" ? "await " : "result = await ";
+      code += `${chain}.${pyMethod}([1, 2, 3])`;
+    } else if (hasBody) {
+      // `space_gass_api.models` is a flat re-export shim (written by
+      // tools/regen_python_inits.py) — import from it, not a submodule.
+      code += `from space_gass_api.models import ${bodyType}\n\n`;
       if (isList) {
         code += `bodies = [\n`;
         code += `    ${bodyType}(\n`;

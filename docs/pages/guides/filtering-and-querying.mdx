@@ -215,7 +215,7 @@ var result = await client.Job.Query.Design.SteelMember.CheckSummary.GetAsync();
 
 foreach (var s in result.Results)
 {
-    Console.WriteLine($"Member {s.Member}: {s.Section} — " +
+    Console.WriteLine($"Steel member {s.SteelMember}: {s.Section} — " +
         $"{s.Failure} (factor {s.LoadFactor}, case {s.CriticalCase})");
 }
 ```
@@ -224,7 +224,7 @@ foreach (var s in result.Results)
 result = await client.job.query.design.steel_member.check_summary.get()
 
 for s in result.results:
-    print(f"Member {s.member}: {s.section} — "
+    print(f"Steel member {s.steel_member}: {s.section} — "
           f"{s.failure} (factor {s.load_factor}, case {s.critical_case})")
 ```
 
