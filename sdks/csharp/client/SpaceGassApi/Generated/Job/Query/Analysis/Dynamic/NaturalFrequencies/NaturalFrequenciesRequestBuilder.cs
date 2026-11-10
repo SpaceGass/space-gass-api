@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NaturalFrequenciesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?limit*,loadCases*,modes*,offset*}", pathParameters)
+        public NaturalFrequenciesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?distinctBy*,limit*,loadCases*,maxAbsFrequencyTolerance*,maxAbsMassPartX*,maxAbsMassPartY*,maxAbsMassPartZ*,maxAbsNaturalFrequency*,maxAbsNaturalPeriod*,maxFrequencyTolerance*,maxIterations*,maxMassPartX*,maxMassPartY*,maxMassPartZ*,maxNaturalFrequency*,maxNaturalPeriod*,minAbsFrequencyTolerance*,minAbsMassPartX*,minAbsMassPartY*,minAbsMassPartZ*,minAbsNaturalFrequency*,minAbsNaturalPeriod*,minFrequencyTolerance*,minIterations*,minMassPartX*,minMassPartY*,minMassPartZ*,minNaturalFrequency*,minNaturalPeriod*,modes*,offset*,order*,sort*,status*,warning*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NaturalFrequenciesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?limit*,loadCases*,modes*,offset*}", rawUrl)
+        public NaturalFrequenciesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?distinctBy*,limit*,loadCases*,maxAbsFrequencyTolerance*,maxAbsMassPartX*,maxAbsMassPartY*,maxAbsMassPartZ*,maxAbsNaturalFrequency*,maxAbsNaturalPeriod*,maxFrequencyTolerance*,maxIterations*,maxMassPartX*,maxMassPartY*,maxMassPartZ*,maxNaturalFrequency*,maxNaturalPeriod*,minAbsFrequencyTolerance*,minAbsMassPartX*,minAbsMassPartY*,minAbsMassPartZ*,minAbsNaturalFrequency*,minAbsNaturalPeriod*,minFrequencyTolerance*,minIterations*,minMassPartX*,minMassPartY*,minMassPartZ*,minNaturalFrequency*,minNaturalPeriod*,modes*,offset*,order*,sort*,status*,warning*}", rawUrl)
         {
         }
         /// <summary>
@@ -104,6 +104,16 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class NaturalFrequenciesRequestBuilderGetQueryParameters 
         {
+            /// <summary>Identity fields: loadCase, mode. One row per value of this identity field: the first row in sort order, i.e. the governingone. `sort=fy&amp;order=AbsDesc&amp;distinctBy=node` returns each node&apos;s governingreaction with its load case; `distinctBy=loadCase` each case&apos;s governing row. Theidentity fields are the row&apos;s Ids (load case, node, member, plate, mode, steel member) orthe reaction summary&apos;s `summaryType`, named as in the response and flagged`distinctBy: true` in `GET …/metadata`. Rows come back whole; the count headeris the number of distinct values. Requires `sort`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("distinctBy")]
+            public string? DistinctBy { get; set; }
+#nullable restore
+#else
+            [QueryParameter("distinctBy")]
+            public string DistinctBy { get; set; }
+#endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             [QueryParameter("limit")]
             public int? Limit { get; set; }
@@ -117,6 +127,84 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
+            /// <summary>Keep rows whose frequencyTolerance has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsFrequencyTolerance")]
+            public double? MaxAbsFrequencyTolerance { get; set; }
+            /// <summary>Keep rows whose massPartX has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsMassPartX")]
+            public double? MaxAbsMassPartX { get; set; }
+            /// <summary>Keep rows whose massPartY has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsMassPartY")]
+            public double? MaxAbsMassPartY { get; set; }
+            /// <summary>Keep rows whose massPartZ has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsMassPartZ")]
+            public double? MaxAbsMassPartZ { get; set; }
+            /// <summary>Keep rows whose naturalFrequency has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsNaturalFrequency")]
+            public double? MaxAbsNaturalFrequency { get; set; }
+            /// <summary>Keep rows whose naturalPeriod has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsNaturalPeriod")]
+            public double? MaxAbsNaturalPeriod { get; set; }
+            /// <summary>Keep rows whose frequencyTolerance is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxFrequencyTolerance")]
+            public double? MaxFrequencyTolerance { get; set; }
+            /// <summary>Keep rows whose iterations is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxIterations")]
+            public double? MaxIterations { get; set; }
+            /// <summary>Keep rows whose massPartX is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxMassPartX")]
+            public double? MaxMassPartX { get; set; }
+            /// <summary>Keep rows whose massPartY is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxMassPartY")]
+            public double? MaxMassPartY { get; set; }
+            /// <summary>Keep rows whose massPartZ is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxMassPartZ")]
+            public double? MaxMassPartZ { get; set; }
+            /// <summary>Keep rows whose naturalFrequency is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxNaturalFrequency")]
+            public double? MaxNaturalFrequency { get; set; }
+            /// <summary>Keep rows whose naturalPeriod is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxNaturalPeriod")]
+            public double? MaxNaturalPeriod { get; set; }
+            /// <summary>Keep rows whose frequencyTolerance has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsFrequencyTolerance")]
+            public double? MinAbsFrequencyTolerance { get; set; }
+            /// <summary>Keep rows whose massPartX has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsMassPartX")]
+            public double? MinAbsMassPartX { get; set; }
+            /// <summary>Keep rows whose massPartY has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsMassPartY")]
+            public double? MinAbsMassPartY { get; set; }
+            /// <summary>Keep rows whose massPartZ has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsMassPartZ")]
+            public double? MinAbsMassPartZ { get; set; }
+            /// <summary>Keep rows whose naturalFrequency has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsNaturalFrequency")]
+            public double? MinAbsNaturalFrequency { get; set; }
+            /// <summary>Keep rows whose naturalPeriod has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsNaturalPeriod")]
+            public double? MinAbsNaturalPeriod { get; set; }
+            /// <summary>Keep rows whose frequencyTolerance is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minFrequencyTolerance")]
+            public double? MinFrequencyTolerance { get; set; }
+            /// <summary>Keep rows whose iterations is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minIterations")]
+            public double? MinIterations { get; set; }
+            /// <summary>Keep rows whose massPartX is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minMassPartX")]
+            public double? MinMassPartX { get; set; }
+            /// <summary>Keep rows whose massPartY is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minMassPartY")]
+            public double? MinMassPartY { get; set; }
+            /// <summary>Keep rows whose massPartZ is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minMassPartZ")]
+            public double? MinMassPartZ { get; set; }
+            /// <summary>Keep rows whose naturalFrequency is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minNaturalFrequency")]
+            public double? MinNaturalFrequency { get; set; }
+            /// <summary>Keep rows whose naturalPeriod is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minNaturalPeriod")]
+            public double? MinNaturalPeriod { get; set; }
             /// <summary>Mode numbers in SG list format (e.g. `&quot;1-3&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -130,6 +218,50 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.NaturalFrequencies
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             [QueryParameter("offset")]
             public int? Offset { get; set; }
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [Obsolete("This property is deprecated, use OrderAsResultSortOrder instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("order")]
+            public string? Order { get; set; }
+#nullable restore
+#else
+            [QueryParameter("order")]
+            public string Order { get; set; }
+#endif
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [QueryParameter("order")]
+            public global::SpaceGassApi.Models.ResultSortOrder? OrderAsResultSortOrder { get; set; }
+            /// <summary>Sortable fields: loadCase, mode, naturalFrequency, naturalPeriod, frequencyTolerance, iterations, massPartX, massPartY, massPartZ. Field to sort the rows by, named as in the response (case-insensitive). Any numeric fieldof the endpoint&apos;s rows can be used. An array field (values at member stations, member ends,plate corners or nodes) ranks each row by its extreme value in the requested direction, andthe row is returned whole. Rows with no value for the field sort last. Omit to return rows inthe endpoint&apos;s default order: its identity fields in order — the fields `GET …/metadata`flags `distinctBy: true`, e.g. load case then node for node results.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("sort")]
+            public string? Sort { get; set; }
+#nullable restore
+#else
+            [QueryParameter("sort")]
+            public string Sort { get; set; }
+#endif
+            /// <summary>Keep rows whose status is one of the given values. One or more of: Reported, AboveUpperLimit, BelowLowerLimit, Unstable (comma-separated, case-insensitive).</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("status")]
+            public string? Status { get; set; }
+#nullable restore
+#else
+            [QueryParameter("status")]
+            public string Status { get; set; }
+#endif
+            /// <summary>Keep rows whose warning is one of the given values. One or more values, comma-separated, matched case-insensitively.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("warning")]
+            public string? Warning { get; set; }
+#nullable restore
+#else
+            [QueryParameter("warning")]
+            public string Warning { get; set; }
+#endif
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

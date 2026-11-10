@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>SPACEGASS analysis types. Values map to the SPACEGASS internal SGAnalysisType IDs.</summary>
+    /// <summary>SPACE GASS analysis types.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum AnalysisType
     {

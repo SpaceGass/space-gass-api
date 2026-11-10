@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 @dataclass
 class SteelMember(Parsable):
     """
-    DTO for reading a steel member design group (SPACE GASS "Design - Steel Members", FileID 40).The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
+    A steel member design group (SPACE GASS "Design - Steel Members").The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
     """
     # Angle section type for structural sections.Maps to SPACE GASS lookup table "Angle Type".
     angle_type: Optional[AngleType] = None

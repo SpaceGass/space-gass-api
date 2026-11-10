@@ -16,7 +16,6 @@ from warnings import warn
 if TYPE_CHECKING:
     from .....models.analysis_run import AnalysisRun
     from .....models.error_response import ErrorResponse
-    from .result.result_request_builder import ResultRequestBuilder
 
 class WithRunItemRequestBuilder(BaseRequestBuilder):
     """
@@ -104,15 +103,6 @@ class WithRunItemRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return WithRunItemRequestBuilder(self.request_adapter, raw_url)
-    
-    @property
-    def result(self) -> ResultRequestBuilder:
-        """
-        The result property
-        """
-        from .result.result_request_builder import ResultRequestBuilder
-
-        return ResultRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class WithRunItemRequestBuilderDeleteRequestConfiguration(RequestConfiguration[QueryParameters]):

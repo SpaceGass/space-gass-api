@@ -34,7 +34,7 @@ namespace SpaceGassApi.FileNamespace.Samples
         {
         }
         /// <summary>
-        /// Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.The file paths use virtual `samples://` scheme (e.g. &quot;samples://Portal Frame.SG&quot;)which can be used with the preview and open endpoints.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET &quot;/api/v1/file/samples?includeImages=true&quot;
+        /// Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.A sample is listed without a `filePath` (the installation path is not exposed).Open one by its `fileName` with `POST /api/v1/job/open-sample`.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET &quot;/api/v1/file/samples?includeImages=true&quot;
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.JobFilePreview&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -62,7 +62,7 @@ namespace SpaceGassApi.FileNamespace.Samples
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.The file paths use virtual `samples://` scheme (e.g. &quot;samples://Portal Frame.SG&quot;)which can be used with the preview and open endpoints.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET &quot;/api/v1/file/samples?includeImages=true&quot;
+        /// Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.A sample is listed without a `filePath` (the installation path is not exposed).Open one by its `fileName` with `POST /api/v1/job/open-sample`.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET &quot;/api/v1/file/samples?includeImages=true&quot;
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -90,7 +90,7 @@ namespace SpaceGassApi.FileNamespace.Samples
             return new global::SpaceGassApi.FileNamespace.Samples.SamplesRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.The file paths use virtual `samples://` scheme (e.g. &quot;samples://Portal Frame.SG&quot;)which can be used with the preview and open endpoints.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET &quot;/api/v1/file/samples?includeImages=true&quot;
+        /// Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.A sample is listed without a `filePath` (the installation path is not exposed).Open one by its `fileName` with `POST /api/v1/job/open-sample`.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET &quot;/api/v1/file/samples?includeImages=true&quot;
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class SamplesRequestBuilderGetQueryParameters 

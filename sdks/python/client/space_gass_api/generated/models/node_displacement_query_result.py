@@ -7,6 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from .node_displacement import NodeDisplacement
     from .query_warnings import QueryWarnings
+    from .sort_key import SortKey
 
 @dataclass
 class NodeDisplacementQueryResult(Parsable):
@@ -15,6 +16,8 @@ class NodeDisplacementQueryResult(Parsable):
     """
     # The query result rows.
     results: Optional[list[NodeDisplacement]] = None
+    # The sort applied to a results page and, for each returned row, the value that ranked it.Arrays are parallel to `results`: entry `i` describes `results[i]`.
+    sort_key: Optional[SortKey] = None
     # Warnings returned when some requested load cases or modes did not have analysisresults in the response. (Filter Ids that don't exist in the model are rejectedup-front with HTTP 400 by the controller — they never reach this DTO.)`loadCasesNotAnalyzed` is an SG list-format string that can be pasted straightinto `POST /job/analysis/run`'s `loadCases` field to re-run only thosecases. `modesNotAnalyzed` is a per-case list — each analysed case can computea different number of modes, so the warning is keyed by case rather than flattened.
     warnings: Optional[QueryWarnings] = None
     
@@ -36,12 +39,15 @@ class NodeDisplacementQueryResult(Parsable):
         """
         from .node_displacement import NodeDisplacement
         from .query_warnings import QueryWarnings
+        from .sort_key import SortKey
 
         from .node_displacement import NodeDisplacement
         from .query_warnings import QueryWarnings
+        from .sort_key import SortKey
 
         fields: dict[str, Callable[[Any], None]] = {
             "results": lambda n : setattr(self, 'results', n.get_collection_of_object_values(NodeDisplacement)),
+            "sortKey": lambda n : setattr(self, 'sort_key', n.get_object_value(SortKey)),
             "warnings": lambda n : setattr(self, 'warnings', n.get_object_value(QueryWarnings)),
         }
         return fields
@@ -55,6 +61,7 @@ class NodeDisplacementQueryResult(Parsable):
         if writer is None:
             raise TypeError("writer cannot be null.")
         writer.write_collection_of_object_values("results", self.results)
+        writer.write_object_value("sortKey", self.sort_key)
         writer.write_object_value("warnings", self.warnings)
     
 

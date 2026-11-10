@@ -1,0 +1,107 @@
+from __future__ import annotations
+from collections.abc import Callable
+from dataclasses import dataclass, field
+from kiota_abstractions.base_request_builder import BaseRequestBuilder
+from kiota_abstractions.base_request_configuration import RequestConfiguration
+from kiota_abstractions.default_query_parameters import QueryParameters
+from kiota_abstractions.get_path_parameters import get_path_parameters
+from kiota_abstractions.method import Method
+from kiota_abstractions.request_adapter import RequestAdapter
+from kiota_abstractions.request_information import RequestInformation
+from kiota_abstractions.request_option import RequestOption
+from kiota_abstractions.serialization import Parsable, ParsableFactory
+from typing import Any, Optional, TYPE_CHECKING, Union
+from warnings import warn
+
+if TYPE_CHECKING:
+    from ...models.error_response import ErrorResponse
+    from ...models.library import Library
+    from .item.with_library_item_request_builder import WithLibraryItemRequestBuilder
+    from .search.search_request_builder import SearchRequestBuilder
+
+class VehiclesRequestBuilder(BaseRequestBuilder):
+    """
+    Builds and executes requests for operations under /libraries/vehicles
+    """
+    def __init__(self,request_adapter: RequestAdapter, path_parameters: Union[str, dict[str, Any]]) -> None:
+        """
+        Instantiates a new VehiclesRequestBuilder and sets the default values.
+        param path_parameters: The raw url or the url-template parameters for the request.
+        param request_adapter: The request adapter to use to execute the requests.
+        Returns: None
+        """
+        super().__init__(request_adapter, "{+baseurl}/libraries/vehicles", path_parameters)
+    
+    def by_library(self,library: str) -> WithLibraryItemRequestBuilder:
+        """
+        Gets an item from the space_gass_api.generated.libraries.vehicles.item collection
+        param library: The library name (case-insensitive)
+        Returns: WithLibraryItemRequestBuilder
+        """
+        if library is None:
+            raise TypeError("library cannot be null.")
+        from .item.with_library_item_request_builder import WithLibraryItemRequestBuilder
+
+        url_tpl_params = get_path_parameters(self.path_parameters)
+        url_tpl_params["library"] = library
+        return WithLibraryItemRequestBuilder(self.request_adapter, url_tpl_params)
+    
+    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[list[Library]]:
+        """
+        Returns the installed standard and custom libraries, sorted by name, each with itsgroup list. Only section libraries have groups; for every other type the grouplist is empty.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: Optional[list[Library]]
+        """
+        request_info = self.to_get_request_information(
+            request_configuration
+        )
+        from ...models.error_response import ErrorResponse
+
+        error_mapping: dict[str, type[ParsableFactory]] = {
+            "403": ErrorResponse,
+            "500": ErrorResponse,
+        }
+        if not self.request_adapter:
+            raise Exception("Http core is null") 
+        from ...models.library import Library
+
+        return await self.request_adapter.send_collection_async(request_info, Library, error_mapping)
+    
+    def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+        """
+        Returns the installed standard and custom libraries, sorted by name, each with itsgroup list. Only section libraries have groups; for every other type the grouplist is empty.
+        param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
+        Returns: RequestInformation
+        """
+        request_info = RequestInformation(Method.GET, self.url_template, self.path_parameters)
+        request_info.configure(request_configuration)
+        request_info.headers.try_add("Accept", "application/json")
+        return request_info
+    
+    def with_url(self,raw_url: str) -> VehiclesRequestBuilder:
+        """
+        Returns a request builder with the provided arbitrary URL. Using this method means any other path or query parameters are ignored.
+        param raw_url: The raw URL to use for the request builder.
+        Returns: VehiclesRequestBuilder
+        """
+        if raw_url is None:
+            raise TypeError("raw_url cannot be null.")
+        return VehiclesRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def search(self) -> SearchRequestBuilder:
+        """
+        The search property
+        """
+        from .search.search_request_builder import SearchRequestBuilder
+
+        return SearchRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @dataclass
+    class VehiclesRequestBuilderGetRequestConfiguration(RequestConfiguration[QueryParameters]):
+        """
+        Configuration for the request such as headers, query parameters, and middleware options.
+        """
+        warn("This class is deprecated. Please use the generic RequestConfiguration class generated by the generator.", DeprecationWarning)
+    
+

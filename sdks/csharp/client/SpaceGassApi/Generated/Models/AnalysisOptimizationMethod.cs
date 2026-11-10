@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Optimization method for analysis bandwidth/profile reduction.Integer values mirror SPACE GASS&apos;s `AnalysisOptimizationTypes` enum(NetCommon/CommonEnums.vb). Used by static, buckling, and dynamic frequency analysis.</summary>
+    /// <summary>Optimization method for analysis bandwidth/profile reduction.Used by static, buckling, and dynamic frequency analysis.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum AnalysisOptimizationMethod
     {

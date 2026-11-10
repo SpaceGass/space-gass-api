@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Moment unit. Members mirror SPACE GASS `SgMoment`.</summary>
+    /// <summary>Moment unit.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MomentUnit
     {

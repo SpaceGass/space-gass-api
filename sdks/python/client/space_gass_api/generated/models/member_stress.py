@@ -33,7 +33,7 @@ class MemberStress(Parsable):
     n_mz_btm: Optional[list[float]] = None
     # Combined axial + Mz stress (top fibre) at each station. Unit: Stress (see GET /job/units).
     n_mz_top: Optional[list[float]] = None
-    # Fractional position along member (0.0 to 1.0).
+    # Distance along the member. Unit: Length (see GET /job/units).
     position: Optional[list[float]] = None
     # Station index at each output point.
     station: Optional[list[int]] = None

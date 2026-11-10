@@ -15,7 +15,7 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Current count of items in this resource.Null for sub-resources whose count does not apply uniformly.</summary>
         public int? Count { get; set; }
-        /// <summary>Field definitions describing the resource&apos;s wire shape. Each entry correspondsto a property on the read DTO; `jsonName` matches the JSON key clients see.</summary>
+        /// <summary>Field definitions describing the resource&apos;s wire shape. Each entry correspondsto a property on the read DTO; `jsonName` matches the JSON key clients see.On a results endpoint each field also says whether `sort` and `distinctBy`accept it and which value-filter parameters apply to it.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<global::SpaceGassApi.Models.FieldMetadata>? Fields { get; set; }

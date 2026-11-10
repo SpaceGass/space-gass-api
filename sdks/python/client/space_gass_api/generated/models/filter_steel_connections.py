@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class FilterSteelConnections(Parsable):
     """
-    Sub-filter carrying a list of steel-connection Ids. No sub-type(the SG-side enum slot is unused; `UpdateFromDatasheetItem` neverreads it back).Maps to SG `SGFilterType.SteelConnections`.
+    Sub-filter carrying a list of steel-connection Ids. No sub-type.
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None

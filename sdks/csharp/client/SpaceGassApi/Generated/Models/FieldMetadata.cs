@@ -45,7 +45,17 @@ namespace SpaceGassApi.Models
 #else
         public string Description { get; set; }
 #endif
-        /// <summary>Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.</summary>
+        /// <summary>Results endpoints only: whether this is one of the row&apos;s identity fields — the fields`distinctBy` accepts, which in field order are also the endpoint&apos;s default sortorder. Omitted for other resources.</summary>
+        public bool? DistinctBy { get; set; }
+        /// <summary>Results endpoints only: the value-filter query parameters that apply to this field —`min…`/`max…` (plus `minAbs…`/`maxAbs…` for a floating-point field)for a numeric field, or the field&apos;s own name for a text, enum or boolean field&apos;sequality filter. Empty for a field with no filter: an identity field is selected by theendpoint&apos;s Id-list parameter instead. Omitted for other resources.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<string>? Filters { get; set; }
+#nullable restore
+#else
+        public List<string> Filters { get; set; }
+#endif
+        /// <summary>Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.A field nested inside an object or a list is named by its path from the top ofthe item: `.` steps into an object and `[]` marks each list level(e.g. `pointA.x`, `outlines[].outer[].y`).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? JsonName { get; set; }
@@ -71,6 +81,8 @@ namespace SpaceGassApi.Models
 #else
         public string Min { get; set; }
 #endif
+        /// <summary>Results endpoints only: whether the endpoint&apos;s `sort` parameter accepts this field(its numeric fields). Omitted for other resources.</summary>
+        public bool? Sortable { get; set; }
         /// <summary>Resolved unit label based on the current job units — e.g. &quot;mm&quot;, &quot;kN&quot;,&quot;kN/mm^2&quot;. Null when the field has no units.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -101,10 +113,13 @@ namespace SpaceGassApi.Models
                 { "dataType", n => { DataType = n.GetStringValue(); } },
                 { "default", n => { Default = n.GetStringValue(); } },
                 { "description", n => { Description = n.GetStringValue(); } },
+                { "distinctBy", n => { DistinctBy = n.GetBoolValue(); } },
+                { "filters", n => { Filters = n.GetCollectionOfPrimitiveValues<string>()?.AsList(); } },
                 { "jsonName", n => { JsonName = n.GetStringValue(); } },
                 { "max", n => { Max = n.GetStringValue(); } },
                 { "maxLength", n => { MaxLength = n.GetIntValue(); } },
                 { "min", n => { Min = n.GetStringValue(); } },
+                { "sortable", n => { Sortable = n.GetBoolValue(); } },
                 { "units", n => { Units = n.GetStringValue(); } },
             };
         }
@@ -119,10 +134,13 @@ namespace SpaceGassApi.Models
             writer.WriteStringValue("dataType", DataType);
             writer.WriteStringValue("default", Default);
             writer.WriteStringValue("description", Description);
+            writer.WriteBoolValue("distinctBy", DistinctBy);
+            writer.WriteCollectionOfPrimitiveValues<string>("filters", Filters);
             writer.WriteStringValue("jsonName", JsonName);
             writer.WriteStringValue("max", Max);
             writer.WriteIntValue("maxLength", MaxLength);
             writer.WriteStringValue("min", Min);
+            writer.WriteBoolValue("sortable", Sortable);
             writer.WriteStringValue("units", Units);
         }
     }

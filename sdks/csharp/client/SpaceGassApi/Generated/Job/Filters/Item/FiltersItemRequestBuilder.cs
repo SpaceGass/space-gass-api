@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Filters.Item
         {
         }
         /// <summary>
-        /// Deletes a filter and all its sub-filter rows from the datasheet.
+        /// Deletes a filter and all of its sub-filters.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.DeleteResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -119,7 +119,7 @@ namespace SpaceGassApi.Job.Filters.Item
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Filter>(requestInfo, global::SpaceGassApi.Models.Filter.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Deletes a filter and all its sub-filter rows from the datasheet.
+        /// Deletes a filter and all of its sub-filters.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

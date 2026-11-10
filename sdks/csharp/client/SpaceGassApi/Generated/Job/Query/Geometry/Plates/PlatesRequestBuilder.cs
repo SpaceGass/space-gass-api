@@ -4,6 +4,7 @@ using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Query.Geometry.Plates.Item;
+using SpaceGassApi.Job.Query.Geometry.Plates.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -18,6 +19,11 @@ namespace SpaceGassApi.Job.Query.Geometry.Plates
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class PlatesRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The metadata property</summary>
+        public global::SpaceGassApi.Job.Query.Geometry.Plates.Metadata.MetadataRequestBuilder Metadata
+        {
+            get => new global::SpaceGassApi.Job.Query.Geometry.Plates.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>Gets an item from the SpaceGassApi.job.query.geometry.plates.item collection</summary>
         /// <param name="position">The plate Id</param>
         /// <returns>A <see cref="global::SpaceGassApi.Job.Query.Geometry.Plates.Item.PlatesItemRequestBuilder"/></returns>
