@@ -548,9 +548,9 @@ while (true)
 {
     await Task.Delay(500);
     finalRun = await client.Job.Analysis.Runs[run.RunId.Value].GetAsync();
-    if (finalRun.Status is AnalysisRunStatus.Completed
-                        or AnalysisRunStatus.Failed
-                        or AnalysisRunStatus.Cancelled)
+    if (finalRun.Status is RunStatus.Completed
+                        or RunStatus.Failed
+                        or RunStatus.Cancelled)
     {
         break;
     }
@@ -558,7 +558,7 @@ while (true)
 
 Console.WriteLine($"Analysis {finalRun.Status} in {finalRun.ElapsedTime}");
 
-if (finalRun.Status != AnalysisRunStatus.Completed)
+if (finalRun.Status != RunStatus.Completed)
 {
     throw new Exception($"Analysis did not complete: {finalRun.ErrorMessage}");
 }
@@ -579,15 +579,15 @@ while True:
     await asyncio.sleep(0.5)
     final_run = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
     if final_run.status in (
-        models.AnalysisRunStatus.Completed,
-        models.AnalysisRunStatus.Failed,
-        models.AnalysisRunStatus.Cancelled,
+        models.RunStatus.Completed,
+        models.RunStatus.Failed,
+        models.RunStatus.Cancelled,
     ):
         break
 
 print(f"Analysis {final_run.status} in {final_run.elapsed_time}")
 
-if final_run.status != models.AnalysisRunStatus.Completed:
+if final_run.status != models.RunStatus.Completed:
     raise RuntimeError(f"Analysis did not complete: {final_run.error_message}")
 ```
 </CodeTabs>
