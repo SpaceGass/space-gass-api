@@ -33,18 +33,17 @@ const palettes = {
 
 const font = `font-family="'Space Grotesk', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"`;
 
-// `subtitle` is one line or an array of up to two lines (each must fit ~200px at 13px).
-function card(p, x, title, subtitle, icon) {
-  const lines = Array.isArray(subtitle) ? subtitle : [subtitle];
-  const firstY = lines.length > 1 ? 120 : 128;
+// Cards are 220x150, laid out with 58px gaps so the arrows sit clear of them.
+// `lines` is the two subtitle lines (each must fit ~200px at 13px).
+function card(p, x, title, lines, icon) {
   const sub = lines
-    .map((line, i) => `<text x="118" y="${firstY + i * 18}" text-anchor="middle" ${font} font-size="13" fill="${p.muted}">${line}</text>`)
+    .map((line, i) => `<text x="110" y="${114 + i * 18}" text-anchor="middle" ${font} font-size="13" fill="${p.muted}">${line}</text>`)
     .join("\n    ");
   return `
   <g transform="translate(${x} 78)">
-    <rect width="236" height="150" rx="14" fill="${p.card}" stroke="${p.cardStroke}" stroke-width="1.5"/>
-    <g transform="translate(96 20)" fill="none" stroke="${p.icon}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${icon}</g>
-    <text x="118" y="100" text-anchor="middle" ${font} font-size="19" font-weight="700" fill="${p.fg}">${title}</text>
+    <rect width="220" height="150" rx="14" fill="${p.card}" stroke="${p.cardStroke}" stroke-width="1.5"/>
+    <g transform="translate(88 16)" fill="none" stroke="${p.icon}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${icon}</g>
+    <text x="110" y="90" text-anchor="middle" ${font} font-size="19" font-weight="700" fill="${p.fg}">${title}</text>
     ${sub}
   </g>`;
 }
@@ -62,14 +61,16 @@ const iconFrame = `
   <path d="M8 26h28M8 40h28"/>
   <path d="M15 26v14M29 26v14"/>`;
 
-function arrow(p, x) {
-  // double-headed arrow between cards, centred vertically on the cards
+function arrow(p, cx) {
+  // double-headed arrow centred on cx (the middle of a gap) and on the cards' mid-height
   const y = 153;
+  const a = cx - 17;
+  const b = cx + 17;
   return `
   <g stroke="${p.accent}" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M${x + 6} ${y}H${x + 28}"/>
-    <path d="M${x + 11} ${y - 6}l-6 6 6 6"/>
-    <path d="M${x + 23} ${y - 6}l6 6-6 6"/>
+    <path d="M${a} ${y}H${b}"/>
+    <path d="M${a + 6} ${y - 6}l-6 6 6 6"/>
+    <path d="M${b - 6} ${y - 6}l6 6-6 6"/>
   </g>`;
 }
 
@@ -84,10 +85,10 @@ function svg(p) {
   </g>
   <text x="66" y="47" ${font} font-size="14" font-weight="600" letter-spacing="0.08em" fill="${p.muted}">YOUR PC</text>
   ${card(p, 52, "Your AI app", ["Claude Desktop, Claude Code,", "VS Code, Cursor and more"], iconChat)}
-  ${arrow(p, 296)}
-  ${card(p, 322, "SPACE GASS MCP", "installed with SPACE GASS 14.51", iconPlug)}
-  ${arrow(p, 566)}
-  ${card(p, 592, "SPACE GASS", "the API service, running", iconFrame)}
+  ${arrow(p, 301)}
+  ${card(p, 330, "SPACE GASS MCP", ["comes with SPACE GASS 14.51,", "you add it to your AI app"], iconPlug)}
+  ${arrow(p, 579)}
+  ${card(p, 608, "SPACE GASS", ["the API service,", "started and left running"], iconFrame)}
   <text x="440" y="262" text-anchor="middle" ${font} font-size="14" fill="${p.muted}">Everything runs here. Your model never leaves your machine.</text>
 </svg>
 `;

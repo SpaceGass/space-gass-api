@@ -87,7 +87,7 @@ For the full walk-through see the [Quick Start](https://api.spacegass.com/docs/g
 
 ## Using with AI assistants
 
-**Drive SPACE GASS from an assistant, no code:** SPACE GASS 14.51+ ships an MCP server that lets Claude Desktop, GitHub Copilot and other desktop MCP clients open models, run analyses and read results. Install steps: <https://api.spacegass.com/docs/mcp>.
+**Drive SPACE GASS from an assistant, no code:** SPACE GASS 14.51+ comes with an MCP server that you add to Claude Desktop, GitHub Copilot or another desktop MCP client, so it can open models, run analyses and read results. Install steps: <https://api.spacegass.com/docs/mcp>.
 
 **Writing scripts against this API** with an AI coding assistant (Claude Code, Cursor, Copilot, ChatGPT, etc.)? Point the agent at the resources below rather than letting it crawl this repo — the docs bundle and OpenAPI spec are single, clean, machine-readable fetches.
 
