@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Node type categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_NodeType` enum verbatim — integer valuesand labels match SG so the filter datasheet round-trips cleanly.Richer than the entity-property `NodeType` (which only has`All` / `Restrained`) because the filter UI surfaces everyfine-grained boundary-condition flavour.</summary>
+    /// <summary>Node type categories available as a Filter resource criterion.Wider than the node type on nodes: it covers every boundary-condition category.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum FilterNodeType
     {

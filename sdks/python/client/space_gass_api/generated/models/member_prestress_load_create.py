@@ -11,7 +11,7 @@ class MemberPrestressLoadCreate(Parsable):
     """
     # The load case number to create this load in.
     load_case: Optional[int] = None
-    # Load category for grouping/organization.
+    # Id of a load category (GET /job/loads/load-categories). Omit, or send 0, for no category.
     load_category: Optional[int] = None
     # The member number to apply this prestress to.
     member: Optional[int] = None

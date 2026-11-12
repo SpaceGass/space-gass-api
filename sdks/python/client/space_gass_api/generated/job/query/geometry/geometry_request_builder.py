@@ -8,6 +8,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from .members.members_request_builder import MembersRequestBuilder
     from .plates.plates_request_builder import PlatesRequestBuilder
+    from .sections.sections_request_builder import SectionsRequestBuilder
 
 class GeometryRequestBuilder(BaseRequestBuilder):
     """
@@ -39,5 +40,14 @@ class GeometryRequestBuilder(BaseRequestBuilder):
         from .plates.plates_request_builder import PlatesRequestBuilder
 
         return PlatesRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def sections(self) -> SectionsRequestBuilder:
+        """
+        The sections property
+        """
+        from .sections.sections_request_builder import SectionsRequestBuilder
+
+        return SectionsRequestBuilder(self.request_adapter, self.path_parameters)
     
 

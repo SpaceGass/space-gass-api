@@ -86,7 +86,7 @@ class NodeRestraintsRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: NodeRestraintCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[NodeRestraint]:
         """
-        Creates a new restraint row for the supplied node. Body must include the parent`node` Id. Returns 409 if a restraint already exists for that node — callermust DELETE first or use PATCH to update. Returns 404 if the node does not exist.Variable-stiffness tables can be supplied inline; the corresponding restraintCodeposition must be 'V'.
+        Creates a new attribute row. The body must include the parent Id (e.g. `node`, `member`).Returns 409 if a row already exists for the supplied parent — PATCH instead, or DELETE first.Returns 404 if the parent does not exist.
         param body: DTO for creating a node restraint. POST is entity-style: 409 if a restraintalready exists for the supplied node — caller must DELETE first or PATCH instead.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[NodeRestraint]
@@ -124,7 +124,7 @@ class NodeRestraintsRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: NodeRestraintCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Creates a new restraint row for the supplied node. Body must include the parent`node` Id. Returns 409 if a restraint already exists for that node — callermust DELETE first or use PATCH to update. Returns 404 if the node does not exist.Variable-stiffness tables can be supplied inline; the corresponding restraintCodeposition must be 'V'.
+        Creates a new attribute row. The body must include the parent Id (e.g. `node`, `member`).Returns 409 if a row already exists for the supplied parent — PATCH instead, or DELETE first.Returns 404 if the parent does not exist.
         param body: DTO for creating a node restraint. POST is entity-style: 409 if a restraintalready exists for the supplied node — caller must DELETE first or PATCH instead.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

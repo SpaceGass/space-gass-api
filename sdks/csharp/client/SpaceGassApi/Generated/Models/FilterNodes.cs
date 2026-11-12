@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a list of node Ids and a node-type categorical filter.Maps to SG `SGFilterType.Nodes`.
+    /// Sub-filter carrying a list of node Ids and a node-type categorical filter.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterNodes : IParsable
@@ -25,7 +25,7 @@ namespace SpaceGassApi.Models
 #else
         public string Nodes { get; set; }
 #endif
-        /// <summary>Node type categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_NodeType` enum verbatim — integer valuesand labels match SG so the filter datasheet round-trips cleanly.Richer than the entity-property `NodeType` (which only has`All` / `Restrained`) because the filter UI surfaces everyfine-grained boundary-condition flavour.</summary>
+        /// <summary>Node type categories available as a Filter resource criterion.Wider than the node type on nodes: it covers every boundary-condition category.</summary>
         public global::SpaceGassApi.Models.FilterNodeType? NodeType { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

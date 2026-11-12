@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for reading a member distributed moment entity.Represents distributed moments applied along a member.Composite Id: (Case, Member, SubLoad).
+    /// DTO for reading a member distributed moment entity.Represents a distributed torsion (a moment about the member&apos;s local X axis) applied along a member.Composite Id: (Case, Member, SubLoad).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberDistributedMoment : IParsable
@@ -19,22 +19,14 @@ namespace SpaceGassApi.Models
         public double? FinishPosition { get; set; }
         /// <summary>The load case number this load belongs to.</summary>
         public int? LoadCase { get; set; }
-        /// <summary>Load category for grouping/organization.</summary>
+        /// <summary>Id of the load&apos;s category (GET /job/loads/load-categories), or 0 when it has none.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>The member number this load is applied to.</summary>
         public int? Member { get; set; }
-        /// <summary>Distributed moment intensity about X axis at the finish position.</summary>
+        /// <summary>Distributed torsion (moment about the member X axis) at the finish position.</summary>
         public double? MxFinish { get; set; }
-        /// <summary>Distributed moment intensity about X axis at the start position.</summary>
+        /// <summary>Distributed torsion (moment about the member X axis) at the start position.</summary>
         public double? MxStart { get; set; }
-        /// <summary>Distributed moment intensity about Y axis at the finish position.</summary>
-        public double? MyFinish { get; set; }
-        /// <summary>Distributed moment intensity about Y axis at the start position.</summary>
-        public double? MyStart { get; set; }
-        /// <summary>Distributed moment intensity about Z axis at the finish position.</summary>
-        public double? MzFinish { get; set; }
-        /// <summary>Distributed moment intensity about Z axis at the start position.</summary>
-        public double? MzStart { get; set; }
         /// <summary>Position units for member load placement along a member.Maps to SPACE GASS lookup table &quot;Load Units&quot;.</summary>
         public global::SpaceGassApi.Models.LoadPositionUnits? PositionUnits { get; set; }
         /// <summary>Start position of the distributed moment along the member.</summary>
@@ -66,10 +58,6 @@ namespace SpaceGassApi.Models
                 { "member", n => { Member = n.GetIntValue(); } },
                 { "mxFinish", n => { MxFinish = n.GetDoubleValue(); } },
                 { "mxStart", n => { MxStart = n.GetDoubleValue(); } },
-                { "myFinish", n => { MyFinish = n.GetDoubleValue(); } },
-                { "myStart", n => { MyStart = n.GetDoubleValue(); } },
-                { "mzFinish", n => { MzFinish = n.GetDoubleValue(); } },
-                { "mzStart", n => { MzStart = n.GetDoubleValue(); } },
                 { "positionUnits", n => { PositionUnits = n.GetEnumValue<global::SpaceGassApi.Models.LoadPositionUnits>(); } },
                 { "startPosition", n => { StartPosition = n.GetDoubleValue(); } },
                 { "subLoad", n => { SubLoad = n.GetIntValue(); } },
@@ -89,10 +77,6 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("member", Member);
             writer.WriteDoubleValue("mxFinish", MxFinish);
             writer.WriteDoubleValue("mxStart", MxStart);
-            writer.WriteDoubleValue("myFinish", MyFinish);
-            writer.WriteDoubleValue("myStart", MyStart);
-            writer.WriteDoubleValue("mzFinish", MzFinish);
-            writer.WriteDoubleValue("mzStart", MzStart);
             writer.WriteEnumValue<global::SpaceGassApi.Models.LoadPositionUnits>("positionUnits", PositionUnits);
             writer.WriteDoubleValue("startPosition", StartPosition);
             writer.WriteIntValue("subLoad", SubLoad);

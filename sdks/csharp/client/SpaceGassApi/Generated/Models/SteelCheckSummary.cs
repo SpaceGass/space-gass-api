@@ -8,14 +8,14 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Steel member design check summary.
+    /// Steel member design check summary: one row per steel member (design group) the runchecked. Steel members are the design groups at GET /job/design/steel-members.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SteelCheckSummary : IParsable
     {
-        /// <summary>Load case ID of the critical case.</summary>
+        /// <summary>Load case Id of the critical case.</summary>
         public int? CriticalCase { get; set; }
-        /// <summary>Failure mode description.</summary>
+        /// <summary>Governing failure mode description.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Failure { get; set; }
@@ -23,19 +23,13 @@ namespace SpaceGassApi.Models
 #else
         public string Failure { get; set; }
 #endif
-        /// <summary>Design check status flag.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-        public string? Flag { get; set; }
-#nullable restore
-#else
-        public string Flag { get; set; }
-#endif
-        /// <summary>Design load factor (capacity ratio).</summary>
+        /// <summary>Why a design check failed — the engine&apos;s own classification of a failed steel member(design group), from its stored design record.</summary>
+        public global::SpaceGassApi.Models.DesignFailureType? FailureType { get; set; }
+        /// <summary>Design load factor: the factor by which the design actions could be increased before the steel member fails, so 1 is at capacity and below 1 is overloaded; the check fails when it is below `loadFactorLimit`. For the permissible-stress codes (AS1250, SABS 0162, AS3990, AISC-ASD 1989, API RP 2A-WSD — the response&apos;s `loadFactorType` says which) it is the combined stress ratio instead, where above 1 is overloaded and the check fails above `loadFactorLimit`.</summary>
         public float? LoadFactor { get; set; }
-        /// <summary>Member key (group key).</summary>
-        public int? Member { get; set; }
-        /// <summary>Section name used for the design check.</summary>
+        /// <summary>The load factor limit this steel member was checked against: the design settings&apos; loadFactorLimit when its run was made. Kept per steel member, as SPACE GASS keeps it — a later run on other steel members leaves this one&apos;s as it was. On the scale of `loadFactor`: the check fails on load factor when `loadFactor` is below it, and for the stress-ratio codes (`loadFactorType` StressRatio) it is the stress ratio limit as entered in the settings, and the check fails above it. `null` for a DesignError row (the engine stored no limit for it) or when the stored design record could not be read.</summary>
+        public float? LoadFactorLimit { get; set; }
+        /// <summary>The section the check was made with: the steel member&apos;s section for a Check run, or the section the design selected for a Design run.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Section { get; set; }
@@ -43,8 +37,14 @@ namespace SpaceGassApi.Models
 #else
         public string Section { get; set; }
 #endif
+        /// <summary>Whether `section` differs from the section the steel member&apos;s analysis members carry in the model: `true` when the design selected a different section (the model has not been updated to it), `false` when they match, `null` when the steel member or its members no longer exist in the model (the results predate a change to it).</summary>
+        public bool? SectionDiffersFromModel { get; set; }
         /// <summary>Critical segment length. Unit: Length (see GET /job/units).</summary>
         public float? SegmentLength { get; set; }
+        /// <summary>Outcome of a design check for one entity — a steel member (design group) in steel member design.</summary>
+        public global::SpaceGassApi.Models.DesignCheckStatus? Status { get; set; }
+        /// <summary>Steel member (design group) Id, as used by GET /job/design/steel-members/{id}.</summary>
+        public int? SteelMember { get; set; }
         /// <summary>Total member length. Unit: Length (see GET /job/units).</summary>
         public float? TotalLength { get; set; }
         /// <summary>Yield stress. Unit: Stress (see GET /job/units).</summary>
@@ -69,11 +69,14 @@ namespace SpaceGassApi.Models
             {
                 { "criticalCase", n => { CriticalCase = n.GetIntValue(); } },
                 { "failure", n => { Failure = n.GetStringValue(); } },
-                { "flag", n => { Flag = n.GetStringValue(); } },
+                { "failureType", n => { FailureType = n.GetEnumValue<global::SpaceGassApi.Models.DesignFailureType>(); } },
                 { "loadFactor", n => { LoadFactor = n.GetFloatValue(); } },
-                { "member", n => { Member = n.GetIntValue(); } },
+                { "loadFactorLimit", n => { LoadFactorLimit = n.GetFloatValue(); } },
                 { "section", n => { Section = n.GetStringValue(); } },
+                { "sectionDiffersFromModel", n => { SectionDiffersFromModel = n.GetBoolValue(); } },
                 { "segmentLength", n => { SegmentLength = n.GetFloatValue(); } },
+                { "status", n => { Status = n.GetEnumValue<global::SpaceGassApi.Models.DesignCheckStatus>(); } },
+                { "steelMember", n => { SteelMember = n.GetIntValue(); } },
                 { "totalLength", n => { TotalLength = n.GetFloatValue(); } },
                 { "yield", n => { Yield = n.GetFloatValue(); } },
             };
@@ -87,11 +90,14 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteIntValue("criticalCase", CriticalCase);
             writer.WriteStringValue("failure", Failure);
-            writer.WriteStringValue("flag", Flag);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.DesignFailureType>("failureType", FailureType);
             writer.WriteFloatValue("loadFactor", LoadFactor);
-            writer.WriteIntValue("member", Member);
+            writer.WriteFloatValue("loadFactorLimit", LoadFactorLimit);
             writer.WriteStringValue("section", Section);
+            writer.WriteBoolValue("sectionDiffersFromModel", SectionDiffersFromModel);
             writer.WriteFloatValue("segmentLength", SegmentLength);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.DesignCheckStatus>("status", Status);
+            writer.WriteIntValue("steelMember", SteelMember);
             writer.WriteFloatValue("totalLength", TotalLength);
             writer.WriteFloatValue("yield", Yield);
         }

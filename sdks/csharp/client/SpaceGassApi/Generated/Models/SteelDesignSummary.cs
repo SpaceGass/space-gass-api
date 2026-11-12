@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.Result flags are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
+    /// Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SteelDesignSummary : IParsable
@@ -17,6 +17,14 @@ namespace SpaceGassApi.Models
         public bool? HasConnectionDesignResults { get; set; }
         /// <summary>Whether steel member design results exist (check or design).</summary>
         public bool? HasMemberDesignResults { get; set; }
+        /// <summary>SPACE GASS&apos;s own label for the steel member design code and edition the stored results were produced under.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? SteelMemberDesignCode { get; set; }
+#nullable restore
+#else
+        public string SteelMemberDesignCode { get; set; }
+#endif
         /// <summary>Number of steel member design groups defined.</summary>
         public int? SteelMembers { get; set; }
         /// <summary>
@@ -39,6 +47,7 @@ namespace SpaceGassApi.Models
             {
                 { "hasConnectionDesignResults", n => { HasConnectionDesignResults = n.GetBoolValue(); } },
                 { "hasMemberDesignResults", n => { HasMemberDesignResults = n.GetBoolValue(); } },
+                { "steelMemberDesignCode", n => { SteelMemberDesignCode = n.GetStringValue(); } },
                 { "steelMembers", n => { SteelMembers = n.GetIntValue(); } },
             };
         }
@@ -51,6 +60,7 @@ namespace SpaceGassApi.Models
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
             writer.WriteBoolValue("hasConnectionDesignResults", HasConnectionDesignResults);
             writer.WriteBoolValue("hasMemberDesignResults", HasMemberDesignResults);
+            writer.WriteStringValue("steelMemberDesignCode", SteelMemberDesignCode);
             writer.WriteIntValue("steelMembers", SteelMembers);
         }
     }

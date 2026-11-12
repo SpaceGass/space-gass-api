@@ -8,11 +8,29 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Wrapper for analysis query results.Contains the result data plus optional warnings about requested cases or modesthat produced no results (i.e. were not analysed).
+    /// The steel member check summary: the rows (one per steel member the stored resultscover, SpaceGassApi.Models.Dtos.Query.Design.SteelCheckSummaryDto) plus what the stored results say as a whole —the design code they were produced under, what their load factors are, and the steelmembers they do not cover.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SteelCheckSummaryQueryResult : IParsable
     {
+        /// <summary>SPACE GASS&apos;s own label for the design code and edition the stored results wereproduced under — the same string as job/status&apos;s `steelDesign.steelMemberDesignCode`(e.g. `AS4100:2020`, `AISC 360-22 (LRFD)`, `AS1250 1981`). A displaystring, not a fixed set of values; `loadFactorType` is the value to switch on.Every row was produced under it: SPACE GASS removes all stored results when thedesign code changes. `null` when SPACE GASS has no label for the stored code.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? DesignCode { get; set; }
+#nullable restore
+#else
+        public string DesignCode { get; set; }
+#endif
+        /// <summary>What a steel member design result&apos;s `loadFactor` (and its `loadFactorLimit`)is, which depends on the design code the results were produced under.</summary>
+        public global::SpaceGassApi.Models.LoadFactorType? LoadFactorType { get; set; }
+        /// <summary>Steel members (design groups) the stored results do not cover — those with no row —in SG list format, empty when every steel member has a row. With a `steelMembers`filter only the filtered Ids are considered. Computed before value filters and paging,so it is the same on every page.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public string? NotDesigned { get; set; }
+#nullable restore
+#else
+        public string NotDesigned { get; set; }
+#endif
         /// <summary>The query result rows.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -20,6 +38,14 @@ namespace SpaceGassApi.Models
 #nullable restore
 #else
         public List<global::SpaceGassApi.Models.SteelCheckSummary> Results { get; set; }
+#endif
+        /// <summary>The sort applied to a results page and, for each returned row, the value that ranked it.Arrays are parallel to `results`: entry `i` describes `results[i]`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.SortKey? SortKey { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.SortKey SortKey { get; set; }
 #endif
         /// <summary>Warnings returned when some requested load cases or modes did not have analysisresults in the response. (Filter Ids that don&apos;t exist in the model are rejectedup-front with HTTP 400 by the controller — they never reach this DTO.)`loadCasesNotAnalyzed` is an SG list-format string that can be pasted straightinto `POST /job/analysis/run`&apos;s `loadCases` field to re-run only thosecases. `modesNotAnalyzed` is a per-case list — each analysed case can computea different number of modes, so the warning is keyed by case rather than flattened.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
@@ -47,7 +73,11 @@ namespace SpaceGassApi.Models
         {
             return new Dictionary<string, Action<IParseNode>>
             {
+                { "designCode", n => { DesignCode = n.GetStringValue(); } },
+                { "loadFactorType", n => { LoadFactorType = n.GetEnumValue<global::SpaceGassApi.Models.LoadFactorType>(); } },
+                { "notDesigned", n => { NotDesigned = n.GetStringValue(); } },
                 { "results", n => { Results = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.SteelCheckSummary>(global::SpaceGassApi.Models.SteelCheckSummary.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "sortKey", n => { SortKey = n.GetObjectValue<global::SpaceGassApi.Models.SortKey>(global::SpaceGassApi.Models.SortKey.CreateFromDiscriminatorValue); } },
                 { "warnings", n => { Warnings = n.GetObjectValue<global::SpaceGassApi.Models.QueryWarnings>(global::SpaceGassApi.Models.QueryWarnings.CreateFromDiscriminatorValue); } },
             };
         }
@@ -58,7 +88,11 @@ namespace SpaceGassApi.Models
         public virtual void Serialize(ISerializationWriter writer)
         {
             if(ReferenceEquals(writer, null)) throw new ArgumentNullException(nameof(writer));
+            writer.WriteStringValue("designCode", DesignCode);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.LoadFactorType>("loadFactorType", LoadFactorType);
+            writer.WriteStringValue("notDesigned", NotDesigned);
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.SteelCheckSummary>("results", Results);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.SortKey>("sortKey", SortKey);
             writer.WriteObjectValue<global::SpaceGassApi.Models.QueryWarnings>("warnings", Warnings);
         }
     }

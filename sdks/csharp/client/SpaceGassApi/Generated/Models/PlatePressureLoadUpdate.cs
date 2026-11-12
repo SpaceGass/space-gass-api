@@ -17,7 +17,7 @@ namespace SpaceGassApi.Models
         public global::SpaceGassApi.Models.LoadAxes? Axes { get; set; }
         /// <summary>The load case number.</summary>
         public int? LoadCase { get; set; }
-        /// <summary>Load category for grouping/organization.</summary>
+        /// <summary>Id of a load category (GET /job/loads/load-categories). Send 0 to clear the category; omit to keep the current one.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>The plate number.</summary>
         public int? Plate { get; set; }

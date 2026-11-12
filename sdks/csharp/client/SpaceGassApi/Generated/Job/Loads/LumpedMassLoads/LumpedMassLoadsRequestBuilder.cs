@@ -203,7 +203,7 @@ namespace SpaceGassApi.Job.Loads.LumpedMassLoads
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
-            /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
+            /// <summary>Filter by load category Id.Returns only loads assigned to the specified category; 0 returns the loads with no category.</summary>
             [QueryParameter("loadCategory")]
             public int? LoadCategory { get; set; }
             /// <summary>Node Ids to filter by, in SG list format (e.g. `&quot;1,5-10,12&quot;`).Returns only lumped masses applied to the specified nodes.Omit to return lumped masses for all nodes.</summary>

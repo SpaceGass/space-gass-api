@@ -203,7 +203,7 @@ namespace SpaceGassApi.Job.Loads.SelfWeightLoads
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
-            /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
+            /// <summary>Filter by load category Id.Returns only loads assigned to the specified category; 0 returns the loads with no category.</summary>
             [QueryParameter("loadCategory")]
             public int? LoadCategory { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>

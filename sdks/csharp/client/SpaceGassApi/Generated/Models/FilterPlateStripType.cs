@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Plate-strip categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_PlateStripType` verbatim.</summary>
+    /// <summary>Plate-strip categories available as a Filter resource criterion.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum FilterPlateStripType
     {

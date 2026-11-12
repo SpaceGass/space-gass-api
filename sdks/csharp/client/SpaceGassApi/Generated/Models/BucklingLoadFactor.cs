@@ -13,19 +13,19 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class BucklingLoadFactor : IParsable
     {
-        /// <summary>Number of iterations to converge.</summary>
+        /// <summary>Number of iterations to converge. Null when `status` is not `Reported`.</summary>
         public int? Iterations { get; set; }
         /// <summary>Load case ID.</summary>
         public int? LoadCase { get; set; }
-        /// <summary>Buckling load factor.</summary>
+        /// <summary>Buckling load factor. Null when `status` is not `Reported`.</summary>
         public float? LoadFactor { get; set; }
         /// <summary>Buckling mode number.</summary>
         public int? Mode { get; set; }
-        /// <summary>Node key at maximum rotation.</summary>
-        public float? NodeAtMaxRotn { get; set; }
-        /// <summary>Node key at maximum translation.</summary>
-        public float? NodeAtMaxTrans { get; set; }
-        /// <summary>Axis of maximum rotation.</summary>
+        /// <summary>Id of the node with the maximum rotation in the mode shape. Null when `status` is not `Reported`.</summary>
+        public int? NodeAtMaxRotn { get; set; }
+        /// <summary>Id of the node with the maximum translation in the mode shape. Null when `status` is not `Reported`.</summary>
+        public int? NodeAtMaxTrans { get; set; }
+        /// <summary>Axis of maximum rotation. Empty when `status` is not `Reported`.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? RotnAxis { get; set; }
@@ -33,9 +33,11 @@ namespace SpaceGassApi.Models
 #else
         public string RotnAxis { get; set; }
 #endif
-        /// <summary>Convergence tolerance.</summary>
+        /// <summary>Whether the solver reported a value for a buckling or dynamic mode, and if not, why.</summary>
+        public global::SpaceGassApi.Models.ModeStatus? Status { get; set; }
+        /// <summary>Convergence tolerance. Null when `status` is not `Reported`.</summary>
         public float? Tolerance { get; set; }
-        /// <summary>Axis of maximum translation.</summary>
+        /// <summary>Axis of maximum translation. Empty when `status` is not `Reported`.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? TransAxis { get; set; }
@@ -73,9 +75,10 @@ namespace SpaceGassApi.Models
                 { "loadCase", n => { LoadCase = n.GetIntValue(); } },
                 { "loadFactor", n => { LoadFactor = n.GetFloatValue(); } },
                 { "mode", n => { Mode = n.GetIntValue(); } },
-                { "nodeAtMaxRotn", n => { NodeAtMaxRotn = n.GetFloatValue(); } },
-                { "nodeAtMaxTrans", n => { NodeAtMaxTrans = n.GetFloatValue(); } },
+                { "nodeAtMaxRotn", n => { NodeAtMaxRotn = n.GetIntValue(); } },
+                { "nodeAtMaxTrans", n => { NodeAtMaxTrans = n.GetIntValue(); } },
                 { "rotnAxis", n => { RotnAxis = n.GetStringValue(); } },
+                { "status", n => { Status = n.GetEnumValue<global::SpaceGassApi.Models.ModeStatus>(); } },
                 { "tolerance", n => { Tolerance = n.GetFloatValue(); } },
                 { "transAxis", n => { TransAxis = n.GetStringValue(); } },
                 { "warning", n => { Warning = n.GetStringValue(); } },
@@ -92,9 +95,10 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("loadCase", LoadCase);
             writer.WriteFloatValue("loadFactor", LoadFactor);
             writer.WriteIntValue("mode", Mode);
-            writer.WriteFloatValue("nodeAtMaxRotn", NodeAtMaxRotn);
-            writer.WriteFloatValue("nodeAtMaxTrans", NodeAtMaxTrans);
+            writer.WriteIntValue("nodeAtMaxRotn", NodeAtMaxRotn);
+            writer.WriteIntValue("nodeAtMaxTrans", NodeAtMaxTrans);
             writer.WriteStringValue("rotnAxis", RotnAxis);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.ModeStatus>("status", Status);
             writer.WriteFloatValue("tolerance", Tolerance);
             writer.WriteStringValue("transAxis", TransAxis);
             writer.WriteStringValue("warning", Warning);

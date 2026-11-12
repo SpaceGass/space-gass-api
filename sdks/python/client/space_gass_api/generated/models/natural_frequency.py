@@ -4,29 +4,34 @@ from dataclasses import dataclass, field
 from kiota_abstractions.serialization import Parsable, ParseNode, SerializationWriter
 from typing import Any, Optional, TYPE_CHECKING, Union
 
+if TYPE_CHECKING:
+    from .mode_status import ModeStatus
+
 @dataclass
 class NaturalFrequency(Parsable):
     """
     Dynamic natural frequency result (FileId 218).
     """
-    # Frequency convergence tolerance.
+    # Frequency convergence tolerance. Null when `status` is not `Reported`.
     frequency_tolerance: Optional[float] = None
-    # Number of iterations to converge.
+    # Number of iterations to converge. Null when `status` is not `Reported`.
     iterations: Optional[int] = None
     # Load case ID.
     load_case: Optional[int] = None
-    # Mass participation factor in X direction.
+    # Mass participation factor in X direction. Null when `status` is not `Reported`.
     mass_part_x: Optional[float] = None
-    # Mass participation factor in Y direction.
+    # Mass participation factor in Y direction. Null when `status` is not `Reported`.
     mass_part_y: Optional[float] = None
-    # Mass participation factor in Z direction.
+    # Mass participation factor in Z direction. Null when `status` is not `Reported`.
     mass_part_z: Optional[float] = None
     # Mode number.
     mode: Optional[int] = None
-    # Natural frequency. Unit: Hz.
+    # Natural frequency. Unit: Hz. Null when `status` is not `Reported`.
     natural_frequency: Optional[float] = None
-    # Natural period. Unit: seconds.
+    # Natural period. Unit: seconds. Null when `status` is not `Reported`.
     natural_period: Optional[float] = None
+    # Whether the solver reported a value for a buckling or dynamic mode, and if not, why.
+    status: Optional[ModeStatus] = None
     # Analysis engine warning message (empty if none).
     warning: Optional[str] = None
     
@@ -46,6 +51,10 @@ class NaturalFrequency(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
+        from .mode_status import ModeStatus
+
+        from .mode_status import ModeStatus
+
         fields: dict[str, Callable[[Any], None]] = {
             "frequencyTolerance": lambda n : setattr(self, 'frequency_tolerance', n.get_float_value()),
             "iterations": lambda n : setattr(self, 'iterations', n.get_int_value()),
@@ -56,6 +65,7 @@ class NaturalFrequency(Parsable):
             "mode": lambda n : setattr(self, 'mode', n.get_int_value()),
             "naturalFrequency": lambda n : setattr(self, 'natural_frequency', n.get_float_value()),
             "naturalPeriod": lambda n : setattr(self, 'natural_period', n.get_float_value()),
+            "status": lambda n : setattr(self, 'status', n.get_enum_value(ModeStatus)),
             "warning": lambda n : setattr(self, 'warning', n.get_str_value()),
         }
         return fields
@@ -77,6 +87,7 @@ class NaturalFrequency(Parsable):
         writer.write_int_value("mode", self.mode)
         writer.write_float_value("naturalFrequency", self.natural_frequency)
         writer.write_float_value("naturalPeriod", self.natural_period)
+        writer.write_enum_value("status", self.status)
         writer.write_str_value("warning", self.warning)
     
 

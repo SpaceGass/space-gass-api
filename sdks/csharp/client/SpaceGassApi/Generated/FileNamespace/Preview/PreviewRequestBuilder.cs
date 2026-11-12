@@ -96,7 +96,7 @@ namespace SpaceGassApi.FileNamespace.Preview
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class PreviewRequestBuilderGetQueryParameters 
         {
-            /// <summary>Full path to the SPACE GASS job file (.sg or .sgbase)</summary>
+            /// <summary>Full path to the SPACE GASS job file (.sg or .sgbase), for example C:\Models\Job.sg; a relative path, such as one starting with &apos;~&apos;, returns an empty preview</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
             [QueryParameter("filePath")]

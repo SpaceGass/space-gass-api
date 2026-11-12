@@ -18,7 +18,7 @@ class ThermalLoadCreate(Parsable):
     element_type: Optional[ThermalElementType] = None
     # The load case number to create this load in.
     load_case: Optional[int] = None
-    # Load category for grouping/organization.
+    # Id of a load category (GET /job/loads/load-categories). Omit, or send 0, for no category.
     load_category: Optional[int] = None
     # The uniform temperature change applied to the element.
     thermal_load: Optional[float] = None

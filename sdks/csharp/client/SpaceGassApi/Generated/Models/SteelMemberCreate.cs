@@ -87,7 +87,7 @@ namespace SpaceGassApi.Models
         public bool? MinorAxisBracedAtEnds { get; set; }
         /// <summary>NZS3404 seismic member category for a steel member design group.Setting category 1 to 4 activates the seismic checks when the NZS3404 design code is used.Maps to SPACE GASS lookup table &quot;NZ Seismic Class&quot;.</summary>
         public global::SpaceGassApi.Models.Nzs3404SeismicClassification? Nzs3404SeismicClassification { get; set; }
-        /// <summary>Scan code letters that group compatible sections for member selection during a design run.</summary>
+        /// <summary>The section library groups, by scan-code letter, that a design run selects sections from.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? ScanCode { get; set; }

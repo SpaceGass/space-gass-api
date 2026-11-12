@@ -31,7 +31,7 @@ class MemberDistributedLoad(Parsable):
     fz_start: Optional[float] = None
     # The load case number this load belongs to.
     load_case: Optional[int] = None
-    # Load category for grouping/organization.
+    # Id of the load's category (GET /job/loads/load-categories), or 0 when it has none.
     load_category: Optional[int] = None
     # The member number this load is applied to.
     member: Optional[int] = None

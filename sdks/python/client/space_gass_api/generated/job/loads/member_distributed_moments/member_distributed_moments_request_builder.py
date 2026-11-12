@@ -88,7 +88,7 @@ class MemberDistributedMomentsRequestBuilder(BaseRequestBuilder):
     async def post(self,body: MemberDistributedMomentCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[MemberDistributedMoment]:
         """
         Creates a new load. The load case must exist and be a Primary load case.
-        param body: DTO for creating a new member distributed moment.The sub-load number is auto-assigned — do not include it in the request.
+        param body: DTO for creating a new member distributed moment (a distributed torsion about the member's local X axis).The sub-load number is auto-assigned — do not include it in the request.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[MemberDistributedMoment]
         """
@@ -126,7 +126,7 @@ class MemberDistributedMomentsRequestBuilder(BaseRequestBuilder):
     def to_post_request_information(self,body: MemberDistributedMomentCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Creates a new load. The load case must exist and be a Primary load case.
-        param body: DTO for creating a new member distributed moment.The sub-load number is auto-assigned — do not include it in the request.
+        param body: DTO for creating a new member distributed moment (a distributed torsion about the member's local X axis).The sub-load number is auto-assigned — do not include it in the request.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -197,7 +197,7 @@ class MemberDistributedMomentsRequestBuilder(BaseRequestBuilder):
         # Load cases to filter by, in SG list format (e.g. `"1,3-7,10"`).Returns only loads belonging to the specified load cases.Omit to return loads for all load cases.
         load_cases: Optional[str] = None
 
-        # Filter by load category number.Returns only loads assigned to the specified category.
+        # Filter by load category Id.Returns only loads assigned to the specified category; 0 returns the loads with no category.
         load_category: Optional[int] = None
 
         # Member Ids to filter by, in SG list format (e.g. `"1,3-7,10"`).Returns only loads applied to the specified members.Omit to return loads for all members.
