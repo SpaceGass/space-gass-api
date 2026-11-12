@@ -34,8 +34,8 @@ changed the port in SPACE GASS, see [Changing the API port](#changing-the-api-po
 disabled, or points at the wrong path.
 
 **Fix:** Check the client's MCP server list (Claude Desktop:
-**Settings › Extensions**; VS Code: **MCP: List Servers**; Claude Code:
-`/mcp`). Fix or re-add the entry, then restart the client. The exe is at
+**Settings › Desktop app › Extensions**; VS Code: **MCP: List Servers**;
+Claude Code: `/mcp`). Fix or re-add the entry, then restart the client. The exe is at
 `C:\Program Files\SPACE GASS 14.5\MCP\server\SpaceGassApi.Mcp.exe` — the
 folder name changes with the SPACE GASS version.
 
@@ -109,9 +109,10 @@ isn't enough — and reopen it.
 with `.mcpb` installs.
 
 **Fix:** Install Claude Desktop from
-[claude.ai/download](https://claude.ai/download) instead, or use
-**Settings › Extensions › Advanced settings › Install Extension…** and pick
-the file.
+[claude.ai/download](https://claude.ai/download) instead, or install the
+bundle from inside Claude Desktop: open **Settings › Desktop app**, click
+**Manage** next to **Extensions**, then **Advanced settings › Install
+Extension…** and pick the file.
 
 </AccordionContent>
 </AccordionItem>
@@ -121,10 +122,13 @@ the file.
 <AccordionContent>
 
 **Why:** On Claude Team and Enterprise plans an administrator can turn on an
-extension allowlist, which blocks anything not on it.
+extension allowlist. Claude Desktop then only installs approved extensions
+and refuses `.mcpb` files you open yourself.
 
-**Fix:** Ask your Claude administrator to add the SPACE GASS bundle to the
-allowlist.
+**Fix:** Send your Claude administrator the
+[steps for administrators](/mcp/claude-desktop#for-claude-administrators).
+Once they have added it, open **Settings › Desktop app**, click **Manage**
+next to **Extensions**, and install **SPACE GASS** from there.
 
 </AccordionContent>
 </AccordionItem>
@@ -209,7 +213,7 @@ precedence it uses:
 3. the default.
 
 In Claude Desktop, set **SPACE GASS API URL** in the extension's settings
-(**Settings › Extensions › SPACE GASS**). In other clients, add the
+(**Settings › Desktop app › Extensions › SPACE GASS**). In other clients, add the
 environment variable to the server entry — the `mcpServers` shape takes the
 same `env` block:
 
@@ -238,13 +242,16 @@ the SPACE GASS beside it; its version is the SPACE GASS build (for example
   major version changed the folder name (`SPACE GASS 14.5` → `SPACE GASS 15`),
   in which case update the path in your configuration.
 - **Claude Desktop** keeps its own copy of the bundle. Open the new
-  `spacegass.mcpb` again to update the extension.
+  `spacegass.mcpb` again to update the extension. If a Claude administrator
+  added it for your organisation, they
+  [upload the new version](/mcp/claude-desktop#for-claude-administrators)
+  instead.
 
 ## Removing the server
 
 | Client | How |
 |---|---|
-| Claude Desktop | **Settings › Extensions**, select **SPACE GASS**, remove |
+| Claude Desktop | **Settings › Desktop app › Extensions**, select **SPACE GASS**, remove |
 | Claude Code | `claude mcp remove spacegass` |
 | VS Code / Visual Studio | Delete the `spacegass` entry from `mcp.json` / `.mcp.json` |
 | Copilot CLI | `copilot mcp remove spacegass` |

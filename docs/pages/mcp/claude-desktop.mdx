@@ -38,9 +38,9 @@ Desktop** for Windows (the direct installer from
    ```
 
    Claude Desktop opens a preview of the extension. If double-clicking does
-   nothing, drag the file onto the Claude Desktop window, or in Claude go to
-   **Settings › Extensions › Advanced settings › Install Extension…** and
-   pick the file.
+   nothing, install it from inside Claude Desktop: open **Settings › Desktop
+   app**, click **Manage** next to **Extensions**, then **Advanced settings ›
+   Install Extension…** and pick the file.
 
 1. **Install**
 
@@ -50,16 +50,24 @@ Desktop** for Windows (the direct installer from
 
 1. **Check it is enabled**
 
-   **Settings › Extensions** now lists **SPACE GASS**. If it is not switched
-   on, switch it on. If the tools still don't appear in a new chat, fully
-   quit Claude Desktop from the system tray and reopen it — extensions only
-   start with the app.
+   Open **Settings › Desktop app** and click **Manage** next to
+   **Extensions**. **SPACE GASS** is now listed. If it is not switched on,
+   switch it on. If the tools still don't appear in a new chat, fully quit
+   Claude Desktop from the system tray and reopen it — extensions only start
+   with the app.
 </Stepper>
 
-The extension is installed for your Windows user only. On Claude Team and
-Enterprise plans an administrator may have turned on the desktop extension
-allowlist, in which case they need to add the bundle before you can
-install it.
+The extension is installed for your Windows user only.
+
+<Callout type="note" title="On a Claude Team or Enterprise plan?">
+
+If Claude Desktop refuses the file, your organisation only allows approved
+extensions. Send your Claude administrator the
+[steps for administrators](#for-claude-administrators). Once they have added
+it, install **SPACE GASS** from the extensions list inside Claude Desktop
+instead of opening the file.
+
+</Callout>
 
 ### Verify
 
@@ -75,8 +83,10 @@ is open (or which one is). Then try [your first session](/mcp/first-session).
 ### Update or remove
 
 Claude Desktop keeps its own copy of the extension, so after upgrading
-SPACE GASS open the new `spacegass.mcpb` again to update it. To remove it,
-open **Settings › Extensions**, select **SPACE GASS** and remove it.
+SPACE GASS open the new `spacegass.mcpb` again to update it. If your
+administrator added the extension for your organisation, they upload the new
+version instead. To remove it, open **Settings › Desktop app**, click
+**Manage** next to **Extensions**, select **SPACE GASS** and remove it.
 
 ### Troubleshooting
 
@@ -94,6 +104,48 @@ open **Settings › Extensions**, select **SPACE GASS** and remove it.
   `%AppData%\Claude\logs\mcp-server-spacegass.log`.
 
 Everything else: [Troubleshooting](/mcp/troubleshooting).
+
+## For Claude administrators
+
+On Claude Team and Enterprise plans, an Owner controls which Claude Desktop
+extensions staff can install. If the extension **Allowlist** is off (the
+default), there is nothing to do: staff install the bundle themselves with
+the steps above. If it is on, Claude Desktop refuses `.mcpb` files that staff
+open themselves, so add SPACE GASS to the allowlist once.
+
+<Stepper>
+1. **Upload the bundle**
+
+   In Claude, click your name in the bottom-left corner and open
+   **Organization settings › Connectors › Desktop**. Click **Add custom
+   extension** and pick the bundle from a PC that has SPACE GASS installed:
+
+   ```text
+   C:\Program Files\SPACE GASS 14.5\MCP\spacegass.mcpb
+   ```
+
+1. **Add it to your team**
+
+   **SPACE GASS** appears under **Custom team extensions**. Click **…**
+   beside it, then **Add to team**.
+
+1. **Staff install it in Claude Desktop**
+
+   Each person opens **Settings › Desktop app**, clicks **Manage** next to
+   **Extensions**, and installs **SPACE GASS** from the extensions your
+   organisation has approved. They can no longer install it by
+   double-clicking the file.
+</Stepper>
+
+Each PC still needs SPACE GASS 14.51 or later with [API access](/licensing),
+and the SPACE GASS API service running.
+
+After upgrading SPACE GASS, upload the new bundle: under **Custom team
+extensions**, click **…** beside **SPACE GASS**, then **Upload new version**.
+
+Only Owners and Primary Owners see these settings. On Enterprise plans,
+**Block all desktop extensions** must be off. Claude's own guide:
+[Enabling and using the desktop extension allowlist](https://support.claude.com/en/articles/12592343-enabling-and-using-the-desktop-extension-allowlist).
 
 ## Claude Code
 
