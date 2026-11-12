@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Controls which load cases a scenario load&apos;s stationary loads are generated into.Mirrors SPACE GASS `MLGenerateStationary` (`NETSpaceGass/Loads/Moving/MLCommon.vb`).</summary>
+    /// <summary>Controls which load cases a scenario load&apos;s stationary loads are generated into.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MovingLoadStationaryOption
     {

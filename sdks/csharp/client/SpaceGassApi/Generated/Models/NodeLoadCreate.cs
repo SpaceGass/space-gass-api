@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
         public double? Fz { get; set; }
         /// <summary>The load case number to create this load in.</summary>
         public int? LoadCase { get; set; }
-        /// <summary>Load category for grouping/organization.</summary>
+        /// <summary>Id of a load category (GET /job/loads/load-categories). Omit, or send 0, for no category.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>Moment about the global X axis.</summary>
         public double? Mx { get; set; }

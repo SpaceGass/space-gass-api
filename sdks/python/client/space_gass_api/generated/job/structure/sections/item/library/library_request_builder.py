@@ -33,7 +33,7 @@ class LibraryRequestBuilder(BaseRequestBuilder):
     
     async def put(self,body: SectionLibraryCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Section]:
         """
-        Replaces the section at the given Id with a library-sourced section. The existing rowis deleted and a new row is created at the same Id, resolved from the SPACE GASSsection library by (name, library). Use this to convert a User section to a Librarysection, or to re-resolve an existing Library section against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
+        Replaces the section at the given Id with a library-sourced section, resolved from theSPACE GASS section library by (name, library); the Id and every member that uses it arekept, and a name or library that cannot be resolved leaves the section unchanged. Usethis to convert a User section to a Librarysection, or to re-resolve an existing Library section against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
         param body: DTO for creating a library-sourced section. Structural properties (A, J, Iy, Iz, etc.)and cross-section shape data are resolved from the SPACE GASS section library by(name, library).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Section]
@@ -59,7 +59,7 @@ class LibraryRequestBuilder(BaseRequestBuilder):
     
     def to_put_request_information(self,body: SectionLibraryCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Replaces the section at the given Id with a library-sourced section. The existing rowis deleted and a new row is created at the same Id, resolved from the SPACE GASSsection library by (name, library). Use this to convert a User section to a Librarysection, or to re-resolve an existing Library section against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
+        Replaces the section at the given Id with a library-sourced section, resolved from theSPACE GASS section library by (name, library); the Id and every member that uses it arekept, and a name or library that cannot be resolved leaves the section unchanged. Usethis to convert a User section to a Librarysection, or to re-resolve an existing Library section against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
         param body: DTO for creating a library-sourced section. Structural properties (A, J, Iy, Iz, etc.)and cross-section shape data are resolved from the SPACE GASS section library by(name, library).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

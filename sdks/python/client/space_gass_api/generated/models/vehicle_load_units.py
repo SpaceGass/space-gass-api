@@ -14,11 +14,11 @@ class VehicleLoadUnits(Parsable):
     """
     The units a vehicle's wheel loads are stored in. Independent of the job-level units.
     """
-    # Force unit. Members mirror SPACE GASS `SgForce`.
+    # Force unit.
     force: Optional[ForceUnit] = None
-    # Length unit. Members mirror SPACE GASS `SGLength`(`NetCommon/CommonEnums.vb`); integer values and identifiers must stay inlock-step with it. The System.ComponentModel.DescriptionAttribute carries the displaylabel (mirrors `gcUNITS_LABEL_*`).
+    # Length unit.
     length: Optional[LengthUnit] = None
-    # Moment unit. Members mirror SPACE GASS `SgMoment`.
+    # Moment unit.
     moment: Optional[MomentUnit] = None
     
     @staticmethod

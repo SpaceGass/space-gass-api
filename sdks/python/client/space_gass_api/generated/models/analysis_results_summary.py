@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class AnalysisResultsSummary(Parsable):
     """
-    Summary of which analysis types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
+    Summary of which analysis types have stored results for the current job.
     """
     # Whether buckling analysis results exist.
     has_buckling_results: Optional[bool] = None

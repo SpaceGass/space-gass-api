@@ -33,7 +33,7 @@ class OpenSampleRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: OpenSampleRequest, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[JobStatus]:
         """
-        Opens a sample SPACE GASS project as a new unsaved job.The sample data is loaded but treated as a new job — use Save As to persist changes.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.            Use GET /api/v1/file/samples to list available sample files and their virtual paths.            Example request:                POST /api/v1/job/open-sample    {      "fileName": "Portal Frame.SG"    }
+        Opens a sample SPACE GASS project as a new unsaved job.The sample data is loaded but treated as a new job — use Save As to persist changes.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.            Use GET /api/v1/file/samples to list the available samples by file name.            Example request:                POST /api/v1/job/open-sample    {      "fileName": "Portal Frame.SG"    }
         param body: Request DTO for opening a sample project as a new unsaved job.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[JobStatus]
@@ -60,7 +60,7 @@ class OpenSampleRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: OpenSampleRequest, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Opens a sample SPACE GASS project as a new unsaved job.The sample data is loaded but treated as a new job — use Save As to persist changes.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.            Use GET /api/v1/file/samples to list available sample files and their virtual paths.            Example request:                POST /api/v1/job/open-sample    {      "fileName": "Portal Frame.SG"    }
+        Opens a sample SPACE GASS project as a new unsaved job.The sample data is loaded but treated as a new job — use Save As to persist changes.            If a job is currently open, returns 409 Conflict — close the current job firstusing POST /job/close.            Use GET /api/v1/file/samples to list the available samples by file name.            Example request:                POST /api/v1/job/open-sample    {      "fileName": "Portal Frame.SG"    }
         param body: Request DTO for opening a sample project as a new unsaved job.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

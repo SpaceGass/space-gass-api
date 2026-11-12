@@ -20,7 +20,11 @@ class FieldMetadata(Parsable):
     default: Optional[str] = None
     # Optional hint text for this field, useful for UI labels and tooltips. Null when not available.
     description: Optional[str] = None
-    # Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.
+    # Results endpoints only: whether this is one of the row's identity fields — the fields`distinctBy` accepts, which in field order are also the endpoint's default sortorder. Omitted for other resources.
+    distinct_by: Optional[bool] = None
+    # Results endpoints only: the value-filter query parameters that apply to this field —`min…`/`max…` (plus `minAbs…`/`maxAbs…` for a floating-point field)for a numeric field, or the field's own name for a text, enum or boolean field'sequality filter. Empty for a field with no filter: an identity field is selected by theendpoint's Id-list parameter instead. Omitted for other resources.
+    filters: Optional[list[str]] = None
+    # Wire-format property key — the JSON object key a client sees in a GETresponse body. This is the authoritative public identifier for the field.A field nested inside an object or a list is named by its path from the top ofthe item: `.` steps into an object and `[]` marks each list level(e.g. `pointA.x`, `outlines[].outer[].y`).
     json_name: Optional[str] = None
     # Maximum allowed value for this field (as a string; use `dataType` to determine how to parse it).Null if no maximum constraint applies.
     max: Optional[str] = None
@@ -28,6 +32,8 @@ class FieldMetadata(Parsable):
     max_length: Optional[int] = None
     # Minimum allowed value for this field (as a string; use `dataType` to determine how to parse it).Null if no minimum constraint applies.
     min: Optional[str] = None
+    # Results endpoints only: whether the endpoint's `sort` parameter accepts this field(its numeric fields). Omitted for other resources.
+    sortable: Optional[bool] = None
     # Resolved unit label based on the current job units — e.g. "mm", "kN","kN/mm^2". Null when the field has no units.
     units: Optional[str] = None
     
@@ -56,10 +62,13 @@ class FieldMetadata(Parsable):
             "dataType": lambda n : setattr(self, 'data_type', n.get_str_value()),
             "default": lambda n : setattr(self, 'default', n.get_str_value()),
             "description": lambda n : setattr(self, 'description', n.get_str_value()),
+            "distinctBy": lambda n : setattr(self, 'distinct_by', n.get_bool_value()),
+            "filters": lambda n : setattr(self, 'filters', n.get_collection_of_primitive_values(str)),
             "jsonName": lambda n : setattr(self, 'json_name', n.get_str_value()),
             "max": lambda n : setattr(self, 'max', n.get_str_value()),
             "maxLength": lambda n : setattr(self, 'max_length', n.get_int_value()),
             "min": lambda n : setattr(self, 'min', n.get_str_value()),
+            "sortable": lambda n : setattr(self, 'sortable', n.get_bool_value()),
             "units": lambda n : setattr(self, 'units', n.get_str_value()),
         }
         return fields
@@ -76,10 +85,13 @@ class FieldMetadata(Parsable):
         writer.write_str_value("dataType", self.data_type)
         writer.write_str_value("default", self.default)
         writer.write_str_value("description", self.description)
+        writer.write_bool_value("distinctBy", self.distinct_by)
+        writer.write_collection_of_primitive_values("filters", self.filters)
         writer.write_str_value("jsonName", self.json_name)
         writer.write_str_value("max", self.max)
         writer.write_int_value("maxLength", self.max_length)
         writer.write_str_value("min", self.min)
+        writer.write_bool_value("sortable", self.sortable)
         writer.write_str_value("units", self.units)
     
 

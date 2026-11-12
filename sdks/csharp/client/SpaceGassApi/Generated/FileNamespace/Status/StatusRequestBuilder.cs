@@ -94,7 +94,7 @@ namespace SpaceGassApi.FileNamespace.Status
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class StatusRequestBuilderGetQueryParameters 
         {
-            /// <summary>Full path to the SPACE GASS job file (.sg)</summary>
+            /// <summary>Full path to the SPACE GASS job file (.sg), for example C:\Models\Job.sg; a relative path, such as one starting with &apos;~&apos;, reports NotFound</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
             [QueryParameter("filePath")]

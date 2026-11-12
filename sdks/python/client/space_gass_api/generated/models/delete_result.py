@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 @dataclass
 class DeleteResult(Parsable):
     """
-    Summary of a cascade delete: everything removed when a Node, Member, or Plate was deleted —the entity itself plus every child row that referenced it and any nodes transitively orphanedby the removal. Only entity types that actually had rows removed are present; the rest are omitted.
+    Summary of a cascade delete: everything removed when a Node, Member, or Plate was deleted —the entity itself plus every child row that referenced it and any nodes transitively orphanedby the removal. Only entity types that actually had rows removed are present; the rest are omitted.Notes and dimensions attached to removed items are removed from the job settings but not listed.
     """
     # Composite keys (case + node) of lumped mass loads removed.
     lumped_mass_loads: Optional[list[LumpedMassLoadKey]] = None
@@ -56,10 +56,14 @@ class DeleteResult(Parsable):
     plates_direction_reset: Optional[list[int]] = None
     # Composite keys (case + node) of prescribed displacements removed.
     prescribed_displacements: Optional[list[PrescribedDisplacementKey]] = None
+    # Ids of steel member design groups removed (a group goes whole when any listed member is deleted).
+    steel_members: Optional[list[int]] = None
     # Composite keys (case + element + elementType) of thermal loads removed.
     thermal_loads: Optional[list[ThermalLoadElementId]] = None
     # Total number of rows removed across all entity types.
     total_removed: Optional[int] = None
+    # Cleanup that was skipped; the removed lists contain only completed removals.
+    warnings: Optional[list[str]] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> DeleteResult:
@@ -116,8 +120,10 @@ class DeleteResult(Parsable):
             "plates": lambda n : setattr(self, 'plates', n.get_collection_of_primitive_values(int)),
             "platesDirectionReset": lambda n : setattr(self, 'plates_direction_reset', n.get_collection_of_primitive_values(int)),
             "prescribedDisplacements": lambda n : setattr(self, 'prescribed_displacements', n.get_collection_of_object_values(PrescribedDisplacementKey)),
+            "steelMembers": lambda n : setattr(self, 'steel_members', n.get_collection_of_primitive_values(int)),
             "thermalLoads": lambda n : setattr(self, 'thermal_loads', n.get_collection_of_object_values(ThermalLoadElementId)),
             "totalRemoved": lambda n : setattr(self, 'total_removed', n.get_int_value()),
+            "warnings": lambda n : setattr(self, 'warnings', n.get_collection_of_primitive_values(str)),
         }
         return fields
     
@@ -147,7 +153,9 @@ class DeleteResult(Parsable):
         writer.write_collection_of_primitive_values("plates", self.plates)
         writer.write_collection_of_primitive_values("platesDirectionReset", self.plates_direction_reset)
         writer.write_collection_of_object_values("prescribedDisplacements", self.prescribed_displacements)
+        writer.write_collection_of_primitive_values("steelMembers", self.steel_members)
         writer.write_collection_of_object_values("thermalLoads", self.thermal_loads)
         writer.write_int_value("totalRemoved", self.total_removed)
+        writer.write_collection_of_primitive_values("warnings", self.warnings)
     
 

@@ -56,7 +56,7 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     async def patch(self,body: MovingLoadSettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[MovingLoadSettings]:
         """
-        Partially updates the collection-level settings (flags, vertical proximity, and theloaded-area polygon); omitted fields keep their current value. Units are read-only —change them via `POST /job/units`.
+        Partially updates the collection-level settings (flags, vertical proximity, and theloaded-area polygon); omitted fields keep their current value. Values are interpretedin the job's active units (see `GET /job/units`).
         param body: Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadSettingsDto. All properties are optional;omitted properties keep their current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[MovingLoadSettings]
@@ -93,7 +93,7 @@ class SettingsRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: MovingLoadSettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Partially updates the collection-level settings (flags, vertical proximity, and theloaded-area polygon); omitted fields keep their current value. Units are read-only —change them via `POST /job/units`.
+        Partially updates the collection-level settings (flags, vertical proximity, and theloaded-area polygon); omitted fields keep their current value. Values are interpretedin the job's active units (see `GET /job/units`).
         param body: Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadSettingsDto. All properties are optional;omitted properties keep their current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

@@ -17,7 +17,7 @@ class NodeLoad(Parsable):
     fz: Optional[float] = None
     # The load case number this load belongs to.
     load_case: Optional[int] = None
-    # Load category for grouping/organization.
+    # Id of the load's category (GET /job/loads/load-categories), or 0 when it has none.
     load_category: Optional[int] = None
     # Moment about the global X axis.
     mx: Optional[float] = None

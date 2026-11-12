@@ -83,7 +83,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     # --- end overloads ---
     async def patch(self,body: list[NodeRestraintUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None, **kwargs) -> Optional[NodeRestraintBulkResult]:
         """
-        Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
+        Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a bulk error if no row exists for the supplied parent.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[NodeRestraintBulkResult]
@@ -120,7 +120,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     # --- end overloads ---
     async def post(self,body: list[NodeRestraintCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None, **kwargs) -> Optional[NodeRestraintBulkResult]:
         """
-        Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
+        Creates multiple attribute rows in a single request. Each item must include its parent Idin the body. Returns 409 (per-item error) for any row whose parent already has an attribute.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[NodeRestraintBulkResult]
@@ -161,7 +161,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_patch_request_information(self,body: list[NodeRestraintUpdate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPatchQueryParameters]] = None) -> RequestInformation:
         """
-        Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
+        Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a bulk error if no row exists for the supplied parent.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -176,7 +176,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: list[NodeRestraintCreate], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderPostQueryParameters]] = None) -> RequestInformation:
         """
-        Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
+        Creates multiple attribute rows in a single request. Each item must include its parent Idin the body. Returns 409 (per-item error) for any row whose parent already has an attribute.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -230,7 +230,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPatchQueryParameters():
         """
-        Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
+        Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a bulk error if no row exists for the supplied parent.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -244,7 +244,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
                 return "continueOnError"
             return original_name
         
-        # If true, continue processing remaining items after a failure. Default: false.
+        # If `true`, processing continues after per-item failures and partial results are returned. Defaults to `false` (stop on first error).
         continue_on_error: Optional[bool] = None
 
     
@@ -258,7 +258,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderPostQueryParameters():
         """
-        Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
+        Creates multiple attribute rows in a single request. Each item must include its parent Idin the body. Returns 409 (per-item error) for any row whose parent already has an attribute.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """
@@ -272,7 +272,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
                 return "continueOnError"
             return original_name
         
-        # If true, continue processing remaining items after a failure. Default: false.
+        # If `true`, processing continues after per-item failures and partial results are returned. Defaults to `false` (stop on first error).
         continue_on_error: Optional[bool] = None
 
     

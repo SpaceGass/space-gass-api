@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CheckSummaryRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/design/steel-member/check-summary{?limit*,members*,offset*}", pathParameters)
+        public CheckSummaryRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/design/steel-member/check-summary{?distinctBy*,failure*,failureType*,limit*,maxAbsLoadFactor*,maxAbsLoadFactorLimit*,maxAbsSegmentLength*,maxAbsTotalLength*,maxAbsYield*,maxCriticalCase*,maxLoadFactor*,maxLoadFactorLimit*,maxSegmentLength*,maxTotalLength*,maxYield*,minAbsLoadFactor*,minAbsLoadFactorLimit*,minAbsSegmentLength*,minAbsTotalLength*,minAbsYield*,minCriticalCase*,minLoadFactor*,minLoadFactorLimit*,minSegmentLength*,minTotalLength*,minYield*,offset*,order*,section*,sectionDiffersFromModel*,sort*,status*,steelMembers*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,11 +36,11 @@ namespace SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public CheckSummaryRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/design/steel-member/check-summary{?limit*,members*,offset*}", rawUrl)
+        public CheckSummaryRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/design/steel-member/check-summary{?distinctBy*,failure*,failureType*,limit*,maxAbsLoadFactor*,maxAbsLoadFactorLimit*,maxAbsSegmentLength*,maxAbsTotalLength*,maxAbsYield*,maxCriticalCase*,maxLoadFactor*,maxLoadFactorLimit*,maxSegmentLength*,maxTotalLength*,maxYield*,minAbsLoadFactor*,minAbsLoadFactorLimit*,minAbsSegmentLength*,minAbsTotalLength*,minAbsYield*,minCriticalCase*,minLoadFactor*,minLoadFactorLimit*,minSegmentLength*,minTotalLength*,minYield*,offset*,order*,section*,sectionDiffersFromModel*,sort*,status*,steelMembers*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets steel member design check summary results, optionally filtered by member Ids.
+        /// Gets the steel member design check summary: one row per steel member (design group,GET /job/design/steel-members), keyed by its Id in `steelMember`, optionallyfiltered by steel member Id. `status` is the check outcome, `failureType`why a Failed row failed (load factor, seismic, slenderness or a design error),`loadFactorLimit` the limit that steel member was checked against, `section`the section checked or selected, and `sectionDiffersFromModel` whether thatsection differs from the one the model carries. Beside the rows the response carrieswhat the stored results say as a whole: `designCode`, the code they wereproduced under, and `notDesigned`, the steel members (of the filter, or the job)with no row.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelCheckSummaryQueryResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -71,7 +71,7 @@ namespace SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.SteelCheckSummaryQueryResult>(requestInfo, global::SpaceGassApi.Models.SteelCheckSummaryQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets steel member design check summary results, optionally filtered by member Ids.
+        /// Gets the steel member design check summary: one row per steel member (design group,GET /job/design/steel-members), keyed by its Id in `steelMember`, optionallyfiltered by steel member Id. `status` is the check outcome, `failureType`why a Failed row failed (load factor, seismic, slenderness or a design error),`loadFactorLimit` the limit that steel member was checked against, `section`the section checked or selected, and `sectionDiffersFromModel` whether thatsection differs from the one the model carries. Beside the rows the response carrieswhat the stored results say as a whole: `designCode`, the code they wereproduced under, and `notDesigned`, the steel members (of the filter, or the job)with no row.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -99,27 +99,177 @@ namespace SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary
             return new global::SpaceGassApi.Job.Query.Design.SteelMember.CheckSummary.CheckSummaryRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets steel member design check summary results, optionally filtered by member Ids.
+        /// Gets the steel member design check summary: one row per steel member (design group,GET /job/design/steel-members), keyed by its Id in `steelMember`, optionallyfiltered by steel member Id. `status` is the check outcome, `failureType`why a Failed row failed (load factor, seismic, slenderness or a design error),`loadFactorLimit` the limit that steel member was checked against, `section`the section checked or selected, and `sectionDiffersFromModel` whether thatsection differs from the one the model carries. Beside the rows the response carrieswhat the stored results say as a whole: `designCode`, the code they wereproduced under, and `notDesigned`, the steel members (of the filter, or the job)with no row.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class CheckSummaryRequestBuilderGetQueryParameters 
         {
+            /// <summary>Identity fields: steelMember. One row per value of this identity field: the first row in sort order, i.e. the governingone. `sort=fy&amp;order=AbsDesc&amp;distinctBy=node` returns each node&apos;s governingreaction with its load case; `distinctBy=loadCase` each case&apos;s governing row. Theidentity fields are the row&apos;s Ids (load case, node, member, plate, mode, steel member) orthe reaction summary&apos;s `summaryType`, named as in the response and flagged`distinctBy: true` in `GET …/metadata`. Rows come back whole; the count headeris the number of distinct values. Requires `sort`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("distinctBy")]
+            public string? DistinctBy { get; set; }
+#nullable restore
+#else
+            [QueryParameter("distinctBy")]
+            public string DistinctBy { get; set; }
+#endif
+            /// <summary>Keep rows whose failure is one of the given values. One or more values, comma-separated, matched case-insensitively.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("failure")]
+            public string? Failure { get; set; }
+#nullable restore
+#else
+            [QueryParameter("failure")]
+            public string Failure { get; set; }
+#endif
+            /// <summary>Keep rows whose failureType is one of the given values. One or more of: LoadFactor, Seismic, Slenderness, DesignError (comma-separated, case-insensitive).</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("failureType")]
+            public string? FailureType { get; set; }
+#nullable restore
+#else
+            [QueryParameter("failureType")]
+            public string FailureType { get; set; }
+#endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             [QueryParameter("limit")]
             public int? Limit { get; set; }
-            /// <summary>Member Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
-#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
-#nullable enable
-            [QueryParameter("members")]
-            public string? Members { get; set; }
-#nullable restore
-#else
-            [QueryParameter("members")]
-            public string Members { get; set; }
-#endif
+            /// <summary>Keep rows whose loadFactor has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsLoadFactor")]
+            public double? MaxAbsLoadFactor { get; set; }
+            /// <summary>Keep rows whose loadFactorLimit has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsLoadFactorLimit")]
+            public double? MaxAbsLoadFactorLimit { get; set; }
+            /// <summary>Keep rows whose segmentLength has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsSegmentLength")]
+            public double? MaxAbsSegmentLength { get; set; }
+            /// <summary>Keep rows whose totalLength has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTotalLength")]
+            public double? MaxAbsTotalLength { get; set; }
+            /// <summary>Keep rows whose yield has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsYield")]
+            public double? MaxAbsYield { get; set; }
+            /// <summary>Keep rows whose criticalCase is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxCriticalCase")]
+            public double? MaxCriticalCase { get; set; }
+            /// <summary>Keep rows whose loadFactor is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxLoadFactor")]
+            public double? MaxLoadFactor { get; set; }
+            /// <summary>Keep rows whose loadFactorLimit is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxLoadFactorLimit")]
+            public double? MaxLoadFactorLimit { get; set; }
+            /// <summary>Keep rows whose segmentLength is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxSegmentLength")]
+            public double? MaxSegmentLength { get; set; }
+            /// <summary>Keep rows whose totalLength is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTotalLength")]
+            public double? MaxTotalLength { get; set; }
+            /// <summary>Keep rows whose yield is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxYield")]
+            public double? MaxYield { get; set; }
+            /// <summary>Keep rows whose loadFactor has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsLoadFactor")]
+            public double? MinAbsLoadFactor { get; set; }
+            /// <summary>Keep rows whose loadFactorLimit has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsLoadFactorLimit")]
+            public double? MinAbsLoadFactorLimit { get; set; }
+            /// <summary>Keep rows whose segmentLength has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsSegmentLength")]
+            public double? MinAbsSegmentLength { get; set; }
+            /// <summary>Keep rows whose totalLength has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTotalLength")]
+            public double? MinAbsTotalLength { get; set; }
+            /// <summary>Keep rows whose yield has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsYield")]
+            public double? MinAbsYield { get; set; }
+            /// <summary>Keep rows whose criticalCase is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minCriticalCase")]
+            public double? MinCriticalCase { get; set; }
+            /// <summary>Keep rows whose loadFactor is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minLoadFactor")]
+            public double? MinLoadFactor { get; set; }
+            /// <summary>Keep rows whose loadFactorLimit is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minLoadFactorLimit")]
+            public double? MinLoadFactorLimit { get; set; }
+            /// <summary>Keep rows whose segmentLength is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minSegmentLength")]
+            public double? MinSegmentLength { get; set; }
+            /// <summary>Keep rows whose totalLength is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTotalLength")]
+            public double? MinTotalLength { get; set; }
+            /// <summary>Keep rows whose yield is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minYield")]
+            public double? MinYield { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             [QueryParameter("offset")]
             public int? Offset { get; set; }
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [Obsolete("This property is deprecated, use OrderAsResultSortOrder instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("order")]
+            public string? Order { get; set; }
+#nullable restore
+#else
+            [QueryParameter("order")]
+            public string Order { get; set; }
+#endif
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [QueryParameter("order")]
+            public global::SpaceGassApi.Models.ResultSortOrder? OrderAsResultSortOrder { get; set; }
+            /// <summary>Keep rows whose section is one of the given values. One or more values, comma-separated, matched case-insensitively.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("section")]
+            public string? Section { get; set; }
+#nullable restore
+#else
+            [QueryParameter("section")]
+            public string Section { get; set; }
+#endif
+            /// <summary>Keep rows whose sectionDiffersFromModel is one of the given values. true or false.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("sectionDiffersFromModel")]
+            public string? SectionDiffersFromModel { get; set; }
+#nullable restore
+#else
+            [QueryParameter("sectionDiffersFromModel")]
+            public string SectionDiffersFromModel { get; set; }
+#endif
+            /// <summary>Sortable fields: steelMember, yield, totalLength, segmentLength, criticalCase, loadFactor, loadFactorLimit. Field to sort the rows by, named as in the response (case-insensitive). Any numeric fieldof the endpoint&apos;s rows can be used. An array field (values at member stations, member ends,plate corners or nodes) ranks each row by its extreme value in the requested direction, andthe row is returned whole. Rows with no value for the field sort last. Omit to return rows inthe endpoint&apos;s default order: its identity fields in order — the fields `GET …/metadata`flags `distinctBy: true`, e.g. load case then node for node results.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("sort")]
+            public string? Sort { get; set; }
+#nullable restore
+#else
+            [QueryParameter("sort")]
+            public string Sort { get; set; }
+#endif
+            /// <summary>Keep rows whose status is one of the given values. One or more of: Passed, PassedWithWarnings, Failed (comma-separated, case-insensitive).</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("status")]
+            public string? Status { get; set; }
+#nullable restore
+#else
+            [QueryParameter("status")]
+            public string Status { get; set; }
+#endif
+            /// <summary>Steel member (design group) Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all. The former name `members` is rejected with a 400.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("steelMembers")]
+            public string? SteelMembers { get; set; }
+#nullable restore
+#else
+            [QueryParameter("steelMembers")]
+            public string SteelMembers { get; set; }
+#endif
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

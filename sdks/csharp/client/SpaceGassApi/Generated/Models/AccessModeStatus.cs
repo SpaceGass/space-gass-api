@@ -25,6 +25,8 @@ namespace SpaceGassApi.Models
 #endif
         /// <summary>Current operational mode of the API.</summary>
         public global::SpaceGassApi.Models.AccessMode? PendingAccessMode { get; set; }
+        /// <summary>Whether this licence can give the API a ReadWrite seat, and if not, why.Computed by SpaceGassApi.Licensing.LicenseState.ReadWriteAvailability; surfaced on`GET /service/access-mode` and on the 409 responses that refuse awrite or a switch to ReadWrite. The System.ComponentModel.DescriptionAttribute is theshort label for metadata and docs; the sentence for the user lives inSpaceGassApi.Licensing.ReadWriteAvailabilityText.</summary>
+        public global::SpaceGassApi.Models.ReadWriteAvailability? ReadWriteAvailability { get; set; }
         /// <summary>Human-readable explanation of the pending access-mode transition(e.g. &quot;Job open — release on close&quot;).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -54,6 +56,7 @@ namespace SpaceGassApi.Models
                 { "accessMode", n => { AccessMode = n.GetEnumValue<global::SpaceGassApi.Models.AccessMode>(); } },
                 { "availableAccessModes", n => { AvailableAccessModes = n.GetCollectionOfEnumValues<global::SpaceGassApi.Models.AccessMode>()?.AsList(); } },
                 { "pendingAccessMode", n => { PendingAccessMode = n.GetEnumValue<global::SpaceGassApi.Models.AccessMode>(); } },
+                { "readWriteAvailability", n => { ReadWriteAvailability = n.GetEnumValue<global::SpaceGassApi.Models.ReadWriteAvailability>(); } },
                 { "reasonIfAccessModePending", n => { ReasonIfAccessModePending = n.GetStringValue(); } },
             };
         }
@@ -67,6 +70,7 @@ namespace SpaceGassApi.Models
             writer.WriteEnumValue<global::SpaceGassApi.Models.AccessMode>("accessMode", AccessMode);
             writer.WriteCollectionOfEnumValues<global::SpaceGassApi.Models.AccessMode>("availableAccessModes", AvailableAccessModes);
             writer.WriteEnumValue<global::SpaceGassApi.Models.AccessMode>("pendingAccessMode", PendingAccessMode);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.ReadWriteAvailability>("readWriteAvailability", ReadWriteAvailability);
             writer.WriteStringValue("reasonIfAccessModePending", ReasonIfAccessModePending);
         }
     }

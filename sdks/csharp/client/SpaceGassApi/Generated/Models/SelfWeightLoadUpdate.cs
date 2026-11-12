@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
         public double? AccelerationZ { get; set; }
         /// <summary>The load case number.</summary>
         public int? LoadCase { get; set; }
-        /// <summary>Load category for grouping/organization.</summary>
+        /// <summary>Id of a load category (GET /job/loads/load-categories). Send 0 to clear the category; omit to keep the current one.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

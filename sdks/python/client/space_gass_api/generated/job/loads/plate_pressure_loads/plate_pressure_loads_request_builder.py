@@ -197,7 +197,7 @@ class PlatePressureLoadsRequestBuilder(BaseRequestBuilder):
         # Load cases to filter by, in SG list format (e.g. `"1,3-7,10"`).Returns only loads belonging to the specified load cases.Omit to return loads for all load cases.
         load_cases: Optional[str] = None
 
-        # Filter by load category number.Returns only loads assigned to the specified category.
+        # Filter by load category Id.Returns only loads assigned to the specified category; 0 returns the loads with no category.
         load_category: Optional[int] = None
 
         # Number of items to skip from the start of the result set. Default is 0.

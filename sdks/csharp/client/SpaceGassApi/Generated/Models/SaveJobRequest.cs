@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SaveJobRequest : IParsable
     {
-        /// <summary>Target file path. Omit to save to current location.Required if the job is new (never saved before).</summary>
+        /// <summary>Full path of the target file, for example C:\Models\Job.sg. Omit to save to current location.Required if the job is new (never saved before). A relative path, such as one starting with &apos;~&apos;, is rejected.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? FilePath { get; set; }

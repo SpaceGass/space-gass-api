@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 @dataclass
 class FilterAxisRange(Parsable):
     """
-    Sub-filter carrying a coordinate-range criterion (one axis).Maps to SG `SGFilterType.XAxis` / `YAxis` / `ZAxis` — three siblingproperties at the parent level use this shape.
+    Sub-filter carrying a coordinate-range criterion (one axis).The filter's X, Y and Z axis ranges each use this shape.
     """
     # Whether the upper bound is inclusive (`true`: `value <= limitHigh`)or strict (`false`: `value < limitHigh`).
     high_inclusive: Optional[bool] = None

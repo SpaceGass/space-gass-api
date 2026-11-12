@@ -13,11 +13,11 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class VehicleLoadUnits : IParsable
     {
-        /// <summary>Force unit. Members mirror SPACE GASS `SgForce`.</summary>
+        /// <summary>Force unit.</summary>
         public global::SpaceGassApi.Models.ForceUnit? Force { get; set; }
-        /// <summary>Length unit. Members mirror SPACE GASS `SGLength`(`NetCommon/CommonEnums.vb`); integer values and identifiers must stay inlock-step with it. The System.ComponentModel.DescriptionAttribute carries the displaylabel (mirrors `gcUNITS_LABEL_*`).</summary>
+        /// <summary>Length unit.</summary>
         public global::SpaceGassApi.Models.LengthUnit? Length { get; set; }
-        /// <summary>Moment unit. Members mirror SPACE GASS `SgMoment`.</summary>
+        /// <summary>Moment unit.</summary>
         public global::SpaceGassApi.Models.MomentUnit? Moment { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

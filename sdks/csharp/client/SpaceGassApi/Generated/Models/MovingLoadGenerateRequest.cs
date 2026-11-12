@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MovingLoadGenerateRequest : IParsable
     {
-        /// <summary>Existing load category Id to tag the generated load cases with.</summary>
+        /// <summary>Id of an existing load category (GET /job/loads/load-categories) to tag the generatedload cases with. Omit, or send `null`, to reuse or create the default &quot;Moving loads&quot;category. `0` is not accepted: generated load cases always get a category. An unknownId is rejected with `400`.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

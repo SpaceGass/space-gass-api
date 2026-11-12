@@ -197,7 +197,7 @@ class LumpedMassLoadsRequestBuilder(BaseRequestBuilder):
         # Load cases to filter by, in SG list format (e.g. `"1,3-7,10"`).Returns only loads belonging to the specified load cases.Omit to return loads for all load cases.
         load_cases: Optional[str] = None
 
-        # Filter by load category number.Returns only loads assigned to the specified category.
+        # Filter by load category Id.Returns only loads assigned to the specified category; 0 returns the loads with no category.
         load_category: Optional[int] = None
 
         # Node Ids to filter by, in SG list format (e.g. `"1,5-10,12"`).Returns only lumped masses applied to the specified nodes.Omit to return lumped masses for all nodes.
