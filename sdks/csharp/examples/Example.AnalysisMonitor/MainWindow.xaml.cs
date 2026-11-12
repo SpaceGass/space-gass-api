@@ -360,7 +360,7 @@ public partial class MainWindow : Window
                 item.ElapsedText = FormatElapsed(run.ElapsedTime);
 
                 // Terminal states
-                if (run.Status is AnalysisRunStatus.Completed or AnalysisRunStatus.Failed or AnalysisRunStatus.Cancelled)
+                if (run.Status is RunStatus.Completed or RunStatus.Failed or RunStatus.Cancelled)
                 {
                     item.IsTerminal = true;
                     item.CancelVisible = Visibility.Collapsed;

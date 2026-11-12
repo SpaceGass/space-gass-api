@@ -53,6 +53,21 @@ function bodyTypeFromSpec(operation: any): string | undefined {
   return ref ? ref.split("/").pop() : undefined;
 }
 
+// `oneOf` bodies (e.g. PATCH /job/design/steel-member/{code}/settings, one
+// variant per design code) have no single `__$ref`. Kiota wraps them in a
+// composed type named `{LastSegment}{Verb}RequestBody` with one property per
+// variant. Returns the variant model names, or undefined for non-oneOf bodies.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function oneOfVariantsFromSpec(operation: any): string[] | undefined {
+  const content: any[] = operation?.requestBody?.content ?? [];
+  const media =
+    content.find((c) => c?.mediaType === "application/json") ?? content[0];
+  const variants: string[] = (media?.schema?.oneOf ?? [])
+    .map((v: any) => v?.__$ref?.split("/").pop())
+    .filter(Boolean);
+  return variants.length ? variants : undefined;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   if (selectedLang === "shell") return false; // fall back to default cURL generator
@@ -93,6 +108,16 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
       : `${entityName}Update`;
   const bodyType = bodyTypeFromSpec(operation) ?? pathGuessBodyType;
 
+  // Kiota composed-type wrapper for oneOf bodies (see oneOfVariantsFromSpec).
+  const oneOfVariants = oneOfVariantsFromSpec(operation);
+  const wrapperType = `${toPascalCase(lastSegment)}${
+    httpMethod.charAt(0) + httpMethod.slice(1).toLowerCase()
+  }RequestBody`;
+  // Kiota namespaces/packages: one per literal segment, "Item" per path param.
+  const builderPath = segments.map((s: string) =>
+    s.startsWith("{") ? "Item" : toPascalCase(s),
+  );
+
   // ── C# SDK ──
   if (selectedLang === "csharp") {
     let chain = "client";
@@ -109,7 +134,16 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
       httpMethod.charAt(0) + httpMethod.slice(1).toLowerCase() + "Async";
 
     let code = "// C# SDK Client\n";
-    if (hasBody) {
+    if (hasBody && oneOfVariants) {
+      const variant = oneOfVariants[0];
+      const builder = `${builderPath.join(".")}.${toPascalCase(lastSegment)}RequestBuilder`;
+      code += `// Set exactly one of: ${oneOfVariants.join(", ")}\n`;
+      code += `var body = new SpaceGassApi.${builder}.${wrapperType}\n`;
+      code += `{\n`;
+      code += `    ${variant} = new ${variant} { /* Set properties */ },\n`;
+      code += `};\n\n`;
+      code += `var result = await ${chain}.${asyncMethod}(body);`;
+    } else if (hasBody) {
       if (isList) {
         code += `var bodies = new List<${bodyType}>\n`;
         code += `{\n`;
@@ -148,7 +182,21 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
     const pyMethod = httpMethod.toLowerCase();
 
     let code = "# Python SDK Client\n";
-    if (hasBody) {
+    if (hasBody && oneOfVariants) {
+      const variant = oneOfVariants[0];
+      const pkg = builderPath
+        .map((s: string) => pascalToSnake(s))
+        .join(".");
+      code += `from space_gass_api.generated.${pkg}.${pascalToSnake(wrapperType)} import ${wrapperType}\n`;
+      code += `from space_gass_api.models.${pascalToSnake(variant)} import ${variant}\n\n`;
+      code += `# Set exactly one of: ${oneOfVariants.map(pascalToSnake).join(", ")}\n`;
+      code += `body = ${wrapperType}(\n`;
+      code += `    ${pascalToSnake(variant)}=${variant}(\n`;
+      code += `        # Set properties\n`;
+      code += `    ),\n`;
+      code += `)\n\n`;
+      code += `result = await ${chain}.${pyMethod}(body)`;
+    } else if (hasBody) {
       const bodyModule = pascalToSnake(bodyType);
       code += `from space_gass_api.models.${bodyModule} import ${bodyType}\n\n`;
       if (isList) {
