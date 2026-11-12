@@ -59,9 +59,9 @@ try
         await Task.Delay(500);
         result = (await client.Job.Analysis.Runs[run!.RunId!.Value].GetAsync())!;
     }
-    while (result.Status is not (AnalysisRunStatus.Completed
-                              or AnalysisRunStatus.Failed
-                              or AnalysisRunStatus.Cancelled));
+    while (result.Status is not (RunStatus.Completed
+                              or RunStatus.Failed
+                              or RunStatus.Cancelled));
 
     // Query node reactions
     var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync();

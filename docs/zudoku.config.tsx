@@ -53,6 +53,22 @@ function bodyTypeFromSpec(operation: any): string | undefined {
   return ref ? ref.split("/").pop() : undefined;
 }
 
+// Inline `oneOf` bodies (e.g. PATCH /job/design/steel-member/{code}/settings)
+// have no single component name. Kiota wraps them in a composed-type class
+// named `{LastSegment}{Method}RequestBody`, generated next to the request
+// builder, with one property per variant. Returns the variant names so the
+// snippet can show the wrapper with the first variant filled in.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function oneOfVariantsFromSpec(operation: any): string[] | undefined {
+  const content: any[] = operation?.requestBody?.content ?? [];
+  const media =
+    content.find((c) => c?.mediaType === "application/json") ?? content[0];
+  const variants: string[] = (media?.schema?.oneOf ?? [])
+    .map((v: any) => v?.__$ref?.split("/").pop())
+    .filter(Boolean);
+  return variants.length ? variants : undefined;
+}
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   if (selectedLang === "shell") return false; // fall back to default cURL generator
@@ -93,6 +109,17 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
       : `${entityName}Update`;
   const bodyType = bodyTypeFromSpec(operation) ?? pathGuessBodyType;
 
+  // Composed-type wrapper for inline oneOf bodies (see oneOfVariantsFromSpec).
+  // Kiota puts it in the request builder's namespace, where each path
+  // parameter segment becomes an "Item" folder.
+  const oneOfVariants = hasBody ? oneOfVariantsFromSpec(operation) : undefined;
+  const wrapperType = `${toPascalCase(lastSegment)}${
+    httpMethod.charAt(0) + httpMethod.slice(1).toLowerCase()
+  }RequestBody`;
+  const builderSegments = segments.map((s: string) =>
+    s.startsWith("{") ? "item" : s,
+  );
+
   // ── C# SDK ──
   if (selectedLang === "csharp") {
     let chain = "client";
@@ -109,7 +136,17 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
       httpMethod.charAt(0) + httpMethod.slice(1).toLowerCase() + "Async";
 
     let code = "// C# SDK Client\n";
-    if (hasBody) {
+    if (hasBody && oneOfVariants) {
+      const ns = builderSegments.map(toPascalCase).join(".");
+      const builder = `${toPascalCase(lastSegment)}RequestBuilder`;
+      code += `using SpaceGassApi.${ns};\n\n`;
+      code += `// Set exactly one of: ${oneOfVariants.join(", ")}\n`;
+      code += `var body = new ${builder}.${wrapperType}\n`;
+      code += `{\n`;
+      code += `    ${oneOfVariants[0]} = new ${oneOfVariants[0]} { /* Set properties */ },\n`;
+      code += `};\n\n`;
+      code += `var result = await ${chain}.${asyncMethod}(body);`;
+    } else if (hasBody) {
       if (isList) {
         code += `var bodies = new List<${bodyType}>\n`;
         code += `{\n`;
@@ -148,9 +185,23 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
     const pyMethod = httpMethod.toLowerCase();
 
     let code = "# Python SDK Client\n";
-    if (hasBody) {
-      const bodyModule = pascalToSnake(bodyType);
-      code += `from space_gass_api.models.${bodyModule} import ${bodyType}\n\n`;
+    if (hasBody && oneOfVariants) {
+      const pkg = builderSegments
+        .map((s: string) => s.replace(/-/g, "_").toLowerCase())
+        .join(".");
+      const variant = oneOfVariants[0];
+      code += `from space_gass_api.generated.${pkg}.${pascalToSnake(wrapperType)} import ${wrapperType}\n`;
+      code += `from space_gass_api.models import ${variant}\n\n`;
+      code += `# Set exactly one of: ${oneOfVariants.map(pascalToSnake).join(", ")}\n`;
+      code += `body = ${wrapperType}(\n`;
+      code += `    ${pascalToSnake(variant)}=${variant}(\n`;
+      code += `        # Set properties\n`;
+      code += `    ),\n`;
+      code += `)\n\n`;
+      code += `result = await ${chain}.${pyMethod}(body)`;
+    } else if (hasBody) {
+      // space_gass_api.models is a flat re-export package (no per-model modules).
+      code += `from space_gass_api.models import ${bodyType}\n\n`;
       if (isList) {
         code += `bodies = [\n`;
         code += `    ${bodyType}(\n`;

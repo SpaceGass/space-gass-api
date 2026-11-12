@@ -400,16 +400,16 @@ try
     {
         await Task.Delay(500);
         finalRun = (await client.Job.Analysis.Runs[run.RunId!.Value].GetAsync())!;
-        if (finalRun.Status is AnalysisRunStatus.Completed
-                            or AnalysisRunStatus.Failed
-                            or AnalysisRunStatus.Cancelled)
+        if (finalRun.Status is RunStatus.Completed
+                            or RunStatus.Failed
+                            or RunStatus.Cancelled)
         {
             break;
         }
     }
 
     Console.WriteLine($"  Analysis {finalRun.Status} in {finalRun.ElapsedTime}");
-    if (finalRun.Status != AnalysisRunStatus.Completed)
+    if (finalRun.Status != RunStatus.Completed)
     {
         throw new Exception($"Analysis did not complete: {finalRun.ErrorMessage}");
     }
