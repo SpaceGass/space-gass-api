@@ -61,9 +61,9 @@ async def main():
             await asyncio.sleep(0.5)
             result = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
             if result.status in (
-                models.AnalysisRunStatus.Completed,
-                models.AnalysisRunStatus.Failed,
-                models.AnalysisRunStatus.Cancelled,
+                models.RunStatus.Completed,
+                models.RunStatus.Failed,
+                models.RunStatus.Cancelled,
             ):
                 break
 

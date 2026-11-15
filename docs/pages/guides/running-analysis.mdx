@@ -40,7 +40,7 @@ var result = await WaitForCompletion(client, run.RunId.Value);
 
 Console.WriteLine($"Analysis {result.Status} in {result.ElapsedTime}");
 
-if (result.Status == AnalysisRunStatus.Completed)
+if (result.Status == RunStatus.Completed)
 {
     // Query results...
     var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync();
@@ -59,9 +59,9 @@ static async Task<AnalysisRun> WaitForCompletion(
 
         var status = await client.Job.Analysis.Runs[runId].GetAsync();
 
-        if (status.Status is AnalysisRunStatus.Completed
-                          or AnalysisRunStatus.Failed
-                          or AnalysisRunStatus.Cancelled)
+        if (status.Status is RunStatus.Completed
+                          or RunStatus.Failed
+                          or RunStatus.Cancelled)
         {
             return status;
         }
@@ -89,9 +89,9 @@ async def wait_for_completion(client, run_id, poll_interval=0.5):
         await asyncio.sleep(poll_interval)
         status = await client.job.analysis.runs.by_run_id(str(run_id)).get()
         if status.status in (
-            models.AnalysisRunStatus.Completed,
-            models.AnalysisRunStatus.Failed,
-            models.AnalysisRunStatus.Cancelled,
+            models.RunStatus.Completed,
+            models.RunStatus.Failed,
+            models.RunStatus.Cancelled,
         ):
             return status
 
@@ -99,7 +99,7 @@ result = await wait_for_completion(client, run.run_id)
 
 print(f"Analysis {result.status} in {result.elapsed_time}")
 
-if result.status == models.AnalysisRunStatus.Completed:
+if result.status == models.RunStatus.Completed:
     # Query results...
     reactions = await client.job.query.analysis.static.node_reactions.get()
     print(f"Got {len(reactions.results)} reactions")
@@ -321,9 +321,9 @@ while (true)
         Console.Write("".PadRight(20));
     }
 
-    if (status.Status is AnalysisRunStatus.Completed
-                      or AnalysisRunStatus.Failed
-                      or AnalysisRunStatus.Cancelled)
+    if (status.Status is RunStatus.Completed
+                      or RunStatus.Failed
+                      or RunStatus.Cancelled)
     {
         Console.WriteLine();
         Console.WriteLine($"Analysis {status.Status} in {status.ElapsedTime}");
@@ -364,9 +364,9 @@ while True:
         print(f"{line:<60}", end="", flush=True)
 
     if status.status in (
-        AnalysisRunStatus.Completed,
-        AnalysisRunStatus.Failed,
-        AnalysisRunStatus.Cancelled,
+        models.RunStatus.Completed,
+        models.RunStatus.Failed,
+        models.RunStatus.Cancelled,
     ):
         print()
         print(f"Analysis {status.status} in {status.elapsed_time}")

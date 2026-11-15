@@ -105,9 +105,9 @@ async def main() -> int:
 
             # Check for terminal states
             if status.status in (
-                models.AnalysisRunStatus.Completed,
-                models.AnalysisRunStatus.Failed,
-                models.AnalysisRunStatus.Cancelled,
+                models.RunStatus.Completed,
+                models.RunStatus.Failed,
+                models.RunStatus.Cancelled,
             ):
                 print()
                 print()

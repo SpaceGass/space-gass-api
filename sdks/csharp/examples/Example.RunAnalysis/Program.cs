@@ -100,9 +100,9 @@ try
         }
 
         // Check for terminal states
-        if (status.Status == AnalysisRunStatus.Completed ||
-            status.Status == AnalysisRunStatus.Failed ||
-            status.Status == AnalysisRunStatus.Cancelled)
+        if (status.Status == RunStatus.Completed ||
+            status.Status == RunStatus.Failed ||
+            status.Status == RunStatus.Cancelled)
         {
             Console.WriteLine();
             Console.WriteLine();
