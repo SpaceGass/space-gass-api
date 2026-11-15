@@ -115,7 +115,7 @@ namespace SpaceGassApi.Job.Filters
         /// Creates a new named filter. At least one sub-filter must beactive (or carry a non-default value) for the filter to be persisted.If `id` is omitted, the next available slot (1..200) is assigned.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Filter"/></returns>
-        /// <param name="body">DTO for creating a new filter.At least one sub-filter must be active — a filter with no rows in thedatasheet has no persisted state and cannot be retrieved by Id.</param>
+        /// <param name="body">DTO for creating a new filter.At least one sub-filter must be active; a filter with none is not stored and cannot beretrieved by Id.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
@@ -167,7 +167,7 @@ namespace SpaceGassApi.Job.Filters
         /// Creates a new named filter. At least one sub-filter must beactive (or carry a non-default value) for the filter to be persisted.If `id` is omitted, the next available slot (1..200) is assigned.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for creating a new filter.At least one sub-filter must be active — a filter with no rows in thedatasheet has no persisted state and cannot be retrieved by Id.</param>
+        /// <param name="body">DTO for creating a new filter.At least one sub-filter must be active; a filter with none is not stored and cannot beretrieved by Id.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

@@ -24,7 +24,7 @@ class MovingLoadVehicle(Parsable):
     loads: Optional[list[VehicleWheelLoad]] = None
     # The vehicle name. Unique across all vehicles.
     name: Optional[str] = None
-    # Origin of a moving-load vehicle. Mirrors SPACE GASS `MLVehicleSource`(`NETSpaceGass/Loads/Moving/MLCommon.vb`).
+    # Origin of a moving-load vehicle.
     source: Optional[MovingLoadVehicleSource] = None
     
     @staticmethod

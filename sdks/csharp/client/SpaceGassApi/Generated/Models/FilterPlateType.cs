@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Plate type categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_PlateType` verbatim. Richer thanthe entity-property SpaceGassApi.Models.Enums.PlateType / SpaceGassApi.Models.Enums.PlateTheorybecause the filter surface includes validity / orientation states.</summary>
+    /// <summary>Plate type categories available as a Filter resource criterion.Wider than SpaceGassApi.Models.Enums.PlateType / SpaceGassApi.Models.Enums.PlateTheory: it includes validity andorientation states.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum FilterPlateType
     {

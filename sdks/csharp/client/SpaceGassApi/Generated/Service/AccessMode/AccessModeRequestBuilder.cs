@@ -34,7 +34,7 @@ namespace SpaceGassApi.Service.AccessMode
         {
         }
         /// <summary>
-        /// Returns the current access mode, the modes available to switch to,and any pending transition. Always reachable — works whileunregistered, unlicensed, or in ReadOnly.
+        /// Returns the current access mode, the modes available to switch to,and any pending transition. Always reachable — works whileunregistered, unlicensed, or in ReadOnly.When licensed, `readWriteAvailability` says whether a ReadWriteseat can be had (`Available`, `AllSeatsInUse`, `NotLicensed`,`Expired` or `Unknown`); omitted when the API is unlicensed.The explanation in words comes only with a refusal: the 409 from afailed switch (`detail`) or from a write in ReadOnly(`extensions.readWriteAvailabilityReason`).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.AccessModeStatus"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -59,7 +59,7 @@ namespace SpaceGassApi.Service.AccessMode
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.AccessModeStatus>(requestInfo, global::SpaceGassApi.Models.AccessModeStatus.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Transitions the API between `ReadWrite` and `ReadOnly`.When switching to `ReadOnly` with a job open, the transitionis queued and returns 202 — the switch commits when the jobcloses. When switching to `ReadWrite` the API attempts tore-acquire MODULE_API_ID; a failure returns 409 and leaves theaccess mode unchanged.
+        /// Transitions the API between `ReadWrite` and `ReadOnly`.When switching to `ReadOnly` with a job open, the transitionis queued and returns 202 — the switch commits when the jobcloses. When switching to `ReadWrite` the API attempts tore-acquire MODULE_API_ID; a failure returns 409 and leaves theaccess mode unchanged. The 409 `errorCode` says why:`API_MODULE_NOT_LICENSED` (the API module is not in the licence),`API_SEAT_UNAVAILABLE` (every API seat is in use),`MAINTENANCE_EXPIRED` or `VERSION_OUT_OF_DATE` (the APIlicence has expired or does not cover this version), or`READONLY_MODE` when the cause could not be determined. For thefirst four, `extensions` carries the current access status(`accessMode`, `availableAccessModes`,`readWriteAvailability`); `detail` is the explanation.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.AccessModeStatus"/></returns>
         /// <param name="body">Request body for `POST /service/access-mode`.</param>
@@ -90,7 +90,7 @@ namespace SpaceGassApi.Service.AccessMode
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.AccessModeStatus>(requestInfo, global::SpaceGassApi.Models.AccessModeStatus.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Returns the current access mode, the modes available to switch to,and any pending transition. Always reachable — works whileunregistered, unlicensed, or in ReadOnly.
+        /// Returns the current access mode, the modes available to switch to,and any pending transition. Always reachable — works whileunregistered, unlicensed, or in ReadOnly.When licensed, `readWriteAvailability` says whether a ReadWriteseat can be had (`Available`, `AllSeatsInUse`, `NotLicensed`,`Expired` or `Unknown`); omitted when the API is unlicensed.The explanation in words comes only with a refusal: the 409 from afailed switch (`detail`) or from a write in ReadOnly(`extensions.readWriteAvailabilityReason`).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -109,7 +109,7 @@ namespace SpaceGassApi.Service.AccessMode
             return requestInfo;
         }
         /// <summary>
-        /// Transitions the API between `ReadWrite` and `ReadOnly`.When switching to `ReadOnly` with a job open, the transitionis queued and returns 202 — the switch commits when the jobcloses. When switching to `ReadWrite` the API attempts tore-acquire MODULE_API_ID; a failure returns 409 and leaves theaccess mode unchanged.
+        /// Transitions the API between `ReadWrite` and `ReadOnly`.When switching to `ReadOnly` with a job open, the transitionis queued and returns 202 — the switch commits when the jobcloses. When switching to `ReadWrite` the API attempts tore-acquire MODULE_API_ID; a failure returns 409 and leaves theaccess mode unchanged. The 409 `errorCode` says why:`API_MODULE_NOT_LICENSED` (the API module is not in the licence),`API_SEAT_UNAVAILABLE` (every API seat is in use),`MAINTENANCE_EXPIRED` or `VERSION_OUT_OF_DATE` (the APIlicence has expired or does not cover this version), or`READONLY_MODE` when the cause could not be determined. For thefirst four, `extensions` carries the current access status(`accessMode`, `availableAccessModes`,`readWriteAvailability`); `detail` is the explanation.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Request body for `POST /service/access-mode`.</param>

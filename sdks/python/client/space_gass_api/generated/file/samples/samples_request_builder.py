@@ -42,7 +42,7 @@ class SamplesRequestBuilder(BaseRequestBuilder):
     # --- end overloads ---
     async def get(self,request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[list[JobFilePreview]]:
         """
-        Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.The file paths use virtual `samples://` scheme (e.g. "samples://Portal Frame.SG")which can be used with the preview and open endpoints.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET "/api/v1/file/samples?includeImages=true"
+        Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.A sample is listed without a `filePath` (the installation path is not exposed).Open one by its `fileName` with `POST /api/v1/job/open-sample`.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET "/api/v1/file/samples?includeImages=true"
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[list[JobFilePreview]]
         """
@@ -64,7 +64,7 @@ class SamplesRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[SamplesRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.The file paths use virtual `samples://` scheme (e.g. "samples://Portal Frame.SG")which can be used with the preview and open endpoints.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET "/api/v1/file/samples?includeImages=true"
+        Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.A sample is listed without a `filePath` (the installation path is not exposed).Open one by its `fileName` with `POST /api/v1/job/open-sample`.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET "/api/v1/file/samples?includeImages=true"
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -86,7 +86,7 @@ class SamplesRequestBuilder(BaseRequestBuilder):
     @dataclass
     class SamplesRequestBuilderGetQueryParameters():
         """
-        Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.The file paths use virtual `samples://` scheme (e.g. "samples://Portal Frame.SG")which can be used with the preview and open endpoints.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET "/api/v1/file/samples?includeImages=true"
+        Returns all available SPACE GASS sample project files.Each sample includes metadata and an optional preview image.A sample is listed without a `filePath` (the installation path is not exposed).Open one by its `fileName` with `POST /api/v1/job/open-sample`.            Samples are opened as new unsaved jobs — use Save As to persist changes.            Example usage with curl:                curl -X GET "/api/v1/file/samples?includeImages=true"
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

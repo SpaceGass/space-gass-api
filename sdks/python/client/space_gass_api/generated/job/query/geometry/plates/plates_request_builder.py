@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from .....models.plate_geometry import PlateGeometry
     from .....models.plate_theory import PlateTheory
     from .item.plates_item_request_builder import PlatesItemRequestBuilder
+    from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class PlatesRequestBuilder(BaseRequestBuilder):
     """
@@ -102,6 +103,15 @@ class PlatesRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return PlatesRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def metadata(self) -> MetadataRequestBuilder:
+        """
+        The metadata property
+        """
+        from .metadata.metadata_request_builder import MetadataRequestBuilder
+
+        return MetadataRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class PlatesRequestBuilderGetQueryParameters():

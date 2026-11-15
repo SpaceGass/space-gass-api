@@ -4,4 +4,5 @@ class SteppingMethod(str, Enum):
     Linear = "Linear",
     Parabolic = "Parabolic",
     File = "File",
+    Auto = "Auto",
 

@@ -203,7 +203,7 @@ namespace SpaceGassApi.Job.Loads.MemberPrestressLoads
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
-            /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
+            /// <summary>Filter by load category Id.Returns only loads assigned to the specified category; 0 returns the loads with no category.</summary>
             [QueryParameter("loadCategory")]
             public int? LoadCategory { get; set; }
             /// <summary>Member Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only prestress loads applied to the specified members.Omit to return prestress loads for all members.</summary>

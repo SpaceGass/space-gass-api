@@ -100,7 +100,7 @@ class StatusRequestBuilder(BaseRequestBuilder):
                 return "filePath"
             return original_name
         
-        # Full path to the SPACE GASS job file (.sg)
+        # Full path to the SPACE GASS job file (.sg), for example C:/Models/Job.sg; a relative path, such as one starting with '~', reports NotFound
         file_path: Optional[str] = None
 
     

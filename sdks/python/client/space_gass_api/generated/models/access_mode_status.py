@@ -6,6 +6,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
     from .access_mode import AccessMode
+    from .read_write_availability import ReadWriteAvailability
 
 @dataclass
 class AccessModeStatus(Parsable):
@@ -18,6 +19,8 @@ class AccessModeStatus(Parsable):
     available_access_modes: Optional[list[AccessMode]] = None
     # Current operational mode of the API.
     pending_access_mode: Optional[AccessMode] = None
+    # Whether this licence can give the API a ReadWrite seat, and if not, why.Computed by SpaceGassApi.Licensing.LicenseState.ReadWriteAvailability; surfaced on`GET /service/access-mode` and on the 409 responses that refuse awrite or a switch to ReadWrite. The System.ComponentModel.DescriptionAttribute is theshort label for metadata and docs; the sentence for the user lives inSpaceGassApi.Licensing.ReadWriteAvailabilityText.
+    read_write_availability: Optional[ReadWriteAvailability] = None
     # Human-readable explanation of the pending access-mode transition(e.g. "Job open — release on close").
     reason_if_access_mode_pending: Optional[str] = None
     
@@ -38,13 +41,16 @@ class AccessModeStatus(Parsable):
         Returns: dict[str, Callable[[ParseNode], None]]
         """
         from .access_mode import AccessMode
+        from .read_write_availability import ReadWriteAvailability
 
         from .access_mode import AccessMode
+        from .read_write_availability import ReadWriteAvailability
 
         fields: dict[str, Callable[[Any], None]] = {
             "accessMode": lambda n : setattr(self, 'access_mode', n.get_enum_value(AccessMode)),
             "availableAccessModes": lambda n : setattr(self, 'available_access_modes', n.get_collection_of_enum_values(AccessMode)),
             "pendingAccessMode": lambda n : setattr(self, 'pending_access_mode', n.get_enum_value(AccessMode)),
+            "readWriteAvailability": lambda n : setattr(self, 'read_write_availability', n.get_enum_value(ReadWriteAvailability)),
             "reasonIfAccessModePending": lambda n : setattr(self, 'reason_if_access_mode_pending', n.get_str_value()),
         }
         return fields
@@ -60,6 +66,7 @@ class AccessModeStatus(Parsable):
         writer.write_enum_value("accessMode", self.access_mode)
         writer.write_collection_of_enum_values("availableAccessModes", self.available_access_modes)
         writer.write_enum_value("pendingAccessMode", self.pending_access_mode)
+        writer.write_enum_value("readWriteAvailability", self.read_write_availability)
         writer.write_str_value("reasonIfAccessModePending", self.reason_if_access_mode_pending)
     
 

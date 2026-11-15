@@ -18,7 +18,7 @@ if TYPE_CHECKING:
 @dataclass
 class SteelMember(Parsable):
     """
-    DTO for reading a steel member design group (SPACE GASS "Design - Steel Members", FileID 40).The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
+    A steel member design group (SPACE GASS "Design - Steel Members").The Id is the design group number; one group spans one or more analytical membersvia its `members` list.
     """
     # Angle section type for structural sections.Maps to SPACE GASS lookup table "Angle Type".
     angle_type: Optional[AngleType] = None
@@ -70,7 +70,7 @@ class SteelMember(Parsable):
     minor_axis_braced_at_ends: Optional[bool] = None
     # NZS3404 seismic member category for a steel member design group.Setting category 1 to 4 activates the seismic checks when the NZS3404 design code is used.Maps to SPACE GASS lookup table "NZ Seismic Class".
     nzs3404_seismic_classification: Optional[Nzs3404SeismicClassification] = None
-    # Scan code letters that group compatible sections for member selection during a design run.
+    # The section library groups, by scan-code letter, that a design run selects sections from.
     scan_code: Optional[str] = None
     # Steel strength grade for a steel member design group.Maps to SPACE GASS lookup table "Strength Grade".
     strength_grade: Optional[SteelStrengthGrade] = None

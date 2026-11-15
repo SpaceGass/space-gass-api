@@ -47,7 +47,7 @@ namespace SpaceGassApi.Models
 #else
         public string Name { get; set; }
 #endif
-        /// <summary>Origin of a moving-load vehicle. Mirrors SPACE GASS `MLVehicleSource`(`NETSpaceGass/Loads/Moving/MLCommon.vb`).</summary>
+        /// <summary>Origin of a moving-load vehicle.</summary>
         public global::SpaceGassApi.Models.MovingLoadVehicleSource? Source { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

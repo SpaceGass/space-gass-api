@@ -17,13 +17,13 @@ namespace SpaceGassApi.Models
         public double? Delay { get; set; }
         /// <summary>Dynamic amplification factor applied to the load.</summary>
         public double? DynamicFactor { get; set; }
-        /// <summary>Controls which load cases a scenario load&apos;s stationary loads are generated into.Mirrors SPACE GASS `MLGenerateStationary` (`NETSpaceGass/Loads/Moving/MLCommon.vb`).</summary>
+        /// <summary>Controls which load cases a scenario load&apos;s stationary loads are generated into.</summary>
         public global::SpaceGassApi.Models.MovingLoadStationaryOption? GenerateStationaryLc { get; set; }
         /// <summary>Lane factor applied to the load.</summary>
         public double? LaneFactor { get; set; }
         /// <summary>Multiplier applied to the load magnitudes.</summary>
         public double? LoadFactor { get; set; }
-        /// <summary>Discriminates a moving-load scenario load between a vehicle run and a pressure run.Mirrors SPACE GASS `MLScenarioLoadType` (`NETSpaceGass/Loads/Moving/MLCommon.vb`).</summary>
+        /// <summary>Discriminates a moving-load scenario load between a vehicle run and a pressure run.</summary>
         public global::SpaceGassApi.Models.MovingLoadType? LoadType { get; set; }
         /// <summary>The pressure Id this load uses.</summary>
         public int? PressureId { get; set; }

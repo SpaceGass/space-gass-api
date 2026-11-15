@@ -13,24 +13,26 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class NaturalFrequency : IParsable
     {
-        /// <summary>Frequency convergence tolerance.</summary>
+        /// <summary>Frequency convergence tolerance. Null when `status` is not `Reported`.</summary>
         public float? FrequencyTolerance { get; set; }
-        /// <summary>Number of iterations to converge.</summary>
+        /// <summary>Number of iterations to converge. Null when `status` is not `Reported`.</summary>
         public int? Iterations { get; set; }
         /// <summary>Load case ID.</summary>
         public int? LoadCase { get; set; }
-        /// <summary>Mass participation factor in X direction.</summary>
+        /// <summary>Mass participation factor in X direction. Null when `status` is not `Reported`.</summary>
         public float? MassPartX { get; set; }
-        /// <summary>Mass participation factor in Y direction.</summary>
+        /// <summary>Mass participation factor in Y direction. Null when `status` is not `Reported`.</summary>
         public float? MassPartY { get; set; }
-        /// <summary>Mass participation factor in Z direction.</summary>
+        /// <summary>Mass participation factor in Z direction. Null when `status` is not `Reported`.</summary>
         public float? MassPartZ { get; set; }
         /// <summary>Mode number.</summary>
         public int? Mode { get; set; }
-        /// <summary>Natural frequency. Unit: Hz.</summary>
+        /// <summary>Natural frequency. Unit: Hz. Null when `status` is not `Reported`.</summary>
         public float? NaturalFrequencyProp { get; set; }
-        /// <summary>Natural period. Unit: seconds.</summary>
+        /// <summary>Natural period. Unit: seconds. Null when `status` is not `Reported`.</summary>
         public float? NaturalPeriod { get; set; }
+        /// <summary>Whether the solver reported a value for a buckling or dynamic mode, and if not, why.</summary>
+        public global::SpaceGassApi.Models.ModeStatus? Status { get; set; }
         /// <summary>Analysis engine warning message (empty if none).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -66,6 +68,7 @@ namespace SpaceGassApi.Models
                 { "mode", n => { Mode = n.GetIntValue(); } },
                 { "naturalFrequency", n => { NaturalFrequencyProp = n.GetFloatValue(); } },
                 { "naturalPeriod", n => { NaturalPeriod = n.GetFloatValue(); } },
+                { "status", n => { Status = n.GetEnumValue<global::SpaceGassApi.Models.ModeStatus>(); } },
                 { "warning", n => { Warning = n.GetStringValue(); } },
             };
         }
@@ -85,6 +88,7 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("mode", Mode);
             writer.WriteFloatValue("naturalFrequency", NaturalFrequencyProp);
             writer.WriteFloatValue("naturalPeriod", NaturalPeriod);
+            writer.WriteEnumValue<global::SpaceGassApi.Models.ModeStatus>("status", Status);
             writer.WriteStringValue("warning", Warning);
         }
     }
