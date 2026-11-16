@@ -13,7 +13,7 @@ namespace SpaceGassApi.Models
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class OpenJobRequest : IParsable
     {
-        /// <summary>Full path to the .sg job file to open.</summary>
+        /// <summary>Full path to the .sg job file to open, for example C:\Models\Job.sg.A relative path, such as one starting with &apos;~&apos;, is rejected.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? FilePath { get; set; }

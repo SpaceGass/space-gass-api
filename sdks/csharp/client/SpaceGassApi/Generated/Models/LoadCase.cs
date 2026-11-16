@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for a load case (from Loads - Titles table, FileID=28).Returns all load cases including primary, combination, and step types.When `Type` is `Combination`, the case owns a list of combination items(hydrated inline via `?expand=all`).
+    /// A load case.Returns all load cases including primary, combination, and step types.When `Type` is `Combination`, the case owns a list of combination items(hydrated inline via `?expand=all`).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class LoadCase : IParsable

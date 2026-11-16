@@ -42,7 +42,7 @@ class InfoRequestBuilder(BaseRequestBuilder):
     # --- end overloads ---
     async def get(self,request_configuration: Optional[RequestConfiguration[InfoRequestBuilderGetQueryParameters]] = None, **kwargs) -> Optional[AnalysisInfo]:
         """
-        Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            `hasResults` is sourced from the result file's header — no datasheet load.Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
+        Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[AnalysisInfo]
         """
@@ -65,7 +65,7 @@ class InfoRequestBuilder(BaseRequestBuilder):
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[InfoRequestBuilderGetQueryParameters]] = None) -> RequestInformation:
         """
-        Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            `hasResults` is sourced from the result file's header — no datasheet load.Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
+        Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """
@@ -87,7 +87,7 @@ class InfoRequestBuilder(BaseRequestBuilder):
     @dataclass
     class InfoRequestBuilderGetQueryParameters():
         """
-        Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            `hasResults` is sourced from the result file's header — no datasheet load.Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
+        Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

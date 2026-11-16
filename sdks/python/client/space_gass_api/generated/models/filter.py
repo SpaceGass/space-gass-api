@@ -20,37 +20,37 @@ if TYPE_CHECKING:
 @dataclass
 class Filter(Parsable):
     """
-    DTO for a named filter (from Filter - Properties datasheet, FileID=213).A filter is a composite of 13 sub-filters that are AND-combinedwhen applied. Maximum 200 filters per job.
+    A named filter.A filter is a composite of 13 sub-filters that are AND-combinedwhen applied. Maximum 200 filters per job.
     """
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
     id: Optional[int] = None
-    # Sub-filter carrying a list of material Ids. No sub-type.Maps to SG `SGFilterType.Materials`.
+    # Sub-filter carrying a list of material Ids. No sub-type.
     materials: Optional[FilterMaterials] = None
-    # Sub-filter carrying a list of member Ids and a member-type categorical filter.Maps to SG `SGFilterType.Members`.
+    # Sub-filter carrying a list of member Ids and a member-type categorical filter.
     members: Optional[FilterMembers] = None
-    # Filter name (the label shown in the SG UI). Persisted on everysub-filter row in the datasheet — a filter with no active sub-filtershas no datasheet rows and effectively does not exist.
+    # Filter name, as shown in SPACE GASS. A filter with no active sub-filters is not stored.
     name: Optional[str] = None
-    # Sub-filter carrying a list of node Ids and a node-type categorical filter.Maps to SG `SGFilterType.Nodes`.
+    # Sub-filter carrying a list of node Ids and a node-type categorical filter.
     nodes: Optional[FilterNodes] = None
-    # Sub-filter carrying a list of plate-cut Ids and a cut-typecategorical filter.Maps to SG `SGFilterType.PlateCut`.
+    # Sub-filter carrying a list of plate-cut Ids and a cut-typecategorical filter.
     plate_cuts: Optional[FilterPlateCuts] = None
-    # Sub-filter carrying a list of plate-strip Ids and a strip-typecategorical filter.Maps to SG `SGFilterType.PlateStrip`.
+    # Sub-filter carrying a list of plate-strip Ids and a strip-typecategorical filter.
     plate_strips: Optional[FilterPlateStrips] = None
-    # Sub-filter carrying a list of plate-thickness values (not Ids).Maps to SG `SGFilterType.Thicknesses`.
+    # Sub-filter carrying a list of plate-thickness values (not Ids).
     plate_thicknesses: Optional[FilterPlateThicknesses] = None
-    # Sub-filter carrying a list of plate Ids and a plate-type categorical filter.Maps to SG `SGFilterType.Plates`.
+    # Sub-filter carrying a list of plate Ids and a plate-type categorical filter.
     plates: Optional[FilterPlates] = None
-    # Sub-filter carrying a list of section Ids. No sub-type — sectionsare filtered by Id alone.Maps to SG `SGFilterType.Sections`.
+    # Sub-filter carrying a list of section Ids. No sub-type — sectionsare filtered by Id alone.
     sections: Optional[FilterSections] = None
-    # Sub-filter carrying a list of steel-connection Ids. No sub-type(the SG-side enum slot is unused; `UpdateFromDatasheetItem` neverreads it back).Maps to SG `SGFilterType.SteelConnections`.
+    # Sub-filter carrying a list of steel-connection Ids. No sub-type.
     steel_connections: Optional[FilterSteelConnections] = None
-    # Sub-filter carrying a list of steel-member Ids and a design-statecategorical filter.Maps to SG `SGFilterType.SteelMembers`.
+    # Sub-filter carrying a list of steel-member Ids and a design-statecategorical filter.
     steel_members: Optional[FilterSteelMembers] = None
-    # Sub-filter carrying a coordinate-range criterion (one axis).Maps to SG `SGFilterType.XAxis` / `YAxis` / `ZAxis` — three siblingproperties at the parent level use this shape.
+    # Sub-filter carrying a coordinate-range criterion (one axis).The filter's X, Y and Z axis ranges each use this shape.
     x_axis: Optional[FilterAxisRange] = None
-    # Sub-filter carrying a coordinate-range criterion (one axis).Maps to SG `SGFilterType.XAxis` / `YAxis` / `ZAxis` — three siblingproperties at the parent level use this shape.
+    # Sub-filter carrying a coordinate-range criterion (one axis).The filter's X, Y and Z axis ranges each use this shape.
     y_axis: Optional[FilterAxisRange] = None
-    # Sub-filter carrying a coordinate-range criterion (one axis).Maps to SG `SGFilterType.XAxis` / `YAxis` / `ZAxis` — three siblingproperties at the parent level use this shape.
+    # Sub-filter carrying a coordinate-range criterion (one axis).The filter's X, Y and Z axis ranges each use this shape.
     z_axis: Optional[FilterAxisRange] = None
     
     @staticmethod

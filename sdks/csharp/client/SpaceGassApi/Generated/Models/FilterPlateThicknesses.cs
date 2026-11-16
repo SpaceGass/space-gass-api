@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a list of plate-thickness values (not Ids).Maps to SG `SGFilterType.Thicknesses`.
+    /// Sub-filter carrying a list of plate-thickness values (not Ids).
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterPlateThicknesses : IParsable

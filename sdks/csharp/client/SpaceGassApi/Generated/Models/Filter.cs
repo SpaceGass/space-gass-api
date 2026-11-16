@@ -8,14 +8,14 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for a named filter (from Filter - Properties datasheet, FileID=213).A filter is a composite of 13 sub-filters that are AND-combinedwhen applied. Maximum 200 filters per job.
+    /// A named filter.A filter is a composite of 13 sub-filters that are AND-combinedwhen applied. Maximum 200 filters per job.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class Filter : IParsable
     {
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
         public int? Id { get; set; }
-        /// <summary>Sub-filter carrying a list of material Ids. No sub-type.Maps to SG `SGFilterType.Materials`.</summary>
+        /// <summary>Sub-filter carrying a list of material Ids. No sub-type.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterMaterials? Materials { get; set; }
@@ -23,7 +23,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterMaterials Materials { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a list of member Ids and a member-type categorical filter.Maps to SG `SGFilterType.Members`.</summary>
+        /// <summary>Sub-filter carrying a list of member Ids and a member-type categorical filter.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterMembers? Members { get; set; }
@@ -31,7 +31,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterMembers Members { get; set; }
 #endif
-        /// <summary>Filter name (the label shown in the SG UI). Persisted on everysub-filter row in the datasheet — a filter with no active sub-filtershas no datasheet rows and effectively does not exist.</summary>
+        /// <summary>Filter name, as shown in SPACE GASS. A filter with no active sub-filters is not stored.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Name { get; set; }
@@ -39,7 +39,7 @@ namespace SpaceGassApi.Models
 #else
         public string Name { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a list of node Ids and a node-type categorical filter.Maps to SG `SGFilterType.Nodes`.</summary>
+        /// <summary>Sub-filter carrying a list of node Ids and a node-type categorical filter.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterNodes? Nodes { get; set; }
@@ -47,7 +47,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterNodes Nodes { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a list of plate-cut Ids and a cut-typecategorical filter.Maps to SG `SGFilterType.PlateCut`.</summary>
+        /// <summary>Sub-filter carrying a list of plate-cut Ids and a cut-typecategorical filter.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterPlateCuts? PlateCuts { get; set; }
@@ -55,7 +55,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterPlateCuts PlateCuts { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a list of plate Ids and a plate-type categorical filter.Maps to SG `SGFilterType.Plates`.</summary>
+        /// <summary>Sub-filter carrying a list of plate Ids and a plate-type categorical filter.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterPlates? Plates { get; set; }
@@ -63,7 +63,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterPlates Plates { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a list of plate-strip Ids and a strip-typecategorical filter.Maps to SG `SGFilterType.PlateStrip`.</summary>
+        /// <summary>Sub-filter carrying a list of plate-strip Ids and a strip-typecategorical filter.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterPlateStrips? PlateStrips { get; set; }
@@ -71,7 +71,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterPlateStrips PlateStrips { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a list of plate-thickness values (not Ids).Maps to SG `SGFilterType.Thicknesses`.</summary>
+        /// <summary>Sub-filter carrying a list of plate-thickness values (not Ids).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterPlateThicknesses? PlateThicknesses { get; set; }
@@ -79,7 +79,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterPlateThicknesses PlateThicknesses { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a list of section Ids. No sub-type — sectionsare filtered by Id alone.Maps to SG `SGFilterType.Sections`.</summary>
+        /// <summary>Sub-filter carrying a list of section Ids. No sub-type — sectionsare filtered by Id alone.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterSections? Sections { get; set; }
@@ -87,7 +87,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterSections Sections { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a list of steel-connection Ids. No sub-type(the SG-side enum slot is unused; `UpdateFromDatasheetItem` neverreads it back).Maps to SG `SGFilterType.SteelConnections`.</summary>
+        /// <summary>Sub-filter carrying a list of steel-connection Ids. No sub-type.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterSteelConnections? SteelConnections { get; set; }
@@ -95,7 +95,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterSteelConnections SteelConnections { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a list of steel-member Ids and a design-statecategorical filter.Maps to SG `SGFilterType.SteelMembers`.</summary>
+        /// <summary>Sub-filter carrying a list of steel-member Ids and a design-statecategorical filter.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterSteelMembers? SteelMembers { get; set; }
@@ -103,7 +103,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterSteelMembers SteelMembers { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a coordinate-range criterion (one axis).Maps to SG `SGFilterType.XAxis` / `YAxis` / `ZAxis` — three siblingproperties at the parent level use this shape.</summary>
+        /// <summary>Sub-filter carrying a coordinate-range criterion (one axis).The filter&apos;s X, Y and Z axis ranges each use this shape.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterAxisRange? XAxis { get; set; }
@@ -111,7 +111,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterAxisRange XAxis { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a coordinate-range criterion (one axis).Maps to SG `SGFilterType.XAxis` / `YAxis` / `ZAxis` — three siblingproperties at the parent level use this shape.</summary>
+        /// <summary>Sub-filter carrying a coordinate-range criterion (one axis).The filter&apos;s X, Y and Z axis ranges each use this shape.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterAxisRange? YAxis { get; set; }
@@ -119,7 +119,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.FilterAxisRange YAxis { get; set; }
 #endif
-        /// <summary>Sub-filter carrying a coordinate-range criterion (one axis).Maps to SG `SGFilterType.XAxis` / `YAxis` / `ZAxis` — three siblingproperties at the parent level use this shape.</summary>
+        /// <summary>Sub-filter carrying a coordinate-range criterion (one axis).The filter&apos;s X, Y and Z axis ranges each use this shape.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.FilterAxisRange? ZAxis { get; set; }

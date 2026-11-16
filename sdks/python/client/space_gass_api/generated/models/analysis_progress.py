@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @dataclass
 class AnalysisProgress(Parsable):
     """
-    Live progress data from the analysis solver.Captured via Windows messages from SGSolver.EXE to the display proxy window.
+    Live progress data from the analysis solver.
     """
     # Current step being processed (0-based index)
     current_step: Optional[int] = None

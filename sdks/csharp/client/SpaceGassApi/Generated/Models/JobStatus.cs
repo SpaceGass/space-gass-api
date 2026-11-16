@@ -15,7 +15,7 @@ namespace SpaceGassApi.Models
     {
         /// <summary>Current operational mode of the API.</summary>
         public global::SpaceGassApi.Models.AccessMode? AccessMode { get; set; }
-        /// <summary>Summary of which analysis types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.</summary>
+        /// <summary>Summary of which analysis types have stored results for the current job.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.AnalysisResultsSummary? Analysis { get; set; }
@@ -47,7 +47,7 @@ namespace SpaceGassApi.Models
 #else
         public global::SpaceGassApi.Models.JobState State { get; set; }
 #endif
-        /// <summary>Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.Result flags are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.</summary>
+        /// <summary>Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public global::SpaceGassApi.Models.SteelDesignSummary? SteelDesign { get; set; }

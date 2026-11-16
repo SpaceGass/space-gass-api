@@ -65,7 +65,7 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Bulk
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.BulkDeletedBulkResult>(requestInfo, global::SpaceGassApi.Models.BulkDeletedBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
+        /// Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a bulk error if no row exists for the supplied parent.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.NodeRestraintBulkResult"/></returns>
         /// <param name="body">The request body</param>
@@ -96,7 +96,7 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Bulk
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.NodeRestraintBulkResult>(requestInfo, global::SpaceGassApi.Models.NodeRestraintBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
+        /// Creates multiple attribute rows in a single request. Each item must include its parent Idin the body. Returns 409 (per-item error) for any row whose parent already has an attribute.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.NodeRestraintBulkResult"/></returns>
         /// <param name="body">The request body</param>
@@ -149,7 +149,7 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Bulk
             return requestInfo;
         }
         /// <summary>
-        /// Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
+        /// Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a bulk error if no row exists for the supplied parent.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -171,7 +171,7 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Bulk
             return requestInfo;
         }
         /// <summary>
-        /// Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
+        /// Creates multiple attribute rows in a single request. Each item must include its parent Idin the body. Returns 409 (per-item error) for any row whose parent already has an attribute.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -220,12 +220,12 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Bulk
         {
         }
         /// <summary>
-        /// Partially updates multiple restraints in a single request. Each item must includeits parent `node` Id. Per-item 404 is reported as a bulk error if no row existsfor the supplied node. Only provided fields are changed; omitted fields keep theircurrent value.
+        /// Updates multiple attribute rows in a single request. Each item must include its parent Id.Per-item 404 reported as a bulk error if no row exists for the supplied parent.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderPatchQueryParameters 
         {
-            /// <summary>If true, continue processing remaining items after a failure. Default: false.</summary>
+            /// <summary>If `true`, processing continues after per-item failures and partial results are returned. Defaults to `false` (stop on first error).</summary>
             [QueryParameter("continueOnError")]
             public bool? ContinueOnError { get; set; }
         }
@@ -238,12 +238,12 @@ namespace SpaceGassApi.Job.Structure.NodeRestraints.Bulk
         {
         }
         /// <summary>
-        /// Creates multiple restraint rows in a single request. Each item must include itsparent `node` Id. Per-item 409 is reported as a bulk error if a restraintalready exists for the supplied node. Variable-stiffness tables can be suppliedinline on each item.
+        /// Creates multiple attribute rows in a single request. Each item must include its parent Idin the body. Returns 409 (per-item error) for any row whose parent already has an attribute.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderPostQueryParameters 
         {
-            /// <summary>If true, continue processing remaining items after a failure. Default: false.</summary>
+            /// <summary>If `true`, processing continues after per-item failures and partial results are returned. Defaults to `false` (stop on first error).</summary>
             [QueryParameter("continueOnError")]
             public bool? ContinueOnError { get; set; }
         }

@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodeDisplacementsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node-displacements{?limit*,loadCases*,nodes*,offset*}", pathParameters)
+        public NodeDisplacementsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node-displacements{?distinctBy*,limit*,loadCases*,maxAbsRx*,maxAbsRy*,maxAbsRz*,maxAbsTx*,maxAbsTy*,maxAbsTz*,maxRx*,maxRy*,maxRz*,maxTx*,maxTy*,maxTz*,minAbsRx*,minAbsRy*,minAbsRz*,minAbsTx*,minAbsTy*,minAbsTz*,minRx*,minRy*,minRz*,minTx*,minTy*,minTz*,nodes*,offset*,order*,sort*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public NodeDisplacementsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node-displacements{?limit*,loadCases*,nodes*,offset*}", rawUrl)
+        public NodeDisplacementsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/node-displacements{?distinctBy*,limit*,loadCases*,maxAbsRx*,maxAbsRy*,maxAbsRz*,maxAbsTx*,maxAbsTy*,maxAbsTz*,maxRx*,maxRy*,maxRz*,maxTx*,maxTy*,maxTz*,minAbsRx*,minAbsRy*,minAbsRz*,minAbsTx*,minAbsTy*,minAbsTz*,minRx*,minRy*,minRz*,minTx*,minTy*,minTz*,nodes*,offset*,order*,sort*}", rawUrl)
         {
         }
         /// <summary>
@@ -104,6 +104,16 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class NodeDisplacementsRequestBuilderGetQueryParameters 
         {
+            /// <summary>Identity fields: loadCase, node. One row per value of this identity field: the first row in sort order, i.e. the governingone. `sort=fy&amp;order=AbsDesc&amp;distinctBy=node` returns each node&apos;s governingreaction with its load case; `distinctBy=loadCase` each case&apos;s governing row. Theidentity fields are the row&apos;s Ids (load case, node, member, plate, mode, steel member) orthe reaction summary&apos;s `summaryType`, named as in the response and flagged`distinctBy: true` in `GET …/metadata`. Rows come back whole; the count headeris the number of distinct values. Requires `sort`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("distinctBy")]
+            public string? DistinctBy { get; set; }
+#nullable restore
+#else
+            [QueryParameter("distinctBy")]
+            public string DistinctBy { get; set; }
+#endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             [QueryParameter("limit")]
             public int? Limit { get; set; }
@@ -117,6 +127,78 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
+            /// <summary>Keep rows whose rx has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsRx")]
+            public double? MaxAbsRx { get; set; }
+            /// <summary>Keep rows whose ry has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsRy")]
+            public double? MaxAbsRy { get; set; }
+            /// <summary>Keep rows whose rz has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsRz")]
+            public double? MaxAbsRz { get; set; }
+            /// <summary>Keep rows whose tx has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTx")]
+            public double? MaxAbsTx { get; set; }
+            /// <summary>Keep rows whose ty has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTy")]
+            public double? MaxAbsTy { get; set; }
+            /// <summary>Keep rows whose tz has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTz")]
+            public double? MaxAbsTz { get; set; }
+            /// <summary>Keep rows whose rx is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxRx")]
+            public double? MaxRx { get; set; }
+            /// <summary>Keep rows whose ry is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxRy")]
+            public double? MaxRy { get; set; }
+            /// <summary>Keep rows whose rz is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxRz")]
+            public double? MaxRz { get; set; }
+            /// <summary>Keep rows whose tx is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTx")]
+            public double? MaxTx { get; set; }
+            /// <summary>Keep rows whose ty is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTy")]
+            public double? MaxTy { get; set; }
+            /// <summary>Keep rows whose tz is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTz")]
+            public double? MaxTz { get; set; }
+            /// <summary>Keep rows whose rx has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsRx")]
+            public double? MinAbsRx { get; set; }
+            /// <summary>Keep rows whose ry has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsRy")]
+            public double? MinAbsRy { get; set; }
+            /// <summary>Keep rows whose rz has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsRz")]
+            public double? MinAbsRz { get; set; }
+            /// <summary>Keep rows whose tx has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTx")]
+            public double? MinAbsTx { get; set; }
+            /// <summary>Keep rows whose ty has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTy")]
+            public double? MinAbsTy { get; set; }
+            /// <summary>Keep rows whose tz has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTz")]
+            public double? MinAbsTz { get; set; }
+            /// <summary>Keep rows whose rx is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minRx")]
+            public double? MinRx { get; set; }
+            /// <summary>Keep rows whose ry is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minRy")]
+            public double? MinRy { get; set; }
+            /// <summary>Keep rows whose rz is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minRz")]
+            public double? MinRz { get; set; }
+            /// <summary>Keep rows whose tx is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTx")]
+            public double? MinTx { get; set; }
+            /// <summary>Keep rows whose ty is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTy")]
+            public double? MinTy { get; set; }
+            /// <summary>Keep rows whose tz is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTz")]
+            public double? MinTz { get; set; }
             /// <summary>Node Ids in SG list format (e.g. `&quot;1,5-10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -130,6 +212,30 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.NodeDisplacements
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             [QueryParameter("offset")]
             public int? Offset { get; set; }
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [Obsolete("This property is deprecated, use OrderAsResultSortOrder instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("order")]
+            public string? Order { get; set; }
+#nullable restore
+#else
+            [QueryParameter("order")]
+            public string Order { get; set; }
+#endif
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [QueryParameter("order")]
+            public global::SpaceGassApi.Models.ResultSortOrder? OrderAsResultSortOrder { get; set; }
+            /// <summary>Sortable fields: loadCase, node, tx, ty, tz, rx, ry, rz. Field to sort the rows by, named as in the response (case-insensitive). Any numeric fieldof the endpoint&apos;s rows can be used. An array field (values at member stations, member ends,plate corners or nodes) ranks each row by its extreme value in the requested direction, andthe row is returned whole. Rows with no value for the field sort last. Omit to return rows inthe endpoint&apos;s default order: its identity fields in order — the fields `GET …/metadata`flags `distinctBy: true`, e.g. load case then node for node results.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("sort")]
+            public string? Sort { get; set; }
+#nullable restore
+#else
+            [QueryParameter("sort")]
+            public string Sort { get; set; }
+#endif
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 @dataclass
 class FilterSteelMembers(Parsable):
     """
-    Sub-filter carrying a list of steel-member Ids and a design-statecategorical filter.Maps to SG `SGFilterType.SteelMembers`.
+    Sub-filter carrying a list of steel-member Ids and a design-statecategorical filter.
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Steel-member design-state categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_SteelMemberTypes` verbatim — note SG's enumname is plural; the API name is singular for consistency with the other`Filter*Type` enums.
+    # Steel-member design-state categories available as a Filter resource criterion.
     steel_member_type: Optional[FilterSteelMemberType] = None
     # Steel-member Ids in SG list format. Empty string means no Id criterion.
     steel_members: Optional[str] = None

@@ -16,6 +16,7 @@ from warnings import warn
 if TYPE_CHECKING:
     from ......models.error_response import ErrorResponse
     from ......models.natural_frequency_query_result import NaturalFrequencyQueryResult
+    from ......models.result_sort_order import ResultSortOrder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class NaturalFrequenciesRequestBuilder(BaseRequestBuilder):
@@ -29,17 +30,48 @@ class NaturalFrequenciesRequestBuilder(BaseRequestBuilder):
         param request_adapter: The request adapter to use to execute the requests.
         Returns: None
         """
-        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?limit*,loadCases*,modes*,offset*}", path_parameters)
+        super().__init__(request_adapter, "{+baseurl}/job/query/analysis/dynamic/natural-frequencies{?distinctBy*,limit*,loadCases*,maxAbsFrequencyTolerance*,maxAbsMassPartX*,maxAbsMassPartY*,maxAbsMassPartZ*,maxAbsNaturalFrequency*,maxAbsNaturalPeriod*,maxFrequencyTolerance*,maxIterations*,maxMassPartX*,maxMassPartY*,maxMassPartZ*,maxNaturalFrequency*,maxNaturalPeriod*,minAbsFrequencyTolerance*,minAbsMassPartX*,minAbsMassPartY*,minAbsMassPartZ*,minAbsNaturalFrequency*,minAbsNaturalPeriod*,minFrequencyTolerance*,minIterations*,minMassPartX*,minMassPartY*,minMassPartZ*,minNaturalFrequency*,minNaturalPeriod*,modes*,offset*,order*,sort*,status*,warning*}", path_parameters)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
     async def get(
         self,
         *,
+        distinct_by: Optional[str] = None,
         limit: Optional[int] = None,
         load_cases: Optional[str] = None,
+        max_abs_frequency_tolerance: Optional[float] = None,
+        max_abs_mass_part_x: Optional[float] = None,
+        max_abs_mass_part_y: Optional[float] = None,
+        max_abs_mass_part_z: Optional[float] = None,
+        max_abs_natural_frequency: Optional[float] = None,
+        max_abs_natural_period: Optional[float] = None,
+        max_frequency_tolerance: Optional[float] = None,
+        max_iterations: Optional[float] = None,
+        max_mass_part_x: Optional[float] = None,
+        max_mass_part_y: Optional[float] = None,
+        max_mass_part_z: Optional[float] = None,
+        max_natural_frequency: Optional[float] = None,
+        max_natural_period: Optional[float] = None,
+        min_abs_frequency_tolerance: Optional[float] = None,
+        min_abs_mass_part_x: Optional[float] = None,
+        min_abs_mass_part_y: Optional[float] = None,
+        min_abs_mass_part_z: Optional[float] = None,
+        min_abs_natural_frequency: Optional[float] = None,
+        min_abs_natural_period: Optional[float] = None,
+        min_frequency_tolerance: Optional[float] = None,
+        min_iterations: Optional[float] = None,
+        min_mass_part_x: Optional[float] = None,
+        min_mass_part_y: Optional[float] = None,
+        min_mass_part_z: Optional[float] = None,
+        min_natural_frequency: Optional[float] = None,
+        min_natural_period: Optional[float] = None,
         modes: Optional[str] = None,
         offset: Optional[int] = None,
+        order: Optional[ResultSortOrder] = None,
+        sort: Optional[str] = None,
+        status: Optional[str] = None,
+        warning: Optional[str] = None,
     ) -> Optional[NaturalFrequencyQueryResult]: ...
     @overload
     async def get(self, request_configuration: Optional[RequestConfiguration[NaturalFrequenciesRequestBuilderGetQueryParameters]] = None) -> Optional[NaturalFrequencyQueryResult]: ...
@@ -111,27 +143,182 @@ class NaturalFrequenciesRequestBuilder(BaseRequestBuilder):
             """
             if original_name is None:
                 raise TypeError("original_name cannot be null.")
+            if original_name == "distinct_by":
+                return "distinctBy"
             if original_name == "load_cases":
                 return "loadCases"
+            if original_name == "max_abs_frequency_tolerance":
+                return "maxAbsFrequencyTolerance"
+            if original_name == "max_abs_mass_part_x":
+                return "maxAbsMassPartX"
+            if original_name == "max_abs_mass_part_y":
+                return "maxAbsMassPartY"
+            if original_name == "max_abs_mass_part_z":
+                return "maxAbsMassPartZ"
+            if original_name == "max_abs_natural_frequency":
+                return "maxAbsNaturalFrequency"
+            if original_name == "max_abs_natural_period":
+                return "maxAbsNaturalPeriod"
+            if original_name == "max_frequency_tolerance":
+                return "maxFrequencyTolerance"
+            if original_name == "max_iterations":
+                return "maxIterations"
+            if original_name == "max_mass_part_x":
+                return "maxMassPartX"
+            if original_name == "max_mass_part_y":
+                return "maxMassPartY"
+            if original_name == "max_mass_part_z":
+                return "maxMassPartZ"
+            if original_name == "max_natural_frequency":
+                return "maxNaturalFrequency"
+            if original_name == "max_natural_period":
+                return "maxNaturalPeriod"
+            if original_name == "min_abs_frequency_tolerance":
+                return "minAbsFrequencyTolerance"
+            if original_name == "min_abs_mass_part_x":
+                return "minAbsMassPartX"
+            if original_name == "min_abs_mass_part_y":
+                return "minAbsMassPartY"
+            if original_name == "min_abs_mass_part_z":
+                return "minAbsMassPartZ"
+            if original_name == "min_abs_natural_frequency":
+                return "minAbsNaturalFrequency"
+            if original_name == "min_abs_natural_period":
+                return "minAbsNaturalPeriod"
+            if original_name == "min_frequency_tolerance":
+                return "minFrequencyTolerance"
+            if original_name == "min_iterations":
+                return "minIterations"
+            if original_name == "min_mass_part_x":
+                return "minMassPartX"
+            if original_name == "min_mass_part_y":
+                return "minMassPartY"
+            if original_name == "min_mass_part_z":
+                return "minMassPartZ"
+            if original_name == "min_natural_frequency":
+                return "minNaturalFrequency"
+            if original_name == "min_natural_period":
+                return "minNaturalPeriod"
             if original_name == "limit":
                 return "limit"
             if original_name == "modes":
                 return "modes"
             if original_name == "offset":
                 return "offset"
+            if original_name == "order":
+                return "order"
+            if original_name == "sort":
+                return "sort"
+            if original_name == "status":
+                return "status"
+            if original_name == "warning":
+                return "warning"
             return original_name
         
+        # Identity fields: loadCase, mode. One row per value of this identity field: the first row in sort order, i.e. the governingone. `sort=fy&order=AbsDesc&distinctBy=node` returns each node's governingreaction with its load case; `distinctBy=loadCase` each case's governing row. Theidentity fields are the row's Ids (load case, node, member, plate, mode, steel member) orthe reaction summary's `summaryType`, named as in the response and flagged`distinctBy: true` in `GET …/metadata`. Rows come back whole; the count headeris the number of distinct values. Requires `sort`.
+        distinct_by: Optional[str] = None
+
         # Maximum number of items to return. Default is null (return all).
         limit: Optional[int] = None
 
         # Load case Ids in SG list format (e.g. `"1,3-7,10"`). Omit to return all.
         load_cases: Optional[str] = None
 
+        # Keep rows whose frequencyTolerance has a magnitude of at most this value (in the field's unit, see GET /job/units).
+        max_abs_frequency_tolerance: Optional[float] = None
+
+        # Keep rows whose massPartX has a magnitude of at most this value (in the field's unit, see GET /job/units).
+        max_abs_mass_part_x: Optional[float] = None
+
+        # Keep rows whose massPartY has a magnitude of at most this value (in the field's unit, see GET /job/units).
+        max_abs_mass_part_y: Optional[float] = None
+
+        # Keep rows whose massPartZ has a magnitude of at most this value (in the field's unit, see GET /job/units).
+        max_abs_mass_part_z: Optional[float] = None
+
+        # Keep rows whose naturalFrequency has a magnitude of at most this value (in the field's unit, see GET /job/units).
+        max_abs_natural_frequency: Optional[float] = None
+
+        # Keep rows whose naturalPeriod has a magnitude of at most this value (in the field's unit, see GET /job/units).
+        max_abs_natural_period: Optional[float] = None
+
+        # Keep rows whose frequencyTolerance is at most this value (in the field's unit, see GET /job/units).
+        max_frequency_tolerance: Optional[float] = None
+
+        # Keep rows whose iterations is at most this value (in the field's unit, see GET /job/units).
+        max_iterations: Optional[float] = None
+
+        # Keep rows whose massPartX is at most this value (in the field's unit, see GET /job/units).
+        max_mass_part_x: Optional[float] = None
+
+        # Keep rows whose massPartY is at most this value (in the field's unit, see GET /job/units).
+        max_mass_part_y: Optional[float] = None
+
+        # Keep rows whose massPartZ is at most this value (in the field's unit, see GET /job/units).
+        max_mass_part_z: Optional[float] = None
+
+        # Keep rows whose naturalFrequency is at most this value (in the field's unit, see GET /job/units).
+        max_natural_frequency: Optional[float] = None
+
+        # Keep rows whose naturalPeriod is at most this value (in the field's unit, see GET /job/units).
+        max_natural_period: Optional[float] = None
+
+        # Keep rows whose frequencyTolerance has a magnitude of at least this value (in the field's unit, see GET /job/units).
+        min_abs_frequency_tolerance: Optional[float] = None
+
+        # Keep rows whose massPartX has a magnitude of at least this value (in the field's unit, see GET /job/units).
+        min_abs_mass_part_x: Optional[float] = None
+
+        # Keep rows whose massPartY has a magnitude of at least this value (in the field's unit, see GET /job/units).
+        min_abs_mass_part_y: Optional[float] = None
+
+        # Keep rows whose massPartZ has a magnitude of at least this value (in the field's unit, see GET /job/units).
+        min_abs_mass_part_z: Optional[float] = None
+
+        # Keep rows whose naturalFrequency has a magnitude of at least this value (in the field's unit, see GET /job/units).
+        min_abs_natural_frequency: Optional[float] = None
+
+        # Keep rows whose naturalPeriod has a magnitude of at least this value (in the field's unit, see GET /job/units).
+        min_abs_natural_period: Optional[float] = None
+
+        # Keep rows whose frequencyTolerance is at least this value (in the field's unit, see GET /job/units).
+        min_frequency_tolerance: Optional[float] = None
+
+        # Keep rows whose iterations is at least this value (in the field's unit, see GET /job/units).
+        min_iterations: Optional[float] = None
+
+        # Keep rows whose massPartX is at least this value (in the field's unit, see GET /job/units).
+        min_mass_part_x: Optional[float] = None
+
+        # Keep rows whose massPartY is at least this value (in the field's unit, see GET /job/units).
+        min_mass_part_y: Optional[float] = None
+
+        # Keep rows whose massPartZ is at least this value (in the field's unit, see GET /job/units).
+        min_mass_part_z: Optional[float] = None
+
+        # Keep rows whose naturalFrequency is at least this value (in the field's unit, see GET /job/units).
+        min_natural_frequency: Optional[float] = None
+
+        # Keep rows whose naturalPeriod is at least this value (in the field's unit, see GET /job/units).
+        min_natural_period: Optional[float] = None
+
         # Mode numbers in SG list format (e.g. `"1-3"`). Omit to return all.
         modes: Optional[str] = None
 
         # Number of items to skip from the start of the result set. Default is 0.
         offset: Optional[int] = None
+
+        # Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.
+        order: Optional[ResultSortOrder] = None
+
+        # Sortable fields: loadCase, mode, naturalFrequency, naturalPeriod, frequencyTolerance, iterations, massPartX, massPartY, massPartZ. Field to sort the rows by, named as in the response (case-insensitive). Any numeric fieldof the endpoint's rows can be used. An array field (values at member stations, member ends,plate corners or nodes) ranks each row by its extreme value in the requested direction, andthe row is returned whole. Rows with no value for the field sort last. Omit to return rows inthe endpoint's default order: its identity fields in order — the fields `GET …/metadata`flags `distinctBy: true`, e.g. load case then node for node results.
+        sort: Optional[str] = None
+
+        # Keep rows whose status is one of the given values. One or more of: Reported, AboveUpperLimit, BelowLowerLimit, Unstable (comma-separated, case-insensitive).
+        status: Optional[str] = None
+
+        # Keep rows whose warning is one of the given values. One or more values, comma-separated, matched case-insensitively.
+        warning: Optional[str] = None
 
     
     @dataclass

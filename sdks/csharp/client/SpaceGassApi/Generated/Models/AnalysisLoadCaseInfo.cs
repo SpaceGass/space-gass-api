@@ -21,7 +21,7 @@ namespace SpaceGassApi.Models
         public int? LoadCase { get; set; }
         /// <summary>Number of buckling or dynamic modes computed for this case.Populated for buckling/dynamic analysis cases that have results;omitted otherwise.</summary>
         public int? Modes { get; set; }
-        /// <summary>Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS&apos;s `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Paradise, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).</summary>
+        /// <summary>Matrix solver type used by the analysis engine.</summary>
         public global::SpaceGassApi.Models.SolverType? Solver { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

@@ -18,6 +18,7 @@ if TYPE_CHECKING:
     from .....models.member_geometry import MemberGeometry
     from .....models.member_type import MemberType
     from .item.members_item_request_builder import MembersItemRequestBuilder
+    from .metadata.metadata_request_builder import MetadataRequestBuilder
 
 class MembersRequestBuilder(BaseRequestBuilder):
     """
@@ -103,6 +104,15 @@ class MembersRequestBuilder(BaseRequestBuilder):
         if raw_url is None:
             raise TypeError("raw_url cannot be null.")
         return MembersRequestBuilder(self.request_adapter, raw_url)
+    
+    @property
+    def metadata(self) -> MetadataRequestBuilder:
+        """
+        The metadata property
+        """
+        from .metadata.metadata_request_builder import MetadataRequestBuilder
+
+        return MetadataRequestBuilder(self.request_adapter, self.path_parameters)
     
     @dataclass
     class MembersRequestBuilderGetQueryParameters():

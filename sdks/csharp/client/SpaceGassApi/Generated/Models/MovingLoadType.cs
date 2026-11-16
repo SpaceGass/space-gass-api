@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Discriminates a moving-load scenario load between a vehicle run and a pressure run.Mirrors SPACE GASS `MLScenarioLoadType` (`NETSpaceGass/Loads/Moving/MLCommon.vb`).</summary>
+    /// <summary>Discriminates a moving-load scenario load between a vehicle run and a pressure run.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MovingLoadType
     {

@@ -23,7 +23,7 @@ class MemberConcentratedLoadUpdate(Parsable):
     fz: Optional[float] = None
     # The load case number.
     load_case: Optional[int] = None
-    # Load category for grouping/organization.
+    # Id of a load category (GET /job/loads/load-categories). Send 0 to clear the category; omit to keep the current one.
     load_category: Optional[int] = None
     # The member number.
     member: Optional[int] = None

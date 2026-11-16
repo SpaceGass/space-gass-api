@@ -19,5 +19,9 @@ namespace SpaceGassApi.Models
         #pragma warning disable CS1591
         File,
         #pragma warning restore CS1591
+        [EnumMember(Value = "Auto")]
+        #pragma warning disable CS1591
+        Auto,
+        #pragma warning restore CS1591
     }
 }

@@ -12,6 +12,7 @@ from ..generated.models.acceleration_unit import AccelerationUnit
 from ..generated.models.access_mode import AccessMode
 from ..generated.models.access_mode_status import AccessModeStatus
 from ..generated.models.access_mode_update import AccessModeUpdate
+from ..generated.models.aisc360_single_angle_method import Aisc360SingleAngleMethod
 from ..generated.models.allowed_value import AllowedValue
 from ..generated.models.analysis_info import AnalysisInfo
 from ..generated.models.analysis_load_case_info import AnalysisLoadCaseInfo
@@ -23,12 +24,15 @@ from ..generated.models.analysis_progress import AnalysisProgress
 from ..generated.models.analysis_results_summary import AnalysisResultsSummary
 from ..generated.models.analysis_run import AnalysisRun
 from ..generated.models.analysis_run_parameters import AnalysisRun_parameters
-from ..generated.models.analysis_run_result import AnalysisRunResult
-from ..generated.models.analysis_run_status import AnalysisRunStatus
 from ..generated.models.analysis_type import AnalysisType
 from ..generated.models.angle_type import AngleType
+from ..generated.models.as3990_reduction_skip import As3990ReductionSkip
 from ..generated.models.axes_type import AxesType
 from ..generated.models.axial_force_distribution import AxialForceDistribution
+from ..generated.models.beam_tee_shape import BeamTeeShape
+from ..generated.models.beam_tee_shape_shape_type import BeamTeeShape_shapeType
+from ..generated.models.box_girder_shape import BoxGirderShape
+from ..generated.models.box_girder_shape_shape_type import BoxGirderShape_shapeType
 from ..generated.models.buckling_effective_length import BucklingEffectiveLength
 from ..generated.models.buckling_effective_length_query_result import BucklingEffectiveLengthQueryResult
 from ..generated.models.buckling_load_factor import BucklingLoadFactor
@@ -36,28 +40,67 @@ from ..generated.models.buckling_load_factor_query_result import BucklingLoadFac
 from ..generated.models.buckling_settings import BucklingSettings
 from ..generated.models.buckling_settings_update import BucklingSettingsUpdate
 from ..generated.models.buckling_theory import BucklingTheory
+from ..generated.models.bulk_delete_result import BulkDeleteResult
 from ..generated.models.bulk_deleted import BulkDeleted
 from ..generated.models.bulk_deleted_bulk_result import BulkDeletedBulkResult
 from ..generated.models.bulk_error import BulkError
+from ..generated.models.cee_back_to_back_shape import CeeBackToBackShape
+from ..generated.models.cee_back_to_back_shape_shape_type import CeeBackToBackShape_shapeType
+from ..generated.models.cee_shape import CeeShape
+from ..generated.models.cee_shape_shape_type import CeeShape_shapeType
+from ..generated.models.channel_shape import ChannelShape
+from ..generated.models.channel_shape_shape_type import ChannelShape_shapeType
+from ..generated.models.circular_bar_shape import CircularBarShape
+from ..generated.models.circular_bar_shape_shape_type import CircularBarShape_shapeType
+from ..generated.models.circular_tube_shape import CircularTubeShape
+from ..generated.models.circular_tube_shape_shape_type import CircularTubeShape_shapeType
+from ..generated.models.column_tee_shape import ColumnTeeShape
+from ..generated.models.column_tee_shape_shape_type import ColumnTeeShape_shapeType
 from ..generated.models.combination_load_case_create import CombinationLoadCaseCreate
 from ..generated.models.combination_load_case_item import CombinationLoadCaseItem
 from ..generated.models.combination_load_case_update import CombinationLoadCaseUpdate
 from ..generated.models.constraint_axes import ConstraintAxes
 from ..generated.models.convergence_entry import ConvergenceEntry
 from ..generated.models.coordinate_system import CoordinateSystem
+from ..generated.models.cruciform_shape import CruciformShape
+from ..generated.models.cruciform_shape_shape_type import CruciformShape_shapeType
+from ..generated.models.d_a_long_shape import DALongShape
+from ..generated.models.d_a_long_shape_shape_type import DALongShape_shapeType
+from ..generated.models.d_a_short_shape import DAShortShape
+from ..generated.models.d_a_short_shape_shape_type import DAShortShape_shapeType
+from ..generated.models.d_a_starred_shape import DAStarredShape
+from ..generated.models.d_a_starred_shape_shape_type import DAStarredShape_shapeType
+from ..generated.models.default_libraries import DefaultLibraries
+from ..generated.models.default_libraries_update import DefaultLibrariesUpdate
 from ..generated.models.delete_result import DeleteResult
+from ..generated.models.design_check_status import DesignCheckStatus
+from ..generated.models.design_code import DesignCode
+from ..generated.models.design_code_info import DesignCodeInfo
+from ..generated.models.design_failure_type import DesignFailureType
+from ..generated.models.design_mode import DesignMode
+from ..generated.models.design_properties import DesignProperties
+from ..generated.models.design_run import DesignRun
+from ..generated.models.design_run_phase import DesignRunPhase
 from ..generated.models.direction_axis import DirectionAxis
 from ..generated.models.direction_source import DirectionSource
 from ..generated.models.direction_update import DirectionUpdate
 from ..generated.models.dynamic_frequency_settings import DynamicFrequencySettings
 from ..generated.models.dynamic_frequency_settings_update import DynamicFrequencySettingsUpdate
+from ..generated.models.equal_angle_shape import EqualAngleShape
+from ..generated.models.equal_angle_shape_shape_type import EqualAngleShape_shapeType
+from ..generated.models.equilateral_triangle_shape import EquilateralTriangleShape
+from ..generated.models.equilateral_triangle_shape_shape_type import EquilateralTriangleShape_shapeType
 from ..generated.models.error_list import ErrorList
 from ..generated.models.error_response import ErrorResponse
 from ..generated.models.error_response_extensions import ErrorResponse_extensions
 from ..generated.models.error_source import ErrorSource
+from ..generated.models.eurocode3_bending_and_axial_compression_method import Eurocode3BendingAndAxialCompressionMethod
+from ..generated.models.eurocode3_lateral_torsional_buckling_method import Eurocode3LateralTorsionalBucklingMethod
 from ..generated.models.expand_option import ExpandOption
 from ..generated.models.field_metadata import FieldMetadata
 from ..generated.models.file_opening_status import FileOpeningStatus
+from ..generated.models.fillet_shape import FilletShape
+from ..generated.models.fillet_shape_shape_type import FilletShape_shapeType
 from ..generated.models.filter import Filter
 from ..generated.models.filter_axis_range import FilterAxisRange
 from ..generated.models.filter_axis_range_update import FilterAxisRangeUpdate
@@ -91,10 +134,23 @@ from ..generated.models.filter_steel_member_type import FilterSteelMemberType
 from ..generated.models.filter_steel_members import FilterSteelMembers
 from ..generated.models.filter_steel_members_update import FilterSteelMembersUpdate
 from ..generated.models.filter_update import FilterUpdate
+from ..generated.models.flat_oval_shape import FlatOvalShape
+from ..generated.models.flat_oval_shape_shape_type import FlatOvalShape_shapeType
 from ..generated.models.force_unit import ForceUnit
 from ..generated.models.friction_normal_axis import FrictionNormalAxis
 from ..generated.models.friction_normal_direction import FrictionNormalDirection
+from ..generated.models.i_shape import IShape
+from ..generated.models.i_shape_shape_type import IShape_shapeType
+from ..generated.models.ifc_convert_to import IfcConvertTo
+from ..generated.models.ifc_export_request import IfcExportRequest
+from ..generated.models.ifc_export_settings import IfcExportSettings
+from ..generated.models.ifc_export_settings_update import IfcExportSettingsUpdate
+from ..generated.models.ifc_schema import IfcSchema
+from ..generated.models.is800_importance_factor import Is800ImportanceFactor
 from ..generated.models.is800_seismic_classification import Is800SeismicClassification
+from ..generated.models.is800_seismic_zone import Is800SeismicZone
+from ..generated.models.is800_single_angle_bolts import Is800SingleAngleBolts
+from ..generated.models.is800_single_angle_end_fixity import Is800SingleAngleEndFixity
 from ..generated.models.job import Job
 from ..generated.models.job_file import JobFile
 from ..generated.models.job_file_opening_status import JobFileOpeningStatus
@@ -106,10 +162,28 @@ from ..generated.models.job_headings_update import JobHeadingsUpdate
 from ..generated.models.job_settings import JobSettings
 from ..generated.models.job_state import JobState
 from ..generated.models.job_status import JobStatus
+from ..generated.models.l_s_b_back_to_back_shape import LSBBackToBackShape
+from ..generated.models.l_s_b_back_to_back_shape_shape_type import LSBBackToBackShape_shapeType
+from ..generated.models.l_s_b_shape import LSBShape
+from ..generated.models.l_s_b_shape_shape_type import LSBShape_shapeType
+from ..generated.models.l_shape import LShape
+from ..generated.models.l_shape_shape_type import LShape_shapeType
 from ..generated.models.last_error import LastError
 from ..generated.models.length_unit import LengthUnit
 from ..generated.models.length_unit_basis import LengthUnitBasis
+from ..generated.models.library import Library
+from ..generated.models.library_availability import LibraryAvailability
+from ..generated.models.library_group import LibraryGroup
+from ..generated.models.library_item import LibraryItem
+from ..generated.models.library_match_type import LibraryMatchType
+from ..generated.models.library_origin import LibraryOrigin
+from ..generated.models.library_search_result import LibrarySearchResult
+from ..generated.models.library_search_summary import LibrarySearchSummary
+from ..generated.models.library_shape import LibraryShape
+from ..generated.models.library_shape_shape_type import LibraryShape_shapeType
 from ..generated.models.license_status import LicenseStatus
+from ..generated.models.lines_shape import LinesShape
+from ..generated.models.lines_shape_shape_type import LinesShape_shapeType
 from ..generated.models.load_axes import LoadAxes
 from ..generated.models.load_case import LoadCase
 from ..generated.models.load_case_bulk_result import LoadCaseBulkResult
@@ -125,6 +199,7 @@ from ..generated.models.load_category import LoadCategory
 from ..generated.models.load_category_bulk_result import LoadCategoryBulkResult
 from ..generated.models.load_category_create import LoadCategoryCreate
 from ..generated.models.load_category_update import LoadCategoryUpdate
+from ..generated.models.load_factor_type import LoadFactorType
 from ..generated.models.load_height_position import LoadHeightPosition
 from ..generated.models.load_position_units import LoadPositionUnits
 from ..generated.models.loading_type import LoadingType
@@ -192,6 +267,7 @@ from ..generated.models.member_update import MemberUpdate
 from ..generated.models.mode_shape import ModeShape
 from ..generated.models.mode_shape_normalization import ModeShapeNormalization
 from ..generated.models.mode_shape_query_result import ModeShapeQueryResult
+from ..generated.models.mode_status import ModeStatus
 from ..generated.models.moment_unit import MomentUnit
 from ..generated.models.moving_load_combination import MovingLoadCombination
 from ..generated.models.moving_load_elements_to_load import MovingLoadElementsToLoad
@@ -239,6 +315,10 @@ from ..generated.models.node_load_create import NodeLoadCreate
 from ..generated.models.node_load_key import NodeLoadKey
 from ..generated.models.node_load_key_bulk_result import NodeLoadKeyBulkResult
 from ..generated.models.node_load_update import NodeLoadUpdate
+from ..generated.models.node_match import NodeMatch
+from ..generated.models.node_match_request import NodeMatchRequest
+from ..generated.models.node_match_result import NodeMatchResult
+from ..generated.models.node_match_summary import NodeMatchSummary
 from ..generated.models.node_reaction import NodeReaction
 from ..generated.models.node_reaction_query_result import NodeReactionQueryResult
 from ..generated.models.node_ref import NodeRef
@@ -249,6 +329,8 @@ from ..generated.models.node_restraint_update import NodeRestraintUpdate
 from ..generated.models.node_type_filter import NodeTypeFilter
 from ..generated.models.node_update import NodeUpdate
 from ..generated.models.non_linear_theory import NonLinearTheory
+from ..generated.models.not_defined_shape import NotDefinedShape
+from ..generated.models.not_defined_shape_shape_type import NotDefinedShape_shapeType
 from ..generated.models.nzs3404_seismic_classification import Nzs3404SeismicClassification
 from ..generated.models.open_job_request import OpenJobRequest
 from ..generated.models.open_sample_request import OpenSampleRequest
@@ -281,7 +363,15 @@ from ..generated.models.plate_strip_update import PlateStripUpdate
 from ..generated.models.plate_theory import PlateTheory
 from ..generated.models.plate_type import PlateType
 from ..generated.models.plate_update import PlateUpdate
+from ..generated.models.plate_web_girder_shape import PlateWebGirderShape
+from ..generated.models.plate_web_girder_shape_shape_type import PlateWebGirderShape_shapeType
 from ..generated.models.point3_d import Point3D
+from ..generated.models.points_shape import PointsShape
+from ..generated.models.points_shape_shape_type import PointsShape_shapeType
+from ..generated.models.polygon_shape import PolygonShape
+from ..generated.models.polygon_shape_shape_type import PolygonShape_shapeType
+from ..generated.models.polygon_tube_shape import PolygonTubeShape
+from ..generated.models.polygon_tube_shape_shape_type import PolygonTubeShape_shapeType
 from ..generated.models.prescribed_displacement import PrescribedDisplacement
 from ..generated.models.prescribed_displacement_bulk_result import PrescribedDisplacementBulkResult
 from ..generated.models.prescribed_displacement_create import PrescribedDisplacementCreate
@@ -290,16 +380,41 @@ from ..generated.models.prescribed_displacement_key_bulk_result import Prescribe
 from ..generated.models.prescribed_displacement_update import PrescribedDisplacementUpdate
 from ..generated.models.property_source import PropertySource
 from ..generated.models.query_warnings import QueryWarnings
+from ..generated.models.rack_shape import RackShape
+from ..generated.models.rack_shape_shape_type import RackShape_shapeType
 from ..generated.models.reaction_summary import ReactionSummary
 from ..generated.models.reaction_summary_query_result import ReactionSummaryQueryResult
 from ..generated.models.reaction_summary_type import ReactionSummaryType
+from ..generated.models.read_write_availability import ReadWriteAvailability
+from ..generated.models.rectangular_bar_shape import RectangularBarShape
+from ..generated.models.rectangular_bar_shape_shape_type import RectangularBarShape_shapeType
+from ..generated.models.rectangular_tube_shape import RectangularTubeShape
+from ..generated.models.rectangular_tube_shape_shape_type import RectangularTubeShape_shapeType
+from ..generated.models.reference_point import ReferencePoint
 from ..generated.models.registration_status import RegistrationStatus
 from ..generated.models.resource_metadata import ResourceMetadata
+from ..generated.models.result_sort_order import ResultSortOrder
+from ..generated.models.rounded_angle_shape import RoundedAngleShape
+from ..generated.models.rounded_angle_shape_shape_type import RoundedAngleShape_shapeType
+from ..generated.models.run_status import RunStatus
 from ..generated.models.save_job_request import SaveJobRequest
+from ..generated.models.schifflerized_angle_shape import SchifflerizedAngleShape
+from ..generated.models.schifflerized_angle_shape_shape_type import SchifflerizedAngleShape_shapeType
 from ..generated.models.section import Section
+from ..generated.models.section_bounds import SectionBounds
 from ..generated.models.section_bulk_result import SectionBulkResult
+from ..generated.models.section_geometry import SectionGeometry
 from ..generated.models.section_library_create import SectionLibraryCreate
+from ..generated.models.section_outline import SectionOutline
+from ..generated.models.section_point import SectionPoint
 from ..generated.models.section_properties_unit import SectionPropertiesUnit
+from ..generated.models.section_shape import SectionShape
+from ..generated.models.section_shape_builder_create import SectionShapeBuilderCreate
+from ..generated.models.section_shape_builder_create_shapes import SectionShapeBuilderCreate_shapes
+from ..generated.models.section_shape_builder_preview import SectionShapeBuilderPreview
+from ..generated.models.section_shape_builder_preview_shape import SectionShapeBuilderPreviewShape
+from ..generated.models.section_shape_geometry import SectionShapeGeometry
+from ..generated.models.section_shapes import Section_shapes
 from ..generated.models.section_update import SectionUpdate
 from ..generated.models.section_user_create import SectionUserCreate
 from ..generated.models.self_weight_load import SelfWeightLoad
@@ -308,7 +423,18 @@ from ..generated.models.self_weight_load_create import SelfWeightLoadCreate
 from ..generated.models.self_weight_load_update import SelfWeightLoadUpdate
 from ..generated.models.service_info import ServiceInfo
 from ..generated.models.set_general_restraint_request import SetGeneralRestraintRequest
+from ..generated.models.shape_anchor_position import ShapeAnchorPosition
+from ..generated.models.shape_fabrication import ShapeFabrication
+from ..generated.models.shape_mirror import ShapeMirror
+from ..generated.models.shape_point import ShapePoint
+from ..generated.models.slice_shape import SliceShape
+from ..generated.models.slice_shape_shape_type import SliceShape_shapeType
 from ..generated.models.solver_type import SolverType
+from ..generated.models.sort_key import SortKey
+from ..generated.models.square_bar_shape import SquareBarShape
+from ..generated.models.square_bar_shape_shape_type import SquareBarShape_shapeType
+from ..generated.models.square_tube_shape import SquareTubeShape
+from ..generated.models.square_tube_shape_shape_type import SquareTubeShape_shapeType
 from ..generated.models.static_settings import StaticSettings
 from ..generated.models.static_settings_update import StaticSettingsUpdate
 from ..generated.models.steel_check_summary import SteelCheckSummary
@@ -318,9 +444,80 @@ from ..generated.models.steel_design_summary import SteelDesignSummary
 from ..generated.models.steel_member import SteelMember
 from ..generated.models.steel_member_bulk_result import SteelMemberBulkResult
 from ..generated.models.steel_member_create import SteelMemberCreate
+from ..generated.models.steel_member_design_general_settings import SteelMemberDesignGeneralSettings
+from ..generated.models.steel_member_design_general_settings_update import SteelMemberDesignGeneralSettingsUpdate
+from ..generated.models.steel_member_design_iteration_settings import SteelMemberDesignIterationSettings
+from ..generated.models.steel_member_design_iteration_settings_update import SteelMemberDesignIterationSettingsUpdate
+from ..generated.models.steel_member_design_run_check_request import SteelMemberDesignRunCheckRequest
+from ..generated.models.steel_member_design_run_check_request_code_settings import SteelMemberDesignRunCheckRequest_codeSettings
+from ..generated.models.steel_member_design_run_design_request import SteelMemberDesignRunDesignRequest
+from ..generated.models.steel_member_design_run_design_request_code_settings import SteelMemberDesignRunDesignRequest_codeSettings
+from ..generated.models.steel_member_design_settings_aisc_asd1989 import SteelMemberDesignSettingsAiscAsd1989
+from ..generated.models.steel_member_design_settings_aisc_asd1989_code import SteelMemberDesignSettingsAiscAsd1989_code
+from ..generated.models.steel_member_design_settings_aisc_asd1989_update import SteelMemberDesignSettingsAiscAsd1989Update
+from ..generated.models.steel_member_design_settings_aisc_asd1989_update_code import SteelMemberDesignSettingsAiscAsd1989Update_code
+from ..generated.models.steel_member_design_settings_aisc_asd360 import SteelMemberDesignSettingsAiscAsd360
+from ..generated.models.steel_member_design_settings_aisc_asd360_code import SteelMemberDesignSettingsAiscAsd360_code
+from ..generated.models.steel_member_design_settings_aisc_asd360_update import SteelMemberDesignSettingsAiscAsd360Update
+from ..generated.models.steel_member_design_settings_aisc_asd360_update_code import SteelMemberDesignSettingsAiscAsd360Update_code
+from ..generated.models.steel_member_design_settings_aisc_lrfd1993 import SteelMemberDesignSettingsAiscLrfd1993
+from ..generated.models.steel_member_design_settings_aisc_lrfd1993_code import SteelMemberDesignSettingsAiscLrfd1993_code
+from ..generated.models.steel_member_design_settings_aisc_lrfd1993_update import SteelMemberDesignSettingsAiscLrfd1993Update
+from ..generated.models.steel_member_design_settings_aisc_lrfd1993_update_code import SteelMemberDesignSettingsAiscLrfd1993Update_code
+from ..generated.models.steel_member_design_settings_aisc_lrfd360 import SteelMemberDesignSettingsAiscLrfd360
+from ..generated.models.steel_member_design_settings_aisc_lrfd360_code import SteelMemberDesignSettingsAiscLrfd360_code
+from ..generated.models.steel_member_design_settings_aisc_lrfd360_update import SteelMemberDesignSettingsAiscLrfd360Update
+from ..generated.models.steel_member_design_settings_aisc_lrfd360_update_code import SteelMemberDesignSettingsAiscLrfd360Update_code
+from ..generated.models.steel_member_design_settings_as1250 import SteelMemberDesignSettingsAs1250
+from ..generated.models.steel_member_design_settings_as1250_code import SteelMemberDesignSettingsAs1250_code
+from ..generated.models.steel_member_design_settings_as1250_update import SteelMemberDesignSettingsAs1250Update
+from ..generated.models.steel_member_design_settings_as1250_update_code import SteelMemberDesignSettingsAs1250Update_code
+from ..generated.models.steel_member_design_settings_as3990 import SteelMemberDesignSettingsAs3990
+from ..generated.models.steel_member_design_settings_as3990_code import SteelMemberDesignSettingsAs3990_code
+from ..generated.models.steel_member_design_settings_as3990_update import SteelMemberDesignSettingsAs3990Update
+from ..generated.models.steel_member_design_settings_as3990_update_code import SteelMemberDesignSettingsAs3990Update_code
+from ..generated.models.steel_member_design_settings_as4100 import SteelMemberDesignSettingsAs4100
+from ..generated.models.steel_member_design_settings_as4100_code import SteelMemberDesignSettingsAs4100_code
+from ..generated.models.steel_member_design_settings_as4100_update import SteelMemberDesignSettingsAs4100Update
+from ..generated.models.steel_member_design_settings_as4100_update_code import SteelMemberDesignSettingsAs4100Update_code
+from ..generated.models.steel_member_design_settings_as_nzs4600 import SteelMemberDesignSettingsAsNzs4600
+from ..generated.models.steel_member_design_settings_as_nzs4600_code import SteelMemberDesignSettingsAsNzs4600_code
+from ..generated.models.steel_member_design_settings_as_nzs4600_duragal_only import SteelMemberDesignSettingsAsNzs4600DuragalOnly
+from ..generated.models.steel_member_design_settings_as_nzs4600_duragal_only_code import SteelMemberDesignSettingsAsNzs4600DuragalOnly_code
+from ..generated.models.steel_member_design_settings_as_nzs4600_duragal_only_update import SteelMemberDesignSettingsAsNzs4600DuragalOnlyUpdate
+from ..generated.models.steel_member_design_settings_as_nzs4600_duragal_only_update_code import SteelMemberDesignSettingsAsNzs4600DuragalOnlyUpdate_code
+from ..generated.models.steel_member_design_settings_as_nzs4600_update import SteelMemberDesignSettingsAsNzs4600Update
+from ..generated.models.steel_member_design_settings_as_nzs4600_update_code import SteelMemberDesignSettingsAsNzs4600Update_code
+from ..generated.models.steel_member_design_settings_base import SteelMemberDesignSettingsBase
+from ..generated.models.steel_member_design_settings_base_update import SteelMemberDesignSettingsBaseUpdate
+from ..generated.models.steel_member_design_settings_bs5950_1990 import SteelMemberDesignSettingsBs5950_1990
+from ..generated.models.steel_member_design_settings_bs5950_1990_code import SteelMemberDesignSettingsBs5950_1990_code
+from ..generated.models.steel_member_design_settings_bs5950_1990_update import SteelMemberDesignSettingsBs5950_1990Update
+from ..generated.models.steel_member_design_settings_bs5950_1990_update_code import SteelMemberDesignSettingsBs5950_1990Update_code
+from ..generated.models.steel_member_design_settings_bs5950_2000 import SteelMemberDesignSettingsBs5950_2000
+from ..generated.models.steel_member_design_settings_bs5950_2000_code import SteelMemberDesignSettingsBs5950_2000_code
+from ..generated.models.steel_member_design_settings_bs5950_2000_update import SteelMemberDesignSettingsBs5950_2000Update
+from ..generated.models.steel_member_design_settings_bs5950_2000_update_code import SteelMemberDesignSettingsBs5950_2000Update_code
+from ..generated.models.steel_member_design_settings_eurocode3_2005 import SteelMemberDesignSettingsEurocode3_2005
+from ..generated.models.steel_member_design_settings_eurocode3_2005_code import SteelMemberDesignSettingsEurocode3_2005_code
+from ..generated.models.steel_member_design_settings_eurocode3_2005_update import SteelMemberDesignSettingsEurocode3_2005Update
+from ..generated.models.steel_member_design_settings_eurocode3_2005_update_code import SteelMemberDesignSettingsEurocode3_2005Update_code
+from ..generated.models.steel_member_design_settings_hk_cp2011 import SteelMemberDesignSettingsHkCp2011
+from ..generated.models.steel_member_design_settings_hk_cp2011_code import SteelMemberDesignSettingsHkCp2011_code
+from ..generated.models.steel_member_design_settings_hk_cp2011_update import SteelMemberDesignSettingsHkCp2011Update
+from ..generated.models.steel_member_design_settings_hk_cp2011_update_code import SteelMemberDesignSettingsHkCp2011Update_code
+from ..generated.models.steel_member_design_settings_is800_2007 import SteelMemberDesignSettingsIs800_2007
+from ..generated.models.steel_member_design_settings_is800_2007_code import SteelMemberDesignSettingsIs800_2007_code
+from ..generated.models.steel_member_design_settings_is800_2007_update import SteelMemberDesignSettingsIs800_2007Update
+from ..generated.models.steel_member_design_settings_is800_2007_update_code import SteelMemberDesignSettingsIs800_2007Update_code
+from ..generated.models.steel_member_design_settings_nzs3404 import SteelMemberDesignSettingsNzs3404
+from ..generated.models.steel_member_design_settings_nzs3404_code import SteelMemberDesignSettingsNzs3404_code
+from ..generated.models.steel_member_design_settings_nzs3404_update import SteelMemberDesignSettingsNzs3404Update
+from ..generated.models.steel_member_design_settings_nzs3404_update_code import SteelMemberDesignSettingsNzs3404Update_code
 from ..generated.models.steel_member_end_connection import SteelMemberEndConnection
 from ..generated.models.steel_member_type import SteelMemberType
 from ..generated.models.steel_member_update import SteelMemberUpdate
+from ..generated.models.steel_strength import SteelStrength
 from ..generated.models.steel_strength_grade import SteelStrengthGrade
 from ..generated.models.stepping_method import SteppingMethod
 from ..generated.models.stress_unit import StressUnit
@@ -335,19 +532,32 @@ from ..generated.models.thermal_load_create import ThermalLoadCreate
 from ..generated.models.thermal_load_element_id import ThermalLoadElementId
 from ..generated.models.thermal_load_element_id_bulk_result import ThermalLoadElementIdBulkResult
 from ..generated.models.thermal_load_update import ThermalLoadUpdate
+from ..generated.models.top_hat_shape import TopHatShape
+from ..generated.models.top_hat_shape_shape_type import TopHatShape_shapeType
 from ..generated.models.translation_unit import TranslationUnit
+from ..generated.models.trapezoid_shape import TrapezoidShape
+from ..generated.models.trapezoid_shape_shape_type import TrapezoidShape_shapeType
+from ..generated.models.triangle_shape import TriangleShape
+from ..generated.models.triangle_shape_shape_type import TriangleShape_shapeType
+from ..generated.models.unequal_angle_shape import UnequalAngleShape
+from ..generated.models.unequal_angle_shape_shape_type import UnequalAngleShape_shapeType
 from ..generated.models.units import Units
 from ..generated.models.validation_error import ValidationError
 from ..generated.models.vector3_d import Vector3D
 from ..generated.models.vehicle_load_units import VehicleLoadUnits
 from ..generated.models.vehicle_wheel_load import VehicleWheelLoad
 from ..generated.models.vertical_axis import VerticalAxis
+from ..generated.models.wedge_shape import WedgeShape
+from ..generated.models.wedge_shape_shape_type import WedgeShape_shapeType
+from ..generated.models.zed_shape import ZedShape
+from ..generated.models.zed_shape_shape_type import ZedShape_shapeType
 
 __all__ = [
     "AccelerationUnit",
     "AccessMode",
     "AccessModeStatus",
     "AccessModeUpdate",
+    "Aisc360SingleAngleMethod",
     "AllowedValue",
     "AnalysisInfo",
     "AnalysisLoadCaseInfo",
@@ -359,12 +569,15 @@ __all__ = [
     "AnalysisResultsSummary",
     "AnalysisRun",
     "AnalysisRun_parameters",
-    "AnalysisRunResult",
-    "AnalysisRunStatus",
     "AnalysisType",
     "AngleType",
+    "As3990ReductionSkip",
     "AxesType",
     "AxialForceDistribution",
+    "BeamTeeShape",
+    "BeamTeeShape_shapeType",
+    "BoxGirderShape",
+    "BoxGirderShape_shapeType",
     "BucklingEffectiveLength",
     "BucklingEffectiveLengthQueryResult",
     "BucklingLoadFactor",
@@ -372,28 +585,67 @@ __all__ = [
     "BucklingSettings",
     "BucklingSettingsUpdate",
     "BucklingTheory",
+    "BulkDeleteResult",
     "BulkDeleted",
     "BulkDeletedBulkResult",
     "BulkError",
+    "CeeBackToBackShape",
+    "CeeBackToBackShape_shapeType",
+    "CeeShape",
+    "CeeShape_shapeType",
+    "ChannelShape",
+    "ChannelShape_shapeType",
+    "CircularBarShape",
+    "CircularBarShape_shapeType",
+    "CircularTubeShape",
+    "CircularTubeShape_shapeType",
+    "ColumnTeeShape",
+    "ColumnTeeShape_shapeType",
     "CombinationLoadCaseCreate",
     "CombinationLoadCaseItem",
     "CombinationLoadCaseUpdate",
     "ConstraintAxes",
     "ConvergenceEntry",
     "CoordinateSystem",
+    "CruciformShape",
+    "CruciformShape_shapeType",
+    "DALongShape",
+    "DALongShape_shapeType",
+    "DAShortShape",
+    "DAShortShape_shapeType",
+    "DAStarredShape",
+    "DAStarredShape_shapeType",
+    "DefaultLibraries",
+    "DefaultLibrariesUpdate",
     "DeleteResult",
+    "DesignCheckStatus",
+    "DesignCode",
+    "DesignCodeInfo",
+    "DesignFailureType",
+    "DesignMode",
+    "DesignProperties",
+    "DesignRun",
+    "DesignRunPhase",
     "DirectionAxis",
     "DirectionSource",
     "DirectionUpdate",
     "DynamicFrequencySettings",
     "DynamicFrequencySettingsUpdate",
+    "EqualAngleShape",
+    "EqualAngleShape_shapeType",
+    "EquilateralTriangleShape",
+    "EquilateralTriangleShape_shapeType",
     "ErrorList",
     "ErrorResponse",
     "ErrorResponse_extensions",
     "ErrorSource",
+    "Eurocode3BendingAndAxialCompressionMethod",
+    "Eurocode3LateralTorsionalBucklingMethod",
     "ExpandOption",
     "FieldMetadata",
     "FileOpeningStatus",
+    "FilletShape",
+    "FilletShape_shapeType",
     "Filter",
     "FilterAxisRange",
     "FilterAxisRangeUpdate",
@@ -427,10 +679,23 @@ __all__ = [
     "FilterSteelMembers",
     "FilterSteelMembersUpdate",
     "FilterUpdate",
+    "FlatOvalShape",
+    "FlatOvalShape_shapeType",
     "ForceUnit",
     "FrictionNormalAxis",
     "FrictionNormalDirection",
+    "IShape",
+    "IShape_shapeType",
+    "IfcConvertTo",
+    "IfcExportRequest",
+    "IfcExportSettings",
+    "IfcExportSettingsUpdate",
+    "IfcSchema",
+    "Is800ImportanceFactor",
     "Is800SeismicClassification",
+    "Is800SeismicZone",
+    "Is800SingleAngleBolts",
+    "Is800SingleAngleEndFixity",
     "Job",
     "JobFile",
     "JobFileOpeningStatus",
@@ -442,10 +707,28 @@ __all__ = [
     "JobSettings",
     "JobState",
     "JobStatus",
+    "LSBBackToBackShape",
+    "LSBBackToBackShape_shapeType",
+    "LSBShape",
+    "LSBShape_shapeType",
+    "LShape",
+    "LShape_shapeType",
     "LastError",
     "LengthUnit",
     "LengthUnitBasis",
+    "Library",
+    "LibraryAvailability",
+    "LibraryGroup",
+    "LibraryItem",
+    "LibraryMatchType",
+    "LibraryOrigin",
+    "LibrarySearchResult",
+    "LibrarySearchSummary",
+    "LibraryShape",
+    "LibraryShape_shapeType",
     "LicenseStatus",
+    "LinesShape",
+    "LinesShape_shapeType",
     "LoadAxes",
     "LoadCase",
     "LoadCaseBulkResult",
@@ -461,6 +744,7 @@ __all__ = [
     "LoadCategoryBulkResult",
     "LoadCategoryCreate",
     "LoadCategoryUpdate",
+    "LoadFactorType",
     "LoadHeightPosition",
     "LoadPositionUnits",
     "LoadingType",
@@ -528,6 +812,7 @@ __all__ = [
     "ModeShape",
     "ModeShapeNormalization",
     "ModeShapeQueryResult",
+    "ModeStatus",
     "MomentUnit",
     "MovingLoadCombination",
     "MovingLoadElementsToLoad",
@@ -575,6 +860,10 @@ __all__ = [
     "NodeLoadKey",
     "NodeLoadKeyBulkResult",
     "NodeLoadUpdate",
+    "NodeMatch",
+    "NodeMatchRequest",
+    "NodeMatchResult",
+    "NodeMatchSummary",
     "NodeReaction",
     "NodeReactionQueryResult",
     "NodeRef",
@@ -585,6 +874,8 @@ __all__ = [
     "NodeTypeFilter",
     "NodeUpdate",
     "NonLinearTheory",
+    "NotDefinedShape",
+    "NotDefinedShape_shapeType",
     "Nzs3404SeismicClassification",
     "OpenJobRequest",
     "OpenSampleRequest",
@@ -617,7 +908,15 @@ __all__ = [
     "PlateTheory",
     "PlateType",
     "PlateUpdate",
+    "PlateWebGirderShape",
+    "PlateWebGirderShape_shapeType",
     "Point3D",
+    "PointsShape",
+    "PointsShape_shapeType",
+    "PolygonShape",
+    "PolygonShape_shapeType",
+    "PolygonTubeShape",
+    "PolygonTubeShape_shapeType",
     "PrescribedDisplacement",
     "PrescribedDisplacementBulkResult",
     "PrescribedDisplacementCreate",
@@ -626,16 +925,41 @@ __all__ = [
     "PrescribedDisplacementUpdate",
     "PropertySource",
     "QueryWarnings",
+    "RackShape",
+    "RackShape_shapeType",
     "ReactionSummary",
     "ReactionSummaryQueryResult",
     "ReactionSummaryType",
+    "ReadWriteAvailability",
+    "RectangularBarShape",
+    "RectangularBarShape_shapeType",
+    "RectangularTubeShape",
+    "RectangularTubeShape_shapeType",
+    "ReferencePoint",
     "RegistrationStatus",
     "ResourceMetadata",
+    "ResultSortOrder",
+    "RoundedAngleShape",
+    "RoundedAngleShape_shapeType",
+    "RunStatus",
     "SaveJobRequest",
+    "SchifflerizedAngleShape",
+    "SchifflerizedAngleShape_shapeType",
     "Section",
+    "SectionBounds",
     "SectionBulkResult",
+    "SectionGeometry",
     "SectionLibraryCreate",
+    "SectionOutline",
+    "SectionPoint",
     "SectionPropertiesUnit",
+    "SectionShape",
+    "SectionShapeBuilderCreate",
+    "SectionShapeBuilderCreate_shapes",
+    "SectionShapeBuilderPreview",
+    "SectionShapeBuilderPreviewShape",
+    "SectionShapeGeometry",
+    "Section_shapes",
     "SectionUpdate",
     "SectionUserCreate",
     "SelfWeightLoad",
@@ -644,7 +968,18 @@ __all__ = [
     "SelfWeightLoadUpdate",
     "ServiceInfo",
     "SetGeneralRestraintRequest",
+    "ShapeAnchorPosition",
+    "ShapeFabrication",
+    "ShapeMirror",
+    "ShapePoint",
+    "SliceShape",
+    "SliceShape_shapeType",
     "SolverType",
+    "SortKey",
+    "SquareBarShape",
+    "SquareBarShape_shapeType",
+    "SquareTubeShape",
+    "SquareTubeShape_shapeType",
     "StaticSettings",
     "StaticSettingsUpdate",
     "SteelCheckSummary",
@@ -654,9 +989,80 @@ __all__ = [
     "SteelMember",
     "SteelMemberBulkResult",
     "SteelMemberCreate",
+    "SteelMemberDesignGeneralSettings",
+    "SteelMemberDesignGeneralSettingsUpdate",
+    "SteelMemberDesignIterationSettings",
+    "SteelMemberDesignIterationSettingsUpdate",
+    "SteelMemberDesignRunCheckRequest",
+    "SteelMemberDesignRunCheckRequest_codeSettings",
+    "SteelMemberDesignRunDesignRequest",
+    "SteelMemberDesignRunDesignRequest_codeSettings",
+    "SteelMemberDesignSettingsAiscAsd1989",
+    "SteelMemberDesignSettingsAiscAsd1989_code",
+    "SteelMemberDesignSettingsAiscAsd1989Update",
+    "SteelMemberDesignSettingsAiscAsd1989Update_code",
+    "SteelMemberDesignSettingsAiscAsd360",
+    "SteelMemberDesignSettingsAiscAsd360_code",
+    "SteelMemberDesignSettingsAiscAsd360Update",
+    "SteelMemberDesignSettingsAiscAsd360Update_code",
+    "SteelMemberDesignSettingsAiscLrfd1993",
+    "SteelMemberDesignSettingsAiscLrfd1993_code",
+    "SteelMemberDesignSettingsAiscLrfd1993Update",
+    "SteelMemberDesignSettingsAiscLrfd1993Update_code",
+    "SteelMemberDesignSettingsAiscLrfd360",
+    "SteelMemberDesignSettingsAiscLrfd360_code",
+    "SteelMemberDesignSettingsAiscLrfd360Update",
+    "SteelMemberDesignSettingsAiscLrfd360Update_code",
+    "SteelMemberDesignSettingsAs1250",
+    "SteelMemberDesignSettingsAs1250_code",
+    "SteelMemberDesignSettingsAs1250Update",
+    "SteelMemberDesignSettingsAs1250Update_code",
+    "SteelMemberDesignSettingsAs3990",
+    "SteelMemberDesignSettingsAs3990_code",
+    "SteelMemberDesignSettingsAs3990Update",
+    "SteelMemberDesignSettingsAs3990Update_code",
+    "SteelMemberDesignSettingsAs4100",
+    "SteelMemberDesignSettingsAs4100_code",
+    "SteelMemberDesignSettingsAs4100Update",
+    "SteelMemberDesignSettingsAs4100Update_code",
+    "SteelMemberDesignSettingsAsNzs4600",
+    "SteelMemberDesignSettingsAsNzs4600_code",
+    "SteelMemberDesignSettingsAsNzs4600DuragalOnly",
+    "SteelMemberDesignSettingsAsNzs4600DuragalOnly_code",
+    "SteelMemberDesignSettingsAsNzs4600DuragalOnlyUpdate",
+    "SteelMemberDesignSettingsAsNzs4600DuragalOnlyUpdate_code",
+    "SteelMemberDesignSettingsAsNzs4600Update",
+    "SteelMemberDesignSettingsAsNzs4600Update_code",
+    "SteelMemberDesignSettingsBase",
+    "SteelMemberDesignSettingsBaseUpdate",
+    "SteelMemberDesignSettingsBs5950_1990",
+    "SteelMemberDesignSettingsBs5950_1990_code",
+    "SteelMemberDesignSettingsBs5950_1990Update",
+    "SteelMemberDesignSettingsBs5950_1990Update_code",
+    "SteelMemberDesignSettingsBs5950_2000",
+    "SteelMemberDesignSettingsBs5950_2000_code",
+    "SteelMemberDesignSettingsBs5950_2000Update",
+    "SteelMemberDesignSettingsBs5950_2000Update_code",
+    "SteelMemberDesignSettingsEurocode3_2005",
+    "SteelMemberDesignSettingsEurocode3_2005_code",
+    "SteelMemberDesignSettingsEurocode3_2005Update",
+    "SteelMemberDesignSettingsEurocode3_2005Update_code",
+    "SteelMemberDesignSettingsHkCp2011",
+    "SteelMemberDesignSettingsHkCp2011_code",
+    "SteelMemberDesignSettingsHkCp2011Update",
+    "SteelMemberDesignSettingsHkCp2011Update_code",
+    "SteelMemberDesignSettingsIs800_2007",
+    "SteelMemberDesignSettingsIs800_2007_code",
+    "SteelMemberDesignSettingsIs800_2007Update",
+    "SteelMemberDesignSettingsIs800_2007Update_code",
+    "SteelMemberDesignSettingsNzs3404",
+    "SteelMemberDesignSettingsNzs3404_code",
+    "SteelMemberDesignSettingsNzs3404Update",
+    "SteelMemberDesignSettingsNzs3404Update_code",
     "SteelMemberEndConnection",
     "SteelMemberType",
     "SteelMemberUpdate",
+    "SteelStrength",
     "SteelStrengthGrade",
     "SteppingMethod",
     "StressUnit",
@@ -671,11 +1077,23 @@ __all__ = [
     "ThermalLoadElementId",
     "ThermalLoadElementIdBulkResult",
     "ThermalLoadUpdate",
+    "TopHatShape",
+    "TopHatShape_shapeType",
     "TranslationUnit",
+    "TrapezoidShape",
+    "TrapezoidShape_shapeType",
+    "TriangleShape",
+    "TriangleShape_shapeType",
+    "UnequalAngleShape",
+    "UnequalAngleShape_shapeType",
     "Units",
     "ValidationError",
     "Vector3D",
     "VehicleLoadUnits",
     "VehicleWheelLoad",
     "VerticalAxis",
+    "WedgeShape",
+    "WedgeShape_shapeType",
+    "ZedShape",
+    "ZedShape_shapeType",
 ]

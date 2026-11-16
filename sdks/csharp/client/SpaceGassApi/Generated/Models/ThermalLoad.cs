@@ -19,7 +19,7 @@ namespace SpaceGassApi.Models
         public global::SpaceGassApi.Models.ThermalElementType? ElementType { get; set; }
         /// <summary>The load case number this load belongs to.</summary>
         public int? LoadCase { get; set; }
-        /// <summary>Load category for grouping/organization.</summary>
+        /// <summary>Id of the load&apos;s category (GET /job/loads/load-categories), or 0 when it has none.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>The uniform temperature change applied to the element.</summary>
         public double? ThermalLoadProp { get; set; }

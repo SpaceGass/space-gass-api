@@ -26,7 +26,7 @@ class BucklingSettings(Parsable):
     drilling_stiffness: Optional[float] = None
     # Whether to perform extra iterations for improved mode shape accuracy.
     extra_iterations: Optional[bool] = None
-    # Load cases to include in the analysis, in SG list format (e.g. `"1,3,5-10"`).Omit or pass an empty string to include all load cases (default).Maximum 50 entries (individual numbers and ranges each count as entries).
+    # Load cases to include in the analysis, in SG list format (e.g. `"1,3,5-10"`).Omit or pass an empty string to include all load cases (default).Maximum 50 slots: each number uses one slot and each range uses two.
     load_cases: Optional[str] = None
     # Lower limit for the load factor in buckling analysis.
     lower_limit: Optional[float] = None
@@ -34,7 +34,7 @@ class BucklingSettings(Parsable):
     modes: Optional[int] = None
     # Axis used for optimization in analysis.
     optimization_axis: Optional[OptimizationAxis] = None
-    # Optimization method for analysis bandwidth/profile reduction.Integer values mirror SPACE GASS's `AnalysisOptimizationTypes` enum(NetCommon/CommonEnums.vb). Used by static, buckling, and dynamic frequency analysis.
+    # Optimization method for analysis bandwidth/profile reduction.Used by static, buckling, and dynamic frequency analysis.
     optimization_method: Optional[AnalysisOptimizationMethod] = None
     # X coordinate or X component of the optimization vector.
     optimization_x: Optional[float] = None
@@ -48,7 +48,7 @@ class BucklingSettings(Parsable):
     retain_load_cases: Optional[bool] = None
     # Number of iterations before disabling reversal of tension/compression-only members.Only relevant when TensionCompressionOnly is Activated.
     reversal_iterations: Optional[int] = None
-    # Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS's `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Paradise, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).
+    # Matrix solver type used by the analysis engine.
     solver_type: Optional[SolverType] = None
     # Whether to stabilize unrestrained nodes during analysis.When true, temporary restraints are added to prevent instability.
     stabilize_unrestrained_nodes: Optional[bool] = None

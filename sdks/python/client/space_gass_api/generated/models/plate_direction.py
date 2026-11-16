@@ -19,7 +19,7 @@ class PlateDirection(Parsable):
     dir_axis: Optional[DirectionAxis] = None
     # Direction node for plate orientation.
     dir_node: Optional[int] = None
-    # Indicates which field defines a member or plate's direction.Setting one source zeros the other two direction fields.Values align with SG's `SGLookupAxisDirection` enum in CommonEnums.vb.
+    # Indicates which field defines a member or plate's direction.Setting one source zeros the other two direction fields.
     source: Optional[DirectionSource] = None
     
     @staticmethod

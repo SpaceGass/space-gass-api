@@ -9,7 +9,7 @@ class MovingLoadGenerateRequest(Parsable):
     """
     Optional request body for `POST moving-loads/generate`. The body itself is optional —omit it entirely to generate with the default load category.
     """
-    # Existing load category Id to tag the generated load cases with.
+    # Id of an existing load category (GET /job/loads/load-categories) to tag the generatedload cases with. Omit, or send `null`, to reuse or create the default "Moving loads"category. `0` is not accepted: generated load cases always get a category. An unknownId is rejected with `400`.
     load_category: Optional[int] = None
     
     @staticmethod

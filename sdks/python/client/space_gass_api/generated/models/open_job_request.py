@@ -12,7 +12,7 @@ class OpenJobRequest(Parsable):
     """
     Request DTO for opening a job file.
     """
-    # Full path to the .sg job file to open.
+    # Full path to the .sg job file to open, for example C:/Models/Job.sg.A relative path, such as one starting with '~', is rejected.
     file_path: Optional[str] = None
     # Options for forcing access to a job file that is in a locked or unsaved state.Used when temporary files exist from a previous session that was not properly closed.
     force_option: Optional[JobForceAccessOption] = None

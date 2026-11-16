@@ -9,7 +9,7 @@ class SaveJobRequest(Parsable):
     """
     Request DTO for saving a job.
     """
-    # Target file path. Omit to save to current location.Required if the job is new (never saved before).
+    # Full path of the target file, for example C:/Models/Job.sg. Omit to save to current location.Required if the job is new (never saved before). A relative path, such as one starting with '~', is rejected.
     file_path: Optional[str] = None
     
     @staticmethod
