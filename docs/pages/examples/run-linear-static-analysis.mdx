@@ -34,9 +34,9 @@ try
         await Task.Delay(500);
         var status = await client.Job.Analysis.Runs[run!.RunId!.Value].GetAsync();
 
-        if (status!.Status is AnalysisRunStatus.Completed
-                           or AnalysisRunStatus.Failed
-                           or AnalysisRunStatus.Cancelled)
+        if (status!.Status is RunStatus.Completed
+                           or RunStatus.Failed
+                           or RunStatus.Cancelled)
         {
             Console.WriteLine($"{status.Status} in {status.ElapsedTime}");
             break;
@@ -68,9 +68,9 @@ try:
         status = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
 
         if status.status in (
-            models.AnalysisRunStatus.Completed,
-            models.AnalysisRunStatus.Failed,
-            models.AnalysisRunStatus.Cancelled,
+            models.RunStatus.Completed,
+            models.RunStatus.Failed,
+            models.RunStatus.Cancelled,
         ):
             print(f"{status.status} in {status.elapsed_time}")
             break
