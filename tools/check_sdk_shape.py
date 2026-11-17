@@ -1,10 +1,11 @@
 """
-Post-regen check that the SDKs are free of Kiota composed-type wrappers and
-that the hand-maintained steel design helpers still fit.
+Post-regen check that the SDKs are free of Kiota composed-type wrappers, so
+polymorphic bodies (steel design code settings, section shapes) can be passed
+and read as plain objects with no hand-written helpers.
 
 Run from the repo root after ``tools/regen_python_inits.py``::
 
-    python tools/check_helpers.py
+    python tools/check_sdk_shape.py
 
 What it verifies:
 
@@ -15,9 +16,9 @@ What it verifies:
 3. Every subclass of a discriminated base sets its discriminator in the
    constructor / as a field default, so callers never set ``shapeType`` or
    ``code`` by hand.
-4. The polymorphic properties have the base types the examples and helpers
-   rely on (``Shapes: List<SectionShape>``, ``CodeSettings``, ``Settings``
-   GET/PATCH), and the Python ``steel_member`` helpers import.
+4. The polymorphic properties have the base types the examples rely on
+   (``Shapes: List<SectionShape>``, ``CodeSettings``, ``Settings`` GET/PATCH).
+5. ``DesignCode.ToString()`` (C#) equals each code's route segment.
 
 Exit code 1 and a list of problems on failure. C# type renames are caught by
 ``dotnet build sdks/csharp/client/SpaceGassApi/SpaceGassApi.csproj``.
@@ -104,7 +105,7 @@ def main() -> int:
         check(getattr(cls(), py_attr, None) == value,
               f"Python {name}().{py_attr} is not \"{value}\"")
 
-    # ---- 4. polymorphic properties are base-typed; helpers import ------------
+    # ---- 4. polymorphic properties are base-typed ---------------------------
     def cs_has(path: Path, needle: str, what: str) -> None:
         check(needle in path.read_text(encoding="utf-8"), f"C# {what}: expected `{needle}` in {path.name}")
 
@@ -124,10 +125,6 @@ def main() -> int:
     check(py_field(models.SteelMemberDesignRunCheckRequest, "code_settings") == "Optional[SteelMemberDesignSettingsBaseUpdate]",
           f"Python SteelMemberDesignRunCheckRequest.code_settings is {py_field(models.SteelMemberDesignRunCheckRequest, 'code_settings')}")
 
-    from space_gass_api import steel_member  # noqa: E402
-
-    for fn in ("get_settings", "patch_settings"):
-        check(callable(getattr(steel_member, fn, None)), f"steel_member.{fn} missing")
     codes = set(schemas["SteelMemberDesignSettingsBase"]["discriminator"]["mapping"])
     check({e.value for e in models.DesignCode} <= codes,
           f"DesignCode enum has values with no settings class: {sorted({e.value for e in models.DesignCode} - codes)}")

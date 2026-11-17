@@ -81,9 +81,8 @@ finally { await client.Job.Close.PostAsync(); }
    Each design code has its own settings classes deriving from `SteelMemberDesignSettingsBase[Update]`;
    pass the code's own object wherever settings are taken (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`,
    `Settings.PatchAsync(...)`). The code is the route segment: C# `client.Job.Design.SteelMember[DesignCode.As4100.ToString()]`,
-   Python `client.job.design.steel_member.by_code(models.DesignCode.As4100.value)`. Typed reads: C#
-   `Settings.GetAsync<SteelMemberDesignSettingsAs4100>()`, Python `steel_member.get_settings(code, models.SteelMemberDesignSettingsAs4100)`.
-   Never set `code`. Design runs are async like analyses — poll `job/design/runs/{runId}` until `status` is
+   Python `client.job.design.steel_member.by_code(models.DesignCode.As4100.value)`. `Settings.GetAsync()` returns
+   the base type holding the code's own class — cast it (C#) or use `isinstance` (Python). Never set `code`. Design runs are async like analyses — poll `job/design/runs/{runId}` until `status` is
    `Completed`, `Failed` or `Cancelled`. A run needs static results first, and a design group whose
    compression effective lengths are explicit (or a buckling analysis). Results:
    `job/query/design/steel-member/check-summary`, one row per design group (`steelMember`).
