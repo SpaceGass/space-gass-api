@@ -15,14 +15,14 @@ class SteelMemberDesignSettingsAiscAsd360Update(SteelMemberDesignSettingsBaseUpd
     """
     Update request for the AISC ASD 360 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not a AISC ASD 360 setting is rejected.
     """
+    # Selects this object type. Always "AiscAsd360".
+    code: Optional[str] = "AiscAsd360"
     # The addEccentricMoments property
     add_eccentric_moments: Optional[bool] = None
     # The calculateCb property
     calculate_cb: Optional[bool] = None
     # The calculateUFactor property
     calculate_u_factor: Optional[bool] = None
-    # Selects this object type. Always "AiscAsd360".
-    code: Optional[SteelMemberDesignSettingsAiscAsd360Update_code] = None
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertCompressionEffectiveLengths property

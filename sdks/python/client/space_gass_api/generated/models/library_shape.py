@@ -15,14 +15,14 @@ class LibraryShape(SectionShape, Parsable):
     """
     A shape taken from a section library item, identified by library and item name.
     """
+    # Selects this object type. Always "Library".
+    shape_type: Optional[str] = "Library"
     # Angle section type for structural sections.Maps to SPACE GASS lookup table "Angle Type".
     angle_type: Optional[AngleType] = None
     # Library holding the item, by its file name.
     library: Optional[str] = None
     # Item name within the library.
     name: Optional[str] = None
-    # Selects this object type. Always "Library".
-    shape_type: Optional[LibraryShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> LibraryShape:

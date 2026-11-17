@@ -14,14 +14,14 @@ class DALongShape(SectionShape, Parsable):
     """
     Double angles, long legs back-to-back.
     """
+    # Selects this object type. Always "DALong".
+    shape_type: Optional[str] = "DALong"
     # Other-leg length.
     b: Optional[float] = None
     # Leg length.
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "DALong".
-    shape_type: Optional[DALongShape_shapeType] = None
     # Horizontal-leg thickness.
     tb: Optional[float] = None
     # Vertical-leg thickness.

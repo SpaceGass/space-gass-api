@@ -15,7 +15,7 @@ class SteelMemberDesignSettingsAs4100Update(SteelMemberDesignSettingsBaseUpdate,
     Update request for the AS4100:2020 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not an AS4100 setting is rejected.
     """
     # Selects this object type. Always "As4100".
-    code: Optional[SteelMemberDesignSettingsAs4100Update_code] = None
+    code: Optional[str] = "As4100"
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertCompressionEffectiveLengths property

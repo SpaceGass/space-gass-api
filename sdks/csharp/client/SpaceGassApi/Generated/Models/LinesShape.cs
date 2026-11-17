@@ -26,6 +26,13 @@ namespace SpaceGassApi.Models
         /// <summary>Wall thickness along the polyline.</summary>
         public double? Thickness { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.LinesShape"/> and sets the default values.
+        /// </summary>
+        public LinesShape() : base()
+        {
+            ShapeType = "LinesShape";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.LinesShape"/></returns>

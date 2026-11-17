@@ -14,12 +14,12 @@ class LSBShape(SectionShape, Parsable):
     """
     LiteSteel beam.
     """
+    # Selects this object type. Always "LSB".
+    shape_type: Optional[str] = "LSB"
     # Flange width.
     b: Optional[float] = None
     # Overall depth.
     d: Optional[float] = None
-    # Selects this object type. Always "LSB".
-    shape_type: Optional[LSBShape_shapeType] = None
     # Flange thickness.
     tt: Optional[float] = None
     # Web thickness.

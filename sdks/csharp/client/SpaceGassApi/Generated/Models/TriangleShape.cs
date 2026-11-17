@@ -20,6 +20,13 @@ namespace SpaceGassApi.Models
         /// <summary>Depth.</summary>
         public double? D { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.TriangleShape"/> and sets the default values.
+        /// </summary>
+        public TriangleShape() : base()
+        {
+            ShapeType = "Triangle";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.TriangleShape"/></returns>

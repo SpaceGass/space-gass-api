@@ -15,7 +15,7 @@ class SteelMemberDesignSettingsNzs3404(SteelMemberDesignSettingsBase, Parsable):
     Steel member design settings for NZS3404 1997.
     """
     # Selects this object type. Always "Nzs3404".
-    code: Optional[SteelMemberDesignSettingsNzs3404_code] = None
+    code: Optional[str] = "Nzs3404"
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Convert compression effective lengths to principal axes.

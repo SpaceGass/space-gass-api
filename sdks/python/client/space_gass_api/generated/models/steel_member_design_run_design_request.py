@@ -7,15 +7,15 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 if TYPE_CHECKING:
     from .steel_member_design_general_settings_update import SteelMemberDesignGeneralSettingsUpdate
     from .steel_member_design_iteration_settings_update import SteelMemberDesignIterationSettingsUpdate
-    from .steel_member_design_run_design_request_code_settings import SteelMemberDesignRunDesignRequest_codeSettings
+    from .steel_member_design_settings_base_update import SteelMemberDesignSettingsBaseUpdate
 
 @dataclass
 class SteelMemberDesignRunDesignRequest(Parsable):
     """
     Request body for POST /job/design/steel-member/{code}/run-design.The body is optional. Supplied settings are written to the job's storedsettings before the run starts, and remain stored after it.
     """
-    # Optional partial code settings, written to the stored settings before the run.
-    code_settings: Optional[SteelMemberDesignRunDesignRequest_codeSettings] = None
+    # Update request for the settings specific to one design code.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /job/design/steel-member/{code}/settings and the codeSettingsblock on the run endpoints. The code property selects the design code's ownupdate object, and a field that object does not have is rejected. code may beomitted: it defaults to the route's design code. When given, it must be theroute's design code.
+    code_settings: Optional[SteelMemberDesignSettingsBaseUpdate] = None
     # Update request for the steel member design iteration settings.Only fields included in the request are updated; omit a field to keep its current value.
     design_iteration_settings: Optional[SteelMemberDesignIterationSettingsUpdate] = None
     # Update request for the general steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /job/design/steel-member/settings and the settings overrides on the run endpoints.
@@ -41,14 +41,14 @@ class SteelMemberDesignRunDesignRequest(Parsable):
         """
         from .steel_member_design_general_settings_update import SteelMemberDesignGeneralSettingsUpdate
         from .steel_member_design_iteration_settings_update import SteelMemberDesignIterationSettingsUpdate
-        from .steel_member_design_run_design_request_code_settings import SteelMemberDesignRunDesignRequest_codeSettings
+        from .steel_member_design_settings_base_update import SteelMemberDesignSettingsBaseUpdate
 
         from .steel_member_design_general_settings_update import SteelMemberDesignGeneralSettingsUpdate
         from .steel_member_design_iteration_settings_update import SteelMemberDesignIterationSettingsUpdate
-        from .steel_member_design_run_design_request_code_settings import SteelMemberDesignRunDesignRequest_codeSettings
+        from .steel_member_design_settings_base_update import SteelMemberDesignSettingsBaseUpdate
 
         fields: dict[str, Callable[[Any], None]] = {
-            "codeSettings": lambda n : setattr(self, 'code_settings', n.get_object_value(SteelMemberDesignRunDesignRequest_codeSettings)),
+            "codeSettings": lambda n : setattr(self, 'code_settings', n.get_object_value(SteelMemberDesignSettingsBaseUpdate)),
             "designIterationSettings": lambda n : setattr(self, 'design_iteration_settings', n.get_object_value(SteelMemberDesignIterationSettingsUpdate)),
             "settings": lambda n : setattr(self, 'settings', n.get_object_value(SteelMemberDesignGeneralSettingsUpdate)),
             "updateSections": lambda n : setattr(self, 'update_sections', n.get_bool_value()),

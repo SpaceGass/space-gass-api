@@ -14,6 +14,8 @@ class CeeShape(SectionShape, Parsable):
     """
     Cee section.
     """
+    # Selects this object type. Always "Cee".
+    shape_type: Optional[str] = "Cee"
     # Lip angle.
     alpha: Optional[float] = None
     # Bottom-flange width.
@@ -24,8 +26,6 @@ class CeeShape(SectionShape, Parsable):
     d: Optional[float] = None
     # Corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "Cee".
-    shape_type: Optional[CeeShape_shapeType] = None
     # Bottom-lip depth.
     tb: Optional[float] = None
     # Top-lip depth.

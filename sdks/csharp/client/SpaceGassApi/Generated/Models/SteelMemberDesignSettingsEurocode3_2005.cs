@@ -30,6 +30,13 @@ namespace SpaceGassApi.Models
         /// <summary>Use UK factors.</summary>
         public bool? UseUkFactors { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsEurocode3_2005"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsEurocode3_2005() : base()
+        {
+            Code = "Eurocode3_2005";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsEurocode3_2005"/></returns>

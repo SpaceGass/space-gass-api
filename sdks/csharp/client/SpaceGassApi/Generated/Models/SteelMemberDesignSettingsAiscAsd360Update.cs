@@ -32,6 +32,13 @@ namespace SpaceGassApi.Models
         /// <summary>The useClauseH2 property</summary>
         public bool? UseClauseH2 { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsAiscAsd360Update"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsAiscAsd360Update() : base()
+        {
+            Code = "AiscAsd360";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsAiscAsd360Update"/></returns>

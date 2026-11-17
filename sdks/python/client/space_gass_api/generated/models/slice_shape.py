@@ -14,12 +14,12 @@ class SliceShape(SectionShape, Parsable):
     """
     Circular slice.
     """
+    # Selects this object type. Always "Slice".
+    shape_type: Optional[str] = "Slice"
     # Included angle.
     alpha: Optional[float] = None
     # Diameter.
     d: Optional[float] = None
-    # Selects this object type. Always "Slice".
-    shape_type: Optional[SliceShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> SliceShape:

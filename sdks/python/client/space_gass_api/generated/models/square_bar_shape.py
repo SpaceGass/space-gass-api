@@ -14,10 +14,10 @@ class SquareBarShape(SectionShape, Parsable):
     """
     Solid square bar.
     """
+    # Selects this object type. Always "SquareBar".
+    shape_type: Optional[str] = "SquareBar"
     # Side length.
     d: Optional[float] = None
-    # Selects this object type. Always "SquareBar".
-    shape_type: Optional[SquareBarShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> SquareBarShape:

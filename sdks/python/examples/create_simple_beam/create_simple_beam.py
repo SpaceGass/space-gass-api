@@ -249,14 +249,14 @@ async def main() -> int:
             await asyncio.sleep(0.5)
             final_run = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
             if final_run.status in (
-                models.AnalysisRunStatus.Completed,
-                models.AnalysisRunStatus.Failed,
-                models.AnalysisRunStatus.Cancelled,
+                models.RunStatus.Completed,
+                models.RunStatus.Failed,
+                models.RunStatus.Cancelled,
             ):
                 break
 
         print(f"  Analysis {final_run.status} in {final_run.elapsed_time}")
-        if final_run.status != models.AnalysisRunStatus.Completed:
+        if final_run.status != models.RunStatus.Completed:
             raise RuntimeError(
                 f"Analysis did not complete: {final_run.error_message}")
         print()

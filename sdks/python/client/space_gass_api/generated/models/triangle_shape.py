@@ -14,14 +14,14 @@ class TriangleShape(SectionShape, Parsable):
     """
     Triangle.
     """
+    # Selects this object type. Always "Triangle".
+    shape_type: Optional[str] = "Triangle"
     # Apex offset from the first base corner.
     a: Optional[float] = None
     # Base width.
     b: Optional[float] = None
     # Depth.
     d: Optional[float] = None
-    # Selects this object type. Always "Triangle".
-    shape_type: Optional[TriangleShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> TriangleShape:

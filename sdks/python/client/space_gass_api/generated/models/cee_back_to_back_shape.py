@@ -14,14 +14,14 @@ class CeeBackToBackShape(SectionShape, Parsable):
     """
     Back-to-back Cee sections.
     """
+    # Selects this object type. Always "CeeBackToBack".
+    shape_type: Optional[str] = "CeeBackToBack"
     # Flange width.
     b: Optional[float] = None
     # Overall depth.
     d: Optional[float] = None
     # Corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "CeeBackToBack".
-    shape_type: Optional[CeeBackToBackShape_shapeType] = None
     # Lip depth.
     tt: Optional[float] = None
     # Wall thickness.

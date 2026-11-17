@@ -30,6 +30,13 @@ namespace SpaceGassApi.Models
         /// <summary>Wall thickness.</summary>
         public double? Tw { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.ZedShape"/> and sets the default values.
+        /// </summary>
+        public ZedShape() : base()
+        {
+            ShapeType = "Zed";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.ZedShape"/></returns>

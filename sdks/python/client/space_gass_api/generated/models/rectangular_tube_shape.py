@@ -14,14 +14,14 @@ class RectangularTubeShape(SectionShape, Parsable):
     """
     Rectangular hollow section (RHS).
     """
+    # Selects this object type. Always "RectangularTube".
+    shape_type: Optional[str] = "RectangularTube"
     # Overall width.
     b: Optional[float] = None
     # Overall depth.
     d: Optional[float] = None
     # Outside corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "RectangularTube".
-    shape_type: Optional[RectangularTubeShape_shapeType] = None
     # Wall thickness.
     t: Optional[float] = None
     

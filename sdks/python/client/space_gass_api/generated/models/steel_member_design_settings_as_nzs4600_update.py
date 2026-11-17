@@ -14,14 +14,14 @@ class SteelMemberDesignSettingsAsNzs4600Update(SteelMemberDesignSettingsBaseUpda
     """
     Update request for the AS/NZS 4600 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not a AS/NZS 4600 setting is rejected.
     """
+    # Selects this object type. Always "AsNzs4600".
+    code: Optional[str] = "AsNzs4600"
     # The calculateCb property
     calculate_cb: Optional[bool] = None
     # The calculateCmAndAlpha property
     calculate_cm_and_alpha: Optional[bool] = None
     # The cb property
     cb: Optional[float] = None
-    # Selects this object type. Always "AsNzs4600".
-    code: Optional[SteelMemberDesignSettingsAsNzs4600Update_code] = None
     # The considerDistortionalBuckling property
     consider_distortional_buckling: Optional[bool] = None
     # The considerEccentricEffects property

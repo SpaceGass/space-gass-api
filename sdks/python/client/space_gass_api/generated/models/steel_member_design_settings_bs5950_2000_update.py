@@ -14,12 +14,12 @@ class SteelMemberDesignSettingsBs5950_2000Update(SteelMemberDesignSettingsBaseUp
     """
     Update request for the BS5950:2000 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not a BS5950:2000 setting is rejected.
     """
+    # Selects this object type. Always "Bs5950_2000".
+    code: Optional[str] = "Bs5950_2000"
     # The addEccentricMoments property
     add_eccentric_moments: Optional[bool] = None
     # The calculateMltFactor property
     calculate_mlt_factor: Optional[bool] = None
-    # Selects this object type. Always "Bs5950_2000".
-    code: Optional[SteelMemberDesignSettingsBs5950_2000Update_code] = None
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertCompressionEffectiveLengths property

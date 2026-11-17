@@ -14,12 +14,12 @@ class RectangularBarShape(SectionShape, Parsable):
     """
     Solid rectangular bar.
     """
+    # Selects this object type. Always "RectangularBar".
+    shape_type: Optional[str] = "RectangularBar"
     # Width.
     b: Optional[float] = None
     # Depth.
     d: Optional[float] = None
-    # Selects this object type. Always "RectangularBar".
-    shape_type: Optional[RectangularBarShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> RectangularBarShape:

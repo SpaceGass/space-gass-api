@@ -18,6 +18,13 @@ namespace SpaceGassApi.Models
         /// <summary>Overall depth.</summary>
         public double? D { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.FlatOvalShape"/> and sets the default values.
+        /// </summary>
+        public FlatOvalShape() : base()
+        {
+            ShapeType = "FlatOval";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.FlatOvalShape"/></returns>

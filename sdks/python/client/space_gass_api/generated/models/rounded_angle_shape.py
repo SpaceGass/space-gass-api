@@ -14,14 +14,14 @@ class RoundedAngleShape(SectionShape, Parsable):
     """
     Rounded angle.
     """
+    # Selects this object type. Always "RoundedAngle".
+    shape_type: Optional[str] = "RoundedAngle"
     # Other-leg length.
     b: Optional[float] = None
     # Leg length.
     d: Optional[float] = None
     # Corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "RoundedAngle".
-    shape_type: Optional[RoundedAngleShape_shapeType] = None
     # Heel thickness.
     tb: Optional[float] = None
     # Toe thickness.

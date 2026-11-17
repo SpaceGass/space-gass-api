@@ -15,7 +15,7 @@ class SteelMemberDesignSettingsAs4100(SteelMemberDesignSettingsBase, Parsable):
     Steel member design settings for AS4100:2020.
     """
     # Selects this object type. Always "As4100".
-    code: Optional[SteelMemberDesignSettingsAs4100_code] = None
+    code: Optional[str] = "As4100"
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Convert compression effective lengths to principal axes.

@@ -15,12 +15,12 @@ class LinesShape(SectionShape, Parsable):
     """
     Thin-walled outline defined by a point polyline.
     """
+    # Selects this object type. Always "LinesShape".
+    shape_type: Optional[str] = "LinesShape"
     # Default corner radius applied at points flagged `useDefaultRadius`.
     general_radius: Optional[float] = None
     # Polyline vertices.
     points: Optional[list[ShapePoint]] = None
-    # Selects this object type. Always "LinesShape".
-    shape_type: Optional[LinesShape_shapeType] = None
     # Wall thickness along the polyline.
     thickness: Optional[float] = None
     

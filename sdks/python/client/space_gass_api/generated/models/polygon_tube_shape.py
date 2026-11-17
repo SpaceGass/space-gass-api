@@ -14,10 +14,10 @@ class PolygonTubeShape(SectionShape, Parsable):
     """
     Hollow regular polygon.
     """
+    # Selects this object type. Always "PolygonTube".
+    shape_type: Optional[str] = "PolygonTube"
     # Across-flats diameter.
     d: Optional[float] = None
-    # Selects this object type. Always "PolygonTube".
-    shape_type: Optional[PolygonTubeShape_shapeType] = None
     # Number of sides.
     sides: Optional[int] = None
     # Wall thickness.

@@ -14,14 +14,14 @@ class DAStarredShape(SectionShape, Parsable):
     """
     Double angles, starred.
     """
+    # Selects this object type. Always "DAStarred".
+    shape_type: Optional[str] = "DAStarred"
     # Other-leg length.
     b: Optional[float] = None
     # Leg length.
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "DAStarred".
-    shape_type: Optional[DAStarredShape_shapeType] = None
     # Horizontal-leg thickness.
     tb: Optional[float] = None
     # Vertical-leg thickness.

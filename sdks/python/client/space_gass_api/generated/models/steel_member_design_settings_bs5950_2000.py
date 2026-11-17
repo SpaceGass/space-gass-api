@@ -14,12 +14,12 @@ class SteelMemberDesignSettingsBs5950_2000(SteelMemberDesignSettingsBase, Parsab
     """
     Steel member design settings for BS5950:2000.
     """
+    # Selects this object type. Always "Bs5950_2000".
+    code: Optional[str] = "Bs5950_2000"
     # Add eccentric moments.
     add_eccentric_moments: Optional[bool] = None
     # Calculate mLT moment factor (otherwise mLT=1.0).
     calculate_mlt_factor: Optional[bool] = None
-    # Selects this object type. Always "Bs5950_2000".
-    code: Optional[SteelMemberDesignSettingsBs5950_2000_code] = None
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Convert compression effective lengths to principal axes.

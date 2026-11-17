@@ -16,6 +16,13 @@ namespace SpaceGassApi.Models
         /// <summary>Side length.</summary>
         public double? D { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SquareBarShape"/> and sets the default values.
+        /// </summary>
+        public SquareBarShape() : base()
+        {
+            ShapeType = "SquareBar";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SquareBarShape"/></returns>

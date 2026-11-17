@@ -14,14 +14,14 @@ class SteelMemberDesignSettingsHkCp2011Update(SteelMemberDesignSettingsBaseUpdat
     """
     Update request for the HK CP2011 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not a HK CP2011 setting is rejected.
     """
+    # Selects this object type. Always "HkCp2011".
+    code: Optional[str] = "HkCp2011"
     # The addEccentricMoments property
     add_eccentric_moments: Optional[bool] = None
     # The calculateMltFactor property
     calculate_mlt_factor: Optional[bool] = None
     # The calculatePcbarFromGroupLength property
     calculate_pcbar_from_group_length: Optional[bool] = None
-    # Selects this object type. Always "HkCp2011".
-    code: Optional[SteelMemberDesignSettingsHkCp2011Update_code] = None
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The useClause6_8_3 property

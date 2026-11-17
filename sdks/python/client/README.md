@@ -61,9 +61,9 @@ async def main():
             await asyncio.sleep(0.5)
             result = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
             if result.status in (
-                models.AnalysisRunStatus.Completed,
-                models.AnalysisRunStatus.Failed,
-                models.AnalysisRunStatus.Cancelled,
+                models.RunStatus.Completed,
+                models.RunStatus.Failed,
+                models.RunStatus.Cancelled,
             ):
                 break
 
@@ -106,7 +106,7 @@ Pass `base_url` only if the service runs on a non-default port (use `https://` f
 nodes = await client.job.structure.nodes.get(
     node_type=models.NodeTypeFilter.Restrained)
 reactions = await client.job.query.analysis.static.node_reactions.get(
-    cases="1,3-7", nodes="10-12")     # ID-list filters use the SG format "1,3-7,10"
+    load_cases="1,3-7", nodes="10-12")     # ID-list filters use the SG format "1,3-7,10"
 
 # Verbose form (still supported for advanced use)
 from kiota_abstractions.base_request_configuration import RequestConfiguration

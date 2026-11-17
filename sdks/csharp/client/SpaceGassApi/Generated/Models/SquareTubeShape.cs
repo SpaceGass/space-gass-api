@@ -20,6 +20,13 @@ namespace SpaceGassApi.Models
         /// <summary>Wall thickness.</summary>
         public double? T { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SquareTubeShape"/> and sets the default values.
+        /// </summary>
+        public SquareTubeShape() : base()
+        {
+            ShapeType = "SquareTube";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SquareTubeShape"/></returns>

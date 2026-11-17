@@ -30,6 +30,13 @@ namespace SpaceGassApi.Models
         /// <summary>Wall thickness.</summary>
         public double? Tw { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.CeeShape"/> and sets the default values.
+        /// </summary>
+        public CeeShape() : base()
+        {
+            ShapeType = "Cee";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.CeeShape"/></returns>

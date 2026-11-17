@@ -18,6 +18,8 @@ class SteelMemberDesignSettingsIs800_2007Update(SteelMemberDesignSettingsBaseUpd
     """
     Update request for the IS 800:2007 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not an IS 800:2007 setting is rejected.
     """
+    # Selects this object type. Always "Is800_2007".
+    code: Optional[str] = "Is800_2007"
     # The addEccentricMoments property
     add_eccentric_moments: Optional[bool] = None
     # The calculateCmFactors property
@@ -26,8 +28,6 @@ class SteelMemberDesignSettingsIs800_2007Update(SteelMemberDesignSettingsBaseUpd
     calculate_k_factors: Optional[bool] = None
     # The calculateMcrUsingAnnexE property
     calculate_mcr_using_annex_e: Optional[bool] = None
-    # Selects this object type. Always "Is800_2007".
-    code: Optional[SteelMemberDesignSettingsIs800_2007Update_code] = None
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertCompressionEffectiveLengths property

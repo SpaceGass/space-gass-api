@@ -14,6 +14,8 @@ class BoxGirderShape(SectionShape, Parsable):
     """
     Box girder.
     """
+    # Selects this object type. Always "BoxGirder".
+    shape_type: Optional[str] = "BoxGirder"
     # Bottom-flange width.
     bb: Optional[float] = None
     # Distance between webs at the bottom flange.
@@ -26,8 +28,6 @@ class BoxGirderShape(SectionShape, Parsable):
     d: Optional[float] = None
     # Corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "BoxGirder".
-    shape_type: Optional[BoxGirderShape_shapeType] = None
     # Bottom-flange thickness.
     tb: Optional[float] = None
     # Top-flange thickness.

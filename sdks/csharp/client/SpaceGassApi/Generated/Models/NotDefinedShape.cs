@@ -14,6 +14,13 @@ namespace SpaceGassApi.Models
     public partial class NotDefinedShape : global::SpaceGassApi.Models.SectionShape, IParsable
     {
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.NotDefinedShape"/> and sets the default values.
+        /// </summary>
+        public NotDefinedShape() : base()
+        {
+            ShapeType = "NotDefined";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.NotDefinedShape"/></returns>

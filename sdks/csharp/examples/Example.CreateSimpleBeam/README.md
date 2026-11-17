@@ -1,6 +1,6 @@
 # Example.CreateSimpleBeam
 
-Backs the [Simple Beam tutorial](https://api.spacegass.com/docs/guides/examples/simple-beam) end-to-end. Builds a simply-supported beam from scratch, runs a linear static analysis, and queries the maximum bending moment + deflection.
+Backs the [Simple Beam tutorial](https://api.spacegass.com/docs/examples/simple-beam) end-to-end. Builds a simply-supported beam from scratch, runs a linear static analysis, and queries the maximum bending moment + deflection.
 
 The full pipeline: project → nodes → restraints → material → section → member → load cases → loads → combinations → save → analyse → query.
 

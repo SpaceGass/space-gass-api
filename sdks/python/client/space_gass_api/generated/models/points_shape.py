@@ -15,12 +15,12 @@ class PointsShape(SectionShape, Parsable):
     """
     Arbitrary solid outline defined by a point polygon.
     """
+    # Selects this object type. Always "PointsShape".
+    shape_type: Optional[str] = "PointsShape"
     # Default corner radius applied at points flagged `useDefaultRadius`.
     general_radius: Optional[float] = None
     # Outline vertices.
     points: Optional[list[ShapePoint]] = None
-    # Selects this object type. Always "PointsShape".
-    shape_type: Optional[PointsShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> PointsShape:

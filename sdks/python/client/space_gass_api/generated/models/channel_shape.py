@@ -14,6 +14,8 @@ class ChannelShape(SectionShape, Parsable):
     """
     Channel section.
     """
+    # Selects this object type. Always "Channel".
+    shape_type: Optional[str] = "Channel"
     # Bottom-flange width.
     bb: Optional[float] = None
     # Top-flange width.
@@ -22,8 +24,6 @@ class ChannelShape(SectionShape, Parsable):
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "Channel".
-    shape_type: Optional[ChannelShape_shapeType] = None
     # Bottom-flange thickness.
     tb: Optional[float] = None
     # Top-flange thickness.

@@ -15,12 +15,12 @@ class SteelMemberDesignSettingsAs3990Update(SteelMemberDesignSettingsBaseUpdate,
     """
     Update request for the AS3990 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not an AS3990 setting is rejected.
     """
+    # Selects this object type. Always "As3990".
+    code: Optional[str] = "As3990"
     # The addEccentricMoments property
     add_eccentric_moments: Optional[bool] = None
     # The assumeFullyStiffenedWebs property
     assume_fully_stiffened_webs: Optional[bool] = None
-    # Selects this object type. Always "As3990".
-    code: Optional[SteelMemberDesignSettingsAs3990Update_code] = None
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertChsBiaxialMomentsToMono property

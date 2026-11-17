@@ -15,7 +15,7 @@ class SteelMemberDesignSettingsNzs3404Update(SteelMemberDesignSettingsBaseUpdate
     Update request for the NZS3404 1997 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not an NZS3404 setting is rejected.
     """
     # Selects this object type. Always "Nzs3404".
-    code: Optional[SteelMemberDesignSettingsNzs3404Update_code] = None
+    code: Optional[str] = "Nzs3404"
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertCompressionEffectiveLengths property

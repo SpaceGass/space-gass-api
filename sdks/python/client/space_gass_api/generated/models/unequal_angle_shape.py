@@ -14,14 +14,14 @@ class UnequalAngleShape(SectionShape, Parsable):
     """
     Unequal angle.
     """
+    # Selects this object type. Always "UnequalAngle".
+    shape_type: Optional[str] = "UnequalAngle"
     # Short-leg length.
     b: Optional[float] = None
     # Long-leg length.
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "UnequalAngle".
-    shape_type: Optional[UnequalAngleShape_shapeType] = None
     # Horizontal-leg thickness.
     tb: Optional[float] = None
     # Vertical-leg thickness.

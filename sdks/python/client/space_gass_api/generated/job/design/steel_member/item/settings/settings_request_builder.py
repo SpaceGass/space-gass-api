@@ -15,10 +15,9 @@ from warnings import warn
 
 if TYPE_CHECKING:
     from ......models.error_response import ErrorResponse
+    from ......models.steel_member_design_settings_base import SteelMemberDesignSettingsBase
+    from ......models.steel_member_design_settings_base_update import SteelMemberDesignSettingsBaseUpdate
     from .metadata.metadata_request_builder import MetadataRequestBuilder
-    from .settings_get_response import SettingsGetResponse
-    from .settings_patch_request_body import SettingsPatchRequestBody
-    from .settings_patch_response import SettingsPatchResponse
 
 class SettingsRequestBuilder(BaseRequestBuilder):
     """
@@ -33,11 +32,11 @@ class SettingsRequestBuilder(BaseRequestBuilder):
         """
         super().__init__(request_adapter, "{+baseurl}/job/design/steel-member/{code}/settings", path_parameters)
     
-    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SettingsGetResponse]:
+    async def get(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SteelMemberDesignSettingsBase]:
         """
         Returns the settings specific to a design code. The response is the designcode's own settings object, carrying only the settings that apply to thatcode (for example, performSeismicChecks appears for NZS3404 only). Settingsare saved with the job.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[SettingsGetResponse]
+        Returns: Optional[SteelMemberDesignSettingsBase]
         """
         request_info = self.to_get_request_information(
             request_configuration
@@ -52,16 +51,16 @@ class SettingsRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .settings_get_response import SettingsGetResponse
+        from ......models.steel_member_design_settings_base import SteelMemberDesignSettingsBase
 
-        return await self.request_adapter.send_async(request_info, SettingsGetResponse, error_mapping)
+        return await self.request_adapter.send_async(request_info, SteelMemberDesignSettingsBase, error_mapping)
     
-    async def patch(self,body: SettingsPatchRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SettingsPatchResponse]:
+    async def patch(self,body: SteelMemberDesignSettingsBaseUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[SteelMemberDesignSettingsBase]:
         """
         Partially updates the settings specific to a design code. The body is thedesign code's own settings update object, selected by its code property.code may be omitted: it defaults to the route's design code. When given, itmust be the route's design code (for example code "As4100" forsteel-member/As4100/settings). Only fields included in the request body areupdated; a field the design code does not have is rejected (seeGET steel-member/{code}/settings for the settings a code has).
         param body: Update request for the settings specific to one design code.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /job/design/steel-member/{code}/settings and the codeSettingsblock on the run endpoints. The code property selects the design code's ownupdate object, and a field that object does not have is rejected. code may beomitted: it defaults to the route's design code. When given, it must be theroute's design code.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[SettingsPatchResponse]
+        Returns: Optional[SteelMemberDesignSettingsBase]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -78,9 +77,9 @@ class SettingsRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .settings_patch_response import SettingsPatchResponse
+        from ......models.steel_member_design_settings_base import SteelMemberDesignSettingsBase
 
-        return await self.request_adapter.send_async(request_info, SettingsPatchResponse, error_mapping)
+        return await self.request_adapter.send_async(request_info, SteelMemberDesignSettingsBase, error_mapping)
     
     def to_get_request_information(self,request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
@@ -93,7 +92,7 @@ class SettingsRequestBuilder(BaseRequestBuilder):
         request_info.headers.try_add("Accept", "application/json")
         return request_info
     
-    def to_patch_request_information(self,body: SettingsPatchRequestBody, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
+    def to_patch_request_information(self,body: SteelMemberDesignSettingsBaseUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Partially updates the settings specific to a design code. The body is thedesign code's own settings update object, selected by its code property.code may be omitted: it defaults to the route's design code. When given, itmust be the route's design code (for example code "As4100" forsteel-member/As4100/settings). Only fields included in the request body areupdated; a field the design code does not have is rejected (seeGET steel-member/{code}/settings for the settings a code has).
         param body: Update request for the settings specific to one design code.Only fields included in the request are updated; omit a field to keep its current value.Used by PATCH /job/design/steel-member/{code}/settings and the codeSettingsblock on the run endpoints. The code property selects the design code's ownupdate object, and a field that object does not have is rejected. code may beomitted: it defaults to the route's design code. When given, it must be theroute's design code.

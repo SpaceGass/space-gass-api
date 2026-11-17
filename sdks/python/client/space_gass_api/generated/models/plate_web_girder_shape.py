@@ -14,6 +14,8 @@ class PlateWebGirderShape(SectionShape, Parsable):
     """
     Plate web girder.
     """
+    # Selects this object type. Always "PlateWebGirder".
+    shape_type: Optional[str] = "PlateWebGirder"
     # Bottom-flange width.
     bb: Optional[float] = None
     # Top-flange width.
@@ -22,8 +24,6 @@ class PlateWebGirderShape(SectionShape, Parsable):
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "PlateWebGirder".
-    shape_type: Optional[PlateWebGirderShape_shapeType] = None
     # Bottom-flange thickness.
     tb: Optional[float] = None
     # Top-flange thickness.

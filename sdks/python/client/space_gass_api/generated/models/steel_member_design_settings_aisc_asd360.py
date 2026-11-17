@@ -15,14 +15,14 @@ class SteelMemberDesignSettingsAiscAsd360(SteelMemberDesignSettingsBase, Parsabl
     """
     Steel member design settings for AISC ASD 360.
     """
+    # Selects this object type. Always "AiscAsd360".
+    code: Optional[str] = "AiscAsd360"
     # Add eccentric moments.
     add_eccentric_moments: Optional[bool] = None
     # Calculate Cb bending coefficient (otherwise Cb=1.0).
     calculate_cb: Optional[bool] = None
     # Calculate U reduction coefficient (otherwise U=1.0).
     calculate_u_factor: Optional[bool] = None
-    # Selects this object type. Always "AiscAsd360".
-    code: Optional[SteelMemberDesignSettingsAiscAsd360_code] = None
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Convert compression effective lengths to principal axes.

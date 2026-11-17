@@ -58,6 +58,13 @@ namespace SpaceGassApi.Models
         /// <summary>Use segment length instead of ley, lez clause D2.1.1.2(a) for Cees and Zeds.</summary>
         public bool? UseSegmentLengthForCeesAndZeds { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsAsNzs4600"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsAsNzs4600() : base()
+        {
+            Code = "AsNzs4600";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsAsNzs4600"/></returns>

@@ -14,10 +14,10 @@ class CircularTubeShape(SectionShape, Parsable):
     """
     Circular hollow section (CHS).
     """
+    # Selects this object type. Always "CircularTube".
+    shape_type: Optional[str] = "CircularTube"
     # Outside diameter.
     d: Optional[float] = None
-    # Selects this object type. Always "CircularTube".
-    shape_type: Optional[CircularTubeShape_shapeType] = None
     # Wall thickness.
     t: Optional[float] = None
     

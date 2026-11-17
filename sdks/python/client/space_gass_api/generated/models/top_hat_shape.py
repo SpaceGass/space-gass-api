@@ -14,6 +14,8 @@ class TopHatShape(SectionShape, Parsable):
     """
     Top hat section.
     """
+    # Selects this object type. Always "TopHat".
+    shape_type: Optional[str] = "TopHat"
     # Lip angle.
     alpha: Optional[float] = None
     # Bottom-flange width.
@@ -26,8 +28,6 @@ class TopHatShape(SectionShape, Parsable):
     d: Optional[float] = None
     # Corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "TopHat".
-    shape_type: Optional[TopHatShape_shapeType] = None
     # Bottom-lip depth.
     tb: Optional[float] = None
     # Top-lip depth.

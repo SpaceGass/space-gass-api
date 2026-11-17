@@ -1,6 +1,6 @@
 ---
 name: sync-sdk-after-regen
-description: Use this skill in the space-gass-api repo whenever the OpenAPI spec or the regenerated Kiota SDK clients change — typically right after the `generate-clients` workflow lands a "regenerate SDK clients" commit on `main`, or any time `descriptions/preview/openapi.json` is updated. It brings the hand-written C# and Python examples, the Zudoku docs pages, and the dynamic code-snippet generator back in line with the new SDK surface. Trigger phrases: "regenerated SDKs", "spec updated", "fix examples after regen", "sync after kiota", "update for new build", or after a commit titled "regenerate SDK clients".
+description: Use this skill in the space-gass-api repo whenever the OpenAPI spec or the regenerated Kiota SDK clients change — typically right after the `generate-clients` workflow lands a "regenerate SDK clients" commit on `main`, or any time `descriptions/openapi.json` is updated. It brings the hand-written C# and Python examples, the Zudoku docs pages, and the dynamic code-snippet generator back in line with the new SDK surface. Trigger phrases: "regenerated SDKs", "spec updated", "fix examples after regen", "sync after kiota", "update for new build", or after a commit titled "regenerate SDK clients".
 ---
 
 # sync-sdk-after-regen
@@ -13,7 +13,7 @@ Goal: every example compiles, every doc page references current endpoints/models
 
 Build the change matrix that drives every later edit:
 
-1. **Spec history** — `git log --oneline -- descriptions/preview/openapi.json` then diff the latest two commits (or against `origin/develop` if working on a feature branch). Note: removed/added paths, renamed query parameters (esp. plural→string SG-list filters like `case`→`cases`), renamed path parameters (`{key}`→`{id}`), and any change to `info.x-space-gass-build`.
+1. **Spec history** — `git log --oneline -- descriptions/openapi.json` then diff the latest two commits (or against `origin/develop` if working on a feature branch). Note: removed/added paths, renamed query parameters (esp. plural→string SG-list filters like `case`→`cases`), renamed path parameters (`{key}`→`{id}`), and any change to `info.x-space-gass-build`.
 2. **C# Generated diff** — `git diff <prev>..HEAD -- sdks/csharp/client/SpaceGassApi/Generated`. Look at:
    - `SpaceGassApiClient.cs` for new/removed top-level builders
    - `Models/` folder additions/removals (typical breaking change: `XCreate` renamed to `XUserCreate`, etc.)
@@ -21,6 +21,12 @@ Build the change matrix that drives every later edit:
 3. **Python Generated diff** — same under `sdks/python/client/space_gass_api`. Python mirrors C# but with snake_case file/property names.
 4. **Default port / base URL change** — `grep -rn "localhost:[0-9]\+" .`. The desktop service port has changed historically (e.g. 5000 → 34560). If the spec's `servers[0].url` or any `ServiceInfo` model docstring shows a new host, sweep all hard-coded references in `CLAUDE.md`, `sdks/*/client/.../Extensions/`, every example header comment, and every doc page curl block.
 5. **Verify the regen committed cleanly** — `dotnet build sdks/csharp/examples/SpaceGassApi.Examples.sln` against the SDK alone (no example edits yet). If it fails with `CS0234: namespace 'X' does not exist`, the regen committed an inconsistent tree (a builder references a folder that wasn't generated/committed). Fix by re-running `kiota generate` (see [CLAUDE.md](../../../CLAUDE.md) for the full command set, or `.github/workflows/generate-clients.yml`). Don't hand-edit `Generated/`.
+
+6. **No composed wrappers** — the SDKs are generated from a transformed copy of the spec (`tools/prepare_spec_for_kiota.py`: every `oneOf` → `$ref` to its shared base type, discriminator defaults on subclasses) so Kiota emits plain inheritance instead of composed-type wrappers. See "oneOf and Kiota" in [CLAUDE.md](../../../CLAUDE.md). Two checks, both must pass before touching examples:
+   - `dotnet build sdks/csharp/client/SpaceGassApi/SpaceGassApi.csproj` — the client and its `Utils/` compile against the regen.
+   - `python tools/check_sdk_shape.py` — fails if the transform left a `oneOf` unconverted, if any `IComposedTypeWrapper` / `ComposedTypeWrapper` exists in either generated tree (i.e. the regen ran against the published spec instead of `build/openapi.kiota.json`), if a subclass doesn't default its discriminator (`shapeType`, `code`), if the polymorphic properties aren't base-typed, or if a C# `DesignCode` member name differs from its route value (examples use `SteelMember[code.ToString()]`).
+
+   Expected: `SDK shape check passed: no composed wrappers; 9 oneOf site(s) generated as base types; discriminator defaults on 71 subclasses (30 by code, 41 by shapeType).` (counts at build `14.51.12`). If it reports a new unconverted `oneOf`, extend the transform (or add it to `ALLOWED_ONEOF` deliberately) — don't paper over it with a helper.
 
 Output of this phase: a written change matrix you can refer back to.
 
@@ -32,6 +38,7 @@ Files: every `Example.*/Program.cs` under `sdks/csharp/examples/`. Apply the cha
 - Request body type renames (e.g. `SectionCreate` → `SectionUserCreate`).
 - Filter query parameters: collection endpoints now take `string?` properties named `Cases`, `Members`, `Modes`, `Nodes` in **SG list format** (`"1,3-7,10"`) instead of `int[]` arrays. Compose with `string.Join(",", ids)` for arbitrary sets.
 - Indexer parameter type: `[int]` typed indexer is preferred; the legacy `[string]` indexer is marked `[Obsolete]`.
+- Polymorphic bodies (steel design code settings, shape-builder shapes): pass the subclass directly (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`, `Shapes = [new LibraryShape {...}]`) and never set discriminators. Steel design examples select the code with the generated indexer and the enum: `SteelMember[DesignCode.X.ToString()]`.
 
 Verify: `dotnet build sdks/csharp/examples/SpaceGassApi.Examples.sln --nologo`. **Build must be 0 errors before moving on.**
 
@@ -45,6 +52,7 @@ Files: every entry-point `.py` under `sdks/python/examples/*/`. Mirror Phase 2 w
 - `keys=[...]` → `nodes="1,2,3"` for reactions filters
 - `from space_gass_api.models.section_create import SectionCreate` → `from space_gass_api.models.section_user_create import SectionUserCreate`
 - Drop list arguments to `case_`/`member`/`mode` filter setattrs in favour of `cases`/`members`/`modes` with SG-list strings
+- Polymorphic bodies: pass the subclass directly (`code_settings=models.SteelMemberDesignSettingsAs4100Update(...)`, `shapes=[models.LibraryShape(...)]`); steel design examples select the code with `steel_member.by_code(models.DesignCode.X.value)`
 
 Verify: `python -m py_compile <each entry-point>` (Python interpreter must be on PATH; if not, do a careful visual diff and rely on the C# build as a structural backstop). The two SDKs share the same shape, so anything that landed cleanly in C# almost always lands cleanly in Python.
 
@@ -66,7 +74,7 @@ Verify: `cd docs && npm ci && npm run build`. The Zudoku build must succeed and 
 
 File: `docs/zudoku.config.tsx`, function `generateCodeSnippet`.
 
-**As of build `14.50.128` the generator reads the request-body type straight from the spec — it does NOT guess from the path, and there is NO `BODY_TYPE_OVERRIDES` map any more.** The helper `bodyTypeFromSpec(operation)` reads the component name from the dereferenced body schema: Zudoku keeps the original pointer on `schema.__$ref` (and `schema.items.__$ref` for bulk/array bodies — see [node_modules/zudoku/src/lib/oas/parser/dereference/index.ts](../../../docs/node_modules/zudoku/src/lib/oas/parser/dereference/index.ts)), so the exact name (`MovingLoadVehicleCreate`, `SectionUserCreate`, …) is always recovered. The old per-regen chore of adding override entries is gone. The path-based `{Entity}Create/Update/Item` derivation survives only as a fallback for inline (un-`$ref`d) bodies.
+**As of build `14.50.128` the generator reads the request-body type straight from the spec — it does NOT guess from the path, and there is NO `BODY_TYPE_OVERRIDES` map any more.** The helper `bodyTypeFromSpec(operation)` reads the component name from the dereferenced body schema: Zudoku keeps the original pointer on `schema.__$ref` (and `schema.items.__$ref` for bulk/array bodies — see [node_modules/zudoku/src/lib/oas/parser/dereference/index.ts](../../../docs/node_modules/zudoku/src/lib/oas/parser/dereference/index.ts)), so the exact name (`MovingLoadVehicleCreate`, `SectionUserCreate`, …) is always recovered. The old per-regen chore of adding override entries is gone. As of build `14.51.12` there is no path-based guessing at all: `bodyShapeFromSpec(operation)` classifies every body from the spec (model `$ref`, list of models, list of primitive ids for bulk DELETE, `oneOf` → one member passed directly, since the SDK is generated with the shared base type, multipart → the `NewFromTemplateRequest`/`ImportTxtRequest` helpers via `MULTIPART_HELPERS`, anything else → raw `UntypedNode`/`bytes`), and only emits a body when the spec declares one. Python indexers for sibling paths with different param names (Kiota merges them, e.g. `by_combination_case_id`) come from `MERGED_PY_INDEXER_PARAMS`, and Python reserved-word segments are escaped (`import_`).
 
 What to still check after a regen:
 
@@ -79,7 +87,7 @@ What to still check after a regen:
      echo "$t -> $(grep -rl "$t" dist/docs | wc -l) file(s)"; done   # all should be >0
    ```
    (`MaterialCreate` was renamed `MaterialUserCreate` server-side between builds 14.50.128 and 14.50.134 — update this list when schemas rename.) If the mechanism check is in doubt (e.g. after a Zudoku upgrade), the only real verification is in a browser: `npm run preview` (serves at `http://localhost:4000/docs`), open an irregular write endpoint (e.g. Moving Load Vehicles → Create) and confirm the C#/Python snippet shows `MovingLoadVehicleCreate`, not the naive path guess `VehicleCreate`.
-2. **Builder chain & Python module path** — the chain (`client.Job.Loads…`) and the Python import (`from space_gass_api.models.<snake> import <Type>`) are still derived mechanically. Spot-check one new endpoint's rendered C# and Python snippet.
+2. **Builder chain & Python imports** — the chain (`client.Job.Loads…`) is still derived mechanically. Python snippets use `import space_gass_api.models as models` + `models.<Type>` (the `space_gass_api.models` shim has no per-model submodules, so `from space_gass_api.models.<snake> import …` does NOT work). Best check: run the generator over every spec operation outside the browser — bundle the snippet-helper block of `zudoku.config.tsx` with `docs/node_modules/.bin/esbuild` into a small Node harness that mimics Zudoku's `__$ref` dereferencing, then compile all C# snippets in a scratch project referencing `SpaceGassApi.csproj`, and execute all Python snippets against the installed SDK with a stub request adapter (assert HTTP method + URL). At `14.51.12` all 461 operations pass both.
 3. **Filter query params** — unchanged: the generator does NOT emit query params; filtered-query snippets are a docs-page job, not a generator job.
 
 ### Naming-consistency sanity check (spec-smell report)
@@ -89,7 +97,7 @@ Because the generator now trusts the spec, inconsistent schema naming no longer 
 ```bash
 python - <<'PY'
 import json
-P=json.load(open('descriptions/preview/openapi.json'))['paths']
+P=json.load(open('descriptions/openapi.json'))['paths']
 def pascal(s): return ''.join(w[:1].upper()+w[1:] for w in s.split('-'))
 def sing(w): return w[:-3]+'y' if w.endswith('ies') else (w[:-1] if w.endswith('s') else w)
 def body(op):

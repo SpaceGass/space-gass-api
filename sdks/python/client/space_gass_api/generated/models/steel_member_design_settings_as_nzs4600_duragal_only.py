@@ -14,14 +14,14 @@ class SteelMemberDesignSettingsAsNzs4600DuragalOnly(SteelMemberDesignSettingsBas
     """
     Steel member design settings for AS/NZS 4600 (Duragal only).
     """
+    # Selects this object type. Always "AsNzs4600DuragalOnly".
+    code: Optional[str] = "AsNzs4600DuragalOnly"
     # Calculate Cb for clause D2.1.1 (otherwise specify Cb).
     calculate_cb: Optional[bool] = None
     # Calculate Cm and alpha for clause 3.5.1 (otherwise Cm=1, alpha=1, Nc limited to <= group length).
     calculate_cm_and_alpha: Optional[bool] = None
     # Cb.
     cb: Optional[float] = None
-    # Selects this object type. Always "AsNzs4600DuragalOnly".
-    code: Optional[SteelMemberDesignSettingsAsNzs4600DuragalOnly_code] = None
     # Consider distortional buckling if applicable.
     consider_distortional_buckling: Optional[bool] = None
     # Consider eccentric effects.

@@ -18,6 +18,8 @@ class SteelMemberDesignSettingsIs800_2007(SteelMemberDesignSettingsBase, Parsabl
     """
     Steel member design settings for IS 800:2007.
     """
+    # Selects this object type. Always "Is800_2007".
+    code: Optional[str] = "Is800_2007"
     # Add eccentric moments for tension members.
     add_eccentric_moments: Optional[bool] = None
     # Calculate Cm uniform moment factors (otherwise Cm = 1) (9.3.2.2).
@@ -26,8 +28,6 @@ class SteelMemberDesignSettingsIs800_2007(SteelMemberDesignSettingsBase, Parsabl
     calculate_k_factors: Optional[bool] = None
     # Calculate Mcr using Annex E (otherwise use 8.2.2.1 if applicable).
     calculate_mcr_using_annex_e: Optional[bool] = None
-    # Selects this object type. Always "Is800_2007".
-    code: Optional[SteelMemberDesignSettingsIs800_2007_code] = None
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Convert compression effective lengths to principal axes.
