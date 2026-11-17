@@ -56,6 +56,13 @@ namespace SpaceGassApi.Models
         /// <summary>The useSegmentLengthForCeesAndZeds property</summary>
         public bool? UseSegmentLengthForCeesAndZeds { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsAsNzs4600DuragalOnlyUpdate"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsAsNzs4600DuragalOnlyUpdate() : base()
+        {
+            Code = "AsNzs4600DuragalOnly";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsAsNzs4600DuragalOnlyUpdate"/></returns>

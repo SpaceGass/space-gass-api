@@ -14,14 +14,14 @@ class SteelMemberDesignSettingsAiscAsd1989(SteelMemberDesignSettingsBase, Parsab
     """
     Steel member design settings for AISC ASD 1989.
     """
+    # Selects this object type. Always "AiscAsd1989".
+    code: Optional[str] = "AiscAsd1989"
     # Add eccentric moments for tension members.
     add_eccentric_moments: Optional[bool] = None
     # Calculate Cb bending coefficient (otherwise Cb=1.0).
     calculate_cb: Optional[bool] = None
     # Calculate U reduction coefficient (otherwise U=1.0).
     calculate_u_factor: Optional[bool] = None
-    # Selects this object type. Always "AiscAsd1989".
-    code: Optional[SteelMemberDesignSettingsAiscAsd1989_code] = None
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Convert compression effective lengths to principal axes.

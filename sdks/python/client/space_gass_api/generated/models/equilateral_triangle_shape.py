@@ -14,12 +14,12 @@ class EquilateralTriangleShape(SectionShape, Parsable):
     """
     Equilateral triangle.
     """
+    # Selects this object type. Always "EquilateralTriangle".
+    shape_type: Optional[str] = "EquilateralTriangle"
     # Side length.
     d: Optional[float] = None
     # Corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "EquilateralTriangle".
-    shape_type: Optional[EquilateralTriangleShape_shapeType] = None
     # Wall thickness.
     t: Optional[float] = None
     

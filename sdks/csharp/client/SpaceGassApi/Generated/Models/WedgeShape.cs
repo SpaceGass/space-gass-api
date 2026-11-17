@@ -20,6 +20,13 @@ namespace SpaceGassApi.Models
         /// <summary>Depth at the second edge.</summary>
         public double? D2 { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.WedgeShape"/> and sets the default values.
+        /// </summary>
+        public WedgeShape() : base()
+        {
+            ShapeType = "Wedge";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.WedgeShape"/></returns>

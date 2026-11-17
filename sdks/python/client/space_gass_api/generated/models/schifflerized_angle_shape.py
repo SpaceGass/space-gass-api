@@ -14,14 +14,14 @@ class SchifflerizedAngleShape(SectionShape, Parsable):
     """
     Schifflerized (60°) angle.
     """
+    # Selects this object type. Always "SchifflerizedAngle".
+    shape_type: Optional[str] = "SchifflerizedAngle"
     # Other-leg length.
     b: Optional[float] = None
     # Leg length.
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "SchifflerizedAngle".
-    shape_type: Optional[SchifflerizedAngleShape_shapeType] = None
     # Leg thickness.
     tw: Optional[float] = None
     

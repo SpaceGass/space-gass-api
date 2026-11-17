@@ -22,6 +22,13 @@ namespace SpaceGassApi.Models
         /// <summary>Convert compression effective lengths to principal axes.</summary>
         public bool? ConvertCompressionEffectiveLengths { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsBs5950_2000"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsBs5950_2000() : base()
+        {
+            Code = "Bs5950_2000";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsBs5950_2000"/></returns>

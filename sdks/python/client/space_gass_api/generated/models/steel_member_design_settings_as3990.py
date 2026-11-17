@@ -15,12 +15,12 @@ class SteelMemberDesignSettingsAs3990(SteelMemberDesignSettingsBase, Parsable):
     """
     Steel member design settings for AS3990.
     """
+    # Selects this object type. Always "As3990".
+    code: Optional[str] = "As3990"
     # Add eccentric moments for tension members.
     add_eccentric_moments: Optional[bool] = None
     # Assume fully stiffened webs for shear checks.
     assume_fully_stiffened_webs: Optional[bool] = None
-    # Selects this object type. Always "As3990".
-    code: Optional[SteelMemberDesignSettingsAs3990_code] = None
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Convert CHS biaxial moments to mono if possible.

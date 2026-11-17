@@ -40,6 +40,13 @@ namespace SpaceGassApi.Models
         /// <summary>Use 7.5.1.2 for single angle loaded through one leg.</summary>
         public bool? UseClause7512ForSingleAngles { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsIs800_2007"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsIs800_2007() : base()
+        {
+            Code = "Is800_2007";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsIs800_2007"/></returns>

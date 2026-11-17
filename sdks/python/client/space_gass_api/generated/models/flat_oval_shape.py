@@ -14,12 +14,12 @@ class FlatOvalShape(SectionShape, Parsable):
     """
     Flat oval.
     """
+    # Selects this object type. Always "FlatOval".
+    shape_type: Optional[str] = "FlatOval"
     # Overall width.
     b: Optional[float] = None
     # Overall depth.
     d: Optional[float] = None
-    # Selects this object type. Always "FlatOval".
-    shape_type: Optional[FlatOvalShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> FlatOvalShape:

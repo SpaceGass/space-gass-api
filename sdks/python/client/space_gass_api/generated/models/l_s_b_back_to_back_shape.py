@@ -14,12 +14,12 @@ class LSBBackToBackShape(SectionShape, Parsable):
     """
     Back-to-back LiteSteel beams.
     """
+    # Selects this object type. Always "LSBBackToBack".
+    shape_type: Optional[str] = "LSBBackToBack"
     # Flange width.
     b: Optional[float] = None
     # Overall depth.
     d: Optional[float] = None
-    # Selects this object type. Always "LSBBackToBack".
-    shape_type: Optional[LSBBackToBackShape_shapeType] = None
     # Flange thickness.
     tt: Optional[float] = None
     # Web thickness.

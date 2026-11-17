@@ -14,12 +14,12 @@ class EqualAngleShape(SectionShape, Parsable):
     """
     Equal angle.
     """
+    # Selects this object type. Always "EqualAngle".
+    shape_type: Optional[str] = "EqualAngle"
     # Leg length.
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "EqualAngle".
-    shape_type: Optional[EqualAngleShape_shapeType] = None
     # Horizontal-leg thickness.
     tb: Optional[float] = None
     # Vertical-leg thickness.

@@ -14,14 +14,14 @@ class DAShortShape(SectionShape, Parsable):
     """
     Double angles, short legs back-to-back.
     """
+    # Selects this object type. Always "DAShort".
+    shape_type: Optional[str] = "DAShort"
     # Other-leg length.
     b: Optional[float] = None
     # Leg length.
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "DAShort".
-    shape_type: Optional[DAShortShape_shapeType] = None
     # Horizontal-leg thickness.
     tb: Optional[float] = None
     # Vertical-leg thickness.

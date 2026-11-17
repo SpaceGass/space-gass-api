@@ -14,6 +14,8 @@ class CruciformShape(SectionShape, Parsable):
     """
     Cruciform.
     """
+    # Selects this object type. Always "Cruciform".
+    shape_type: Optional[str] = "Cruciform"
     # Overall width.
     b: Optional[float] = None
     # Overall depth.
@@ -22,8 +24,6 @@ class CruciformShape(SectionShape, Parsable):
     hf: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "Cruciform".
-    shape_type: Optional[CruciformShape_shapeType] = None
     # Flange thickness.
     tf: Optional[float] = None
     # Web thickness.

@@ -24,6 +24,13 @@ namespace SpaceGassApi.Models
         /// <summary>Use clause 6.8.3 instead of clause 8.9.2.</summary>
         public bool? UseClause683 { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsHkCp2011"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsHkCp2011() : base()
+        {
+            Code = "HkCp2011";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsHkCp2011"/></returns>

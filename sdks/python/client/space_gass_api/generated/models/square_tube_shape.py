@@ -14,12 +14,12 @@ class SquareTubeShape(SectionShape, Parsable):
     """
     Square hollow section (SHS).
     """
+    # Selects this object type. Always "SquareTube".
+    shape_type: Optional[str] = "SquareTube"
     # Outside side length.
     d: Optional[float] = None
     # Outside corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "SquareTube".
-    shape_type: Optional[SquareTubeShape_shapeType] = None
     # Wall thickness.
     t: Optional[float] = None
     

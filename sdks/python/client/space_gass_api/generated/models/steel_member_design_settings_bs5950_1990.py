@@ -15,7 +15,7 @@ class SteelMemberDesignSettingsBs5950_1990(SteelMemberDesignSettingsBase, Parsab
     Steel member design settings for BS5950:1990.
     """
     # Selects this object type. Always "Bs5950_1990".
-    code: Optional[SteelMemberDesignSettingsBs5950_1990_code] = None
+    code: Optional[str] = "Bs5950_1990"
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Convert compression effective lengths to principal axes.

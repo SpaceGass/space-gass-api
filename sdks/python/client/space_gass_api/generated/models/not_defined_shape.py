@@ -15,7 +15,7 @@ class NotDefinedShape(SectionShape, Parsable):
     Shape geometry not defined.
     """
     # Selects this object type. Always "NotDefined".
-    shape_type: Optional[NotDefinedShape_shapeType] = None
+    shape_type: Optional[str] = "NotDefined"
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> NotDefinedShape:

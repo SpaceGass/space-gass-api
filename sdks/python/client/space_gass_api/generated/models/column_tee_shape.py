@@ -14,14 +14,14 @@ class ColumnTeeShape(SectionShape, Parsable):
     """
     Tee cut from a universal column.
     """
+    # Selects this object type. Always "ColumnTee".
+    shape_type: Optional[str] = "ColumnTee"
     # Flange width.
     b: Optional[float] = None
     # Overall depth.
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "ColumnTee".
-    shape_type: Optional[ColumnTeeShape_shapeType] = None
     # Flange thickness.
     tt: Optional[float] = None
     # Web thickness.

@@ -24,6 +24,13 @@ namespace SpaceGassApi.Models
         public List<global::SpaceGassApi.Models.ShapePoint> Points { get; set; }
 #endif
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.PointsShape"/> and sets the default values.
+        /// </summary>
+        public PointsShape() : base()
+        {
+            ShapeType = "PointsShape";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.PointsShape"/></returns>

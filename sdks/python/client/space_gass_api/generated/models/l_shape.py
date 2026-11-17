@@ -14,14 +14,14 @@ class LShape(SectionShape, Parsable):
     """
     L shape.
     """
+    # Selects this object type. Always "LShape".
+    shape_type: Optional[str] = "LShape"
     # Overall width.
     b: Optional[float] = None
     # Overall depth.
     d: Optional[float] = None
     # Root radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "LShape".
-    shape_type: Optional[LShape_shapeType] = None
     # Flange thickness.
     tt: Optional[float] = None
     # Web thickness.

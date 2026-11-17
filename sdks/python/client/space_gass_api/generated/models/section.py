@@ -8,7 +8,7 @@ if TYPE_CHECKING:
     from .angle_type import AngleType
     from .design_properties import DesignProperties
     from .property_source import PropertySource
-    from .section_shapes import Section_shapes
+    from .section_shape import SectionShape
 
 @dataclass
 class Section(Parsable):
@@ -52,7 +52,7 @@ class Section(Parsable):
     # Number of shapes composited into the section.
     shape_count: Optional[int] = None
     # The shapes composited into the section, in order.
-    shapes: Optional[list[Section_shapes]] = None
+    shapes: Optional[list[SectionShape]] = None
     # Indicates whether a section or material was user-defined or imported from a library.
     source: Optional[PropertySource] = None
     # Torsion modification factor.
@@ -79,12 +79,12 @@ class Section(Parsable):
         from .angle_type import AngleType
         from .design_properties import DesignProperties
         from .property_source import PropertySource
-        from .section_shapes import Section_shapes
+        from .section_shape import SectionShape
 
         from .angle_type import AngleType
         from .design_properties import DesignProperties
         from .property_source import PropertySource
-        from .section_shapes import Section_shapes
+        from .section_shape import SectionShape
 
         fields: dict[str, Callable[[Any], None]] = {
             "a": lambda n : setattr(self, 'a', n.get_float_value()),
@@ -105,7 +105,7 @@ class Section(Parsable):
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
             "principalAngle": lambda n : setattr(self, 'principal_angle', n.get_float_value()),
             "shapeCount": lambda n : setattr(self, 'shape_count', n.get_int_value()),
-            "shapes": lambda n : setattr(self, 'shapes', n.get_collection_of_object_values(Section_shapes)),
+            "shapes": lambda n : setattr(self, 'shapes', n.get_collection_of_object_values(SectionShape)),
             "source": lambda n : setattr(self, 'source', n.get_enum_value(PropertySource)),
             "torsionFactor": lambda n : setattr(self, 'torsion_factor', n.get_float_value()),
             "transposed": lambda n : setattr(self, 'transposed', n.get_bool_value()),

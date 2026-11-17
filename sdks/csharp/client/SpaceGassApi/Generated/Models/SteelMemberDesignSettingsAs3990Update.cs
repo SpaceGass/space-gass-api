@@ -24,6 +24,13 @@ namespace SpaceGassApi.Models
         /// <summary>Which AS3990 clause 4.3.2 reductions are skipped. AS1250 uses the same setting.</summary>
         public global::SpaceGassApi.Models.As3990ReductionSkip? SkipClause432Reductions { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsAs3990Update"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsAs3990Update() : base()
+        {
+            Code = "As3990";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsAs3990Update"/></returns>

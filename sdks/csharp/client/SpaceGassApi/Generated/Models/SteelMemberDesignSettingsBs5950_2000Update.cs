@@ -22,6 +22,13 @@ namespace SpaceGassApi.Models
         /// <summary>The convertCompressionEffectiveLengths property</summary>
         public bool? ConvertCompressionEffectiveLengths { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsBs5950_2000Update"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsBs5950_2000Update() : base()
+        {
+            Code = "Bs5950_2000";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsBs5950_2000Update"/></returns>

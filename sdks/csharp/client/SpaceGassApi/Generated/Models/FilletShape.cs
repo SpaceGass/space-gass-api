@@ -18,6 +18,13 @@ namespace SpaceGassApi.Models
         /// <summary>Diameter.</summary>
         public double? D { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.FilletShape"/> and sets the default values.
+        /// </summary>
+        public FilletShape() : base()
+        {
+            ShapeType = "Fillet";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.FilletShape"/></returns>

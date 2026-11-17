@@ -14,14 +14,14 @@ class WedgeShape(SectionShape, Parsable):
     """
     Wedge.
     """
+    # Selects this object type. Always "Wedge".
+    shape_type: Optional[str] = "Wedge"
     # Width.
     b: Optional[float] = None
     # Depth at the first edge.
     d1: Optional[float] = None
     # Depth at the second edge.
     d2: Optional[float] = None
-    # Selects this object type. Always "Wedge".
-    shape_type: Optional[WedgeShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> WedgeShape:

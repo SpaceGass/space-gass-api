@@ -14,6 +14,8 @@ class RackShape(SectionShape, Parsable):
     """
     Storage-rack profile.
     """
+    # Selects this object type. Always "Rack".
+    shape_type: Optional[str] = "Rack"
     # Overall width.
     b: Optional[float] = None
     # Web-face width.
@@ -24,8 +26,6 @@ class RackShape(SectionShape, Parsable):
     hf: Optional[float] = None
     # Corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "Rack".
-    shape_type: Optional[RackShape_shapeType] = None
     # Lip depth.
     tt: Optional[float] = None
     # Wall thickness.

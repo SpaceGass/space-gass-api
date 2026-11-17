@@ -15,7 +15,7 @@ class SteelMemberDesignSettingsBs5950_1990Update(SteelMemberDesignSettingsBaseUp
     Update request for the BS5950:1990 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not a BS5950:1990 setting is rejected.
     """
     # Selects this object type. Always "Bs5950_1990".
-    code: Optional[SteelMemberDesignSettingsBs5950_1990Update_code] = None
+    code: Optional[str] = "Bs5950_1990"
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertCompressionEffectiveLengths property

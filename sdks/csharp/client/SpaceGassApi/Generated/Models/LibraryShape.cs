@@ -32,6 +32,13 @@ namespace SpaceGassApi.Models
         public string Name { get; set; }
 #endif
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.LibraryShape"/> and sets the default values.
+        /// </summary>
+        public LibraryShape() : base()
+        {
+            ShapeType = "Library";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.LibraryShape"/></returns>

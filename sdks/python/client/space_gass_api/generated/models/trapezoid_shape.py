@@ -14,14 +14,14 @@ class TrapezoidShape(SectionShape, Parsable):
     """
     Trapezoid.
     """
+    # Selects this object type. Always "Trapezoid".
+    shape_type: Optional[str] = "Trapezoid"
     # Bottom width.
     bb: Optional[float] = None
     # Top width.
     bt: Optional[float] = None
     # Depth.
     d: Optional[float] = None
-    # Selects this object type. Always "Trapezoid".
-    shape_type: Optional[TrapezoidShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> TrapezoidShape:

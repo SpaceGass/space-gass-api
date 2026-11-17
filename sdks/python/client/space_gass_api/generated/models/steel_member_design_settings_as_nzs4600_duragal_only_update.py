@@ -14,14 +14,14 @@ class SteelMemberDesignSettingsAsNzs4600DuragalOnlyUpdate(SteelMemberDesignSetti
     """
     Update request for the AS/NZS 4600 (Duragal only) steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not an AS/NZS 4600 (Duragal only) setting is rejected.
     """
+    # Selects this object type. Always "AsNzs4600DuragalOnly".
+    code: Optional[str] = "AsNzs4600DuragalOnly"
     # The calculateCb property
     calculate_cb: Optional[bool] = None
     # The calculateCmAndAlpha property
     calculate_cm_and_alpha: Optional[bool] = None
     # The cb property
     cb: Optional[float] = None
-    # Selects this object type. Always "AsNzs4600DuragalOnly".
-    code: Optional[SteelMemberDesignSettingsAsNzs4600DuragalOnlyUpdate_code] = None
     # The considerDistortionalBuckling property
     consider_distortional_buckling: Optional[bool] = None
     # The considerEccentricEffects property

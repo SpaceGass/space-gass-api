@@ -14,14 +14,14 @@ class SteelMemberDesignSettingsHkCp2011(SteelMemberDesignSettingsBase, Parsable)
     """
     Steel member design settings for HK CP2011.
     """
+    # Selects this object type. Always "HkCp2011".
+    code: Optional[str] = "HkCp2011"
     # Add eccentric moments for tension members.
     add_eccentric_moments: Optional[bool] = None
     # Calculate mLT moment factor (otherwise mLT=1.0).
     calculate_mlt_factor: Optional[bool] = None
     # Calculate Pcbar in eq 8.80 based on group length only.
     calculate_pcbar_from_group_length: Optional[bool] = None
-    # Selects this object type. Always "HkCp2011".
-    code: Optional[SteelMemberDesignSettingsHkCp2011_code] = None
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Use clause 6.8.3 instead of clause 8.9.2.

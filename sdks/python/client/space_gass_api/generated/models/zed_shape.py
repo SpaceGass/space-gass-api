@@ -14,6 +14,8 @@ class ZedShape(SectionShape, Parsable):
     """
     Zed section.
     """
+    # Selects this object type. Always "Zed".
+    shape_type: Optional[str] = "Zed"
     # Lip angle.
     alpha: Optional[float] = None
     # Bottom-flange width.
@@ -24,8 +26,6 @@ class ZedShape(SectionShape, Parsable):
     d: Optional[float] = None
     # Corner radius.
     radius: Optional[float] = None
-    # Selects this object type. Always "Zed".
-    shape_type: Optional[ZedShape_shapeType] = None
     # Bottom-lip depth.
     tb: Optional[float] = None
     # Top-lip depth.

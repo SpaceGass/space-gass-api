@@ -16,12 +16,12 @@ class SteelMemberDesignSettingsEurocode3_2005(SteelMemberDesignSettingsBase, Par
     """
     Steel member design settings for Eurocode 3:2005.
     """
+    # Selects this object type. Always "Eurocode3_2005".
+    code: Optional[str] = "Eurocode3_2005"
     # Add eccentric moments for tension members.
     add_eccentric_moments: Optional[bool] = None
     # Which Eurocode 3 annex is used for bending and axial compression (clause 6.3.3).
     bending_and_axial_compression_method: Optional[Eurocode3BendingAndAxialCompressionMethod] = None
-    # Selects this object type. Always "Eurocode3_2005".
-    code: Optional[SteelMemberDesignSettingsEurocode3_2005_code] = None
     # Consider eccentric effects.
     consider_eccentric_effects: Optional[bool] = None
     # Convert compression effective lengths to principal axes.

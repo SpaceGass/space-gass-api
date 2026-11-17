@@ -15,12 +15,12 @@ class SteelMemberDesignSettingsAs1250Update(SteelMemberDesignSettingsBaseUpdate,
     """
     Update request for the AS1250 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not an AS1250 setting is rejected.
     """
+    # Selects this object type. Always "As1250".
+    code: Optional[str] = "As1250"
     # The addEccentricMoments property
     add_eccentric_moments: Optional[bool] = None
     # The assumeFullyStiffenedWebs property
     assume_fully_stiffened_webs: Optional[bool] = None
-    # Selects this object type. Always "As1250".
-    code: Optional[SteelMemberDesignSettingsAs1250Update_code] = None
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertChsBiaxialMomentsToMono property

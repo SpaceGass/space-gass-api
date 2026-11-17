@@ -14,10 +14,10 @@ class PolygonShape(SectionShape, Parsable):
     """
     Solid regular polygon.
     """
+    # Selects this object type. Always "Polygon".
+    shape_type: Optional[str] = "Polygon"
     # Across-flats diameter.
     d: Optional[float] = None
-    # Selects this object type. Always "Polygon".
-    shape_type: Optional[PolygonShape_shapeType] = None
     # Number of sides.
     sides: Optional[int] = None
     

@@ -5,7 +5,7 @@ from kiota_abstractions.serialization import Parsable, ParseNode, SerializationW
 from typing import Any, Optional, TYPE_CHECKING, Union
 
 if TYPE_CHECKING:
-    from .section_shape_builder_create_shapes import SectionShapeBuilderCreate_shapes
+    from .section_shape import SectionShape
 
 @dataclass
 class SectionShapeBuilderCreate(Parsable):
@@ -19,7 +19,7 @@ class SectionShapeBuilderCreate(Parsable):
     # Section name.
     name: Optional[str] = None
     # The shapes composited into the section, in order.
-    shapes: Optional[list[SectionShapeBuilderCreate_shapes]] = None
+    shapes: Optional[list[SectionShape]] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> SectionShapeBuilderCreate:
@@ -37,15 +37,15 @@ class SectionShapeBuilderCreate(Parsable):
         The deserialization information for the current model
         Returns: dict[str, Callable[[ParseNode], None]]
         """
-        from .section_shape_builder_create_shapes import SectionShapeBuilderCreate_shapes
+        from .section_shape import SectionShape
 
-        from .section_shape_builder_create_shapes import SectionShapeBuilderCreate_shapes
+        from .section_shape import SectionShape
 
         fields: dict[str, Callable[[Any], None]] = {
             "id": lambda n : setattr(self, 'id', n.get_int_value()),
             "mark": lambda n : setattr(self, 'mark', n.get_str_value()),
             "name": lambda n : setattr(self, 'name', n.get_str_value()),
-            "shapes": lambda n : setattr(self, 'shapes', n.get_collection_of_object_values(SectionShapeBuilderCreate_shapes)),
+            "shapes": lambda n : setattr(self, 'shapes', n.get_collection_of_object_values(SectionShape)),
         }
         return fields
     

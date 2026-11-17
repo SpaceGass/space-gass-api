@@ -26,6 +26,13 @@ namespace SpaceGassApi.Models
         /// <summary>Leg thickness.</summary>
         public double? Tw { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.RoundedAngleShape"/> and sets the default values.
+        /// </summary>
+        public RoundedAngleShape() : base()
+        {
+            ShapeType = "RoundedAngle";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.RoundedAngleShape"/></returns>

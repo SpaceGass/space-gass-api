@@ -14,14 +14,14 @@ class SteelMemberDesignSettingsAiscAsd1989Update(SteelMemberDesignSettingsBaseUp
     """
     Update request for the AISC ASD 1989 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not an AISC ASD 1989 setting is rejected.
     """
+    # Selects this object type. Always "AiscAsd1989".
+    code: Optional[str] = "AiscAsd1989"
     # The addEccentricMoments property
     add_eccentric_moments: Optional[bool] = None
     # The calculateCb property
     calculate_cb: Optional[bool] = None
     # The calculateUFactor property
     calculate_u_factor: Optional[bool] = None
-    # Selects this object type. Always "AiscAsd1989".
-    code: Optional[SteelMemberDesignSettingsAiscAsd1989Update_code] = None
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertCompressionEffectiveLengths property

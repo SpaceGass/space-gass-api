@@ -24,6 +24,13 @@ namespace SpaceGassApi.Models
         /// <summary>Vertical-leg thickness.</summary>
         public double? Tw { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.DAShortShape"/> and sets the default values.
+        /// </summary>
+        public DAShortShape() : base()
+        {
+            ShapeType = "DAShort";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.DAShortShape"/></returns>

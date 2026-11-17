@@ -22,6 +22,13 @@ namespace SpaceGassApi.Models
         /// <summary>Use Kt factor for tension members.</summary>
         public bool? UseKtFactorForTension { get; set; }
         /// <summary>
+        /// Instantiates a new <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsNzs3404"/> and sets the default values.
+        /// </summary>
+        public SteelMemberDesignSettingsNzs3404() : base()
+        {
+            Code = "Nzs3404";
+        }
+        /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.SteelMemberDesignSettingsNzs3404"/></returns>

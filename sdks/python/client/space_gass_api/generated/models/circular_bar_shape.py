@@ -14,10 +14,10 @@ class CircularBarShape(SectionShape, Parsable):
     """
     Solid circular bar.
     """
+    # Selects this object type. Always "CircularBar".
+    shape_type: Optional[str] = "CircularBar"
     # Diameter.
     d: Optional[float] = None
-    # Selects this object type. Always "CircularBar".
-    shape_type: Optional[CircularBarShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> CircularBarShape:

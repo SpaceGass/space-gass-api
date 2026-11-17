@@ -14,12 +14,12 @@ class FilletShape(SectionShape, Parsable):
     """
     Fillet.
     """
+    # Selects this object type. Always "Fillet".
+    shape_type: Optional[str] = "Fillet"
     # Included angle.
     alpha: Optional[float] = None
     # Diameter.
     d: Optional[float] = None
-    # Selects this object type. Always "Fillet".
-    shape_type: Optional[FilletShape_shapeType] = None
     
     @staticmethod
     def create_from_discriminator_value(parse_node: ParseNode) -> FilletShape:

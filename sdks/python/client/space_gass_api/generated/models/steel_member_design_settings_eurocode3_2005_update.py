@@ -16,12 +16,12 @@ class SteelMemberDesignSettingsEurocode3_2005Update(SteelMemberDesignSettingsBas
     """
     Update request for the Eurocode 3:2005 steel member design settings.Only fields included in the request are updated; omit a field to keep its current value.A field that is not a Eurocode 3:2005 setting is rejected.
     """
+    # Selects this object type. Always "Eurocode3_2005".
+    code: Optional[str] = "Eurocode3_2005"
     # The addEccentricMoments property
     add_eccentric_moments: Optional[bool] = None
     # Which Eurocode 3 annex is used for bending and axial compression (clause 6.3.3).
     bending_and_axial_compression_method: Optional[Eurocode3BendingAndAxialCompressionMethod] = None
-    # Selects this object type. Always "Eurocode3_2005".
-    code: Optional[SteelMemberDesignSettingsEurocode3_2005Update_code] = None
     # The considerEccentricEffects property
     consider_eccentric_effects: Optional[bool] = None
     # The convertCompressionEffectiveLengths property
