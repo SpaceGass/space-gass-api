@@ -84,15 +84,15 @@ from .space_gass_api_client import _enhance_request_methods
 
 _enhance_request_methods()
 
-from . import shape_builder, steel_member
+from . import steel_member
 from .space_gass_api_client import SpaceGassApiClient
 from .upload_requests import ImportTxtRequest, NewFromTemplateRequest
 
-__all__ = ["ImportTxtRequest", "NewFromTemplateRequest", "SpaceGassApiClient", "shape_builder", "steel_member"]
+__all__ = ["ImportTxtRequest", "NewFromTemplateRequest", "SpaceGassApiClient", "steel_member"]
 '''
 
 PKG_INIT_STUB = '''# Auto-generated post-Kiota by `tools/regen_python_inits.py` — DO NOT EDIT.
-from . import shape_builder as shape_builder, steel_member as steel_member
+from . import steel_member as steel_member
 from .space_gass_api_client import SpaceGassApiClient as SpaceGassApiClient
 from .upload_requests import ImportTxtRequest as ImportTxtRequest, NewFromTemplateRequest as NewFromTemplateRequest
 

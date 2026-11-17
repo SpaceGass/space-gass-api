@@ -77,21 +77,20 @@ finally { await client.Job.Close.PostAsync(); }
    `Utils/ListUtilsExtensions.cs` (`ToFilterString`, `ToIdArray`) convert to/from `int[]`.
 6. **File uploads** (`job/new-from-template`, `job/import/txt`) use the multipart helpers
    `NewFromTemplateRequest` / `ImportTxtRequest`, which take a file path.
-7. **Steel member design** (`job/design/steel-member/{code}/run-check|run-design`, `{code}/settings`)
-   takes per-code settings that the spec models as a oneOf across every design code. Don't build
-   Kiota's composed wrappers by hand. In C#: `client.Job.Design.SteelMember.ForCode(DesignCode.As4100)`,
-   assign the code's settings object directly (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`),
-   and read/update stored settings with `Settings.GetAsync<SteelMemberDesignSettingsAs4100>()` /
-   `Settings.PatchAsync<...>(update)`. In Python: `steel_member.for_code(client, models.DesignCode.As4100)`,
-   `steel_member.run_check_request(code_settings=...)` / `run_design_request(...)`, and
-   `steel_member.get_settings(...)` / `patch_settings(...)`. Never set `code` — the API defaults it to the
-   route. Design runs are async like analyses — poll `job/design/runs/{runId}` until `status` is
+7. **Steel member design** (`job/design/steel-member/{code}/run-check|run-design`, `{code}/settings`).
+   Each design code has its own settings classes deriving from `SteelMemberDesignSettingsBase[Update]`;
+   pass the code's own object wherever settings are taken (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`,
+   `Settings.PatchAsync(...)`). Pick the code by enum: C# `client.Job.Design.SteelMember.ForCode(DesignCode.As4100)`,
+   Python `steel_member.for_code(client, models.DesignCode.As4100)`. Typed reads: C#
+   `Settings.GetAsync<SteelMemberDesignSettingsAs4100>()`, Python `steel_member.get_settings(code, models.SteelMemberDesignSettingsAs4100)`.
+   Never set `code`. Design runs are async like analyses — poll `job/design/runs/{runId}` until `status` is
    `Completed`, `Failed` or `Cancelled`. A run needs static results first, and a design group whose
    compression effective lengths are explicit (or a buckling analysis). Results:
    `job/query/design/steel-member/check-summary`, one row per design group (`steelMember`).
 8. **Built-up (shape-builder) sections** (`job/structure/sections/shape-builder`, `/preview`) take a
-   polymorphic `shapes` list. In C# list `SectionShape` objects directly in `Shapes`; in Python pass
-   `shapes=shape_builder.shapes(...)` and read back with `shape_builder.shapes_of(section)`. Use
+   plain list of shapes: C# `Shapes = [new LibraryShape {...}, new RectangularBarShape {...}]`, Python
+   `shapes=[models.LibraryShape(...), models.RectangularBarShape(...)]`. Never set `shapeType` — each
+   shape class sets its own. Shapes read back as their own classes (pattern-match / `isinstance`). Use
    `/preview` to get each shape's numbered reference points for `anchorPosition`.
 
 ## Authoritative resources (fetch these; don't crawl the repo)

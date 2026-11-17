@@ -22,8 +22,8 @@ come from `POST /sections/shape-builder/preview`, which computes the
 geometry without writing anything. Point 1 is the centroid; 2–5 are the
 top, right, bottom and left mid-edges.
 
-Both SDKs let you list shape objects directly — the SDK fills in the
-`shapeType` discriminator and Kiota's per-shape wrapper for you.
+In both SDKs `shapes` is a plain list of shape objects, and each shape
+class sets its own `shapeType`.
 
 <CodeTabs>
 ```csharp title="C#"
@@ -46,7 +46,7 @@ var ubTopCentre = ubPreview!.Shapes!.First().ReferencePoints!
 ```
 
 ```python title="Python"
-from space_gass_api import SpaceGassApiClient, shape_builder
+from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
 client = SpaceGassApiClient.create_client("http://localhost:34560")
@@ -55,7 +55,7 @@ await client.job.new.post()
 ub = models.LibraryShape(library="Aust300", name="360 UB 44.7")
 
 ub_preview = await client.job.structure.sections.shape_builder.preview.post(
-    models.SectionShapeBuilderCreate(name="UB only", shapes=shape_builder.shapes(ub)))
+    models.SectionShapeBuilderCreate(name="UB only", shapes=[ub]))
 
 # Top-centre of the UB: z == 0, highest y
 ub_top_centre = max(
@@ -137,7 +137,7 @@ Console.WriteLine($"Section {section!.Id}: A={section.A}, Iz={section.Iz:E3}");
 request = models.SectionShapeBuilderCreate(
     name="360 UB 44.7 + 250x16 plate",
     mark="B1",
-    shapes=shape_builder.shapes(ub, plate),
+    shapes=[ub, plate],
 )
 
 preview = await client.job.structure.sections.shape_builder.preview.post(request)
@@ -200,13 +200,13 @@ curl -X POST http://localhost:34560/api/v1/job/structure/members \
 
 `GET /sections/{id}` expands the shapes by default. A `Library` shape is
 resolved on create, so it comes back as the concrete profile (here an
-`IShape`) with the library item's name in `shapeName`. The SDK helpers
-unwrap the list to typed shape objects.
+`IShape`) with the library item's name in `shapeName`. In the SDKs each
+shape comes back as its own class.
 
 <CodeTabs>
 ```csharp title="C#"
 var saved = await client.Job.Structure.Sections[section.Id!.Value].GetAsync();
-foreach (var shape in saved!.GetShapes())
+foreach (var shape in saved!.Shapes!)
 {
     Console.WriteLine($"{shape.Id}: {shape.ShapeType} {shape.ShapeName} " +
                       $"translateY={shape.TranslateY}");
@@ -217,7 +217,7 @@ foreach (var shape in saved!.GetShapes())
 
 ```python title="Python"
 saved = await client.job.structure.sections.by_id(section.id).get()
-for shape in shape_builder.shapes_of(saved):
+for shape in saved.shapes:
     print(f"{shape.id}: {shape.shape_type} {shape.shape_name} "
           f"translate_y={shape.translate_y}")
 # 1: IShape 360 UB 44.7 translate_y=0.0

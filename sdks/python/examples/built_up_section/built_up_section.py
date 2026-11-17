@@ -30,7 +30,7 @@ import os
 import sys
 import winreg
 
-from space_gass_api import SpaceGassApiClient, shape_builder
+from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 
 # -- Configuration ------------------------------------------------
@@ -74,13 +74,13 @@ async def main() -> int:
         # with its extent and numbered reference points — the points an
         # anchor_position refers to when snapping shapes together.
         #
-        # shape_builder.shapes(...) takes plain shape objects; Kiota's
-        # per-shape wrapper and the shape_type discriminator are handled.
+        # shapes is a list of SectionShape — add any shape class to it
+        # (LibraryShape, IShape, RectangularBarShape, ...).
         print("Previewing the bare 360 UB 44.7...")
         ub = models.LibraryShape(library="Aust300", name="360 UB 44.7")
 
         ub_preview = await client.job.structure.sections.shape_builder.preview.post(
-            models.SectionShapeBuilderCreate(name="UB only", shapes=shape_builder.shapes(ub)))
+            models.SectionShapeBuilderCreate(name="UB only", shapes=[ub]))
 
         ub_geometry = ub_preview.shapes[0]
         print(f"  Depth {ub_geometry.bounds.min_y} .. {ub_geometry.bounds.max_y}, "
@@ -121,7 +121,7 @@ async def main() -> int:
         request = models.SectionShapeBuilderCreate(
             name="360 UB 44.7 + 250x16 plate",
             mark="B1",
-            shapes=shape_builder.shapes(ub, plate),
+            shapes=[ub, plate],
         )
 
         print("Previewing the compound section...")
@@ -164,13 +164,13 @@ async def main() -> int:
         print()
 
         # == Step 9 — Read the section back ============================
-        # GET /sections/{id} expands the shapes by default.
-        # shape_builder.shapes_of() unwraps them to typed shape objects.
+        # GET /sections/{id} expands the shapes by default. Each one comes
+        # back as its own class, so use isinstance to reach its dimensions.
         print("Reading the section back...")
         saved = await client.job.structure.sections.by_id(built_up.id).get()
         # A LibraryShape is resolved on create: it comes back as the
         # concrete shape (here an IShape) carrying the library item's name.
-        for shape in shape_builder.shapes_of(saved):
+        for shape in saved.shapes:
             if isinstance(shape, models.IShape):
                 detail = f"{shape.d} deep x {shape.bt} wide"
             elif isinstance(shape, models.RectangularBarShape):

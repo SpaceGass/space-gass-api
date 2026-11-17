@@ -232,8 +232,8 @@ try
     // Each design code has its own settings object (AS 4100 and NZS 3404
     // differ). They can be PATCHed at steel-member/{code}/settings, or —
     // as here — passed as a per-run override on the run request; either
-    // way they are stored with the job. The SDK lets you assign the
-    // code's own settings object straight to CodeSettings.
+    // way they are stored with the job. CodeSettings takes the code's
+    // own settings object.
     Console.WriteLine("Preparing AS 4100 settings...");
     var as4100Settings = new SteelMemberDesignSettingsAs4100Update
     {

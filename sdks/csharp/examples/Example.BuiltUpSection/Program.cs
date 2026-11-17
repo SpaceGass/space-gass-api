@@ -70,9 +70,8 @@ try
     // with its extent and numbered reference points — the points an
     // AnchorPosition refers to when snapping shapes together.
     //
-    // The SDK's SectionShapeExtensions let you list SectionShape objects
-    // directly in Shapes; Kiota's per-shape wrapper and the ShapeType
-    // discriminator are handled for you.
+    // Shapes is a list of SectionShape — add any shape class to it
+    // (LibraryShape, IShape, RectangularBarShape, ...).
     Console.WriteLine("Previewing the bare 360 UB 44.7...");
     var ub = new LibraryShape { Library = "Aust300", Name = "360 UB 44.7" };
 
@@ -170,11 +169,11 @@ try
     Console.WriteLine();
 
     // == Step 9 — Read the section back ============================
-    // GET /sections/{id} expands the shapes by default. GetShapes()
-    // unwraps them to typed SectionShape objects.
+    // GET /sections/{id} expands the shapes by default. Each one comes
+    // back as its own class, so pattern-match to reach its dimensions.
     Console.WriteLine("Reading the section back...");
     var saved = await client.Job.Structure.Sections[builtUp.Id!.Value].GetAsync();
-    foreach (var shape in saved!.GetShapes())
+    foreach (var shape in saved!.Shapes!)
     {
         // A LibraryShape is resolved on create: it comes back as the
         // concrete shape (here an IShape) carrying the library item's name.

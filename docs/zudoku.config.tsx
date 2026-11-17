@@ -53,6 +53,12 @@ type BodyShape =
 const refName = (s: any): string | undefined => s?.__$ref?.split("/").pop();
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
+// Which `oneOf` member a snippet shows: AS 4100 when it is one of them
+// (the code the examples use), otherwise the first.
+function pickComposedMember(members: string[]): string {
+  return members.find((m) => /As4100/.test(m)) ?? members[0];
+}
+
 function bodyShapeFromSpec(operation: any): BodyShape {
   const content: any[] = operation?.requestBody?.content ?? [];
   if (!content.length) return { kind: "none" };
@@ -76,7 +82,7 @@ function bodyShapeFromSpec(operation: any): BodyShape {
     if (p) return { kind: "primitiveList", csType: p[0], sample: p[1] };
     return { kind: "raw" };
   }
-  // `oneOf` → Kiota composed-type wrapper with one property per member.
+  // `oneOf` → one of several subclasses of a shared base type.
   const members = (schema?.oneOf ?? schema?.anyOf ?? [])
     .map(refName)
     .filter(Boolean);
@@ -131,16 +137,6 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
   const body = bodyShapeFromSpec(operation);
   const uploadHelper = MULTIPART_HELPERS[cleanPath];
 
-  // Kiota nests a composed-type wrapper in the request builder:
-  // `{Seg}RequestBuilder.{Seg}{Verb}RequestBody`, in the namespace/module
-  // mirroring the path (parameters → `Item`/`item`).
-  const lastPascal = toPascalCase(lastSegment);
-  const wrapperType = `${lastPascal}${verbPascal}RequestBody`;
-  const builderType = `${lastPascal}RequestBuilder`;
-  const builderSegments = segments.map((s: string) =>
-    s.startsWith("{") ? "item" : s,
-  );
-
   // ── C# SDK ──
   if (selectedLang === "csharp") {
     let chain = "client";
@@ -177,16 +173,14 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
         code += `${assign}${call}(ids);`;
         break;
       case "composed": {
-        const member = body.members[0];
-        code += `using SpaceGassApi.${builderSegments.map(toPascalCase).join(".")};\n\n`;
+        // The spec's `oneOf` lists subclasses of one base type; the SDK is
+        // generated with the base type (tools/prepare_spec_for_kiota.py), so
+        // any member is passed directly.
+        const member = pickComposedMember(body.members);
         code += `// Body is one of: ${body.members.join(", ")}.\n`;
-        code += `// Set the single property matching the target type.\n`;
-        code += `var body = new ${builderType}.${wrapperType}\n`;
+        code += `var body = new ${member}\n`;
         code += `{\n`;
-        code += `    ${member.replace(/_/g, "")} = new ${member}\n`;
-        code += `    {\n`;
-        code += `        // Set properties\n`;
-        code += `    },\n`;
+        code += `    // Set properties\n`;
         code += `};\n\n`;
         code += `${assign}${call}(body);`;
         break;
@@ -257,16 +251,11 @@ function generateCodeSnippet({ selectedLang, operation }: any): string | false {
         code += `${assign}${call}([${body.sample}])`;
         break;
       case "composed": {
-        const member = body.members[0];
-        const mod = builderSegments.map(pySegment).join(".");
-        code += `from space_gass_api.generated.${mod}.${pascalToSnake(wrapperType)} import ${wrapperType}\n`;
+        const member = pickComposedMember(body.members);
         code += importModels;
         code += `# Body is one of: ${body.members.join(", ")}.\n`;
-        code += `# Set the single attribute matching the target type.\n`;
-        code += `body = ${wrapperType}(\n`;
-        code += `    ${pascalToSnake(member)}=models.${member}(\n`;
-        code += `        # Set properties\n`;
-        code += `    ),\n`;
+        code += `body = models.${member}(\n`;
+        code += `    # Set properties\n`;
         code += `)\n\n`;
         code += `${assign}${call}(body)`;
         break;

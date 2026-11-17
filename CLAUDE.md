@@ -45,11 +45,22 @@ Cross-tool agent instructions (install, `CreateClient()`, base URL, async/analys
 ### SDK Generation (Kiota)
 
 - `kiota.config.json` at the root defines both C# and Python targets
-- Both point to `descriptions/openapi.json` (stable path)
+- Both point to `build/openapi.kiota.json` — a **transformed copy** of the published spec written by `tools/prepare_spec_for_kiota.py` (git-ignored). See "oneOf and Kiota" below.
 - The `generate-clients` workflow is **manual trigger** (`workflow_dispatch`) with `--clean-output`
 - C# output: `sdks/csharp/client/SpaceGassApi/Generated/` — never hand-edit
 - Python output: `sdks/python/client/space_gass_api/generated/` — never hand-edit. The `generate-clients` workflow runs `tools/regen_python_inits.py` automatically after Kiota; for local regens, run `python tools/regen_python_inits.py` afterwards.
 - Kiota generates a `BaseSpaceGassApiClient` base class (set via `--class-name` in the workflow). The hand-maintained wrappers extend it and expose the public `SpaceGassApiClient` class. Same pattern as the MS Graph SDKs.
+
+#### oneOf and Kiota
+
+The published spec (`descriptions/openapi.json`) uses `oneOf` wherever a body or response is one of several polymorphic types — per-code steel design settings (15 codes) and section shapes (41 types). That is the right shape for the API reference (Swagger/Zudoku render a pick-list) but Kiota has no union types: it turns each `oneOf` into a *composed type wrapper* with one nullable property per member (`new X_codeSettings { SteelMemberDesignSettingsAs4100Update = ... }`, `GetAsSettingsGetResponseAsync()`).
+
+Every such `oneOf` lists subclasses of one base schema with a discriminator, so the wire format is the same either way. `tools/prepare_spec_for_kiota.py` therefore writes a copy for Kiota only, in which:
+
+1. each `oneOf` is replaced by a `$ref` to the shared base (`SteelMemberDesignSettingsBase[Update]`, `SectionShape`) → Kiota emits plain inheritance: `PatchAsync(SteelMemberDesignSettingsBaseUpdate body)`, `List<SectionShape> Shapes`, and the base's factory builds the right subclass on read;
+2. each subclass's single-value discriminator enum is replaced by a string `default` → Kiota sets it in the constructor (`ShapeType = "Library"`), so callers never set discriminators. (Leaving the enum in as well makes Kiota emit C# that doesn't compile.)
+
+The published spec is never modified. The script exits non-zero if it meets a `oneOf` it can't convert (members without a single shared discriminated base) — decide then whether to extend it or accept a wrapper (`ALLOWED_ONEOF`). `tools/check_helpers.py` fails if any composed wrapper appears in either generated tree. **Any regen path must run the transform first** — the `generate-clients` workflow does; the BuildMachine pipeline (`generate-api-clients.yml` in the SPACEGASS repo) must too.
 
 ### C# Client Structure
 
@@ -62,8 +73,7 @@ sdks/csharp/client/
     ├── Utils/                           ← hand-maintained helpers (safe from regen)
     │   ├── ListUtilsExtensions.cs       ← SG list-string helpers (ToFilterString, ToIdArray)
     │   ├── UploadRequests.cs            ← NewFromTemplateRequest / ImportTxtRequest (multipart uploads)
-    │   ├── SteelMemberDesignExtensions.cs ← per-code design settings: ForCode(), implicit oneOf wrapping, typed Get/Patch
-    │   └── SectionShapeExtensions.cs    ← shape-builder: implicit shape wrapping + GetShapes() unwrap
+    │   └── SteelMemberDesignExtensions.cs ← steel design conveniences: ForCode(DesignCode), typed Settings.GetAsync<T>/PatchAsync<T>
     └── Generated/                       ← Kiota output (wiped on --clean-output)
         ├── BaseSpaceGassApiClient.cs    ← Kiota-generated base client
         ├── Models/
@@ -79,10 +89,9 @@ Anything that smooths over awkward raw Kiota output lives **outside `Generated/`
 
 - **`Utils/ListUtilsExtensions.cs`** — converts between `int[]` and the SG list-string filter format used by query parameters (`ToFilterString()`, `ToIdArray()`, `ToIdList()`).
 - **`Utils/UploadRequests.cs`** — `NewFromTemplateRequest` / `ImportTxtRequest` subclass Kiota's `MultipartBody` for the multipart file-upload endpoints (`POST /job/new-from-template`, `POST /job/import/txt`). Kiota types those `PostAsync` parameters as a bare `MultipartBody`; these subclasses let callers write `PostAsync(new NewFromTemplateRequest(path))` — they take a file path, read the bytes, and add the single form part with its filename. No request adapter is set: the request builder attaches it at send time (Kiota's `SetContentFromParsable`).
-- **`Utils/SteelMemberDesignExtensions.cs`** — every design code's settings class derives from `SteelMemberDesignSettingsBase` / `...BaseUpdate`, and the spec's `oneOf` over them makes Kiota emit a composed wrapper everywhere they appear (`SteelMemberDesignRunCheckRequest_codeSettings`, `SteelMemberDesignRunDesignRequest_codeSettings`, `SettingsRequestBuilder.SettingsPatchRequestBody` / `SettingsGetResponse`). The helpers are **generic over the base class**, so they cover all codes (15 at build `14.51.12`) and any added later with no per-code code: partial-class **implicit conversions** from `SteelMemberDesignSettingsBaseUpdate` let callers assign the code's own settings object directly (`CodeSettings = new SteelMemberDesignSettingsAs4100Update { ... }`); `SteelMember.ForCode(DesignCode.As4100)` replaces the string indexer; `Settings.GetAsync<TSettings>()` / `Settings.PatchAsync<TSettings>(update)` return the typed settings instead of the wrapper. Wrapper properties are resolved **by property type, not name** (Kiota drops underscores from property names: class `...Bs5950_2000Update`, property `...Bs59502000Update`). `code` is never set — the API defaults it to the route.
-- **`Utils/SectionShapeExtensions.cs`** — a shape-builder section's `Shapes` are a polymorphic `oneOf` (`shapeType` discriminator), wrapped per element in `SectionShapeBuilderCreate_shapes` / `Section_shapes`. An **implicit conversion** from `SectionShape` lets callers write `Shapes = [new LibraryShape {...}, new RectangularBarShape {...}]` (discriminator filled from a class→`shapeType` map mirroring the spec); `section.GetShapes()` unwraps a response to typed `SectionShape`s.
+- **`Utils/SteelMemberDesignExtensions.cs`** — conveniences on top of the (wrapper-free) steel member design surface: `SteelMember.ForCode(DesignCode.As4100)` replaces the string indexer, and `Settings.GetAsync<TSettings>()` / `Settings.PatchAsync<TSettings>(update)` return the code's own settings type instead of `SteelMemberDesignSettingsBase` (throwing `InvalidCastException` on a mismatch). Nothing here is needed to *call* the API — settings objects and shapes are passed directly thanks to the spec transform.
 
-**Pattern for oneOf/composed types:** Kiota's wrappers are `partial`, so add implicit operators in a partial class under `Utils/` rather than asking callers to construct the wrapper. When a new oneOf appears in the spec, mirror this.
+**If a composed wrapper ever shows up in `Generated/`** it means a `oneOf` slipped past `tools/prepare_spec_for_kiota.py` — fix it there (spec transform), not with a helper here.
 
 When a new endpoint is similarly awkward (multipart uploads, list-string filters, etc.), prefer adding a small hand-maintained type/extension here over documenting the raw Kiota boilerplate.
 
@@ -96,8 +105,7 @@ sdks/python/client/
     ├── __init__.pyi                ← AUTO-WRITTEN post-Kiota (type stub for IDE support)
     ├── space_gass_api_client.py    ← hand-maintained (SpaceGassApiClient, create_client, _enhance_request_methods)
     ├── upload_requests.py          ← hand-maintained (NewFromTemplateRequest, ImportTxtRequest)
-    ├── steel_member.py             ← hand-maintained (for_code, run_check_request, run_design_request, get_settings, patch_settings)
-    ├── shape_builder.py            ← hand-maintained (shapes(), shapes_of() — shape-builder oneOf wrap/unwrap)
+    ├── steel_member.py             ← hand-maintained (for_code, get_settings, patch_settings)
     ├── models/
     │   └── __init__.py             ← AUTO-WRITTEN post-Kiota (re-exports from generated/)
     └── generated/                  ← Kiota output (wiped on --clean-output)
@@ -110,7 +118,7 @@ sdks/python/client/
 - The `generated/` subfolder is the Kiota `--clean-output` target. Hand-maintained files (`__init__.py`, `__init__.pyi`, `space_gass_api_client.py`, `models/__init__.py`) live outside it and survive regeneration.
 - The post-regen script `tools/regen_python_inits.py` writes `__init__.py` at the package root and `models/__init__.py` as a re-export shim so callers can write `from space_gass_api import SpaceGassApiClient` and `import space_gass_api.models as models`.
 - `space_gass_api/__init__.py` imports `SpaceGassApiClient` from the hand-maintained `space_gass_api_client` module and calls `_enhance_request_methods()` to enable keyword query parameters on builder `get`/`post`/`patch`/`put`/`delete` methods (each verb is enhanced only where a matching `{Verb}QueryParameters` dataclass exists).
-- **Hand-maintained additions on top of Kiota** (Python mirror of the C# `Utils/` layer) live at the package root, outside `generated/`: `upload_requests.py` defines `NewFromTemplateRequest` / `ImportTxtRequest`, which subclass Kiota's `MultipartBody` so the multipart file-upload endpoints can be called by file path — `await client.job.new_from_template.post(NewFromTemplateRequest(path))`. They are re-exported from the package root by `tools/regen_python_inits.py` (so `from space_gass_api import NewFromTemplateRequest` works); update that script's `PKG_INIT_*` constants when adding more. Two further modules mirror the C# `Utils/` oneOf helpers: `steel_member.py` (`for_code(client, DesignCode.As4100)`, `run_check_request(code_settings=...)`, `run_design_request(...)`, `code_settings_body(...)`, `get_settings(code, expect=None)` / `patch_settings(code, update, expect=None)` — generic over `SteelMemberDesignSettingsBase[Update]`, so every design code works; `expect` gives a typed return via `@overload`) and `shape_builder.py` (`shapes(*shapes)` builds the wrapped list for `SectionShapeBuilderCreate`, `shapes_of(section)` unwraps a response; the class→`shapeType` map mirrors the spec discriminator mapping). Both are importable as `from space_gass_api import steel_member, shape_builder`.
+- **Hand-maintained additions on top of Kiota** (Python mirror of the C# `Utils/` layer) live at the package root, outside `generated/`: `upload_requests.py` defines `NewFromTemplateRequest` / `ImportTxtRequest`, which subclass Kiota's `MultipartBody` so the multipart file-upload endpoints can be called by file path — `await client.job.new_from_template.post(NewFromTemplateRequest(path))`. They are re-exported from the package root by `tools/regen_python_inits.py` (so `from space_gass_api import NewFromTemplateRequest` works); update that script's `PKG_INIT_*` constants when adding more. `steel_member.py` mirrors the C# `SteelMemberDesignExtensions`: `for_code(client, DesignCode.As4100)`, and `get_settings(code, expect=None)` / `patch_settings(code, update, expect=None)` where `expect` gives a typed return via `@overload`. Importable as `from space_gass_api import steel_member`.
 
 ### Authentication
 
