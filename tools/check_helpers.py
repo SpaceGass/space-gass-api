@@ -126,11 +126,24 @@ def main() -> int:
 
     from space_gass_api import steel_member  # noqa: E402
 
-    for fn in ("for_code", "get_settings", "patch_settings"):
+    for fn in ("get_settings", "patch_settings"):
         check(callable(getattr(steel_member, fn, None)), f"steel_member.{fn} missing")
     codes = set(schemas["SteelMemberDesignSettingsBase"]["discriminator"]["mapping"])
     check({e.value for e in models.DesignCode} <= codes,
           f"DesignCode enum has values with no settings class: {sorted({e.value for e in models.DesignCode} - codes)}")
+
+    # ---- 5. DesignCode.ToString() is the route segment ----------------------
+    # Examples select a design code with `SteelMember[DesignCode.X.ToString()]`.
+    # That only works while Kiota keeps each C# member name equal to its wire
+    # value; a value Kiota has to sanitise (a dash, a leading digit) would break it.
+    design_code_cs = (CS_MODELS / "DesignCode.cs").read_text(encoding="utf-8")
+    cs_pairs = re.findall(
+        r'EnumMember\(Value = "([^"]+)"\)\]\s*(?:#pragma[^\n]*\n\s*)?(\w+),', design_code_cs)
+    renamed = [(value, name) for value, name in cs_pairs if value != name]
+    check(not renamed, f"C# DesignCode member names differ from wire values {renamed}: "
+                       "`SteelMember[code.ToString()]` would send the wrong route segment")
+    check({value for value, _ in cs_pairs} == set(published["components"]["schemas"]["DesignCode"]["enum"]),
+          "C# DesignCode enum does not match the spec's DesignCode values")
 
     if problems:
         print("SDK shape check FAILED:")

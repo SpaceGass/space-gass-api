@@ -4,8 +4,6 @@ Builds the simply-supported beam from `create_simple_beam`, analyses it, then ru
 
 A check verifies the members' current sections without changing the model. See `steel_design_optimise` for a DESIGN run that selects new sections.
 
-Uses `steel_member.for_code(client, models.DesignCode.As4100)` to pick the design code by enum, and passes the AS 4100 settings object straight to the run request.
-
 ## Run it
 
 1. Start the SPACE GASS API service (a licence for the AS 4100 steel member design module is required).

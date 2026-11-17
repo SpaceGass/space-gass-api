@@ -73,7 +73,7 @@ sdks/csharp/client/
     ├── Utils/                           ← hand-maintained helpers (safe from regen)
     │   ├── ListUtilsExtensions.cs       ← SG list-string helpers (ToFilterString, ToIdArray)
     │   ├── UploadRequests.cs            ← NewFromTemplateRequest / ImportTxtRequest (multipart uploads)
-    │   └── SteelMemberDesignExtensions.cs ← steel design conveniences: ForCode(DesignCode), typed Settings.GetAsync<T>/PatchAsync<T>
+    │   └── SteelMemberDesignExtensions.cs ← steel design conveniences: typed Settings.GetAsync<T>/PatchAsync<T>
     └── Generated/                       ← Kiota output (wiped on --clean-output)
         ├── BaseSpaceGassApiClient.cs    ← Kiota-generated base client
         ├── Models/
@@ -89,7 +89,7 @@ Anything that smooths over awkward raw Kiota output lives **outside `Generated/`
 
 - **`Utils/ListUtilsExtensions.cs`** — converts between `int[]` and the SG list-string filter format used by query parameters (`ToFilterString()`, `ToIdArray()`, `ToIdList()`).
 - **`Utils/UploadRequests.cs`** — `NewFromTemplateRequest` / `ImportTxtRequest` subclass Kiota's `MultipartBody` for the multipart file-upload endpoints (`POST /job/new-from-template`, `POST /job/import/txt`). Kiota types those `PostAsync` parameters as a bare `MultipartBody`; these subclasses let callers write `PostAsync(new NewFromTemplateRequest(path))` — they take a file path, read the bytes, and add the single form part with its filename. No request adapter is set: the request builder attaches it at send time (Kiota's `SetContentFromParsable`).
-- **`Utils/SteelMemberDesignExtensions.cs`** — conveniences on top of the (wrapper-free) steel member design surface: `SteelMember.ForCode(DesignCode.As4100)` replaces the string indexer, and `Settings.GetAsync<TSettings>()` / `Settings.PatchAsync<TSettings>(update)` return the code's own settings type instead of `SteelMemberDesignSettingsBase` (throwing `InvalidCastException` on a mismatch). Nothing here is needed to *call* the API — settings objects and shapes are passed directly thanks to the spec transform.
+- **`Utils/SteelMemberDesignExtensions.cs`** — conveniences on top of the (wrapper-free) steel member design surface: `Settings.GetAsync<TSettings>()` / `Settings.PatchAsync<TSettings>(update)` return the code's own settings type instead of `SteelMemberDesignSettingsBase` (throwing `InvalidCastException` on a mismatch). Nothing here is needed to *call* the API — settings objects and shapes are passed directly thanks to the spec transform.
 
 **If a composed wrapper ever shows up in `Generated/`** it means a `oneOf` slipped past `tools/prepare_spec_for_kiota.py` — fix it there (spec transform), not with a helper here.
 
@@ -105,7 +105,7 @@ sdks/python/client/
     ├── __init__.pyi                ← AUTO-WRITTEN post-Kiota (type stub for IDE support)
     ├── space_gass_api_client.py    ← hand-maintained (SpaceGassApiClient, create_client, _enhance_request_methods)
     ├── upload_requests.py          ← hand-maintained (NewFromTemplateRequest, ImportTxtRequest)
-    ├── steel_member.py             ← hand-maintained (for_code, get_settings, patch_settings)
+    ├── steel_member.py             ← hand-maintained (get_settings, patch_settings)
     ├── models/
     │   └── __init__.py             ← AUTO-WRITTEN post-Kiota (re-exports from generated/)
     └── generated/                  ← Kiota output (wiped on --clean-output)
@@ -118,7 +118,7 @@ sdks/python/client/
 - The `generated/` subfolder is the Kiota `--clean-output` target. Hand-maintained files (`__init__.py`, `__init__.pyi`, `space_gass_api_client.py`, `models/__init__.py`) live outside it and survive regeneration.
 - The post-regen script `tools/regen_python_inits.py` writes `__init__.py` at the package root and `models/__init__.py` as a re-export shim so callers can write `from space_gass_api import SpaceGassApiClient` and `import space_gass_api.models as models`.
 - `space_gass_api/__init__.py` imports `SpaceGassApiClient` from the hand-maintained `space_gass_api_client` module and calls `_enhance_request_methods()` to enable keyword query parameters on builder `get`/`post`/`patch`/`put`/`delete` methods (each verb is enhanced only where a matching `{Verb}QueryParameters` dataclass exists).
-- **Hand-maintained additions on top of Kiota** (Python mirror of the C# `Utils/` layer) live at the package root, outside `generated/`: `upload_requests.py` defines `NewFromTemplateRequest` / `ImportTxtRequest`, which subclass Kiota's `MultipartBody` so the multipart file-upload endpoints can be called by file path — `await client.job.new_from_template.post(NewFromTemplateRequest(path))`. They are re-exported from the package root by `tools/regen_python_inits.py` (so `from space_gass_api import NewFromTemplateRequest` works); update that script's `PKG_INIT_*` constants when adding more. `steel_member.py` mirrors the C# `SteelMemberDesignExtensions`: `for_code(client, DesignCode.As4100)`, and `get_settings(code, expect=None)` / `patch_settings(code, update, expect=None)` where `expect` gives a typed return via `@overload`. Importable as `from space_gass_api import steel_member`.
+- **Hand-maintained additions on top of Kiota** (Python mirror of the C# `Utils/` layer) live at the package root, outside `generated/`: `upload_requests.py` defines `NewFromTemplateRequest` / `ImportTxtRequest`, which subclass Kiota's `MultipartBody` so the multipart file-upload endpoints can be called by file path — `await client.job.new_from_template.post(NewFromTemplateRequest(path))`. They are re-exported from the package root by `tools/regen_python_inits.py` (so `from space_gass_api import NewFromTemplateRequest` works); update that script's `PKG_INIT_*` constants when adding more. `steel_member.py` mirrors the C# `SteelMemberDesignExtensions`: `get_settings(code, expect=None)` / `patch_settings(code, update, expect=None)` where `expect` gives a typed return via `@overload`. Importable as `from space_gass_api import steel_member`.
 
 ### Authentication
 

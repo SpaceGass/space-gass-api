@@ -38,7 +38,7 @@ Files: every `Example.*/Program.cs` under `sdks/csharp/examples/`. Apply the cha
 - Request body type renames (e.g. `SectionCreate` → `SectionUserCreate`).
 - Filter query parameters: collection endpoints now take `string?` properties named `Cases`, `Members`, `Modes`, `Nodes` in **SG list format** (`"1,3-7,10"`) instead of `int[]` arrays. Compose with `string.Join(",", ids)` for arbitrary sets.
 - Indexer parameter type: `[int]` typed indexer is preferred; the legacy `[string]` indexer is marked `[Obsolete]`.
-- Polymorphic bodies (steel design code settings, shape-builder shapes): pass the subclass directly (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`, `Shapes = [new LibraryShape {...}]`) and never set discriminators. Steel design examples use `SteelMember.ForCode(DesignCode.X)` and `Settings.GetAsync<T>()`.
+- Polymorphic bodies (steel design code settings, shape-builder shapes): pass the subclass directly (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`, `Shapes = [new LibraryShape {...}]`) and never set discriminators. Steel design examples select the code with the generated indexer and the enum: `SteelMember[DesignCode.X.ToString()]`.
 
 Verify: `dotnet build sdks/csharp/examples/SpaceGassApi.Examples.sln --nologo`. **Build must be 0 errors before moving on.**
 
@@ -52,7 +52,7 @@ Files: every entry-point `.py` under `sdks/python/examples/*/`. Mirror Phase 2 w
 - `keys=[...]` → `nodes="1,2,3"` for reactions filters
 - `from space_gass_api.models.section_create import SectionCreate` → `from space_gass_api.models.section_user_create import SectionUserCreate`
 - Drop list arguments to `case_`/`member`/`mode` filter setattrs in favour of `cases`/`members`/`modes` with SG-list strings
-- Polymorphic bodies: pass the subclass directly (`code_settings=models.SteelMemberDesignSettingsAs4100Update(...)`, `shapes=[models.LibraryShape(...)]`); steel design examples use `steel_member.for_code(client, models.DesignCode.X)`
+- Polymorphic bodies: pass the subclass directly (`code_settings=models.SteelMemberDesignSettingsAs4100Update(...)`, `shapes=[models.LibraryShape(...)]`); steel design examples select the code with `steel_member.by_code(models.DesignCode.X.value)`
 
 Verify: `python -m py_compile <each entry-point>` (Python interpreter must be on PATH; if not, do a careful visual diff and rely on the C# build as a structural backstop). The two SDKs share the same shape, so anything that landed cleanly in C# almost always lands cleanly in Python.
 

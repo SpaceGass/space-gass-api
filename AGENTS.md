@@ -80,8 +80,8 @@ finally { await client.Job.Close.PostAsync(); }
 7. **Steel member design** (`job/design/steel-member/{code}/run-check|run-design`, `{code}/settings`).
    Each design code has its own settings classes deriving from `SteelMemberDesignSettingsBase[Update]`;
    pass the code's own object wherever settings are taken (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`,
-   `Settings.PatchAsync(...)`). Pick the code by enum: C# `client.Job.Design.SteelMember.ForCode(DesignCode.As4100)`,
-   Python `steel_member.for_code(client, models.DesignCode.As4100)`. Typed reads: C#
+   `Settings.PatchAsync(...)`). The code is the route segment: C# `client.Job.Design.SteelMember[DesignCode.As4100.ToString()]`,
+   Python `client.job.design.steel_member.by_code(models.DesignCode.As4100.value)`. Typed reads: C#
    `Settings.GetAsync<SteelMemberDesignSettingsAs4100>()`, Python `steel_member.get_settings(code, models.SteelMemberDesignSettingsAs4100)`.
    Never set `code`. Design runs are async like analyses — poll `job/design/runs/{runId}` until `status` is
    `Completed`, `Failed` or `Cancelled`. A run needs static results first, and a design group whose

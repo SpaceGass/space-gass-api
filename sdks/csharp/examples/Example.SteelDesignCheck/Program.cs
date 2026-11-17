@@ -248,7 +248,7 @@ try
     // job's stored settings before the run starts. Analysis and design
     // runs share one queue, so QueuePosition may be > 1.
     Console.WriteLine($"Starting {designCode} design CHECK run...");
-    var designRun = await client.Job.Design.SteelMember.ForCode(designCode).RunCheck.PostAsync(
+    var designRun = await client.Job.Design.SteelMember[designCode.ToString()].RunCheck.PostAsync(
         new SteelMemberDesignRunCheckRequest { CodeSettings = as4100Settings });
     Console.WriteLine($"  Run {designRun!.RunId} {designRun.Status}; waiting for completion...");
 

@@ -241,7 +241,7 @@ try
     // Everything in the body is optional — the settings PATCHed above
     // could equally have been passed here as per-run overrides.
     Console.WriteLine($"Starting {designCode} DESIGN run...");
-    var designRun = await client.Job.Design.SteelMember.ForCode(designCode).RunDesign.PostAsync(
+    var designRun = await client.Job.Design.SteelMember[designCode.ToString()].RunDesign.PostAsync(
         new SteelMemberDesignRunDesignRequest { UpdateSections = true });
     Console.WriteLine($"  Run {designRun!.RunId} {designRun.Status}; waiting for completion...");
 

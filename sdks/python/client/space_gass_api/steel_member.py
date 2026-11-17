@@ -12,7 +12,7 @@ settings are taken::
     from space_gass_api import steel_member
     import space_gass_api.models as models
 
-    as4100 = steel_member.for_code(client, models.DesignCode.As4100)
+    as4100 = client.job.design.steel_member.by_code(models.DesignCode.As4100.value)
 
     run = await as4100.run_check.post(models.SteelMemberDesignRunCheckRequest(
         code_settings=models.SteelMemberDesignSettingsAs4100Update(slenderness_ratio_check=True)))
@@ -22,29 +22,24 @@ settings are taken::
         as4100, models.SteelMemberDesignSettingsAs4100Update(use_kt_factor_for_tension=True),
         models.SteelMemberDesignSettingsAs4100)
 
-These helpers add the ``DesignCode`` enum in place of the string route
-segment, and typed reads so IntelliSense knows the result's class.
+These helpers add typed reads so IntelliSense knows the result's class.
 
 Lives outside ``generated/`` so it survives Kiota's ``--clean-output``.
 """
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Optional, TypeVar, Union, overload
+from typing import Optional, TypeVar, overload
 
 from .generated.job.design.steel_member.item.with_code_item_request_builder import (
     WithCodeItemRequestBuilder,
 )
-from .generated.models.design_code import DesignCode
 from .generated.models.steel_member_design_settings_base import SteelMemberDesignSettingsBase
 from .generated.models.steel_member_design_settings_base_update import (
     SteelMemberDesignSettingsBaseUpdate,
 )
 
-if TYPE_CHECKING:
-    from .space_gass_api_client import SpaceGassApiClient
-
-__all__ = ["for_code", "get_settings", "patch_settings"]
+__all__ = ["get_settings", "patch_settings"]
 
 TSettings = TypeVar("TSettings", bound=SteelMemberDesignSettingsBase)
 
@@ -53,15 +48,6 @@ def _expect(value: Optional[SteelMemberDesignSettingsBase], expect: Optional[typ
     if value is not None and expect is not None and not isinstance(value, expect):
         raise TypeError(f"The design code returned {type(value).__name__}, not {expect.__name__}.")
     return value
-
-
-def for_code(client: "SpaceGassApiClient", code: Union[DesignCode, str]) -> WithCodeItemRequestBuilder:
-    """The endpoints for one design code — ``run_check``, ``run_design``, ``settings``.
-
-    Equivalent to ``client.job.design.steel_member.by_code("As4100")`` but takes the
-    ``DesignCode`` enum.
-    """
-    return client.job.design.steel_member.by_code(code.value if isinstance(code, DesignCode) else code)
 
 
 @overload
@@ -73,7 +59,7 @@ async def get_settings(code: WithCodeItemRequestBuilder, expect: type[TSettings]
 async def get_settings(code, expect=None):
     """Reads a design code's stored settings.
 
-    ``code`` is ``for_code(client, DesignCode.As4100)``. Pass ``expect`` (e.g.
+    ``code`` is ``client.job.design.steel_member.by_code("As4100")``. Pass ``expect`` (e.g.
     ``models.SteelMemberDesignSettingsAs4100``) to get a typed result; a different
     type coming back raises ``TypeError``. Without it this is ``code.settings.get()``.
     """

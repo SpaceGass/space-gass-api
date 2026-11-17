@@ -30,7 +30,7 @@ import os
 import sys
 import winreg
 
-from space_gass_api import SpaceGassApiClient, steel_member
+from space_gass_api import SpaceGassApiClient
 import space_gass_api.models as models
 from space_gass_api.utils import to_filter_string
 
@@ -236,7 +236,7 @@ async def main() -> int:
         # job's stored settings before the run starts. Analysis and design
         # runs share one queue, so queue_position may be > 1.
         print(f"Starting {DESIGN_CODE.value} design CHECK run...")
-        design_run = await steel_member.for_code(client, DESIGN_CODE).run_check.post(
+        design_run = await client.job.design.steel_member.by_code(DESIGN_CODE.value).run_check.post(
             models.SteelMemberDesignRunCheckRequest(code_settings=as4100_settings))
         print(f"  Run {design_run.run_id} {design_run.status.value}; waiting for completion...")
 

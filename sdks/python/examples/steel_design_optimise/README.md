@@ -4,8 +4,6 @@ Builds the simply-supported beam from `create_simple_beam` on a deliberately hea
 
 See `steel_design_check` for a CHECK run that leaves the model unchanged.
 
-Uses `steel_member.for_code(client, models.DesignCode.As4100)` to pick the design code by enum.
-
 ## Run it
 
 1. Start the SPACE GASS API service (a licence for the AS 4100 steel member design module is required).

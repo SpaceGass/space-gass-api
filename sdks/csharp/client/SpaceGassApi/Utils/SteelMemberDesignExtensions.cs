@@ -1,8 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using SpaceGassApi.Job.Design.SteelMember;
-using SpaceGassApi.Job.Design.SteelMember.Item;
 using SpaceGassApi.Job.Design.SteelMember.Item.Settings;
 using SpaceGassApi.Models;
 
@@ -20,7 +18,7 @@ namespace SpaceGassApi
     /// settings are taken:
     /// </para>
     /// <code>
-    /// var as4100 = client.Job.Design.SteelMember.ForCode(DesignCode.As4100);
+    /// var as4100 = client.Job.Design.SteelMember[DesignCode.As4100.ToString()];
     ///
     /// await as4100.RunCheck.PostAsync(new SteelMemberDesignRunCheckRequest
     /// {
@@ -32,20 +30,12 @@ namespace SpaceGassApi
     ///     new SteelMemberDesignSettingsAs4100Update { UseKtFactorForTension = true });
     /// </code>
     /// <para>
-    /// These helpers add the <see cref="DesignCode"/> enum in place of the string indexer,
-    /// and typed reads so the result does not need casting from the base class.
+    /// These helpers add typed reads so the result does not need casting from the base class.
     /// Lives in Utils/ so it survives Kiota's --clean-output.
     /// </para>
     /// </remarks>
     public static class SteelMemberDesignExtensions
     {
-        /// <summary>
-        /// The endpoints for one design code — <c>RunCheck</c>, <c>RunDesign</c>, <c>Settings</c>.
-        /// Equivalent to <c>SteelMember["As4100"]</c> but with the <see cref="DesignCode"/> enum.
-        /// </summary>
-        public static WithCodeItemRequestBuilder ForCode(this SteelMemberRequestBuilder builder, DesignCode code)
-            => builder[code.ToString()];
-
         /// <summary>
         /// Reads the design code's stored settings as its own type, e.g.
         /// <c>Settings.GetAsync&lt;SteelMemberDesignSettingsAs4100&gt;()</c>.
