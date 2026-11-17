@@ -11,7 +11,7 @@ using SpaceGassApi.Utils;
 // run pick the lightest adequate section from the section library:
 //   1.  Create the client and a new project
 //   2.  Build the beam on a 610 UB 125
-//   3.  Find the section library and scan code the design selects from
+//   3.  Set the section library the design selects from, and find the scan code
 //   4.  Load cases, loads and a ULS combination
 //   5.  Run a linear static analysis and wait for completion
 //   6.  Create a steel member design group (optimise for weight)
@@ -20,7 +20,7 @@ using SpaceGassApi.Utils;
 //   9.  Start the DESIGN run and poll until it finishes
 //   10. Report what the run did and which section it chose
 //   11. Query the check summary for the final section
-//   12. Save and close
+//   12. Save, restore the default section library, and close
 //
 // With UpdateSections = true (the default) the run swaps the member's
 // analysis section for the selected size and, as the iteration settings
@@ -30,8 +30,9 @@ using SpaceGassApi.Utils;
 //
 // Prerequisites:
 //   - SPACE GASS API running locally (default: http://localhost:34560)
-//   - The "Aust300" section library installed (default in SPACE GASS)
+//   - The "Aust300" section library installed
 //   - A licence for the AS 4100 steel member design module
+//   - Vertical axis set to Y in SPACE GASS preferences (loads here are in global Y)
 // ---------------------------------------------------------------
 
 // -- Configuration ------------------------------------------------
@@ -42,7 +43,13 @@ var saveFilePath = Path.Combine(
 
 const DesignCode designCode = DesignCode.As4100;
 
+// The section library the beam is built from and the design selects from.
+const string sectionLibrary = "Aust300";
+
 var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
+
+// The default section library before this example changes it (restored at the end).
+string? originalSectionLibrary = null;
 
 try
 {
@@ -68,7 +75,7 @@ try
         new MaterialLibraryCreate { Library = "Aust", Name = "STEEL" });
 
     var initialSection = await client.Job.Structure.Sections.Library.PostAsync(
-        new SectionLibraryCreate { Library = "Aust300", Name = "610 UB 125", Mark = "B1" });
+        new SectionLibraryCreate { Library = sectionLibrary, Name = "610 UB 125", Mark = "B1" });
 
     var member = await client.Job.Structure.Members.PostAsync(
         new MemberCreate
@@ -83,13 +90,26 @@ try
 
     // == Step 3 — Where the design selects sections from ===========
     // A DESIGN run picks replacement sections from the default section
-    // library nominated in SPACE GASS (Preferences > Default Libraries).
+    // library (SPACE GASS Preferences > Default Libraries), not from the
+    // library the member's current section came from. Set it explicitly
+    // so the result does not depend on this machine's preferences.
+    //
+    // The default libraries are saved to SG.INI and apply to every job,
+    // so remember the current one and put it back at the end.
+    var defaults = await client.Job.Settings.DefaultLibraries.GetAsync();
+    if (!string.Equals(defaults!.Sections, sectionLibrary, StringComparison.OrdinalIgnoreCase))
+    {
+        originalSectionLibrary = defaults.Sections;
+        await client.Job.Settings.DefaultLibraries.PatchAsync(
+            new DefaultLibrariesUpdate { Sections = sectionLibrary });
+        Console.WriteLine($"Default section library: {originalSectionLibrary} -> {sectionLibrary}");
+    }
+
     // Each library is divided into groups (universal beams, columns,
     // channels, ...) and each group has a scan-code letter. A design
     // group's ScanCode lists the letters of the groups the run may
     // select from.
-    var libraries = await client.Job.Settings.DefaultLibraries.GetAsync();
-    var library = await client.Libraries.Sections[libraries!.Sections!].GetAsync();
+    var library = await client.Libraries.Sections[sectionLibrary].GetAsync();
     Console.WriteLine($"Design will select sections from the \"{library!.Name}\" library:");
     foreach (var g in library.Groups!)
     {
@@ -98,19 +118,14 @@ try
 
     // Keep the design within the same family as the current section:
     // find which group the beam's section is in, then take that
-    // group's scan code. Scan codes belong to a library, so look the
-    // section up in the library the design selects from — which may not
-    // be the library the beam's section was loaded from.
+    // group's scan code.
     var match = await client.Libraries.Sections.Search.GetAsync(config =>
     {
         config.QueryParameters.Q = initialSection.Name;
         config.QueryParameters.Library = library.Name;
         config.QueryParameters.Limit = 1;
     });
-    var sectionGroup = match!.Items!.FirstOrDefault()?.Group
-        ?? throw new Exception(
-            $"{initialSection.Name} is not in the default section library \"{library.Name}\". " +
-            "Pick a scan code from the list above instead.");
+    var sectionGroup = match!.Items!.First().Group;
     var scanCode = library.Groups.First(g => g.Name == sectionGroup).ScanCode;
     Console.WriteLine($"  {initialSection.Name} is in \"{sectionGroup}\" - scan code {scanCode}");
     Console.WriteLine();
@@ -353,6 +368,25 @@ catch (Exception ex)
 }
 finally
 {
+    // Put the default section library back the way it was. This needs
+    // the job to still be open, so do it before closing.
+    if (originalSectionLibrary != null)
+    {
+        try
+        {
+            await client.Job.Settings.DefaultLibraries.PatchAsync(
+                new DefaultLibrariesUpdate { Sections = originalSectionLibrary });
+            Console.WriteLine($"Default section library restored to {originalSectionLibrary}.");
+        }
+        catch (Exception restoreEx)
+        {
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Error.WriteLine(
+                $"Warning: could not restore the default section library to {originalSectionLibrary}: {restoreEx.Message}");
+            Console.ResetColor();
+        }
+    }
+
     // Always close the active job so the next run starts clean.
     try
     {

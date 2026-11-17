@@ -83,7 +83,7 @@ finally:
     await client.job.close.post()
 ```
 
-For the full walk-through see the [Quick Start](https://api.spacegass.com/docs/getting-started/quick-start). More examples are in `sdks/csharp/examples/` and `sdks/python/examples/`, or clone the repo and browse.
+For the full walk-through see the [Quick Start](https://api.spacegass.com/docs/quick-start). More examples are in `sdks/csharp/examples/` and `sdks/python/examples/`, or clone the repo and browse.
 
 ## Using with AI assistants
 
@@ -120,7 +120,7 @@ The C# and Python SDKs are auto-generated using [Kiota](https://learn.microsoft.
 
 The generated client code should never be hand-edited — changes come from updating the OpenAPI spec and re-running the generation workflow.
 
-Kiota generates fluent builder chains that use REST terms explicitly — `GetAsync()`, `PostAsync()`, `PatchAsync()`, `DeleteAsync()` — so the SDK reads like the HTTP calls it makes under the hood. See the [Concepts page](https://api.spacegass.com/docs/getting-started/concepts) for how these map to the API.
+Kiota generates fluent builder chains that use REST terms explicitly — `GetAsync()`, `PostAsync()`, `PatchAsync()`, `DeleteAsync()` — so the SDK reads like the HTTP calls it makes under the hood. See the [Concepts page](https://api.spacegass.com/docs/concepts) for how these map to the API.
 
 ## Repository Structure
 

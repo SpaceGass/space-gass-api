@@ -6,7 +6,7 @@ it on a deliberately heavy section, then lets a DESIGN run pick the
 lightest adequate section from the section library:
    1.  Create the client and a new project
    2.  Build the beam on a 610 UB 125
-   3.  Find the section library and scan code the design selects from
+   3.  Set the section library the design selects from, and find the scan code
    4.  Load cases, loads and a ULS combination
    5.  Run a linear static analysis and wait for completion
    6.  Create a steel member design group (optimise for weight)
@@ -15,7 +15,7 @@ lightest adequate section from the section library:
    9.  Start the DESIGN run and poll until it finishes
    10. Report what the run did and which section it chose
    11. Query the check summary for the final section
-   12. Save and close
+   12. Save, restore the default section library, and close
 
 With update_sections=True (the default) the run swaps the member's
 analysis section for the selected size and, as the iteration settings
@@ -25,8 +25,9 @@ that leaves the model unchanged.
 
 Prerequisites:
   - SPACE GASS API running locally (default: http://localhost:34560)
-  - The "Aust300" section library installed (default in SPACE GASS)
+  - The "Aust300" section library installed
   - A licence for the AS 4100 steel member design module
+  - Vertical axis set to Y in SPACE GASS preferences (loads here are in global Y)
 """
 
 import asyncio
@@ -47,6 +48,9 @@ save_file_path = os.path.join(_DESKTOP, "SpaceGass Examples-py", "SteelDesignOpt
 
 DESIGN_CODE = models.DesignCode.As4100
 
+# The section library the beam is built from and the design selects from.
+SECTION_LIBRARY = "Aust300"
+
 TERMINAL = (
     models.RunStatus.Completed,
     models.RunStatus.Failed,
@@ -56,6 +60,9 @@ TERMINAL = (
 
 async def main() -> int:
     client = SpaceGassApiClient.create_client("http://localhost:34560")
+
+    # The default section library before this example changes it (restored at the end).
+    original_section_library = None
 
     try:
         # == Step 1 — Create a new blank project =======================
@@ -78,7 +85,7 @@ async def main() -> int:
             models.MaterialLibraryCreate(library="Aust", name="STEEL"))
 
         initial_section = await client.job.structure.sections.library.post(
-            models.SectionLibraryCreate(library="Aust300", name="610 UB 125", mark="B1"))
+            models.SectionLibraryCreate(library=SECTION_LIBRARY, name="610 UB 125", mark="B1"))
 
         member = await client.job.structure.members.post(
             models.MemberCreate(
@@ -92,28 +99,33 @@ async def main() -> int:
 
         # == Step 3 — Where the design selects sections from ===========
         # A DESIGN run picks replacement sections from the default section
-        # library nominated in SPACE GASS (Preferences > Default Libraries).
+        # library (SPACE GASS Preferences > Default Libraries), not from the
+        # library the member's current section came from. Set it explicitly
+        # so the result does not depend on this machine's preferences.
+        #
+        # The default libraries are saved to SG.INI and apply to every job,
+        # so remember the current one and put it back at the end.
+        defaults = await client.job.settings.default_libraries.get()
+        if (defaults.sections or "").lower() != SECTION_LIBRARY.lower():
+            original_section_library = defaults.sections
+            await client.job.settings.default_libraries.patch(
+                models.DefaultLibrariesUpdate(sections=SECTION_LIBRARY))
+            print(f"Default section library: {original_section_library} -> {SECTION_LIBRARY}")
+
         # Each library is divided into groups (universal beams, columns,
         # channels, ...) and each group has a scan-code letter. A design
         # group's scan_code lists the letters of the groups the run may
         # select from.
-        libraries = await client.job.settings.default_libraries.get()
-        library = await client.libraries.sections.by_library(libraries.sections).get()
+        library = await client.libraries.sections.by_library(SECTION_LIBRARY).get()
         print(f'Design will select sections from the "{library.name}" library:')
         for g in library.groups:
             print(f"  {g.scan_code}  {g.name}")
 
         # Keep the design within the same family as the current section:
         # find which group the beam's section is in, then take that
-        # group's scan code. Scan codes belong to a library, so look the
-        # section up in the library the design selects from — which may not
-        # be the library the beam's section was loaded from.
+        # group's scan code.
         match = await client.libraries.sections.search.get(
             q=initial_section.name, library=library.name, limit=1)
-        if not match.items:
-            raise RuntimeError(
-                f'{initial_section.name} is not in the default section library "{library.name}". '
-                "Pick a scan code from the list above instead.")
         section_group = match.items[0].group
         scan_code = next(g.scan_code for g in library.groups if g.name == section_group)
         print(f'  {initial_section.name} is in "{section_group}" - scan code {scan_code}')
@@ -320,6 +332,17 @@ async def main() -> int:
         return 1
 
     finally:
+        # Put the default section library back the way it was. This needs
+        # the job to still be open, so do it before closing.
+        if original_section_library is not None:
+            try:
+                await client.job.settings.default_libraries.patch(
+                    models.DefaultLibrariesUpdate(sections=original_section_library))
+                print(f"Default section library restored to {original_section_library}.")
+            except Exception as restore_ex:
+                print(f"Warning: could not restore the default section library to "
+                      f"{original_section_library}: {restore_ex}", file=sys.stderr)
+
         # Always close the active job so the next run starts clean.
         try:
             print("Closing project...")

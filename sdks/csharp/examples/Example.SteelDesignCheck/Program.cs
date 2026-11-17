@@ -28,6 +28,7 @@ using SpaceGassApi.Utils;
 //   - SPACE GASS API running locally (default: http://localhost:34560)
 //   - The "Aust300" section library installed (default in SPACE GASS)
 //   - A licence for the AS 4100 steel member design module
+//   - Vertical axis set to Y in SPACE GASS preferences (loads here are in global Y)
 // ---------------------------------------------------------------
 
 // -- Configuration ------------------------------------------------

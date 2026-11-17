@@ -4,6 +4,8 @@ Builds the simply-supported beam from `create_simple_beam`, analyses it, then ru
 
 A check verifies the members' current sections without changing the model. See `steel_design_optimise` for a DESIGN run that selects new sections.
 
+The loads are applied in global Y, so the results assume the vertical axis is set to Y in SPACE GASS preferences.
+
 ## Run it
 
 1. Start the SPACE GASS API service (a licence for the AS 4100 steel member design module is required).

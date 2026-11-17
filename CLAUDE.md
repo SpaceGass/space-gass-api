@@ -44,8 +44,8 @@ Cross-tool agent instructions (install, `CreateClient()`, base URL, async/analys
 
 ### SDK Generation (Kiota)
 
-- `kiota.config.json` at the root defines both C# and Python targets
-- Both point to `build/openapi.kiota.json` — a **transformed copy** of the published spec written by `tools/prepare_spec_for_kiota.py` (git-ignored). See "oneOf and Kiota" below.
+- Kiota generates from `build/openapi.kiota.json` — a **transformed copy** of the published spec written by `tools/prepare_spec_for_kiota.py` (git-ignored), never from `descriptions/openapi.json` directly. See "oneOf and Kiota" below.
+- `kiota.config.json` at the root describes both C# and Python targets and points at the same transformed copy; the `generate-clients` workflow passes the equivalent flags on the command line.
 - The `generate-clients` workflow is **manual trigger** (`workflow_dispatch`) with `--clean-output`
 - C# output: `sdks/csharp/client/SpaceGassApi/Generated/` — never hand-edit
 - Python output: `sdks/python/client/space_gass_api/generated/` — never hand-edit. The `generate-clients` workflow runs `tools/regen_python_inits.py` automatically after Kiota; for local regens, run `python tools/regen_python_inits.py` afterwards.
