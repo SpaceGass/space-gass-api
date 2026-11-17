@@ -3,8 +3,8 @@ Post-regen check for the hand-maintained oneOf helpers.
 
 The helpers under ``sdks/csharp/client/SpaceGassApi/Utils/`` and at the
 ``space_gass_api`` package root carry knowledge that Kiota does not emit:
-the class -> discriminator maps for ``SectionShape`` and the design-code
-settings. A regen can silently change the spec mapping, add shape types, or
+the class -> discriminator map for ``SectionShape``, and the class-name
+convention the generic design-code settings helpers resolve wrappers by. A regen can silently change the spec mapping, add shape types, or
 rename the composed wrapper properties these helpers rely on. This script
 compares them.
 
@@ -68,9 +68,9 @@ def main() -> int:
     for wrapper in ("SectionShapeBuilderCreate", "Section"):
         text = (CS_MODELS / f"{wrapper}.cs").read_text(encoding="utf-8")
         props = set(re.findall(r"public global::SpaceGassApi\.Models\.(\w+)\? (\w+) \{ get; set; \}", text))
-        names = {p for t, p in props if t == p and t in spec_map}
+        names = {t for t, p in props if t in spec_map}
         check(names == set(spec_map),
-              f"C# {wrapper}_shapes wrapper properties no longer match class names: "
+              f"C# {wrapper}_shapes wrapper has no property typed as some shape classes: "
               f"missing={sorted(set(spec_map) - names)}")
 
     from space_gass_api.generated.models.section_shape_builder_create_shapes import (  # noqa: E402
@@ -84,54 +84,74 @@ def main() -> int:
               f"Python {cls.__name__} fields no longer match shape classes: "
               f"missing={sorted(set(spec_map) - set(fields))}")
 
-    # ---- Design-code settings discriminator ------------------------------
-    code_map = schemas["SteelMemberDesignSettingsBase"]["discriminator"]["mapping"]
-    from space_gass_api import steel_design  # noqa: E402
+    # ---- Design-code settings (generic helpers) ---------------------------
+    # The steel member design helpers are generic: they find the wrapper
+    # property/field by the settings class name. Check that convention still
+    # holds for every design code in the spec, in both SDKs.
+    codes = sorted(schemas["SteelMemberDesignSettingsBaseUpdate"]["discriminator"]["mapping"])
+    check(codes == sorted(schemas["SteelMemberDesignSettingsBase"]["discriminator"]["mapping"]),
+          "Design codes differ between SteelMemberDesignSettingsBase and ...BaseUpdate")
 
-    check(set(code_map) == {steel_design.AS4100, steel_design.NZS3404},
-          f"Design codes in spec {sorted(code_map)} differ from steel_design constants — "
-          "add helpers for the new code in steel_design.py and SteelDesignExtensions.cs")
+    cs_steel = (CS_UTILS / "SteelMemberDesignExtensions.cs").read_text(encoding="utf-8")
+    for needed in ("SteelMemberDesignRunCheckRequest_codeSettings", "SteelMemberDesignRunDesignRequest_codeSettings",
+                   "SettingsPatchRequestBody", "GetAsSettingsGetResponseAsync", "PatchAsSettingsPatchResponseAsync"):
+        check(needed in cs_steel, f"SteelMemberDesignExtensions.cs no longer references {needed}")
 
-    cs_steel = (CS_UTILS / "SteelDesignExtensions.cs").read_text(encoding="utf-8")
-    for code in code_map:
-        check(f'"{code}"' in cs_steel, f"SteelDesignExtensions.cs has no constant for design code {code}")
+    cs_wrappers = {
+        "SteelMemberDesignRunCheckRequest": (CS_MODELS / "SteelMemberDesignRunCheckRequest.cs", "Update"),
+        "SteelMemberDesignRunDesignRequest": (CS_MODELS / "SteelMemberDesignRunDesignRequest.cs", "Update"),
+        "SettingsRequestBuilder (patch body)": (
+            CS_MODELS.parent / "Job" / "Design" / "SteelMember" / "Item" / "Settings" / "SettingsRequestBuilder.cs", "Update"),
+        "SettingsRequestBuilder (responses)": (
+            CS_MODELS.parent / "Job" / "Design" / "SteelMember" / "Item" / "Settings" / "SettingsRequestBuilder.cs", ""),
+    }
+    for label, (path, suffix) in cs_wrappers.items():
+        text = path.read_text(encoding="utf-8")
+        missing = [c for c in codes
+                   if not re.search(rf"\.SteelMemberDesignSettings{c}{suffix}\? \w+ \{{ get; set; \}}", text)]
+        check(not missing, f"C# {label}: no wrapper property typed as the settings class for {missing}")
 
-    # Wrapper classes the steel helpers rely on still exist with the expected properties.
-    for wrapper, prop in (
-        ("SteelDesignRunCheckRequest", "SteelMemberDesignSettingsAS4100Update"),
-        ("SteelDesignRunDesignRequest", "SteelMemberDesignSettingsAS4100Update"),
-    ):
-        text = (CS_MODELS / f"{wrapper}.cs").read_text(encoding="utf-8")
-        check(f"{prop}? {prop} {{ get; set; }}" in text,
-              f"C# {wrapper}_codeSettings wrapper no longer has {prop}")
-
-    from space_gass_api.generated.models.steel_design_run_check_request_code_settings import (  # noqa: E402
-        SteelDesignRunCheckRequest_codeSettings,
-    )
-    import dataclasses  # noqa: E402
-
-    names = {f.name for f in dataclasses.fields(SteelDesignRunCheckRequest_codeSettings)}
-    check({"steel_member_design_settings_a_s4100_update", "steel_member_design_settings_n_z_s3404_update"} <= names,
-          f"Python SteelDesignRunCheckRequest_codeSettings fields changed: {sorted(names)}")
-
-    # ---- Smoke: the helpers still round-trip --------------------------------
     import space_gass_api.models as models  # noqa: E402
+    from space_gass_api import steel_design  # noqa: E402
+    from space_gass_api.generated.job.design.steel_member.item.settings.settings_get_response import (  # noqa: E402
+        SettingsGetResponse,
+    )
+    from space_gass_api.generated.job.design.steel_member.item.settings.settings_patch_request_body import (  # noqa: E402
+        SettingsPatchRequestBody,
+    )
 
+    for c in codes:
+        update_cls = getattr(models, f"SteelMemberDesignSettings{c}Update", None)
+        settings_cls = getattr(models, f"SteelMemberDesignSettings{c}", None)
+        if update_cls is None or settings_cls is None:
+            check(False, f"Python models have no SteelMemberDesignSettings{c}[Update] class")
+            continue
+        try:
+            steel_design.run_check_request(code_settings=update_cls())
+            steel_design.run_design_request(code_settings=update_cls())
+            body = steel_design.code_settings_body(update_cls())
+            check(isinstance(body, SettingsPatchRequestBody), f"code_settings_body failed for {c}")
+        except TypeError as ex:
+            check(False, f"steel_design helpers cannot wrap {c}: {ex}")
+        check(steel_design._wrapper_field(SettingsGetResponse, settings_cls) is not None,
+              f"Python SettingsGetResponse has no field for SteelMemberDesignSettings{c}")
+
+    design_code_enum = {e.value for e in models.DesignCode}
+    check(design_code_enum <= set(codes),
+          f"DesignCode enum has values with no settings class: {sorted(design_code_enum - set(codes))}")
+
+    # ---- Smoke: the shape helpers still round-trip ---------------------------
     wrapped = shape_builder.shapes(models.LibraryShape(library="x", name="y"), models.RectangularBarShape(d=1, b=2))
     back = shape_builder.shapes_of(models.SectionShapeBuilderCreate(name="t", shapes=wrapped))
     check([s.shape_type for s in back] == ["Library", "RectangularBar"], "shape_builder round-trip failed")
-
-    req = steel_design.run_check_request(code_settings=models.SteelMemberDesignSettingsAS4100Update())
-    check(req.code_settings.steel_member_design_settings_a_s4100_update.code == steel_design.AS4100,
-          "steel_design.run_check_request did not fill the code discriminator")
 
     if problems:
         print("Helper check FAILED:")
         for p in problems:
             print("  -", p)
         return 1
-    print("Helper check passed: shape map (%d types), wrapper fields, design codes %s."
-          % (len(spec_map), sorted(code_map)))
+    print("Helper check passed: shape map (%d types), wrapper fields, %d design codes."
+          % (len(spec_map), len(codes)))
     return 0
 
 

@@ -107,8 +107,8 @@ namespace SpaceGassApi
         };
 
         /// <summary>
-        /// Wraps a shape in a Kiota composed-type wrapper. The wrapper's property for
-        /// the shape is the one named after the shape's class (Kiota's convention).
+        /// Wraps a shape in a Kiota composed-type wrapper, in the wrapper property
+        /// whose type is the shape's class.
         /// Fills in <see cref="SectionShape.ShapeType"/> when the caller didn't.
         /// </summary>
         public static TWrapper Wrap<TWrapper>(SectionShape shape) where TWrapper : IComposedTypeWrapper, new()
@@ -120,7 +120,8 @@ namespace SpaceGassApi
 
             shape.ShapeType ??= discriminator;
 
-            var property = typeof(TWrapper).GetProperty(type.Name, BindingFlags.Public | BindingFlags.Instance)
+            var property = typeof(TWrapper).GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .FirstOrDefault(p => p.PropertyType == type)
                 ?? throw new InvalidOperationException($"{typeof(TWrapper).Name} has no {type.Name} property.");
 
             var wrapper = new TWrapper();

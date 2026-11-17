@@ -41,12 +41,12 @@ with winreg.OpenKey(winreg.HKEY_CURRENT_USER,
 
 save_file_path = os.path.join(_DESKTOP, "SpaceGass Examples-py", "SteelDesignCheck.sg")
 
-DESIGN_CODE = steel_design.AS4100      # route segment: steel-design/{code}/...
+DESIGN_CODE = models.DesignCode.As4100
 
 TERMINAL = (
-    models.AnalysisRunStatus.Completed,
-    models.AnalysisRunStatus.Failed,
-    models.AnalysisRunStatus.Cancelled,
+    models.RunStatus.Completed,
+    models.RunStatus.Failed,
+    models.RunStatus.Cancelled,
 )
 
 
@@ -157,7 +157,7 @@ async def main() -> int:
                 break
 
         print(f"  Analysis {final_analysis.status.value} in {final_analysis.elapsed_time}")
-        if final_analysis.status != models.AnalysisRunStatus.Completed:
+        if final_analysis.status != models.RunStatus.Completed:
             raise RuntimeError(f"Analysis did not complete: {final_analysis.error_message}")
         print()
 
@@ -165,11 +165,11 @@ async def main() -> int:
         # Does not need an open job. Each entry says whether this seat is
         # licensed for the code and which edition a run is completed under.
         print("Steel member design codes:")
-        codes = await client.job.design.steel_design.codes.get()
+        codes = await client.job.design.steel_member.codes.get()
         for c in codes:
-            print(f"  {str(c.code):8} {c.edition:16} licensed: {c.is_licensed}")
+            print(f"  {c.code.value:22} {c.label:28} licensed: {c.is_licensed}")
 
-        as4100 = next((c for c in codes if c.code == models.SteelDesignCode.As4100), None)
+        as4100 = next((c for c in codes if c.code == DESIGN_CODE), None)
         if not as4100 or not as4100.is_licensed:
             raise RuntimeError("This seat is not licensed for AS 4100 steel member design.")
         print()
@@ -207,7 +207,7 @@ async def main() -> int:
         # groups and load cases to design/check, section availability, etc.
         # Settings are saved with the job.
         print("Configuring general design settings...")
-        settings = await client.job.design.steel_design.settings.patch(
+        settings = await client.job.design.steel_member.settings.patch(
             models.SteelMemberDesignGeneralSettingsUpdate(
                 groups=to_filter_string([group.id]),
                 load_cases=to_filter_string([uls_case.id]),
@@ -219,12 +219,12 @@ async def main() -> int:
 
         # == Step 8 — AS 4100 code-specific settings ===================
         # Each design code has its own settings object (AS 4100 and NZS 3404
-        # differ). They can be PATCHed at steel-design/{code}/settings, or —
+        # differ). They can be PATCHed at steel-member/{code}/settings, or —
         # as here — passed as a per-run override on the run request; either
         # way they are stored with the job. The steel_design helpers take
-        # the code's own settings object and fill in the code discriminator.
+        # the code's own settings object directly.
         print("Preparing AS 4100 settings...")
-        as4100_settings = models.SteelMemberDesignSettingsAS4100Update(
+        as4100_settings = models.SteelMemberDesignSettingsAs4100Update(
             slenderness_ratio_check=True,
             use_kt_factor_for_tension=True,
         )
@@ -235,8 +235,8 @@ async def main() -> int:
         # The body is optional; settings supplied here are written to the
         # job's stored settings before the run starts. Analysis and design
         # runs share one queue, so queue_position may be > 1.
-        print(f"Starting {DESIGN_CODE} design CHECK run...")
-        design_run = await client.job.design.steel_design.by_code(DESIGN_CODE).run_check.post(
+        print(f"Starting {DESIGN_CODE.value} design CHECK run...")
+        design_run = await steel_design.for_code(client, DESIGN_CODE).run_check.post(
             steel_design.run_check_request(code_settings=as4100_settings))
         print(f"  Run {design_run.run_id} {design_run.status.value}; waiting for completion...")
 
@@ -247,28 +247,28 @@ async def main() -> int:
                 break
 
         print(f"  Design run {final_design.status.value} in {final_design.elapsed_time}")
-        if final_design.status != models.AnalysisRunStatus.Completed:
+        if final_design.status != models.RunStatus.Completed:
             raise RuntimeError(f"Design run did not complete: {final_design.error_message}")
 
         # Once Completed the run carries its result summary.
         print(f"  Mode: {final_design.mode.value}, code: {final_design.code.value}")
-        print(f"  Members checked: {final_design.members_checked}, failed: {final_design.members_failed}")
+        print(f"  Groups checked: {final_design.checked_count}, passed: {final_design.passed_count}, failed: {final_design.failed_count}")
         for warning in final_design.warnings or []:
             print(f"  Warning: {warning}")
         print()
 
         # == Step 10 — Query the check summary =========================
-        # One row per member. load_factor is the capacity ratio the member
-        # achieved; flag and failure describe the governing check, and
-        # critical_case is the load case that governed.
+        # One row per design group. load_factor is the capacity ratio the
+        # group achieved; status and failure describe the governing check,
+        # and critical_case is the load case that governed.
         print("Steel member check summary:")
         summary = await client.job.query.design.steel_member.check_summary.get(
-            members=to_filter_string([member.id]),
+            steel_members=to_filter_string([group.id]),
         )
 
         for row in summary.results or []:
-            print(f"  Member {row.member}: {row.section}")
-            print(f"    Load factor:   {row.load_factor:.3f}  (flag: {row.flag})")
+            print(f"  Design group {row.steel_member}: {row.section}")
+            print(f"    Load factor:   {row.load_factor:.3f}  ({row.status.value})")
             print(f"    Critical case: {row.critical_case}")
             print(f"    Failure mode:  {row.failure}")
             print(f"    Yield stress:  {row.yield_}  Segment length: {row.segment_length}")

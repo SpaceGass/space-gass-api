@@ -23,10 +23,10 @@ Build the change matrix that drives every later edit:
 5. **Verify the regen committed cleanly** — `dotnet build sdks/csharp/examples/SpaceGassApi.Examples.sln` against the SDK alone (no example edits yet). If it fails with `CS0234: namespace 'X' does not exist`, the regen committed an inconsistent tree (a builder references a folder that wasn't generated/committed). Fix by re-running `kiota generate` (see [CLAUDE.md](../../../CLAUDE.md) for the full command set, or `.github/workflows/generate-clients.yml`). Don't hand-edit `Generated/`.
 
 6. **Hand-maintained helpers still fit the regen** — the oneOf helpers outside `Generated/` / `generated/` encode things Kiota doesn't emit (class→discriminator maps, composed-wrapper property names). Two checks, both must pass before touching examples:
-   - `dotnet build sdks/csharp/client/SpaceGassApi/SpaceGassApi.csproj` — catches renamed wrapper/model types referenced by `Utils/SteelDesignExtensions.cs` and `Utils/SectionShapeExtensions.cs` (partial classes on Kiota's composed wrappers; a rename there is a compile error, not a silent break).
-   - `python tools/check_helpers.py` — compares the `SectionShape` and design-code discriminator maps in both SDKs against the spec, verifies the composed-wrapper property/field names the helpers resolve by reflection still match the shape class names, and round-trips `shape_builder` / `steel_design`. On failure it lists what drifted: a new shape type → add it to both maps; a new design code → add constants + typed Get/Patch helpers in both SDKs; a wrapper rename → update the helper.
+   - `dotnet build sdks/csharp/client/SpaceGassApi/SpaceGassApi.csproj` — catches renamed wrapper/model types referenced by `Utils/SteelMemberDesignExtensions.cs` and `Utils/SectionShapeExtensions.cs` (partial classes on Kiota's composed wrappers; a rename there is a compile error, not a silent break).
+   - `python tools/check_helpers.py` — compares the `SectionShape` discriminator map in both SDKs against the spec, verifies every shape class and every design code's settings class has a composed-wrapper property/field typed as that class (the helpers resolve wrappers by type), and round-trips `shape_builder` / `steel_design` for every design code. On failure it lists what drifted: a new shape type → add it to both maps; a wrapper or base-class rename → update the helper. New design codes need no helper change — the steel design helpers are generic over `SteelMemberDesignSettingsBase[Update]`.
 
-   Expected: `Helper check passed: shape map (41 types), wrapper fields, design codes ['As4100', 'Nzs3404'].` (41 at build `14.51.1`; a higher count just means new shape types were added to both maps.)
+   Expected: `Helper check passed: shape map (41 types), wrapper fields, 15 design codes.` (counts at build `14.51.12`; higher counts just mean new shape types or design codes.)
 
 Output of this phase: a written change matrix you can refer back to.
 
@@ -38,7 +38,7 @@ Files: every `Example.*/Program.cs` under `sdks/csharp/examples/`. Apply the cha
 - Request body type renames (e.g. `SectionCreate` → `SectionUserCreate`).
 - Filter query parameters: collection endpoints now take `string?` properties named `Cases`, `Members`, `Modes`, `Nodes` in **SG list format** (`"1,3-7,10"`) instead of `int[]` arrays. Compose with `string.Join(",", ids)` for arbitrary sets.
 - Indexer parameter type: `[int]` typed indexer is preferred; the legacy `[string]` indexer is marked `[Obsolete]`.
-- oneOf bodies (steel design code settings, shape-builder shapes): examples use the `Utils/` helpers (implicit conversions, `GetAs4100Async`, `GetShapes()`), never Kiota's composed wrappers directly. If Phase 1 step 6 flagged drift, fix the helper, not the example.
+- oneOf bodies (steel design code settings, shape-builder shapes): examples use the `Utils/` helpers (implicit conversions, `SteelMember.ForCode(...)`, `Settings.GetAsync<T>()`, `GetShapes()`), never Kiota's composed wrappers directly. If Phase 1 step 6 flagged drift, fix the helper, not the example.
 
 Verify: `dotnet build sdks/csharp/examples/SpaceGassApi.Examples.sln --nologo`. **Build must be 0 errors before moving on.**
 
@@ -52,7 +52,7 @@ Files: every entry-point `.py` under `sdks/python/examples/*/`. Mirror Phase 2 w
 - `keys=[...]` → `nodes="1,2,3"` for reactions filters
 - `from space_gass_api.models.section_create import SectionCreate` → `from space_gass_api.models.section_user_create import SectionUserCreate`
 - Drop list arguments to `case_`/`member`/`mode` filter setattrs in favour of `cases`/`members`/`modes` with SG-list strings
-- oneOf bodies: examples use `steel_design.run_check_request(...)` / `shape_builder.shapes(...)` etc. from the package root, never the generated `*_codeSettings` / `*_shapes` wrappers directly
+- oneOf bodies: examples use `steel_design.for_code(...)` / `steel_design.run_check_request(...)` / `shape_builder.shapes(...)` etc. from the package root, never the generated `*_codeSettings` / `*_shapes` wrappers directly
 
 Verify: `python -m py_compile <each entry-point>` (Python interpreter must be on PATH; if not, do a careful visual diff and rely on the C# build as a structural backstop). The two SDKs share the same shape, so anything that landed cleanly in C# almost always lands cleanly in Python.
 

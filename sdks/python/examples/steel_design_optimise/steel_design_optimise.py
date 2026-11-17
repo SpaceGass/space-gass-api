@@ -45,12 +45,12 @@ with winreg.OpenKey(winreg.HKEY_CURRENT_USER,
 
 save_file_path = os.path.join(_DESKTOP, "SpaceGass Examples-py", "SteelDesignOptimise.sg")
 
-DESIGN_CODE = steel_design.AS4100      # route segment: steel-design/{code}/...
+DESIGN_CODE = models.DesignCode.As4100
 
 TERMINAL = (
-    models.AnalysisRunStatus.Completed,
-    models.AnalysisRunStatus.Failed,
-    models.AnalysisRunStatus.Cancelled,
+    models.RunStatus.Completed,
+    models.RunStatus.Failed,
+    models.RunStatus.Cancelled,
 )
 
 
@@ -170,7 +170,7 @@ async def main() -> int:
                 break
 
         print(f"  Analysis {final_analysis.status.value} in {final_analysis.elapsed_time}")
-        if final_analysis.status != models.AnalysisRunStatus.Completed:
+        if final_analysis.status != models.RunStatus.Completed:
             raise RuntimeError(f"Analysis did not complete: {final_analysis.error_message}")
         print()
 
@@ -203,7 +203,7 @@ async def main() -> int:
         # run designs: which design groups, against which load cases, and —
         # via sections — only members on those section property numbers.
         print("Configuring general design settings...")
-        settings = await client.job.design.steel_design.settings.patch(
+        settings = await client.job.design.steel_member.settings.patch(
             models.SteelMemberDesignGeneralSettingsUpdate(
                 groups=to_filter_string([group.id]),
                 load_cases=to_filter_string([uls_case.id]),
@@ -215,25 +215,25 @@ async def main() -> int:
         # == Step 8 — Design iteration settings ========================
         # What happens after the run selects sections: re-run the static
         # analysis with the new sections, re-run the design, and keep
-        # iterating (up to iterations times) until the design settles.
+        # iterating (up to max_iterations times) until the design settles.
         print("Configuring design iteration settings...")
-        iteration = await client.job.design.steel_design.design_iteration_settings.patch(
+        iteration = await client.job.design.steel_member.design_iteration_settings.patch(
             models.SteelMemberDesignIterationSettingsUpdate(
                 rerun_static_analysis=True,
-                rerun_steel_member_design=True,
+                rerun_design=True,
                 auto_iterate=True,
-                iterations=5,
+                max_iterations=5,
             ))
         print(f"  Re-run static: {iteration.rerun_static_analysis}, "
-              f"auto-iterate: {iteration.auto_iterate}, max iterations: {iteration.iterations}")
+              f"auto-iterate: {iteration.auto_iterate}, max iterations: {iteration.max_iterations}")
         print()
 
         # == Step 9 — Start the DESIGN run and poll ====================
         # update_sections=True applies the selected sections to the model.
         # Everything in the body is optional — the settings PATCHed above
         # could equally have been passed here as per-run overrides.
-        print(f"Starting {DESIGN_CODE} DESIGN run...")
-        design_run = await client.job.design.steel_design.by_code(DESIGN_CODE).run_design.post(
+        print(f"Starting {DESIGN_CODE.value} DESIGN run...")
+        design_run = await steel_design.for_code(client, DESIGN_CODE).run_design.post(
             steel_design.run_design_request(update_sections=True))
         print(f"  Run {design_run.run_id} {design_run.status.value}; waiting for completion...")
 
@@ -244,7 +244,7 @@ async def main() -> int:
                 break
 
         print(f"  Design run {final_design.status.value} in {final_design.elapsed_time}")
-        if final_design.status != models.AnalysisRunStatus.Completed:
+        if final_design.status != models.RunStatus.Completed:
             raise RuntimeError(f"Design run did not complete: {final_design.error_message}")
         print()
 
@@ -253,7 +253,7 @@ async def main() -> int:
         print(f"  Iterations:       {final_design.iterations}")
         print(f"  Sections updated: {final_design.sections_updated}")
         print(f"  Analysis re-run:  {final_design.analysis_rerun}")
-        print(f"  Members checked:  {final_design.members_checked}, failed: {final_design.members_failed}")
+        print(f"  Groups checked:   {final_design.checked_count}, passed: {final_design.passed_count}, failed: {final_design.failed_count}")
         for warning in final_design.warnings or []:
             print(f"  Warning: {warning}")
 
@@ -266,12 +266,12 @@ async def main() -> int:
         # == Step 11 — Check summary for the final section =============
         print("Steel member check summary:")
         summary = await client.job.query.design.steel_member.check_summary.get(
-            members=to_filter_string([member.id]),
+            steel_members=to_filter_string([group.id]),
         )
 
         for row in summary.results or []:
-            print(f"  Member {row.member}: {row.section}")
-            print(f"    Load factor:   {row.load_factor:.3f}  (flag: {row.flag})")
+            print(f"  Design group {row.steel_member}: {row.section}")
+            print(f"    Load factor:   {row.load_factor:.3f}  ({row.status.value})")
             print(f"    Critical case: {row.critical_case}")
             print(f"    Failure mode:  {row.failure}")
         print()

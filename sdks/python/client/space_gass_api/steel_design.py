@@ -1,122 +1,149 @@
 """
-Hand-maintained helpers for the steel member design surface — parity with
-the C# SDK's ``Utils/SteelDesignExtensions.cs``.
+Hand-maintained helpers for steel member design
+(``/job/design/steel-member/...``) — parity with the C# SDK's
+``Utils/SteelMemberDesignExtensions.cs``.
 
-The per-code settings (AS 4100, NZS 3404, ...) are a oneOf in the spec, so
-Kiota wraps them in composed types — one per place they appear:
+Every design code (AS 4100, NZS 3404, Eurocode 3, AISC, ...) has its own
+settings object. The spec models "one of these" as a oneOf, so Kiota wraps
+them in composed types with one attribute per code:
 
-- ``SteelDesignRunCheckRequest_codeSettings``  (``run-check`` body)
-- ``SteelDesignRunDesignRequest_codeSettings`` (``run-design`` body)
+- ``SteelMemberDesignRunCheckRequest_codeSettings``  (``run-check`` body)
+- ``SteelMemberDesignRunDesignRequest_codeSettings`` (``run-design`` body)
 - ``SettingsPatchRequestBody`` / ``SettingsGetResponse`` (``{code}/settings``)
 
-Raw usage means nesting the code's update object inside the wrapper and
-repeating the discriminator (``code="As4100"``). These helpers take the
-code's own settings object directly and fill the discriminator in::
+All the per-code classes derive from ``SteelMemberDesignSettingsBase`` /
+``SteelMemberDesignSettingsBaseUpdate``, so these helpers are generic — they
+work for every code, including ones added in later builds::
 
     from space_gass_api import steel_design
     import space_gass_api.models as models
 
-    run = await client.job.design.steel_design.by_code(steel_design.AS4100).run_check.post(
-        steel_design.run_check_request(
-            code_settings=models.SteelMemberDesignSettingsAS4100Update(slenderness_ratio_check=True)))
+    as4100 = steel_design.for_code(client, models.DesignCode.As4100)
 
-    settings = await steel_design.patch_as4100(
-        client.job.design.steel_design.by_code(steel_design.AS4100).settings,
-        models.SteelMemberDesignSettingsAS4100Update(use_kt_factor_for_tension=True))
+    # Pass the code's own settings object straight in
+    run = await as4100.run_check.post(steel_design.run_check_request(
+        code_settings=models.SteelMemberDesignSettingsAs4100Update(slenderness_ratio_check=True)))
+
+    # Read / update the stored settings, typed
+    settings = await steel_design.get_settings(as4100, models.SteelMemberDesignSettingsAs4100)
+    settings = await steel_design.patch_settings(
+        as4100, models.SteelMemberDesignSettingsAs4100Update(use_kt_factor_for_tension=True),
+        models.SteelMemberDesignSettingsAs4100)
+
+The ``code`` discriminator never needs setting: the API defaults it to the
+route's design code.
 
 Lives outside ``generated/`` so it survives Kiota's ``--clean-output``.
 """
 
 from __future__ import annotations
 
-from typing import Optional, Union
+import dataclasses
+import re
+from typing import TYPE_CHECKING, Optional, TypeVar, Union, overload
 
-from .generated.job.design.steel_design.item.settings.settings_patch_request_body import (
+from .generated.job.design.steel_member.item.settings.settings_patch_request_body import (
     SettingsPatchRequestBody,
 )
-from .generated.job.design.steel_design.item.settings.settings_request_builder import (
-    SettingsRequestBuilder,
+from .generated.job.design.steel_member.item.with_code_item_request_builder import (
+    WithCodeItemRequestBuilder,
 )
-from .generated.models.steel_design_run_check_request import SteelDesignRunCheckRequest
-from .generated.models.steel_design_run_check_request_code_settings import (
-    SteelDesignRunCheckRequest_codeSettings,
-)
-from .generated.models.steel_design_run_design_request import SteelDesignRunDesignRequest
-from .generated.models.steel_design_run_design_request_code_settings import (
-    SteelDesignRunDesignRequest_codeSettings,
-)
+from .generated.models.design_code import DesignCode
 from .generated.models.steel_member_design_general_settings_update import (
     SteelMemberDesignGeneralSettingsUpdate,
 )
 from .generated.models.steel_member_design_iteration_settings_update import (
     SteelMemberDesignIterationSettingsUpdate,
 )
-from .generated.models.steel_member_design_settings_a_s4100 import SteelMemberDesignSettingsAS4100
-from .generated.models.steel_member_design_settings_a_s4100_update import (
-    SteelMemberDesignSettingsAS4100Update,
+from .generated.models.steel_member_design_run_check_request import SteelMemberDesignRunCheckRequest
+from .generated.models.steel_member_design_run_check_request_code_settings import (
+    SteelMemberDesignRunCheckRequest_codeSettings,
 )
-from .generated.models.steel_member_design_settings_n_z_s3404 import SteelMemberDesignSettingsNZS3404
-from .generated.models.steel_member_design_settings_n_z_s3404_update import (
-    SteelMemberDesignSettingsNZS3404Update,
+from .generated.models.steel_member_design_run_design_request import SteelMemberDesignRunDesignRequest
+from .generated.models.steel_member_design_run_design_request_code_settings import (
+    SteelMemberDesignRunDesignRequest_codeSettings,
+)
+from .generated.models.steel_member_design_settings_base import SteelMemberDesignSettingsBase
+from .generated.models.steel_member_design_settings_base_update import (
+    SteelMemberDesignSettingsBaseUpdate,
 )
 
-#: Route segment for AS 4100 — ``client.job.design.steel_design.by_code(AS4100)``.
-AS4100 = "As4100"
-#: Route segment for NZS 3404 — ``client.job.design.steel_design.by_code(NZS3404)``.
-NZS3404 = "Nzs3404"
-
-CodeSettingsUpdate = Union[SteelMemberDesignSettingsAS4100Update, SteelMemberDesignSettingsNZS3404Update]
+if TYPE_CHECKING:
+    from .space_gass_api_client import SpaceGassApiClient
 
 __all__ = [
-    "AS4100",
-    "NZS3404",
-    "CodeSettingsUpdate",
     "code_settings_body",
-    "get_as4100",
-    "get_nzs3404",
-    "patch_as4100",
-    "patch_nzs3404",
+    "for_code",
+    "get_settings",
+    "patch_settings",
     "run_check_request",
     "run_design_request",
 ]
 
+TSettings = TypeVar("TSettings", bound=SteelMemberDesignSettingsBase)
 
-def _with_code(update: CodeSettingsUpdate) -> CodeSettingsUpdate:
-    """Fill in the discriminator when the caller didn't — it is fixed per type."""
-    if update.code is None:
-        update.code = (
-            AS4100 if isinstance(update, SteelMemberDesignSettingsAS4100Update) else NZS3404
-        )
-    return update
+_OPTIONAL = re.compile(r"Optional\[(\w+)\]")
 
 
-def _wrap(wrapper_cls, update: Optional[CodeSettingsUpdate]):
+def _wrapper_field(wrapper_cls: type, value_cls: type) -> Optional[str]:
+    """The wrapper attribute typed as ``Optional[<value class>]`` (Kiota's convention)."""
+    for f in dataclasses.fields(wrapper_cls):
+        m = _OPTIONAL.fullmatch(str(f.type))
+        if m and m.group(1) == value_cls.__name__:
+            return f.name
+    return None
+
+
+def _wrap(wrapper_cls, update: Optional[SteelMemberDesignSettingsBaseUpdate]):
     if update is None:
         return None
-    update = _with_code(update)
-    if isinstance(update, SteelMemberDesignSettingsAS4100Update):
-        return wrapper_cls(steel_member_design_settings_a_s4100_update=update)
-    if isinstance(update, SteelMemberDesignSettingsNZS3404Update):
-        return wrapper_cls(steel_member_design_settings_n_z_s3404_update=update)
-    raise TypeError(
-        "code_settings must be a SteelMemberDesignSettingsAS4100Update or "
-        f"SteelMemberDesignSettingsNZS3404Update, not {type(update).__name__}"
-    )
+    attr = _wrapper_field(wrapper_cls, type(update))
+    if attr is None:
+        raise TypeError(
+            f"{type(update).__name__} is not a design code settings type {wrapper_cls.__name__} "
+            "accepts. Use the code's own class, e.g. SteelMemberDesignSettingsAs4100Update."
+        )
+    return wrapper_cls(**{attr: update})
+
+
+def _unwrap(wrapper) -> Optional[SteelMemberDesignSettingsBase]:
+    if wrapper is None:
+        return None
+    for f in dataclasses.fields(wrapper):
+        value = getattr(wrapper, f.name, None)
+        if isinstance(value, SteelMemberDesignSettingsBase):
+            return value
+    return None
+
+
+def _expect(value: Optional[SteelMemberDesignSettingsBase], expect: Optional[type]):
+    if value is not None and expect is not None and not isinstance(value, expect):
+        raise TypeError(f"The design code returned {type(value).__name__}, not {expect.__name__}.")
+    return value
+
+
+def for_code(client: "SpaceGassApiClient", code: Union[DesignCode, str]) -> WithCodeItemRequestBuilder:
+    """The endpoints for one design code — ``run_check``, ``run_design``, ``settings``.
+
+    Equivalent to ``client.job.design.steel_member.by_code("As4100")`` but takes the
+    ``DesignCode`` enum.
+    """
+    return client.job.design.steel_member.by_code(code.value if isinstance(code, DesignCode) else code)
 
 
 def run_check_request(
     *,
     settings: Optional[SteelMemberDesignGeneralSettingsUpdate] = None,
-    code_settings: Optional[CodeSettingsUpdate] = None,
-) -> SteelDesignRunCheckRequest:
-    """Body for ``POST /job/design/steel-design/{code}/run-check``.
+    code_settings: Optional[SteelMemberDesignSettingsBaseUpdate] = None,
+) -> SteelMemberDesignRunCheckRequest:
+    """Body for ``POST /job/design/steel-member/{code}/run-check``.
 
-    ``code_settings`` is the design code's own update object; it is wrapped
-    in Kiota's ``SteelDesignRunCheckRequest_codeSettings`` for you.
+    ``code_settings`` is the design code's own update object (e.g.
+    ``SteelMemberDesignSettingsAs4100Update``); Kiota's wrapper is built for you.
     """
-    return SteelDesignRunCheckRequest(
+    return SteelMemberDesignRunCheckRequest(
         settings=settings,
-        code_settings=_wrap(SteelDesignRunCheckRequest_codeSettings, code_settings),
+        code_settings=_wrap(SteelMemberDesignRunCheckRequest_codeSettings, code_settings),
     )
 
 
@@ -125,49 +152,52 @@ def run_design_request(
     update_sections: Optional[bool] = None,
     design_iteration_settings: Optional[SteelMemberDesignIterationSettingsUpdate] = None,
     settings: Optional[SteelMemberDesignGeneralSettingsUpdate] = None,
-    code_settings: Optional[CodeSettingsUpdate] = None,
-) -> SteelDesignRunDesignRequest:
-    """Body for ``POST /job/design/steel-design/{code}/run-design``.
+    code_settings: Optional[SteelMemberDesignSettingsBaseUpdate] = None,
+) -> SteelMemberDesignRunDesignRequest:
+    """Body for ``POST /job/design/steel-member/{code}/run-design``.
 
-    ``code_settings`` is the design code's own update object; it is wrapped
-    in Kiota's ``SteelDesignRunDesignRequest_codeSettings`` for you.
+    ``code_settings`` is the design code's own update object (e.g.
+    ``SteelMemberDesignSettingsAs4100Update``); Kiota's wrapper is built for you.
     """
-    return SteelDesignRunDesignRequest(
+    return SteelMemberDesignRunDesignRequest(
         update_sections=update_sections,
         design_iteration_settings=design_iteration_settings,
         settings=settings,
-        code_settings=_wrap(SteelDesignRunDesignRequest_codeSettings, code_settings),
+        code_settings=_wrap(SteelMemberDesignRunDesignRequest_codeSettings, code_settings),
     )
 
 
-def code_settings_body(update: CodeSettingsUpdate) -> SettingsPatchRequestBody:
-    """Body for ``PATCH /job/design/steel-design/{code}/settings`` from the code's own update object."""
+def code_settings_body(update: SteelMemberDesignSettingsBaseUpdate) -> SettingsPatchRequestBody:
+    """Body for ``PATCH /job/design/steel-member/{code}/settings`` from the code's own update object."""
     return _wrap(SettingsPatchRequestBody, update)
 
 
-async def get_as4100(settings: SettingsRequestBuilder) -> Optional[SteelMemberDesignSettingsAS4100]:
-    """Reads the AS 4100 settings from ``client.job.design.steel_design.by_code(AS4100).settings``."""
-    response = await settings.get()
-    return response.steel_member_design_settings_a_s4100 if response else None
+@overload
+async def get_settings(code: WithCodeItemRequestBuilder) -> Optional[SteelMemberDesignSettingsBase]: ...
+@overload
+async def get_settings(code: WithCodeItemRequestBuilder, expect: type[TSettings]) -> Optional[TSettings]: ...
 
 
-async def get_nzs3404(settings: SettingsRequestBuilder) -> Optional[SteelMemberDesignSettingsNZS3404]:
-    """Reads the NZS 3404 settings from ``client.job.design.steel_design.by_code(NZS3404).settings``."""
-    response = await settings.get()
-    return response.steel_member_design_settings_n_z_s3404 if response else None
+async def get_settings(code, expect=None):
+    """Reads a design code's stored settings as its own object.
+
+    ``code`` is ``for_code(client, DesignCode.As4100)``. Pass ``expect`` (e.g.
+    ``models.SteelMemberDesignSettingsAs4100``) to get a typed result; a different
+    type coming back raises ``TypeError``.
+    """
+    return _expect(_unwrap(await code.settings.get()), expect)
 
 
-async def patch_as4100(
-    settings: SettingsRequestBuilder, update: SteelMemberDesignSettingsAS4100Update
-) -> Optional[SteelMemberDesignSettingsAS4100]:
-    """Partially updates the AS 4100 settings and returns the updated settings."""
-    response = await settings.patch(code_settings_body(update))
-    return response.steel_member_design_settings_a_s4100 if response else None
+@overload
+async def patch_settings(
+    code: WithCodeItemRequestBuilder, update: SteelMemberDesignSettingsBaseUpdate
+) -> Optional[SteelMemberDesignSettingsBase]: ...
+@overload
+async def patch_settings(
+    code: WithCodeItemRequestBuilder, update: SteelMemberDesignSettingsBaseUpdate, expect: type[TSettings]
+) -> Optional[TSettings]: ...
 
 
-async def patch_nzs3404(
-    settings: SettingsRequestBuilder, update: SteelMemberDesignSettingsNZS3404Update
-) -> Optional[SteelMemberDesignSettingsNZS3404]:
-    """Partially updates the NZS 3404 settings and returns the updated settings."""
-    response = await settings.patch(code_settings_body(update))
-    return response.steel_member_design_settings_n_z_s3404 if response else None
+async def patch_settings(code, update, expect=None):
+    """Partially updates a design code's stored settings and returns the updated settings."""
+    return _expect(_unwrap(await code.settings.patch(code_settings_body(update))), expect)

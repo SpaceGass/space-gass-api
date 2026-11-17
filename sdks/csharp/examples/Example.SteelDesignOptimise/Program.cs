@@ -40,7 +40,7 @@ var saveFilePath = Path.Combine(
     "SpaceGass Examples",
     "SteelDesignOptimise.sg");
 
-const string designCode = SteelDesignExtensions.As4100;   // route segment: steel-design/{code}/...
+const DesignCode designCode = DesignCode.As4100;
 
 var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
@@ -164,16 +164,16 @@ try
     {
         await Task.Delay(500);
         finalAnalysis = (await client.Job.Analysis.Runs[analysisRun!.RunId!.Value].GetAsync())!;
-        if (finalAnalysis.Status is AnalysisRunStatus.Completed
-                                 or AnalysisRunStatus.Failed
-                                 or AnalysisRunStatus.Cancelled)
+        if (finalAnalysis.Status is RunStatus.Completed
+                                 or RunStatus.Failed
+                                 or RunStatus.Cancelled)
         {
             break;
         }
     }
 
     Console.WriteLine($"  Analysis {finalAnalysis.Status} in {finalAnalysis.ElapsedTime}");
-    if (finalAnalysis.Status != AnalysisRunStatus.Completed)
+    if (finalAnalysis.Status != RunStatus.Completed)
     {
         throw new Exception($"Analysis did not complete: {finalAnalysis.ErrorMessage}");
     }
@@ -209,7 +209,7 @@ try
     // designs: which design groups, against which load cases, and — via
     // Sections — only members on those section property numbers.
     Console.WriteLine("Configuring general design settings...");
-    var settings = await client.Job.Design.SteelDesign.Settings.PatchAsync(
+    var settings = await client.Job.Design.SteelMember.Settings.PatchAsync(
         new SteelMemberDesignGeneralSettingsUpdate
         {
             Groups = new[] { group.Id!.Value }.ToFilterString(),
@@ -222,18 +222,18 @@ try
     // == Step 8 — Design iteration settings ========================
     // What happens after the run selects sections: re-run the static
     // analysis with the new sections, re-run the design, and keep
-    // iterating (up to Iterations times) until the design settles.
+    // iterating (up to MaxIterations times) until the design settles.
     Console.WriteLine("Configuring design iteration settings...");
-    var iteration = await client.Job.Design.SteelDesign.DesignIterationSettings.PatchAsync(
+    var iteration = await client.Job.Design.SteelMember.DesignIterationSettings.PatchAsync(
         new SteelMemberDesignIterationSettingsUpdate
         {
             RerunStaticAnalysis = true,
-            RerunSteelMemberDesign = true,
+            RerunDesign = true,
             AutoIterate = true,
-            Iterations = 5,
+            MaxIterations = 5,
         });
     Console.WriteLine($"  Re-run static: {iteration!.RerunStaticAnalysis}, " +
-                      $"auto-iterate: {iteration.AutoIterate}, max iterations: {iteration.Iterations}");
+                      $"auto-iterate: {iteration.AutoIterate}, max iterations: {iteration.MaxIterations}");
     Console.WriteLine();
 
     // == Step 9 — Start the DESIGN run and poll ====================
@@ -241,8 +241,8 @@ try
     // Everything in the body is optional — the settings PATCHed above
     // could equally have been passed here as per-run overrides.
     Console.WriteLine($"Starting {designCode} DESIGN run...");
-    var designRun = await client.Job.Design.SteelDesign[designCode].RunDesign.PostAsync(
-        new SteelDesignRunDesignRequest { UpdateSections = true });
+    var designRun = await client.Job.Design.SteelMember.ForCode(designCode).RunDesign.PostAsync(
+        new SteelMemberDesignRunDesignRequest { UpdateSections = true });
     Console.WriteLine($"  Run {designRun!.RunId} {designRun.Status}; waiting for completion...");
 
     DesignRun finalDesign;
@@ -250,16 +250,16 @@ try
     {
         await Task.Delay(500);
         finalDesign = (await client.Job.Design.Runs[designRun.RunId!.Value].GetAsync())!;
-        if (finalDesign.Status is AnalysisRunStatus.Completed
-                               or AnalysisRunStatus.Failed
-                               or AnalysisRunStatus.Cancelled)
+        if (finalDesign.Status is RunStatus.Completed
+                               or RunStatus.Failed
+                               or RunStatus.Cancelled)
         {
             break;
         }
     }
 
     Console.WriteLine($"  Design run {finalDesign.Status} in {finalDesign.ElapsedTime}");
-    if (finalDesign.Status != AnalysisRunStatus.Completed)
+    if (finalDesign.Status != RunStatus.Completed)
     {
         throw new Exception($"Design run did not complete: {finalDesign.ErrorMessage}");
     }
@@ -270,7 +270,7 @@ try
     Console.WriteLine($"  Iterations:       {finalDesign.Iterations}");
     Console.WriteLine($"  Sections updated: {finalDesign.SectionsUpdated}");
     Console.WriteLine($"  Analysis re-run:  {finalDesign.AnalysisRerun}");
-    Console.WriteLine($"  Members checked:  {finalDesign.MembersChecked}, failed: {finalDesign.MembersFailed}");
+    Console.WriteLine($"  Groups checked:   {finalDesign.CheckedCount}, passed: {finalDesign.PassedCount}, failed: {finalDesign.FailedCount}");
     foreach (var warning in finalDesign.Warnings ?? [])
     {
         Console.WriteLine($"  Warning: {warning}");
@@ -285,12 +285,12 @@ try
     // == Step 11 — Check summary for the final section =============
     Console.WriteLine("Steel member check summary:");
     var summary = await client.Job.Query.Design.SteelMember.CheckSummary.GetAsync(
-        config => config.QueryParameters.Members = new[] { member.Id!.Value }.ToFilterString());
+        config => config.QueryParameters.SteelMembers = new[] { group.Id!.Value }.ToFilterString());
 
     foreach (var row in summary!.Results ?? [])
     {
-        Console.WriteLine($"  Member {row.Member}: {row.Section}");
-        Console.WriteLine($"    Load factor:   {row.LoadFactor:F3}  (flag: {row.Flag})");
+        Console.WriteLine($"  Design group {row.SteelMember}: {row.Section}");
+        Console.WriteLine($"    Load factor:   {row.LoadFactor:F3}  ({row.Status})");
         Console.WriteLine($"    Critical case: {row.CriticalCase}");
         Console.WriteLine($"    Failure mode:  {row.Failure}");
     }

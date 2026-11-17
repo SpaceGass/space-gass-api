@@ -36,7 +36,7 @@ var saveFilePath = Path.Combine(
     "SpaceGass Examples",
     "SteelDesignCheck.sg");
 
-const string designCode = SteelDesignExtensions.As4100;   // route segment: steel-design/{code}/...
+const DesignCode designCode = DesignCode.As4100;
 
 var client = SpaceGassApiClient.CreateClient("http://localhost:34560");
 
@@ -151,16 +151,16 @@ try
     {
         await Task.Delay(500);
         finalAnalysis = (await client.Job.Analysis.Runs[analysisRun!.RunId!.Value].GetAsync())!;
-        if (finalAnalysis.Status is AnalysisRunStatus.Completed
-                                 or AnalysisRunStatus.Failed
-                                 or AnalysisRunStatus.Cancelled)
+        if (finalAnalysis.Status is RunStatus.Completed
+                                 or RunStatus.Failed
+                                 or RunStatus.Cancelled)
         {
             break;
         }
     }
 
     Console.WriteLine($"  Analysis {finalAnalysis.Status} in {finalAnalysis.ElapsedTime}");
-    if (finalAnalysis.Status != AnalysisRunStatus.Completed)
+    if (finalAnalysis.Status != RunStatus.Completed)
     {
         throw new Exception($"Analysis did not complete: {finalAnalysis.ErrorMessage}");
     }
@@ -170,13 +170,13 @@ try
     // Does not need an open job. Each entry says whether this seat is
     // licensed for the code and which edition a run is completed under.
     Console.WriteLine("Steel member design codes:");
-    var codes = await client.Job.Design.SteelDesign.Codes.GetAsync();
+    var codes = await client.Job.Design.SteelMember.Codes.GetAsync();
     foreach (var c in codes!)
     {
-        Console.WriteLine($"  {c.Code,-8} {c.Edition,-16} licensed: {c.IsLicensed}");
+        Console.WriteLine($"  {c.Code,-22} {c.Label,-28} licensed: {c.IsLicensed}");
     }
 
-    var as4100 = codes.FirstOrDefault(c => c.Code == SteelDesignCode.As4100);
+    var as4100 = codes.FirstOrDefault(c => c.Code == designCode);
     if (as4100?.IsLicensed != true)
     {
         throw new Exception("This seat is not licensed for AS 4100 steel member design.");
@@ -217,7 +217,7 @@ try
     // groups and load cases to design/check, section availability, etc.
     // Settings are saved with the job.
     Console.WriteLine("Configuring general design settings...");
-    var settings = await client.Job.Design.SteelDesign.Settings.PatchAsync(
+    var settings = await client.Job.Design.SteelMember.Settings.PatchAsync(
         new SteelMemberDesignGeneralSettingsUpdate
         {
             Groups = new[] { group.Id!.Value }.ToFilterString(),
@@ -230,13 +230,12 @@ try
 
     // == Step 8 — AS 4100 code-specific settings ===================
     // Each design code has its own settings object (AS 4100 and NZS 3404
-    // differ). They can be PATCHed at steel-design/{code}/settings, or —
+    // differ). They can be PATCHed at steel-member/{code}/settings, or —
     // as here — passed as a per-run override on the run request; either
-    // way they are stored with the job. The SDK's SteelDesignExtensions
-    // let you assign the code's own settings object straight to
-    // CodeSettings; the Code discriminator is filled in for you.
+    // way they are stored with the job. The SDK lets you assign the
+    // code's own settings object straight to CodeSettings.
     Console.WriteLine("Preparing AS 4100 settings...");
-    var as4100Settings = new SteelMemberDesignSettingsAS4100Update
+    var as4100Settings = new SteelMemberDesignSettingsAs4100Update
     {
         SlendernessRatioCheck = true,
         UseKtFactorForTension = true,
@@ -249,8 +248,8 @@ try
     // job's stored settings before the run starts. Analysis and design
     // runs share one queue, so QueuePosition may be > 1.
     Console.WriteLine($"Starting {designCode} design CHECK run...");
-    var designRun = await client.Job.Design.SteelDesign[designCode].RunCheck.PostAsync(
-        new SteelDesignRunCheckRequest { CodeSettings = as4100Settings });
+    var designRun = await client.Job.Design.SteelMember.ForCode(designCode).RunCheck.PostAsync(
+        new SteelMemberDesignRunCheckRequest { CodeSettings = as4100Settings });
     Console.WriteLine($"  Run {designRun!.RunId} {designRun.Status}; waiting for completion...");
 
     DesignRun finalDesign;
@@ -258,23 +257,23 @@ try
     {
         await Task.Delay(500);
         finalDesign = (await client.Job.Design.Runs[designRun.RunId!.Value].GetAsync())!;
-        if (finalDesign.Status is AnalysisRunStatus.Completed
-                               or AnalysisRunStatus.Failed
-                               or AnalysisRunStatus.Cancelled)
+        if (finalDesign.Status is RunStatus.Completed
+                               or RunStatus.Failed
+                               or RunStatus.Cancelled)
         {
             break;
         }
     }
 
     Console.WriteLine($"  Design run {finalDesign.Status} in {finalDesign.ElapsedTime}");
-    if (finalDesign.Status != AnalysisRunStatus.Completed)
+    if (finalDesign.Status != RunStatus.Completed)
     {
         throw new Exception($"Design run did not complete: {finalDesign.ErrorMessage}");
     }
 
     // Once Completed the run carries its result summary.
     Console.WriteLine($"  Mode: {finalDesign.Mode}, code: {finalDesign.Code}");
-    Console.WriteLine($"  Members checked: {finalDesign.MembersChecked}, failed: {finalDesign.MembersFailed}");
+    Console.WriteLine($"  Groups checked: {finalDesign.CheckedCount}, passed: {finalDesign.PassedCount}, failed: {finalDesign.FailedCount}");
     foreach (var warning in finalDesign.Warnings ?? [])
     {
         Console.WriteLine($"  Warning: {warning}");
@@ -282,17 +281,17 @@ try
     Console.WriteLine();
 
     // == Step 10 — Query the check summary =========================
-    // One row per member. LoadFactor is the capacity ratio the member
-    // achieved; the Flag and Failure fields describe the governing
-    // check, and CriticalCase is the load case that governed.
+    // One row per design group. LoadFactor is the capacity ratio the
+    // group achieved; Status and Failure describe the governing check,
+    // and CriticalCase is the load case that governed.
     Console.WriteLine("Steel member check summary:");
     var summary = await client.Job.Query.Design.SteelMember.CheckSummary.GetAsync(
-        config => config.QueryParameters.Members = new[] { member.Id!.Value }.ToFilterString());
+        config => config.QueryParameters.SteelMembers = new[] { group.Id!.Value }.ToFilterString());
 
     foreach (var row in summary!.Results ?? [])
     {
-        Console.WriteLine($"  Member {row.Member}: {row.Section}");
-        Console.WriteLine($"    Load factor:   {row.LoadFactor:F3}  (flag: {row.Flag})");
+        Console.WriteLine($"  Design group {row.SteelMember}: {row.Section}");
+        Console.WriteLine($"    Load factor:   {row.LoadFactor:F3}  ({row.Status})");
         Console.WriteLine($"    Critical case: {row.CriticalCase}");
         Console.WriteLine($"    Failure mode:  {row.Failure}");
         Console.WriteLine($"    Yield stress:  {row.Yield}  Segment length: {row.SegmentLength}");
