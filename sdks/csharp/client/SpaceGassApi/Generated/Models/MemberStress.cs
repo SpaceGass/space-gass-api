@@ -97,7 +97,7 @@ namespace SpaceGassApi.Models
 #else
         public List<float?> NMzTop { get; set; }
 #endif
-        /// <summary>Fractional position along member (0.0 to 1.0).</summary>
+        /// <summary>Distance along the member. Unit: Length (see GET /job/units).</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public List<float?>? Position { get; set; }

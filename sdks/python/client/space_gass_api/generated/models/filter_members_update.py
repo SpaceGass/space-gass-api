@@ -15,7 +15,7 @@ class FilterMembersUpdate(Parsable):
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None
-    # Member type categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_MemberType` verbatim — richer than theentity-property SpaceGassApi.Models.Enums.MemberType because the filter UI surfacesmember-state categories (Duplicated, Rotated, Along axis, FreeEnd, ...)that are not member-create options.
+    # Member type categories available as a Filter resource criterion.Wider than SpaceGassApi.Models.Enums.MemberType: it includes member-state categories (Duplicated,Rotated, Along axis, FreeEnd, ...) that are not member types.
     member_type: Optional[FilterMemberType] = None
     # The members property
     members: Optional[str] = None

@@ -104,7 +104,7 @@ class PreviewRequestBuilder(BaseRequestBuilder):
                 return "includeImage"
             return original_name
         
-        # Full path to the SPACE GASS job file (.sg or .sgbase)
+        # Full path to the SPACE GASS job file (.sg or .sgbase), for example C:/Models/Job.sg; a relative path, such as one starting with '~', returns an empty preview
         file_path: Optional[str] = None
 
         # If true, includes the preview image (base64 encoded). Defaults to false.

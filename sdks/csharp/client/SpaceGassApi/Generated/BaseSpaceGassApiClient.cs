@@ -8,6 +8,7 @@ using Microsoft.Kiota.Serialization.Multipart;
 using Microsoft.Kiota.Serialization.Text;
 using SpaceGassApi.FileNamespace;
 using SpaceGassApi.Job;
+using SpaceGassApi.Libraries;
 using SpaceGassApi.License;
 using SpaceGassApi.Service;
 using System.Collections.Generic;
@@ -31,6 +32,11 @@ namespace SpaceGassApi
         public global::SpaceGassApi.Job.JobRequestBuilder Job
         {
             get => new global::SpaceGassApi.Job.JobRequestBuilder(PathParameters, RequestAdapter);
+        }
+        /// <summary>The libraries property</summary>
+        public global::SpaceGassApi.Libraries.LibrariesRequestBuilder Libraries
+        {
+            get => new global::SpaceGassApi.Libraries.LibrariesRequestBuilder(PathParameters, RequestAdapter);
         }
         /// <summary>The license property</summary>
         public global::SpaceGassApi.License.LicenseRequestBuilder License

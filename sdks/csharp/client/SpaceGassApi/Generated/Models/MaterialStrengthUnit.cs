@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Material strength unit (yield stress, ultimate stress, etc.). Members mirrorSPACE GASS `SgMaterialStrength`.</summary>
+    /// <summary>Material strength unit (yield stress, ultimate stress, etc.).</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum MaterialStrengthUnit
     {

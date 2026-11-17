@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public LoadFactorsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/load-factors{?limit*,offset*}", pathParameters)
+        public LoadFactorsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/load-factors{?distinctBy*,limit*,loadCases*,maxAbsLoadFactor*,maxAbsTolerance*,maxIterations*,maxLoadFactor*,maxNodeAtMaxRotn*,maxNodeAtMaxTrans*,maxTolerance*,minAbsLoadFactor*,minAbsTolerance*,minIterations*,minLoadFactor*,minNodeAtMaxRotn*,minNodeAtMaxTrans*,minTolerance*,modes*,offset*,order*,rotnAxis*,sort*,status*,transAxis*,warning*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,15 +36,16 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public LoadFactorsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/load-factors{?limit*,offset*}", rawUrl)
+        public LoadFactorsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/load-factors{?distinctBy*,limit*,loadCases*,maxAbsLoadFactor*,maxAbsTolerance*,maxIterations*,maxLoadFactor*,maxNodeAtMaxRotn*,maxNodeAtMaxTrans*,maxTolerance*,minAbsLoadFactor*,minAbsTolerance*,minIterations*,minLoadFactor*,minNodeAtMaxRotn*,minNodeAtMaxTrans*,minTolerance*,modes*,offset*,order*,rotnAxis*,sort*,status*,transAxis*,warning*}", rawUrl)
         {
         }
         /// <summary>
-        /// Gets buckling load factor results for all load cases and modes.
+        /// Gets buckling load factor results, optionally filtered by load cases and modes.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.BucklingLoadFactorQueryResult"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
+        /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 403 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 404 status code</exception>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 409 status code</exception>
@@ -61,6 +62,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors
             var requestInfo = ToGetRequestInformation(requestConfiguration);
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
+                { "400", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "403", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "409", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
@@ -69,7 +71,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.BucklingLoadFactorQueryResult>(requestInfo, global::SpaceGassApi.Models.BucklingLoadFactorQueryResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Gets buckling load factor results for all load cases and modes.
+        /// Gets buckling load factor results, optionally filtered by load cases and modes.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -97,17 +99,153 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors
             return new global::SpaceGassApi.Job.Query.Analysis.Buckling.LoadFactors.LoadFactorsRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Gets buckling load factor results for all load cases and modes.
+        /// Gets buckling load factor results, optionally filtered by load cases and modes.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class LoadFactorsRequestBuilderGetQueryParameters 
         {
+            /// <summary>Identity fields: loadCase, mode. One row per value of this identity field: the first row in sort order, i.e. the governingone. `sort=fy&amp;order=AbsDesc&amp;distinctBy=node` returns each node&apos;s governingreaction with its load case; `distinctBy=loadCase` each case&apos;s governing row. Theidentity fields are the row&apos;s Ids (load case, node, member, plate, mode, steel member) orthe reaction summary&apos;s `summaryType`, named as in the response and flagged`distinctBy: true` in `GET …/metadata`. Rows come back whole; the count headeris the number of distinct values. Requires `sort`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("distinctBy")]
+            public string? DistinctBy { get; set; }
+#nullable restore
+#else
+            [QueryParameter("distinctBy")]
+            public string DistinctBy { get; set; }
+#endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             [QueryParameter("limit")]
             public int? Limit { get; set; }
+            /// <summary>Load case Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("loadCases")]
+            public string? LoadCases { get; set; }
+#nullable restore
+#else
+            [QueryParameter("loadCases")]
+            public string LoadCases { get; set; }
+#endif
+            /// <summary>Keep rows whose loadFactor has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsLoadFactor")]
+            public double? MaxAbsLoadFactor { get; set; }
+            /// <summary>Keep rows whose tolerance has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsTolerance")]
+            public double? MaxAbsTolerance { get; set; }
+            /// <summary>Keep rows whose iterations is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxIterations")]
+            public double? MaxIterations { get; set; }
+            /// <summary>Keep rows whose loadFactor is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxLoadFactor")]
+            public double? MaxLoadFactor { get; set; }
+            /// <summary>Keep rows whose nodeAtMaxRotn is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxNodeAtMaxRotn")]
+            public double? MaxNodeAtMaxRotn { get; set; }
+            /// <summary>Keep rows whose nodeAtMaxTrans is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxNodeAtMaxTrans")]
+            public double? MaxNodeAtMaxTrans { get; set; }
+            /// <summary>Keep rows whose tolerance is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxTolerance")]
+            public double? MaxTolerance { get; set; }
+            /// <summary>Keep rows whose loadFactor has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsLoadFactor")]
+            public double? MinAbsLoadFactor { get; set; }
+            /// <summary>Keep rows whose tolerance has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsTolerance")]
+            public double? MinAbsTolerance { get; set; }
+            /// <summary>Keep rows whose iterations is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minIterations")]
+            public double? MinIterations { get; set; }
+            /// <summary>Keep rows whose loadFactor is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minLoadFactor")]
+            public double? MinLoadFactor { get; set; }
+            /// <summary>Keep rows whose nodeAtMaxRotn is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minNodeAtMaxRotn")]
+            public double? MinNodeAtMaxRotn { get; set; }
+            /// <summary>Keep rows whose nodeAtMaxTrans is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minNodeAtMaxTrans")]
+            public double? MinNodeAtMaxTrans { get; set; }
+            /// <summary>Keep rows whose tolerance is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minTolerance")]
+            public double? MinTolerance { get; set; }
+            /// <summary>Buckling mode numbers in SG list format (e.g. `&quot;1-3&quot;`). Omit to return all.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("modes")]
+            public string? Modes { get; set; }
+#nullable restore
+#else
+            [QueryParameter("modes")]
+            public string Modes { get; set; }
+#endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             [QueryParameter("offset")]
             public int? Offset { get; set; }
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [Obsolete("This property is deprecated, use OrderAsResultSortOrder instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("order")]
+            public string? Order { get; set; }
+#nullable restore
+#else
+            [QueryParameter("order")]
+            public string Order { get; set; }
+#endif
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [QueryParameter("order")]
+            public global::SpaceGassApi.Models.ResultSortOrder? OrderAsResultSortOrder { get; set; }
+            /// <summary>Keep rows whose rotnAxis is one of the given values. One or more values, comma-separated, matched case-insensitively.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("rotnAxis")]
+            public string? RotnAxis { get; set; }
+#nullable restore
+#else
+            [QueryParameter("rotnAxis")]
+            public string RotnAxis { get; set; }
+#endif
+            /// <summary>Sortable fields: loadCase, mode, loadFactor, tolerance, iterations, nodeAtMaxTrans, nodeAtMaxRotn. Field to sort the rows by, named as in the response (case-insensitive). Any numeric fieldof the endpoint&apos;s rows can be used. An array field (values at member stations, member ends,plate corners or nodes) ranks each row by its extreme value in the requested direction, andthe row is returned whole. Rows with no value for the field sort last. Omit to return rows inthe endpoint&apos;s default order: its identity fields in order — the fields `GET …/metadata`flags `distinctBy: true`, e.g. load case then node for node results.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("sort")]
+            public string? Sort { get; set; }
+#nullable restore
+#else
+            [QueryParameter("sort")]
+            public string Sort { get; set; }
+#endif
+            /// <summary>Keep rows whose status is one of the given values. One or more of: Reported, AboveUpperLimit, BelowLowerLimit, Unstable (comma-separated, case-insensitive).</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("status")]
+            public string? Status { get; set; }
+#nullable restore
+#else
+            [QueryParameter("status")]
+            public string Status { get; set; }
+#endif
+            /// <summary>Keep rows whose transAxis is one of the given values. One or more values, comma-separated, matched case-insensitively.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("transAxis")]
+            public string? TransAxis { get; set; }
+#nullable restore
+#else
+            [QueryParameter("transAxis")]
+            public string TransAxis { get; set; }
+#endif
+            /// <summary>Keep rows whose warning is one of the given values. One or more values, comma-separated, matched case-insensitively.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("warning")]
+            public string? Warning { get; set; }
+#nullable restore
+#else
+            [QueryParameter("warning")]
+            public string Warning { get; set; }
+#endif
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

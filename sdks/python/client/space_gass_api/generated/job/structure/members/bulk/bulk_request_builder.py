@@ -14,7 +14,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union, overload
 from warnings import warn
 
 if TYPE_CHECKING:
-    from .....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
+    from .....models.bulk_delete_result import BulkDeleteResult
     from .....models.error_response import ErrorResponse
     from .....models.member_bulk_result import MemberBulkResult
     from .....models.member_create import MemberCreate
@@ -40,16 +40,16 @@ class BulkRequestBuilder(BaseRequestBuilder):
         body: list[int],
         *,
         continue_on_error: Optional[bool] = None,
-    ) -> Optional[BulkDeletedBulkResult]: ...
+    ) -> Optional[BulkDeleteResult]: ...
     @overload
-    async def delete(self, body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeletedBulkResult]: ...
+    async def delete(self, body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> Optional[BulkDeleteResult]: ...
     # --- end overloads ---
-    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[BulkDeletedBulkResult]:
+    async def delete(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None, **kwargs) -> Optional[BulkDeleteResult]:
         """
-        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
+        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`).            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cleanup for the whole batch then runs once. It is best-effort and not atomic:if it fails part-way, the request fails and some of the removals may already have beenmade.            For Nodes, Members and Plates the response also has `removed`: the batch'scascade, in the shape a single delete returns.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
-        Returns: Optional[BulkDeletedBulkResult]
+        Returns: Optional[BulkDeleteResult]
         """
         if body is None:
             raise TypeError("body cannot be null.")
@@ -66,9 +66,9 @@ class BulkRequestBuilder(BaseRequestBuilder):
         }
         if not self.request_adapter:
             raise Exception("Http core is null") 
-        from .....models.bulk_deleted_bulk_result import BulkDeletedBulkResult
+        from .....models.bulk_delete_result import BulkDeleteResult
 
-        return await self.request_adapter.send_async(request_info, BulkDeletedBulkResult, error_mapping)
+        return await self.request_adapter.send_async(request_info, BulkDeleteResult, error_mapping)
     
     # --- @overload added by regen_python_inits.py ---
     @overload
@@ -146,7 +146,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     
     def to_delete_request_information(self,body: list[int], request_configuration: Optional[RequestConfiguration[BulkRequestBuilderDeleteQueryParameters]] = None) -> RequestInformation:
         """
-        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
+        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`).            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cleanup for the whole batch then runs once. It is best-effort and not atomic:if it fails part-way, the request fails and some of the removals may already have beenmade.            For Nodes, Members and Plates the response also has `removed`: the batch'scascade, in the shape a single delete returns.
         param body: The request body
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
@@ -202,7 +202,7 @@ class BulkRequestBuilder(BaseRequestBuilder):
     @dataclass
     class BulkRequestBuilderDeleteQueryParameters():
         """
-        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md "Query Parameter Conventions").            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
+        Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`).            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cleanup for the whole batch then runs once. It is best-effort and not atomic:if it fails part-way, the request fails and some of the removals may already have beenmade.            For Nodes, Members and Plates the response also has `removed`: the batch'scascade, in the shape a single delete returns.
         """
         def get_query_parameter(self,original_name: str) -> str:
             """

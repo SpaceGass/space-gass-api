@@ -19,7 +19,7 @@ namespace SpaceGassApi.Job.Analysis.Runs
     public partial class RunsRequestBuilder : BaseRequestBuilder
     {
         /// <summary>Gets an item from the SpaceGassApi.job.analysis.runs.item collection</summary>
-        /// <param name="position">The unique run ID returned when the analysis was started</param>
+        /// <param name="position">The unique run Id returned when the analysis was started</param>
         /// <returns>A <see cref="global::SpaceGassApi.Job.Analysis.Runs.Item.WithRunItemRequestBuilder"/></returns>
         public global::SpaceGassApi.Job.Analysis.Runs.Item.WithRunItemRequestBuilder this[Guid position]
         {
@@ -31,7 +31,7 @@ namespace SpaceGassApi.Job.Analysis.Runs
             }
         }
         /// <summary>Gets an item from the SpaceGassApi.job.analysis.runs.item collection</summary>
-        /// <param name="position">The unique run ID returned when the analysis was started</param>
+        /// <param name="position">The unique run Id returned when the analysis was started</param>
         /// <returns>A <see cref="global::SpaceGassApi.Job.Analysis.Runs.Item.WithRunItemRequestBuilder"/></returns>
         [Obsolete("This indexer is deprecated and will be removed in the next major version. Use the one with the typed parameter instead.")]
         public global::SpaceGassApi.Job.Analysis.Runs.Item.WithRunItemRequestBuilder this[string position]
@@ -60,7 +60,7 @@ namespace SpaceGassApi.Job.Analysis.Runs
         {
         }
         /// <summary>
-        /// Lists the current analysis run (if any) and recent run history.History is capped at the 10 most recent runs.
+        /// Lists the executing and queued analysis runs and recent run history.History is capped at the 10 most recent runs.
         /// </summary>
         /// <returns>A List&lt;global::SpaceGassApi.Models.AnalysisRun&gt;</returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -88,7 +88,7 @@ namespace SpaceGassApi.Job.Analysis.Runs
             return collectionResult?.AsList();
         }
         /// <summary>
-        /// Lists the current analysis run (if any) and recent run history.History is capped at the 10 most recent runs.
+        /// Lists the executing and queued analysis runs and recent run history.History is capped at the 10 most recent runs.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>

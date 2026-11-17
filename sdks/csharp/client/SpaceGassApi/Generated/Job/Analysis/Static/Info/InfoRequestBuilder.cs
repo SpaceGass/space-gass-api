@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Analysis.Static.Info
         {
         }
         /// <summary>
-        /// Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            `hasResults` is sourced from the result file&apos;s header — no datasheet load.Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
+        /// Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.AnalysisInfo"/></returns>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
@@ -63,7 +63,7 @@ namespace SpaceGassApi.Job.Analysis.Static.Info
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.AnalysisInfo>(requestInfo, global::SpaceGassApi.Models.AnalysisInfo.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            `hasResults` is sourced from the result file&apos;s header — no datasheet load.Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
+        /// Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -91,7 +91,7 @@ namespace SpaceGassApi.Job.Analysis.Static.Info
             return new global::SpaceGassApi.Job.Analysis.Static.Info.InfoRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            `hasResults` is sourced from the result file&apos;s header — no datasheet load.Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
+        /// Returns a lightweight pre-flight summary describing whether static analysisresults are stored for this job and which load cases they cover.Use this before issuing a static results query to decide whether the queryis worth issuing, and to derive a follow-up `POST /static/run-*` bodyfor the cases that still need to be analysed.            Linear and Non-Linear Static share the same result files, so this endpointcovers both modes.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class InfoRequestBuilderGetQueryParameters 

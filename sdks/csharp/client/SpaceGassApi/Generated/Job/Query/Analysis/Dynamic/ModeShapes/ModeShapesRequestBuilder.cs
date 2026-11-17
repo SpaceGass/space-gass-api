@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ModeShapesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?limit*,loadCases*,modes*,nodes*,offset*}", pathParameters)
+        public ModeShapesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?distinctBy*,limit*,loadCases*,maxAbsRx*,maxAbsRy*,maxAbsRz*,maxAbsTx*,maxAbsTy*,maxAbsTz*,maxNode*,maxRx*,maxRy*,maxRz*,maxTx*,maxTy*,maxTz*,minAbsRx*,minAbsRy*,minAbsRz*,minAbsTx*,minAbsTy*,minAbsTz*,minNode*,minRx*,minRy*,minRz*,minTx*,minTy*,minTz*,modes*,nodes*,normalization*,offset*,order*,sort*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public ModeShapesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?limit*,loadCases*,modes*,nodes*,offset*}", rawUrl)
+        public ModeShapesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/dynamic/mode-shapes{?distinctBy*,limit*,loadCases*,maxAbsRx*,maxAbsRy*,maxAbsRz*,maxAbsTx*,maxAbsTy*,maxAbsTz*,maxNode*,maxRx*,maxRy*,maxRz*,maxTx*,maxTy*,maxTz*,minAbsRx*,minAbsRy*,minAbsRz*,minAbsTx*,minAbsTy*,minAbsTz*,minNode*,minRx*,minRy*,minRz*,minTx*,minTy*,minTz*,modes*,nodes*,normalization*,offset*,order*,sort*}", rawUrl)
         {
         }
         /// <summary>
@@ -104,6 +104,16 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class ModeShapesRequestBuilderGetQueryParameters 
         {
+            /// <summary>Identity fields: loadCase, mode. One row per value of this identity field: the first row in sort order, i.e. the governingone. `sort=fy&amp;order=AbsDesc&amp;distinctBy=node` returns each node&apos;s governingreaction with its load case; `distinctBy=loadCase` each case&apos;s governing row. Theidentity fields are the row&apos;s Ids (load case, node, member, plate, mode, steel member) orthe reaction summary&apos;s `summaryType`, named as in the response and flagged`distinctBy: true` in `GET …/metadata`. Rows come back whole; the count headeris the number of distinct values. Requires `sort`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("distinctBy")]
+            public string? DistinctBy { get; set; }
+#nullable restore
+#else
+            [QueryParameter("distinctBy")]
+            public string DistinctBy { get; set; }
+#endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             [QueryParameter("limit")]
             public int? Limit { get; set; }
@@ -117,6 +127,84 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
+            /// <summary>Keep rows whose rx has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsRx")]
+            public double? MaxAbsRx { get; set; }
+            /// <summary>Keep rows whose ry has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsRy")]
+            public double? MaxAbsRy { get; set; }
+            /// <summary>Keep rows whose rz has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsRz")]
+            public double? MaxAbsRz { get; set; }
+            /// <summary>Keep rows whose tx has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsTx")]
+            public double? MaxAbsTx { get; set; }
+            /// <summary>Keep rows whose ty has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsTy")]
+            public double? MaxAbsTy { get; set; }
+            /// <summary>Keep rows whose tz has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsTz")]
+            public double? MaxAbsTz { get; set; }
+            /// <summary>Keep rows whose node is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxNode")]
+            public double? MaxNode { get; set; }
+            /// <summary>Keep rows whose rx is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxRx")]
+            public double? MaxRx { get; set; }
+            /// <summary>Keep rows whose ry is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxRy")]
+            public double? MaxRy { get; set; }
+            /// <summary>Keep rows whose rz is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxRz")]
+            public double? MaxRz { get; set; }
+            /// <summary>Keep rows whose tx is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxTx")]
+            public double? MaxTx { get; set; }
+            /// <summary>Keep rows whose ty is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxTy")]
+            public double? MaxTy { get; set; }
+            /// <summary>Keep rows whose tz is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxTz")]
+            public double? MaxTz { get; set; }
+            /// <summary>Keep rows whose rx has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsRx")]
+            public double? MinAbsRx { get; set; }
+            /// <summary>Keep rows whose ry has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsRy")]
+            public double? MinAbsRy { get; set; }
+            /// <summary>Keep rows whose rz has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsRz")]
+            public double? MinAbsRz { get; set; }
+            /// <summary>Keep rows whose tx has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsTx")]
+            public double? MinAbsTx { get; set; }
+            /// <summary>Keep rows whose ty has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsTy")]
+            public double? MinAbsTy { get; set; }
+            /// <summary>Keep rows whose tz has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsTz")]
+            public double? MinAbsTz { get; set; }
+            /// <summary>Keep rows whose node is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minNode")]
+            public double? MinNode { get; set; }
+            /// <summary>Keep rows whose rx is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minRx")]
+            public double? MinRx { get; set; }
+            /// <summary>Keep rows whose ry is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minRy")]
+            public double? MinRy { get; set; }
+            /// <summary>Keep rows whose rz is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minRz")]
+            public double? MinRz { get; set; }
+            /// <summary>Keep rows whose tx is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minTx")]
+            public double? MinTx { get; set; }
+            /// <summary>Keep rows whose ty is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minTy")]
+            public double? MinTy { get; set; }
+            /// <summary>Keep rows whose tz is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minTz")]
+            public double? MinTz { get; set; }
             /// <summary>Mode numbers in SG list format (e.g. `&quot;1-3&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -137,9 +225,43 @@ namespace SpaceGassApi.Job.Query.Analysis.Dynamic.ModeShapes
             [QueryParameter("nodes")]
             public string Nodes { get; set; }
 #endif
+            /// <summary>Keep rows whose normalization is one of the given values. One or more of: Unknown, Mass, Unit, None (comma-separated, case-insensitive).</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("normalization")]
+            public string? Normalization { get; set; }
+#nullable restore
+#else
+            [QueryParameter("normalization")]
+            public string Normalization { get; set; }
+#endif
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             [QueryParameter("offset")]
             public int? Offset { get; set; }
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [Obsolete("This property is deprecated, use OrderAsResultSortOrder instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("order")]
+            public string? Order { get; set; }
+#nullable restore
+#else
+            [QueryParameter("order")]
+            public string Order { get; set; }
+#endif
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [QueryParameter("order")]
+            public global::SpaceGassApi.Models.ResultSortOrder? OrderAsResultSortOrder { get; set; }
+            /// <summary>Sortable fields: loadCase, mode, node, tx, ty, tz, rx, ry, rz. Field to sort the rows by, named as in the response (case-insensitive). Any numeric fieldof the endpoint&apos;s rows can be used. An array field (values at member stations, member ends,plate corners or nodes) ranks each row by its extreme value in the requested direction, andthe row is returned whole. Rows with no value for the field sort last. Omit to return rows inthe endpoint&apos;s default order: its identity fields in order — the fields `GET …/metadata`flags `distinctBy: true`, e.g. load case then node for node results.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("sort")]
+            public string? Sort { get; set; }
+#nullable restore
+#else
+            [QueryParameter("sort")]
+            public string Sort { get; set; }
+#endif
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

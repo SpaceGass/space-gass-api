@@ -17,7 +17,7 @@ class FilterPlateStripsUpdate(Parsable):
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Plate-strip categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_PlateStripType` verbatim.
+    # Plate-strip categories available as a Filter resource criterion.
     plate_strip_type: Optional[FilterPlateStripType] = None
     # The plateStrips property
     plate_strips: Optional[str] = None

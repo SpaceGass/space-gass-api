@@ -33,7 +33,7 @@ class LibraryRequestBuilder(BaseRequestBuilder):
     
     async def put(self,body: MaterialLibraryCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[Material]:
         """
-        Replaces the material at the given Id with a library-sourced material. The existing rowis deleted and a new row is created at the same Id, resolved from the SPACE GASSmaterial library by (name, library). Use this to convert a User material to a Librarymaterial, or to re-resolve an existing Library material against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
+        Replaces the material at the given Id with a library-sourced material, resolved from theSPACE GASS material library by (name, library); the Id and every member and plate thatuse it are kept, and a name or library that cannot be resolved leaves the materialunchanged. Use this to convert a User material to a Librarymaterial, or to re-resolve an existing Library material against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
         param body: DTO for creating a new library-sourced material.All material properties (Young's modulus, Poisson's ratio, etc.) are resolved from thelibrary — the caller provides only the material name and library.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[Material]
@@ -59,7 +59,7 @@ class LibraryRequestBuilder(BaseRequestBuilder):
     
     def to_put_request_information(self,body: MaterialLibraryCreate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Replaces the material at the given Id with a library-sourced material. The existing rowis deleted and a new row is created at the same Id, resolved from the SPACE GASSmaterial library by (name, library). Use this to convert a User material to a Librarymaterial, or to re-resolve an existing Library material against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
+        Replaces the material at the given Id with a library-sourced material, resolved from theSPACE GASS material library by (name, library); the Id and every member and plate thatuse it are kept, and a name or library that cannot be resolved leaves the materialunchanged. Use this to convert a User material to a Librarymaterial, or to re-resolve an existing Library material against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
         param body: DTO for creating a new library-sourced material.All material properties (Young's modulus, Poisson's ratio, etc.) are resolved from thelibrary — the caller provides only the material name and library.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

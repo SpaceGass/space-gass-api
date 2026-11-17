@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Structure.Materials.Item.Library
         {
         }
         /// <summary>
-        /// Replaces the material at the given Id with a library-sourced material. The existing rowis deleted and a new row is created at the same Id, resolved from the SPACE GASSmaterial library by (name, library). Use this to convert a User material to a Librarymaterial, or to re-resolve an existing Library material against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
+        /// Replaces the material at the given Id with a library-sourced material, resolved from theSPACE GASS material library by (name, library); the Id and every member and plate thatuse it are kept, and a name or library that cannot be resolved leaves the materialunchanged. Use this to convert a User material to a Librarymaterial, or to re-resolve an existing Library material against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Material"/></returns>
         /// <param name="body">DTO for creating a new library-sourced material.All material properties (Young&apos;s modulus, Poisson&apos;s ratio, etc.) are resolved from thelibrary — the caller provides only the material name and library.</param>
@@ -65,7 +65,7 @@ namespace SpaceGassApi.Job.Structure.Materials.Item.Library
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Material>(requestInfo, global::SpaceGassApi.Models.Material.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Replaces the material at the given Id with a library-sourced material. The existing rowis deleted and a new row is created at the same Id, resolved from the SPACE GASSmaterial library by (name, library). Use this to convert a User material to a Librarymaterial, or to re-resolve an existing Library material against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
+        /// Replaces the material at the given Id with a library-sourced material, resolved from theSPACE GASS material library by (name, library); the Id and every member and plate thatuse it are kept, and a name or library that cannot be resolved leaves the materialunchanged. Use this to convert a User material to a Librarymaterial, or to re-resolve an existing Library material against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">DTO for creating a new library-sourced material.All material properties (Young&apos;s modulus, Poisson&apos;s ratio, etc.) are resolved from thelibrary — the caller provides only the material name and library.</param>

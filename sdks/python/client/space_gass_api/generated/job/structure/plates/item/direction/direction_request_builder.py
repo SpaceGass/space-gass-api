@@ -55,7 +55,7 @@ class DirectionRequestBuilder(BaseRequestBuilder):
     
     async def put(self,body: DirectionUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[PlateDirection]:
         """
-        Sets the direction for a specific plate. Exactly one of `dirAngle`,`dirNode`, or `dirAxis` must be supplied — the underlying datasheet rowenforces mutual exclusion, so the supplied field is written and SG's per-fieldhelper zeros the other two for the row.A missing or empty body is rejected with 400 (PUT expects a meaningful payload).            Uses PUT because today every write replaces the full direction state (the mutexinvariant zeros the other two fields). When SG stores a discriminator on therow, a sibling PATCH endpoint will be added that supports true single-fieldpartial updates without touching the others.
+        Sets the direction for a specific plate. Exactly one of `dirAngle`,`dirNode` or `dirAxis` must be supplied; the other two are set to zero.A missing or empty body is rejected with 400.
         param body: DTO for updating the direction on a member or plate (partial-update semantics).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[PlateDirection]
@@ -92,7 +92,7 @@ class DirectionRequestBuilder(BaseRequestBuilder):
     
     def to_put_request_information(self,body: DirectionUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Sets the direction for a specific plate. Exactly one of `dirAngle`,`dirNode`, or `dirAxis` must be supplied — the underlying datasheet rowenforces mutual exclusion, so the supplied field is written and SG's per-fieldhelper zeros the other two for the row.A missing or empty body is rejected with 400 (PUT expects a meaningful payload).            Uses PUT because today every write replaces the full direction state (the mutexinvariant zeros the other two fields). When SG stores a discriminator on therow, a sibling PATCH endpoint will be added that supports true single-fieldpartial updates without touching the others.
+        Sets the direction for a specific plate. Exactly one of `dirAngle`,`dirNode` or `dirAxis` must be supplied; the other two are set to zero.A missing or empty body is rejected with 400.
         param body: DTO for updating the direction on a member or plate (partial-update semantics).
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

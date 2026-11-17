@@ -34,7 +34,7 @@ namespace SpaceGassApi.Job.Structure.Sections.Item.Library
         {
         }
         /// <summary>
-        /// Replaces the section at the given Id with a library-sourced section. The existing rowis deleted and a new row is created at the same Id, resolved from the SPACE GASSsection library by (name, library). Use this to convert a User section to a Librarysection, or to re-resolve an existing Library section against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
+        /// Replaces the section at the given Id with a library-sourced section, resolved from theSPACE GASS section library by (name, library); the Id and every member that uses it arekept, and a name or library that cannot be resolved leaves the section unchanged. Usethis to convert a User section to a Librarysection, or to re-resolve an existing Library section against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.Section"/></returns>
         /// <param name="body">DTO for creating a library-sourced section. Structural properties (A, J, Iy, Iz, etc.)and cross-section shape data are resolved from the SPACE GASS section library by(name, library).</param>
@@ -65,7 +65,7 @@ namespace SpaceGassApi.Job.Structure.Sections.Item.Library
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.Section>(requestInfo, global::SpaceGassApi.Models.Section.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Replaces the section at the given Id with a library-sourced section. The existing rowis deleted and a new row is created at the same Id, resolved from the SPACE GASSsection library by (name, library). Use this to convert a User section to a Librarysection, or to re-resolve an existing Library section against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
+        /// Replaces the section at the given Id with a library-sourced section, resolved from theSPACE GASS section library by (name, library); the Id and every member that uses it arekept, and a name or library that cannot be resolved leaves the section unchanged. Usethis to convert a User section to a Librarysection, or to re-resolve an existing Library section against a different libraryentry. Any `id` in the request body is ignored — the route Id wins.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">DTO for creating a library-sourced section. Structural properties (A, J, Iy, Iz, etc.)and cross-section shape data are resolved from the SPACE GASS section library by(name, library).</param>

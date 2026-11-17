@@ -20,7 +20,7 @@ class JobStatus(Parsable):
     """
     # Current operational mode of the API.
     access_mode: Optional[AccessMode] = None
-    # Summary of which analysis types have stored results for the current job.Values are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
+    # Summary of which analysis types have stored results for the current job.
     analysis: Optional[AnalysisResultsSummary] = None
     # Read DTO for job responses.Model counts and file state are available via GET /job/status (JobStatusDto).
     job: Optional[Job] = None
@@ -28,7 +28,7 @@ class JobStatus(Parsable):
     loads: Optional[LoadsSummary] = None
     # Current session/file state of the job.
     state: Optional[JobState] = None
-    # Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.Result flags are read from Fortran result-file headers on disk — a lightweightheader-only read that does not load result datasheets.
+    # Summary of steel design data and results for the current job — the number ofsteel member design groups, and which steel design types have stored results.
     steel_design: Optional[SteelDesignSummary] = None
     # Summary counts of structural entities in the current job — geometry,boundary conditions, and section/material properties.
     structure: Optional[StructureSummary] = None

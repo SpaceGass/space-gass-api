@@ -14,7 +14,7 @@ class ResourceMetadata(Parsable):
     """
     # Current count of items in this resource.Null for sub-resources whose count does not apply uniformly.
     count: Optional[int] = None
-    # Field definitions describing the resource's wire shape. Each entry correspondsto a property on the read DTO; `jsonName` matches the JSON key clients see.
+    # Field definitions describing the resource's wire shape. Each entry correspondsto a property on the read DTO; `jsonName` matches the JSON key clients see.On a results endpoint each field also says whether `sort` and `distinctBy`accept it and which value-filter parameters apply to it.
     fields: Optional[list[FieldMetadata]] = None
     # Maximum Id currently in use (single-int Id entities only).
     max_id: Optional[int] = None

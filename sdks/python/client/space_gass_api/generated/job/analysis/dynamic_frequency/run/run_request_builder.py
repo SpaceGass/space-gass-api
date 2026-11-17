@@ -33,7 +33,7 @@ class RunRequestBuilder(BaseRequestBuilder):
     
     async def post(self,body: DynamicFrequencySettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[AnalysisRun]:
         """
-        Starts a Dynamic Frequency Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.
+        Starts a Dynamic Frequency Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Runs execute one at a time; a run of this type that is already running or queued returns 409 Conflict.            The request body is optional. If provided, the fields included are written to the job'sanalysis settings before the run starts and stay in effect afterwards; omitted fields keeptheir stored values.
         param body: Update request for Dynamic Frequency Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[AnalysisRun]
@@ -60,7 +60,7 @@ class RunRequestBuilder(BaseRequestBuilder):
     
     def to_post_request_information(self,body: DynamicFrequencySettingsUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
-        Starts a Dynamic Frequency Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Only one analysis can run at a time.            The request body is optional. If provided, only fields included are applied as settingoverrides before the analysis starts; omitted fields remain unchanged.
+        Starts a Dynamic Frequency Analysis run. The analysis executes asynchronously in the background.Poll the returned status URL to track progress. Runs execute one at a time; a run of this type that is already running or queued returns 409 Conflict.            The request body is optional. If provided, the fields included are written to the job'sanalysis settings before the run starts and stay in effect afterwards; omitted fields keeptheir stored values.
         param body: Update request for Dynamic Frequency Analysis settings.Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation

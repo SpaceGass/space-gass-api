@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a list of plate-cut Ids and a cut-typecategorical filter.Maps to SG `SGFilterType.PlateCut`.
+    /// Sub-filter carrying a list of plate-cut Ids and a cut-typecategorical filter.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterPlateCuts : IParsable
@@ -25,7 +25,7 @@ namespace SpaceGassApi.Models
 #else
         public string PlateCuts { get; set; }
 #endif
-        /// <summary>Plate-cut categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_PlateCutType` verbatim (identicalmembers to SpaceGassApi.Models.Enums.Filters.FilterPlateStripType at the SG layer, butkept as a distinct type so future SG additions don&apos;t require anAPI refactor).</summary>
+        /// <summary>Plate-cut categories available as a Filter resource criterion.</summary>
         public global::SpaceGassApi.Models.FilterPlateCutType? PlateCutType { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

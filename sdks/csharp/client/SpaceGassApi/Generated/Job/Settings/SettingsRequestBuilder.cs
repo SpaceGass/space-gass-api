@@ -3,6 +3,7 @@
 using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
+using SpaceGassApi.Job.Settings.DefaultLibraries;
 using SpaceGassApi.Job.Settings.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
@@ -18,6 +19,11 @@ namespace SpaceGassApi.Job.Settings
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class SettingsRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The defaultLibraries property</summary>
+        public global::SpaceGassApi.Job.Settings.DefaultLibraries.DefaultLibrariesRequestBuilder DefaultLibraries
+        {
+            get => new global::SpaceGassApi.Job.Settings.DefaultLibraries.DefaultLibrariesRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>The metadata property</summary>
         public global::SpaceGassApi.Job.Settings.Metadata.MetadataRequestBuilder Metadata
         {
