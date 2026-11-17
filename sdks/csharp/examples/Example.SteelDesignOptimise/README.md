@@ -1,6 +1,6 @@
 # Example.SteelDesignOptimise
 
-Builds the simply-supported beam from `Example.CreateSimpleBeam` on a deliberately heavy 610 UB 125, analyses it, sets the default section library to Aust300 (the library a design run selects from), looks up that library's groups and the scan code of the group the beam's section belongs to, then runs a steel member **DESIGN** to AS 4100 that selects the lightest adequate section from that group, swaps it into the model, re-runs the static analysis and iterates until the design settles. Prints what the run did (iterations, sections updated, analysis re-run), the section it chose, and the check summary for the final section.
+Backs the [Design steel members recipe](https://api.spacegass.com/docs/examples/run-steel-design). Builds the simply-supported beam from `Example.CreateSimpleBeam` on a deliberately heavy 610 UB 125, analyses it, sets the default section library to Aust300 (the library a design run selects from), looks up that library's groups and the scan code of the group the beam's section belongs to, then runs a steel member **DESIGN** to AS 4100 that selects the lightest adequate section from that group, swaps it into the model, re-runs the static analysis and iterates until the design settles. Prints what the run did (iterations, sections updated, analysis re-run), the section it chose, and the check summary for the final section.
 
 See `Example.SteelDesignCheck` for a CHECK run that leaves the model unchanged.
 

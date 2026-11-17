@@ -1,6 +1,6 @@
 # steel_design_check
 
-Builds the simply-supported beam from `create_simple_beam`, analyses it, then runs a steel member design **CHECK** to AS 4100: lists the design codes this seat is licensed for, creates a steel member design group, sets the general and AS 4100 settings, starts the check run, polls it to completion and prints the per-member check summary (load factor, critical case, failure mode).
+Backs the [Run a steel member design check recipe](https://api.spacegass.com/docs/examples/run-steel-design-check). Builds the simply-supported beam from `create_simple_beam`, analyses it, then runs a steel member design **CHECK** to AS 4100: lists the design codes this seat is licensed for, creates a steel member design group, sets the general and AS 4100 settings, starts the check run, polls it to completion and prints the per-member check summary (load factor, critical case, failure mode).
 
 A check verifies the members' current sections without changing the model. See `steel_design_optimise` for a DESIGN run that selects new sections.
 

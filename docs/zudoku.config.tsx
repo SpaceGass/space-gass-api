@@ -508,6 +508,8 @@ const config: ZudokuConfig = {
             "examples/filter-results-by-case",
             "examples/switch-to-readonly",
             "examples/create-shape-builder-section",
+            "examples/run-steel-design-check",
+            "examples/run-steel-design",
           ],
         },
       ],
