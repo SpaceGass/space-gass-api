@@ -4,7 +4,7 @@ Builds the simply-supported beam from `create_simple_beam` on a deliberately hea
 
 See `steel_design_check` for a CHECK run that leaves the model unchanged.
 
-Uses the `steel_design` helpers (`from space_gass_api import steel_design`) to build the run request.
+Uses the `steel_member` helpers (`from space_gass_api import steel_member`) to build the run request.
 
 ## Run it
 

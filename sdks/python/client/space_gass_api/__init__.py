@@ -29,8 +29,8 @@ from .space_gass_api_client import _enhance_request_methods
 
 _enhance_request_methods()
 
-from . import shape_builder, steel_design
+from . import shape_builder, steel_member
 from .space_gass_api_client import SpaceGassApiClient
 from .upload_requests import ImportTxtRequest, NewFromTemplateRequest
 
-__all__ = ["ImportTxtRequest", "NewFromTemplateRequest", "SpaceGassApiClient", "shape_builder", "steel_design"]
+__all__ = ["ImportTxtRequest", "NewFromTemplateRequest", "SpaceGassApiClient", "shape_builder", "steel_member"]

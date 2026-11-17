@@ -82,9 +82,9 @@ finally { await client.Job.Close.PostAsync(); }
    Kiota's composed wrappers by hand. In C#: `client.Job.Design.SteelMember.ForCode(DesignCode.As4100)`,
    assign the code's settings object directly (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`),
    and read/update stored settings with `Settings.GetAsync<SteelMemberDesignSettingsAs4100>()` /
-   `Settings.PatchAsync<...>(update)`. In Python: `steel_design.for_code(client, models.DesignCode.As4100)`,
-   `steel_design.run_check_request(code_settings=...)` / `run_design_request(...)`, and
-   `steel_design.get_settings(...)` / `patch_settings(...)`. Never set `code` — the API defaults it to the
+   `Settings.PatchAsync<...>(update)`. In Python: `steel_member.for_code(client, models.DesignCode.As4100)`,
+   `steel_member.run_check_request(code_settings=...)` / `run_design_request(...)`, and
+   `steel_member.get_settings(...)` / `patch_settings(...)`. Never set `code` — the API defaults it to the
    route. Design runs are async like analyses — poll `job/design/runs/{runId}` until `status` is
    `Completed`, `Failed` or `Cancelled`. A run needs static results first, and a design group whose
    compression effective lengths are explicit (or a buckling analysis). Results:

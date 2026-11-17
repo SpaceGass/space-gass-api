@@ -15,18 +15,18 @@ All the per-code classes derive from ``SteelMemberDesignSettingsBase`` /
 ``SteelMemberDesignSettingsBaseUpdate``, so these helpers are generic — they
 work for every code, including ones added in later builds::
 
-    from space_gass_api import steel_design
+    from space_gass_api import steel_member
     import space_gass_api.models as models
 
-    as4100 = steel_design.for_code(client, models.DesignCode.As4100)
+    as4100 = steel_member.for_code(client, models.DesignCode.As4100)
 
     # Pass the code's own settings object straight in
-    run = await as4100.run_check.post(steel_design.run_check_request(
+    run = await as4100.run_check.post(steel_member.run_check_request(
         code_settings=models.SteelMemberDesignSettingsAs4100Update(slenderness_ratio_check=True)))
 
     # Read / update the stored settings, typed
-    settings = await steel_design.get_settings(as4100, models.SteelMemberDesignSettingsAs4100)
-    settings = await steel_design.patch_settings(
+    settings = await steel_member.get_settings(as4100, models.SteelMemberDesignSettingsAs4100)
+    settings = await steel_member.patch_settings(
         as4100, models.SteelMemberDesignSettingsAs4100Update(use_kt_factor_for_tension=True),
         models.SteelMemberDesignSettingsAs4100)
 

@@ -30,7 +30,7 @@ import os
 import sys
 import winreg
 
-from space_gass_api import SpaceGassApiClient, steel_design
+from space_gass_api import SpaceGassApiClient, steel_member
 import space_gass_api.models as models
 from space_gass_api.utils import to_filter_string
 
@@ -221,7 +221,7 @@ async def main() -> int:
         # Each design code has its own settings object (AS 4100 and NZS 3404
         # differ). They can be PATCHed at steel-member/{code}/settings, or —
         # as here — passed as a per-run override on the run request; either
-        # way they are stored with the job. The steel_design helpers take
+        # way they are stored with the job. The steel_member helpers take
         # the code's own settings object directly.
         print("Preparing AS 4100 settings...")
         as4100_settings = models.SteelMemberDesignSettingsAs4100Update(
@@ -236,8 +236,8 @@ async def main() -> int:
         # job's stored settings before the run starts. Analysis and design
         # runs share one queue, so queue_position may be > 1.
         print(f"Starting {DESIGN_CODE.value} design CHECK run...")
-        design_run = await steel_design.for_code(client, DESIGN_CODE).run_check.post(
-            steel_design.run_check_request(code_settings=as4100_settings))
+        design_run = await steel_member.for_code(client, DESIGN_CODE).run_check.post(
+            steel_member.run_check_request(code_settings=as4100_settings))
         print(f"  Run {design_run.run_id} {design_run.status.value}; waiting for completion...")
 
         while True:

@@ -34,7 +34,7 @@ import os
 import sys
 import winreg
 
-from space_gass_api import SpaceGassApiClient, steel_design
+from space_gass_api import SpaceGassApiClient, steel_member
 import space_gass_api.models as models
 from space_gass_api.utils import to_filter_string
 
@@ -233,8 +233,8 @@ async def main() -> int:
         # Everything in the body is optional — the settings PATCHed above
         # could equally have been passed here as per-run overrides.
         print(f"Starting {DESIGN_CODE.value} DESIGN run...")
-        design_run = await steel_design.for_code(client, DESIGN_CODE).run_design.post(
-            steel_design.run_design_request(update_sections=True))
+        design_run = await steel_member.for_code(client, DESIGN_CODE).run_design.post(
+            steel_member.run_design_request(update_sections=True))
         print(f"  Run {design_run.run_id} {design_run.status.value}; waiting for completion...")
 
         while True:

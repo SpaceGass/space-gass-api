@@ -112,7 +112,7 @@ def main() -> int:
         check(not missing, f"C# {label}: no wrapper property typed as the settings class for {missing}")
 
     import space_gass_api.models as models  # noqa: E402
-    from space_gass_api import steel_design  # noqa: E402
+    from space_gass_api import steel_member  # noqa: E402
     from space_gass_api.generated.job.design.steel_member.item.settings.settings_get_response import (  # noqa: E402
         SettingsGetResponse,
     )
@@ -127,13 +127,13 @@ def main() -> int:
             check(False, f"Python models have no SteelMemberDesignSettings{c}[Update] class")
             continue
         try:
-            steel_design.run_check_request(code_settings=update_cls())
-            steel_design.run_design_request(code_settings=update_cls())
-            body = steel_design.code_settings_body(update_cls())
+            steel_member.run_check_request(code_settings=update_cls())
+            steel_member.run_design_request(code_settings=update_cls())
+            body = steel_member.code_settings_body(update_cls())
             check(isinstance(body, SettingsPatchRequestBody), f"code_settings_body failed for {c}")
         except TypeError as ex:
-            check(False, f"steel_design helpers cannot wrap {c}: {ex}")
-        check(steel_design._wrapper_field(SettingsGetResponse, settings_cls) is not None,
+            check(False, f"steel_member helpers cannot wrap {c}: {ex}")
+        check(steel_member._wrapper_field(SettingsGetResponse, settings_cls) is not None,
               f"Python SettingsGetResponse has no field for SteelMemberDesignSettings{c}")
 
     design_code_enum = {e.value for e in models.DesignCode}

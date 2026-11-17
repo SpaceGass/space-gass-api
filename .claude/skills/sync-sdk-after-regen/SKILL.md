@@ -24,7 +24,7 @@ Build the change matrix that drives every later edit:
 
 6. **Hand-maintained helpers still fit the regen** — the oneOf helpers outside `Generated/` / `generated/` encode things Kiota doesn't emit (class→discriminator maps, composed-wrapper property names). Two checks, both must pass before touching examples:
    - `dotnet build sdks/csharp/client/SpaceGassApi/SpaceGassApi.csproj` — catches renamed wrapper/model types referenced by `Utils/SteelMemberDesignExtensions.cs` and `Utils/SectionShapeExtensions.cs` (partial classes on Kiota's composed wrappers; a rename there is a compile error, not a silent break).
-   - `python tools/check_helpers.py` — compares the `SectionShape` discriminator map in both SDKs against the spec, verifies every shape class and every design code's settings class has a composed-wrapper property/field typed as that class (the helpers resolve wrappers by type), and round-trips `shape_builder` / `steel_design` for every design code. On failure it lists what drifted: a new shape type → add it to both maps; a wrapper or base-class rename → update the helper. New design codes need no helper change — the steel design helpers are generic over `SteelMemberDesignSettingsBase[Update]`.
+   - `python tools/check_helpers.py` — compares the `SectionShape` discriminator map in both SDKs against the spec, verifies every shape class and every design code's settings class has a composed-wrapper property/field typed as that class (the helpers resolve wrappers by type), and round-trips `shape_builder` / `steel_member` for every design code. On failure it lists what drifted: a new shape type → add it to both maps; a wrapper or base-class rename → update the helper. New design codes need no helper change — the steel design helpers are generic over `SteelMemberDesignSettingsBase[Update]`.
 
    Expected: `Helper check passed: shape map (41 types), wrapper fields, 15 design codes.` (counts at build `14.51.12`; higher counts just mean new shape types or design codes.)
 
@@ -52,7 +52,7 @@ Files: every entry-point `.py` under `sdks/python/examples/*/`. Mirror Phase 2 w
 - `keys=[...]` → `nodes="1,2,3"` for reactions filters
 - `from space_gass_api.models.section_create import SectionCreate` → `from space_gass_api.models.section_user_create import SectionUserCreate`
 - Drop list arguments to `case_`/`member`/`mode` filter setattrs in favour of `cases`/`members`/`modes` with SG-list strings
-- oneOf bodies: examples use `steel_design.for_code(...)` / `steel_design.run_check_request(...)` / `shape_builder.shapes(...)` etc. from the package root, never the generated `*_codeSettings` / `*_shapes` wrappers directly
+- oneOf bodies: examples use `steel_member.for_code(...)` / `steel_member.run_check_request(...)` / `shape_builder.shapes(...)` etc. from the package root, never the generated `*_codeSettings` / `*_shapes` wrappers directly
 
 Verify: `python -m py_compile <each entry-point>` (Python interpreter must be on PATH; if not, do a careful visual diff and rely on the C# build as a structural backstop). The two SDKs share the same shape, so anything that landed cleanly in C# almost always lands cleanly in Python.
 

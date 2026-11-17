@@ -4,7 +4,7 @@ Builds the simply-supported beam from `create_simple_beam`, analyses it, then ru
 
 A check verifies the members' current sections without changing the model. See `steel_design_optimise` for a DESIGN run that selects new sections.
 
-Uses the `steel_design` helpers (`from space_gass_api import steel_design`) so the AS 4100 settings object can be passed straight to the run request without Kiota's oneOf wrapper.
+Uses the `steel_member` helpers (`from space_gass_api import steel_member`) so the AS 4100 settings object can be passed straight to the run request without Kiota's oneOf wrapper.
 
 ## Run it
 
