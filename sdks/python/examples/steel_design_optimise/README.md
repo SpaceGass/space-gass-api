@@ -1,6 +1,6 @@
 # steel_design_optimise
 
-Builds the simply-supported beam from `create_simple_beam` on a deliberately heavy 610 UB 125, analyses it, then runs a steel member **DESIGN** to AS 4100 that selects the lightest adequate section from the default section library, swaps it into the model, re-runs the static analysis and iterates until the design settles. Prints what the run did (iterations, sections updated, analysis re-run), the section it chose, and the check summary for the final section.
+Builds the simply-supported beam from `create_simple_beam` on a deliberately heavy 610 UB 125, analyses it, looks up the default section library's groups and the scan code of the group the beam's section belongs to, then runs a steel member **DESIGN** to AS 4100 that selects the lightest adequate section from that group, swaps it into the model, re-runs the static analysis and iterates until the design settles. Prints what the run did (iterations, sections updated, analysis re-run), the section it chose, and the check summary for the final section.
 
 See `steel_design_check` for a CHECK run that leaves the model unchanged.
 

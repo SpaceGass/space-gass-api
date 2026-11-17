@@ -6,7 +6,7 @@ it on a deliberately heavy section, then lets a DESIGN run pick the
 lightest adequate section from the section library:
    1.  Create the client and a new project
    2.  Build the beam on a 610 UB 125
-   3.  Confirm which section library the design will select from
+   3.  Find the section library and scan code the design selects from
    4.  Load cases, loads and a ULS combination
    5.  Run a linear static analysis and wait for completion
    6.  Create a steel member design group (optimise for weight)
@@ -92,10 +92,31 @@ async def main() -> int:
 
         # == Step 3 — Where the design selects sections from ===========
         # A DESIGN run picks replacement sections from the default section
-        # library nominated in SPACE GASS (Preferences > Default Libraries),
-        # narrowed by the design group's scan code to compatible shapes.
+        # library nominated in SPACE GASS (Preferences > Default Libraries).
+        # Each library is divided into groups (universal beams, columns,
+        # channels, ...) and each group has a scan-code letter. A design
+        # group's scan_code lists the letters of the groups the run may
+        # select from.
         libraries = await client.job.settings.default_libraries.get()
-        print(f'Design will select sections from the "{libraries.sections}" library.')
+        library = await client.libraries.sections.by_library(libraries.sections).get()
+        print(f'Design will select sections from the "{library.name}" library:')
+        for g in library.groups:
+            print(f"  {g.scan_code}  {g.name}")
+
+        # Keep the design within the same family as the current section:
+        # find which group the beam's section is in, then take that
+        # group's scan code. Scan codes belong to a library, so look the
+        # section up in the library the design selects from — which may not
+        # be the library the beam's section was loaded from.
+        match = await client.libraries.sections.search.get(
+            q=initial_section.name, library=library.name, limit=1)
+        if not match.items:
+            raise RuntimeError(
+                f'{initial_section.name} is not in the default section library "{library.name}". '
+                "Pick a scan code from the list above instead.")
+        section_group = match.items[0].group
+        scan_code = next(g.scan_code for g in library.groups if g.name == section_group)
+        print(f'  {initial_section.name} is in "{section_group}" - scan code {scan_code}')
         print()
 
         # == Step 4 — Load cases, loads and a ULS combination ==========
@@ -192,10 +213,14 @@ async def main() -> int:
                 calculate_lc_minor_from_buckling=False,
                 lc_minor=6.0,
                 calculate_lb_from_flange_restraints=True,
+                # Only consider sections from the library group(s) with these
+                # scan-code letters (looked up in Step 3).
+                scan_code=scan_code,
                 # Pick the lightest adequate section rather than the shallowest.
                 design_criteria=models.SteelDesignCriteria.Weight,
             ))
-        print(f"  Design group {group.id}: members {group.members}, criteria {group.design_criteria.value}")
+        print(f"  Design group {group.id}: members {group.members}, "
+              f"scan code {group.scan_code}, criteria {group.design_criteria.value}")
         print()
 
         # == Step 7 — General design settings ==========================

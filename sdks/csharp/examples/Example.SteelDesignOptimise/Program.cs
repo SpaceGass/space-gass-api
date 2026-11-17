@@ -11,7 +11,7 @@ using SpaceGassApi.Utils;
 // run pick the lightest adequate section from the section library:
 //   1.  Create the client and a new project
 //   2.  Build the beam on a 610 UB 125
-//   3.  Confirm which section library the design will select from
+//   3.  Find the section library and scan code the design selects from
 //   4.  Load cases, loads and a ULS combination
 //   5.  Run a linear static analysis and wait for completion
 //   6.  Create a steel member design group (optimise for weight)
@@ -83,10 +83,36 @@ try
 
     // == Step 3 — Where the design selects sections from ===========
     // A DESIGN run picks replacement sections from the default section
-    // library nominated in SPACE GASS (Preferences > Default Libraries),
-    // narrowed by the design group's scan code to compatible shapes.
+    // library nominated in SPACE GASS (Preferences > Default Libraries).
+    // Each library is divided into groups (universal beams, columns,
+    // channels, ...) and each group has a scan-code letter. A design
+    // group's ScanCode lists the letters of the groups the run may
+    // select from.
     var libraries = await client.Job.Settings.DefaultLibraries.GetAsync();
-    Console.WriteLine($"Design will select sections from the \"{libraries!.Sections}\" library.");
+    var library = await client.Libraries.Sections[libraries!.Sections!].GetAsync();
+    Console.WriteLine($"Design will select sections from the \"{library!.Name}\" library:");
+    foreach (var g in library.Groups!)
+    {
+        Console.WriteLine($"  {g.ScanCode}  {g.Name}");
+    }
+
+    // Keep the design within the same family as the current section:
+    // find which group the beam's section is in, then take that
+    // group's scan code. Scan codes belong to a library, so look the
+    // section up in the library the design selects from — which may not
+    // be the library the beam's section was loaded from.
+    var match = await client.Libraries.Sections.Search.GetAsync(config =>
+    {
+        config.QueryParameters.Q = initialSection.Name;
+        config.QueryParameters.Library = library.Name;
+        config.QueryParameters.Limit = 1;
+    });
+    var sectionGroup = match!.Items!.FirstOrDefault()?.Group
+        ?? throw new Exception(
+            $"{initialSection.Name} is not in the default section library \"{library.Name}\". " +
+            "Pick a scan code from the list above instead.");
+    var scanCode = library.Groups.First(g => g.Name == sectionGroup).ScanCode;
+    Console.WriteLine($"  {initialSection.Name} is in \"{sectionGroup}\" - scan code {scanCode}");
     Console.WriteLine();
 
     // == Step 4 — Load cases, loads and a ULS combination ==========
@@ -198,10 +224,14 @@ try
             CalculateLcMinorFromBuckling = false,
             LcMinor = 6.0,
             CalculateLbFromFlangeRestraints = true,
+            // Only consider sections from the library group(s) with these
+            // scan-code letters (looked up in Step 3).
+            ScanCode = scanCode,
             // Pick the lightest adequate section rather than the shallowest.
             DesignCriteria = SteelDesignCriteria.Weight,
         });
-    Console.WriteLine($"  Design group {group!.Id}: members {group.Members}, criteria {group.DesignCriteria}");
+    Console.WriteLine($"  Design group {group!.Id}: members {group.Members}, " +
+                      $"scan code {group.ScanCode}, criteria {group.DesignCriteria}");
     Console.WriteLine();
 
     // == Step 7 — General design settings ==========================
