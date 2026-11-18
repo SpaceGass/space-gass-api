@@ -5,7 +5,9 @@ on:
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-  SPEC_PATH: descriptions/preview/openapi.json
+  SPEC_PATH: descriptions/openapi.json
+  # Kiota generates from a transformed copy (oneOf -> base types); see tools/prepare_spec_for_kiota.py
+  KIOTA_SPEC_PATH: build/openapi.kiota.json
 
 jobs:
   generate:
@@ -41,13 +43,21 @@ jobs:
             console.log("Made " + touched + " requestBody parameter(s) explicitly optional.");
           ' "$SPEC_PATH"
 
+      - name: Prepare spec for Kiota — oneOf to base types
+        run: |
+          # The published spec keeps `oneOf` for polymorphic bodies (good for the API
+          # reference). Kiota turns each oneOf into a clumsy composed-wrapper class, so
+          # generate from a copy where they are references to the shared base type and
+          # each subclass's discriminator has a default. Wire format is identical.
+          python3 tools/prepare_spec_for_kiota.py "$SPEC_PATH" "$KIOTA_SPEC_PATH"
+
       - name: Install Kiota
         run: dotnet tool install --global Microsoft.OpenApi.Kiota
 
       - name: Generate C# client
         run: |
           kiota generate \
-            --openapi "$SPEC_PATH" \
+            --openapi "$KIOTA_SPEC_PATH" \
             --language csharp \
             --output sdks/csharp/client/SpaceGassApi/Generated \
             --namespace-name SpaceGassApi \
@@ -57,7 +67,7 @@ jobs:
       - name: Generate Python client
         run: |
           kiota generate \
-            --openapi "$SPEC_PATH" \
+            --openapi "$KIOTA_SPEC_PATH" \
             --language python \
             --output sdks/python/client/space_gass_api/generated \
             --namespace-name space_gass_api.generated \
@@ -72,6 +82,18 @@ jobs:
           # files inside the generated tree, glued to the hand-maintained
           # `space_gass_api_extensions.py` at the client root.
           python3 tools/regen_python_inits.py
+
+      - name: Check the SDKs have no oneOf wrappers
+        run: |
+          # Fails if the clients were generated from the published spec instead of the
+          # transformed copy (composed-type wrappers present), if a subclass does not
+          # default its discriminator, or if a DesignCode member name differs from its
+          # route value.
+          pip install --quiet "microsoft-kiota-bundle>=1.9.8"   # same dependency as sdks/python/client/pyproject.toml
+          python3 tools/check_sdk_shape.py
+
+      - name: Build C# client
+        run: dotnet build sdks/csharp/client/SpaceGassApi/SpaceGassApi.csproj --nologo -v q
 
       - name: Sync SDK source versions to spec
         id: sync_version

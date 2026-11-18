@@ -11,13 +11,13 @@ if TYPE_CHECKING:
 @dataclass
 class FilterPlates(Parsable):
     """
-    Sub-filter carrying a list of plate Ids and a plate-type categorical filter.Maps to SG `SGFilterType.Plates`.
+    Sub-filter carrying a list of plate Ids and a plate-type categorical filter.
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None
     # Whether a sub-filter block includes or excludes matching entities.
     mode: Optional[FilterMode] = None
-    # Plate type categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_PlateType` verbatim. Richer thanthe entity-property SpaceGassApi.Models.Enums.PlateType / SpaceGassApi.Models.Enums.PlateTheorybecause the filter surface includes validity / orientation states.
+    # Plate type categories available as a Filter resource criterion.Wider than SpaceGassApi.Models.Enums.PlateType / SpaceGassApi.Models.Enums.PlateTheory: it includes validity andorientation states.
     plate_type: Optional[FilterPlateType] = None
     # Plate Ids in SG list format. Empty string means no Id criterion.
     plates: Optional[str] = None

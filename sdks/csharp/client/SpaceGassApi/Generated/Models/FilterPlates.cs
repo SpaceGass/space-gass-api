@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a list of plate Ids and a plate-type categorical filter.Maps to SG `SGFilterType.Plates`.
+    /// Sub-filter carrying a list of plate Ids and a plate-type categorical filter.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterPlates : IParsable
@@ -25,7 +25,7 @@ namespace SpaceGassApi.Models
 #else
         public string Plates { get; set; }
 #endif
-        /// <summary>Plate type categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_PlateType` verbatim. Richer thanthe entity-property SpaceGassApi.Models.Enums.PlateType / SpaceGassApi.Models.Enums.PlateTheorybecause the filter surface includes validity / orientation states.</summary>
+        /// <summary>Plate type categories available as a Filter resource criterion.Wider than SpaceGassApi.Models.Enums.PlateType / SpaceGassApi.Models.Enums.PlateTheory: it includes validity andorientation states.</summary>
         public global::SpaceGassApi.Models.FilterPlateType? PlateType { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

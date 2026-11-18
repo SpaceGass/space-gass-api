@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.MemberStresses
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberStressesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member-stresses{?limit*,loadCases*,members*,offset*}", pathParameters)
+        public MemberStressesRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member-stresses{?distinctBy*,limit*,loadCases*,maxAbsMx*,maxAbsMyBtm*,maxAbsMyTop*,maxAbsMzBtm*,maxAbsMzTop*,maxAbsN*,maxAbsNMyBtm*,maxAbsNMyTop*,maxAbsNMzBtm*,maxAbsNMzTop*,maxAbsPosition*,maxAbsVy*,maxAbsVz*,maxMx*,maxMyBtm*,maxMyTop*,maxMzBtm*,maxMzTop*,maxN*,maxNMyBtm*,maxNMyTop*,maxNMzBtm*,maxNMzTop*,maxPosition*,maxStation*,maxVy*,maxVz*,members*,minAbsMx*,minAbsMyBtm*,minAbsMyTop*,minAbsMzBtm*,minAbsMzTop*,minAbsN*,minAbsNMyBtm*,minAbsNMyTop*,minAbsNMzBtm*,minAbsNMzTop*,minAbsPosition*,minAbsVy*,minAbsVz*,minMx*,minMyBtm*,minMyTop*,minMzBtm*,minMzTop*,minN*,minNMyBtm*,minNMyTop*,minNMzBtm*,minNMzTop*,minPosition*,minStation*,minVy*,minVz*,offset*,order*,sort*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.MemberStresses
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberStressesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member-stresses{?limit*,loadCases*,members*,offset*}", rawUrl)
+        public MemberStressesRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/static/member-stresses{?distinctBy*,limit*,loadCases*,maxAbsMx*,maxAbsMyBtm*,maxAbsMyTop*,maxAbsMzBtm*,maxAbsMzTop*,maxAbsN*,maxAbsNMyBtm*,maxAbsNMyTop*,maxAbsNMzBtm*,maxAbsNMzTop*,maxAbsPosition*,maxAbsVy*,maxAbsVz*,maxMx*,maxMyBtm*,maxMyTop*,maxMzBtm*,maxMzTop*,maxN*,maxNMyBtm*,maxNMyTop*,maxNMzBtm*,maxNMzTop*,maxPosition*,maxStation*,maxVy*,maxVz*,members*,minAbsMx*,minAbsMyBtm*,minAbsMyTop*,minAbsMzBtm*,minAbsMzTop*,minAbsN*,minAbsNMyBtm*,minAbsNMyTop*,minAbsNMzBtm*,minAbsNMzTop*,minAbsPosition*,minAbsVy*,minAbsVz*,minMx*,minMyBtm*,minMyTop*,minMzBtm*,minMzTop*,minN*,minNMyBtm*,minNMyTop*,minNMzBtm*,minNMzTop*,minPosition*,minStation*,minVy*,minVz*,offset*,order*,sort*}", rawUrl)
         {
         }
         /// <summary>
@@ -104,6 +104,16 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.MemberStresses
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class MemberStressesRequestBuilderGetQueryParameters 
         {
+            /// <summary>Identity fields: loadCase, member. One row per value of this identity field: the first row in sort order, i.e. the governingone. `sort=fy&amp;order=AbsDesc&amp;distinctBy=node` returns each node&apos;s governingreaction with its load case; `distinctBy=loadCase` each case&apos;s governing row. Theidentity fields are the row&apos;s Ids (load case, node, member, plate, mode, steel member) orthe reaction summary&apos;s `summaryType`, named as in the response and flagged`distinctBy: true` in `GET …/metadata`. Rows come back whole; the count headeris the number of distinct values. Requires `sort`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("distinctBy")]
+            public string? DistinctBy { get; set; }
+#nullable restore
+#else
+            [QueryParameter("distinctBy")]
+            public string DistinctBy { get; set; }
+#endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             [QueryParameter("limit")]
             public int? Limit { get; set; }
@@ -117,6 +127,87 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.MemberStresses
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
+            /// <summary>Keep rows whose mx has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsMx")]
+            public double? MaxAbsMx { get; set; }
+            /// <summary>Keep rows whose myBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsMyBtm")]
+            public double? MaxAbsMyBtm { get; set; }
+            /// <summary>Keep rows whose myTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsMyTop")]
+            public double? MaxAbsMyTop { get; set; }
+            /// <summary>Keep rows whose mzBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsMzBtm")]
+            public double? MaxAbsMzBtm { get; set; }
+            /// <summary>Keep rows whose mzTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsMzTop")]
+            public double? MaxAbsMzTop { get; set; }
+            /// <summary>Keep rows whose n has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsN")]
+            public double? MaxAbsN { get; set; }
+            /// <summary>Keep rows whose nMyBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsNMyBtm")]
+            public double? MaxAbsNMyBtm { get; set; }
+            /// <summary>Keep rows whose nMyTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsNMyTop")]
+            public double? MaxAbsNMyTop { get; set; }
+            /// <summary>Keep rows whose nMzBtm has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsNMzBtm")]
+            public double? MaxAbsNMzBtm { get; set; }
+            /// <summary>Keep rows whose nMzTop has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsNMzTop")]
+            public double? MaxAbsNMzTop { get; set; }
+            /// <summary>Keep rows whose position has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsPosition")]
+            public double? MaxAbsPosition { get; set; }
+            /// <summary>Keep rows whose vy has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsVy")]
+            public double? MaxAbsVy { get; set; }
+            /// <summary>Keep rows whose vz has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxAbsVz")]
+            public double? MaxAbsVz { get; set; }
+            /// <summary>Keep rows whose mx is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxMx")]
+            public double? MaxMx { get; set; }
+            /// <summary>Keep rows whose myBtm is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxMyBtm")]
+            public double? MaxMyBtm { get; set; }
+            /// <summary>Keep rows whose myTop is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxMyTop")]
+            public double? MaxMyTop { get; set; }
+            /// <summary>Keep rows whose mzBtm is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxMzBtm")]
+            public double? MaxMzBtm { get; set; }
+            /// <summary>Keep rows whose mzTop is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxMzTop")]
+            public double? MaxMzTop { get; set; }
+            /// <summary>Keep rows whose n is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxN")]
+            public double? MaxN { get; set; }
+            /// <summary>Keep rows whose nMyBtm is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxNMyBtm")]
+            public double? MaxNMyBtm { get; set; }
+            /// <summary>Keep rows whose nMyTop is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxNMyTop")]
+            public double? MaxNMyTop { get; set; }
+            /// <summary>Keep rows whose nMzBtm is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxNMzBtm")]
+            public double? MaxNMzBtm { get; set; }
+            /// <summary>Keep rows whose nMzTop is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxNMzTop")]
+            public double? MaxNMzTop { get; set; }
+            /// <summary>Keep rows whose position is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxPosition")]
+            public double? MaxPosition { get; set; }
+            /// <summary>Keep rows whose station is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxStation")]
+            public double? MaxStation { get; set; }
+            /// <summary>Keep rows whose vy is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxVy")]
+            public double? MaxVy { get; set; }
+            /// <summary>Keep rows whose vz is at most this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("maxVz")]
+            public double? MaxVz { get; set; }
             /// <summary>Member Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -127,9 +218,114 @@ namespace SpaceGassApi.Job.Query.Analysis.Static.MemberStresses
             [QueryParameter("members")]
             public string Members { get; set; }
 #endif
+            /// <summary>Keep rows whose mx has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsMx")]
+            public double? MinAbsMx { get; set; }
+            /// <summary>Keep rows whose myBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsMyBtm")]
+            public double? MinAbsMyBtm { get; set; }
+            /// <summary>Keep rows whose myTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsMyTop")]
+            public double? MinAbsMyTop { get; set; }
+            /// <summary>Keep rows whose mzBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsMzBtm")]
+            public double? MinAbsMzBtm { get; set; }
+            /// <summary>Keep rows whose mzTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsMzTop")]
+            public double? MinAbsMzTop { get; set; }
+            /// <summary>Keep rows whose n has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsN")]
+            public double? MinAbsN { get; set; }
+            /// <summary>Keep rows whose nMyBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsNMyBtm")]
+            public double? MinAbsNMyBtm { get; set; }
+            /// <summary>Keep rows whose nMyTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsNMyTop")]
+            public double? MinAbsNMyTop { get; set; }
+            /// <summary>Keep rows whose nMzBtm has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsNMzBtm")]
+            public double? MinAbsNMzBtm { get; set; }
+            /// <summary>Keep rows whose nMzTop has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsNMzTop")]
+            public double? MinAbsNMzTop { get; set; }
+            /// <summary>Keep rows whose position has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsPosition")]
+            public double? MinAbsPosition { get; set; }
+            /// <summary>Keep rows whose vy has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsVy")]
+            public double? MinAbsVy { get; set; }
+            /// <summary>Keep rows whose vz has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minAbsVz")]
+            public double? MinAbsVz { get; set; }
+            /// <summary>Keep rows whose mx is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minMx")]
+            public double? MinMx { get; set; }
+            /// <summary>Keep rows whose myBtm is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minMyBtm")]
+            public double? MinMyBtm { get; set; }
+            /// <summary>Keep rows whose myTop is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minMyTop")]
+            public double? MinMyTop { get; set; }
+            /// <summary>Keep rows whose mzBtm is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minMzBtm")]
+            public double? MinMzBtm { get; set; }
+            /// <summary>Keep rows whose mzTop is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minMzTop")]
+            public double? MinMzTop { get; set; }
+            /// <summary>Keep rows whose n is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minN")]
+            public double? MinN { get; set; }
+            /// <summary>Keep rows whose nMyBtm is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minNMyBtm")]
+            public double? MinNMyBtm { get; set; }
+            /// <summary>Keep rows whose nMyTop is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minNMyTop")]
+            public double? MinNMyTop { get; set; }
+            /// <summary>Keep rows whose nMzBtm is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minNMzBtm")]
+            public double? MinNMzBtm { get; set; }
+            /// <summary>Keep rows whose nMzTop is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minNMzTop")]
+            public double? MinNMzTop { get; set; }
+            /// <summary>Keep rows whose position is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minPosition")]
+            public double? MinPosition { get; set; }
+            /// <summary>Keep rows whose station is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minStation")]
+            public double? MinStation { get; set; }
+            /// <summary>Keep rows whose vy is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minVy")]
+            public double? MinVy { get; set; }
+            /// <summary>Keep rows whose vz is at least this value (in the field&apos;s unit, see GET /job/units). Evaluated per station, member end, plate corner or node together with the other range filters: a row is kept when one of its values satisfies them all, and the row is returned whole. Filters select existing values; nothing is interpolated.</summary>
+            [QueryParameter("minVz")]
+            public double? MinVz { get; set; }
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             [QueryParameter("offset")]
             public int? Offset { get; set; }
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [Obsolete("This property is deprecated, use OrderAsResultSortOrder instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("order")]
+            public string? Order { get; set; }
+#nullable restore
+#else
+            [QueryParameter("order")]
+            public string Order { get; set; }
+#endif
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [QueryParameter("order")]
+            public global::SpaceGassApi.Models.ResultSortOrder? OrderAsResultSortOrder { get; set; }
+            /// <summary>Sortable fields: loadCase, member, station, position, n, vy, vz, mx, myTop, myBtm, mzTop, mzBtm, nMyTop, nMyBtm, nMzTop, nMzBtm. Field to sort the rows by, named as in the response (case-insensitive). Any numeric fieldof the endpoint&apos;s rows can be used. An array field (values at member stations, member ends,plate corners or nodes) ranks each row by its extreme value in the requested direction, andthe row is returned whole. Rows with no value for the field sort last. Omit to return rows inthe endpoint&apos;s default order: its identity fields in order — the fields `GET …/metadata`flags `distinctBy: true`, e.g. load case then node for node results.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("sort")]
+            public string? Sort { get; set; }
+#nullable restore
+#else
+            [QueryParameter("sort")]
+            public string Sort { get; set; }
+#endif
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

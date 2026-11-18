@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a list of plate-strip Ids and a strip-typecategorical filter.Maps to SG `SGFilterType.PlateStrip`.
+    /// Sub-filter carrying a list of plate-strip Ids and a strip-typecategorical filter.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterPlateStrips : IParsable
@@ -25,7 +25,7 @@ namespace SpaceGassApi.Models
 #else
         public string PlateStrips { get; set; }
 #endif
-        /// <summary>Plate-strip categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_PlateStripType` verbatim.</summary>
+        /// <summary>Plate-strip categories available as a Filter resource criterion.</summary>
         public global::SpaceGassApi.Models.FilterPlateStripType? PlateStripType { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

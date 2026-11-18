@@ -12,7 +12,7 @@ class AnalysisInfo(Parsable):
     """
     Lightweight pre-flight summary of which load cases have results for a givenanalysis type, used by clients to decide whether a results query is worth issuing(and which cases still need to be analysed).
     """
-    # True when any analysis of this type has been run and at least one casehas stored results. Determined from the file header — does not requireloading the full result datasheet.
+    # True when any analysis of this type has been run and at least one casehas stored results.
     has_results: Optional[bool] = None
     # Per-case result status, optionally restricted to the caller-supplied`loadCases` filter. Every requested case appears in the array; eachentry's SpaceGassApi.Models.Dtos.Analysis.AnalysisLoadCaseInfoDto.HasResults indicates whetherresult data is available.
     load_cases: Optional[list[AnalysisLoadCaseInfo]] = None

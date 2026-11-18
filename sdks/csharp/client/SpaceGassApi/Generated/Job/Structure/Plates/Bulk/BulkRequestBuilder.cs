@@ -34,9 +34,9 @@ namespace SpaceGassApi.Job.Structure.Plates.Bulk
         {
         }
         /// <summary>
-        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
+        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`).            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cleanup for the whole batch then runs once. It is best-effort and not atomic:if it fails part-way, the request fails and some of the removals may already have beenmade.            For Nodes, Members and Plates the response also has `removed`: the batch&apos;scascade, in the shape a single delete returns.
         /// </summary>
-        /// <returns>A <see cref="global::SpaceGassApi.Models.BulkDeletedBulkResult"/></returns>
+        /// <returns>A <see cref="global::SpaceGassApi.Models.BulkDeleteResult"/></returns>
         /// <param name="body">The request body</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
@@ -46,11 +46,11 @@ namespace SpaceGassApi.Job.Structure.Plates.Bulk
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 500 status code</exception>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
-        public async Task<global::SpaceGassApi.Models.BulkDeletedBulkResult?> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Plates.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.BulkDeleteResult?> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Plates.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>>? requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #nullable restore
 #else
-        public async Task<global::SpaceGassApi.Models.BulkDeletedBulkResult> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Plates.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
+        public async Task<global::SpaceGassApi.Models.BulkDeleteResult> DeleteAsync(List<int?> body, Action<RequestConfiguration<global::SpaceGassApi.Job.Structure.Plates.Bulk.BulkRequestBuilder.BulkRequestBuilderDeleteQueryParameters>> requestConfiguration = default, CancellationToken cancellationToken = default)
         {
 #endif
             if(ReferenceEquals(body, null)) throw new ArgumentNullException(nameof(body));
@@ -62,7 +62,7 @@ namespace SpaceGassApi.Job.Structure.Plates.Bulk
                 { "404", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
                 { "500", global::SpaceGassApi.Models.ErrorResponse.CreateFromDiscriminatorValue },
             };
-            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.BulkDeletedBulkResult>(requestInfo, global::SpaceGassApi.Models.BulkDeletedBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
+            return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.BulkDeleteResult>(requestInfo, global::SpaceGassApi.Models.BulkDeleteResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
         /// Updates multiple items in a bulk operation.Each item must include its Id in the request body.If a validator is registered, all items are validated upfront before any are updated.
@@ -127,7 +127,7 @@ namespace SpaceGassApi.Job.Structure.Plates.Bulk
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.PlateBulkResult>(requestInfo, global::SpaceGassApi.Models.PlateBulkResult.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
+        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`).            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cleanup for the whole batch then runs once. It is best-effort and not atomic:if it fails part-way, the request fails and some of the removals may already have beenmade.            For Nodes, Members and Plates the response also has `removed`: the batch&apos;scascade, in the shape a single delete returns.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">The request body</param>
@@ -202,7 +202,7 @@ namespace SpaceGassApi.Job.Structure.Plates.Bulk
             return new global::SpaceGassApi.Job.Structure.Plates.Bulk.BulkRequestBuilder(rawUrl, RequestAdapter);
         }
         /// <summary>
-        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`) — consistent with every other bulk-delete endpointin the API (see CLAUDE.md &quot;Query Parameter Conventions&quot;).            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cascade itself is planned and executed as a single unit — if cleanup failsmid-execution the entire batch is rolled back (affected datasheets are reloaded), so nopartial cascade is persisted.
+        /// Deletes multiple entities by Id. The body is a JSON array of integer Ids(e.g. `[1, 5, 10]`).            For cascading entities (Nodes, Members, Plates), `continueOnError` governs only theper-Id existence pre-check: a missing Id is reported and, when `false`, aborts thebatch. The cleanup for the whole batch then runs once. It is best-effort and not atomic:if it fails part-way, the request fails and some of the removals may already have beenmade.            For Nodes, Members and Plates the response also has `removed`: the batch&apos;scascade, in the shape a single delete returns.
         /// </summary>
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class BulkRequestBuilderDeleteQueryParameters 

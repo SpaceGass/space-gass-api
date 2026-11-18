@@ -105,7 +105,7 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments
         /// Creates a new load. The load case must exist and be a Primary load case.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MemberDistributedMoment"/></returns>
-        /// <param name="body">DTO for creating a new member distributed moment.The sub-load number is auto-assigned — do not include it in the request.</param>
+        /// <param name="body">DTO for creating a new member distributed moment (a distributed torsion about the member&apos;s local X axis).The sub-load number is auto-assigned — do not include it in the request.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
@@ -157,7 +157,7 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments
         /// Creates a new load. The load case must exist and be a Primary load case.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for creating a new member distributed moment.The sub-load number is auto-assigned — do not include it in the request.</param>
+        /// <param name="body">DTO for creating a new member distributed moment (a distributed torsion about the member&apos;s local X axis).The sub-load number is auto-assigned — do not include it in the request.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -203,7 +203,7 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
-            /// <summary>Filter by load category number.Returns only loads assigned to the specified category.</summary>
+            /// <summary>Filter by load category Id.Returns only loads assigned to the specified category; 0 returns the loads with no category.</summary>
             [QueryParameter("loadCategory")]
             public int? LoadCategory { get; set; }
             /// <summary>Member Ids to filter by, in SG list format (e.g. `&quot;1,3-7,10&quot;`).Returns only loads applied to the specified members.Omit to return loads for all members.</summary>

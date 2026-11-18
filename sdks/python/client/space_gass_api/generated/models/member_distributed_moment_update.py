@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @dataclass
 class MemberDistributedMomentUpdate(Parsable):
     """
-    DTO for updating an existing member distributed moment.Only fields included in the request are updated; omit a field to keep its current value.
+    DTO for updating an existing member distributed moment (a distributed torsion about the member's local X axis).Only fields included in the request are updated; omit a field to keep its current value.
     """
     # Coordinate axes type for distributed loads and plate pressure loads.Maps to SPACE GASS lookup table "L/GI/GP Axes".
     axes: Optional[LoadAxes] = None
@@ -19,22 +19,14 @@ class MemberDistributedMomentUpdate(Parsable):
     finish_position: Optional[float] = None
     # The load case number.
     load_case: Optional[int] = None
-    # Load category for grouping/organization.
+    # Id of a load category (GET /job/loads/load-categories). Send 0 to clear the category; omit to keep the current one.
     load_category: Optional[int] = None
     # The member number.
     member: Optional[int] = None
-    # Distributed moment intensity about X axis at the finish position.
+    # Distributed torsion (moment about the member X axis) at the finish position.
     mx_finish: Optional[float] = None
-    # Distributed moment intensity about X axis at the start position.
+    # Distributed torsion (moment about the member X axis) at the start position.
     mx_start: Optional[float] = None
-    # Distributed moment intensity about Y axis at the finish position.
-    my_finish: Optional[float] = None
-    # Distributed moment intensity about Y axis at the start position.
-    my_start: Optional[float] = None
-    # Distributed moment intensity about Z axis at the finish position.
-    mz_finish: Optional[float] = None
-    # Distributed moment intensity about Z axis at the start position.
-    mz_start: Optional[float] = None
     # Position units for member load placement along a member.Maps to SPACE GASS lookup table "Load Units".
     position_units: Optional[LoadPositionUnits] = None
     # Start position of the distributed moment along the member.
@@ -72,10 +64,6 @@ class MemberDistributedMomentUpdate(Parsable):
             "member": lambda n : setattr(self, 'member', n.get_int_value()),
             "mxFinish": lambda n : setattr(self, 'mx_finish', n.get_float_value()),
             "mxStart": lambda n : setattr(self, 'mx_start', n.get_float_value()),
-            "myFinish": lambda n : setattr(self, 'my_finish', n.get_float_value()),
-            "myStart": lambda n : setattr(self, 'my_start', n.get_float_value()),
-            "mzFinish": lambda n : setattr(self, 'mz_finish', n.get_float_value()),
-            "mzStart": lambda n : setattr(self, 'mz_start', n.get_float_value()),
             "positionUnits": lambda n : setattr(self, 'position_units', n.get_enum_value(LoadPositionUnits)),
             "startPosition": lambda n : setattr(self, 'start_position', n.get_float_value()),
             "subLoad": lambda n : setattr(self, 'sub_load', n.get_int_value()),
@@ -97,10 +85,6 @@ class MemberDistributedMomentUpdate(Parsable):
         writer.write_int_value("member", self.member)
         writer.write_float_value("mxFinish", self.mx_finish)
         writer.write_float_value("mxStart", self.mx_start)
-        writer.write_float_value("myFinish", self.my_finish)
-        writer.write_float_value("myStart", self.my_start)
-        writer.write_float_value("mzFinish", self.mz_finish)
-        writer.write_float_value("mzStart", self.mz_start)
         writer.write_enum_value("positionUnits", self.position_units)
         writer.write_float_value("startPosition", self.start_position)
         writer.write_int_value("subLoad", self.sub_load)

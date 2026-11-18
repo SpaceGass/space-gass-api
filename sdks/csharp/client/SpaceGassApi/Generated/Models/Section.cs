@@ -23,6 +23,16 @@ namespace SpaceGassApi.Models
         public double? Ay { get; set; }
         /// <summary>Shear area in the Z direction.</summary>
         public double? Az { get; set; }
+        /// <summary>The steel design properties of a geometry-backed section: fabrication method and thenormal/high strength grades. In SPACE GASS these apply across the whole section.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public global::SpaceGassApi.Models.DesignProperties? DesignProperties { get; set; }
+#nullable restore
+#else
+        public global::SpaceGassApi.Models.DesignProperties DesignProperties { get; set; }
+#endif
+        /// <summary>Whether the section has shape geometry (a shape-builder or library section).</summary>
+        public bool? HasShapes { get; set; }
         /// <summary>Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue</summary>
         public int? Id { get; set; }
         /// <summary>Second moment of area about the principal Y axis.</summary>
@@ -61,8 +71,16 @@ namespace SpaceGassApi.Models
 #endif
         /// <summary>Principal axis rotation angle.</summary>
         public double? PrincipalAngle { get; set; }
-        /// <summary>Number of shapes in the section (1 for a standard library section).</summary>
-        public int? Shapes { get; set; }
+        /// <summary>Number of shapes composited into the section.</summary>
+        public int? ShapeCount { get; set; }
+        /// <summary>The shapes composited into the section, in order.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<global::SpaceGassApi.Models.SectionShape>? Shapes { get; set; }
+#nullable restore
+#else
+        public List<global::SpaceGassApi.Models.SectionShape> Shapes { get; set; }
+#endif
         /// <summary>Indicates whether a section or material was user-defined or imported from a library.</summary>
         public global::SpaceGassApi.Models.PropertySource? Source { get; set; }
         /// <summary>Torsion modification factor.</summary>
@@ -92,6 +110,8 @@ namespace SpaceGassApi.Models
                 { "areaFactor", n => { AreaFactor = n.GetDoubleValue(); } },
                 { "ay", n => { Ay = n.GetDoubleValue(); } },
                 { "az", n => { Az = n.GetDoubleValue(); } },
+                { "designProperties", n => { DesignProperties = n.GetObjectValue<global::SpaceGassApi.Models.DesignProperties>(global::SpaceGassApi.Models.DesignProperties.CreateFromDiscriminatorValue); } },
+                { "hasShapes", n => { HasShapes = n.GetBoolValue(); } },
                 { "id", n => { Id = n.GetIntValue(); } },
                 { "iy", n => { Iy = n.GetDoubleValue(); } },
                 { "iyFactor", n => { IyFactor = n.GetDoubleValue(); } },
@@ -102,7 +122,8 @@ namespace SpaceGassApi.Models
                 { "mark", n => { Mark = n.GetStringValue(); } },
                 { "name", n => { Name = n.GetStringValue(); } },
                 { "principalAngle", n => { PrincipalAngle = n.GetDoubleValue(); } },
-                { "shapes", n => { Shapes = n.GetIntValue(); } },
+                { "shapeCount", n => { ShapeCount = n.GetIntValue(); } },
+                { "shapes", n => { Shapes = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.SectionShape>(global::SpaceGassApi.Models.SectionShape.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "source", n => { Source = n.GetEnumValue<global::SpaceGassApi.Models.PropertySource>(); } },
                 { "torsionFactor", n => { TorsionFactor = n.GetDoubleValue(); } },
                 { "transposed", n => { Transposed = n.GetBoolValue(); } },
@@ -120,6 +141,8 @@ namespace SpaceGassApi.Models
             writer.WriteDoubleValue("areaFactor", AreaFactor);
             writer.WriteDoubleValue("ay", Ay);
             writer.WriteDoubleValue("az", Az);
+            writer.WriteObjectValue<global::SpaceGassApi.Models.DesignProperties>("designProperties", DesignProperties);
+            writer.WriteBoolValue("hasShapes", HasShapes);
             writer.WriteIntValue("id", Id);
             writer.WriteDoubleValue("iy", Iy);
             writer.WriteDoubleValue("iyFactor", IyFactor);
@@ -130,7 +153,8 @@ namespace SpaceGassApi.Models
             writer.WriteStringValue("mark", Mark);
             writer.WriteStringValue("name", Name);
             writer.WriteDoubleValue("principalAngle", PrincipalAngle);
-            writer.WriteIntValue("shapes", Shapes);
+            writer.WriteIntValue("shapeCount", ShapeCount);
+            writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.SectionShape>("shapes", Shapes);
             writer.WriteEnumValue<global::SpaceGassApi.Models.PropertySource>("source", Source);
             writer.WriteDoubleValue("torsionFactor", TorsionFactor);
             writer.WriteBoolValue("transposed", Transposed);

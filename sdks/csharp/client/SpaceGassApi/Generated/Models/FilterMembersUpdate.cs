@@ -23,7 +23,7 @@ namespace SpaceGassApi.Models
 #else
         public string Members { get; set; }
 #endif
-        /// <summary>Member type categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_MemberType` verbatim — richer than theentity-property SpaceGassApi.Models.Enums.MemberType because the filter UI surfacesmember-state categories (Duplicated, Rotated, Along axis, FreeEnd, ...)that are not member-create options.</summary>
+        /// <summary>Member type categories available as a Filter resource criterion.Wider than SpaceGassApi.Models.Enums.MemberType: it includes member-state categories (Duplicated,Rotated, Along axis, FreeEnd, ...) that are not member types.</summary>
         public global::SpaceGassApi.Models.FilterMemberType? MemberType { get; set; }
         /// <summary>Whether a sub-filter block includes or excludes matching entities.</summary>
         public global::SpaceGassApi.Models.FilterMode? Mode { get; set; }

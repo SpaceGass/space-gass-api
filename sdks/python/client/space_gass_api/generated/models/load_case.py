@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 @dataclass
 class LoadCase(Parsable):
     """
-    DTO for a load case (from Loads - Titles table, FileID=28).Returns all load cases including primary, combination, and step types.When `Type` is `Combination`, the case owns a list of combination items(hydrated inline via `?expand=all`).
+    A load case.Returns all load cases including primary, combination, and step types.When `Type` is `Combination`, the case owns a list of combination items(hydrated inline via `?expand=all`).
     """
     # The combination items (component case + multiplying factor rows) that make up this case.Populated only when `?expand=all` is passed AND `hasCombinationItems` is true;omitted from the wire otherwise.
     combination_items: Optional[list[CombinationLoadCaseItem]] = None

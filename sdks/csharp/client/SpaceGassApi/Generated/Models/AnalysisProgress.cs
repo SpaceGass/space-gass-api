@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Live progress data from the analysis solver.Captured via Windows messages from SGSolver.EXE to the display proxy window.
+    /// Live progress data from the analysis solver.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class AnalysisProgress : IParsable

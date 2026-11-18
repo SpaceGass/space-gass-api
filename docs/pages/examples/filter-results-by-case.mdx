@@ -42,9 +42,9 @@ try
     {
         await Task.Delay(500);
         var s = await client.Job.Analysis.Runs[run!.RunId!.Value].GetAsync();
-        if (s!.Status is AnalysisRunStatus.Completed
-                      or AnalysisRunStatus.Failed
-                      or AnalysisRunStatus.Cancelled) break;
+        if (s!.Status is RunStatus.Completed
+                      or RunStatus.Failed
+                      or RunStatus.Cancelled) break;
     }
 
     var reactions = await client.Job.Query.Analysis.Static.NodeReactions.GetAsync(
@@ -84,9 +84,9 @@ try:
         await asyncio.sleep(0.5)
         s = await client.job.analysis.runs.by_run_id(str(run.run_id)).get()
         if s.status in (
-            models.AnalysisRunStatus.Completed,
-            models.AnalysisRunStatus.Failed,
-            models.AnalysisRunStatus.Cancelled,
+            models.RunStatus.Completed,
+            models.RunStatus.Failed,
+            models.RunStatus.Cancelled,
         ):
             break
 

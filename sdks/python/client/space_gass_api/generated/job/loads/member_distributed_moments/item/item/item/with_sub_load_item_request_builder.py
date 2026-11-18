@@ -76,7 +76,7 @@ class WithSubLoadItemRequestBuilder(BaseRequestBuilder):
     async def patch(self,body: MemberDistributedMomentUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> Optional[MemberDistributedMoment]:
         """
         Updates an existing member distributed moment. Only provided fields are updated.The load case must be a Primary load case.
-        param body: DTO for updating an existing member distributed moment.Only fields included in the request are updated; omit a field to keep its current value.
+        param body: DTO for updating an existing member distributed moment (a distributed torsion about the member's local X axis).Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: Optional[MemberDistributedMoment]
         """
@@ -124,7 +124,7 @@ class WithSubLoadItemRequestBuilder(BaseRequestBuilder):
     def to_patch_request_information(self,body: MemberDistributedMomentUpdate, request_configuration: Optional[RequestConfiguration[QueryParameters]] = None) -> RequestInformation:
         """
         Updates an existing member distributed moment. Only provided fields are updated.The load case must be a Primary load case.
-        param body: DTO for updating an existing member distributed moment.Only fields included in the request are updated; omit a field to keep its current value.
+        param body: DTO for updating an existing member distributed moment (a distributed torsion about the member's local X axis).Only fields included in the request are updated; omit a field to keep its current value.
         param request_configuration: Configuration for the request such as headers, query parameters, and middleware options.
         Returns: RequestInformation
         """

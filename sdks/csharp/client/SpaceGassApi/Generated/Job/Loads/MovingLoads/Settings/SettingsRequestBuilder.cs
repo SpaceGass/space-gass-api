@@ -67,7 +67,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Settings
             return await RequestAdapter.SendAsync<global::SpaceGassApi.Models.MovingLoadSettings>(requestInfo, global::SpaceGassApi.Models.MovingLoadSettings.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);
         }
         /// <summary>
-        /// Partially updates the collection-level settings (flags, vertical proximity, and theloaded-area polygon); omitted fields keep their current value. Units are read-only —change them via `POST /job/units`.
+        /// Partially updates the collection-level settings (flags, vertical proximity, and theloaded-area polygon); omitted fields keep their current value. Values are interpretedin the job&apos;s active units (see `GET /job/units`).
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MovingLoadSettings"/></returns>
         /// <param name="body">Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadSettingsDto. All properties are optional;omitted properties keep their current value.</param>
@@ -117,7 +117,7 @@ namespace SpaceGassApi.Job.Loads.MovingLoads.Settings
             return requestInfo;
         }
         /// <summary>
-        /// Partially updates the collection-level settings (flags, vertical proximity, and theloaded-area polygon); omitted fields keep their current value. Units are read-only —change them via `POST /job/units`.
+        /// Partially updates the collection-level settings (flags, vertical proximity, and theloaded-area polygon); omitted fields keep their current value. Values are interpretedin the job&apos;s active units (see `GET /job/units`).
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
         /// <param name="body">Partial update for SpaceGassApi.Models.Dtos.MovingLoads.MovingLoadSettingsDto. All properties are optional;omitted properties keep their current value.</param>

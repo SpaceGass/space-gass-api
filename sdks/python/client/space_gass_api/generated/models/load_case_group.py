@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class LoadCaseGroup(Parsable):
     """
-    DTO for a load case group (from Loads - Load Case Groups table, FileID=39).
+    A load case group.
     """
     # Primary identifier - must be unique, no duplicates allowed.Range: 1 to int.MaxValue
     id: Optional[int] = None

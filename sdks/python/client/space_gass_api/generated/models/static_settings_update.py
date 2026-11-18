@@ -45,7 +45,7 @@ class StaticSettingsUpdate(Parsable):
     matrix_type: Optional[MatrixType] = None
     # Axis used for optimization in analysis.
     optimization_axis: Optional[OptimizationAxis] = None
-    # Optimization method for analysis bandwidth/profile reduction.Integer values mirror SPACE GASS's `AnalysisOptimizationTypes` enum(NetCommon/CommonEnums.vb). Used by static, buckling, and dynamic frequency analysis.
+    # Optimization method for analysis bandwidth/profile reduction.Used by static, buckling, and dynamic frequency analysis.
     optimization_method: Optional[AnalysisOptimizationMethod] = None
     # The optimizationX property
     optimization_x: Optional[float] = None
@@ -67,7 +67,7 @@ class StaticSettingsUpdate(Parsable):
     reversal_iterations: Optional[int] = None
     # The rotateLocalLoads property
     rotate_local_loads: Optional[bool] = None
-    # Matrix solver type used by the analysis engine.Integer values mirror SPACE GASS's `SGSolverType` enum(NetCommon/CommonEnums.vb): 0=Paradise, 1=Wavefront, 2=Watcom (legacy,not exposed), 3=SG-X (cloud, dispatched externally — not yet supportedby the in-process API analysis path).
+    # Matrix solver type used by the analysis engine.
     solver_type: Optional[SolverType] = None
     # The stabilizeUnrestrainedNodes property
     stabilize_unrestrained_nodes: Optional[bool] = None

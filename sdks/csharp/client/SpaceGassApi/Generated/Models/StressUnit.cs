@@ -3,7 +3,7 @@ using System.Runtime.Serialization;
 using System;
 namespace SpaceGassApi.Models
 {
-    /// <summary>Stress unit. Members mirror SPACE GASS `SgStress`.</summary>
+    /// <summary>Stress unit.</summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public enum StressUnit
     {

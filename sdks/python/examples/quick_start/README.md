@@ -1,6 +1,6 @@
 # quick_start
 
-Mirrors the [Quick Start docs page](https://api.spacegass.com/docs/getting-started/quick-start) end-to-end. Opens the built-in `Portal Frame.SG` sample, lists every node, then closes the job.
+Mirrors the [Quick Start docs page](https://api.spacegass.com/docs/quick-start) end-to-end. Opens the built-in `Portal Frame.SG` sample, lists every node, then closes the job.
 
 No project file of your own needed.
 

@@ -11,11 +11,11 @@ if TYPE_CHECKING:
 @dataclass
 class FilterMembers(Parsable):
     """
-    Sub-filter carrying a list of member Ids and a member-type categorical filter.Maps to SG `SGFilterType.Members`.
+    Sub-filter carrying a list of member Ids and a member-type categorical filter.
     """
     # Whether this sub-filter participates in the filter.
     is_active: Optional[bool] = None
-    # Member type categories available as a Filter resource criterion.Mirrors SG's `SGItemFilter_MemberType` verbatim — richer than theentity-property SpaceGassApi.Models.Enums.MemberType because the filter UI surfacesmember-state categories (Duplicated, Rotated, Along axis, FreeEnd, ...)that are not member-create options.
+    # Member type categories available as a Filter resource criterion.Wider than SpaceGassApi.Models.Enums.MemberType: it includes member-state categories (Duplicated,Rotated, Along axis, FreeEnd, ...) that are not member types.
     member_type: Optional[FilterMemberType] = None
     # Member Ids in SG list format. Empty string means no Id criterion.
     members: Optional[str] = None

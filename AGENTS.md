@@ -77,6 +77,21 @@ finally { await client.Job.Close.PostAsync(); }
    `Utils/ListUtilsExtensions.cs` (`ToFilterString`, `ToIdArray`) convert to/from `int[]`.
 6. **File uploads** (`job/new-from-template`, `job/import/txt`) use the multipart helpers
    `NewFromTemplateRequest` / `ImportTxtRequest`, which take a file path.
+7. **Steel member design** (`job/design/steel-member/{code}/run-check|run-design`, `{code}/settings`).
+   Each design code has its own settings classes deriving from `SteelMemberDesignSettingsBase[Update]`;
+   pass the code's own object wherever settings are taken (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`,
+   `Settings.PatchAsync(...)`). The code is the route segment: C# `client.Job.Design.SteelMember[DesignCode.As4100.ToString()]`,
+   Python `client.job.design.steel_member.by_code(models.DesignCode.As4100.value)`. `Settings.GetAsync()` returns
+   the base type holding the code's own class — cast it (C#) or use `isinstance` (Python). Never set `code`.
+   Design runs are async like analyses — poll `job/design/runs/{runId}` until `status` is `Completed`,
+   `Failed` or `Cancelled`. A run needs static results first, and a design group whose
+   compression effective lengths are explicit (or a buckling analysis). Results:
+   `job/query/design/steel-member/check-summary`, one row per design group (`steelMember`).
+8. **Built-up (shape-builder) sections** (`job/structure/sections/shape-builder`, `/preview`) take a
+   plain list of shapes: C# `Shapes = [new LibraryShape {...}, new RectangularBarShape {...}]`, Python
+   `shapes=[models.LibraryShape(...), models.RectangularBarShape(...)]`. Never set `shapeType` — each
+   shape class sets its own. Shapes read back as their own classes (pattern-match / `isinstance`). Use
+   `/preview` to get each shape's numbered reference points for `anchorPosition`.
 
 ## Authoritative resources (fetch these; don't crawl the repo)
 

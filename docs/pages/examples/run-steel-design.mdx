@@ -1,0 +1,382 @@
+---
+title: Design steel members
+description: Let SPACE GASS select the lightest adequate section for each design group, update the model and re-analyse
+---
+
+A design **run** selects a new section for each design group from a
+section library, puts it on the members, re-runs the analysis and
+repeats until the sections stop changing. To verify the existing
+sections without changing them, see
+[Run a steel member design check](/examples/run-steel-design-check).
+
+## Before you start
+
+- The model has **static analysis results** for the load cases you
+  want to design for.
+- Your seat is **licensed** for the design code.
+- The snippets continue from the
+  [Simple Beam](/examples/simple-beam) tutorial after its analysis
+  step: `client` is the connected client, `member` is the beam,
+  `section` is its 360 UB 44.7 and `ulsCase` is the ULS combination.
+
+## 1. Set the library the design selects from
+
+A design run picks sections from the **default section library**, not
+from the library the member's current section came from. Set it so the
+result does not depend on the machine's preferences.
+
+The default libraries are a SPACE GASS preference: they are saved for
+every job, not just this one. Keep the previous value so you can put
+it back in step 7.
+
+<CodeTabs>
+```csharp title="C#"
+const string sectionLibrary = "Aust300";
+
+var defaults = await client.Job.Settings.DefaultLibraries.GetAsync();
+var previousLibrary = defaults!.Sections;
+
+await client.Job.Settings.DefaultLibraries.PatchAsync(
+    new DefaultLibrariesUpdate { Sections = sectionLibrary });
+```
+
+```python title="Python"
+SECTION_LIBRARY = "Aust300"
+
+defaults = await client.job.settings.default_libraries.get()
+previous_library = defaults.sections
+
+await client.job.settings.default_libraries.patch(
+    models.DefaultLibrariesUpdate(sections=SECTION_LIBRARY))
+```
+
+```bash title="curl"
+curl http://localhost:34560/api/v1/job/settings/default-libraries
+# {"sections":"Aust250","materials":"Aust", ...}
+
+curl -X PATCH http://localhost:34560/api/v1/job/settings/default-libraries \
+  -H "Content-Type: application/json" \
+  -d '{"sections": "Aust300"}'
+```
+</CodeTabs>
+
+## 2. Find the scan code
+
+A library is divided into groups (universal beams, universal columns,
+channels, …) and each group has a **scan code** letter. A design group
+lists the scan codes it may select from, so this is how you keep a
+beam a universal beam.
+
+Find the group the current section is in, then take that group's scan
+code.
+
+<CodeTabs>
+```csharp title="C#"
+var library = await client.Libraries.Sections[sectionLibrary].GetAsync();
+foreach (var g in library!.Groups!)
+    Console.WriteLine($"{g.ScanCode}  {g.Name}");
+// A  Universal beams
+// C  Universal columns
+// ...
+
+var match = await client.Libraries.Sections.Search.GetAsync(config =>
+{
+    config.QueryParameters.Q = section.Name;
+    config.QueryParameters.Library = sectionLibrary;
+    config.QueryParameters.Limit = 1;
+});
+var sectionGroup = match!.Items!.First().Group;
+var scanCode = library.Groups.First(g => g.Name == sectionGroup).ScanCode;   // "A"
+```
+
+```python title="Python"
+library = await client.libraries.sections.by_library(SECTION_LIBRARY).get()
+for g in library.groups:
+    print(f"{g.scan_code}  {g.name}")
+# A  Universal beams
+# C  Universal columns
+# ...
+
+match = await client.libraries.sections.search.get(
+    q=section.name, library=SECTION_LIBRARY, limit=1)
+section_group = match.items[0].group
+scan_code = next(g.scan_code for g in library.groups if g.name == section_group)   # "A"
+```
+
+```bash title="curl"
+curl http://localhost:34560/api/v1/libraries/sections/Aust300
+# {"name":"Aust300", "groups":[{"name":"Universal beams","scanCode":"A"}, ...]}
+
+curl "http://localhost:34560/api/v1/libraries/sections/search?q=360%20UB%2044.7&library=Aust300&limit=1"
+# {"items":[{"library":"Aust300","group":"Universal beams","name":"360 UB 44.7", ...}]}
+```
+</CodeTabs>
+
+## 3. Create a design group
+
+Same as for a [check](/examples/run-steel-design-check#2-create-a-design-group),
+plus two inputs that steer the selection: `scanCode` (which library
+groups to choose from) and `designCriteria` (`Weight` for the lightest
+section, `Depth` for the shallowest).
+
+<CodeTabs>
+```csharp title="C#"
+var group = await client.Job.Design.SteelMembers.PostAsync(
+    new SteelMemberCreate
+    {
+        Members = $"{member.Id}",
+        MemberType = SteelMemberType.Beam,
+        LoadHeightPosition = LoadHeightPosition.Top,
+        LengthUnitBasis = LengthUnitBasis.Actual,
+        CalculateLcMajorFromBuckling = false,
+        LcMajor = 6.0,
+        CalculateLcMinorFromBuckling = false,
+        LcMinor = 6.0,
+        CalculateLbFromFlangeRestraints = true,
+        ScanCode = scanCode,
+        DesignCriteria = SteelDesignCriteria.Weight,
+    });
+```
+
+```python title="Python"
+group = await client.job.design.steel_members.post(
+    models.SteelMemberCreate(
+        members=str(member.id),
+        member_type=models.SteelMemberType.Beam,
+        load_height_position=models.LoadHeightPosition.Top,
+        length_unit_basis=models.LengthUnitBasis.Actual,
+        calculate_lc_major_from_buckling=False,
+        lc_major=6.0,
+        calculate_lc_minor_from_buckling=False,
+        lc_minor=6.0,
+        calculate_lb_from_flange_restraints=True,
+        scan_code=scan_code,
+        design_criteria=models.SteelDesignCriteria.Weight,
+    ))
+```
+
+```bash title="curl"
+curl -X POST http://localhost:34560/api/v1/job/design/steel-members \
+  -H "Content-Type: application/json" \
+  -d '{
+    "members": "1",
+    "memberType": "Beam",
+    "loadHeightPosition": "Top",
+    "lengthUnitBasis": "Actual",
+    "calculateLcMajorFromBuckling": false, "lcMajor": 6.0,
+    "calculateLcMinorFromBuckling": false, "lcMinor": 6.0,
+    "calculateLbFromFlangeRestraints": true,
+    "scanCode": "A",
+    "designCriteria": "Weight"
+  }'
+```
+</CodeTabs>
+
+## 4. Choose what to design and how to iterate
+
+The general settings say which design groups and load cases the run
+covers. The iteration settings say what happens after sections are
+selected: re-run the static analysis with the new sections, design
+again, and repeat until the result settles.
+
+`sections` in the general settings is a filter, like `groups`: it
+limits the run to members on those section numbers. It is not a list
+of sections to choose from.
+
+<CodeTabs>
+```csharp title="C#"
+await client.Job.Design.SteelMember.Settings.PatchAsync(
+    new SteelMemberDesignGeneralSettingsUpdate
+    {
+        Groups = $"{group!.Id}",
+        LoadCases = $"{ulsCase.Id}",
+    });
+
+await client.Job.Design.SteelMember.DesignIterationSettings.PatchAsync(
+    new SteelMemberDesignIterationSettingsUpdate
+    {
+        RerunStaticAnalysis = true,
+        RerunDesign = true,
+        AutoIterate = true,
+        MaxIterations = 5,
+    });
+```
+
+```python title="Python"
+await client.job.design.steel_member.settings.patch(
+    models.SteelMemberDesignGeneralSettingsUpdate(
+        groups=str(group.id),
+        load_cases=str(uls_case.id),
+    ))
+
+await client.job.design.steel_member.design_iteration_settings.patch(
+    models.SteelMemberDesignIterationSettingsUpdate(
+        rerun_static_analysis=True,
+        rerun_design=True,
+        auto_iterate=True,
+        max_iterations=5,
+    ))
+```
+
+```bash title="curl"
+curl -X PATCH http://localhost:34560/api/v1/job/design/steel-member/settings \
+  -H "Content-Type: application/json" \
+  -d '{"groups": "1", "loadCases": "10"}'
+
+curl -X PATCH http://localhost:34560/api/v1/job/design/steel-member/design-iteration-settings \
+  -H "Content-Type: application/json" \
+  -d '{"rerunStaticAnalysis": true, "rerunDesign": true, "autoIterate": true, "maxIterations": 5}'
+```
+</CodeTabs>
+
+## 5. Run the design
+
+Start the run, then poll `GET /job/design/runs/{runId}` until `status`
+is `Completed`, `Failed` or `Cancelled`. `updateSections` puts the
+selected sections on the members; set it to `false` to see what would
+be selected without changing the model.
+
+<CodeTabs>
+```csharp title="C#"
+var run = await client.Job.Design.SteelMember[DesignCode.As4100.ToString()].RunDesign.PostAsync(
+    new SteelMemberDesignRunDesignRequest { UpdateSections = true });
+
+DesignRun result;
+do
+{
+    await Task.Delay(500);
+    result = (await client.Job.Design.Runs[run!.RunId!.Value].GetAsync())!;
+}
+while (result.Status is not (RunStatus.Completed or RunStatus.Failed or RunStatus.Cancelled));
+
+if (result.Status != RunStatus.Completed)
+    throw new Exception($"Design run did not complete: {result.ErrorMessage}");
+```
+
+```python title="Python"
+run = await client.job.design.steel_member.by_code(models.DesignCode.As4100.value).run_design.post(
+    models.SteelMemberDesignRunDesignRequest(update_sections=True))
+
+while True:
+    await asyncio.sleep(0.5)
+    result = await client.job.design.runs.by_run_id(run.run_id).get()
+    if result.status in (models.RunStatus.Completed,
+                         models.RunStatus.Failed,
+                         models.RunStatus.Cancelled):
+        break
+
+if result.status != models.RunStatus.Completed:
+    raise RuntimeError(f"Design run did not complete: {result.error_message}")
+```
+
+```bash title="curl"
+curl -X POST http://localhost:34560/api/v1/job/design/steel-member/As4100/run-design \
+  -H "Content-Type: application/json" \
+  -d '{"updateSections": true}'
+# -> {"runId": "...", "status": "Running", ...}
+
+curl http://localhost:34560/api/v1/job/design/runs/{runId}
+```
+</CodeTabs>
+
+## 6. See what changed
+
+The finished run reports what it did. Read the member again to get its
+new section, and the check summary for the result on that section.
+
+<CodeTabs>
+```csharp title="C#"
+Console.WriteLine($"Iterations {result.Iterations}, sections updated: {result.SectionsUpdated}, " +
+                  $"analysis re-run: {result.AnalysisRerun}");
+
+var designed = await client.Job.Structure.Members[member.Id!.Value].GetAsync();
+var newSection = await client.Job.Structure.Sections[designed!.Section!.Value].GetAsync();
+Console.WriteLine($"{section.Name} -> {newSection!.Name}");
+
+var summary = await client.Job.Query.Design.SteelMember.CheckSummary.GetAsync(
+    config => config.QueryParameters.SteelMembers = $"{group.Id}");
+foreach (var row in summary!.Results!)
+    Console.WriteLine($"Group {row.SteelMember}: {row.Section}, load factor {row.LoadFactor:F3}, {row.Status}");
+// Iterations 1, sections updated: True, analysis re-run: True
+// 360 UB 44.7 -> 200 UB 29.8
+// Group 1: 200 UB 29.8, load factor 1.260, PassedWithWarnings
+```
+
+```python title="Python"
+print(f"Iterations {result.iterations}, sections updated: {result.sections_updated}, "
+      f"analysis re-run: {result.analysis_rerun}")
+
+designed = await client.job.structure.members.by_id(member.id).get()
+new_section = await client.job.structure.sections.by_id(designed.section).get()
+print(f"{section.name} -> {new_section.name}")
+
+summary = await client.job.query.design.steel_member.check_summary.get(
+    steel_members=str(group.id))
+for row in summary.results:
+    print(f"Group {row.steel_member}: {row.section}, load factor {row.load_factor:.3f}, {row.status.value}")
+# Iterations 1, sections updated: True, analysis re-run: True
+# 360 UB 44.7 -> 200 UB 29.8
+# Group 1: 200 UB 29.8, load factor 1.260, PassedWithWarnings
+```
+
+```bash title="curl"
+curl http://localhost:34560/api/v1/job/structure/members/1
+curl "http://localhost:34560/api/v1/job/query/design/steel-member/check-summary?steelMembers=1"
+```
+</CodeTabs>
+
+The run replaces the section's analysis results too: after it
+finishes, reactions, forces and deflections are for the new section.
+
+## 7. Put the default library back
+
+Do this before closing the job. In a real program, put it in a
+`finally` block so it also runs when a step fails.
+
+<CodeTabs>
+```csharp title="C#"
+await client.Job.Settings.DefaultLibraries.PatchAsync(
+    new DefaultLibrariesUpdate { Sections = previousLibrary });
+```
+
+```python title="Python"
+await client.job.settings.default_libraries.patch(
+    models.DefaultLibrariesUpdate(sections=previous_library))
+```
+
+```bash title="curl"
+curl -X PATCH http://localhost:34560/api/v1/job/settings/default-libraries \
+  -H "Content-Type: application/json" \
+  -d '{"sections": "Aust250"}'
+```
+</CodeTabs>
+
+## Run this example locally
+
+A complete version that also builds and analyses the beam, starting
+from a deliberately heavy 610 UB 125, is in the repo as
+[`Example.SteelDesignOptimise`](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/csharp/examples/Example.SteelDesignOptimise) (C#) and
+[`steel_design_optimise`](https://github.com/SpaceGass/space-gass-api/tree/main/sdks/python/examples/steel_design_optimise) (Python).
+Clone and run:
+
+<CodeTabs>
+```bash title="C#"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/csharp/examples/Example.SteelDesignOptimise
+dotnet run
+```
+
+```bash title="Python"
+git clone https://github.com/SpaceGass/space-gass-api.git
+cd space-gass-api/sdks/python/examples/steel_design_optimise
+pip install space-gass-api    # once per environment
+python steel_design_optimise.py
+```
+</CodeTabs>
+
+## See also
+
+- [Run a steel member design check](/examples/run-steel-design-check)
+  — verify sections without changing the model.
+- [Simple Beam Model](/examples/simple-beam) — the model these
+  snippets continue from.

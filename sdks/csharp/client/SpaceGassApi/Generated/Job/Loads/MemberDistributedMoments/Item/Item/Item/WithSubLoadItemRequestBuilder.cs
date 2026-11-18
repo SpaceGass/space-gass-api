@@ -90,7 +90,7 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments.Item.Item.Item
         /// Updates an existing member distributed moment. Only provided fields are updated.The load case must be a Primary load case.
         /// </summary>
         /// <returns>A <see cref="global::SpaceGassApi.Models.MemberDistributedMoment"/></returns>
-        /// <param name="body">DTO for updating an existing member distributed moment.Only fields included in the request are updated; omit a field to keep its current value.</param>
+        /// <param name="body">DTO for updating an existing member distributed moment (a distributed torsion about the member&apos;s local X axis).Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="cancellationToken">Cancellation token to use when cancelling requests</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
         /// <exception cref="global::SpaceGassApi.Models.ErrorResponse">When receiving a 400 status code</exception>
@@ -159,7 +159,7 @@ namespace SpaceGassApi.Job.Loads.MemberDistributedMoments.Item.Item.Item
         /// Updates an existing member distributed moment. Only provided fields are updated.The load case must be a Primary load case.
         /// </summary>
         /// <returns>A <see cref="RequestInformation"/></returns>
-        /// <param name="body">DTO for updating an existing member distributed moment.Only fields included in the request are updated; omit a field to keep its current value.</param>
+        /// <param name="body">DTO for updating an existing member distributed moment (a distributed torsion about the member&apos;s local X axis).Only fields included in the request are updated; omit a field to keep its current value.</param>
         /// <param name="requestConfiguration">Configuration for the request such as headers, query parameters, and middleware options.</param>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable

@@ -22,6 +22,7 @@ if TYPE_CHECKING:
     from .bulk.bulk_request_builder import BulkRequestBuilder
     from .exists.exists_request_builder import ExistsRequestBuilder
     from .item.nodes_item_request_builder import NodesItemRequestBuilder
+    from .match.match_request_builder import MatchRequestBuilder
     from .metadata.metadata_request_builder import MetadataRequestBuilder
     from .next.next_request_builder import NextRequestBuilder
 
@@ -168,6 +169,15 @@ class NodesRequestBuilder(BaseRequestBuilder):
         from .exists.exists_request_builder import ExistsRequestBuilder
 
         return ExistsRequestBuilder(self.request_adapter, self.path_parameters)
+    
+    @property
+    def match(self) -> MatchRequestBuilder:
+        """
+        The match property
+        """
+        from .match.match_request_builder import MatchRequestBuilder
+
+        return MatchRequestBuilder(self.request_adapter, self.path_parameters)
     
     @property
     def metadata(self) -> MetadataRequestBuilder:

@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Sub-filter carrying a list of steel-member Ids and a design-statecategorical filter.Maps to SG `SGFilterType.SteelMembers`.
+    /// Sub-filter carrying a list of steel-member Ids and a design-statecategorical filter.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class FilterSteelMembers : IParsable
@@ -25,7 +25,7 @@ namespace SpaceGassApi.Models
 #else
         public string SteelMembers { get; set; }
 #endif
-        /// <summary>Steel-member design-state categories available as a Filter resource criterion.Mirrors SG&apos;s `SGItemFilter_SteelMemberTypes` verbatim — note SG&apos;s enumname is plural; the API name is singular for consistency with the other`Filter*Type` enums.</summary>
+        /// <summary>Steel-member design-state categories available as a Filter resource criterion.</summary>
         public global::SpaceGassApi.Models.FilterSteelMemberType? SteelMemberType { get; set; }
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value

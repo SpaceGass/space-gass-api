@@ -4,6 +4,7 @@ using Microsoft.Kiota.Abstractions.Extensions;
 using Microsoft.Kiota.Abstractions.Serialization;
 using Microsoft.Kiota.Abstractions;
 using SpaceGassApi.Job.Query.Geometry.Members.Item;
+using SpaceGassApi.Job.Query.Geometry.Members.Metadata;
 using SpaceGassApi.Models;
 using System.Collections.Generic;
 using System.IO;
@@ -18,6 +19,11 @@ namespace SpaceGassApi.Job.Query.Geometry.Members
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MembersRequestBuilder : BaseRequestBuilder
     {
+        /// <summary>The metadata property</summary>
+        public global::SpaceGassApi.Job.Query.Geometry.Members.Metadata.MetadataRequestBuilder Metadata
+        {
+            get => new global::SpaceGassApi.Job.Query.Geometry.Members.Metadata.MetadataRequestBuilder(PathParameters, RequestAdapter);
+        }
         /// <summary>Gets an item from the SpaceGassApi.job.query.geometry.members.item collection</summary>
         /// <param name="position">The member Id</param>
         /// <returns>A <see cref="global::SpaceGassApi.Job.Query.Geometry.Members.Item.MembersItemRequestBuilder"/></returns>

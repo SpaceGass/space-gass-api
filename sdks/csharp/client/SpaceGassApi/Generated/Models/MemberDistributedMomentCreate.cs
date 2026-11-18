@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// DTO for creating a new member distributed moment.The sub-load number is auto-assigned — do not include it in the request.
+    /// DTO for creating a new member distributed moment (a distributed torsion about the member&apos;s local X axis).The sub-load number is auto-assigned — do not include it in the request.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MemberDistributedMomentCreate : IParsable
@@ -19,22 +19,14 @@ namespace SpaceGassApi.Models
         public double? FinishPosition { get; set; }
         /// <summary>The load case number to create this load in.</summary>
         public int? LoadCase { get; set; }
-        /// <summary>Load category for grouping/organization.</summary>
+        /// <summary>Id of a load category (GET /job/loads/load-categories). Omit, or send 0, for no category.</summary>
         public int? LoadCategory { get; set; }
         /// <summary>The member number to apply this load to.</summary>
         public int? Member { get; set; }
-        /// <summary>Distributed moment intensity about X axis at the finish position.</summary>
+        /// <summary>Distributed torsion (moment about the member X axis) at the finish position.</summary>
         public double? MxFinish { get; set; }
-        /// <summary>Distributed moment intensity about X axis at the start position.</summary>
+        /// <summary>Distributed torsion (moment about the member X axis) at the start position.</summary>
         public double? MxStart { get; set; }
-        /// <summary>Distributed moment intensity about Y axis at the finish position.</summary>
-        public double? MyFinish { get; set; }
-        /// <summary>Distributed moment intensity about Y axis at the start position.</summary>
-        public double? MyStart { get; set; }
-        /// <summary>Distributed moment intensity about Z axis at the finish position.</summary>
-        public double? MzFinish { get; set; }
-        /// <summary>Distributed moment intensity about Z axis at the start position.</summary>
-        public double? MzStart { get; set; }
         /// <summary>Position units for member load placement along a member.Maps to SPACE GASS lookup table &quot;Load Units&quot;.</summary>
         public global::SpaceGassApi.Models.LoadPositionUnits? PositionUnits { get; set; }
         /// <summary>Start position of the distributed moment along the member.</summary>
@@ -64,10 +56,6 @@ namespace SpaceGassApi.Models
                 { "member", n => { Member = n.GetIntValue(); } },
                 { "mxFinish", n => { MxFinish = n.GetDoubleValue(); } },
                 { "mxStart", n => { MxStart = n.GetDoubleValue(); } },
-                { "myFinish", n => { MyFinish = n.GetDoubleValue(); } },
-                { "myStart", n => { MyStart = n.GetDoubleValue(); } },
-                { "mzFinish", n => { MzFinish = n.GetDoubleValue(); } },
-                { "mzStart", n => { MzStart = n.GetDoubleValue(); } },
                 { "positionUnits", n => { PositionUnits = n.GetEnumValue<global::SpaceGassApi.Models.LoadPositionUnits>(); } },
                 { "startPosition", n => { StartPosition = n.GetDoubleValue(); } },
             };
@@ -86,10 +74,6 @@ namespace SpaceGassApi.Models
             writer.WriteIntValue("member", Member);
             writer.WriteDoubleValue("mxFinish", MxFinish);
             writer.WriteDoubleValue("mxStart", MxStart);
-            writer.WriteDoubleValue("myFinish", MyFinish);
-            writer.WriteDoubleValue("myStart", MyStart);
-            writer.WriteDoubleValue("mzFinish", MzFinish);
-            writer.WriteDoubleValue("mzStart", MzStart);
             writer.WriteEnumValue<global::SpaceGassApi.Models.LoadPositionUnits>("positionUnits", PositionUnits);
             writer.WriteDoubleValue("startPosition", StartPosition);
         }

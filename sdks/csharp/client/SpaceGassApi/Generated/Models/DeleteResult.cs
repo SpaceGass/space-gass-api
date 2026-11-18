@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// Summary of a cascade delete: everything removed when a Node, Member, or Plate was deleted —the entity itself plus every child row that referenced it and any nodes transitively orphanedby the removal. Only entity types that actually had rows removed are present; the rest are omitted.
+    /// Summary of a cascade delete: everything removed when a Node, Member, or Plate was deleted —the entity itself plus every child row that referenced it and any nodes transitively orphanedby the removal. Only entity types that actually had rows removed are present; the rest are omitted.Notes and dimensions attached to removed items are removed from the job settings but not listed.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class DeleteResult : IParsable
@@ -157,6 +157,14 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.PrescribedDisplacementKey> PrescribedDisplacements { get; set; }
 #endif
+        /// <summary>Ids of steel member design groups removed (a group goes whole when any listed member is deleted).</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<int?>? SteelMembers { get; set; }
+#nullable restore
+#else
+        public List<int?> SteelMembers { get; set; }
+#endif
         /// <summary>Composite keys (case + element + elementType) of thermal loads removed.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -167,6 +175,14 @@ namespace SpaceGassApi.Models
 #endif
         /// <summary>Total number of rows removed across all entity types.</summary>
         public int? TotalRemoved { get; set; }
+        /// <summary>Cleanup that was skipped; the removed lists contain only completed removals.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+        public List<string>? Warnings { get; set; }
+#nullable restore
+#else
+        public List<string> Warnings { get; set; }
+#endif
         /// <summary>
         /// Creates a new instance of the appropriate class based on discriminator value
         /// </summary>
@@ -203,8 +219,10 @@ namespace SpaceGassApi.Models
                 { "plates", n => { Plates = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
                 { "platesDirectionReset", n => { PlatesDirectionReset = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
                 { "prescribedDisplacements", n => { PrescribedDisplacements = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.PrescribedDisplacementKey>(global::SpaceGassApi.Models.PrescribedDisplacementKey.CreateFromDiscriminatorValue)?.AsList(); } },
+                { "steelMembers", n => { SteelMembers = n.GetCollectionOfPrimitiveValues<int?>()?.AsList(); } },
                 { "thermalLoads", n => { ThermalLoads = n.GetCollectionOfObjectValues<global::SpaceGassApi.Models.ThermalLoadElementId>(global::SpaceGassApi.Models.ThermalLoadElementId.CreateFromDiscriminatorValue)?.AsList(); } },
                 { "totalRemoved", n => { TotalRemoved = n.GetIntValue(); } },
+                { "warnings", n => { Warnings = n.GetCollectionOfPrimitiveValues<string>()?.AsList(); } },
             };
         }
         /// <summary>
@@ -232,8 +250,10 @@ namespace SpaceGassApi.Models
             writer.WriteCollectionOfPrimitiveValues<int?>("platesDirectionReset", PlatesDirectionReset);
             writer.WriteCollectionOfPrimitiveValues<int?>("plateStrips", PlateStrips);
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.PrescribedDisplacementKey>("prescribedDisplacements", PrescribedDisplacements);
+            writer.WriteCollectionOfPrimitiveValues<int?>("steelMembers", SteelMembers);
             writer.WriteCollectionOfObjectValues<global::SpaceGassApi.Models.ThermalLoadElementId>("thermalLoads", ThermalLoads);
             writer.WriteIntValue("totalRemoved", TotalRemoved);
+            writer.WriteCollectionOfPrimitiveValues<string>("warnings", Warnings);
         }
     }
 }

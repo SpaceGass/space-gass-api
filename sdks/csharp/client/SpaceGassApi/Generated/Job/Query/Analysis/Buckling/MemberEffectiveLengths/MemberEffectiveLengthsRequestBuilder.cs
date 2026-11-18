@@ -28,7 +28,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
         /// </summary>
         /// <param name="pathParameters">Path parameters for the request</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberEffectiveLengthsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?limit*,loadCases*,members*,modes*,offset*}", pathParameters)
+        public MemberEffectiveLengthsRequestBuilder(Dictionary<string, object> pathParameters, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?distinctBy*,exclusionReason*,limit*,loadCases*,maxAbsLength*,maxAbsLy*,maxAbsLz*,maxAbsPcr*,maxLength*,maxLy*,maxLz*,maxPcr*,members*,minAbsLength*,minAbsLy*,minAbsLz*,minAbsPcr*,minLength*,minLy*,minLz*,minPcr*,modes*,offset*,order*,sort*}", pathParameters)
         {
         }
         /// <summary>
@@ -36,7 +36,7 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
         /// </summary>
         /// <param name="rawUrl">The raw URL to use for the request builder.</param>
         /// <param name="requestAdapter">The request adapter to use to execute the requests.</param>
-        public MemberEffectiveLengthsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?limit*,loadCases*,members*,modes*,offset*}", rawUrl)
+        public MemberEffectiveLengthsRequestBuilder(string rawUrl, IRequestAdapter requestAdapter) : base(requestAdapter, "{+baseurl}/job/query/analysis/buckling/member-effective-lengths{?distinctBy*,exclusionReason*,limit*,loadCases*,maxAbsLength*,maxAbsLy*,maxAbsLz*,maxAbsPcr*,maxLength*,maxLy*,maxLz*,maxPcr*,members*,minAbsLength*,minAbsLy*,minAbsLz*,minAbsPcr*,minLength*,minLy*,minLz*,minPcr*,modes*,offset*,order*,sort*}", rawUrl)
         {
         }
         /// <summary>
@@ -104,6 +104,26 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
         [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
         public partial class MemberEffectiveLengthsRequestBuilderGetQueryParameters 
         {
+            /// <summary>Identity fields: loadCase, mode, member. One row per value of this identity field: the first row in sort order, i.e. the governingone. `sort=fy&amp;order=AbsDesc&amp;distinctBy=node` returns each node&apos;s governingreaction with its load case; `distinctBy=loadCase` each case&apos;s governing row. Theidentity fields are the row&apos;s Ids (load case, node, member, plate, mode, steel member) orthe reaction summary&apos;s `summaryType`, named as in the response and flagged`distinctBy: true` in `GET …/metadata`. Rows come back whole; the count headeris the number of distinct values. Requires `sort`.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("distinctBy")]
+            public string? DistinctBy { get; set; }
+#nullable restore
+#else
+            [QueryParameter("distinctBy")]
+            public string DistinctBy { get; set; }
+#endif
+            /// <summary>Keep rows whose exclusionReason is one of the given values. One or more values, comma-separated, matched case-insensitively.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("exclusionReason")]
+            public string? ExclusionReason { get; set; }
+#nullable restore
+#else
+            [QueryParameter("exclusionReason")]
+            public string ExclusionReason { get; set; }
+#endif
             /// <summary>Maximum number of items to return. Default is null (return all).</summary>
             [QueryParameter("limit")]
             public int? Limit { get; set; }
@@ -117,6 +137,30 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
             [QueryParameter("loadCases")]
             public string LoadCases { get; set; }
 #endif
+            /// <summary>Keep rows whose length has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsLength")]
+            public double? MaxAbsLength { get; set; }
+            /// <summary>Keep rows whose ly has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsLy")]
+            public double? MaxAbsLy { get; set; }
+            /// <summary>Keep rows whose lz has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsLz")]
+            public double? MaxAbsLz { get; set; }
+            /// <summary>Keep rows whose pcr has a magnitude of at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxAbsPcr")]
+            public double? MaxAbsPcr { get; set; }
+            /// <summary>Keep rows whose length is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxLength")]
+            public double? MaxLength { get; set; }
+            /// <summary>Keep rows whose ly is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxLy")]
+            public double? MaxLy { get; set; }
+            /// <summary>Keep rows whose lz is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxLz")]
+            public double? MaxLz { get; set; }
+            /// <summary>Keep rows whose pcr is at most this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("maxPcr")]
+            public double? MaxPcr { get; set; }
             /// <summary>Member Ids in SG list format (e.g. `&quot;1,3-7,10&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -127,6 +171,30 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
             [QueryParameter("members")]
             public string Members { get; set; }
 #endif
+            /// <summary>Keep rows whose length has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsLength")]
+            public double? MinAbsLength { get; set; }
+            /// <summary>Keep rows whose ly has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsLy")]
+            public double? MinAbsLy { get; set; }
+            /// <summary>Keep rows whose lz has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsLz")]
+            public double? MinAbsLz { get; set; }
+            /// <summary>Keep rows whose pcr has a magnitude of at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minAbsPcr")]
+            public double? MinAbsPcr { get; set; }
+            /// <summary>Keep rows whose length is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minLength")]
+            public double? MinLength { get; set; }
+            /// <summary>Keep rows whose ly is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minLy")]
+            public double? MinLy { get; set; }
+            /// <summary>Keep rows whose lz is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minLz")]
+            public double? MinLz { get; set; }
+            /// <summary>Keep rows whose pcr is at least this value (in the field&apos;s unit, see GET /job/units).</summary>
+            [QueryParameter("minPcr")]
+            public double? MinPcr { get; set; }
             /// <summary>Buckling mode numbers in SG list format (e.g. `&quot;1-3&quot;`). Omit to return all.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
@@ -140,6 +208,30 @@ namespace SpaceGassApi.Job.Query.Analysis.Buckling.MemberEffectiveLengths
             /// <summary>Number of items to skip from the start of the result set. Default is 0.</summary>
             [QueryParameter("offset")]
             public int? Offset { get; set; }
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [Obsolete("This property is deprecated, use OrderAsResultSortOrder instead")]
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("order")]
+            public string? Order { get; set; }
+#nullable restore
+#else
+            [QueryParameter("order")]
+            public string Order { get; set; }
+#endif
+            /// <summary>Sort direction: `Asc` (smallest first, default), `Desc` (largest first),`AbsDesc` (largest magnitude first) or `AbsAsc` (smallest magnitude first).Requires `sort`.</summary>
+            [QueryParameter("order")]
+            public global::SpaceGassApi.Models.ResultSortOrder? OrderAsResultSortOrder { get; set; }
+            /// <summary>Sortable fields: loadCase, mode, member, pcr, length, ly, lz. Field to sort the rows by, named as in the response (case-insensitive). Any numeric fieldof the endpoint&apos;s rows can be used. An array field (values at member stations, member ends,plate corners or nodes) ranks each row by its extreme value in the requested direction, andthe row is returned whole. Rows with no value for the field sort last. Omit to return rows inthe endpoint&apos;s default order: its identity fields in order — the fields `GET …/metadata`flags `distinctBy: true`, e.g. load case then node for node results.</summary>
+#if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
+#nullable enable
+            [QueryParameter("sort")]
+            public string? Sort { get; set; }
+#nullable restore
+#else
+            [QueryParameter("sort")]
+            public string Sort { get; set; }
+#endif
         }
         /// <summary>
         /// Configuration for the request such as headers, query parameters, and middleware options.

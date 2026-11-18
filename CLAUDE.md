@@ -28,9 +28,8 @@ Cross-tool agent instructions (install, `CreateClient()`, base URL, async/analys
 
 ### OpenAPI Spec Naming
 
-- Use **`openapi.json`** in `preview/` and `current/` — standard OpenAPI filename convention (tooling and consumers expect it)
-- Use **versioned filenames** in `archive/`: `openapi-v14.5.0.json`
-- The version is embedded inside the spec file itself — the filename doesn't need to carry it in folders where configs need a stable path
+- The single live spec is **`descriptions/openapi.json`** — standard OpenAPI filename convention (tooling and consumers expect it), and a stable path for configs
+- The version is embedded inside the spec file itself (`info.x-space-gass-build`) — the filename doesn't carry it
 
 ### SDK Client Naming
 
@@ -45,12 +44,23 @@ Cross-tool agent instructions (install, `CreateClient()`, base URL, async/analys
 
 ### SDK Generation (Kiota)
 
-- `kiota.config.json` at the root defines both C# and Python targets
-- Both point to `descriptions/preview/openapi.json` (stable path)
+- Kiota generates from `build/openapi.kiota.json` — a **transformed copy** of the published spec written by `tools/prepare_spec_for_kiota.py` (git-ignored), never from `descriptions/openapi.json` directly. See "oneOf and Kiota" below.
+- `kiota.config.json` at the root describes both C# and Python targets and points at the same transformed copy; the `generate-clients` workflow passes the equivalent flags on the command line.
 - The `generate-clients` workflow is **manual trigger** (`workflow_dispatch`) with `--clean-output`
 - C# output: `sdks/csharp/client/SpaceGassApi/Generated/` — never hand-edit
 - Python output: `sdks/python/client/space_gass_api/generated/` — never hand-edit. The `generate-clients` workflow runs `tools/regen_python_inits.py` automatically after Kiota; for local regens, run `python tools/regen_python_inits.py` afterwards.
 - Kiota generates a `BaseSpaceGassApiClient` base class (set via `--class-name` in the workflow). The hand-maintained wrappers extend it and expose the public `SpaceGassApiClient` class. Same pattern as the MS Graph SDKs.
+
+#### oneOf and Kiota
+
+The published spec (`descriptions/openapi.json`) uses `oneOf` wherever a body or response is one of several polymorphic types — per-code steel design settings (15 codes) and section shapes (41 types). That is the right shape for the API reference (Swagger/Zudoku render a pick-list) but Kiota has no union types: it turns each `oneOf` into a *composed type wrapper* with one nullable property per member (`new X_codeSettings { SteelMemberDesignSettingsAs4100Update = ... }`, `GetAsSettingsGetResponseAsync()`).
+
+Every such `oneOf` lists subclasses of one base schema with a discriminator, so the wire format is the same either way. `tools/prepare_spec_for_kiota.py` therefore writes a copy for Kiota only, in which:
+
+1. each `oneOf` is replaced by a `$ref` to the shared base (`SteelMemberDesignSettingsBase[Update]`, `SectionShape`) → Kiota emits plain inheritance: `PatchAsync(SteelMemberDesignSettingsBaseUpdate body)`, `List<SectionShape> Shapes`, and the base's factory builds the right subclass on read;
+2. each subclass's single-value discriminator enum is replaced by a string `default` → Kiota sets it in the constructor (`ShapeType = "Library"`), so callers never set discriminators. (Leaving the enum in as well makes Kiota emit C# that doesn't compile.)
+
+The published spec is never modified. The script exits non-zero if it meets a `oneOf` it can't convert (members without a single shared discriminated base) — decide then whether to extend it or accept a wrapper (`ALLOWED_ONEOF`). `tools/check_sdk_shape.py` fails if any composed wrapper appears in either generated tree. **Any regen path must run the transform first** — the `generate-clients` workflow does; the BuildMachine pipeline (`generate-api-clients.yml` in the SPACEGASS repo) must too.
 
 ### C# Client Structure
 
@@ -78,6 +88,8 @@ Anything that smooths over awkward raw Kiota output lives **outside `Generated/`
 
 - **`Utils/ListUtilsExtensions.cs`** — converts between `int[]` and the SG list-string filter format used by query parameters (`ToFilterString()`, `ToIdArray()`, `ToIdList()`).
 - **`Utils/UploadRequests.cs`** — `NewFromTemplateRequest` / `ImportTxtRequest` subclass Kiota's `MultipartBody` for the multipart file-upload endpoints (`POST /job/new-from-template`, `POST /job/import/txt`). Kiota types those `PostAsync` parameters as a bare `MultipartBody`; these subclasses let callers write `PostAsync(new NewFromTemplateRequest(path))` — they take a file path, read the bytes, and add the single form part with its filename. No request adapter is set: the request builder attaches it at send time (Kiota's `SetContentFromParsable`).
+
+**Polymorphic bodies need no helpers.** Steel design code settings and section shapes are passed and read as plain objects (`CodeSettings = new SteelMemberDesignSettingsAs4100Update {...}`, `Shapes = [new LibraryShape {...}]`) because the SDK is generated from the base-typed spec (see "oneOf and Kiota"). If a composed wrapper ever shows up in `Generated/`, a `oneOf` slipped past `tools/prepare_spec_for_kiota.py` — fix it there (spec transform), not with a helper here.
 
 When a new endpoint is similarly awkward (multipart uploads, list-string filters, etc.), prefer adding a small hand-maintained type/extension here over documenting the raw Kiota boilerplate.
 
@@ -127,7 +139,7 @@ sdks/python/client/
 - **`basePath: "/docs"`** is required in `zudoku.config.tsx` — the docs site is served at `https://api.spacegass.com/docs/`
 - The deploy workflow uploads `docs/dist/docs` (the inner basePath directory) as the Pages artifact to avoid double-nesting
 - A postinstall patch (`docs/patches/fix-zudoku-mjs.js`) fixes a Vite SSR `.mjs` issue (still required as of zudoku 0.82.2)
-- The API reference reads from `../descriptions/preview/openapi.json` (single source of truth)
+- The API reference reads from `../descriptions/openapi.json` (single source of truth)
 - `node_modules/` is never committed — `npm ci` regenerates it
 
 ### GitHub Pages Deployment
@@ -148,5 +160,4 @@ sdks/python/client/
 ### Versioning
 
 - SDK versions mirror the SPACE GASS Desktop version (e.g., Desktop v15.0.2 = NuGet `SpaceGassApi 15.0.2`)
-- The `descriptions/current/` folder won't exist until the first formal release
-- The repo starts in **preview state** with specs in `descriptions/preview/`
+- The spec lives at `descriptions/openapi.json` (no `preview/`/`current/` split); the SDK version is taken from `info.x-space-gass-build`
