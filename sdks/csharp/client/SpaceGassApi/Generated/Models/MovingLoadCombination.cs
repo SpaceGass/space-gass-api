@@ -8,7 +8,7 @@ using System;
 namespace SpaceGassApi.Models
 {
     /// <summary>
-    /// One row of a scenario&apos;s &quot;Combining with other Load Cases&quot; table (the desktop ScenarioProperties dialog) — defines how the scenario&apos;s generated moving-load cases are combined withanother load case to produce combination cases. Distinct from a standalone combination loadcase (`job/loads/combination-load-cases`): these rows are owned by the scenario and setwholesale via `PUT moving-loads/scenarios/{id}/combinations`.
+    /// One row of a scenario&apos;s &quot;Combining with other Load Cases&quot; table (the desktop ScenarioProperties dialog) — defines how the scenario&apos;s generated moving-load cases are combined withanother load case to produce combination cases. Distinct from a standalone combination loadcase (`job/loads/combination-load-cases`): these rows are owned by the scenario and setwholesale via `PUT moving-loads/scenarios/{id}/combinations`. An omitted field takes the valueSPACE GASS gives a new row (`MLCombination`&apos;s constructor): 1. `startingCombinationCase` is the exception: it must be given.
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCode("Kiota", "1.0.0")]
     public partial class MovingLoadCombination : IParsable

@@ -16,7 +16,7 @@ class MovingLoadVehicleUpdate(Parsable):
     id: Optional[int] = None
     # Replacement wheel loads. When present, replaces the entire wheel-load list. Omit to keep current.
     loads: Optional[list[VehicleWheelLoad]] = None
-    # Replacement vehicle name. Must remain unique. Omit to keep current.
+    # Replacement vehicle name. Must remain unique. At most 64 characters. Omit to keep current.
     name: Optional[str] = None
     
     @staticmethod

@@ -19,7 +19,7 @@ namespace SpaceGassApi.Models
         public double? Length { get; set; }
         /// <summary>Spacing between discretised load points within the patch.</summary>
         public double? LoadSpacing { get; set; }
-        /// <summary>The pressure name. Must be unique across all pressures.</summary>
+        /// <summary>The pressure name. Must be unique across all pressures. At most 64 characters.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Name { get; set; }

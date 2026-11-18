@@ -11,7 +11,7 @@ class MovingLoadTravelPathCreate(Parsable):
     """
     # The Id to assign to the new item.
     id: Optional[int] = None
-    # The travel-path name. Must be unique across all travel paths.
+    # The travel-path name. Must be unique across all travel paths. At most 64 characters.
     name: Optional[str] = None
     
     @staticmethod

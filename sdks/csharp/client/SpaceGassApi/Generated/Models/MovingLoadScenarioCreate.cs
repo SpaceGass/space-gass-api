@@ -33,7 +33,7 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.MovingLoadScenarioLoad> Loads { get; set; }
 #endif
-        /// <summary>The scenario name. Must be unique across all scenarios.</summary>
+        /// <summary>The scenario name. Must be unique across all scenarios. At most 64 characters.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Name { get; set; }

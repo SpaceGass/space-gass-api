@@ -23,7 +23,7 @@ namespace SpaceGassApi.Models
 #else
         public List<global::SpaceGassApi.Models.VehicleWheelLoad> Loads { get; set; }
 #endif
-        /// <summary>Replacement vehicle name. Must remain unique. Omit to keep current.</summary>
+        /// <summary>Replacement vehicle name. Must remain unique. At most 64 characters. Omit to keep current.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Name { get; set; }

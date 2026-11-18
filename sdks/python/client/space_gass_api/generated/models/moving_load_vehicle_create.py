@@ -19,7 +19,7 @@ class MovingLoadVehicleCreate(Parsable):
     load_units: Optional[VehicleLoadUnits] = None
     # The vehicle's wheel loads. Must contain at least one wheel.
     loads: Optional[list[VehicleWheelLoad]] = None
-    # The vehicle name. Must be unique across all vehicles.
+    # The vehicle name. Must be unique across all vehicles. At most 64 characters.
     name: Optional[str] = None
     
     @staticmethod
