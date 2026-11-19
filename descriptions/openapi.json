@@ -12,7 +12,7 @@
       "url": "https://www.spacegass.com/manual/Introduction/End_User_Licence_Agreement.htm"
     },
     "version": "1",
-    "x-space-gass-build": "14.51.12"
+    "x-space-gass-build": "14.51.17"
   },
   "servers": [
     {
@@ -20262,6 +20262,16 @@
                   "items": {
                     "$ref": "#/components/schemas/MovingLoadCombination"
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "A load case number is outside 1 to the maximum number of load cases",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
                 }
               }
             }
@@ -43772,14 +43782,13 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
+            "minLength": 1,
             "type": "string",
             "description": "Load case title.",
             "example": "Dead Load"
           },
           "notes": {
             "maxLength": 2048,
-            "minLength": 0,
             "type": "string",
             "description": "Load case notes (supports multi-line text).",
             "nullable": true,
@@ -43836,7 +43845,6 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "Load case title.",
             "nullable": true,
@@ -43844,7 +43852,6 @@
           },
           "notes": {
             "maxLength": 2048,
-            "minLength": 0,
             "type": "string",
             "description": "Load case notes (supports multi-line text).",
             "nullable": true,
@@ -46475,28 +46482,24 @@
         "properties": {
           "projectHeading": {
             "maxLength": 50,
-            "minLength": 0,
             "type": "string",
             "description": "Project heading. Omit to leave unchanged.",
             "nullable": true
           },
           "heading": {
             "maxLength": 50,
-            "minLength": 0,
             "type": "string",
             "description": "Job heading. Omit to leave unchanged.",
             "nullable": true
           },
           "designerInitials": {
             "maxLength": 3,
-            "minLength": 0,
             "type": "string",
             "description": "Designer initials. Omit to leave unchanged.",
             "nullable": true
           },
           "notes": {
             "maxLength": 1024,
-            "minLength": 0,
             "type": "string",
             "description": "Job notes. Omit to leave unchanged.",
             "nullable": true
@@ -47132,14 +47135,13 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
+            "minLength": 1,
             "type": "string",
             "description": "Load case title.",
             "example": "Dead Load"
           },
           "notes": {
             "maxLength": 2048,
-            "minLength": 0,
             "type": "string",
             "description": "Load case notes (supports multi-line text).",
             "nullable": true,
@@ -47224,13 +47226,13 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
+            "minLength": 1,
             "type": "string",
             "description": "Group title."
           },
           "loadCaseList": {
             "maxLength": 600,
-            "minLength": 0,
+            "minLength": 1,
             "pattern": "^[\\d,\\- ]+$",
             "type": "string",
             "description": "Comma-separated list of load case numbers and ranges (e.g., \"1,3,5-10\").\r\nValid characters: digits, commas, hyphens, spaces."
@@ -47253,14 +47255,12 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "Group title.",
             "nullable": true
           },
           "loadCaseList": {
             "maxLength": 600,
-            "minLength": 0,
             "pattern": "^[\\d,\\- ]+$",
             "type": "string",
             "description": "Comma-separated list of load case numbers and ranges (e.g., \"1,3,5-10\").",
@@ -47313,7 +47313,6 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "Load case title.",
             "nullable": true,
@@ -47321,7 +47320,6 @@
           },
           "notes": {
             "maxLength": 2048,
-            "minLength": 0,
             "type": "string",
             "description": "Load case notes (supports multi-line text).",
             "nullable": true,
@@ -47419,13 +47417,12 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
+            "minLength": 1,
             "type": "string",
             "description": "Category title."
           },
           "notes": {
             "maxLength": 2048,
-            "minLength": 0,
             "type": "string",
             "description": "Notes (supports multi-line text).",
             "nullable": true
@@ -47448,14 +47445,12 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "Category title.",
             "nullable": true
           },
           "notes": {
             "maxLength": 2048,
-            "minLength": 0,
             "type": "string",
             "description": "Notes (supports multi-line text).",
             "nullable": true
@@ -50525,7 +50520,7 @@
           }
         },
         "additionalProperties": false,
-        "description": "One row of a scenario's \"Combining with other Load Cases\" table (the desktop Scenario\r\nProperties dialog) — defines how the scenario's generated moving-load cases are combined with\r\nanother load case to produce combination cases. Distinct from a standalone combination load\r\ncase (`job/loads/combination-load-cases`): these rows are owned by the scenario and set\r\nwholesale via `PUT moving-loads/scenarios/{id}/combinations`."
+        "description": "One row of a scenario's \"Combining with other Load Cases\" table (the desktop Scenario\r\nProperties dialog) — defines how the scenario's generated moving-load cases are combined with\r\nanother load case to produce combination cases. Distinct from a standalone combination load\r\ncase (`job/loads/combination-load-cases`): these rows are owned by the scenario and set\r\nwholesale via `PUT moving-loads/scenarios/{id}/combinations`. An omitted field takes the value\r\nSPACE GASS gives a new row (`MLCombination`'s constructor): 1. `startingCombinationCase` is the exception: it must be given."
       },
       "MovingLoadElementsToLoad": {
         "type": "object",
@@ -50699,7 +50694,7 @@
           },
           "name": {
             "type": "string",
-            "description": "The pressure name. Must be unique across all pressures.",
+            "description": "The pressure name. Must be unique across all pressures. At most 64 characters.",
             "nullable": true,
             "example": "Crowd load"
           },
@@ -50754,7 +50749,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Replacement name. Must remain unique. Omit to keep current.",
+            "description": "Replacement name. Must remain unique. At most 64 characters. Omit to keep current.",
             "nullable": true,
             "example": "Crowd load"
           },
@@ -50910,7 +50905,7 @@
           },
           "name": {
             "type": "string",
-            "description": "The scenario name. Must be unique across all scenarios.",
+            "description": "The scenario name. Must be unique across all scenarios. At most 64 characters.",
             "nullable": true,
             "example": "Truck northbound"
           },
@@ -51034,7 +51029,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Replacement scenario name. Must remain unique. Omit to keep current.",
+            "description": "Replacement scenario name. Must remain unique. At most 64 characters. Omit to keep current.",
             "nullable": true,
             "example": "Truck northbound"
           },
@@ -51300,7 +51295,7 @@
           },
           "name": {
             "type": "string",
-            "description": "The travel-path name. Must be unique across all travel paths.",
+            "description": "The travel-path name. Must be unique across all travel paths. At most 64 characters.",
             "nullable": true,
             "example": "Lane 1 centreline"
           }
@@ -51319,7 +51314,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Replacement travel-path name. Must remain unique. Omit to keep current.",
+            "description": "Replacement travel-path name. Must remain unique. At most 64 characters. Omit to keep current.",
             "nullable": true,
             "example": "Lane 1 centreline"
           }
@@ -51415,7 +51410,7 @@
           },
           "name": {
             "type": "string",
-            "description": "The vehicle name. Must be unique across all vehicles.",
+            "description": "The vehicle name. Must be unique across all vehicles. At most 64 characters.",
             "nullable": true,
             "example": "T44 Truck"
           },
@@ -51481,7 +51476,7 @@
           },
           "name": {
             "type": "string",
-            "description": "Replacement vehicle name. Must remain unique. Omit to keep current.",
+            "description": "Replacement vehicle name. Must remain unique. At most 64 characters. Omit to keep current.",
             "nullable": true,
             "example": "T44 Truck"
           },
@@ -53444,7 +53439,6 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "User-defined title for the plate cut.",
             "nullable": true
@@ -53517,7 +53511,6 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "User-defined title for the plate cut.",
             "nullable": true
@@ -54358,7 +54351,6 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "User-defined title for the plate strip.",
             "nullable": true
@@ -54471,7 +54463,6 @@
           },
           "title": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "User-defined title for the plate strip.",
             "nullable": true
@@ -57652,7 +57643,6 @@
           },
           "description": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "Optional description of the design group.",
             "nullable": true,
@@ -57660,7 +57650,7 @@
           },
           "members": {
             "maxLength": 500,
-            "minLength": 0,
+            "minLength": 1,
             "type": "string",
             "description": "Members that make up the design group, as a plain comma-separated list of member Ids — e.g. `\"1,2,3\"` (ranges are not supported).",
             "example": "1,2,3"
@@ -57676,7 +57666,6 @@
           },
           "scanCode": {
             "maxLength": 4,
-            "minLength": 0,
             "type": "string",
             "description": "The section library groups, by scan-code letter, that a design run selects sections from.",
             "nullable": true,
@@ -57742,7 +57731,6 @@
           },
           "topFlangeIntermediateRestraintPositions": {
             "maxLength": 768,
-            "minLength": 0,
             "type": "string",
             "description": "Positions of intermediate top flange restraints along the design group, in SG list format.",
             "nullable": true,
@@ -57750,7 +57738,6 @@
           },
           "topFlangeRestraintTypes": {
             "maxLength": 52,
-            "minLength": 0,
             "type": "string",
             "description": "Top flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
             "nullable": true,
@@ -57758,7 +57745,6 @@
           },
           "btmFlangeIntermediateRestraintPositions": {
             "maxLength": 768,
-            "minLength": 0,
             "type": "string",
             "description": "Positions of intermediate bottom flange restraints along the design group, in SG list format.",
             "nullable": true,
@@ -57766,7 +57752,6 @@
           },
           "btmFlangeRestraintTypes": {
             "maxLength": 52,
-            "minLength": 0,
             "type": "string",
             "description": "Bottom flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
             "nullable": true,
@@ -59996,7 +59981,6 @@
           },
           "description": {
             "maxLength": 100,
-            "minLength": 0,
             "type": "string",
             "description": "Optional description of the design group.",
             "nullable": true,
@@ -60004,7 +59988,6 @@
           },
           "members": {
             "maxLength": 500,
-            "minLength": 0,
             "type": "string",
             "description": "Members that make up the design group, as a plain comma-separated list of member Ids — e.g. `\"1,2,3\"` (ranges are not supported).",
             "nullable": true,
@@ -60021,7 +60004,6 @@
           },
           "scanCode": {
             "maxLength": 4,
-            "minLength": 0,
             "type": "string",
             "description": "The section library groups, by scan-code letter, that a design run selects sections from.",
             "nullable": true,
@@ -60087,7 +60069,6 @@
           },
           "topFlangeIntermediateRestraintPositions": {
             "maxLength": 768,
-            "minLength": 0,
             "type": "string",
             "description": "Positions of intermediate top flange restraints along the design group, in SG list format.",
             "nullable": true,
@@ -60095,7 +60076,6 @@
           },
           "topFlangeRestraintTypes": {
             "maxLength": 52,
-            "minLength": 0,
             "type": "string",
             "description": "Top flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
             "nullable": true,
@@ -60103,7 +60083,6 @@
           },
           "btmFlangeIntermediateRestraintPositions": {
             "maxLength": 768,
-            "minLength": 0,
             "type": "string",
             "description": "Positions of intermediate bottom flange restraints along the design group, in SG list format.",
             "nullable": true,
@@ -60111,7 +60090,6 @@
           },
           "btmFlangeRestraintTypes": {
             "maxLength": 52,
-            "minLength": 0,
             "type": "string",
             "description": "Bottom flange restraint type codes: the end restraints plus one code per intermediate restraint position.",
             "nullable": true,

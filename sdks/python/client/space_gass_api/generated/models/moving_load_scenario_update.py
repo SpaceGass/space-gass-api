@@ -13,7 +13,7 @@ class MovingLoadScenarioUpdate(Parsable):
     id: Optional[int] = None
     # Whether the scenario is included in generation. Omit to keep current.
     include: Optional[bool] = None
-    # Replacement scenario name. Must remain unique. Omit to keep current.
+    # Replacement scenario name. Must remain unique. At most 64 characters. Omit to keep current.
     name: Optional[str] = None
     # The first generated load case number. Omit to keep current.
     starting_load_case: Optional[int] = None

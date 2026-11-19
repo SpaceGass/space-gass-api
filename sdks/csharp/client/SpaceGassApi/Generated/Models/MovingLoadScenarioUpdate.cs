@@ -17,7 +17,7 @@ namespace SpaceGassApi.Models
         public int? Id { get; set; }
         /// <summary>Whether the scenario is included in generation. Omit to keep current.</summary>
         public bool? Include { get; set; }
-        /// <summary>Replacement scenario name. Must remain unique. Omit to keep current.</summary>
+        /// <summary>Replacement scenario name. Must remain unique. At most 64 characters. Omit to keep current.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Name { get; set; }
