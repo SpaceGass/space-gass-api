@@ -15,7 +15,7 @@ class MovingLoadPressureCreate(Parsable):
     length: Optional[float] = None
     # Spacing between discretised load points within the patch.
     load_spacing: Optional[float] = None
-    # The pressure name. Must be unique across all pressures.
+    # The pressure name. Must be unique across all pressures. At most 64 characters.
     name: Optional[str] = None
     # Pressure component along global X.
     px: Optional[float] = None

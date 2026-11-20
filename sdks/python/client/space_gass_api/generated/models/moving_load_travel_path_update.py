@@ -11,7 +11,7 @@ class MovingLoadTravelPathUpdate(Parsable):
     """
     # The Id of the item to update.
     id: Optional[int] = None
-    # Replacement travel-path name. Must remain unique. Omit to keep current.
+    # Replacement travel-path name. Must remain unique. At most 64 characters. Omit to keep current.
     name: Optional[str] = None
     
     @staticmethod

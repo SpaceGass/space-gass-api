@@ -19,7 +19,7 @@ namespace SpaceGassApi.Models
         public double? Length { get; set; }
         /// <summary>Replacement load spacing. Omit to keep current.</summary>
         public double? LoadSpacing { get; set; }
-        /// <summary>Replacement name. Must remain unique. Omit to keep current.</summary>
+        /// <summary>Replacement name. Must remain unique. At most 64 characters. Omit to keep current.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Name { get; set; }

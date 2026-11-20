@@ -15,7 +15,7 @@ class MovingLoadPressureUpdate(Parsable):
     length: Optional[float] = None
     # Replacement load spacing. Omit to keep current.
     load_spacing: Optional[float] = None
-    # Replacement name. Must remain unique. Omit to keep current.
+    # Replacement name. Must remain unique. At most 64 characters. Omit to keep current.
     name: Optional[str] = None
     # Replacement global-X pressure. Omit to keep current.
     px: Optional[float] = None

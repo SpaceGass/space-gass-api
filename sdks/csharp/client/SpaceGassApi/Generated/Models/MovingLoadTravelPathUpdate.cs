@@ -15,7 +15,7 @@ namespace SpaceGassApi.Models
     {
         /// <summary>The Id of the item to update.</summary>
         public int? Id { get; set; }
-        /// <summary>Replacement travel-path name. Must remain unique. Omit to keep current.</summary>
+        /// <summary>Replacement travel-path name. Must remain unique. At most 64 characters. Omit to keep current.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Name { get; set; }

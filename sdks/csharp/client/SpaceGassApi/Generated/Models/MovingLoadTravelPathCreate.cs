@@ -15,7 +15,7 @@ namespace SpaceGassApi.Models
     {
         /// <summary>The Id to assign to the new item.</summary>
         public int? Id { get; set; }
-        /// <summary>The travel-path name. Must be unique across all travel paths.</summary>
+        /// <summary>The travel-path name. Must be unique across all travel paths. At most 64 characters.</summary>
 #if NETSTANDARD2_1_OR_GREATER || NETCOREAPP3_1_OR_GREATER
 #nullable enable
         public string? Name { get; set; }
