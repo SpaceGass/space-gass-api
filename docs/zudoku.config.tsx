@@ -646,7 +646,8 @@ const config: ZudokuConfig = {
     },
     defaultOptions: {
       suggestEdit: {
-        url: "https://github.com/SpaceGass/space-gass-api/edit/main/docs/pages",
+        // {filePath} is the page's path relative to docs/, e.g. pages/overview.mdx
+        url: "https://github.com/SpaceGass/space-gass-api/edit/main/docs/{filePath}",
       },
     },
   },

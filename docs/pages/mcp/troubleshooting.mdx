@@ -101,6 +101,24 @@ isn't enough — and reopen it.
 </AccordionContent>
 </AccordionItem>
 
+<AccordionItem value="mcpb-open-with">
+<AccordionTrigger className="text-left">Windows asks which app to open spacegass.mcpb with</AccordionTrigger>
+<AccordionContent>
+
+**Why:** Windows hasn't linked `.mcpb` files to Claude Desktop yet, so it
+asks the first time you open one.
+
+**Fix:** Pick **Claude** and click **Always** (on older Windows, tick **Always
+use this app** and click **OK**). Claude Desktop then opens the install
+preview. If you picked another app by mistake, right-click the file, choose
+**Open with › Choose another app**, and pick **Claude**. If **Claude** isn't
+in the list, install the bundle from inside Claude Desktop: open
+**Settings › Desktop app**, click **Manage** next to **Extensions**, then
+**Advanced settings › Install Extension…** and pick the file.
+
+</AccordionContent>
+</AccordionItem>
+
 <AccordionItem value="mcpb-closes">
 <AccordionTrigger className="text-left">Double-clicking spacegass.mcpb does nothing, or the install window closes by itself</AccordionTrigger>
 <AccordionContent>
