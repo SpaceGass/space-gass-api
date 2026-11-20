@@ -58,7 +58,7 @@ var saveFilePath = Path.Combine(
 
 if (Frequency < 1 || Frequency > 50)
 {
-    Console.Error.WriteLine("Frequency must be between 1 and 36.");
+    Console.Error.WriteLine("Frequency must be between 1 and 50.");
     return 1;
 }
 
