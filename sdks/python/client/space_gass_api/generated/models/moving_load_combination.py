@@ -7,7 +7,7 @@ from typing import Any, Optional, TYPE_CHECKING, Union
 @dataclass
 class MovingLoadCombination(Parsable):
     """
-    One row of a scenario's "Combining with other Load Cases" table (the desktop ScenarioProperties dialog) — defines how the scenario's generated moving-load cases are combined withanother load case to produce combination cases. Distinct from a standalone combination loadcase (`job/loads/combination-load-cases`): these rows are owned by the scenario and setwholesale via `PUT moving-loads/scenarios/{id}/combinations`.
+    One row of a scenario's "Combining with other Load Cases" table (the desktop ScenarioProperties dialog) — defines how the scenario's generated moving-load cases are combined withanother load case to produce combination cases. Distinct from a standalone combination loadcase (`job/loads/combination-load-cases`): these rows are owned by the scenario and setwholesale via `PUT moving-loads/scenarios/{id}/combinations`. An omitted field takes the valueSPACE GASS gives a new row (`MLCombination`'s constructor): 1. `startingCombinationCase` is the exception: it must be given.
     """
     # The load case combined with the scenario's generated cases.
     combine_with_load_case: Optional[int] = None

@@ -21,7 +21,7 @@ class MovingLoadScenarioCreate(Parsable):
     include: Optional[bool] = None
     # The scenario's load rows, in order. Optional — supply to create the scenario and its loads in one call; omit to set them later via `PUT .../{id}/loads`.
     loads: Optional[list[MovingLoadScenarioLoad]] = None
-    # The scenario name. Must be unique across all scenarios.
+    # The scenario name. Must be unique across all scenarios. At most 64 characters.
     name: Optional[str] = None
     # The first load case number generated for this scenario.
     starting_load_case: Optional[int] = None
