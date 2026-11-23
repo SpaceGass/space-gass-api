@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "js-yaml": "^4.3.2",
-    "zudoku": "^0.93.2"
+    "zudoku": "^0.95.0"
   },
   "overrides": {
     "hono": "4.13.5",
